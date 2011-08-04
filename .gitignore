@@ -1,0 +1,11 @@
+/config.ru
+/unicorn.rb
+/config/config.yml
+/vendor/gems
+/.bundle
+
+/tmp
+/REVISION
+/log
+
+*.kate-swp
