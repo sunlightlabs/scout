@@ -2,7 +2,44 @@
   Enter in keywords below to get notified when they appear in bills that are introduced or revised.
 <% end %>
 
-<form action="/subscriptions/new">
+<div class="subscription new">
+  <form action="/subscriptions/new" method="post">
+    <input type="hidden" name="subscription[subscription_type]" value="bills_by_keyword" />
+    
+    <% if defined?(subscription) and subscription.errors.any? %>
+      <div class="errors">
+        <% subscription.errors.full_messages.each do |msg| %>
+          <span><%= msg %></span>
+        <% end %>
+      </div>
+    <% end %>
+    
+    <input type="text" name="subscription[data][keyword]" placeholder="keywords (e.g. health care, foia)" />
+    
+    <input type="submit" value="Subscribe" />
+  </form>
+</div>
 
-  <input type="submit" value="Subscribe" />
-</form>
+<% subscriptions.each do |subscription| %>
+  <div class="subscription existing">
+    <h2><%= subscription.data['keyword'] %></h2>
+    
+    <form method="post" action="/subscriptions/<%= subscription.id %>">
+      <input type="hidden" name="_method" value="delete" />
+      <input type="submit" style="display: none" />
+      <a class="remove subscription" href="#">Remove</a>
+    </form>
+    
+  </div>
+<% end %>
+
+<script type="text/javascript">
+  $(function() {
+    $("a.remove.subscription").click(function() {
+      if (confirm("Remove this subscription?"))
+        this.parentNode.submit();
+      
+      return false;
+    });
+  });
+</script>
