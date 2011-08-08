@@ -11,6 +11,8 @@ gem 'SystemTimer', '1.2.3' # mongo gem asks for this
 
 gem 'ruby-hmac', '0.4.0'
 
+# gem 'sinatra-authentication', '0.4.1'
+
 group :development do
   gem 'sinatra-reloader', '0.5.0'
   gem 'wirble'

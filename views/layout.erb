@@ -19,6 +19,14 @@
   <h1>Alarm Site</h1>
   <h2>name TBD</h2>
   
+  <% if logged_in? %>
+    <span class="login">
+      <%= current_user.email %>
+    </span>
+  <% end %>
+  
+  <%= styled_flash %>
+  
   <header>
     <% yield_content :header %>
   </header>
@@ -26,7 +34,7 @@
   <%= yield %>
 
   <footer>
-    For the interloper: this is a private alpha project by the <a href="http://sunlightfoundation.com">, not yet for public use or distribution. Please be kind and <a href="mailto:eric@sunlightfoundation.com">write to us privately</a> before you go posting about it.
+    For the interloper: this is a private alpha project by the <a href="http://sunlightfoundation.com">Sunlight Foundation</a>, not yet for public use or distribution. Please be kind and <a href="mailto:eric@sunlightfoundation.com">write to us privately</a> before you go posting about it.
   </footer>
   
 </body>
