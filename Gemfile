@@ -1,6 +1,8 @@
 source 'http://rubygems.org'
 
 gem 'sinatra', '1.2.6'
+gem 'sinatra-content-for', '0.2'
+gem 'sinatra-flash', '0.3.0'
 
 gem "mongo", "1.3.1"
 gem "mongoid", '2.0.2'
