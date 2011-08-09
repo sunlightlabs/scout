@@ -95,7 +95,6 @@ helpers do
   end
   
   def log_in(user)
-    puts "here"
     session[:user_email] = user.email
   end
   

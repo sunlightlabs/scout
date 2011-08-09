@@ -1,0 +1,52 @@
+body {background-color: #eeeeff;}
+
+header, footer, section.main {
+  width: 980px;
+  margin: 30px 50px;
+}
+header h1 {
+  font-size: 300%;
+  text-align: center;
+  font-weight: normal;
+  width: 
+}
+header h2 {
+  font-size: 100%;
+  text-align: center;
+  font-weight: normal;
+  margin-top: 10px;
+  margin-bottom: 30px;
+}
+
+header span.login {
+  
+}
+
+header p {
+  border: 1px solid #601291;
+  padding: 20px;
+  text-align: center;
+}
+
+section.main {
+  padding: 20px 0;
+}
+
+footer {
+  text-align: center;
+  font-size: 90%;
+  line-height: 25px;
+}
+
+section.signup {text-align: center;}
+
+section.signup form input.email {
+  font-size: 125%;
+  padding: 5px 5px;
+}
+
+section.signup form input.submit {
+  font-size: 125%;
+  padding: 5px 20px;
+  margin-left: 5px;
+}
