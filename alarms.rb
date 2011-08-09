@@ -35,7 +35,6 @@ post '/users/new' do
   
   if user = User.where(:email => params[:email]).first
     log_in user
-    flash[:success] = "Welcome back."
     redirect '/dashboard'
   else
     if user = User.create(:email => params[:email])
@@ -47,6 +46,15 @@ post '/users/new' do
       erb :index, :locals => {:email => params[:email]}
     end
   end
+end
+
+get '/logout' do
+  if logged_in?
+    log_out
+    flash[:success] = "Logged out."
+  end
+  
+  redirect '/'
 end
 
 
@@ -98,6 +106,10 @@ helpers do
   
   def log_in(user)
     session[:user_email] = user.email
+  end
+  
+  def log_out
+    session[:user_email] = nil
   end
   
   def requires_login

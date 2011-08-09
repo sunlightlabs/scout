@@ -1,4 +1,4 @@
-body {background-color: #eeeeff;}
+body {background-color: #f9f9f9;}
 
 header, footer, section.main {
   width: 980px;
@@ -18,8 +18,12 @@ header h2 {
   margin-bottom: 30px;
 }
 
-header span.login {
-  font-size: 90%; font-style: italic;
+header div.login {
+  font-size: 90%;
+}
+
+header div.login span {
+  font-style: italic;
 }
 
 header #flash div.flash {
@@ -38,7 +42,7 @@ header #flash div.flash.failure {
 
 
 header p {
-  border: 1px solid #601291;
+  background-color: #A2D1E5;
   padding: 20px;
   text-align: center;
 }

@@ -19,9 +19,12 @@
 
   <header>
     <% if logged_in? %>
-      <span class="login">
-        <%= current_user.email %>
-      </span>
+      <div class="login">
+        <span>
+          <%= current_user.email %>
+        </span>
+        [<a class="logout" href="/logout">logout</a>]
+      </div>
     <% end %>
     
     <h1>Alarm Site</h1>
