@@ -51,7 +51,6 @@ end
 get '/logout' do
   if logged_in?
     log_out
-    flash[:success] = "Logged out."
   end
   
   redirect '/'
