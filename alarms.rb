@@ -78,8 +78,10 @@ end
 delete '/subscriptions/:id' do
   requires_login
   
-  if subscription = Subscription.where(:user_id => current_user.id, :_id => BSON::ObjectId(params[:id].strip))
+  if subscription = Subscription.where(:user_id => current_user.id, :_id => BSON::ObjectId(params[:id].strip)).first
+    keyword = subscription.data['keyword']
     subscription.destroy
+    flash[:success] = "No longer subscribed to \"#{keyword}\"."
   end
   
   redirect '/dashboard'

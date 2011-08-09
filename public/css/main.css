@@ -14,13 +14,28 @@ header h2 {
   font-size: 100%;
   text-align: center;
   font-weight: normal;
-  margin-top: 10px;
+  margin-top: 5px;
   margin-bottom: 30px;
 }
 
 header span.login {
-  
+  font-size: 90%; font-style: italic;
 }
+
+header #flash div.flash {
+  padding: 10px 20px;
+  margin-bottom: 15px;
+  color: #f5f5f5;
+}
+
+header #flash div.flash.success {
+  background-color: #348145;
+}
+
+header #flash div.flash.failure {
+  background-color: #C13445;
+}
+
 
 header p {
   border: 1px solid #601291;
@@ -36,6 +51,8 @@ footer {
   text-align: center;
   font-size: 90%;
   line-height: 25px;
+  clear: both;
+  padding-top: 30px;
 }
 
 section.signup {text-align: center;}
@@ -49,4 +66,48 @@ section.signup form input.submit {
   font-size: 125%;
   padding: 5px 20px;
   margin-left: 5px;
+}
+
+
+div.subscription {
+  border: 1px solid #128234;
+  width: 410px; height: 120px;
+  padding: 20px; margin-bottom: 50px;
+  position: relative;
+}
+
+div.subscription div.errors {
+  color: #c42323;
+  font-size: 90%;
+  padding-left: 5px; padding-top: 10px;
+}
+
+div.subscription.new {border-style: dashed;}
+div.subscription.left {float: left; clear: both;}
+div.subscription.right {float: right;}
+
+div.subscription input[type=text] {
+  font-size: 125%;
+  padding: 5px 5px;
+}
+
+div.subscription input[type=submit] {
+  font-size: 125%;
+  padding: 5px 20px;
+  margin-bottom: 20px;
+  display: block;
+  position: absolute; bottom: 0;
+}
+
+div.subscription.existing h2 {
+  font-weight: normal;
+  font-size: 150%;
+  padding: 5px 5px;
+}
+
+div.subscription.existing a.remove {
+  font-size: 125%;
+  margin-bottom: 20px;
+  padding: 5px 5px;
+  position: absolute; bottom: 0;
 }

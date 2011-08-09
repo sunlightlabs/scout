@@ -18,14 +18,14 @@
 <body>
 
   <header>
-    <h1>Alarm Site</h1>
-    <h2>name TBD</h2>
-    
     <% if logged_in? %>
       <span class="login">
         <%= current_user.email %>
       </span>
     <% end %>
+    
+    <h1>Alarm Site</h1>
+    <h2>name TBD</h2>
     
     <%= styled_flash %>
     
