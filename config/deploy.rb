@@ -31,7 +31,7 @@ after "deploy:update_code", "deploy:bundle_install"
 
 namespace :deploy do
   task :start do
-    run "cd #{current_path} && #{local_bin}/unicorn -D -l #{shared_path}/#{sock}"
+    run "cd #{current_path} && unicorn -D -l #{shared_path}/#{sock} -c #{current_path}/unicorn.rb"
   end
   
   task :stop do
@@ -54,6 +54,7 @@ namespace :deploy do
   task :shared_links, :roles => [:web, :app] do
     run "ln -nfs #{shared_path}/config.yml #{release_path}/config/config.yml"
     run "ln -nfs #{shared_path}/config.ru #{release_path}/config.ru"
+    run "ln -nfs #{shared_path}/unicorn.rb #{release_path}/unicorn.rb"
     
     # stupid capistrano boilerplate
     run "rm -rf #{File.join release_path, 'tmp'}"
