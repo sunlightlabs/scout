@@ -24,3 +24,17 @@ task :create_indexes => :environment do
     puts "Error creating indexes, emailed report."
   end
 end
+
+
+# subscription management tasks
+
+namespace :subscriptions do
+  
+  desc "Poll for new items for every active, initialized subscription"
+  task :poll do
+    
+    
+    
+  end
+
+end

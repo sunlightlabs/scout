@@ -11,6 +11,6 @@ configure do
   Mongoid.configure {|c| c.from_hash config[:mongoid]}
 end
 
-Dir.glob('models/*.rb').each do |filename|
-  load filename
-end
+Dir.glob('models/*.rb').each {|filename| load filename}
+Dir.glob('subscriptions/adapters/*.rb').each {|filename| load filename}
+require 'subscriptions/manager'

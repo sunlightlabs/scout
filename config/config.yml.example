@@ -18,3 +18,7 @@
     :authentication: plain
     :domain:
     :enable_starttls_auto: false
+
+# subscription-specific stuff
+:subscriptions:
+  :sunlight_api_key: 
