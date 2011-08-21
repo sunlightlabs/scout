@@ -4,12 +4,14 @@ module Subscriptions
 
   class Manager
     
+    # ! denotes that it changes the subscription passed in (and by implication it needs to be a saved subscription)
+    
     # takes a new (uninitialized) subscription and:
     # 1) does the initial poll, 
     # 2) stores everything as seen in the appropriate tables
     # 3) records the latest item date
     # 4) marks the subscription as initialized
-    def self.initialize(subscription)
+    def self.initialize!(subscription)
       
     end
     
@@ -18,16 +20,16 @@ module Subscriptions
     # 2) checks for new items
     # 3) stores unseen items as seen in the appropriate tables
     # 4) records the latest item date
-    def self.check(subscription)
+    def self.check!(subscription)
       
     end
     
     
-    # internal methods
+    # internal methods, do not alter the subscription passed in
     
     # returns an array where each item is a hash containing the id, title, and post date of each item found
     def self.poll(subscription)
-      adapter = adapter_for subscription
+      adapter = subscription.adapter
       url = adapter.url_for subscription
       
       response = HTTParty.get url
@@ -35,10 +37,6 @@ module Subscriptions
       adapter.items_for response
     end
     
-    # adapter class associated with a particular subscription
-    def self.adapter_for(subscription)
-      "Subscriptions::Adapters::#{subscription.subscription_type.camelize}".constantize rescue nil
-    end
     
   end
   

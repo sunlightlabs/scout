@@ -24,5 +24,8 @@ class Subscription
   scope :initialized, :where => {:initialized => true}
   scope :uninitialized, :where => {:initialized => false}
   
-  
+  # adapter class associated with a particular subscription
+  def adapter
+    "Subscriptions::Adapters::#{subscription_type.camelize}".constantize rescue nil
+  end
 end

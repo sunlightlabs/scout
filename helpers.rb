@@ -12,6 +12,10 @@ helpers do
     URI.escape url
   end
   
+  def long_date(time)
+    time.strftime "%B #{time.day}, %Y" # remove 0-prefix
+  end
+  
 end
 
 # stolen from http://github.com/cschneid/irclogger/blob/master/lib/partials.rb
