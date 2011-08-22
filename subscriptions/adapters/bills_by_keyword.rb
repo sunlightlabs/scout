@@ -38,12 +38,8 @@ module Subscriptions
       # returns a hash containing the id, title, and post date of the item
       def self.item_for(bill_version)
         
-        title = bill_version["bill.short_title"].present? ? bill_version["bill.short_title"] : bill_version["bill.official_title"]
-        
         Subscriptions::Item.new(
           :id => bill_version["bill_version_id"],
-          :title => title,
-          :order_date => bill_version["bill.last_action_at"],
           :data => bill_version
         )
           

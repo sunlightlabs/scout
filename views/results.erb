@@ -9,7 +9,11 @@
       <li class="bill">
       
         <h2><%= bill_code item.data['bill.bill_type'], item.data['bill.number'] %></h2>
-        <h3><%= item.title %></h3>
+        <% if item.data['short_title'].present? %>
+          <h3><%= item.data['short_title'] %></h3>
+        <% else %>
+          <h4><%= item.data['official_title'] %></h4>
+        <% end %>
         
         <% if item.data['search']['highlight'] %>
           <dl>
