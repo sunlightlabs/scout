@@ -28,4 +28,9 @@ class Subscription
   def adapter
     "Subscriptions::Adapters::#{subscription_type.camelize}".constantize rescue nil
   end
+  
+  after_create :initial_poll
+  def initial_poll
+    Subscriptions::Manager.initialize! self
+  end
 end
