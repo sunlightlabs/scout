@@ -4,7 +4,9 @@ module Subscriptions
 
   class Manager
     
-    # ! denotes that it changes the subscription passed in (and by implication it needs to be a saved subscription)
+    # ! denotes that it changes the database, possibly including the subscription passed in 
+    # (and by implication the subscription passed in needs to be a saved subscription)
+    
     
     # takes a new (uninitialized) subscription and:
     # 1) does the initial poll, 
@@ -33,11 +35,39 @@ module Subscriptions
     
     # takes an initialized subscription and:
     # 1) does a poll
-    # 2) stores all ids in seen_ids
-    # 3) stores any as-yet-unseen items as seen items
-    # 4) stores any as-yet-unseen items in the delivery queue
+    # 2) stores any items as yet unseen by the system in seen items
+    # 3) stores any items as yet unseen by this subscription in seen_ids
+    # 4) stores any items as yet unseen by this subscription in the delivery queue
     def self.check!(subscription)
+      items = poll subscription
       
+      user = User.where(:_id => subscription.user_id).first
+      
+      deliveries = []
+      
+      items.each do |item|
+        # find or create the item in the system library of items that have come through
+        unless seen_item = SeenItem.where(:subscription_type => subscription.subscription_type, :item_id => item.id).first
+          seen_item = SeenItem.create! :subscription_type => subscription.subscription_type, :item_id => item.id, :data => item.data
+        end
+        
+        # if the item hasn't been seen, mark it and add it to the delivery queue
+        unless SeenId.where(:subscription_id => subscription.id, :item_id => item.id).first
+          SeenId.create! :subscription_id => subscription.id, :item_id => item.id
+          deliveries << Delivery.create!(
+            :subscription_id => subscription.id,
+            :user_id => user.id,
+            :seen_item_id => seen_item.id,
+            :user_email => user.email,
+            :subscription_type => subscription.subscription_type,
+            :data => item.data
+          )
+        end
+        
+      end
+      
+      # return delivery items made
+      deliveries
     end
     
     
@@ -48,7 +78,7 @@ module Subscriptions
       adapter = subscription.adapter
       url = adapter.url_for subscription
       
-      puts "[DEBUG] Polling #{url}..."
+      puts "[DEBUG] Polling #{url}"
       
       response = HTTParty.get url
       
