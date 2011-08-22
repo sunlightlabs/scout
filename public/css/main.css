@@ -1,10 +1,12 @@
 body {background-color: #f9f9f9;}
+h1, h2, h3, h4, h5, h6 {font-weight: normal;}
 
 header, footer, section.main {
   width: 980px;
   margin: 30px 50px;
 }
-header h1 {
+
+/*header h1 {
   font-size: 300%;
   text-align: center;
   font-weight: normal;
@@ -15,11 +17,12 @@ header h2 {
   text-align: center;
   font-weight: normal;
   margin-top: 5px;
-  margin-bottom: 30px;
-}
+  
+}*/
 
 header div.login {
   font-size: 90%;
+  margin-bottom: 30px;
 }
 
 header div.login span {
@@ -73,45 +76,75 @@ section.signup form input.submit {
 }
 
 
-div.subscription {
-  border: 1px solid #128234;
-  width: 410px; height: 120px;
-  padding: 20px; margin-bottom: 50px;
-  position: relative;
+section.subscriptions {
+  float: left;
+  width: 450px;
+  margin-right: 40px;
+}
+section.subscriptions ul {list-style-type: none;}
+
+section.subscriptions li {
+  float: left; width: 450px;
+  padding: 10px 0 20px 0; clear: both;
 }
 
-div.subscription div.errors {
+section.subscriptions li.existing {
+  border-top: 1px solid #128234;
+}
+
+section.subscriptions li.new div.errors {
   color: #c42323;
   font-size: 90%;
-  padding-left: 5px; padding-top: 10px;
+  padding-bottom: 10px;
 }
 
-div.subscription.new {border-style: dashed;}
-div.subscription.left {float: left; clear: both;}
-div.subscription.right {float: right;}
-
-div.subscription input[type=text] {
-  font-size: 125%;
+section.subscriptions li.new input[type=text] {
+  font-size: 100%;
   padding: 5px 5px;
+  float: left;
 }
 
-div.subscription input[type=submit] {
-  font-size: 125%;
-  padding: 5px 20px;
-  margin-bottom: 20px;
-  display: block;
-  position: absolute; bottom: 0;
+section.subscriptions li input[type=submit], section.subscriptions li input[type=button] {
+  font-size: 100%;
+  padding: 5px 10px;
 }
 
-div.subscription.existing h2 {
+section.subscriptions li h2 {
+  float: left;
   font-weight: normal;
   font-size: 150%;
-  padding: 5px 5px;
+  padding: 5px 0px 15px 0px;
 }
 
-div.subscription.existing a.remove {
-  font-size: 125%;
-  margin-bottom: 20px;
-  padding: 5px 5px;
-  position: absolute; bottom: 0;
+section.subscriptions li div.buttons {
+  float: right;
 }
+
+section.results {
+  float: left; 
+  width: 450px;
+  margin-left: 40px;
+}
+
+section.results p.header {
+  font-size: 110%;
+  margin-bottom: 20px;
+}
+
+section.results ul {list-style-type: none;}
+section.results li {
+  padding: 15px 0 15px 0;
+}
+
+section.results li.bill h3 {
+  font-size: 125%; margin-top: 5px;
+}
+
+section.results li.bill dl {}
+section.results li.bill dl dt {
+  margin-top: 5px;
+}
+section.results li.bill dl dd {
+  margin: 3px 10px;
+}
+section.results li.bill dl dd em {font-weight: bold; font-style: normal;}

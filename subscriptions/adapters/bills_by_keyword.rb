@@ -11,7 +11,8 @@ module Subscriptions
         
         api_key = config[:subscriptions][:sunlight_api_key]
         query = URI.escape subscription.data['keyword']
-        sections = %w{ bill.bill_id bill.short_title bill.official_title bill.introduced_at bill.last_action_at }
+        
+        sections = %w{ bill.bill_id bill.bill_type bill.number bill.short_title bill.official_title bill.introduced_at bill.last_action_at version_code bill_version_id }
         
         url = "http://api.realtimecongress.org/api/v1/search/bill_versions.json?apikey=#{api_key}"
         url << "&per_page=#{MAX_ITEMS}"
@@ -40,7 +41,7 @@ module Subscriptions
         title = bill_version["bill.short_title"].present? ? bill_version["bill.short_title"] : bill_version["bill.official_title"]
         
         Subscriptions::Item.new(
-          :id => bill_version["bill.bill_id"],
+          :id => bill_version["bill_version_id"],
           :title => title,
           :order_date => bill_version["bill.last_action_at"],
           :data => bill_version

@@ -67,7 +67,7 @@ get '/dashboard' do
 end
 
 
-post '/subscriptions/new' do
+post '/subscriptions' do
   requires_login
   
   subscription = Subscription.new params[:subscription]
@@ -82,6 +82,17 @@ post '/subscriptions/new' do
     erb :dashboard, :locals => {:subscription => subscription, :subscriptions => subscriptions}
   end
   
+end
+
+get '/subscriptions/:id/test' do
+  requires_login
+  
+  if subscription = Subscription.where(:user_id => current_user.id, :_id => BSON::ObjectId(params[:id].strip)).first
+    items = Subscriptions::Manager.poll subscription
+    erb :results, :layout => false, :locals => {:items => items, :subscription => subscription}
+  else
+    halt 404
+  end
 end
 
 delete '/subscriptions/:id' do

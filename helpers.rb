@@ -16,12 +16,45 @@ helpers do
     time.strftime "%B #{time.day}, %Y" # remove 0-prefix
   end
   
+  # bill display helpers
+  
+  def bill_code(type, number)
+    "#{bill_type type} #{number}"
+  end
+  
+  def bill_type(short)
+    {
+      "hr" => "H.R.",
+      "hres" => "H. Res.",
+      "hjres" => "H. J. Res.",
+      "hcres" => "H. C. Res.",
+      "s" => "S.",
+      "sres" => "S. Res.",
+      "sjres" => "S. J. Res.",
+      "scres" => "S. C. Res."
+    }[short]
+  end
+  
+  def bill_highlight(item)
+    highlighting = item.data['search']['highlight']
+    field = highlighting.keys.first
+    
+    "<dt>From #{highlight_field field}:</dt>\n<dd>#{highlighting[field]}</dd>"
+  end
+  
+  def highlight_field(field)
+    {
+      "full_text" => "the full text",
+      "summary" => "the summary",
+      "official_title" => "the official title",
+      "short_title" => "the official short title",
+      "popular_title" => "the nickname",
+    }[field]
+  end
+  
 end
 
-# stolen from http://github.com/cschneid/irclogger/blob/master/lib/partials.rb
-#   and made a lot more robust by me
-# this implementation uses erb by default. if you want to use any other template mechanism
-#   then replace `erb` on line 13 and line 17 with `haml` or whatever 
+# taken from https://gist.github.com/119874
 module Sinatra::Partials
   def partial(template, *args)
     template_array = template.to_s.split('/')

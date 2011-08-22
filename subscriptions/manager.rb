@@ -32,6 +32,8 @@ module Subscriptions
       adapter = subscription.adapter
       url = adapter.url_for subscription
       
+      puts "[DEBUG] Polling #{url}..."
+      
       response = HTTParty.get url
       
       adapter.items_for response

@@ -1,0 +1,30 @@
+<% if items.any? %>
+
+  <p class="header">
+    Latest introduced or updated bills for "<%= subscription.data['keyword'] %>":
+  </p>
+
+  <ul>
+    <% items.each do |item| %>
+      <li class="bill">
+      
+        <h2><%= bill_code item.data['bill.bill_type'], item.data['bill.number'] %></h2>
+        <h3><%= item.title %></h3>
+        
+        <% if item.data['search']['highlight'] %>
+          <dl>
+            <%= bill_highlight item %>
+          </dl>
+        <% end %>
+        
+      </li>
+    <% end %>
+  </ul>
+  
+<% else %>
+  
+  <p>
+    No results found for this search.
+  </p>
+  
+<% end %>

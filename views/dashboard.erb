@@ -4,12 +4,9 @@
 
 <section class="subscriptions">
 
-  <div class="subscription new left">
-    <form action="/subscriptions/new" method="post">
-      <input type="hidden" name="subscription[subscription_type]" value="bills_by_keyword" />
-      
-      <input type="text" name="subscription[data][keyword]" placeholder="keywords" />
-      
+  <ul>
+    
+    <li class="new">
       <% if defined?(subscription) and subscription.errors.any? %>
         <div class="errors">
           <% subscription.errors.full_messages.each do |msg| %>
@@ -18,35 +15,63 @@
         </div>
       <% end %>
       
-      <input type="submit" value="Subscribe" />
-    </form>
-  </div>
-
-  <% subscriptions.each_with_index do |subscription, i| %>
-    <% cycle = i % 2 == 0 ? "right" : "left" %>
-    <div class="subscription existing <%= cycle %>">
-      <h2>"<%= subscription.data['keyword'] %>"</h2>
-      
-      <form method="post" action="/subscriptions/<%= subscription.id %>">
-        <input type="hidden" name="_method" value="delete" />
-        <input class="remove subscription" type="submit" value="Unsubscribe" data-keyword="<%= form_escape subscription.data['keyword'] %>" />
-        <!--
-          <a class="remove subscription" data-keyword="<%= form_escape subscription.data['keyword'] %>" href="#">Unsubscribe</a>
-        -->
+      <form action="/subscriptions" method="post">
+        <input type="hidden" name="subscription[subscription_type]" value="bills_by_keyword" />
+        
+        <input type="text" name="subscription[data][keyword]" placeholder="keyword/phrase" />
+        
+        <div class="buttons">
+          <!-- <input class="test new" type="button" value="Test" /> -->
+          <input type="submit" value="Add" />
+        </div>
       </form>
-      
     </div>
-  <% end %>
+    
+    <% subscriptions.each do |subscription| %>
+      <li class="existing">
+        <form method="post" action="/subscriptions/<%= subscription.id %>">
+          <input type="hidden" name="_method" value="delete" />
+          
+          <h2><%= subscription.data['keyword'] %></h2>
+          
+          <div class="buttons">
+            <input data-id="<%= subscription.id %>" class="test existing" type="button" value="Test" />
+            <input class="remove subscription" type="submit" value="Remove" data-keyword="<%= form_escape subscription.data['keyword'] %>" />
+          </div>
+        </form>
+        
+      </li>
+    <% end %>
+
+  </ul>
 
   <script type="text/javascript">
     $(function() {
+      
       $("input.remove.subscription").click(function() {
-        if (confirm("Unsubscribe?"))
+        if (confirm("Remove this alarm?"))
           this.parentNode.submit();
         
         return false;
       });
+      
+      $("input.test").click(function() {
+        var id = $(this).data("id");
+        $.get("/subscriptions/" + id + "/test", function(data) {
+          $("#results").html(data);
+        })
+        .error(function() {
+          console.log("Error.");
+        });
+      });
+      
+      // testing
+      $("input.test").get(0).click();
     });
   </script>
 
+</section>
+
+<section class="results" id="results">
+  
 </section>
