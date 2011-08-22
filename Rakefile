@@ -33,8 +33,6 @@ namespace :subscriptions do
   desc "Poll for new items for every active, initialized subscription"
   task :poll do
     
-    
-    
   end
 
 end
