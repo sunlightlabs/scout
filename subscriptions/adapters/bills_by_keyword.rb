@@ -18,7 +18,7 @@ module Subscriptions
           endpoint = "http://api.realtimecongress.org/api/v1"
         end
         
-        sections = %w{ bill.bill_id bill.bill_type bill.number bill.short_title bill.official_title bill.introduced_at bill.last_action_at version_code bill_version_id }
+        sections = %w{ bill.bill_id bill.bill_type bill.number bill.short_title bill.official_title bill.introduced_at bill.last_action_at version_code bill_version_id bill.session }
         
         url = "#{endpoint}/search/bill_versions.json?apikey=#{api_key}"
         url << "&per_page=#{MAX_ITEMS}"
@@ -51,7 +51,8 @@ module Subscriptions
           "short_title" => bill_version.delete("bill.short_title"),
           "official_title" => bill_version.delete("bill.official_title"),
           "introduced_at" => bill_version.delete("bill.introduced_at"),
-          "last_action_at" => bill_version.delete("bill.last_action_at")
+          "last_action_at" => bill_version.delete("bill.last_action_at"),
+          "session" => bill_version.delete("bill.session")
         }
         data = data.merge bill_version
         

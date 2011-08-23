@@ -136,15 +136,46 @@ section.results li {
   padding: 15px 0 15px 0;
 }
 
-section.results li.bill h3 {
-  font-size: 125%; margin-top: 5px;
+section.results li.bill h2 {
+  font-size: 90%; font-weight: bold;
+  margin-bottom: 7px;
 }
 
-section.results li.bill dl {}
+section.results li.bill h2 span {
+  font-weight: normal; font-style: italic;
+  margin-left: 5px;
+}
+
+section.results li.bill h3 {
+  font-size: 110%; 
+}
+
+section.results li.bill h4 {
+  font-size: 90%; 
+}
+
+section.results li.bill dl {
+  background-color: #C9F5E9;
+  padding: 10px; 
+  margin-left: 0px; margin-top: 10px;
+  font-size: 90%;
+}
 section.results li.bill dl dt {
-  margin-top: 5px;
+  
 }
+
 section.results li.bill dl dd {
-  margin: 3px 10px;
+  margin: 8px 10px 0 10px;
 }
-section.results li.bill dl dd em {font-weight: bold; font-style: normal;}
+
+section.results li.bill dl dd em {
+  font-weight: bold; font-style: normal;
+}
+
+section.results li.bill section.links {
+  font-size: 90%; margin-top: 10px;
+}
+
+section.results li.bill section.links a {
+  margin-left: 10px;
+}

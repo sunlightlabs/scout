@@ -62,7 +62,7 @@ end
 get '/dashboard' do
   requires_login
   
-  subscriptions = Subscription.where(:user_id => current_user.id).all
+  subscriptions = Subscription.where(:user_id => current_user.id).desc(:created_at).all
   erb :dashboard, :locals => {:subscriptions => subscriptions}
 end
 
