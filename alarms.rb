@@ -74,7 +74,6 @@ post '/subscriptions' do
   subscription[:user_id] = current_user.id
   
   if subscription.save
-    flash[:success] = "Added subscription."
     redirect '/dashboard'
   else
     flash.now[:failure] = "Problem adding subscription."

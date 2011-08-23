@@ -21,7 +21,6 @@
         <input type="text" name="subscription[data][keyword]" placeholder="keyword/phrase" />
         
         <div class="buttons">
-          <!-- <input class="test new" type="button" value="Test" /> -->
           <input type="submit" value="Add" />
         </div>
       </form>
@@ -57,21 +56,32 @@
       
       $("input.test").click(function() {
         var id = $(this).data("id");
+        
+        $("#results div.container").html("");
+        $("#results div.loading_container").show();
+        
         $.get("/subscriptions/" + id + "/test", function(data) {
-          $("#results").html(data);
+          $("#results div.loading_container").hide();
+          $("#results div.container").html(data);
         })
         .error(function() {
-          console.log("Error.");
+          $("#results div.loading_container").hide();
+          $("#results div.container").html("<p class=\"error\">Error loading results.</p>");
         });
       });
       
       // testing
-      $("input.test").get(0).click();
+      // $("input.test").get(0).click();
     });
   </script>
 
 </section>
 
 <section class="results" id="results">
-  
+  <div class="loading_container">
+    <img class="loading" src="/images/loader.gif" />
+  </div>
+  <div class="container">
+    <!-- results get loaded in here -->
+  </div>
 </section>

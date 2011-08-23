@@ -1,24 +1,12 @@
 body {background-color: #f9f9f9;}
 h1, h2, h3, h4, h5, h6 {font-weight: normal;}
 
+a {color: #22447f;}
+
 header, footer, section.main {
   width: 980px;
   margin: 30px 50px;
 }
-
-/*header h1 {
-  font-size: 300%;
-  text-align: center;
-  font-weight: normal;
-  width: 
-}
-header h2 {
-  font-size: 100%;
-  text-align: center;
-  font-weight: normal;
-  margin-top: 5px;
-  
-}*/
 
 header div.login {
   font-size: 90%;
@@ -126,14 +114,23 @@ section.results {
   margin-left: 40px;
 }
 
+section.results div.loading_container {display: none;}
+
+section.results img.loading {
+  margin: 0 auto; display: block;
+}
+
 section.results p.header {
   font-size: 110%;
   margin-bottom: 20px;
+  display: none;
 }
 
 section.results ul {list-style-type: none;}
-section.results li {
+
+section.results li.bill {
   padding: 15px 0 15px 0;
+  margin-bottom: 7px;
 }
 
 section.results li.bill h2 {
@@ -160,12 +157,13 @@ section.results li.bill dl {
   margin-left: 0px; margin-top: 10px;
   font-size: 90%;
 }
+
 section.results li.bill dl dt {
-  
+  display: none;
 }
 
 section.results li.bill dl dd {
-  margin: 8px 10px 0 10px;
+  margin: 0px 0px 0 0px;
 }
 
 section.results li.bill dl dd em {
