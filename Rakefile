@@ -22,7 +22,7 @@ task :create_indexes => :environment do
       end
     end
   rescue Exception => ex
-    email_message "Exception creating indexes, message and backtrace attached", {'message' => ex.message, 'type' => ex.class.to_s, 'backtrace' => ex.backtrace}
+    email_message "Exception creating indexes.", ex
     puts "Error creating indexes, emailed report."
   end
 end
@@ -41,6 +41,7 @@ namespace :subscriptions do
       end
     rescue Exception => ex
       email_message "Problem during polling task.", ex
+      puts "Error during polling, emailed report."
     end
   end
   
@@ -93,6 +94,7 @@ namespace :subscriptions do
     end  
   rescue Exception => ex
     email_message "Problem during delivery task.", ex
+    puts "Error during delivery, emailed report."
   end
 end
 
