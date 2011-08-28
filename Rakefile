@@ -35,8 +35,12 @@ namespace :subscriptions do
   
   desc "Poll for new items for every active, initialized subscription"
   task :poll => :environment do
-    Subscription.initialized.all.each do |subscription|
-      Subscriptions::Manager.check! subscription
+    begin
+      Subscription.initialized.all.each do |subscription|
+        Subscriptions::Manager.check! subscription
+      end
+    rescue Exception => ex
+      email_message "Problem during polling task.", ex
     end
   end
   
@@ -88,9 +92,10 @@ namespace :subscriptions do
       
     end  
   rescue Exception => ex
-    
+    email_message "Problem during delivery task.", ex
   end
 end
+
 
 def render_email(deliveries)
   content = ""
