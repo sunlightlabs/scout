@@ -21,7 +21,6 @@ task :create_indexes => :environment do
         puts "Skipping #{model}, not a Mongoid model"
       end
     end
-    raise Exception.new("test")
   rescue Exception => ex
     email_message "Exception creating indexes.", ex
     puts "Error creating indexes, emailed report."
