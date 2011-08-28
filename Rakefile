@@ -91,11 +91,12 @@ namespace :subscriptions do
         puts "No emails to deliver."
       end
       
-    end  
-  rescue Exception => ex
-    email_message "Problem during delivery task.", ex
-    puts "Error during delivery, emailed report."
+    rescue Exception => ex
+      email_message "Problem during delivery task.", ex
+      puts "Error during delivery, emailed report."
+    end
   end
+  
 end
 
 
