@@ -53,7 +53,7 @@ namespace :subscriptions do
       deliveries = Delivery.where(:user_email => email).all.to_a
       content = render_email deliveries
       
-      if email_items(email, content)
+      if email_user(email, content)
       
         deliveries.each do |delivery|
           delivery.destroy
@@ -90,20 +90,35 @@ end
 def render_email(deliveries)
   content = ""
   
-  template = Tilt.new "views/subscriptions/_email_item.erb"
+  # group the deliveries by keyword
+  groups = {}
   
   deliveries.each do |delivery|
     item = Subscriptions::Item.new :id => delivery.item['id'], :data => delivery.item['data']
-    content << template.render(item, :item => item)
+    groups[item.data['keyword']] ||= []
+    groups[item.data['keyword']] << item
+  end
+  
+  groups.keys.each do |keyword|
+    content << "<h1>#{keyword}</h1>"
+    
+    groups[keyword].each do |item|
+      content << render_item(item)
+    end
   end
   
   content
 end
 
-def email_items(email, content)
+def render_item(item)
+  template = Tilt::ERBTemplate.new "views/subscriptions/_email_item.erb"
+  template.render item, :item => item
+end
+
+def email_user(email, content)
   if config[:email][:from].present?
     begin
-      puts "Emailing something to #{email}"
+      
       true
     rescue Errno::ECONNREFUSED
       false
