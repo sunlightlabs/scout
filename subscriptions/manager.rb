@@ -67,7 +67,7 @@ module Subscriptions
         
       end
       
-      puts "[#{user.email}][#{subscription.subscription_type}] (#{deliveries.size}) #{subscription.keyword}"
+      puts "[#{user.email}][#{subscription.subscription_type}](#{deliveries.size}) #{subscription.keyword}"
       
       # return delivery items made
       deliveries
