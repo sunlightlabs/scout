@@ -21,6 +21,7 @@ task :create_indexes => :environment do
         puts "Skipping #{model}, not a Mongoid model"
       end
     end
+    raise Exception.new("test")
   rescue Exception => ex
     email_message "Exception creating indexes.", ex
     puts "Error creating indexes, emailed report."
@@ -176,12 +177,14 @@ def email_report(report)
   end
 end
 
-def email_message(msg, exception)
+def email_message(msg, exception = nil)
+  body = exception ? exception_message(exception) : msg
+  
   if config[:admin][:email].present?
     begin
       Pony.mail config[:email].merge(
         :subject => msg, 
-        :body => (exception ? exception_message(exception) : msg),
+        :body => body,
         :to => config[:admin][:email]
       )
     rescue Errno::ECONNREFUSED
@@ -199,7 +202,7 @@ def exception_message(exception)
   msg += "#{type}: #{message}" 
   msg += "\n\n"
   
-  if backtrace backtrace.respond_to?(:each)
+  if backtrace.respond_to?(:each)
     backtrace.each {|line| msg += "#{line}\n"}
     msg += "\n\n"
   end
