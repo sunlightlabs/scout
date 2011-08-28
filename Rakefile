@@ -133,7 +133,7 @@ end
 def email_user(email, content)
   if config[:email][:from].present?
     begin
-      subject = "Latest alerts"
+      subject = "[Alarm Site] Latest alerts"
       
       Pony.mail config[:email].merge(
         :to => email, 
@@ -182,7 +182,7 @@ def email_message(msg, exception = nil)
   if config[:admin][:email].present?
     begin
       Pony.mail config[:email].merge(
-        :subject => msg, 
+        :subject => "[ERROR] #{msg}", 
         :body => body,
         :to => config[:admin][:email]
       )
