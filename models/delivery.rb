@@ -25,5 +25,4 @@ class Delivery
   validates_presence_of :subscription_type
   validates_presence_of :user_id
   validates_presence_of :user_email
-  validates_presence_of :seen_item_id
 end

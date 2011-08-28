@@ -33,4 +33,8 @@ class Subscription
   def initial_poll
     Subscriptions::Manager.initialize! self
   end
+  
+  def to_s
+    "[#{subscription.user_id}](#{subscription.data['keyword']})"
+  end
 end

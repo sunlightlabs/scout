@@ -51,10 +51,7 @@ post '/users/new' do
 end
 
 get '/logout' do
-  if logged_in?
-    log_out
-  end
-  
+  log_out if logged_in?
   redirect '/'
 end
 
@@ -105,6 +102,9 @@ delete '/subscriptions/:id' do
   
   redirect '/dashboard'
 end
+
+
+# auth helpers
 
 helpers do
   def logged_in?

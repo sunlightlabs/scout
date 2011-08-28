@@ -1,0 +1,25 @@
+<li class="bill">
+  <h2>
+    <%= bill_code item.data['bill_type'], item.data['number'] %>
+    <span>as <%= bill_version item.data['version_code'] %></span>
+  </h2>
+  <% if item.data['short_title'].present? %>
+    <h3><%= item.data['short_title'] %></h3>
+  <% else %>
+    <h4><%= item.data['official_title'] %></h4>
+  <% end %>
+  
+  <% if item.data['search']['highlight'] %>
+    <dl class="highlight">
+      <%= bill_highlight item %>
+    </dl>
+  <% end %>
+  
+  <section class="links">
+    <span>More:</span>
+    <a href="<%= govtrack_url item %>">GovTrack</a>
+    <a href="<%= opencongress_url item %>">OpenCongress</a>
+    <a href="<%= thomas_url item %>">THOMAS</a>
+  </section>
+  
+</li>

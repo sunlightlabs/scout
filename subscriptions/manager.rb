@@ -1,4 +1,5 @@
 require 'httparty'
+require 'subscriptions/helpers'
 
 module Subscriptions
 
@@ -54,17 +55,26 @@ module Subscriptions
         # if the item hasn't been seen, mark it and add it to the delivery queue
         unless SeenId.where(:subscription_id => subscription.id, :item_id => item.id).first
           SeenId.create! :subscription_id => subscription.id, :item_id => item.id
+          
           deliveries << Delivery.create!(
-            :subscription_id => subscription.id,
+            # user ID and inline email
             :user_id => user.id,
-            :seen_item_id => seen_item.id,
             :user_email => user.email,
+            
+            # original subscription and inline type
+            :subscription_id => subscription.id,
             :subscription_type => subscription.subscription_type,
-            :data => item.data
+            
+            :item => {
+              :id => item.id,
+              :data => item.data
+            }
           )
         end
         
       end
+      
+      puts "[#{user.email}][#{subscription.subscription_type}] (#{deliveries.size}) #{subscription.data['keyword']}"
       
       # return delivery items made
       deliveries
@@ -78,7 +88,7 @@ module Subscriptions
       adapter = subscription.adapter
       url = adapter.url_for subscription
       
-      puts "[DEBUG] Polling #{url}"
+      puts "\n[DEBUG] Polling #{url}\n\n" if ENV['debug'].present?
       
       response = HTTParty.get url
       
@@ -91,6 +101,7 @@ module Subscriptions
   
   # utility class returned by adapters, then used to create various items in the database
   class Item
+    include Subscriptions::Helpers
     
     attr_accessor :id, :data
     

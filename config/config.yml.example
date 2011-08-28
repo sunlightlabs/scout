@@ -7,8 +7,6 @@
 
 :email:
   :via: :smtp
-  :to:
-    -
   :from:
   :via_options:
     :address:
@@ -22,3 +20,6 @@
 # subscription-specific stuff
 :subscriptions:
   :sunlight_api_key: 
+
+:admin:
+  :email: # 
