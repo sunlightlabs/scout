@@ -2,6 +2,8 @@ task :environment do
   require 'rubygems'
   require 'bundler/setup'
   require 'config/environment'
+  
+  require 'pony'
 end
 
 desc "Run through each model and create all indexes" 
@@ -118,7 +120,8 @@ end
 def email_user(email, content)
   if config[:email][:from].present?
     begin
-      
+      subject = "Latest alerts"
+      Pony.mail config[:email].merge(:to => email, :subject => subject, :body => content)
       true
     rescue Errno::ECONNREFUSED
       false
