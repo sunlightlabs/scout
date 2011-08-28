@@ -24,6 +24,7 @@ set :use_sudo, false
 after "deploy", "deploy:cleanup"
 after "deploy:update_code", "deploy:shared_links"
 after "deploy:update_code", "deploy:bundle_install"
+after "deploy:update_code", "deploy:create_indexes"
 
 
 namespace :deploy do
@@ -40,6 +41,11 @@ namespace :deploy do
   desc "Restart the server"
   task :restart, :roles => :app, :except => {:no_release => true} do
     run "kill -HUP `cat #{shared_path}/unicorn.pid`"
+  end
+  
+  desc "Create indexes"
+  task :create_indexes, :roles => :app, :except => {:no_release => true} do
+    run "cd #{release_path} && rake create_indexes"
   end
   
   desc "Run bundle install --local"
