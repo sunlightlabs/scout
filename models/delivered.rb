@@ -1,4 +1,4 @@
-# transaction log of delivered items
+# transaction log of delivered emails
 
 class Delivered
   include Mongoid::Document

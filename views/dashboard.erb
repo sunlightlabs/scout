@@ -18,7 +18,7 @@
       <form action="/subscriptions" method="post">
         <input type="hidden" name="subscription[subscription_type]" value="bills_by_keyword" />
         
-        <input type="text" name="subscription[data][keyword]" placeholder="keyword/phrase" />
+        <input type="text" name="subscription[keyword]" placeholder="keyword/phrase" />
         
         <div class="buttons">
           <input type="submit" value="Add" />
@@ -31,11 +31,11 @@
         <form method="post" action="/subscriptions/<%= subscription.id %>">
           <input type="hidden" name="_method" value="delete" />
           
-          <h2><%= subscription.data['keyword'] %></h2>
+          <h2><%= subscription.keyword %></h2>
           
           <div class="buttons">
             <input data-id="<%= subscription.id %>" class="test existing" type="button" value="Test" />
-            <input class="remove subscription" type="submit" value="Remove" data-keyword="<%= form_escape subscription.data['keyword'] %>" />
+            <input class="remove subscription" type="submit" value="Remove" data-keyword="<%= form_escape subscription.keyword %>" />
           </div>
         </form>
         

@@ -97,8 +97,10 @@ def render_email(deliveries)
   
   deliveries.each do |delivery|
     item = Subscriptions::Item.new :id => delivery.item['id'], :data => delivery.item['data']
-    groups[item.data['keyword']] ||= []
-    groups[item.data['keyword']] << item
+    keyword = delivery.subscription_keyword
+    
+    groups[keyword] ||= []
+    groups[keyword] << item
   end
   
   groups.keys.each do |keyword|

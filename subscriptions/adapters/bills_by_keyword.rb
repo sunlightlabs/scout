@@ -7,10 +7,10 @@ module Subscriptions
       
       def self.url_for(subscription)
         # requires a query string
-        return nil unless subscription.data['keyword'].present?
+        return nil unless subscription.keyword.present?
         
         api_key = config[:subscriptions][:sunlight_api_key]
-        query = URI.escape subscription.data['keyword']
+        query = URI.escape subscription.keyword
         
         if config[:subscriptions][:rtc_endpoint].present?
           endpoint = config[:subscriptions][:rtc_endpoint]

@@ -56,6 +56,7 @@ module Subscriptions
             # original subscription and inline type
             :subscription_id => subscription.id,
             :subscription_type => subscription.subscription_type,
+            :subscription_keyword => subscription.keyword,
             
             :item => {
               :id => item.id,
@@ -66,7 +67,7 @@ module Subscriptions
         
       end
       
-      puts "[#{user.email}][#{subscription.subscription_type}] (#{deliveries.size}) #{subscription.data['keyword']}"
+      puts "[#{user.email}][#{subscription.subscription_type}] (#{deliveries.size}) #{subscription.keyword}"
       
       # return delivery items made
       deliveries
