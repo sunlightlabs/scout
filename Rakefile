@@ -42,51 +42,54 @@ namespace :subscriptions do
   
   desc "Deliver outstanding queued items, grouped by user"
   task :deliver => :environment do
-    # should be in as dependencies of sinatra
-    require 'erb'
-    require 'tilt'
-    
-    failures = []
-    successes = 0
-    
-    # group by emails, send one to each user
-    Delivery.all.distinct(:user_email).each do |email|
+    begin
+      # should be in as dependencies of sinatra
+      require 'erb'
+      require 'tilt'
       
-      deliveries = Delivery.where(:user_email => email).all.to_a
-      content = render_email deliveries
+      failures = []
+      successes = 0
       
-      if email_user(email, content)
-      
-        deliveries.each do |delivery|
-          delivery.destroy
-        end
-      
-        # shouldn't be a risk of failure
-        delivered = Delivered.create!(
-          :deliveries => deliveries.map {|d| d.attributes},
-          :delivered_at => Time.now,
-          :content => content
-        )
+      # group by emails, send one to each user
+      Delivery.all.distinct(:user_email).each do |email|
         
-        successes += 1
-      else
-        failures << "Couldn't send an email to #{email}"
+        deliveries = Delivery.where(:user_email => email).all.to_a
+        content = render_email deliveries
+        
+        if email_user(email, content)
+        
+          deliveries.each do |delivery|
+            delivery.destroy
+          end
+        
+          # shouldn't be a risk of failure
+          delivered = Delivered.create!(
+            :deliveries => deliveries.map {|d| d.attributes},
+            :delivered_at => Time.now,
+            :content => content
+          )
+          
+          successes += 1
+        else
+          failures << "Couldn't send an email to #{email}"
+        end
+        
       end
       
-    end
+      if failures.any?
+        report = Report.failure "Delivery", "Failed to deliver #{failures.size} deliveries"
+      end
+      
+      if successes > 0
+        report = Report.success "Delivery", "Delivered #{successes} emails."
+      else
+        puts "No emails to deliver."
+      end
+      
+    end  
+  rescue Exception => ex
     
-    if failures.any?
-      report = Report.failure "Delivery", "Failed to deliver #{failures.size} deliveries"
-    end
-    
-    if successes > 0
-      report = Report.success "Delivery", "Delivered #{successes} emails."
-    else
-      puts "No emails to deliver."
-    end
-    
-  end  
-
+  end
 end
 
 def render_email(deliveries)
@@ -123,7 +126,13 @@ def email_user(email, content)
   if config[:email][:from].present?
     begin
       subject = "Latest alerts"
-      Pony.mail config[:email].merge(:to => email, :subject => subject, :html_body => content)
+      
+      Pony.mail config[:email].merge(
+        :to => email, 
+        :subject => subject, 
+        :html_body => content
+      )
+      
       true
     rescue Errno::ECONNREFUSED
       false
@@ -135,7 +144,7 @@ def email_user(email, content)
 end
 
 def email_report(report)
-  if config[:email][:to] and config[:email][:to].any?
+  if config[:admin][:email].present?
     
     subject = "[#{report.status}] #{report.source} | #{report.message}"
     
@@ -148,7 +157,11 @@ def email_report(report)
     body += attrs.inspect
     
     begin
-      Pony.mail config[:email].merge(:subject => subject, :body => body)
+      Pony.mail config[:email].merge(
+        :subject => subject, 
+        :body => body,
+        :to => config[:admin][:email]
+      )
     rescue Errno::ECONNREFUSED
       puts "Couldn't email report, connection refused! Check system settings."
     end
@@ -156,9 +169,13 @@ def email_report(report)
 end
 
 def email_message(msg, exception)
-  if config[:email][:to] and config[:email][:to].any?
+  if config[:admin][:email].present?
     begin
-      Pony.mail config[:email].merge(:subject => msg, :body => (exception ? exception_message(exception) : msg))
+      Pony.mail config[:email].merge(
+        :subject => msg, 
+        :body => (exception ? exception_message(exception) : msg),
+        :to => config[:admin][:email]
+      )
     rescue Errno::ECONNREFUSED
       puts "Couldn't email message, connection refused! Check system settings."
     end
@@ -166,12 +183,16 @@ def email_message(msg, exception)
 end
 
 def exception_message(exception)
+  type = exception.class.to_s
+  message = exception.message
+  backtrace = exception.backtrace
+  
   msg = ""
-  msg += "#{exception['type']}: #{exception['message']}" 
+  msg += "#{type}: #{message}" 
   msg += "\n\n"
   
-  if exception['backtrace'] and exception['backtrace'].respond_to?(:each)
-    exception['backtrace'].each {|line| msg += "#{line}\n"}
+  if backtrace backtrace.respond_to?(:each)
+    backtrace.each {|line| msg += "#{line}\n"}
     msg += "\n\n"
   end
   

@@ -21,5 +21,6 @@
 :subscriptions:
   :sunlight_api_key: 
 
+# where error emails should go
 :admin:
   :email: # 

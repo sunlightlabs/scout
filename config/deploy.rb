@@ -2,14 +2,11 @@ set :environment, (ENV['target'] || 'staging')
 
 set :user, 'alarms'
 set :application, user
-
 set :sock, "#{user}.sock"
 
-
-  set :deploy_to, "/projects/#{user}/"
-  set :local_bin, "/projects/#{user}/.gem/ruby/1.8/bin"
-
-  set :domain, 'dupont.sunlightlabs.net'
+set :deploy_to, "/projects/#{user}/"
+set :local_bin, "/projects/#{user}/.gem/ruby/1.8/bin"
+set :domain, 'dupont.sunlightlabs.net'
 
 
   set :scm, :git
