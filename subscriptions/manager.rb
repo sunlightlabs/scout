@@ -21,10 +21,6 @@ module Subscriptions
       items.each do |item|
         # all existing IDs are now considered "seen" by this subscription
         SeenId.create! :subscription_id => subscription.id, :item_id => item.id
-        
-        unless SeenItem.where(:subscription_type => subscription.subscription_type, :item_id => item.id).first
-          SeenItem.create! :subscription_type => subscription.subscription_type, :item_id => item.id, :data => item.data
-        end
       end
       
       # not delivering anything, this subscription was just made and anything there is presumed to have been "seen"
@@ -47,10 +43,6 @@ module Subscriptions
       deliveries = []
       
       items.each do |item|
-        # find or create the item in the system library of items that have come through
-        unless seen_item = SeenItem.where(:subscription_type => subscription.subscription_type, :item_id => item.id).first
-          seen_item = SeenItem.create! :subscription_type => subscription.subscription_type, :item_id => item.id, :data => item.data
-        end
         
         # if the item hasn't been seen, mark it and add it to the delivery queue
         unless SeenId.where(:subscription_id => subscription.id, :item_id => item.id).first
