@@ -1,5 +1,6 @@
 body {background-color: #f9f9f9;}
 h1, h2, h3, h4, h5, h6 {font-weight: normal;}
+em, strong {font-weight: normal; font-style: normal;}
 
 a {color: #22447f;}
 
@@ -149,6 +150,15 @@ section.results li.bill h3 {
 
 section.results li.bill h4 {
   font-size: 90%; 
+}
+
+section.results li.bill span.dates {
+  margin-top: 10px; display: block;
+  font-size: 90%;
+}
+
+section.results li.bill span.dates strong {
+  font-style: italic;
 }
 
 section.results li.bill dl {

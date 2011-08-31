@@ -1,4 +1,4 @@
-<li class="bill">
+<li class="result bill">
   <h2>
     <%= bill_code item.data['bill_type'], item.data['number'] %>
     <span>as <%= bill_version item.data['version_code'] %></span>
@@ -8,6 +8,10 @@
   <% else %>
     <h4><%= item.data['official_title'] %></h4>
   <% end %>
+  
+  <span class="dates">
+    <strong><%= short_date item.data['last_action_at'] %></strong>: <%= item.data['last_action']['text'] %>
+  </span>
   
   <% if item.data['search']['highlight'] %>
     <dl class="highlight">

@@ -15,6 +15,10 @@ helpers do
   def long_date(time)
     time.strftime "%B #{time.day}, %Y" # remove 0-prefix
   end
+  
+  def short_date(time)
+    time.strftime "%m-%d-%Y"
+  end
 end
 
 
