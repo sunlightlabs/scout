@@ -1,6 +1,10 @@
 module Subscriptions::Helpers
   # bill display helpers
   
+  def short_date(time)
+    time.strftime "%m-%d-%Y"
+  end
+  
   def bill_code(type, number)
     "#{bill_type type} #{number}"
   end
