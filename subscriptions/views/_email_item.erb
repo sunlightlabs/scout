@@ -9,7 +9,7 @@
     <h4><%= item.data['official_title'] %></h4>
   <% end %>
   
-  <% if item.data['last_action_at'] and item.data['last_action_at']['text'] %>
+  <% if item.data['last_action'] and item.data['last_action']['text'] %>
     <span class="dates">
       <strong><%= short_date item.data['last_action_at'] %></strong>: <%= item.data['last_action']['text'] %>
     </span>
