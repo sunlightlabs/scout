@@ -25,7 +25,7 @@ module Subscriptions
         url << "&query=#{query}"
         url << "&order=bill.last_action_at"
         url << "&sections=#{sections.join ','}"
-        url << "&highlight=true"
+        url << "&highlight=true&highlight_size=500"
       end
       
       # takes parsed response and returns an array where each item is 
