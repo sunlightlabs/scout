@@ -30,7 +30,7 @@ class Report
   end
   
   def to_s
-    msg = "[#{status}] #{source}\n\t#{message}"
+    msg = "[#{status}] #{source}\n#{message}"
     if self[:exception]
       msg += "\n\t#{self[:exception]['type']}: #{self[:exception]['message']}"
       if self[:exception]['backtrace'] and self[:exception]['backtrace'].respond_to?(:each)

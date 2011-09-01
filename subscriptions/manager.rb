@@ -16,6 +16,11 @@ module Subscriptions
     def self.initialize!(subscription)
       items = poll subscription
       
+      unless items
+        Report.warning "Initialization", "Got a bad response when polling to initialize a new subscription. This process should be updated to add re-tries and graceful handling of failure.", :subscription => subscription.attributes
+        return
+      end
+      
       # store all items in the seen IDs table
       # store any unseen items in the seen items table
       items.each do |item|
@@ -37,6 +42,11 @@ module Subscriptions
     # 4) stores any items as yet unseen by this subscription in the delivery queue
     def self.check!(subscription)
       items = poll subscription
+      
+      unless items
+        Report.warning "Checking", "Got a bad response when polling to check an existing subscription. This process should be updated to note re-tries and add a threshold to decide when there's a real failure.", :subscription => subscription.attributes
+        return
+      end
       
       user = User.where(:_id => subscription.user_id).first
       
@@ -81,7 +91,7 @@ module Subscriptions
       adapter = subscription.adapter
       url = adapter.url_for subscription
       
-      puts "\n[DEBUG] Polling #{url}\n\n" if ENV['debug'].present?
+      # puts "\n[DEBUG] Polling #{url}\n\n"
       
       response = HTTParty.get url
       
