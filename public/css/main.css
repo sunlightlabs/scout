@@ -162,18 +162,17 @@ section.results li.bill span.dates strong {
 }
 
 section.results li.bill dl {
-  background-color: #C9F5E9;
-  padding: 10px; 
-  margin-left: 0px; margin-top: 10px;
   font-size: 90%;
 }
 
 section.results li.bill dl dt {
-  display: none;
+  margin-top: 10px;
 }
 
 section.results li.bill dl dd {
-  margin: 0px 0px 0 0px;
+  background-color: #C9F5E9;
+  padding: 10px; 
+  margin-left: 0px; margin-top: 5px;
 }
 
 section.results li.bill dl dd em {
