@@ -33,8 +33,8 @@ end
 
 namespace :subscriptions do
   
-  desc "Poll for new items for every active, initialized subscription"
-  task :poll => :environment do
+  desc "Check for new items for every active, initialized subscription"
+  task :check => :environment do
     begin
       Subscription.initialized.all.each do |subscription|
         Subscriptions::Manager.check! subscription
@@ -55,8 +55,10 @@ namespace :subscriptions do
       failures = []
       successes = 0
       
+      emails = Delivery.all.distinct :user_email
+      
       # group by emails, send one to each user
-      Delivery.all.distinct(:user_email).each do |email|
+      emails.each do |email|
         
         deliveries = Delivery.where(:user_email => email).all.to_a
         content = render_email deliveries
@@ -87,6 +89,9 @@ namespace :subscriptions do
       
       if successes > 0
         report = Report.success "Delivery", "Delivered #{successes} emails."
+        
+        # Temporary, but for now I want to know when emails go out
+        email_message "Sent #{successes} emails among #{emails.join ', '}"
       else
         puts "No emails to deliver."
       end
