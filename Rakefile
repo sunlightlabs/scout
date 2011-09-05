@@ -152,18 +152,17 @@ def email_user(email, content)
 end
 
 def email_report(report)
+  subject = "[#{report.status}] #{report.source} | #{report.message}"
+    
+  body = ""
+  body += exception_message(report[:exception]) if report[:exception]
+  
+  attrs = report.attributes.dup
+  [:status, :created_at, :updated_at, :_id, :message, :exception, :read, :source].each {|key| attrs.delete key.to_s}
+  
+  body += attrs.inspect
+    
   if config[:admin][:email].present?
-    
-    subject = "[#{report.status}] #{report.source} | #{report.message}"
-    
-    body = ""
-    body += exception_message(report[:exception]) if report[:exception]
-    
-    attrs = report.attributes.dup
-    [:status, :created_at, :updated_at, :_id, :message, :exception, :read, :source].each {|key| attrs.delete key.to_s}
-    
-    body += attrs.inspect
-    
     begin
       Pony.mail config[:email].merge(
         :subject => subject, 
@@ -173,6 +172,8 @@ def email_report(report)
     rescue Errno::ECONNREFUSED
       puts "Couldn't email report, connection refused! Check system settings."
     end
+  else
+    puts body
   end
 end
 
@@ -189,6 +190,8 @@ def email_message(msg, exception = nil)
     rescue Errno::ECONNREFUSED
       puts "Couldn't email message, connection refused! Check system settings."
     end
+  else
+    puts body
   end
 end
 
