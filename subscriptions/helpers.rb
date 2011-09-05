@@ -52,17 +52,20 @@ module Subscriptions::Helpers
   end
   
   def opencongress_url(item)
-    id = "#{item.data['session']}-#{govtrack_type item.data['bill_type']}#{item.data['number']}"
+    bill = item.data['bill']
+    id = "#{bill['session']}-#{govtrack_type bill['bill_type']}#{bill['number']}"
     "http://www.opencongress.org/bill/#{id}/show"
   end
   
   def govtrack_url(item)
-    id = "#{govtrack_type item.data['bill_type']}#{item.data['session']}-#{item.data['number']}"
+    bill = item.data['bill']
+    id = "#{govtrack_type bill['bill_type']}#{bill['session']}-#{bill['number']}"
     "http://www.govtrack.us/congress/bill.xpd?bill=#{id}"
   end
   
   def thomas_url(item)
-    id = "#{item.data['session']}#{thomas_type item.data['bill_type']}#{item.data['number']}"
+    bill = item.data['bill']
+    id = "#{bill['session']}#{thomas_type bill['bill_type']}#{bill['number']}"
     "http://hdl.loc.gov/loc.uscongress/legislation.#{id}"
   end
   

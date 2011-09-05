@@ -18,6 +18,7 @@ configure(:development) do |config|
   config.also_reload "models/*.rb"
   config.also_reload "subscriptions/adapters/*.rb"
   config.also_reload "subscriptions/manager.rb"
+  config.also_reload "subscriptions/helpers.rb"
 end
 
 

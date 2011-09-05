@@ -3,6 +3,8 @@ module Subscriptions
 
     class BillsByKeyword
       
+      # public
+      
       MAX_ITEMS = 20
       
       def self.url_for(subscription)
@@ -41,25 +43,11 @@ module Subscriptions
       
       # internal
       
-      # returns a hash containing the id, title, and post date of the item
       def self.item_for(bill_version)
-        # remove the prefacing 'bill.' (will fix this in RTC)
-        data = {
-          "bill_id" => bill_version.delete("bill.bill_id"),
-          "bill_type" => bill_version.delete("bill.bill_type"),
-          "number" => bill_version.delete("bill.number"),
-          "short_title" => bill_version.delete("bill.short_title"),
-          "official_title" => bill_version.delete("bill.official_title"),
-          "introduced_at" => bill_version.delete("bill.introduced_at"),
-          "last_action_at" => bill_version.delete("bill.last_action_at"),
-          "session" => bill_version.delete("bill.session"),
-          "last_action" => bill_version.delete("bill.last_action")
-        }
-        data = data.merge bill_version
         
         Subscriptions::Item.new(
           :id => bill_version["bill_version_id"],
-          :data => data
+          :data => bill_version
         )
           
       end
