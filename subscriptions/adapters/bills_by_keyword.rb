@@ -44,6 +44,34 @@ module Subscriptions
       # internal
       
       def self.item_for(bill_version)
+        # clean out the dot notation from the highlight fields,
+        # since the data hash here may get stored in the database
+        # use a double-underscore to guarantee never a conflict
+        highlight = bill_version['search']['highlight']
+        
+        highlight.keys.each do |key|
+          if key["."]
+            highlight[key.gsub('.', '__')] = highlight.delete key
+          end
+        end
+        
+        
+        # Long-winded justification for the above:
+        
+        # Having to do this shouldn't be viewed as a flaw on RTC's part; its job shouldn't be
+        # to make sure its clients under no circumstances ever need to worry about putting the JSON output
+        # directly into a Mongo database. 
+        
+        # The document data itself gets cleaned RTC-side of dot notation, but it doesn't make sense to change 
+        # the structure of the highlight object as it comes back from ElasticSearch.
+        # The highlight object should remain a flat set of keys that point to arrays of highlighted text, both to
+        # preserve what we can from ES, and so that clients don't have to build in complicated parsing logic to understand
+        # the highlighting of a document.
+        
+        # It also doesn't make sense to invent a new notation for separating subobjects on RTC's side just to 
+        # avoid the edge case where a client wants to dump the entire thing into their own Mongo database. 
+        # This is our particular client's problem.
+        
         
         Subscriptions::Item.new(
           :id => bill_version["bill_version_id"],

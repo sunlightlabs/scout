@@ -72,12 +72,22 @@ module Subscriptions::Helpers
   def highlight_field(field)
     {
       "full_text" => "the full text",
-      "summary" => "the summary",
-      "official_title" => "the official title",
-      "short_title" => "the official short title",
-      "popular_title" => "the nickname",
+      "bill__summary" => "the CRS summary",
+      "bill__official_title" => "the official title",
+      "bill__short_title" => "the nickname",
+      "bill__popular_title" => "the common parlance",
     }[field]
   end
+  
+#   def highlight_priority(field)
+#     {
+#       "full_text" => "the full text",
+#       "bill__summary" => "the CRS summary",
+#       "bill__official_title" => "the official title",
+#       "bill__short_title" => "the nickname",
+#       "bill__popular_title" => "the common parlance",
+#     }[field]
+#   end
   
   # adapted from http://www.gpoaccess.gov/bills/glossary.html
   def bill_version(code)
