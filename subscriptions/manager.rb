@@ -91,7 +91,7 @@ module Subscriptions
       adapter = subscription.adapter
       url = adapter.url_for subscription
       
-      # puts "\n[DEBUG] Polling #{url}\n\n"
+      puts "\n[DEBUG] Polling #{url}\n\n" if config[:debug][:output_urls]
       
       response = HTTParty.get url
       

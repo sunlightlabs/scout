@@ -24,3 +24,7 @@
 # where error emails should go
 :admin:
   :email: # 
+
+:debug:
+  # outputs polled URLs to STDOUT
+  :output_urls: false
