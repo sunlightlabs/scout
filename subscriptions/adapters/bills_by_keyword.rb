@@ -20,12 +20,12 @@ module Subscriptions
           endpoint = "http://api.realtimecongress.org/api/v1"
         end
         
-        sections = %w{ bill.bill_id bill.bill_type bill.number bill.short_title bill.official_title bill.introduced_at bill.last_action_at bill.last_action version_code bill_version_id bill.session }
+        sections = %w{ bill.bill_id bill.bill_type bill.number bill.short_title bill.official_title bill.introduced_at bill.last_action_at bill.last_action version_code bill_version_id bill.session issued_on }
         
         url = "#{endpoint}/search/bill_versions.json?apikey=#{api_key}"
         url << "&per_page=#{MAX_ITEMS}"
         url << "&query=#{query}"
-        url << "&order=bill.last_action_at"
+        url << "&order=issued_on"
         url << "&sections=#{sections.join ','}"
         url << "&highlight=true&highlight_size=500"
       end

@@ -25,7 +25,7 @@ module Subscriptions::Helpers
   
   def bill_highlight(item)
     highlighting = item.data['search']['highlight']
-    field = highlighting.keys.first
+    field = highlighting.keys.sort_by {|k| highlight_priority k}.first
     
     "<dt>From #{highlight_field field}:</dt>\n<dd>#{highlighting[field]}</dd>"
   end
@@ -74,20 +74,22 @@ module Subscriptions::Helpers
       "full_text" => "the full text",
       "bill__summary" => "the CRS summary",
       "bill__official_title" => "the official title",
-      "bill__short_title" => "the nickname",
+      "bill__short_title" => "the shorthand title",
       "bill__popular_title" => "the common parlance",
+      "bill__keywords" => "the tagged subjects"
     }[field]
   end
   
-#   def highlight_priority(field)
-#     {
-#       "full_text" => "the full text",
-#       "bill__summary" => "the CRS summary",
-#       "bill__official_title" => "the official title",
-#       "bill__short_title" => "the nickname",
-#       "bill__popular_title" => "the common parlance",
-#     }[field]
-#   end
+  def highlight_priority(field)
+    {
+      "bill__summary" => 1,
+      "full_text" => 2,
+      "bill__keywords" => 3,
+      "bill__official_title" => 4,
+      "bill__short_title" => 5,
+      "bill__popular_title" => 6
+    }[field]
+  end
   
   # adapted from http://www.gpoaccess.gov/bills/glossary.html
   def bill_version(code)
