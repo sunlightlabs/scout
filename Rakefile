@@ -184,11 +184,12 @@ end
 
 def email_message(msg, exception = nil)
   body = exception ? exception_message(exception) : msg
+  subject = "[#{exception ? "ERROR" : "ADMIN"}] #{msg}"
   
   if config[:admin][:email].present?
     begin
       Pony.mail config[:email].merge(
-        :subject => "[ERROR] #{msg}", 
+        :subject => subject,
         :body => body,
         :to => config[:admin][:email]
       )
