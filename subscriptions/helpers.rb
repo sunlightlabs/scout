@@ -5,8 +5,8 @@ module Subscriptions::Helpers
     time.strftime "%m-%d-%Y"
   end
   
-  def very_short_date(date)
-    date.strftime "%m/%d"
+  def very_short_date(time)
+    time.strftime "%m/%d"
   end
   
   def bill_code(type, number)

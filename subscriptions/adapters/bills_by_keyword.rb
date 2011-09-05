@@ -73,6 +73,8 @@ module Subscriptions
         # This is our particular client's problem.
         
         
+        bill_version['issued_on'] = noon_utc_for bill_version['issued_on']
+        
         Subscriptions::Item.new(
           :id => bill_version["bill_version_id"],
           :date => bill_version["issued_on"],
@@ -80,6 +82,13 @@ module Subscriptions
         )
           
       end
+      
+      # helper function to straighten dates into UTC times (necessary for serializing to BSON, sigh)
+      def self.noon_utc_for(date)
+        time = date.to_time
+        time.getutc + (12-time.getutc.hour).hours
+      end
+      
     end
   
   end
