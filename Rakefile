@@ -91,7 +91,7 @@ namespace :subscriptions do
         report = Report.success "Delivery", "Delivered #{successes} emails."
         
         # Temporary, but for now I want to know when emails go out
-        email_message "Sent #{successes} emails among #{emails.join ', '}"
+        email_message "Sent #{successes} emails among [#{emails.join ', '}]"
       else
         puts "No emails to deliver."
       end
@@ -151,7 +151,7 @@ def email_user(email, content)
       false
     end
   else
-    puts "Would have emailed something to #{email}"
+    puts "\n[USER EMAIL] Would have emailed delivery to #{email}"
     true # if no email is specified, we'll assume it's a dev environment or something
   end
 end
@@ -178,7 +178,7 @@ def email_report(report)
       puts "Couldn't email report, connection refused! Check system settings."
     end
   else
-    puts body
+    puts "\n[ADMIN EMAIL] #{body}"
   end
 end
 
@@ -196,7 +196,7 @@ def email_message(msg, exception = nil)
       puts "Couldn't email message, connection refused! Check system settings."
     end
   else
-    puts body
+    puts "\n[ADMIN EMAIL] #{body}"
   end
 end
 

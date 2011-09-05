@@ -13,7 +13,7 @@ class Report
   
   def self.file(status, source, message, attached = {})
     report = Report.create!(:source => source.to_s, :status => status, :message => message, :attached => attached)
-    puts report
+    puts "\n#{report}"
     report
   end
   
