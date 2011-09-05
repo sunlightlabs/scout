@@ -157,7 +157,10 @@ section.results li.bill h2 span.code {
 
 section.results li.bill h2 span.version {
   font-weight: normal; 
-  
+}
+
+section.results li.bill h2 a.file {
+  margin-left: 5px;
 }
 
 section.results li.bill h3 {

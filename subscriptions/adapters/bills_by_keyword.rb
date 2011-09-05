@@ -20,7 +20,7 @@ module Subscriptions
           endpoint = "http://api.realtimecongress.org/api/v1"
         end
         
-        sections = %w{ bill.bill_id bill.bill_type bill.number bill.short_title bill.official_title bill.introduced_at bill.last_action_at bill.last_action version_code bill_version_id bill.session issued_on }
+        sections = %w{ bill.bill_id bill.bill_type bill.number bill.short_title bill.official_title bill.introduced_at bill.last_action_at bill.last_action version_code bill_version_id bill.session urls.pdf urls.xml issued_on }
         
         url = "#{endpoint}/search/bill_versions.json?apikey=#{api_key}"
         url << "&per_page=#{MAX_ITEMS}"
