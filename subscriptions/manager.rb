@@ -106,10 +106,11 @@ module Subscriptions
   class Item
     include Subscriptions::Helpers
     
-    attr_accessor :id, :data
+    attr_accessor :id, :date, :data
     
     def initialize(options)
       self.id = options[:id]
+      self.date = options[:date]
       self.data = options[:data]
     end
     

@@ -5,7 +5,12 @@
   </p>
 
   <ul>
+    <% current_date = nil %>
     <% items.each do |item| %>
+      <% if item.date != current_date %>
+        <p class="date"><%= just_date item.date %></p>
+        <% current_date = item.date %>
+      <% end %>
       <%= partial :"subscriptions/result_item", :locals => {:item => item} %>
     <% end %>
   </ul>

@@ -75,6 +75,7 @@ module Subscriptions
         
         Subscriptions::Item.new(
           :id => bill_version["bill_version_id"],
+          :date => bill_version["issued_on"],
           :data => bill_version
         )
           

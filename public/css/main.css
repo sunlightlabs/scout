@@ -128,6 +128,18 @@ section.results p.header {
 }
 
 section.results ul {list-style-type: none;}
+section.results ul p.date {
+  font-size: 90%;
+  width: 100%;
+  
+  padding: 3px 0;
+  border: 1px solid #5577bb;
+  background-color: #e5e5ff;
+  border-width: 1px 0;
+  margin: 20px 0;
+  text-align: center;
+  
+}
 
 section.results li.bill {
   padding: 15px 0 15px 0;
@@ -135,13 +147,17 @@ section.results li.bill {
 }
 
 section.results li.bill h2 {
-  font-size: 90%; font-weight: bold;
+  font-size: 90%; 
   margin-bottom: 7px;
 }
 
-section.results li.bill h2 span {
-  font-weight: normal; font-style: italic;
-  margin-left: 5px;
+section.results li.bill h2 span.code {
+  font-weight: bold;
+}
+
+section.results li.bill h2 span.version {
+  font-weight: normal; 
+  
 }
 
 section.results li.bill h3 {

@@ -19,6 +19,10 @@ helpers do
   def short_date(time)
     time.strftime "%m-%d-%Y"
   end
+  
+  def just_date(date)
+    date.strftime "%B #{date.day}"
+  end
 end
 
 

@@ -1,19 +1,15 @@
 <% bill = item.data['bill'] %>
 <li class="result bill">
   <h2>
-    <%= bill_code bill['bill_type'], bill['number'] %>
-    <span>as <%= bill_version item.data['version_code'] %></span>
+    <span class="code"><%= bill_code bill['bill_type'], bill['number'] %></span>
+    <span class="version">as <%= bill_version item.data['version_code'] %></span>
+    <span class="issued_on">on <%= very_short_date item.data['issued_on'] %></span>
   </h2>
+  
   <% if bill['short_title'].present? %>
     <h3><%= bill['short_title'] %></h3>
   <% else %>
     <h4><%= bill['official_title'] %></h4>
-  <% end %>
-  
-  <% if bill['last_action'] and bill['last_action']['text'] %>
-    <span class="dates">
-      <strong><%= short_date bill['last_action_at'] %></strong>: <%= bill['last_action']['text'] %>
-    </span>
   <% end %>
   
   <% if item.data['search']['highlight'] %>
