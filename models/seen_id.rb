@@ -5,6 +5,8 @@ class SeenId
   include Mongoid::Document
   include Mongoid::Timestamps
   
+  belongs_to :subscription
+  
   field :subscription_id
   field :item_id
   

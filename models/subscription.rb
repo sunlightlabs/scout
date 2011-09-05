@@ -12,6 +12,9 @@ class Subscription
   index :user_id
   index :keyword
   
+  has_many :seen_ids
+  has_many :deliveries
+  
   validates_presence_of :user_id
   validates_presence_of :subscription_type
   

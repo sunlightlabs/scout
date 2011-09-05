@@ -8,6 +8,8 @@ class Delivery
   include Mongoid::Document
   include Mongoid::Timestamps
   
+  belongs_to :subscription
+  
   # references to other tables, shouldn't be needed but useful for debugging and archival
   field :subscription_id
   field :user_id
