@@ -47,11 +47,11 @@ module Subscriptions
         # clean out the dot notation from the highlight fields,
         # since the data hash here may get stored in the database
         # use a double-underscore to guarantee never a conflict
-        highlight = bill_version['search']['highlight']
-        
-        highlight.keys.each do |key|
-          if key["."]
-            highlight[key.gsub('.', '__')] = highlight.delete key
+        if highlight = bill_version['search']['highlight']
+          highlight.keys.each do |key|
+            if key["."]
+              highlight[key.gsub('.', '__')] = highlight.delete key
+            end
           end
         end
         
