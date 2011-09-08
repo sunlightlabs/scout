@@ -14,6 +14,7 @@ class Subscription
   
   has_many :seen_ids
   has_many :deliveries
+  belongs_to :user
   
   validates_presence_of :user_id
   validates_presence_of :subscription_type

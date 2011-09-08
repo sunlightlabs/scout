@@ -1,5 +1,18 @@
 # general display helpers
 helpers do
+  
+  # index of subscription adapters and associated copy
+  def subscription_types
+    {
+      :bills_by_keyword => {
+                            :name => "Congress"
+                           }
+#       :state_bills => {
+#                        :name => "State Bills"
+#                       }
+    }
+  end
+  
   def h(text)
     Rack::Utils.escape_html(text)
   end

@@ -7,18 +7,16 @@
   <ul>
     
     <li class="new">
-      <% if defined?(subscription) and subscription.errors.any? %>
+      <% if defined?(keyword) and keyword.errors.any? %>
         <div class="errors">
-          <% subscription.errors.full_messages.each do |msg| %>
+          <% keyword.errors.full_messages.each do |msg| %>
             <span><%= msg %></span>
           <% end %>
         </div>
       <% end %>
       
       <form action="/subscriptions" method="post">
-        <input type="hidden" name="subscription[subscription_type]" value="bills_by_keyword" />
-        
-        <input type="text" name="subscription[keyword]" placeholder="keyword/phrase" />
+        <input type="text" name="keyword" placeholder="keyword/phrase" />
         
         <div class="buttons">
           <input type="submit" value="Add" />
@@ -26,20 +24,23 @@
       </form>
     </div>
     
-    <% subscriptions.each do |subscription| %>
-      <li class="existing">
-        <form method="post" action="/subscriptions/<%= subscription.id %>">
-          <input type="hidden" name="_method" value="delete" />
+    <% keywords.each do |keyword| %>
+      <% subscriptions = keyword.subscriptions.all %>
+      <% subscriptions.each do |subscription| %>
+        <li class="existing">
+          <form method="post" action="/subscriptions/<%= subscription.id %>">
+            <input type="hidden" name="_method" value="delete" />
+            
+            <h2><%= subscription.keyword %></h2>
+            
+            <div class="buttons">
+              <input data-id="<%= subscription.id %>" class="test existing" type="button" value="Test" />
+              <input class="remove subscription" type="submit" value="Remove" data-keyword="<%= form_escape subscription.keyword %>" />
+            </div>
+          </form>
           
-          <h2><%= subscription.keyword %></h2>
-          
-          <div class="buttons">
-            <input data-id="<%= subscription.id %>" class="test existing" type="button" value="Test" />
-            <input class="remove subscription" type="submit" value="Remove" data-keyword="<%= form_escape subscription.keyword %>" />
-          </div>
-        </form>
-        
-      </li>
+        </li>
+      <% end %>
     <% end %>
 
   </ul>

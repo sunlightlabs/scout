@@ -14,19 +14,27 @@ task :create_indexes => :environment do
     end
     
     models.each do |model| 
-      if model.respond_to? :create_indexes
-        model.create_indexes 
-        puts "Created indexes for #{model}"
-      else
-        puts "Skipping #{model}, not a Mongoid model"
-      end
+      model.create_indexes 
+      puts "Created indexes for #{model}"
     end
+    
   rescue Exception => ex
     email_message "Exception creating indexes.", ex
     puts "Error creating indexes, emailed report."
   end
 end
 
+desc "Clear the database"
+task :clear_data => :environment do
+  models = Dir.glob('models/*.rb').map do |file|
+    File.basename(file, File.extname(file)).camelize.constantize
+  end
+  
+  models.each do |model| 
+    model.delete_all
+    puts "Cleared model #{model}."
+  end
+end
 
 # subscription management tasks
 # most of this work is encapsulated inside the Subscriptions::Manager (/subscriptions/manager.rb)

@@ -60,23 +60,27 @@ end
 get '/dashboard' do
   requires_login
   
-  subscriptions = Subscription.where(:user_id => current_user.id).desc(:created_at).all
-  erb :dashboard, :locals => {:subscriptions => subscriptions}
+  erb :dashboard, :locals => {:keywords => current_user.keywords.all}
 end
 
 
 post '/subscriptions' do
   requires_login
   
-  subscription = Subscription.new params[:subscription]
-  subscription[:user_id] = current_user.id
+  keyword = current_user.keywords.new :keyword => params[:keyword]
+  subscriptions = subscription_types.keys.map do |type| 
+    current_user.subscriptions.new :keyword => params[:keyword], :subscription_type => type.to_s
+  end
   
-  if subscription.save
+  # make sure keyword has the same validations as subscriptions
+  if keyword.valid? and subscriptions.reject {|s| s.valid?}.empty?
+    keyword.save!
+    subscriptions.each {|s| s.save!}
+    
     redirect '/dashboard'
   else
     flash.now[:failure] = "Problem adding subscription."
-    subscriptions = Subscription.where(:user_id => current_user.id).all
-    erb :dashboard, :locals => {:subscription => subscription, :subscriptions => subscriptions}
+    erb :dashboard, :locals => {:keyword => keyword, :keywords => current_user.keywords.all}
   end
   
 end
