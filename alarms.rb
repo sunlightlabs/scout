@@ -64,7 +64,7 @@ get '/dashboard' do
 end
 
 
-post '/subscriptions' do
+post '/keywords' do
   requires_login
   
   keyword = current_user.keywords.new :keyword => params[:keyword]
@@ -79,16 +79,28 @@ post '/subscriptions' do
     
     redirect '/dashboard'
   else
-    flash.now[:failure] = "Problem adding subscription."
+    flash.now[:failure] = "Problem adding keyword."
     erb :dashboard, :locals => {:keyword => keyword, :keywords => current_user.keywords.all}
   end
   
 end
 
-get '/subscriptions/:id/test' do
+# get '/subscriptions/:id/test' do
+#   requires_login
+#   
+#   if subscription = Subscription.where(:user_id => current_user.id, :_id => BSON::ObjectId(params[:id].strip)).first
+#     items = Subscriptions::Manager.poll subscription
+#     erb :results, :layout => false, :locals => {:items => items, :subscription => subscription}
+#   else
+#     halt 404
+#   end
+# end
+
+get '/subscriptions/test' do
   requires_login
   
-  if subscription = Subscription.where(:user_id => current_user.id, :_id => BSON::ObjectId(params[:id].strip)).first
+  subscription = Subscription.new :keyword => params[:keyword], :subscription_type => params[:subscription_type]
+  if subscription.adapter # valid subscription type
     items = Subscriptions::Manager.poll subscription
     erb :results, :layout => false, :locals => {:items => items, :subscription => subscription}
   else
@@ -96,12 +108,15 @@ get '/subscriptions/:id/test' do
   end
 end
 
-delete '/subscriptions/:id' do
+delete '/keyword/:id' do
   requires_login
   
-  if subscription = Subscription.where(:user_id => current_user.id, :_id => BSON::ObjectId(params[:id].strip)).first
-    keyword = subscription.keyword
-    subscription.destroy
+  if keyword = Keyword.where(:user_id => current_user.id, :_id => BSON::ObjectId(params[:id].strip)).first
+    subscriptions = keyword.subscriptions.to_a
+    
+    keyword.destroy
+    subscriptions.each {|s| s.destroy}
+    
     flash[:success] = "No longer subscribed to \"#{keyword}\"."
   end
   

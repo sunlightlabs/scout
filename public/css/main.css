@@ -6,8 +6,12 @@ a {color: #22447f;}
 
 header, footer, section.main {
   width: 980px;
-  margin: 30px 50px;
+  margin-left: 50px;
+  margin-right: 50px;
 }
+
+header {margin-top: 30px; margin-bottom: 10px;}
+footer {margin-top: 30px; margin-bottom: 30px;}
 
 header div.login {
   font-size: 90%;
@@ -65,9 +69,8 @@ section.signup form input.submit {
 }
 
 section.entry {
-  float: left;
-  width: 450px;
-  padding-bottom: 30px;
+  width: 100%;
+  margin-bottom: 30px;
 }
 
 section.entry div.errors {
@@ -76,21 +79,21 @@ section.entry div.errors {
   padding-bottom: 10px;
 }
 
-section.entry input[type=submit], section.entry li input[type=button] {
-  font-size: 100%;
-  padding: 5px 10px;
-  float: left; 
-  margin-left: 20px;
-}
-
 section.entry input[type=text] {
   font-size: 100%; float: left;
-  padding: 5px 5px;
+  padding: 10px 10px; width: 400px;
+}
+
+section.entry input[type=submit], section.entry input[type=button] {
+  font-size: 125%;
+  padding: 8px 20px;
+  float: left; 
+  margin-left: 10px;
 }
 
 ul.subscriptions {
   float: left; clear: both;
-  width: 450px;
+  width: 450px; margin-top: 30px;
   margin-right: 40px;
 }
 
@@ -122,10 +125,9 @@ ul.subscriptions li.existing div.buttons {
 ul.subscriptions li.existing ul.types {
   padding-left: 20px;
 }
-ul.subscriptions li.existing ul.types li {display: inline;}
+ul.subscriptions li.existing ul.types li {display: inline; font-size: 90%;}
 ul.subscriptions li.existing ul.types li input[type=checkbox] {}
-ul.subscriptions li.existing ul.types li label {
-  font-size: 90%; color: #888;
+ul.subscriptions li.existing ul.types li a {
 }
 
 section.results {

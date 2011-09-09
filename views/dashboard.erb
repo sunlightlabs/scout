@@ -11,7 +11,7 @@
     </div>
   <% end %>
   
-  <form action="/subscriptions" method="post">
+  <form action="/keywords" method="post">
     <input type="text" name="keyword" placeholder="keyword/phrase" />
     
     <div class="buttons">
@@ -31,24 +31,22 @@
         <h2><%= keyword.keyword %></h2>
         
         <div class="buttons">
-          <input class="remove keyword" type="submit" value="Remove" data-keyword="<%= form_escape keyword.keyword %>" />
+          <a class="remove keyword" href="#">Remove</a>
         </div>
       </form>
         
       <ul class="subscription types">
-        <% on_types = subscriptions.map {|s| s.subscription_type} %>
         <% subscription_types.keys.each do |type| %>
+          <% subscription = subscriptions.detect {|s| s.subscription_type == type} %>
           <li>
             <input 
               type="checkbox" name="subscription_type" class="subscription_type"
               value="<%= type %>"
-              <% if on_types.include?(type) %>
+              <% if subscription %>
                 checked
               <% end %>
               />
-            <label>
-              <%= subscription_types[type][:name] %>
-            </label>
+            <a class="test" href="#" data-keyword="<%= form_escape keyword.keyword %>" data-type="<%= type %>"><%= subscription_types[type][:name] %></a>
           </li>
         <% end %>
       </ul>
@@ -63,20 +61,24 @@
 <script type="text/javascript">
   $(function() {
     
-    $("input.remove.subscription").click(function() {
-      if (confirm("Remove this alarm?"))
-        this.parentNode.submit();
+    $("a.remove.keyword").click(function() {
+      if (confirm("Remove this alert?"))
+        this.parentNode.parentNode.submit();
       
       return false;
     });
     
-    $("input.test").click(function() {
-      var id = $(this).data("id");
+    $("a.test").click(function() {
+      var keyword = $(this).data("keyword");
+      var type = $(this).data("type");
       
       $("#results div.container").html("");
       $("#results div.loading_container").show();
       
-      $.get("/subscriptions/" + id + "/test", function(data) {
+      $.get("/subscriptions/test", {
+        keyword: keyword,
+        subscription_type: type
+      }, function(data) {
         $("#results div.loading_container").hide();
         $("#results div.container").html(data);
       })
@@ -84,6 +86,8 @@
         $("#results div.loading_container").hide();
         $("#results div.container").html("<p class=\"error\">Error loading results.</p>");
       });
+      
+      return false;
     });
     
     // testing
