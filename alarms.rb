@@ -60,7 +60,7 @@ end
 get '/dashboard' do
   requires_login
   
-  erb :dashboard, :locals => {:keywords => current_user.keywords.all}
+  erb :dashboard, :locals => {:keywords => current_user.keywords.all.map {|k| [k, k.subscriptions]}}
 end
 
 

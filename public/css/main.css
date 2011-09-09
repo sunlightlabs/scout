@@ -1,7 +1,7 @@
 body {background-color: #f9f9f9;}
 h1, h2, h3, h4, h5, h6 {font-weight: normal;}
 em, strong {font-weight: normal; font-style: normal;}
-
+ul, ol {list-style-type: none;}
 a {color: #22447f;}
 
 header, footer, section.main {
@@ -88,36 +88,44 @@ section.entry input[type=text] {
   padding: 5px 5px;
 }
 
-section.subscriptions {
+ul.subscriptions {
   float: left; clear: both;
   width: 450px;
   margin-right: 40px;
 }
-section.subscriptions ul {list-style-type: none;}
 
-section.subscriptions li {
-  float: left; width: 450px;
+ul.subscriptions li.existing {
+  width: 450px; position: relative;
   padding: 10px 0 20px 0; clear: both;
 }
 
-section.subscriptions li.existing {
+ul.subscriptions li.existing {
   border-top: 1px solid #128234;
 }
 
-section.subscriptions li input[type=submit], section.subscriptions li input[type=button] {
+ul.subscriptions li.existing input[type=submit], section.subscriptions li.existing input[type=button] {
   font-size: 100%;
   padding: 5px 10px;
 }
 
-section.subscriptions li h2 {
-  float: left;
+ul.subscriptions li.existing h2 {
+  
   font-weight: normal;
   font-size: 150%;
-  padding: 5px 0px 15px 0px;
+  padding: 5px 0px 10px 0px;
 }
 
-section.subscriptions li div.buttons {
-  float: right;
+ul.subscriptions li.existing div.buttons {
+  position: absolute; right: 0; top: 10px;
+}
+
+ul.subscriptions li.existing ul.types {
+  padding-left: 20px;
+}
+ul.subscriptions li.existing ul.types li {display: inline;}
+ul.subscriptions li.existing ul.types li input[type=checkbox] {}
+ul.subscriptions li.existing ul.types li label {
+  font-size: 90%; color: #888;
 }
 
 section.results {

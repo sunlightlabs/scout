@@ -20,63 +20,76 @@
   </form>
 </section>
 
-<section class="subscriptions">
-
-  <ul>
+<ul class="subscriptions">
     
-    <% keywords.each do |keyword| %>
-      <% subscriptions = keyword.subscriptions.all %>
-      <% subscriptions.each do |subscription| %>
-        <li class="existing">
-          <form method="post" action="/subscriptions/<%= subscription.id %>">
-            <input type="hidden" name="_method" value="delete" />
-            
-            <h2><%= subscription.keyword %></h2>
-            
-            <div class="buttons">
-              <input data-id="<%= subscription.id %>" class="test existing" type="button" value="Test" />
-              <input class="remove subscription" type="submit" value="Remove" data-keyword="<%= form_escape subscription.keyword %>" />
-            </div>
-          </form>
-          
-        </li>
-      <% end %>
-    <% end %>
+  <% keywords.each do |keyword, subscriptions| %>
+  
+    <li class="existing">
+      <form method="post" action="/keyword/<%= keyword.id %>">
+        <input type="hidden" name="_method" value="delete" />
+        
+        <h2><%= keyword.keyword %></h2>
+        
+        <div class="buttons">
+          <input class="remove keyword" type="submit" value="Remove" data-keyword="<%= form_escape keyword.keyword %>" />
+        </div>
+      </form>
+        
+      <ul class="subscription types">
+        <% on_types = subscriptions.map {|s| s.subscription_type} %>
+        <% subscription_types.keys.each do |type| %>
+          <li>
+            <input 
+              type="checkbox" name="subscription_type" class="subscription_type"
+              value="<%= type %>"
+              <% if on_types.include?(type) %>
+                checked
+              <% end %>
+              />
+            <label>
+              <%= subscription_types[type][:name] %>
+            </label>
+          </li>
+        <% end %>
+      </ul>
+        
+      </form>
+      
+    </li>
+  <% end %>
 
-  </ul>
+</ul>
 
-  <script type="text/javascript">
-    $(function() {
+<script type="text/javascript">
+  $(function() {
+    
+    $("input.remove.subscription").click(function() {
+      if (confirm("Remove this alarm?"))
+        this.parentNode.submit();
       
-      $("input.remove.subscription").click(function() {
-        if (confirm("Remove this alarm?"))
-          this.parentNode.submit();
-        
-        return false;
-      });
-      
-      $("input.test").click(function() {
-        var id = $(this).data("id");
-        
-        $("#results div.container").html("");
-        $("#results div.loading_container").show();
-        
-        $.get("/subscriptions/" + id + "/test", function(data) {
-          $("#results div.loading_container").hide();
-          $("#results div.container").html(data);
-        })
-        .error(function() {
-          $("#results div.loading_container").hide();
-          $("#results div.container").html("<p class=\"error\">Error loading results.</p>");
-        });
-      });
-      
-      // testing
-      // $("input.test").get(0).click();
+      return false;
     });
-  </script>
-
-</section>
+    
+    $("input.test").click(function() {
+      var id = $(this).data("id");
+      
+      $("#results div.container").html("");
+      $("#results div.loading_container").show();
+      
+      $.get("/subscriptions/" + id + "/test", function(data) {
+        $("#results div.loading_container").hide();
+        $("#results div.container").html(data);
+      })
+      .error(function() {
+        $("#results div.loading_container").hide();
+        $("#results div.container").html("<p class=\"error\">Error loading results.</p>");
+      });
+    });
+    
+    // testing
+    // $("input.test").get(0).click();
+  });
+</script>
 
 <section class="results" id="results">
   <div class="loading_container">

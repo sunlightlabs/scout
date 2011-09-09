@@ -4,12 +4,12 @@ helpers do
   # index of subscription adapters and associated copy
   def subscription_types
     {
-      :bills_by_keyword => {
-                            :name => "Congress"
-                           }
-#       :state_bills => {
-#                        :name => "State Bills"
-#                       }
+      'bills_by_keyword' => {
+        :name => "Federal"
+      },
+#       'state_bills' => {
+#         :name => "States"
+#       }
     }
   end
   
