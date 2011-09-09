@@ -68,6 +68,9 @@ section.signup form input.submit {
   margin-left: 5px;
 }
 
+
+/* adding new subscriptions */
+
 section.entry {
   width: 100%;
   margin-bottom: 30px;
@@ -90,6 +93,9 @@ section.entry input[type=submit], section.entry input[type=button] {
   float: left; 
   margin-left: 10px;
 }
+
+
+/* subscription display */
 
 ul.subscriptions {
   float: left; clear: both;
@@ -125,10 +131,21 @@ ul.subscriptions li.existing div.buttons {
 ul.subscriptions li.existing ul.types {
   padding-left: 20px;
 }
-ul.subscriptions li.existing ul.types li {display: inline; font-size: 90%;}
-ul.subscriptions li.existing ul.types li input[type=checkbox] {}
-ul.subscriptions li.existing ul.types li a {
+
+ul.subscriptions li.existing ul.types li {
+  display: inline; font-size: 90%;
 }
+
+ul.subscriptions li.existing ul.types li input[type=checkbox] {
+  margin-top: -1px;
+}
+
+ul.subscriptions li.existing ul.types li img.loading {
+  display: none;
+}
+
+
+/* results section */
 
 section.results {
   float: left; 
@@ -161,6 +178,9 @@ section.results ul p.date {
   text-align: center;
   
 }
+
+
+/* federal bill results */
 
 section.results li.bill {
   padding: 15px 0 15px 0;

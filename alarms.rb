@@ -85,17 +85,6 @@ post '/keywords' do
   
 end
 
-# get '/subscriptions/:id/test' do
-#   requires_login
-#   
-#   if subscription = Subscription.where(:user_id => current_user.id, :_id => BSON::ObjectId(params[:id].strip)).first
-#     items = Subscriptions::Manager.poll subscription
-#     erb :results, :layout => false, :locals => {:items => items, :subscription => subscription}
-#   else
-#     halt 404
-#   end
-# end
-
 get '/subscriptions/test' do
   requires_login
   
@@ -117,10 +106,34 @@ delete '/keyword/:id' do
     keyword.destroy
     subscriptions.each {|s| s.destroy}
     
-    flash[:success] = "No longer subscribed to \"#{keyword}\"."
+    flash[:success] = "No longer subscribed to \"#{keyword.keyword}\"."
   end
   
   redirect '/dashboard'
+end
+
+delete '/subscription/:id' do
+  requires_login
+  
+  if subscription = Subscription.where(:user_id => current_user.id, :_id => BSON::ObjectId(params[:id].strip)).first
+    subscription.destroy
+    halt 204
+  else
+    puts "no?!?!"
+    halt 404
+  end
+end
+
+post '/subscriptions' do
+  requires_login
+  
+  subscription = current_user.subscriptions.new :keyword => params[:keyword], :subscription_type => params[:subscription_type]
+  if subscription.valid?
+    subscription.save!
+    halt 201, subscription.id.to_s
+  else
+    halt 404
+  end
 end
 
 

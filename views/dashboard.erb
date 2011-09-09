@@ -39,11 +39,16 @@
         <% subscription_types.keys.each do |type| %>
           <% subscription = subscriptions.detect {|s| s.subscription_type == type} %>
           <li>
+            <img src="/images/loader-small.gif" class="loading" />
             <input 
-              type="checkbox" name="subscription_type" class="subscription_type"
+              type="checkbox" name="subscription_type" 
+              class="subscription_type"
+              data-keyword="<%= form_escape keyword.keyword %>" 
+              data-type="<%= type %>"
               value="<%= type %>"
               <% if subscription %>
                 checked
+                data-id="<%= subscription.id %>"
               <% end %>
               />
             <a class="test" href="#" data-keyword="<%= form_escape keyword.keyword %>" data-type="<%= type %>"><%= subscription_types[type][:name] %></a>
@@ -88,6 +93,69 @@
       });
       
       return false;
+    });
+    
+    $("input.subscription_type").change(function() {
+      var elem = $(this);
+      var checked = elem.prop("checked");
+      
+      if (checked) {
+        // create the subscription
+        if (elem.data("id")) return; // shouldn't happen
+        
+        var keyword = elem.data("keyword");
+        var type = elem.data("type");
+        
+        console.log("keyword: " + keyword + ", type: " + type);
+        
+        elem.hide();
+        elem.siblings("img").show();
+        
+        $.post("/subscriptions", {
+          keyword: keyword,
+          subscription_type: type
+        }, function(data) {
+          console.log("created subscription " + data);
+          
+          elem.siblings("img").hide();
+          elem.show();
+          elem.data("id", data);
+        })
+        .error(function() {
+          console.log("failed to create subscription, un-checking");
+          elem.prop("checked", false); // leave un-checked
+        
+          elem.siblings("img").hide();
+          elem.show();
+        });
+        
+      } else {
+        // delete the subscription
+        var id = elem.data("id");
+        if (!id) return; // shouldn't happen
+        
+        console.log("deleting " + id);
+        
+        elem.hide();
+        elem.siblings("img").show();
+        
+        $.post("/subscription/" + id, {
+          _method: "delete"
+        }, function(data) {
+          console.log("deleted " + id);
+          elem.siblings("img").hide();
+          elem.show();
+          
+          elem.data("id", null);
+        })
+        .error(function() {
+          console.log("failed to delete " + id + ", rechecking");
+          elem.prop("checked", true); // re-check
+        
+          elem.siblings("img").hide();
+          elem.show();
+        });
+      }
     });
     
     // testing
