@@ -2,27 +2,27 @@
   Enter in keywords below to get notified when they appear in bills that are introduced or revised.
 <% end %>
 
+<section class="entry">
+  <% if defined?(keyword) and keyword.errors.any? %>
+    <div class="errors">
+      <% keyword.errors.full_messages.each do |msg| %>
+        <span><%= msg %></span>
+      <% end %>
+    </div>
+  <% end %>
+  
+  <form action="/subscriptions" method="post">
+    <input type="text" name="keyword" placeholder="keyword/phrase" />
+    
+    <div class="buttons">
+      <input type="submit" value="Add" />
+    </div>
+  </form>
+</section>
+
 <section class="subscriptions">
 
   <ul>
-    
-    <li class="new">
-      <% if defined?(keyword) and keyword.errors.any? %>
-        <div class="errors">
-          <% keyword.errors.full_messages.each do |msg| %>
-            <span><%= msg %></span>
-          <% end %>
-        </div>
-      <% end %>
-      
-      <form action="/subscriptions" method="post">
-        <input type="text" name="keyword" placeholder="keyword/phrase" />
-        
-        <div class="buttons">
-          <input type="submit" value="Add" />
-        </div>
-      </form>
-    </div>
     
     <% keywords.each do |keyword| %>
       <% subscriptions = keyword.subscriptions.all %>

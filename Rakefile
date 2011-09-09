@@ -81,6 +81,7 @@ namespace :subscriptions do
           delivered = Delivered.create!(
             :deliveries => deliveries.map {|d| d.attributes},
             :delivered_at => Time.now,
+            :user_email => email,
             :content => content
           )
           
