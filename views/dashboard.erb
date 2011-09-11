@@ -1,5 +1,5 @@
 <% content_for :header do %>
-  Enter in keywords below to get notified when they appear in bills that are introduced or revised.<br/><br/>Click the links beneath each keyword to see what sort of results they turn up.
+  Enter in keywords below to get notified when they appear in new or updated bills.<br/><br/>Click the links beneath each keyword to see what sort of results they turn up.
 <% end %>
 
 <section class="entry">
@@ -54,6 +54,14 @@
             <a class="test" href="#" data-keyword="<%= form_escape keyword.keyword %>" data-type="<%= type %>"><%= subscription_types[type][:name] %></a>
           </li>
         <% end %>
+        <li>
+            <input 
+              type="checkbox" name="subscription_type" 
+              class="subscription_type"
+              disabled
+              />
+            <span style="color: #888">State (coming next)</span>
+          </li>
       </ul>
         
       </form>
