@@ -23,7 +23,7 @@ module Subscriptions
         query = URI.escape subscription.keyword
         # updated_since = subscription.memo['last_checked'].strftime("%Y-%m-%dT%H:%M:%S")
         
-        fields = %w{ bill_id subjects state chamber updated_at title sources versions }
+        fields = %w{ bill_id subjects state chamber updated_at title sources versions session }
         
         url = "#{endpoint}/bills/?apikey=#{api_key}"
         url << "&fields=#{fields.join ','}"

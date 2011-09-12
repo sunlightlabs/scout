@@ -224,7 +224,6 @@ module Subscriptions::Helpers
   
   def state_in_og?(code)
     ["CA", "LA", "MD", "MN", "WI", "TX"].include? code.to_s.upcase
-    false
   end
   
   def state_version_info?(bill)
@@ -233,6 +232,18 @@ module Subscriptions::Helpers
   
   def state_source_info?(bill)
     bill['sources'] and bill['sources'].any?
+  end
+  
+  def opengovernment_url(bill)
+    state = bill['state'].to_s.downcase
+    bill_id = bill['bill_id'].downcase.gsub(' ', '-')
+    session = bill['session']
+    
+    if bill == "wi"
+      session = bill['session'].downcase.gsub(' ', '-')
+    end
+    
+    "http://#{state}.opengovernment.org/sessions/#{session}/bills/#{bill_id}"
   end
   
 end
