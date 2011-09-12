@@ -37,10 +37,11 @@ header #flash div.flash.failure {
 }
 
 
-header p {
+header p.content {
   background-color: #c9e9f5;
   padding: 20px;
   text-align: center;
+  line-height: 140%;
 }
 
 section.main {

@@ -68,14 +68,14 @@ post '/keywords' do
   requires_login
   
   keyword = current_user.keywords.new :keyword => params[:keyword]
-  subscriptions = subscription_types.keys.map do |type| 
-    current_user.subscriptions.new :keyword => params[:keyword], :subscription_type => type.to_s
-  end
+#   subscriptions = subscription_types.keys.map do |type| 
+#     current_user.subscriptions.new :keyword => params[:keyword], :subscription_type => type.to_s
+#   end
   
   # make sure keyword has the same validations as subscriptions
-  if keyword.valid? and subscriptions.reject {|s| s.valid?}.empty?
+  if keyword.valid? # and subscriptions.reject {|s| s.valid?}.empty?
     keyword.save!
-    subscriptions.each {|s| s.save!}
+    # subscriptions.each {|s| s.save!}
     
     redirect '/dashboard'
   else
