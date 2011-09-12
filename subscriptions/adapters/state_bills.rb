@@ -3,6 +3,7 @@ module Subscriptions
 
     class StateBills
       
+      MAX_ITEMS = 20
       
       def self.initialize!(subscription)
         subscription.memo['last_checked'] = Time.now
@@ -15,27 +16,26 @@ module Subscriptions
       end
       
       
-      def self.url_for(subscription, options = {})
+      def self.url_for(subscription)
         endpoint = "http://openstates.sunlightlabs.com/api/v1"
         
         api_key = config[:subscriptions][:sunlight_api_key]
         query = URI.escape subscription.keyword
-        updated_since = 2.months.ago.strftime("%Y-%m-%d") # subscription.memo['last_checked'].strftime("%Y-%m-%d")
+        # updated_since = subscription.memo['last_checked'].strftime("%Y-%m-%dT%H:%M:%S")
         
-        fields = %w{ bill_id subjects state chamber updated_at title }
+        fields = %w{ bill_id subjects state chamber updated_at title sources versions }
         
         url = "#{endpoint}/bills/?apikey=#{api_key}"
         url << "&fields=#{fields.join ','}"
         url << "&q=#{query}"
-        # url << "&updated_since=#{updated_since}"
+        url << "&sort=updated_at"
         url << "&search_window=term"
       end
       
       # takes parsed response and returns an array where each item is 
       # a hash containing the id, title, and post date of each item found
       def self.items_for(response)
-        items = response.map {|bill| item_for bill}
-        items.sort {|i, j| j.data['updated_at'] <=> i.data['updated_at'] }
+        response.first(MAX_ITEMS).map {|bill| item_for bill}
       end
       
       

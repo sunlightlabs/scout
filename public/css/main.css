@@ -163,7 +163,7 @@ section.results img.loading {
 section.results p.header {
   font-size: 125%; color: #444;
   margin-bottom: 30px; text-align: center; width: 100%;
-  xdisplay: none;
+  display: none;
 }
 
 section.results ul {list-style-type: none;}
@@ -266,4 +266,12 @@ section.results li.state_bill h3 {
 }
 section.results li.state_bill div.subjects {
   margin-top: 8px; font-size: 90%;
+}
+
+section.results li.state_bill section.links {
+  font-size: 90%; margin-top: 10px;
+}
+
+section.results li.state_bill section.links a {
+  margin-left: 10px;
 }

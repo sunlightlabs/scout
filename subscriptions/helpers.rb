@@ -222,4 +222,17 @@ module Subscriptions::Helpers
     }[code.to_s.upcase]
   end
   
+  def state_in_og?(code)
+    ["CA", "LA", "MD", "MN", "WI", "TX"].include? code.to_s.upcase
+    false
+  end
+  
+  def state_version_info?(bill)
+    bill['versions'] and bill['versions'].any?
+  end
+  
+  def state_source_info?(bill)
+    bill['sources'] and bill['sources'].any?
+  end
+  
 end

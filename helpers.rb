@@ -6,11 +6,11 @@ helpers do
     {
       'bills_by_keyword' => {
         :name => "Federal",
-        :results_header => "Most recent #{Subscriptions::Adapters::BillsByKeyword::MAX_ITEMS} bills"
+        :results_header => "Most recently updated bills"
       },
       'state_bills' => {
         :name => "States",
-        :results_header => "Bills active in the last 2 months"
+        :results_header => "Most recently updated bills"
       }
     }
   end

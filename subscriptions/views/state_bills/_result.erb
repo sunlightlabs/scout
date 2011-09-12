@@ -16,4 +16,19 @@
     </div>
   <% end %>
   
+  <% if state_in_og?(bill['state']) or state_version_info?(bill) or state_source_info?(bill) %>
+    <section class="links">
+      <span>More:</span>
+      
+      <% if state_version_info?(bill) %>
+        <a href="<%= bill['versions'].last['url'] %>">Latest Version</a>
+      <% end %>
+      <% if state_source_info?(bill) %>
+        <% bill['sources'].each_with_index do |source, i| %>
+          <a href="<%= source['url'] %>">Source <%= i + 1 %></a>
+        <% end %>
+      <% end %>
+    </section>
+  <% end %>
+  
 </li>
