@@ -252,12 +252,16 @@ section.results li.state_bill {
   margin: 40px 0;
 }
 
+section.results li.state_bill h2 {
+  font-size: 90%;
+}
+
 section.results li.state_bill h2 span.code {
-  font-weight: bold; 
+  
 }
 
 section.results li.state_bill h2 span.state {
-  
+  font-weight: bold; 
 }
 
 section.results li.state_bill h2 a.read {
