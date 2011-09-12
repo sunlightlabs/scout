@@ -17,7 +17,7 @@ module Subscriptions
       
       
       def self.url_for(subscription)
-        endpoint = "http://openstates.sunlightlabs.com/api/v1"
+        endpoint = "http://openstates.org/api/v1"
         
         api_key = config[:subscriptions][:sunlight_api_key]
         query = URI.escape subscription.keyword
