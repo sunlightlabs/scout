@@ -1,0 +1,19 @@
+<% bill = item.data %>
+<li class="result state_bill">
+  <h2>
+    <span class="code"><%= bill['bill_id'] %></span>
+    in
+    <span class="state"><%= state_name bill['state'] %></span>,
+    updated
+    <span class="updated_at"><%= very_short_date bill['updated_at'] %></span>
+  </h2>
+  
+  <h3><%= bill['title'] %></h3>
+  
+  <% if bill['subjects'] and bill['subjects'].any? %>
+    <div class="subjects">
+      Keywords: <%= bill['subjects'].join ", " %>
+    </div>
+  <% end %>
+  
+</li>

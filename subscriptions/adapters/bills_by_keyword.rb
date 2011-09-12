@@ -8,9 +8,6 @@ module Subscriptions
       MAX_ITEMS = 20
       
       def self.url_for(subscription)
-        # requires a query string
-        return nil unless subscription.keyword.present?
-        
         api_key = config[:subscriptions][:sunlight_api_key]
         query = URI.escape subscription.keyword
         
@@ -54,7 +51,6 @@ module Subscriptions
             end
           end
         end
-        
         
         # Long-winded justification for the above:
         

@@ -5,11 +5,13 @@ helpers do
   def subscription_types
     {
       'bills_by_keyword' => {
-        :name => "Federal"
+        :name => "Federal",
+        :results_header => "Most recent #{Subscriptions::Adapters::BillsByKeyword::MAX_ITEMS} bills"
       },
-#       'state_bills' => {
-#         :name => "States"
-#       }
+      'state_bills' => {
+        :name => "States",
+        :results_header => "Bills active in the last 2 months"
+      }
     }
   end
   

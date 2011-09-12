@@ -1,17 +1,17 @@
 <% if items.any? %>
 
   <p class="header">
-    Latest introduced or updated bills for "<%= subscription.keyword %>":
+    <%= subscription_types[subscription.subscription_type][:results_header] %>
   </p>
 
   <ul>
     <% current_date = nil %>
     <% items.each do |item| %>
-      <% if item.date != current_date %>
-        <p class="date"><%= just_date item.date %></p>
-        <% current_date = item.date %>
+      <% if item.date.strftime("%Y-%m-%d") != current_date %>
+        <p class="date"><%= long_date item.date %></p>
+        <% current_date = item.date.strftime("%Y-%m-%d") %>
       <% end %>
-      <%= partial :"subscriptions/result_item", :locals => {:item => item} %>
+      <%= partial :"subscriptions/#{subscription.subscription_type}/result", :locals => {:item => item} %>
     <% end %>
   </ul>
   

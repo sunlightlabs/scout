@@ -121,7 +121,12 @@ def render_email(deliveries)
   groups = {}
   
   deliveries.each do |delivery|
-    item = Subscriptions::Item.new :id => delivery.item['id'], :data => delivery.item['data']
+    item = Subscriptions::Item.new(
+      :id => delivery.item['id'], 
+      :data => delivery.item['data'], 
+      :subscription_type => delivery.subscription_type
+    )
+    
     keyword = delivery.subscription_keyword
     
     groups[keyword] ||= []
@@ -140,7 +145,7 @@ def render_email(deliveries)
 end
 
 def render_item(item)
-  template = Tilt::ERBTemplate.new "views/subscriptions/_email_item.erb"
+  template = Tilt::ERBTemplate.new "views/subscriptions/#{item.subscription_type}/_email.erb"
   template.render item, :item => item
 end
 

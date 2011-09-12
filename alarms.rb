@@ -88,8 +88,8 @@ end
 get '/subscriptions/test' do
   requires_login
   
-  subscription = Subscription.new :keyword => params[:keyword], :subscription_type => params[:subscription_type]
-  if subscription.adapter # valid subscription type
+  subscription = current_user.subscriptions.new :keyword => params[:keyword], :subscription_type => params[:subscription_type]
+  if subscription.valid? and subscription.adapter # valid subscription type
     items = Subscriptions::Manager.poll subscription
     erb :results, :layout => false, :locals => {:items => items, :subscription => subscription}
   else
@@ -119,7 +119,6 @@ delete '/subscription/:id' do
     subscription.destroy
     halt 204
   else
-    puts "no?!?!"
     halt 404
   end
 end

@@ -14,6 +14,10 @@ module Subscriptions
     # 2) stores everything as seen in the appropriate tables
     # 3) marks the subscription as initialized
     def self.initialize!(subscription)
+      if subscription.adapter.respond_to?(:initialize!)
+        return adapter.initialize!(subscription)
+      end
+      
       items = poll subscription
       
       unless items
@@ -41,6 +45,10 @@ module Subscriptions
     # 3) stores any items as yet unseen by this subscription in seen_ids
     # 4) stores any items as yet unseen by this subscription in the delivery queue
     def self.check!(subscription)
+      if subscription.adapter.respond_to?(:check!)
+        return adapter.check!(subscription)
+      end
+      
       items = poll subscription
       
       unless items
@@ -106,12 +114,13 @@ module Subscriptions
   class Item
     include Subscriptions::Helpers
     
-    attr_accessor :id, :date, :data
+    attr_accessor :id, :date, :data, :subscription_type
     
     def initialize(options)
       self.id = options[:id]
       self.date = options[:date]
       self.data = options[:data]
+      self.subscription_type = options[:subscription_type]
     end
     
   end
