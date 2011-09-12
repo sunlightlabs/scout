@@ -15,7 +15,7 @@ module Subscriptions
     # 3) marks the subscription as initialized
     def self.initialize!(subscription)
       if subscription.adapter.respond_to?(:initialize!)
-        return adapter.initialize!(subscription)
+        return subscription.adapter.initialize!(subscription)
       end
       
       items = poll subscription
