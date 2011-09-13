@@ -36,8 +36,6 @@ task :clear_data => :environment do
   end
 end
 
-# subscription management tasks
-# most of this work is encapsulated inside the Subscriptions::Manager (/subscriptions/manager.rb)
 
 namespace :subscriptions do
   
@@ -56,7 +54,7 @@ namespace :subscriptions do
   desc "Deliver outstanding queued items, grouped by user"
   task :deliver => :environment do
     begin
-      # should be in as dependencies of sinatra
+      # should already be loaded as dependencies of sinatra
       require 'erb'
       require 'tilt'
       

@@ -1,7 +1,7 @@
 module Subscriptions  
   module Adapters
 
-    class BillsByKeyword
+    class FederalBills
       
       # public
       

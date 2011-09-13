@@ -4,7 +4,7 @@ helpers do
   # index of subscription adapters and associated copy
   def subscription_types
     {
-      'bills_by_keyword' => {
+      'federal_bills' => {
         :name => "Federal",
         :results_header => "Most recently updated bills"
       },
