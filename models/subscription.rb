@@ -4,8 +4,8 @@ class Subscription
   
   field :subscription_type
   field :initialized, :type => Boolean, :default => false
-  field :latest_time, :type => Time
   field :keyword
+  field :last_checked_at, :type => Time
   
   # catch-all used for subscription adapter specific memo data
   field :memo, :type => Hash, :default => {}
@@ -14,6 +14,7 @@ class Subscription
   index :initialized
   index :user_id
   index :keyword
+  index :last_checked_at
   
   has_many :seen_ids
   has_many :deliveries
@@ -37,8 +38,8 @@ class Subscription
     "Subscriptions::Adapters::#{subscription_type.camelize}".constantize rescue nil
   end
   
-  after_create :initial_poll
-  def initial_poll
-    Subscriptions::Manager.initialize! self
+  after_create :initialize_self
+  def initialize_self
+    adapter.initialize! self
   end
 end

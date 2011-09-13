@@ -43,7 +43,7 @@ namespace :subscriptions do
   task :check => :environment do
     begin
       Subscription.initialized.all.each do |subscription|
-        Subscriptions::Manager.check! subscription
+        subscription.adapter.check! subscription
       end
     rescue Exception => ex
       email_message "Problem during polling task.", ex
@@ -121,29 +121,28 @@ def render_email(deliveries)
   deliveries.each do |delivery|
     item = Subscriptions::Item.new(
       :id => delivery.item['id'], 
-      :data => delivery.item['data'], 
-      :subscription_type => delivery.subscription_type
+      :data => delivery.item['data']
     )
     
     keyword = delivery.subscription_keyword
     
     groups[keyword] ||= []
-    groups[keyword] << item
+    groups[keyword] << [delivery.subscription_type, item]
   end
   
   groups.keys.each do |keyword|
     content << "<h1>#{keyword}</h1>"
     
-    groups[keyword].each do |item|
-      content << render_item(item)
+    groups[keyword].each do |type, item|
+      content << render_item(type, item)
     end
   end
   
   content
 end
 
-def render_item(item)
-  template = Tilt::ERBTemplate.new "views/subscriptions/#{item.subscription_type}/_email.erb"
+def render_item(type, item)
+  template = Tilt::ERBTemplate.new "views/subscriptions/#{type}/_email.erb"
   template.render item, :item => item
 end
 
@@ -163,7 +162,7 @@ def email_user(email, content)
       false
     end
   else
-    puts "\n[USER EMAIL] Would have emailed delivery to #{email}"
+    puts "\n[USER EMAIL] Delivery to #{email}"
     true # if no email is specified, we'll assume it's a dev environment or something
   end
 end

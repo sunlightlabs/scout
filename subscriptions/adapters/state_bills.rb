@@ -6,17 +6,22 @@ module Subscriptions
       MAX_ITEMS = 20
       
       def self.initialize!(subscription)
-        subscription.memo['last_checked'] = Time.now
-        subscription.save!
+        # don't do anything
       end
       
-      # don't deliver anything yet
       def self.check!(subscription)
-        # pass
+        
+        
+        
       end
       
+      def self.search(subscription)
+        Subscriptions::Manager.poll subscription, :search
+      end
+        
       
-      def self.url_for(subscription)
+      # function is one of :search, :check
+      def self.url_for(subscription, function)
         endpoint = "http://openstates.org/api/v1"
         
         api_key = config[:subscriptions][:sunlight_api_key]
