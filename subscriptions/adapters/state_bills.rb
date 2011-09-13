@@ -59,8 +59,11 @@ module Subscriptions
       def self.item_for(bill)
         bill['updated_at'] = Time.parse bill['updated_at']
         
+        slug = bill['bill_id'].downcase.tr " ", "-"
+        id = "#{bill['state']}-#{slug}"
+        
         Subscriptions::Item.new(
-          :id => bill["bill_id"],
+          :id => id,
           :date => bill["updated_at"],
           :data => bill
         )
