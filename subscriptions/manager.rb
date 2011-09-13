@@ -3,7 +3,6 @@ require 'subscriptions/helpers'
 
 module Subscriptions
 
-  # utility functions each subscription adapter will need
   class Manager
     
     def self.initialize!(subscription)
@@ -22,12 +21,12 @@ module Subscriptions
     end
     
     def self.schedule_delivery!(subscription, item)
+      puts "[#{subscription.user.email}][#{subscription.subscription_type}][#{subscription.keyword}](#{item.id}) Scheduling delivery"
+      
       Delivery.create!(
-        # user ID and inline email
         :user_id => subscription.user.id,
         :user_email => subscription.user.email,
         
-        # original subscription and inline type
         :subscription_id => subscription.id,
         :subscription_type => subscription.subscription_type,
         :subscription_keyword => subscription.keyword,
@@ -49,7 +48,6 @@ module Subscriptions
       response = HTTParty.get url
       adapter.items_for response
     end
-    
     
   end
   

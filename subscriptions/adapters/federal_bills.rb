@@ -19,17 +19,12 @@ module Subscriptions
       # 2) stores any items as yet unseen by this subscription in seen_ids
       # 3) stores any items as yet unseen by this subscription in the delivery queue
       def self.check!(subscription)
-        count = 0
-        
         Subscriptions::Manager.poll(subscription, :check).each do |item|
           unless SeenId.where(:subscription_id => subscription.id, :item_id => item.id).first
             SeenId.create! :subscription_id => subscription.id, :item_id => item.id
             Subscriptions::Manager.schedule_delivery! subscription, item
-            count += 1
           end  
         end
-        
-        puts "[#{subscription.user.email}][#{subscription.subscription_type}](#{count}) #{subscription.keyword}"
       end
       
       # non-destructive, searches for example results

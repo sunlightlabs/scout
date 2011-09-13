@@ -43,7 +43,7 @@ namespace :subscriptions do
   task :check => :environment do
     begin
       Subscription.initialized.all.each do |subscription|
-        subscription.adapter.check! subscription
+        Subscriptions::Manager.check! subscription
       end
     rescue Exception => ex
       email_message "Problem during polling task.", ex

@@ -40,6 +40,6 @@ class Subscription
   
   after_create :initialize_self
   def initialize_self
-    adapter.initialize! self
+    Subscriptions::Manager.initialize! self
   end
 end
