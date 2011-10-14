@@ -9,7 +9,7 @@ set :local_bin, "/projects/#{user}/.gem/ruby/1.8/bin"
 set :domain, 'dupont.sunlightlabs.net'
 
 
-  set :scm, :git
+set :scm, :git
 set :repository, "git@github.com:sunlightlabs/alarms.git"
 set :branch, 'master'
 
