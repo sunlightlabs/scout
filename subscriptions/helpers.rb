@@ -246,4 +246,29 @@ module Subscriptions::Helpers
     "http://#{state}.opengovernment.org/sessions/#{session}/bills/#{bill_id}"
   end
   
+  def capitolwords_url(speech)
+    year = speech['date_year']
+    month = zero_prefix speech['date_month']
+    day = speech['date_day']
+    page_slug = speech['page_slug']
+    
+    "http://capitolwords.org/date/#{year}/#{month}/#{day}/#{page_slug}-capitolwords"
+  end
+  
+  def speech_highlight(speech, subscription)
+    speech['speaking'].select do |paragraph|
+      paragraph =~ /#{subscription['keyword']}/i
+    end.first.gsub(/#{subscription['keyword']}/i) do |keyword|
+      "<em>#{keyword}</em>"
+    end
+  end
+  
+  def speaker_name(speech)
+    title = (speech['chamber'] == 'Senate') ? 'Sen' : 'Rep'
+    "#{title}. #{speech['speaker_first']} #{speech['speaker_last']}"
+  end
+  
+  def speaker_url(speech)
+    "http://capitolwords.org/legislator/#{speech['bioguide_id']}"
+  end
 end

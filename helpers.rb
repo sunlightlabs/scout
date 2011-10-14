@@ -5,12 +5,16 @@ helpers do
   def subscription_types
     {
       'federal_bills' => {
-        :name => "Federal",
+        :name => "Federal Bills",
         :results_header => "Most recently updated bills"
       },
       'state_bills' => {
-        :name => "States",
+        :name => "State Bills",
         :results_header => "Most recently updated bills"
+      },
+      'congressional_record' => {
+        :name => "Congressional Record",
+        :results_header => "Most recent occurrences"
       }
     }
   end
@@ -37,6 +41,10 @@ helpers do
   
   def just_date(date)
     date.strftime "%B #{date.day}"
+  end
+  
+  def zero_prefix(number)
+    number.to_i < 10 ? "0#{number}" : number.to_s
   end
 end
 

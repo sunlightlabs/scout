@@ -11,7 +11,7 @@
         <p class="date"><%= long_date item.date %></p>
         <% current_date = item.date.strftime("%Y-%m-%d") %>
       <% end %>
-      <%= partial :"subscriptions/#{subscription.subscription_type}/result", :locals => {:item => item} %>
+      <%= partial :"subscriptions/#{subscription.subscription_type}/result", :locals => {:item => item, :subscription => subscription} %>
     <% end %>
   </ul>
   

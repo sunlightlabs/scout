@@ -180,13 +180,41 @@ section.results ul p.date {
   
 }
 
+/* common to results */
 
-/* federal bill results */
+section.results li dl.highlight {
+  font-size: 90%;
+}
 
-section.results li.bill {
+section.results li dl.highlight dt {
+  margin-top: 10px;
+}
+
+section.results li dl.highlight dd {
+  background-color: #C9F5E9;
+  padding: 10px; 
+  margin-left: 0px; margin-top: 5px;
+}
+
+section.results li dl.highlight dd em {
+  font-weight: bold; font-style: normal;
+}
+
+section.results li section.links {
+  font-size: 90%; margin-top: 10px;
+}
+
+section.results li section.links a {
+  margin-left: 10px;
+}
+
+section.results li {
   padding: 15px 0 15px 0;
   margin-bottom: 7px;
 }
+
+
+/* federal bill results */
 
 section.results li.bill h2 {
   font-size: 90%; 
@@ -222,42 +250,8 @@ section.results li.bill span.dates strong {
   font-style: italic;
 }
 
-section.results li.bill dl {
-  font-size: 90%;
-}
-
-section.results li.bill dl dt {
-  margin-top: 10px;
-}
-
-section.results li.bill dl dd {
-  background-color: #C9F5E9;
-  padding: 10px; 
-  margin-left: 0px; margin-top: 5px;
-}
-
-section.results li.bill dl dd em {
-  font-weight: bold; font-style: normal;
-}
-
-section.results li.bill section.links {
-  font-size: 90%; margin-top: 10px;
-}
-
-section.results li.bill section.links a {
-  margin-left: 10px;
-}
-
-section.results li.state_bill {
-  margin: 40px 0;
-}
-
 section.results li.state_bill h2 {
   font-size: 90%;
-}
-
-section.results li.state_bill h2 span.code {
-  
 }
 
 section.results li.state_bill h2 span.state {
@@ -272,14 +266,14 @@ section.results li.state_bill h3 {
   font-size: 110%; 
   margin-top: 8px;
 }
+
 section.results li.state_bill div.subjects {
   margin-top: 8px; font-size: 90%;
 }
 
-section.results li.state_bill section.links {
-  font-size: 90%; margin-top: 10px;
+section.results li.speech h2 {
+  margin-bottom: 7px;
 }
 
-section.results li.state_bill section.links a {
-  margin-left: 10px;
+section.results li.speech h2 a.speaker {
 }

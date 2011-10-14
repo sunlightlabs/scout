@@ -32,6 +32,7 @@ module Subscriptions
         Subscriptions::Manager.poll subscription, :search
       end
       
+      # ignore function, all polls look for the same information
       def self.url_for(subscription, function)
         api_key = config[:subscriptions][:sunlight_api_key]
         query = URI.escape subscription.keyword
