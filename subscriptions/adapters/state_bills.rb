@@ -57,7 +57,7 @@ module Subscriptions
       # internal
       
       def self.item_for(bill)
-        bill['updated_at'] = Time.parse bill['updated_at']
+        bill['updated_at'] = bill['updated_at'] ? Time.parse(bill['updated_at']) : nil
         
         slug = bill['bill_id'].downcase.tr " ", "-"
         id = "#{bill['state']}-#{slug}"
