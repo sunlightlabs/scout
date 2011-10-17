@@ -271,4 +271,8 @@ module Subscriptions::Helpers
   def speaker_url(speech)
     "http://capitolwords.org/legislator/#{speech['bioguide_id']}"
   end
+  
+  def zero_prefix(number)
+    number.to_i < 10 ? "0#{number}" : number.to_s
+  end
 end

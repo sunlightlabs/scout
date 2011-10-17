@@ -43,9 +43,6 @@ helpers do
     date.strftime "%B #{date.day}"
   end
   
-  def zero_prefix(number)
-    number.to_i < 10 ? "0#{number}" : number.to_s
-  end
 end
 
 
