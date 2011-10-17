@@ -8,7 +8,6 @@ module Subscriptions
       
       # 1) does the initial poll, 
       # 2) stores every item ID as seen 
-      # 3) marks the subscription as initialized
       def self.initialize!(subscription)
         Subscriptions::Manager.poll(subscription, :initialize).each do |item|
           SeenId.create! :subscription_id => subscription.id, :item_id => item.id
@@ -19,11 +18,13 @@ module Subscriptions
       # 2) stores any items as yet unseen by this subscription in seen_ids
       # 3) stores any items as yet unseen by this subscription in the delivery queue
       def self.check!(subscription)
-        Subscriptions::Manager.poll(subscription, :check).each do |item|
-          unless SeenId.where(:subscription_id => subscription.id, :item_id => item.id).first
-            SeenId.create! :subscription_id => subscription.id, :item_id => item.id
-            Subscriptions::Manager.schedule_delivery! subscription, item
-          end  
+        if results = Subscriptions::Manager.poll(subscription, :check)
+          results.each do |item|
+            unless SeenId.where(:subscription_id => subscription.id, :item_id => item.id).first
+              SeenId.create! :subscription_id => subscription.id, :item_id => item.id
+              Subscriptions::Manager.schedule_delivery! subscription, item
+            end
+          end
         end
       end
       

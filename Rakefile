@@ -46,8 +46,8 @@ namespace :subscriptions do
         Subscriptions::Manager.check! subscription
       end
     rescue Exception => ex
-      email_message "Problem during polling task.", ex
-      puts "Error during polling, emailed report."
+      email_message "Problem during 'rake subscriptions:check'.", ex
+      puts "Error during subscription checking, emailed report."
     end
   end
   
@@ -104,7 +104,7 @@ namespace :subscriptions do
       end
       
     rescue Exception => ex
-      email_message "Problem during delivery task.", ex
+      email_message "Problem during 'rake subscriptions:deliver'.", ex
       puts "Error during delivery, emailed report."
     end
   end
