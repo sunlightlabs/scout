@@ -91,7 +91,7 @@ get '/subscriptions/test' do
   subscription = current_user.subscriptions.new :keyword => params[:keyword], :subscription_type => params[:subscription_type]
   if subscription.valid? and (adapter = subscription.adapter) # valid subscription type
     items = adapter.search subscription
-    erb :results, :layout => false, :locals => {:items => items, :subscription => subscription}
+    erb :results, :layout => false, :locals => {:items => items, :keyword => subscription.keyword, :subscription_type => subscription.subscription_type}
   else
     halt 404
   end

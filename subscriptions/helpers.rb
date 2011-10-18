@@ -255,11 +255,11 @@ module Subscriptions::Helpers
     "http://capitolwords.org/date/#{year}/#{month}/#{day}/#{page_slug}-capitolwords"
   end
   
-  def speech_highlight(speech, subscription)
+  def speech_highlight(speech, keyword)
     speech['speaking'].select do |paragraph|
-      paragraph =~ /#{subscription['keyword']}/i
-    end.first.gsub(/#{subscription['keyword']}/i) do |keyword|
-      "<em>#{keyword}</em>"
+      paragraph =~ /#{keyword}/i
+    end.first.gsub(/#{keyword}/i) do |word|
+      "<em>#{word}</em>"
     end
   end
   
