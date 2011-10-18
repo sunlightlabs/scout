@@ -1,5 +1,5 @@
 # general display helpers
-helpers do
+module GeneralHelpers
   
   # index of subscription adapters and associated copy
   def subscription_types
@@ -43,7 +43,16 @@ helpers do
     date.strftime "%B #{date.day}"
   end
   
+  def very_short_date(time)
+    time.strftime "%m/%d"
+  end
+  
+  def zero_prefix(number)
+    number.to_i < 10 ? "0#{number}" : number.to_s
+  end
+  
 end
+helpers GeneralHelpers
 
 
 # Subscription-specific helpers

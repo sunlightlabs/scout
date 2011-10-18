@@ -11,6 +11,10 @@ configure do
   Mongoid.configure {|c| c.from_hash config[:mongoid]}
 end
 
+# app-wide models and helpers
 Dir.glob('models/*.rb').each {|filename| load filename}
+require 'helpers'
+
+# subscription-specific adapters and management
 Dir.glob('subscriptions/adapters/*.rb').each {|filename| load filename}
 require 'subscriptions/manager'

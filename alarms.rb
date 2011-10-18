@@ -9,8 +9,6 @@ set :views, 'views'
 set :public, 'public'
 set :sessions, true
 
-require 'helpers'
-
 configure(:development) do |config|
   require 'sinatra/reloader'
   config.also_reload "config/environment.rb"

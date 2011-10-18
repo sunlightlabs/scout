@@ -54,7 +54,10 @@ module Subscriptions
   
   # utility class returned by adapters, then used to create various items in the database
   class Item
+    # done so that when a template is rendered with this item as the context, 
+    # it has all the subscription display helpers available to it
     include Subscriptions::Helpers
+    include GeneralHelpers
     
     attr_accessor :id, :date, :data
     
