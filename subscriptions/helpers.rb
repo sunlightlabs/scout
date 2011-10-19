@@ -23,7 +23,8 @@ module Subscriptions
       highlighting = item.data['search']['highlight']
       field = highlighting.keys.sort_by {|k| highlight_priority k}.first
       
-      "<dt>From #{highlight_field field}:</dt>\n<dd>#{highlighting[field]}</dd>"
+      # "<dt>From #{highlight_field field}:</dt>\n" + 
+      "<dd class=\"content\">#{highlighting[field]}</dd>"
     end
     
     def govtrack_type(bill_type)

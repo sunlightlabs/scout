@@ -3,11 +3,20 @@
   <ul>
     <% current_date = nil %>
     <% items.each do |item| %>
+    
       <% if item.date.strftime("%Y-%m-%d") != current_date %>
         <p class="date"><%= long_date item.date %></p>
         <% current_date = item.date.strftime("%Y-%m-%d") %>
       <% end %>
-      <%= partial :"subscriptions/#{item.subscription.subscription_type}/result", :locals => {:item => item, :keyword => keyword} %>
+      
+      <li class="result <%= item.subscription.subscription_type %>">
+        <%= partial :"subscriptions/#{item.subscription.subscription_type}/result", :locals => {:item => item, :keyword => keyword} %>
+        
+        <!--<div class="banner <%= item.subscription.subscription_type %>">
+          <%= subscription_types[item.subscription.subscription_type][:name] %>
+        </div>-->
+      </li>
+      
     <% end %>
   </ul>
   

@@ -273,101 +273,86 @@ section.results ul p.date:first-child {
 }
 
 /* common to results */
+section.results li.result {width: 630px;}
 
-section.results li dl.highlight {
-  font-size: 90%;
+/*section.results li.result div.content {float: left; width: 550px;}
+section.results li.result div.banner {float: left; width: 100px;}*/
+
+section.results li.result {
+  padding: 15px 0 15px 0;
+  margin-bottom: 20px;
 }
 
-section.results li dl.highlight dt {
+section.results li.result h2 {
+  margin-bottom: 10px; font-size: 125%;
+}
+
+section.results li.result h3 {
+  margin-bottom: 10px; font-size: 100%;
+}
+
+section.results li.result dl.highlight {
+  
+}
+
+section.results li.result dl.highlight dt {
   margin-top: 10px;
+  margin-bottom: 5px;
 }
 
-section.results li dl.highlight dd {
-  background-color: #C9F5E9;
-  padding: 10px; 
-  margin-left: 0px; margin-top: 5px;
+section.results li.result dl.highlight dd em {
+  font-weight: bold; font-style: normal; color: #aa0000;
 }
 
-section.results li dl.highlight dd em {
-  font-weight: bold; font-style: normal;
+section.results li.result section.more {
+  font-size: 100%; margin-top: 10px;
 }
 
-section.results li section.links {
-  font-size: 90%; margin-top: 10px;
-}
-
-section.results li section.links a {
+section.results li.result section.more a {
   margin-left: 10px;
 }
 
-section.results li {
-  padding: 15px 0 15px 0;
-  margin-bottom: 7px;
+section.results .content {
+  padding: 10px; color: #444; line-height: 20px; font-size: 90%;
+}
+
+section.results .subtitle {
+  font-size: 100%;
+  
 }
 
 
 /* federal bill results */
 
-section.results li.bill h2 {
-  font-size: 90%; 
-  margin-bottom: 7px;
+section.results li.federal_bills span.code {
+  
 }
 
-section.results li.bill h2 span.code {
-  font-weight: bold;
-}
-
-section.results li.bill h2 span.version {
+section.results li.federal_bills span.version {
   font-weight: normal; 
 }
 
-section.results li.bill h2 a.file {
+section.results li.federal_bills a.file {
   margin-left: 5px;
 }
 
-section.results li.bill h3 {
-  font-size: 110%; 
-}
-
-section.results li.bill h4 {
-  font-size: 90%; 
-}
-
-section.results li.bill span.dates {
+section.results li.federal_bills span.dates {
   margin-top: 10px; display: block;
   font-size: 90%;
 }
 
-section.results li.bill span.dates strong {
+section.results li.federal_bills span.dates strong {
   font-style: italic;
 }
 
-section.results li.state_bill {}
-
-section.results li.state_bill h2 {
-  font-size: 90%; 
-}
-
-section.results li.state_bill h2 span.state {
-  
-}
-
-section.results li.state_bill h2 a.read {
+section.results li.state_bills h2 a.read {
   margin-left: 5px;
 }
 
-section.results li.state_bill h3 {
-  font-size: 110%; 
-  margin-top: 8px;
+section.results li.state_bills h3 {
+  
 }
 
-section.results li.state_bill div.subjects {
+section.results li.state_bills div.subjects {
   margin-top: 8px; font-size: 90%;
-}
-
-section.results li.speech h2 {
-  margin-bottom: 7px;
-}
-
-section.results li.speech h2 a.speaker {
 }

@@ -5,16 +5,13 @@ module GeneralHelpers
   def subscription_types
     {
       'federal_bills' => {
-        :name => "Federal Bills",
-        :results_header => "Most recently updated bills"
+        :name => "Bills in Congress"
       },
       'state_bills' => {
-        :name => "State Bills",
-        :results_header => "Most recently updated bills"
+        :name => "Bills in the States"
       },
       'congressional_record' => {
-        :name => "Congressional Record",
-        :results_header => "Most recent occurrences"
+        :name => "Congressional Record"
       }
     }
   end

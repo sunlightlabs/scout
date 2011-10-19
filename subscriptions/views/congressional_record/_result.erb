@@ -1,23 +1,19 @@
 <% speech = item.data %>
-<li class="result speech">
-  <% if speech['bioguide_id'] %>
-    <h2>
-      <a class="speaker" href="<%= speaker_url speech %>">
-        <%= speaker_name speech %></a>
-      said:
-    </h2>
-  <% end %>
-  
-  <dl class="highlight">
-    <dd>
-      <%= speech_highlight speech, keyword %>
-    </dd>
-  </dl>
-  
-  <section class="links">
-    <span>More:</span>
-    <a href="<%= capitolwords_url speech %>">CapitolWords</a>
-    <a href="<%= speech['origin_url'] %>">Original</a>
-  </section>
-  
-</li>
+<% if speech['bioguide_id'] %>
+  <h2>
+    <%= speaker_name speech %>
+    <a href="<%= capitolwords_url speech %>">said</a>:
+  </h2>
+<% end %>
+
+<dl class="highlight content">
+  <dd>
+    <%= speech_highlight speech, keyword %>
+  </dd>
+</dl>
+
+<section class="more">
+  <span>More:</span>
+  <a href="<%= capitolwords_url speech %>">CapitolWords</a>
+  <a href="<%= speech['origin_url'] %>">Original</a>
+</section>
