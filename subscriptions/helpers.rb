@@ -248,10 +248,14 @@ module Subscriptions
     end
     
     def speech_highlight(speech, keyword)
-      speech['speaking'].select do |paragraph|
+      matches = speech['speaking'].select do |paragraph|
         paragraph =~ /#{keyword}/i
-      end.first.gsub(/#{keyword}/i) do |word|
-        "<em>#{word}</em>"
+      end
+      
+      if matches.any?
+        matches.first.gsub(/#{keyword}/i) do |word|
+          "<em>#{word}</em>"
+        end
       end
     end
     

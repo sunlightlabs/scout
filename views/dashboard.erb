@@ -1,9 +1,3 @@
-<% content_for :header do %>
-  Enter in keywords below, then click the links beneath each keyword to see what sort of results they turn up.
-  <br/>
-  Check the boxes to get notification emails of new results.
-<% end %>
-
 <section class="entry">
   <% if defined?(keyword) and keyword.errors.any? %>
     <div class="errors">
@@ -13,13 +7,23 @@
     </div>
   <% end %>
   
-  <form action="/keywords" method="post">
-    <input type="text" name="keyword" placeholder="keyword/phrase" />
+  <form class="search" action="/search" method="get" onsubmit="return false">
+    <input type="text" class="query" name="keyword" placeholder="keyword/phrase" />
     
     <div class="buttons">
-      <input type="submit" value="Add" />
+      <input type="submit" value="Search" />
     </div>
   </form>
+</section>
+
+<section class="results" id="results">
+  <div class="loading_container">
+    <img class="loading" src="/images/loader.gif" />
+  </div>
+  
+  <div class="container">
+    <!-- results get loaded in here -->
+  </div>
 </section>
 
 <ul class="subscriptions">
@@ -27,14 +31,12 @@
   <% keywords.each do |keyword, subscriptions| %>
   
     <li class="keyword">
+      <h2>
+        <%= keyword.keyword %>
+      </h2>
+      
       <form method="post" action="/keyword/<%= keyword.id %>">
         <input type="hidden" name="_method" value="delete" />
-        
-        <h2>
-          <a href="#" class="search" data-keyword="<%= form_escape keyword.keyword %>">
-            <%= keyword.keyword %>
-          </a>
-        </h2>
         
         <div class="buttons">
           <a class="remove" href="#">Remove</a>
@@ -56,8 +58,10 @@
       return false;
     });
     
-    $("li.keyword a.search").click(function() {
-      var keyword = $(this).data("keyword");
+    $("form.search").submit(function() {
+      var keyword = $("input.query").val();
+      if (keyword) keyword = keyword.trim();
+      if (!keyword) return;
       
       $("#results div.container").html("");
       $("#results div.loading_container").show();
@@ -143,12 +147,3 @@
     // $("input.test").get(0).click();
   });
 </script>
-
-<section class="results" id="results">
-  <div class="loading_container">
-    <img class="loading" src="/images/loader.gif" />
-  </div>
-  <div class="container">
-    <!-- results get loaded in here -->
-  </div>
-</section>
