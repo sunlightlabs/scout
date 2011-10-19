@@ -4,4 +4,8 @@ require 'rubygems'
 require 'bundler/setup'
 
 require 'alarms'
+
+# in production, nginx should scoop these up before they make it here anyway
+use Rack::Static, :urls => ["/css", "/images", "/js"], :root => "public"
+
 run Sinatra::Application
