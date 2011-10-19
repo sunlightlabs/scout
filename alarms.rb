@@ -108,10 +108,10 @@ delete '/keyword/:id' do
     keyword.destroy
     subscriptions.each {|s| s.destroy}
     
-    flash[:success] = "No longer subscribed to \"#{keyword.keyword}\"."
+    halt 200
+  else
+    halt 404
   end
-  
-  redirect '/dashboard'
 end
 
 # delete '/subscription/:id' do

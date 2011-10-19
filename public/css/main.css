@@ -32,8 +32,8 @@ button.image {
   color: transparent; /* Fix for Firefox */
   text-align: left;
   line-height: 1 !important;
-  background-position: 0 0;
-  background-repeat: no-repeat scroll:
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 button.text {
@@ -179,14 +179,23 @@ ul.subscriptions button.save:hover {
 
 ul.subscriptions li.keyword {
   width: 100%; position: relative;
-  padding: 20px 0 20px 0; clear: both;
+  padding: 30px 0 30px 0; clear: both;
   border-top: 1px solid #d5d5d5;
 }
 
 ul.subscriptions li.keyword h2 {
   font-weight: normal;
   font-size: 150%;
-  padding: 5px 0px 10px 0px;
+}
+
+ul.subscriptions li.keyword button.remove {
+  width: 28px;
+  height: 28px;
+  
+  background-image: url(/images/x-24.png);
+  background-color: #eeeeee;
+  
+  position: absolute; right: 0; top: 30px;
 }
 
 

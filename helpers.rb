@@ -24,7 +24,7 @@ module GeneralHelpers
   end
   
   def form_escape(string)
-    string.gsub "\"", "&quot;"
+    string.to_s.gsub "\"", "&quot;"
   end
   
   def url_escape(url)

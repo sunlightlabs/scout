@@ -35,17 +35,19 @@
     
   <% keywords.each do |keyword, subscriptions| %>
   
-    <li class="keyword">
+    <li class="keyword" id="keyword-<%= keyword.id %>">
       <h2>
         <%= keyword.keyword %>
       </h2>
       
-      <form method="post" action="/keyword/<%= keyword.id %>">
+      <form method="post" action="/keyword/<%= keyword.id %>" onsubmit="return false">
         <input type="hidden" name="_method" value="delete" />
         
-        <div class="buttons">
-          <a class="remove" href="#">Remove</a>
-        </div>
+        <button class="remove image" 
+          data-keyword_id="<%= form_escape keyword.id %>"
+          data-keyword="<%= form_escape keyword.keyword %>">
+          Remove
+        </button>
       </form>
       
     </li>
@@ -74,6 +76,25 @@
       .error(function() {
         console.log("Error creating subscription.");
       });
+    });
+    
+    $("li.keyword button.remove").click(function() {
+      var keyword_id = $(this).data("keyword_id");
+      var keyword = $(this).data("keyword");
+      
+      if (confirm("Remove the saved search \"" + keyword + "\"?")) {
+        $.post("/keyword/" + keyword_id, {
+          _method: "delete"
+        }, function(data) {
+          console.log("Keyword by ID " + keyword_id + " removed.");
+          $("#keyword-" + keyword_id).remove();
+        })
+        .error(function() {
+          console.log("Error removing saved search.");
+        });
+      }
+      
+      return false;
     });
     
     $("form.search").submit(function() {
