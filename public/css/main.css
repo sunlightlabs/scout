@@ -141,7 +141,6 @@ ul.subscriptions {
   right: 0; 
   width: 300px; 
   padding-left: 20px;
-  border-left: 1px solid #444;
 }
 
 ul.subscriptions li.keyword {
@@ -153,36 +152,10 @@ ul.subscriptions li.keyword {
   border-top: 1px solid #128234;
 }
 
-ul.subscriptions li.keyword input[type=submit], section.subscriptions li.keyword input[type=button] {
-  font-size: 100%;
-  padding: 5px 10px;
-}
-
 ul.subscriptions li.keyword h2 {
-  
   font-weight: normal;
   font-size: 150%;
   padding: 5px 0px 10px 0px;
-}
-
-ul.subscriptions li.keyword div.buttons {
-  position: absolute; right: 0; top: 10px;
-}
-
-ul.subscriptions li.keyword ul.types {
-  padding-left: 20px;
-}
-
-ul.subscriptions li.keyword ul.types li {
-  display: inline; font-size: 90%;
-}
-
-ul.subscriptions li.keyword ul.types li input[type=checkbox] {
-  margin-top: -1px;
-}
-
-ul.subscriptions li.keyword ul.types li img.loading {
-  display: none;
 }
 
 
@@ -194,10 +167,22 @@ section.results {
   height: 500px; overflow: auto;
 }
 section.results div.container {width: 625px;}
-section.results div.loading_container {display: none;}
+section.results div.loading_container {
+  display: none; margin: 0 auto; width: 80%;
+}
 
-section.results img.loading {
-  margin: 0 auto; display: block;
+section.results div.loading_container img {
+  margin-top: 10px;
+}
+
+section.results div.loading_container span {
+  color: #444; font-size: 150%;
+  display: block;
+  padding-top: 20px; padding: 20px;
+  padding-left: 50px;
+  background-position: left;
+  background-image: url(/images/loader.gif);
+  background-repeat: no-repeat;
 }
 
 section.results p.header {
