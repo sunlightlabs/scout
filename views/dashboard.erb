@@ -11,7 +11,7 @@
     <input type="text" class="query" name="keyword" placeholder="something" />
     
     <div class="buttons">
-      <button class="search">Search</button>
+      <button class="image search">Search</button>
     </div>
   </form>
 </section>
@@ -28,6 +28,10 @@
 </section>
 
 <ul class="subscriptions">
+
+  <button class="text save">
+    Save this search
+  </button>
     
   <% keywords.each do |keyword, subscriptions| %>
   
@@ -50,6 +54,7 @@
 </ul>
 
 <script type="text/javascript">
+  $("input.query").focus();
   $(function() {
     
     $("li.keyword a.remove").click(function() {
@@ -59,19 +64,33 @@
       return false;
     });
     
+    $("button.save").click(function() {
+      var keyword = $("input.query").val();
+      $.post("/keywords", {
+        keyword: keyword
+      }, function(data) {
+        console.log("Subscription created.");
+      })
+      .error(function() {
+        console.log("Error creating subscription.");
+      });
+    });
+    
     $("form.search").submit(function() {
       var keyword = $("input.query").val();
       if (keyword) keyword = keyword.trim();
       if (!keyword) return;
       
+      $("ul.subscriptions button.save").hide();
       $("#results div.container").html("");
       $("#results div.loading_container").show();
       
-      $.get("/subscriptions/search", {
+      $.get("/search", {
         keyword: keyword
       }, function(data) {
         $("#results div.loading_container").hide();
         $("#results div.container").html(data);
+        $("ul.subscriptions button.save").show();
       })
       .error(function() {
         $("#results div.loading_container").hide();

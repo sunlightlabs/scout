@@ -4,7 +4,7 @@ body {background-color: #f9f9f9;}
 h1, h2, h3, h4, h5, h6 {font-weight: normal;}
 em, strong {font-weight: normal; font-style: normal;}
 ul, ol {list-style-type: none;}
-a {color: #22447f;}
+a {color: #579;}
 
 header, footer, section.main {
   width: 980px; 
@@ -14,10 +14,34 @@ header, footer, section.main {
 }
 
 header {margin-top: 20px; margin-bottom: 10px;}
-footer {
-  position: absolute; bottom: 0;
-  margin-bottom: 30px;
+
+button {
+  border-color: #8F8F8F;
+  border-width: 1px;
+  border-radius: 5px;
+  background-color: transparent;
+  overflow: hidden;
+  cursor: pointer;
 }
+
+button:hover {
+  background-color: #e5e5e5;
+}
+
+button.image {
+  color: transparent; /* Fix for Firefox */
+  text-align: left;
+  line-height: 1 !important;
+  background-position: 0 0;
+  background-repeat: no-repeat scroll:
+}
+
+button.text {
+  padding: 10px 15px;
+  font-size: 100%;
+  color: #4c4c4c;
+}
+
 
 header div.login {
   font-size: 90%;
@@ -38,7 +62,7 @@ header h1 {
 header h2 {
   font-size: 100%;
   text-align: center;
-  color: #68a;
+  color: #579;
 }
 
 header div.login span {
@@ -47,16 +71,16 @@ header div.login span {
 
 header #flash div.flash {
   padding: 10px 20px;
+  margin-top: 15px;
   margin-bottom: 15px;
-  color: #f5f5f5;
 }
 
 header #flash div.flash.success {
-  background-color: #348145;
+  color: #348145;
 }
 
 header #flash div.flash.failure {
-  background-color: #C13445;
+  color: #C13445;
 }
 
 
@@ -68,8 +92,7 @@ header p.content {
 }
 
 section.main {
-  padding: 20px 0;
-  position: relative;
+  padding: 20px 0; height: 0;
 }
 
 footer {
@@ -78,6 +101,7 @@ footer {
   line-height: 25px;
   clear: both;
   padding-top: 30px;
+  display: none;
 }
 
 section.signup {text-align: center;}
@@ -118,18 +142,11 @@ section.entry input[type=text] {
 /* adapted from http://stackoverflow.com/questions/600438/css-to-hide-input-button-value-text */
 section.entry button.search {
   float: left;
-  width: 75px;
   margin-left: 10px;
+  width: 75px;
   height: 75px;
-  color: transparent; /* Fix for Firefox */
-  border-color: #8F8F8F;
-  border-width: 1px;
-  border-radius: 5px;
-  text-align: left;
-  line-height: 1 !important;
-  background: transparent url(/images/search-70.png) no-repeat scroll 0 0;
-  overflow: hidden;
-  cursor: pointer;
+  
+  background-image: url(/images/search-70.png);
 }
 
 
@@ -141,6 +158,16 @@ ul.subscriptions {
   right: 0; 
   width: 300px; 
   padding-left: 20px;
+  border-left: 1px solid #d5d5d5;
+  min-height: 500px;
+}
+
+ul.subscriptions button.save {
+  display: none;
+  background-color: #ccddee;
+}
+ul.subscriptions button.save:hover {
+  background-color: #99ccee;
 }
 
 ul.subscriptions li.keyword {
@@ -149,7 +176,7 @@ ul.subscriptions li.keyword {
 }
 
 ul.subscriptions li.keyword {
-  border-top: 1px solid #128234;
+  border-top: 1px solid #42a264;
 }
 
 ul.subscriptions li.keyword h2 {
@@ -164,7 +191,6 @@ ul.subscriptions li.keyword h2 {
 section.results {
   position: absolute; left: 0;
   width: 650px; margin-right: 30px;
-  height: 500px; overflow: auto;
 }
 section.results div.container {width: 625px;}
 section.results div.loading_container {
@@ -194,16 +220,17 @@ section.results p.header {
 section.results ul {
   list-style-type: none;
 }
+
 section.results ul p.date {
-  font-size: 90%;
+  font-size: 120%;
   width: 100%;
-  
-  padding: 3px 0;
-  border: 1px solid #5577bb;
-  background-color: #e5e5ff;
-  border-width: 1px 0;
-  margin: 20px 0;
-  text-align: center; 
+  margin-top: 50px; margin-bottom: 10px;
+  text-align: center;
+  color: #579;
+}
+
+section.results ul p.date:first-child {
+  margin-top: 0;
 }
 
 /* common to results */
