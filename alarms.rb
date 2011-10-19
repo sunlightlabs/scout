@@ -83,16 +83,20 @@ post '/keywords' do
   
 end
 
-get '/subscriptions/test' do
+get '/subscriptions/search' do
   requires_login
   
-  subscription = current_user.subscriptions.new :keyword => params[:keyword], :subscription_type => params[:subscription_type]
-  if subscription.valid? and (adapter = subscription.adapter) # valid subscription type
-    items = adapter.search subscription
-    erb :results, :layout => false, :locals => {:items => items, :keyword => subscription.keyword, :subscription_type => subscription.subscription_type}
-  else
-    halt 404
+  items = []
+  subscription_types.keys.each do |subscription_type|
+    items += current_user.subscriptions.new(
+      :keyword => params[:keyword], 
+      :subscription_type => subscription_type
+    ).search
   end
+  
+  items = items.sort {|a, b| b.date <=> a.date}
+  
+  erb :results, :layout => false, :locals => {:items => items, :keyword => params[:keyword]}
 end
 
 delete '/keyword/:id' do
@@ -110,28 +114,28 @@ delete '/keyword/:id' do
   redirect '/dashboard'
 end
 
-delete '/subscription/:id' do
-  requires_login
-  
-  if subscription = Subscription.where(:user_id => current_user.id, :_id => BSON::ObjectId(params[:id].strip)).first
-    subscription.destroy
-    halt 204
-  else
-    halt 404
-  end
-end
+# delete '/subscription/:id' do
+#   requires_login
+#   
+#   if subscription = Subscription.where(:user_id => current_user.id, :_id => BSON::ObjectId(params[:id].strip)).first
+#     subscription.destroy
+#     halt 204
+#   else
+#     halt 404
+#   end
+# end
 
-post '/subscriptions' do
-  requires_login
-  
-  subscription = current_user.subscriptions.new :keyword => params[:keyword], :subscription_type => params[:subscription_type]
-  if subscription.valid?
-    subscription.save!
-    halt 201, subscription.id.to_s
-  else
-    halt 404
-  end
-end
+# post '/subscriptions' do
+#   requires_login
+#   
+#   subscription = current_user.subscriptions.new :keyword => params[:keyword], :subscription_type => params[:subscription_type]
+#   if subscription.valid?
+#     subscription.save!
+#     halt 201, subscription.id.to_s
+#   else
+#     halt 404
+#   end
+# end
 
 
 # auth helpers

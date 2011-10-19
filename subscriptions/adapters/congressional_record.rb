@@ -74,7 +74,7 @@ module Subscriptions
           result['page_slug'] = matches.first
         end
         
-        Subscriptions::Item.new(
+        Subscriptions::Result.new(
           :id => "#{result["origin_url"]}-#{result['order']}",
           :date => result['date'],
           :data => result

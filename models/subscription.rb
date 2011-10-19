@@ -38,6 +38,10 @@ class Subscription
     "Subscriptions::Adapters::#{subscription_type.camelize}".constantize rescue nil
   end
   
+  def search
+    adapter.search self
+  end
+  
   after_create :initialize_self
   def initialize_self
     Subscriptions::Manager.initialize! self

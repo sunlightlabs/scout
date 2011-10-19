@@ -26,38 +26,19 @@
     
   <% keywords.each do |keyword, subscriptions| %>
   
-    <li class="existing">
+    <li class="keyword">
       <form method="post" action="/keyword/<%= keyword.id %>">
         <input type="hidden" name="_method" value="delete" />
         
-        <h2><%= keyword.keyword %></h2>
+        <h2>
+          <a href="#" class="search" data-keyword="<%= form_escape keyword.keyword %>">
+            <%= keyword.keyword %>
+          </a>
+        </h2>
         
         <div class="buttons">
-          <a class="remove keyword" href="#">Remove</a>
+          <a class="remove" href="#">Remove</a>
         </div>
-      </form>
-        
-      <ul class="subscription types">
-        <% subscription_types.keys.each do |type| %>
-          <% subscription = subscriptions.detect {|s| s.subscription_type == type} %>
-          <li>
-            <img src="/images/loader-small.gif" class="loading" />
-            <input 
-              type="checkbox" name="subscription_type" 
-              class="subscription_type"
-              data-keyword="<%= form_escape keyword.keyword %>" 
-              data-type="<%= type %>"
-              value="<%= type %>"
-              <% if subscription %>
-                checked
-                data-id="<%= subscription.id %>"
-              <% end %>
-              />
-            <a class="test" href="#" data-keyword="<%= form_escape keyword.keyword %>" data-type="<%= type %>"><%= subscription_types[type][:name] %></a>
-          </li>
-        <% end %>
-      </ul>
-        
       </form>
       
     </li>
@@ -68,23 +49,21 @@
 <script type="text/javascript">
   $(function() {
     
-    $("a.remove.keyword").click(function() {
+    $("li.keyword a.remove").click(function() {
       if (confirm("Remove this alert?"))
         this.parentNode.parentNode.submit();
       
       return false;
     });
     
-    $("a.test").click(function() {
+    $("li.keyword a.search").click(function() {
       var keyword = $(this).data("keyword");
-      var type = $(this).data("type");
       
       $("#results div.container").html("");
       $("#results div.loading_container").show();
       
-      $.get("/subscriptions/test", {
-        keyword: keyword,
-        subscription_type: type
+      $.get("/subscriptions/search", {
+        keyword: keyword
       }, function(data) {
         $("#results div.loading_container").hide();
         $("#results div.container").html(data);

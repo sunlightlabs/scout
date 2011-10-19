@@ -46,25 +46,32 @@ module Subscriptions
       puts "\n[#{adapter}][#{function}][#{subscription.id}] #{url}\n\n" if config[:debug][:output_urls]
       
       response = HTTParty.get url
-      adapter.items_for response
+      
+      # insert the subscription onto each result
+      adapter.items_for(response).map do |result| 
+        result.subscription = subscription
+        result
+      end
     end
     
   end
   
   
-  # utility class returned by adapters, then used to create various items in the database
-  class Item
+  # utility class returned by adapters, then used to render displays and create various items in the database
+  class Result
+    
     # done so that when a template is rendered with this item as the context, 
     # it has all the subscription display helpers available to it
     include Subscriptions::Helpers
     include GeneralHelpers
     
-    attr_accessor :id, :date, :data
+    attr_accessor :id, :date, :data, :subscription
     
     def initialize(options)
       self.id = options[:id]
       self.date = options[:date]
       self.data = options[:data]
+      self.subscription = options[:subscription]
     end
     
   end

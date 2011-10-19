@@ -1,4 +1,6 @@
+* {font-family: Ubuntu, sans-serif;}
 body {background-color: #f9f9f9;}
+
 h1, h2, h3, h4, h5, h6 {font-weight: normal;}
 em, strong {font-weight: normal; font-style: normal;}
 ul, ol {list-style-type: none;}
@@ -8,14 +10,32 @@ header, footer, section.main {
   width: 980px;
   margin-left: 50px;
   margin-right: 50px;
+  position: relative;
 }
 
-header {margin-top: 30px; margin-bottom: 10px;}
+header {margin-top: 20px; margin-bottom: 10px;}
 footer {margin-top: 30px; margin-bottom: 30px;}
 
 header div.login {
   font-size: 90%;
   margin-bottom: 30px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  color: #444;
+}
+
+header h1 {
+  font-size: 400%;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #444;
+}
+
+header h2 {
+  font-size: 100%;
+  text-align: center;
+  color: #68a;
 }
 
 header div.login span {

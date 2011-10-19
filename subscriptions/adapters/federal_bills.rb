@@ -102,7 +102,7 @@ module Subscriptions
         
         bill_version['issued_on'] = noon_utc_for bill_version['issued_on']
         
-        Subscriptions::Item.new(
+        Subscriptions::Result.new(
           :id => bill_version["bill_version_id"],
           :date => bill_version["issued_on"],
           :data => bill_version

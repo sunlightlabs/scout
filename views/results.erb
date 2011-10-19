@@ -1,9 +1,5 @@
 <% if items.any? %>
 
-  <p class="header">
-    <%= subscription_types[subscription_type][:results_header] %>
-  </p>
-
   <ul>
     <% current_date = nil %>
     <% items.each do |item| %>
@@ -11,7 +7,7 @@
         <p class="date"><%= long_date item.date %></p>
         <% current_date = item.date.strftime("%Y-%m-%d") %>
       <% end %>
-      <%= partial :"subscriptions/#{subscription_type}/result", :locals => {:item => item, :keyword => keyword} %>
+      <%= partial :"subscriptions/#{item.subscription.subscription_type}/result", :locals => {:item => item, :keyword => keyword} %>
     <% end %>
   </ul>
   
