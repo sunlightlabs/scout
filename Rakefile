@@ -119,7 +119,7 @@ def render_email(deliveries)
   groups = {}
   
   deliveries.each do |delivery|
-    item = Subscriptions::Item.new(
+    item = Subscriptions::Result.new(
       :id => delivery.item['id'], 
       :data => delivery.item['data']
     )
