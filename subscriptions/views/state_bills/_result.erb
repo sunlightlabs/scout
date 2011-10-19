@@ -10,8 +10,8 @@
 
 <p class="content"><%= bill['title'] %></p>
 
-<% if bill['subjects'] and bill['subjects'].any? %>
-  <div class="subjects">
+<% if false and (bill['subjects'] and bill['subjects'].any?) %>
+  <div class="subjects subtitle">
     Keywords: <%= bill['subjects'].join ", " %>
   </div>
 <% end %>
