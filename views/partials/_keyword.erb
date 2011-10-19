@@ -1,0 +1,16 @@
+<li class="keyword" id="keyword-<%= keyword.id %>">
+  <h2>
+    <%= keyword.keyword %>
+  </h2>
+  
+  <form method="post" action="/keyword/<%= keyword.id %>" onsubmit="return false">
+    <input type="hidden" name="_method" value="delete" />
+    
+    <button class="remove image" 
+      data-keyword_id="<%= form_escape keyword.id %>"
+      data-keyword="<%= form_escape keyword.keyword %>">
+      Remove
+    </button>
+  </form>
+  
+</li>

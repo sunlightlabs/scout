@@ -75,10 +75,9 @@ post '/keywords' do
     keyword.save!
     subscriptions.each {|s| s.save!}
     
-    redirect '/dashboard'
+    partial :"partials/keyword", :locals => {:keyword => keyword}
   else
-    flash.now[:failure] = "Problem adding keyword."
-    erb :dashboard, :locals => {:keyword => keyword, :keywords => current_user.keywords.all}
+    halt 500
   end
   
 end

@@ -42,6 +42,10 @@ button.text {
   color: #4c4c4c;
 }
 
+button.text.image {
+  color: #4c4c4c;
+  background-position: left;
+}
 
 header div.login {
   font-size: 90%;
@@ -169,12 +173,34 @@ ul.subscriptions {
   min-height: 500px;
 }
 
+ul.subscriptions div.save.buttons {
+  margin-bottom: 20px;
+  height: 50px;
+}
+
 ul.subscriptions button.save {
   display: none;
   background-color: #ccddee;
 }
+
 ul.subscriptions button.save:hover {
   background-color: #99ccee;
+}
+
+ul.subscriptions button.saving {
+  display: none;
+  padding-left: 30px;
+  background-image: url(/images/loader-small.gif);
+  background-position: 10px center;
+  cursor: default;
+  background-color: #dde5ee;
+}
+
+ul.subscriptions button.saved {
+  display: none;
+  background-color: #99aabb;
+  color: #f5f5f5;
+  cursor: default;
 }
 
 ul.subscriptions li.keyword {
