@@ -53,7 +53,7 @@ header div.login {
 }
 
 header h1 {
-  font-size: 400%;
+  font-size: 300%;
   text-align: center;
   margin-bottom: 20px;
   color: #444;
@@ -104,17 +104,24 @@ footer {
   display: none;
 }
 
-section.signup {text-align: center;}
-
-section.signup form input.email {
-  font-size: 125%;
-  padding: 5px 5px;
+section.signup {
+  text-align: center;
+  position: relative;
 }
 
-section.signup form input.submit {
-  font-size: 125%;
-  padding: 5px 20px;
-  margin-left: 5px;
+section.signup form input.email {
+  font-size: 250%;
+  padding: 10px 10px;
+  width: 700px;
+}
+
+section.signup button {
+  width: 75px;
+  height: 70px;
+  font-size: 150%;
+  margin-left: 10px;
+  font-weight: bold;
+  position: absolute; top: 0;
 }
 
 
@@ -172,11 +179,8 @@ ul.subscriptions button.save:hover {
 
 ul.subscriptions li.keyword {
   width: 100%; position: relative;
-  padding: 10px 0 20px 0; clear: both;
-}
-
-ul.subscriptions li.keyword {
-  border-top: 1px solid #42a264;
+  padding: 20px 0 20px 0; clear: both;
+  border-top: 1px solid #d5d5d5;
 }
 
 ul.subscriptions li.keyword h2 {
