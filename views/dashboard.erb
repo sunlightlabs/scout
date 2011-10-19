@@ -76,7 +76,7 @@
       });
     });
     
-    $("li.keyword button.remove").click(function() {
+    $("li.keyword button.remove").live("click", function() {
       var keyword_id = $(this).data("keyword_id");
       var keyword = $(this).data("keyword");
       
