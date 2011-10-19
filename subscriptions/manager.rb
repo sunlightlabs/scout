@@ -48,9 +48,15 @@ module Subscriptions
       response = HTTParty.get url
       
       # insert the subscription onto each result
-      adapter.items_for(response).map do |result| 
-        result.subscription = subscription
-        result
+      results = adapter.items_for(response)
+      
+      if results
+        results.map do |result| 
+          result.subscription = subscription
+          result
+        end
+      else
+        nil
       end
     end
     
