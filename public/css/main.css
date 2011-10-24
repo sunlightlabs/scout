@@ -134,7 +134,7 @@ section.signup button {
 section.entry {
   width: 100%; height: 100px;
   position: relative;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
 }
 
 section.entry div.errors {
@@ -163,7 +163,7 @@ section.entry button.search {
 
 /* subscription display */
 
-ul.subscriptions {
+section.sidebar {
   clear: both;
   position: absolute;
   right: 0; 
@@ -173,21 +173,30 @@ ul.subscriptions {
   min-height: 500px;
 }
 
-ul.subscriptions div.save.buttons {
+section.sidebar div.save.buttons {
   margin-bottom: 20px;
-  height: 50px;
+  height: 30px;
 }
 
-ul.subscriptions button.save {
+section.sidebar div.save.buttons button {
+  padding: 5px;
+}
+
+section.sidebar div.save.buttons button.nothing {
+  background-color: #dddddd;
+  opacity: 0.35;
+}
+
+section.sidebar div.save.buttons button.save {
   display: none;
   background-color: #ccddee;
 }
 
-ul.subscriptions button.save:hover {
+section.sidebar div.save.buttons button.save:hover {
   background-color: #99ccee;
 }
 
-ul.subscriptions button.saving {
+section.sidebar div.save.buttons button.saving {
   display: none;
   padding-left: 30px;
   background-image: url(/images/loader-small.gif);
@@ -196,12 +205,43 @@ ul.subscriptions button.saving {
   background-color: #dde5ee;
 }
 
-ul.subscriptions button.saved {
+section.sidebar div.save.buttons button.saved {
   display: none;
   background-color: #99aabb;
   color: #f5f5f5;
   cursor: default;
 }
+
+section.sidebar ul.filters {
+  padding-bottom: 10px;
+}
+
+section.sidebar ul.filters li {
+  margin: 10px 0;
+}
+
+section.sidebar ul.filters li button.filter {
+  padding: 0px;
+  color: #f5f5f5;
+}
+
+section.sidebar ul.filters li button.filter:disabled {
+  opacity: 0.35;
+}
+
+section.sidebar ul.filters li button.filter span.status {
+  padding: 5px 7px;
+  font-size: 80%;
+  text-transform: uppercase;
+  border-right: 1px solid #aaa;
+  display: inline-block;
+  font-weight: bold;
+}
+section.sidebar ul.filters li button.filter span.name {
+  padding: 5px 7px; display: inline-block;
+  font-size: 90%;
+}
+section.sidebar ul.filters li button.filter.off {background-color: #9E9E9E;}
 
 ul.subscriptions li.keyword {
   width: 100%; position: relative;
@@ -250,12 +290,6 @@ section.results div.loading_container span {
   background-repeat: no-repeat;
 }
 
-section.results p.header {
-  font-size: 125%; color: #444;
-  margin-bottom: 30px; text-align: center; width: 100%;
-  display: none;
-}
-
 section.results ul {
   list-style-type: none;
 }
@@ -273,14 +307,13 @@ section.results ul p.date:first-child {
 }
 
 /* common to results */
-section.results li.result {width: 630px;}
-
-/*section.results li.result div.content {float: left; width: 550px;}
-section.results li.result div.banner {float: left; width: 100px;}*/
-
 section.results li.result {
-  padding: 15px 0 15px 0;
-  margin-bottom: 20px;
+  width: 630px;
+  border-left-width: 6px;
+  border-left-style: solid;
+  border-radius: 15px;
+  padding: 15px 0px 15px 15px;
+  margin-bottom: 40px;
 }
 
 section.results li.result h2 {
@@ -289,10 +322,6 @@ section.results li.result h2 {
 
 section.results li.result h3 {
   margin-bottom: 10px; font-size: 100%;
-}
-
-section.results li.result dl.highlight {
-  
 }
 
 section.results li.result dl.highlight dt {
@@ -318,7 +347,6 @@ section.results .content {
 
 section.results .subtitle {
   font-size: 100%;
-  
 }
 
 

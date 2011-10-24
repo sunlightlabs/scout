@@ -33,25 +33,51 @@
   </div>
 </section>
 
-<ul class="subscriptions">
+<section class="sidebar">
 
   <div class="save buttons">
+    <button class="text nothing" disabled>
+      Save this search
+    </button> 
+    
     <button class="text save">
       Save this search
     </button>
     
-    <button class="text image saving">
+    <button class="text image saving" disabled>
       Saving...
     </button>
     
-    <button class="text saved">
+    <button class="text saved" disabled>
       Saved
     </button>
   </div>
-    
-  <% keywords.each do |keyword, subscriptions| %>
-    <%= partial :"partials/keyword", :locals => {:keyword => keyword} %>
-  <% end %>
+  
+  <style>
+    <% subscription_types.each do |type, data| %>
+      section.sidebar ul.filters li button.filter.<%= type %>.on {background-color: <%= data[:color] %>;}
+      section.results li.result.<%= type %> {border-left-color: <%= data[:color] %>;}
+    <% end %>
+  </style>
+
+  <ul class="filters">
+    <% subscription_types.each do |type, data| %>
+      <li>
+        <button class="text filter <%= type %> off" data-type="<%= type %>" disabled>
+          <span class="status">off</span>
+          <span class="name">
+            <%= data[:name] %>
+          </span>
+        </button>
+      </li>
+    <% end %>
+  </ul>
+  
+  <ul class="subscriptions">
+    <% keywords.each do |keyword, subscriptions| %>
+      <%= partial :"partials/keyword", :locals => {:keyword => keyword} %>
+    <% end %>
+  </ul>
 
 </ul>
 
@@ -120,8 +146,27 @@
       return false;
     });
     
+    $("ul.filters button").prop("disabled", true).click(function() {
+      var elem = $(this);
+      var status = elem.find("span.status");
+      var type = elem.data("type");
+      
+      if (elem.hasClass("on")) {
+        elem.removeClass("on").addClass("off");
+        status.html("off");
+        $("section.results li.result." + type).hide();
+      } else {
+        elem.removeClass("off").addClass("on");
+        status.html("on");
+        $("section.results li.result." + type).show();
+      }
+      
+      return false;
+    });
+    
     function searchFor(keyword, keyword_id) {
-      $("ul.subscriptions div.save.buttons button").hide();
+      $("section.sidebar div.save.buttons button").hide();
+      $("section.sidebar button.nothing").show();
       
       $("#results div.container").html("");
       $("#results div.loading_container").show();
@@ -129,17 +174,20 @@
       $("#keyword_searched").val(keyword);
       $("#keyword_id").val(keyword_id);
       
+      $("ul.filters button").prop("disabled", true).removeClass("on").addClass("off")
+        .find("span.status").html("off");
+      
       $.get("/search", {
         keyword: keyword
       }, function(data) {
         $("#results div.loading_container").hide();
         $("#results div.container").html(data);
         
-        $("ul.subscriptions div.save.buttons button").hide();
+        $("section.sidebar div.save.buttons button").hide();
         if (keyword_id)
-          $("ul.subscriptions button.saved").show();
+          $("section.sidebar button.saved").show();
         else
-          $("ul.subscriptions button.save").show();
+          $("section.sidebar button.save").show();
       })
       .error(function() {
         $("#results div.loading_container").hide();

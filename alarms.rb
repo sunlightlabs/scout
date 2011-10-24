@@ -86,16 +86,22 @@ get '/search' do
   requires_login
   
   items = []
+  types = []
   subscription_types.keys.each do |subscription_type|
-    items += current_user.subscriptions.new(
+    results = current_user.subscriptions.new(
       :keyword => params[:keyword], 
       :subscription_type => subscription_type
     ).search
+    
+    if results.any?
+      items += results
+      types << subscription_type
+    end
   end
   
   items = items.sort {|a, b| b.date <=> a.date}
   
-  erb :results, :layout => false, :locals => {:items => items, :keyword => params[:keyword]}
+  erb :results, :layout => false, :locals => {:items => items, :types => types, :keyword => params[:keyword]}
 end
 
 delete '/keyword/:id' do

@@ -1,3 +1,8 @@
+<script type="text/javascript">
+  $("ul.filters button").prop("disabled", false).removeClass("off").addClass("on")
+    .find("span.status").html("on");
+</script>
+
 <% if items.any? %>
 
   <ul>
@@ -11,10 +16,6 @@
       
       <li class="result <%= item.subscription.subscription_type %>">
         <%= partial :"subscriptions/#{item.subscription.subscription_type}/result", :locals => {:item => item, :keyword => keyword} %>
-        
-        <!--<div class="banner <%= item.subscription.subscription_type %>">
-          <%= subscription_types[item.subscription.subscription_type][:name] %>
-        </div>-->
       </li>
       
     <% end %>
