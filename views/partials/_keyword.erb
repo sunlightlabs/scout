@@ -1,6 +1,11 @@
 <li class="keyword" id="keyword-<%= keyword.id %>">
   <h2>
-    <%= keyword.keyword %>
+    <a href="#" onclick="return false" 
+      data-keyword="<%= form_escape keyword.keyword %>"
+      data-keyword_id="<%= form_escape keyword.id %>"
+      >
+      <%= keyword.keyword %>
+    </a>
   </h2>
   
   <form method="post" action="/keyword/<%= keyword.id %>" onsubmit="return false">
