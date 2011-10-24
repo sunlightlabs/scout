@@ -254,9 +254,14 @@ module Subscriptions
       end
       
       if matches.any?
-        matches.first.gsub(/#{keyword}/i) do |word|
-          "<em>#{word}</em>"
-        end
+        highlight matches.first, keyword
+      end
+    end
+    
+    # when client-side highlighting is necessary
+    def highlight(text, keyword)
+      text.gsub(/#{keyword}/i) do |word|
+        "<em class=\"highlight\">#{word}</em>"
       end
     end
     

@@ -8,13 +8,9 @@
   <span class="state"><%= state_name bill['state'] %></span>:
 </h2>
 
-<p class="content"><%= bill['title'] %></p>
-
-<% if false and (bill['subjects'] and bill['subjects'].any?) %>
-  <div class="subjects subtitle">
-    Keywords: <%= bill['subjects'].join ", " %>
-  </div>
-<% end %>
+<p class="content">
+  <%= highlight bill['title'], keyword %>
+</p>
 
 <% if state_in_og?(bill['state']) or state_source_info?(bill) %>
   <section class="more">

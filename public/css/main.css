@@ -300,7 +300,7 @@ section.results li.result dl.highlight dt {
   margin-bottom: 5px;
 }
 
-section.results li.result dl.highlight dd em {
+section.results em.highlight, section.results .highlight em {
   font-weight: bold; font-style: normal; color: #aa0000;
 }
 
