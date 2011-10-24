@@ -155,14 +155,26 @@
         elem.removeClass("on").addClass("off");
         status.html("off");
         $("section.results li.result." + type).hide();
+        dateScan();
       } else {
         elem.removeClass("off").addClass("on");
         status.html("on");
         $("section.results li.result." + type).show();
+        dateScan();
       }
       
       return false;
     });
+    
+    function dateScan() {
+      $("section.results p.date").each(function(i, elem) {
+        if ($(elem).nextUntil("p.date", "li:visible").size() == 0) {
+          $(elem).hide();
+        } else {
+          $(elem).show();
+        }
+      });
+    }
     
     function searchFor(keyword, keyword_id) {
       $("section.sidebar div.save.buttons button").hide();

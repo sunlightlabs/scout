@@ -223,6 +223,8 @@ section.sidebar ul.filters li {
 section.sidebar ul.filters li button.filter {
   padding: 0px;
   color: #f5f5f5;
+  width: 100%;
+  text-align: left;
 }
 
 section.sidebar ul.filters li button.filter:disabled {
@@ -292,6 +294,7 @@ section.results div.loading_container span {
 
 section.results ul {
   list-style-type: none;
+  margin-top: -30px;
 }
 
 section.results ul p.date {
@@ -303,7 +306,7 @@ section.results ul p.date {
 }
 
 section.results ul p.date:first-child {
-  margin-top: 0;
+  xmargin-top: 0;
 }
 
 /* common to results */

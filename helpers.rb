@@ -5,11 +5,11 @@ module GeneralHelpers
   def subscription_types
     {
       'federal_bills' => {
-        :name => "Congress' Bills",
+        :name => "Bills in Congress",
         :color => "#46517A"
       },
       'state_bills' => {
-        :name => "State Bills",
+        :name => "Bills in the States",
         :color => "#7A5D46"
       },
       'congressional_record' => {
