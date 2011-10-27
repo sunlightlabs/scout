@@ -194,7 +194,7 @@ section.sidebar div.save.buttons button.nothing {
 
 section.sidebar div.save.buttons button.save {
   display: none;
-  background-color: #ccddee;
+  background-color: #773533; color: #f5f5f5;
 }
 
 section.sidebar div.save.buttons button.save:hover {
@@ -230,7 +230,7 @@ section.sidebar ul.filters li button.filter {
   width: 100%;
   text-align: left;
   color: #f5f5f5;
-  background-color: #335577;
+  background-color: #C7DBF1; color: #444;
 }
 
 section.sidebar ul.filters li button.filter:disabled {
@@ -241,7 +241,7 @@ section.sidebar ul.filters li button.filter span.status {
   padding: 5px 7px;
   font-size: 80%;
   text-transform: uppercase;
-  border-right: 1px solid #aaa;
+  border-right: 1px solid #777;
   display: inline-block;
   font-weight: bold;
 }
@@ -253,7 +253,7 @@ section.sidebar ul.filters li button.filter span.name {
 section.sidebar ul.filters li button.filter span.results {
   padding: 5px 7px; display: inline-block; 
   float: right; font-size: 80%;
-  border-left: 1px solid #aaa;
+  border-left: 1px solid #777;
 }
 section.sidebar ul.filters li button.filter.off {
    opacity: 0.35;
