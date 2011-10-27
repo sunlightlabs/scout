@@ -19,19 +19,19 @@
 <body>
 
   <header>
-    <h1>
+    <!-- <h1>
       government
-    </h1>
+    </h1> -->
     
     <h2>
-      maybe you want to find something in it?
+      find something in your government
     </h2>
   
     <% if logged_in? %>
       <div class="login">
-        <!--<span>
+        <span>
           <%= current_user.email %>
-        </span>-->
+        </span>
         <a class="logout" href="/logout">logout</a>
       </div>
     <% end %>

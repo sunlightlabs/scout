@@ -86,7 +86,8 @@ get '/search' do
   requires_login
   
   items = []
-  types = []
+  types = {}
+  groups = {}
   subscription_types.keys.each do |subscription_type|
     results = current_user.subscriptions.new(
       :keyword => params[:keyword], 
@@ -95,13 +96,35 @@ get '/search' do
     
     if results.any?
       items += results
-      types << subscription_type
+      types[subscription_type] = {
+        :newest => results.first.date,
+        :count => results.size
+      }
+
+      group = subscription_types[subscription_type][:group]
+
+      if groups[group]
+        if results.first.date > groups[group][:newest]
+          groups[group][:newest] = results.first.date
+        end
+        groups[group][:count] += results.size
+      else
+        groups[group] = {
+          :count => results.size,
+          :newest => results.first.date
+        }
+      end
     end
   end
   
   items = items.sort {|a, b| b.date <=> a.date}
   
-  erb :results, :layout => false, :locals => {:items => items, :types => types, :keyword => params[:keyword]}
+  erb :results, :layout => false, :locals => {
+    :items => items, 
+    :types => types, 
+    :groups => groups,
+    :keyword => params[:keyword]
+  }
 end
 
 delete '/keyword/:id' do

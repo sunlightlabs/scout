@@ -54,20 +54,25 @@
   </div>
   
   <style>
-    <% subscription_types.each do |type, data| %>
-      section.sidebar ul.filters li button.filter.<%= type %>.on {background-color: <%= data[:color] %>;}
-      section.results li.result.<%= type %> {border-left-color: <%= data[:color] %>;}
+    <% subscription_groups.each do |group, data| %>
+      /*section.sidebar ul.filters li button.filter.<%= group %>.on {background-color: <%= data[:color] %>;}
+      section.results li.result.<%= group %> {border-left-color: <%= data[:color] %>;}*/
     <% end %>
   </style>
 
   <ul class="filters">
-    <% subscription_types.each do |type, data| %>
+    <% subscription_types.sort_by {|k, v| v[:order]}.each do |type, data| %>
       <li>
-        <button class="text filter <%= type %> off" data-type="<%= type %>" disabled>
+        <button class="text filter <%= type %> off" 
+          data-group="<%= data[:group] %>" 
+          data-type="<%= type %>"
+          disabled
+          >
           <span class="status">off</span>
           <span class="name">
             <%= data[:name] %>
           </span>
+          <span class="results"></span>
         </button>
       </li>
     <% end %>
@@ -83,6 +88,8 @@
 
 <script type="text/javascript">
   
+  var group_mapping = <%= subscription_groups_json %>;
+
   $(function() {
     
     $("button.save").click(function() {
@@ -188,9 +195,11 @@
       
       $("ul.filters button").prop("disabled", true).removeClass("on").addClass("off")
         .find("span.status").html("off");
+      $("ul.filters button").find("span.results").hide();
       
       $.get("/search", {
-        keyword: keyword
+        keyword: keyword,
+        keyword_id: keyword_id
       }, function(data) {
         $("#results div.loading_container").hide();
         $("#results div.container").html(data);
@@ -206,71 +215,5 @@
         $("#results div.container").html("<p class=\"error\">Error loading results.</p>");
       });
     }
-    
-//     $("input.subscription_type").change(function() {
-//       var elem = $(this);
-//       var checked = elem.prop("checked");
-//       
-//       if (checked) {
-//         // create the subscription
-//         if (elem.data("id")) return; // shouldn't happen
-//         
-//         var keyword = elem.data("keyword");
-//         var type = elem.data("type");
-//         
-//         console.log("keyword: " + keyword + ", type: " + type);
-//         
-//         elem.hide();
-//         elem.siblings("img").show();
-//         
-//         $.post("/subscriptions", {
-//           keyword: keyword,
-//           subscription_type: type
-//         }, function(data) {
-//           console.log("created subscription " + data);
-//           
-//           elem.siblings("img").hide();
-//           elem.show();
-//           elem.data("id", data);
-//         })
-//         .error(function() {
-//           console.log("failed to create subscription, un-checking");
-//           elem.prop("checked", false); // leave un-checked
-//         
-//           elem.siblings("img").hide();
-//           elem.show();
-//         });
-//         
-//       } else {
-//         // delete the subscription
-//         var id = elem.data("id");
-//         if (!id) return; // shouldn't happen
-//         
-//         console.log("deleting " + id);
-//         
-//         elem.hide();
-//         elem.siblings("img").show();
-//         
-//         $.post("/subscription/" + id, {
-//           _method: "delete"
-//         }, function(data) {
-//           console.log("deleted " + id);
-//           elem.siblings("img").hide();
-//           elem.show();
-//           
-//           elem.data("id", null);
-//         })
-//         .error(function() {
-//           console.log("failed to delete " + id + ", rechecking");
-//           elem.prop("checked", true); // re-check
-//         
-//           elem.siblings("img").hide();
-//           elem.show();
-//         });
-//       }
-//     });
-    
-    // testing
-    // $("input.test").get(0).click();
   });
 </script>

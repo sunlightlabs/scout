@@ -1,6 +1,12 @@
 <script type="text/javascript">
   $("ul.filters button").prop("disabled", false).removeClass("off").addClass("on")
     .find("span.status").html("on");
+
+  <% types.each do |type, data| %>
+    $("ul.filters button.<%= type %>").find("span.results").show().html(
+      "<%= data[:count] %> from <%= data[:newest].strftime("%b %d") %>"
+    );
+  <% end %>
 </script>
 
 <% if items.any? %>

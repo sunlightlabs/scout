@@ -3,20 +3,46 @@ module GeneralHelpers
   
   # index of subscription adapters and associated copy
   def subscription_types
-    {
+    @subscription_types ||= {
       'federal_bills' => {
-        :name => "Bills in Congress",
-        :color => "#46517A"
+        :name => "Congress' Bills",
+        :group => "congress",
+        :order => 1,
       },
       'state_bills' => {
-        :name => "Bills in the States",
-        :color => "#7A5D46"
+        :name => "State Bills",
+        :group => "states",
+        :order => 3
       },
       'congressional_record' => {
-        :name => "Congressional Record",
-        :color => "#467A74"
+        :name => "Congress' Speeches",
+        :group => "congress",
+        :order => 2
       }
     }
+  end
+
+  def subscription_groups
+    @subscription_groups ||= {
+      "congress" => {
+        :name  => "Congress",
+        :types => ["federal_bills", "congressional_record"],
+        :color => "#46517A",
+        :order => 1
+      },
+      "states" => {
+        :name => "States",
+        :types => ["state_bills"],
+        :color => "#467A49",
+        :order => 2
+      }
+    }
+  end
+
+  def subscription_groups_json
+    "{\n%s\n}" % subscription_groups.map do |group, data|
+      "#{group}: [#{data[:types].map {|t| "\"#{t}\""}.join(", ")}]"
+    end.join(",\n")
   end
   
   def h(text)
