@@ -205,15 +205,10 @@ section.sidebar div.save.buttons button.save:hover {
   background-color: #c5c5c5;
 }
 
-section.sidebar div.save.buttons button.saving {
-  padding-left: 30px;
+section.sidebar div.save.buttons button.saving,
+section.sidebar div.save.buttons button.saved {
   cursor: default;
   background-color: #c5c5c5;
-}
-
-section.sidebar div.save.buttons button.saved {
-  background-color: #c5c5c5;
-  cursor: default; 
   opacity: 0.35;
 }
 
@@ -259,14 +254,14 @@ section.sidebar ul.filters li button.filter.off {
    opacity: 0.35;
 }
 
-section.sidebar ul.filters li button.filter.on {
-  
-}
-
 ul.subscriptions li.keyword {
   width: 100%; position: relative;
   padding: 30px 0 30px 0; clear: both;
   border-top: 1px solid #d5d5d5;
+}
+
+ul.subscriptions li.keyword.current h2 {
+  font-weight: bold;
 }
 
 ul.subscriptions li.keyword h2 {

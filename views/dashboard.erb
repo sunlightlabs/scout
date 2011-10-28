@@ -43,7 +43,7 @@
       Subscribe
     </button>
     
-    <button class="text image saving" disabled style="display: none">
+    <button class="text saving" disabled style="display: none">
       Subscribing...
     </button>
     
@@ -90,8 +90,6 @@
 
 <script type="text/javascript">
   
-  var group_mapping = <%= subscription_groups_json %>;
-
   $(function() {
     
     $("button.save, button.update").click(function() {
@@ -116,7 +114,9 @@
           
           showSave("saved");
 
-          $("ul.subscriptions#keyword-" + data.keyword_id).replaceWith(data.pane);
+          $("ul.subscriptions #keyword-" + data.keyword_id).replaceWith(data.pane);
+          if ($("#keyword_searched").val() == keyword)
+            selectKeyword(data.keyword_id);
         })
         .error(function() {
           console.log("Error creating subscription.");
@@ -130,12 +130,12 @@
         }, function(data) {
           console.log("Subscription created: " + data.keyword_id);
           
-          if ($("#keyword_searched").val() == keyword)
-            $("#keyword_id").val(data.keyword_id);
-          
           showSave("saved");
 
           $("ul.subscriptions").append(data.pane);
+
+          if ($("#keyword_searched").val() == keyword)
+            selectKeyword(data.keyword_id);
         })
         .error(function() {
           console.log("Error creating subscription.");
@@ -154,6 +154,12 @@
         }, function(data) {
           console.log("Keyword by ID " + keyword_id + " removed.");
           $("#keyword-" + keyword_id).remove();
+
+          // if the current search was removed
+          if ($("#keyword_id").val() == keyword_id) {
+            selectKeyword();
+            showSave("save");
+          }
         })
         .error(function() {
           console.log("Error removing saved search.");
@@ -216,6 +222,14 @@
       });
     }
 
+    function selectKeyword(keyword_id) {
+      $("#keyword_id").val(keyword_id);
+      $("li.keyword").removeClass("current");
+
+      if (keyword_id)
+        $("li.keyword#keyword-" + keyword_id).addClass("current");
+    }
+
     function showSave(name) {
       $("section.sidebar div.save.buttons button").hide();
       $("section.sidebar button." + name).show();
@@ -228,7 +242,7 @@
       $("#results div.loading_container").show();
       
       $("#keyword_searched").val(keyword);
-      $("#keyword_id").val(keyword_id);
+      selectKeyword(keyword_id);
       
       $("ul.filters button").prop("disabled", true).removeClass("on").addClass("off")
         .find("span.status").html("off");

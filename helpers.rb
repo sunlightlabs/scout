@@ -41,12 +41,6 @@ module GeneralHelpers
       }
     }
   end
-
-  def subscription_groups_json
-    "{\n%s\n}" % subscription_groups.map do |group, data|
-      "#{group}: [#{data[:types].map {|t| "\"#{t}\""}.join(", ")}]"
-    end.join(",\n")
-  end
   
   def h(text)
     Rack::Utils.escape_html(text)
