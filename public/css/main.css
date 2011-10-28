@@ -276,10 +276,10 @@ ul.subscriptions li.keyword h2 {
 }
 
 ul.subscriptions li.keyword button.remove {
-  width: 28px;
-  height: 28px;
+  width: 22px;
+  height: 22px;
   
-  background-image: url(/images/x-24.png);
+  background-image: url(/images/x-18.png);
   background-color: #eeeeee;
   
   position: absolute; right: 0; top: 30px;
