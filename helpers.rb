@@ -8,16 +8,19 @@ module GeneralHelpers
         :name => "Congress' Bills",
         :group => "congress",
         :order => 1,
+        :color => "#46517A"
       },
       'state_bills' => {
         :name => "State Bills",
         :group => "states",
-        :order => 3
+        :order => 3,
+        :color => "#467A62"
       },
       'congressional_record' => {
         :name => "Congress' Speeches",
         :group => "congress",
-        :order => 2
+        :order => 2,
+        :color => "#51467A"
       }
     }
   end

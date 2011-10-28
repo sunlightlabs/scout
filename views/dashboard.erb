@@ -24,7 +24,6 @@
 
 <section class="results" id="results">
   <div class="loading_container">
-    <!--<img class="loading" src="/images/loader.gif" />-->
     <span>searching through many things...</span>
   </div>
   
@@ -55,8 +54,8 @@
   
   <style>
     <% subscription_groups.each do |group, data| %>
-      /*section.sidebar ul.filters li button.filter.<%= group %>.on {background-color: <%= data[:color] %>;}
-      section.results li.result.<%= group %> {border-left-color: <%= data[:color] %>;}*/
+      section.sidebar ul.filters li button.filter.<%= group %>.on {background-color: <%= data[:color] %>;}
+      section.results li.result.<%= group %> {border-left-color: <%= data[:color] %>;}
     <% end %>
   </style>
 
@@ -72,7 +71,6 @@
           <span class="name">
             <%= data[:name] %>
           </span>
-          <span class="results"></span>
         </button>
       </li>
     <% end %>
@@ -98,8 +96,15 @@
       $("div.save.buttons button").hide();
       $("button.saving").show();
       
+      var selected_types = [];
+      $("button.filter.on").each(function(i, elem) {
+        selected_types[selected_types.length] = $(elem).data("type");
+      });
+
+
       $.post("/keywords", {
-        keyword: keyword
+        keyword: keyword,
+        "subscription_types[]": selected_types
       }, function(data) {
         console.log("Subscription created.");
         
@@ -195,7 +200,6 @@
       
       $("ul.filters button").prop("disabled", true).removeClass("on").addClass("off")
         .find("span.status").html("off");
-      $("ul.filters button").find("span.results").hide();
       
       $.get("/search", {
         keyword: keyword,

@@ -64,16 +64,19 @@ end
 
 post '/keywords' do
   requires_login
-  
+
   keyword = current_user.keywords.new :keyword => params[:keyword]
-  subscriptions = subscription_types.keys.map do |type| 
+  subscriptions = params[:subscription_types].map do |type| 
     current_user.subscriptions.new :keyword => params[:keyword], :subscription_type => type.to_s
   end
   
   # make sure keyword has the same validations as subscriptions
   if keyword.valid? and subscriptions.reject {|s| s.valid?}.empty?
     keyword.save!
-    subscriptions.each {|s| s.save!}
+    subscriptions.each do |subscription| 
+      subscription[:keyword_id] = keyword._id
+      subscription.save!
+    end
     
     partial :"partials/keyword", :locals => {:keyword => keyword}
   else
@@ -86,9 +89,16 @@ get '/search' do
   requires_login
   
   items = []
-  types = {}
-  groups = {}
+  subscribed_to = nil
+
+  if params[:keyword_id] and (keyword = Keyword.where(:user_id => current_user.id, :_id => BSON::ObjectId(params[:keyword_id].strip)).first)
+    subscribed_to = keyword.subscriptions.map {|s| s.subscription_type}
+  end
+
+  # search through every subscription type, even if it's not enabled for this search term
+  # so that results are available client side
   subscription_types.keys.each do |subscription_type|
+    # make new, temporary subscription items
     results = current_user.subscriptions.new(
       :keyword => params[:keyword], 
       :subscription_type => subscription_type
@@ -96,24 +106,6 @@ get '/search' do
     
     if results.any?
       items += results
-      types[subscription_type] = {
-        :newest => results.first.date,
-        :count => results.size
-      }
-
-      group = subscription_types[subscription_type][:group]
-
-      if groups[group]
-        if results.first.date > groups[group][:newest]
-          groups[group][:newest] = results.first.date
-        end
-        groups[group][:count] += results.size
-      else
-        groups[group] = {
-          :count => results.size,
-          :newest => results.first.date
-        }
-      end
     end
   end
   
@@ -121,8 +113,7 @@ get '/search' do
   
   erb :results, :layout => false, :locals => {
     :items => items, 
-    :types => types, 
-    :groups => groups,
+    :subscribed_to => subscribed_to,
     :keyword => params[:keyword]
   }
 end
@@ -141,29 +132,6 @@ delete '/keyword/:id' do
     halt 404
   end
 end
-
-# delete '/subscription/:id' do
-#   requires_login
-#   
-#   if subscription = Subscription.where(:user_id => current_user.id, :_id => BSON::ObjectId(params[:id].strip)).first
-#     subscription.destroy
-#     halt 204
-#   else
-#     halt 404
-#   end
-# end
-
-# post '/subscriptions' do
-#   requires_login
-#   
-#   subscription = current_user.subscriptions.new :keyword => params[:keyword], :subscription_type => params[:subscription_type]
-#   if subscription.valid?
-#     subscription.save!
-#     halt 201, subscription.id.to_s
-#   else
-#     halt 404
-#   end
-# end
 
 
 # auth helpers

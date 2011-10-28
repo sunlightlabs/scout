@@ -337,6 +337,13 @@ section.results li.result {
   margin-bottom: 40px;
 }
 
+section.results span.result_type {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 90%;
+  color: #444;
+}
+
 section.results li.result h2 {
   margin-bottom: 10px; font-size: 125%;
 }

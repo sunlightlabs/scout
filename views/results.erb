@@ -1,11 +1,14 @@
 <script type="text/javascript">
-  $("ul.filters button").prop("disabled", false).removeClass("off").addClass("on")
-    .find("span.status").html("on");
+  $("ul.filters button").prop("disabled", false);
 
-  <% types.each do |type, data| %>
-    $("ul.filters button.<%= type %>").find("span.results").show().html(
-      "<%= data[:count] %> from <%= data[:newest].strftime("%b %d") %>"
-    );
+  <% if subscribed_to %>
+    <% subscribed_to.each do |type| %>
+     $("ul.filters button.<%= type %>").removeClass("off").addClass("on")
+      .find("span.status").html("on");
+    <% end %>
+  <% else %>
+    $("ul.filters button").removeClass("off").addClass("on")
+      .find("span.status").html("on");
   <% end %>
 </script>
 
@@ -21,6 +24,9 @@
       <% end %>
       
       <li class="result <%= item.subscription.subscription_type %>">
+        <span class="result_type">
+          <%= subscription_types[item.subscription.subscription_type][:name] %>
+        </span>
         <%= partial :"subscriptions/#{item.subscription.subscription_type}/result", :locals => {:item => item, :keyword => keyword} %>
       </li>
       

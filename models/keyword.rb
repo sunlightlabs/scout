@@ -13,8 +13,5 @@ class Keyword
   validates_presence_of :keyword
   
   belongs_to :user
-  
-  def subscriptions
-    Subscription.where(:keyword => keyword, :user_id => user_id)
-  end
+  has_many :subscriptions
 end
