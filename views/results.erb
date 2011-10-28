@@ -1,14 +1,15 @@
 <script type="text/javascript">
   $("ul.filters button").prop("disabled", false);
 
-  <% if subscribed_to %>
-    <% subscribed_to.each do |type| %>
-     $("ul.filters button.<%= type %>").removeClass("off").addClass("on")
-      .find("span.status").html("on");
+  // initialize them all as on
+  $("ul.filters button").removeClass("off").addClass("on")
+        .find("span.status").html("on");
+
+  // for any we're not subscribed_to, turn them off
+  <% subscription_types.keys.each do |type| %>
+    <% if subscribed_to and !subscribed_to.include?(type.to_s) %>
+     $("ul.filters button.<%= type %>").click();
     <% end %>
-  <% else %>
-    $("ul.filters button").removeClass("off").addClass("on")
-      .find("span.status").html("on");
   <% end %>
 </script>
 

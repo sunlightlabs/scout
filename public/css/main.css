@@ -180,22 +180,24 @@ section.sidebar {
 
 section.sidebar div.save.buttons {
   margin-bottom: 20px;
-  height: 30px;
 }
 
 section.sidebar div.save.buttons button {
-  padding: 5px;
+  width: 100%;
+  padding: 15px 10px;
+  font-size: 200%;
   color: #444;
 }
 
 section.sidebar div.save.buttons button.nothing {
   background-color: #c5c5c5;
   opacity: 0.35;
+  cursor: default;
 }
 
-section.sidebar div.save.buttons button.save {
-  display: none;
-  color: #aa0000;
+section.sidebar div.save.buttons button.save,
+section.sidebar div.save.buttons button.update {
+  color: #335577;
   background-color: #e5e5e5;
 }
 
@@ -204,18 +206,15 @@ section.sidebar div.save.buttons button.save:hover {
 }
 
 section.sidebar div.save.buttons button.saving {
-  display: none;
   padding-left: 30px;
-  background-image: url(/images/loader-small.gif);
-  background-position: 10px center;
   cursor: default;
   background-color: #c5c5c5;
 }
 
 section.sidebar div.save.buttons button.saved {
-  display: none;
   background-color: #c5c5c5;
-  cursor: default; opacity: 0.35;
+  cursor: default; 
+  opacity: 0.35;
 }
 
 section.sidebar ul.filters {
@@ -307,7 +306,7 @@ section.results div.loading_container span {
   padding-top: 20px; padding: 20px;
   padding-left: 50px;
   background-position: left;
-  background-image: url(/images/loader.gif);
+  background-image: url(/images/loader-32.gif);
   background-repeat: no-repeat;
 }
 

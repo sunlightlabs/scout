@@ -78,11 +78,52 @@ post '/keywords' do
       subscription.save!
     end
     
-    partial :"partials/keyword", :locals => {:keyword => keyword}
+    headers["Content-Type"] = "application/json"
+    {
+      :keyword_id => keyword._id.to_s,
+      :pane => partial(:"partials/keyword", :locals => {:keyword => keyword})
+    }.to_json
   else
     halt 500
   end
   
+end
+
+# delete and re-subscribe to each selected subscription type for that keyword
+put '/keyword/:keyword_id/resubscribe' do
+  requires_login
+
+  if keyword = current_user.keywords.where(:_id => BSON::ObjectId(params[:keyword_id].strip)).first
+    keyword.subscriptions.delete_all
+
+    subscriptions = params[:subscription_types].map do |type| 
+      current_user.subscriptions.new(
+        :keyword => params[:keyword], 
+        :keyword_id => keyword._id,
+        :subscription_type => type.to_s
+      )
+    end
+    
+    # make sure keyword has the same validations as subscriptions
+    if subscriptions.reject {|s| s.valid?}.empty?
+      
+      subscriptions.each do |subscription| 
+        subscription.save!
+      end
+
+      keyword.reload # for the hell of it
+      
+      headers["Content-Type"] = "application/json"
+      {
+        :keyword_id => keyword._id.to_s,
+        :pane => partial(:"partials/keyword", :locals => {:keyword => keyword, :subscriptions => keyword.subscriptions})
+      }.to_json
+    else
+      halt 500
+    end
+  else
+    halt 404
+  end
 end
 
 get '/search' do

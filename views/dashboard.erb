@@ -36,26 +36,30 @@
 
   <div class="save buttons">
     <button class="text nothing" disabled>
-      Save this search
+      Subscribe
     </button> 
     
-    <button class="text save">
-      Save this search
+    <button class="text save" style="display: none">
+      Subscribe
     </button>
     
-    <button class="text image saving" disabled>
-      Saving...
+    <button class="text image saving" disabled style="display: none">
+      Subscribing...
     </button>
     
-    <button class="text saved" disabled>
-      Saved
+    <button class="text saved" disabled style="display: none">
+      Subscribe
+    </button>
+
+    <button class="text update" style="display: none">
+      Re-subscribe
     </button>
   </div>
   
   <style>
-    <% subscription_groups.each do |group, data| %>
-      section.sidebar ul.filters li button.filter.<%= group %>.on {background-color: <%= data[:color] %>;}
-      section.results li.result.<%= group %> {border-left-color: <%= data[:color] %>;}
+    <% subscription_types.each do |type, data| %>
+/*      section.sidebar ul.filters li button.filter.<%= type %>.on {background-color: <%= data[:color] %>;}
+      section.results li.result.<%= type %> {border-left-color: <%= data[:color] %>;}*/
     <% end %>
   </style>
 
@@ -78,7 +82,7 @@
   
   <ul class="subscriptions">
     <% keywords.each do |keyword, subscriptions| %>
-      <%= partial :"partials/keyword", :locals => {:keyword => keyword} %>
+      <%= partial :"partials/keyword", :locals => {:keyword => keyword, :subscriptions => subscriptions} %>
     <% end %>
   </ul>
 
@@ -90,34 +94,54 @@
 
   $(function() {
     
-    $("button.save").click(function() {
-      var keyword = $("input.query").val();
-      
-      $("div.save.buttons button").hide();
-      $("button.saving").show();
+    $("button.save, button.update").click(function() {
+      var keyword = $("#keyword_searched").val();
+      var keyword_id = $("#keyword_id").val();
+
+      showSave("saving");
       
       var selected_types = [];
       $("button.filter.on").each(function(i, elem) {
         selected_types[selected_types.length] = $(elem).data("type");
       });
 
+      if (keyword_id) {
+        
+        $.post("/keyword/" + keyword_id + "/resubscribe", {
+          _method: "put",
+          keyword: keyword,
+          "subscription_types[]": selected_types
+        }, function(data) {
+          console.log("Subscription updated: " + data.keyword_id);
+          
+          showSave("saved");
 
-      $.post("/keywords", {
-        keyword: keyword,
-        "subscription_types[]": selected_types
-      }, function(data) {
-        console.log("Subscription created.");
-        
-        $("div.save.buttons button").hide();
-        $("button.saved").show();
-        
-        $("ul.subscriptions").append(data);
-      })
-      .error(function() {
-        console.log("Error creating subscription.");
-        $("div.save.buttons button").hide();
-        $("button.save").show();
-      });
+          $("ul.subscriptions#keyword-" + data.keyword_id).replaceWith(data.pane);
+        })
+        .error(function() {
+          console.log("Error creating subscription.");
+          showSave("save");
+        });
+
+      } else {
+        $.post("/keywords", {
+          keyword: keyword,
+          "subscription_types[]": selected_types
+        }, function(data) {
+          console.log("Subscription created: " + data.keyword_id);
+          
+          if ($("#keyword_searched").val() == keyword)
+            $("#keyword_id").val(data.keyword_id);
+          
+          showSave("saved");
+
+          $("ul.subscriptions").append(data.pane);
+        })
+        .error(function() {
+          console.log("Error creating subscription.");
+          showSave("save");
+        });
+      }
     });
     
     $("li.keyword button.remove").live("click", function() {
@@ -153,15 +177,19 @@
       var keyword = $("input.query").val();
       if (keyword) keyword = keyword.trim();
       if (!keyword) return;
+      if ($("#keyword_searched").val() == keyword) return;
       
       searchFor(keyword);
       return false;
     });
     
-    $("ul.filters button").prop("disabled", true).click(function() {
+    $("ul.filters button").click(function() {
       var elem = $(this);
       var status = elem.find("span.status");
       var type = elem.data("type");
+
+      if ($("#keyword_id").val())
+        showSave("update");
       
       if (elem.hasClass("on")) {
         elem.removeClass("on").addClass("off");
@@ -176,7 +204,7 @@
       }
       
       return false;
-    });
+    }).prop("disabled", true);
     
     function dateScan() {
       $("section.results p.date").each(function(i, elem) {
@@ -187,10 +215,14 @@
         }
       });
     }
+
+    function showSave(name) {
+      $("section.sidebar div.save.buttons button").hide();
+      $("section.sidebar button." + name).show();
+    }
     
     function searchFor(keyword, keyword_id) {
-      $("section.sidebar div.save.buttons button").hide();
-      $("section.sidebar button.nothing").show();
+      showSave("nothing");
       
       $("#results div.container").html("");
       $("#results div.loading_container").show();
@@ -208,11 +240,10 @@
         $("#results div.loading_container").hide();
         $("#results div.container").html(data);
         
-        $("section.sidebar div.save.buttons button").hide();
         if (keyword_id)
-          $("section.sidebar button.saved").show();
+          showSave("saved");
         else
-          $("section.sidebar button.save").show();
+          showSave("save");
       })
       .error(function() {
         $("#results div.loading_container").hide();
