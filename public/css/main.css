@@ -355,7 +355,7 @@ section.results em.highlight, section.results .highlight em {
   font-weight: bold; 
   font-style: normal; 
   color: #aa0000;
-  padding: 2px 5px;
+  padding: 2px 0px;
   background-color: #dddddd;
 }
 
