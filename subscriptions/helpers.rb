@@ -22,9 +22,7 @@ module Subscriptions
     def bill_highlight(item)
       highlighting = item.data['search']['highlight']
       field = highlighting.keys.sort_by {|k| highlight_priority k}.first
-      
-      # "<dt>From #{highlight_field field}:</dt>\n" + 
-      "<dd class=\"content\">#{highlighting[field]}</dd>"
+      highlighting[field]
     end
     
     def govtrack_type(bill_type)
@@ -65,7 +63,8 @@ module Subscriptions
       id = "#{bill['session']}#{thomas_type bill['bill_type']}#{bill['number']}"
       "http://hdl.loc.gov/loc.uscongress/legislation.#{id}"
     end
-    
+
+    # unused    
     def highlight_field(field)
       {
         "full_text" => "the full text",

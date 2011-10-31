@@ -8,7 +8,9 @@
 
 <% if item.data['search']['highlight'] %>
   <dl class="highlight">
-    <%= bill_highlight item %>
+    <dd class="content">
+      <%= bill_highlight item %>
+    </dd>
   </dl>
 <% end %>
 
