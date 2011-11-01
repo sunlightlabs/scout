@@ -1,8 +1,8 @@
 <% speech = item.data %>
 <% if speech['bioguide_id'] %>
-  <%= speaker_name speech %> said:
+<%= speaker_name speech %> said:
 <% end %>
 
-  "<%= speech_selection speech, keyword %>"
+"<%= speech_selection speech, keyword %>"
 
-  <%= speech['capitolwords_url'] %>
+<%= speech['capitolwords_url'] %>

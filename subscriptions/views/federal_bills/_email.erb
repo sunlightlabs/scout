@@ -1,4 +1,9 @@
-  <%= bill_code item.data['bill']['bill_type'], item.data['bill']['number'] %> - <% if item.data['bill']['short_title'].present? %><%= item.data['bill']['short_title'] %><% else %><%= item.data['bill']['official_title'] %><% end %>
+<%= bill_code item.data['bill']['bill_type'], item.data['bill']['number'] %> - <% if item.data['bill']['short_title'].present? %>
+<%= item.data['bill']['short_title'] %>
+<% else %>
+<%= item.data['bill']['official_title'] %>
+<% end %>
 
-  GovTrack: <%= govtrack_url item %>
-  OpenCongress: <%= opencongress_url item %>
+
+GovTrack: <%= govtrack_url item %>
+OpenCongress: <%= opencongress_url item %>

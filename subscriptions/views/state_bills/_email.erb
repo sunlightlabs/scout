@@ -1,12 +1,12 @@
 <% bill = item.data %>
-  [<%= state_name bill['state'] %>] <%= bill['title'] %>
+[<%= state_name bill['state'] %>] <%= bill['title'] %>
   
 <% if state_in_og?(bill['state']) %>
-  <%= opengovernment_url bill %>
+<%= opengovernment_url bill %>
 <% elsif state_version_info?(bill) %>
-  <%= bill['versions'].last['url'] %>
+<%= bill['versions'].last['url'] %>
 <% elsif state_source_info?(bill) %>
 <% bill['sources'].each do |source| %>
-  <%= source['url'] %>
+<%= source['url'] %>
 <% end %>
 <% end %>
