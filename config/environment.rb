@@ -27,21 +27,21 @@ def subscription_data
   {
     'federal_bills' => {
       :name => "Congress' Bills",
-      :description => "bills in Congress",
+      :description => "bill(s) in Congress",
       :group => "congress",
       :order => 1,
       :color => "#46517A"
     },
     'state_bills' => {
       :name => "State Bills",
-      :description => "bills in the states",
+      :description => "bill(s) in the states",
       :group => "states",
       :order => 3,
       :color => "#467A62"
     },
     'congressional_record' => {
       :name => "Congress' Speeches",
-      :description => "speeches",
+      :description => "speech(es)",
       :group => "congress",
       :order => 2,
       :color => "#51467A"

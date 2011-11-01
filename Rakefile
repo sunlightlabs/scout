@@ -58,9 +58,9 @@ namespace :subscriptions do
     desc "Deliver outstanding emails, grouped by keywords"
     task :email => :environment do
       begin
-        Subscriptions::Delivery.deliver!        
+        Subscriptions::Deliverance.deliver!      
       rescue Exception => ex
-        Email.report Report.failure("Delivery", "Problem during 'rake subscriptions:deliver'.", ex)
+        Email.report Report.exception("Delivery", "Problem during 'rake subscriptions:deliver'.", ex)
         puts "Error during delivery, emailed report."
       end
     end
