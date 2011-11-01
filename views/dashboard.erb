@@ -35,7 +35,9 @@
 <section class="sidebar">
 
   <div class="subscribe_message">
-    Your filters have changed.
+    <span class="update">Your filters have changed.</span>
+    <span class="save">Be notified when new things come up.</span>
+    <span class="saved">You will be notified.</span>
   </div>
 
   <div class="save buttons">
@@ -217,13 +219,20 @@
     }).prop("disabled", true);
     
     function dateScan() {
+      var someShowing = false;
       $("section.results p.date").each(function(i, elem) {
         if ($(elem).nextUntil("p.date", "li:visible").size() == 0) {
           $(elem).hide();
         } else {
           $(elem).show();
+          someShowing = true;
         }
       });
+      if (someShowing)
+        $("p.none.left").hide();
+      else
+        $("p.none.left").show();
+
     }
 
     function selectKeyword(keyword_id) {
@@ -235,9 +244,8 @@
     }
 
     function showSave(name) {
-      $("section.sidebar div.subscribe_message").css("visibility", "hidden");
-      if (name == "update")
-        $("section.sidebar div.subscribe_message").css("visibility", "visible");
+      $("section.sidebar div.subscribe_message span").hide();
+      $("section.sidebar div.subscribe_message span." + name).show();
 
       $("section.sidebar div.save.buttons button").hide();
       $("section.sidebar button." + name).show();

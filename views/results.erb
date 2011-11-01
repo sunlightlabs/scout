@@ -13,6 +13,14 @@
   <% end %>
 </script>
 
+<p class="none atAll" <%= "style=\"display: none\"" if items.any? %>>
+    No results found for this search.
+</p>
+
+<p class="none left" style="display: none">
+  No results for the currently selected filters.
+</p>
+
 <% if items.any? %>
 
   <ul>
@@ -33,11 +41,5 @@
       
     <% end %>
   </ul>
-  
-<% else %>
-  
-  <p>
-    No results found for this search.
-  </p>
-  
+
 <% end %>
