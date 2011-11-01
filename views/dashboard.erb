@@ -132,7 +132,7 @@
           
           showSave("saved");
 
-          $("ul.subscriptions").append(data.pane);
+          $("ul.subscriptions").prepend(data.pane);
 
           if ($("#keyword_searched").val() == keyword)
             selectKeyword(data.keyword_id);
