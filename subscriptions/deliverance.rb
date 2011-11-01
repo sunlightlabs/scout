@@ -15,7 +15,9 @@ module Subscriptions
       end
 
       # Temporary, but for now I want to know when emails go out
-      Email.admin "Sent #{total} emails among [#{emails.join ', '}]"
+      if total > 0
+        Email.admin "Sent #{total} emails among [#{emails.join ', '}]"
+      end
     end
 
     def self.deliver_for_user!(email)
