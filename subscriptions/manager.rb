@@ -33,6 +33,7 @@ module Subscriptions
         
         :item => {
           :id => item.id,
+          :date => item.date,
           :data => item.data
         }
       )

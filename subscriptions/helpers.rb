@@ -247,13 +247,15 @@ module Subscriptions
       "http://capitolwords.org/date/#{year}/#{month}/#{day}/#{page_slug}-capitolwords"
     end
     
-    def speech_highlight(speech, keyword)
-      matches = speech['speaking'].select do |paragraph|
+    def speech_selection(speech, keyword)
+      speech['speaking'].select do |paragraph|
         paragraph =~ /#{keyword}/i
-      end
-      
-      if matches.any?
-        highlight matches.first, keyword
+      end.first
+    end
+
+    def speech_highlight(speech, keyword)
+      if selection = speech_selection(speech, keyword)
+        highlight selection, keyword
       end
     end
     

@@ -28,6 +28,15 @@ class Report
   def self.success(source, message, objects = {})
     file 'SUCCESS', source, message, objects
   end
+
+  def self.exception(source, message, exception)
+    file 'FAILURE', source, message, {
+      :exception => {
+        'backtrace' => exception.backtrace, 
+        'message' => exception.message, 
+        'type' => exception.class.to_s
+    }}
+  end
   
   def to_s
     msg = "[#{status}] #{source}\n#{message}"

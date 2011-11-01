@@ -1,34 +1,4 @@
-<% bill = item.data['bill'] %>
-<li class="result bill">
-  <h2>
-    <span class="code"><%= bill_code bill['bill_type'], bill['number'] %></span>
-    <span class="version">as <%= bill_version item.data['version_code'] %></span>
-    <span class="issued_on">on <%= very_short_date item.data['issued_on'] %></span>
-    <% if item.data['urls'] and item.data['urls']['pdf'] %>
-      <a class="file pdf" href="<%= item.data['urls']['pdf'] %>">PDF</a>
-    <% end %>
-    <% if item.data['urls'] and item.data['urls']['xml'] %>
-      <a class="file xml" href="<%= item.data['urls']['xml'] %>">HTML</a>
-    <% end %>
-  </h2>
-  
-  <% if bill['short_title'].present? %>
-    <h3><%= bill['short_title'] %></h3>
-  <% else %>
-    <h4><%= bill['official_title'] %></h4>
-  <% end %>
-  
-  <% if item.data['search']['highlight'] %>
-    <dl class="highlight">
-      <%= bill_highlight item %>
-    </dl>
-  <% end %>
-  
-  <section class="links">
-    <span>More:</span>
-    <a href="<%= govtrack_url item %>">GovTrack</a>
-    <a href="<%= opencongress_url item %>">OpenCongress</a>
-    <a href="<%= thomas_url item %>">THOMAS</a>
-  </section>
-  
-</li>
+  <%= bill_code item.data['bill']['bill_type'], item.data['bill']['number'] %> - <% if item.data['bill']['short_title'].present? %><%= item.data['bill']['short_title'] %><% else %><%= item.data['bill']['official_title'] %><% end %>
+
+  GovTrack: <%= govtrack_url item %>
+  OpenCongress: <%= opencongress_url item %>

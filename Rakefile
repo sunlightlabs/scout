@@ -2,8 +2,6 @@ task :environment do
   require 'rubygems'
   require 'bundler/setup'
   require 'config/environment'
-  
-  require 'pony'
 end
 
 desc "Run through each model and create all indexes" 
@@ -13,13 +11,17 @@ task :create_indexes => :environment do
       File.basename(file, File.extname(file)).camelize.constantize
     end
     
+    # DEBUG
+    raise Exception.new
+
     models.each do |model| 
       model.create_indexes 
       puts "Created indexes for #{model}"
     end
     
   rescue Exception => ex
-    email_message "Exception creating indexes.", ex
+    report = Report.exception 'Indexes', "Exception creating indexes", ex
+    Email.report report
     puts "Error creating indexes, emailed report."
   end
 end
@@ -36,7 +38,6 @@ task :clear_data => :environment do
   end
 end
 
-
 namespace :subscriptions do
   
   desc "Check for new items for every active, initialized subscription"
@@ -46,185 +47,86 @@ namespace :subscriptions do
         Subscriptions::Manager.check! subscription
       end
     rescue Exception => ex
-      email_message "Problem during 'rake subscriptions:check'.", ex
+      report = Report.exception "Check", "Problem during 'rake subscriptions:check'.", ex
+      Email.report report
       puts "Error during subscription checking, emailed report."
     end
   end
   
-  desc "Deliver outstanding queued items, grouped by user"
-  task :deliver => :environment do
-    begin
-      # should already be loaded as dependencies of sinatra
-      require 'erb'
-      require 'tilt'
-      
-      failures = []
-      successes = 0
-      
-      emails = Delivery.all.distinct :user_email
-      
-      # group by emails, send one to each user
-      emails.each do |email|
-        
-        deliveries = Delivery.where(:user_email => email).all.to_a
-        content = render_email deliveries
-        
-        if email_user(email, content)
-        
-          deliveries.each do |delivery|
-            delivery.destroy
-          end
-        
-          # shouldn't be a risk of failure
-          delivered = Delivered.create!(
-            :deliveries => deliveries.map {|d| d.attributes},
-            :delivered_at => Time.now,
-            :user_email => email,
-            :content => content
-          )
-          
-          successes += 1
-        else
-          failures << "Couldn't send an email to #{email}"
+  namespace :deliver do
+
+    desc "Deliver outstanding emails, grouped by keywords"
+    task :email => :environment do
+      begin
+        Subscriptions::Delivery.deliver!        
+      rescue Exception => ex
+        Email.report Report.failure("Delivery", "Problem during 'rake subscriptions:deliver'.", ex)
+        puts "Error during delivery, emailed report."
+      end
+    end
+  end
+  
+end
+
+# some helpful test tasks to exercise emails 
+
+namespace :test do
+
+  desc "Send a test email to the admin"
+  task :email_admin => :environment do
+    Email.admin "Test message. May you receive this in good health."
+  end
+
+  desc "Send two test reports"
+  task :email_report => :environment do
+    Email.report Report.failure("Email.report 1", "Testing regular failure reports.", {:name => "test report"})
+    Email.report Report.exception("Email.report 2", "Testing exception reports", Exception.new("WOW! OUCH!!"))
+  end
+
+  desc "Send a test report of a subscription"
+  task :email_result => :environment do
+    types = ENV['type'].split(",")
+    keywords = ENV['keyword'].split(",")
+    email = ENV['email']
+    max = ENV['max'] || 2
+
+    if types.empty? or keywords.empty?
+      puts "Enter 'type' and 'keyword' parameters."
+      return
+    end
+
+    unless admin = User.where(:email => email).first
+      puts "Can't find user by that email."
+      return
+    end
+
+    # clear out any deliveries for this user
+    Delivery.where(:user_email => email).delete_all
+
+    keywords.each do |keyword|
+      types.each do |type|
+
+        subscription = admin.subscriptions.new(
+          :keyword => keyword,
+          :subscription_type => type
+        )
+
+        puts "Searching for #{type} results for #{keyword}..."
+        results = subscription.search
+        if results.empty?
+          puts "\tNo results, nothing to deliver."
+          return
         end
-        
+
+        results.first(max).each do |result|
+          delivery = Subscriptions::Manager.schedule_delivery! subscription, result
+        end
       end
-      
-      if failures.any?
-        report = Report.failure "Delivery", "Failed to deliver #{failures.size} deliveries"
-      end
-      
-      if successes > 0
-        report = Report.success "Delivery", "Delivered #{successes} emails."
-        
-        # Temporary, but for now I want to know when emails go out
-        email_message "Sent #{successes} emails among [#{emails.join ', '}]"
-      else
-        puts "No emails to deliver."
-      end
-      
-    rescue Exception => ex
-      email_message "Problem during 'rake subscriptions:deliver'.", ex
-      puts "Error during delivery, emailed report."
+
     end
-  end
-  
-end
 
+    Subscriptions::Deliverance.deliver_for_user! email
 
-def render_email(deliveries)
-  content = ""
-  
-  # group the deliveries by keyword
-  groups = {}
-  
-  deliveries.each do |delivery|
-    item = Subscriptions::Result.new(
-      :id => delivery.item['id'], 
-      :data => delivery.item['data']
-    )
-    
-    keyword = delivery.subscription_keyword
-    
-    groups[keyword] ||= []
-    groups[keyword] << [delivery.subscription_type, delivery.subscription_keyword, item]
   end
-  
-  groups.keys.each do |keyword|
-    content << "<h1>#{keyword}</h1>"
-    
-    groups[keyword].each do |type, keyword, item|
-      content << render_item(type, keyword, item)
-    end
-  end
-  
-  content
-end
 
-def render_item(subscription_type, keyword, item)
-  template = Tilt::ERBTemplate.new "views/subscriptions/#{subscription_type}/_email.erb"
-  template.render item, :item => item, :keyword => keyword
-end
-
-def email_user(email, content)
-  if config[:email][:from].present?
-    begin
-      subject = "[Alarm Site] Latest alerts"
-      
-      Pony.mail config[:email].merge(
-        :to => email, 
-        :subject => subject, 
-        :html_body => content
-      )
-      
-      true
-    rescue Errno::ECONNREFUSED
-      false
-    end
-  else
-    puts "\n[USER EMAIL] Delivery to #{email}"
-    true # if no email is specified, we'll assume it's a dev environment or something
-  end
-end
-
-def email_report(report)
-  subject = "[#{report.status}] #{report.source} | #{report.message}"
-    
-  body = ""
-  body += exception_message(report[:exception]) if report[:exception]
-  
-  attrs = report.attributes.dup
-  [:status, :created_at, :updated_at, :_id, :message, :exception, :read, :source].each {|key| attrs.delete key.to_s}
-  
-  body += attrs.inspect
-    
-  if config[:admin][:email].present?
-    begin
-      Pony.mail config[:email].merge(
-        :subject => subject, 
-        :body => body,
-        :to => config[:admin][:email]
-      )
-    rescue Errno::ECONNREFUSED
-      puts "Couldn't email report, connection refused! Check system settings."
-    end
-  else
-    puts "\n[ADMIN EMAIL] #{body}"
-  end
-end
-
-def email_message(msg, exception = nil)
-  body = exception ? exception_message(exception) : msg
-  subject = "[#{exception ? "ERROR" : "ADMIN"}] #{msg}"
-  
-  if config[:admin][:email].present?
-    begin
-      Pony.mail config[:email].merge(
-        :subject => subject,
-        :body => body,
-        :to => config[:admin][:email]
-      )
-    rescue Errno::ECONNREFUSED
-      puts "Couldn't email message, connection refused! Check system settings."
-    end
-  else
-    puts "\n[ADMIN EMAIL] #{body}"
-  end
-end
-
-def exception_message(exception)
-  type = exception.class.to_s
-  message = exception.message
-  backtrace = exception.backtrace
-  
-  msg = ""
-  msg += "#{type}: #{message}" 
-  msg += "\n\n"
-  
-  if backtrace.respond_to?(:each)
-    backtrace.each {|line| msg += "#{line}\n"}
-    msg += "\n\n"
-  end
-  
-  msg
 end

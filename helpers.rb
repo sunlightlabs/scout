@@ -3,26 +3,7 @@ module GeneralHelpers
   
   # index of subscription adapters and associated copy
   def subscription_types
-    @subscription_types ||= {
-      'federal_bills' => {
-        :name => "Congress' Bills",
-        :group => "congress",
-        :order => 1,
-        :color => "#46517A"
-      },
-      'state_bills' => {
-        :name => "State Bills",
-        :group => "states",
-        :order => 3,
-        :color => "#467A62"
-      },
-      'congressional_record' => {
-        :name => "Congress' Speeches",
-        :group => "congress",
-        :order => 2,
-        :color => "#51467A"
-      }
-    }
+    @subscription_types ||= subscription_data
   end
 
   def subscription_groups
