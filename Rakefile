@@ -10,9 +10,6 @@ task :create_indexes => :environment do
     models = Dir.glob('models/*.rb').map do |file|
       File.basename(file, File.extname(file)).camelize.constantize
     end
-    
-    # DEBUG
-    raise Exception.new
 
     models.each do |model| 
       model.create_indexes 
