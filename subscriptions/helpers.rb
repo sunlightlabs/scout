@@ -238,15 +238,6 @@ module Subscriptions
       "http://#{state}.opengovernment.org/sessions/#{session}/bills/#{bill_id}"
     end
     
-    def capitolwords_url(speech)
-      year = speech['date_year']
-      month = zero_prefix speech['date_month']
-      day = speech['date_day']
-      page_slug = speech['page_slug']
-      
-      "http://capitolwords.org/date/#{year}/#{month}/#{day}/#{page_slug}-capitolwords"
-    end
-    
     def speech_selection(speech, keyword)
       speech['speaking'].select do |paragraph|
         paragraph =~ /#{keyword}/i
