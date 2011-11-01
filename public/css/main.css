@@ -178,6 +178,12 @@ section.sidebar {
   min-height: 500px;
 }
 
+section.sidebar div.subscribe_message {
+  visibility: hidden;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
 section.sidebar div.save.buttons {
   margin-bottom: 20px;
 }

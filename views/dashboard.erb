@@ -34,6 +34,10 @@
 
 <section class="sidebar">
 
+  <div class="subscribe_message">
+    Your filters have changed.
+  </div>
+
   <div class="save buttons">
     <button class="text nothing" disabled>
       Subscribe
@@ -183,7 +187,7 @@
       var keyword = $("input.query").val();
       if (keyword) keyword = keyword.trim();
       if (!keyword) return;
-      if ($("#keyword_searched").val() == keyword) return;
+      //if ($("#keyword_searched").val() == keyword) return;
       
       searchFor(keyword);
       return false;
@@ -231,6 +235,10 @@
     }
 
     function showSave(name) {
+      $("section.sidebar div.subscribe_message").css("visibility", "hidden");
+      if (name == "update")
+        $("section.sidebar div.subscribe_message").css("visibility", "visible");
+
       $("section.sidebar div.save.buttons button").hide();
       $("section.sidebar button." + name).show();
     }
