@@ -28,8 +28,7 @@ module Subscriptions
 
       # group the deliveries by keyword
       deliveries.group_by(&:subscription_keyword).each do |keyword, group|
-        subject = "#{keyword} - #{group.size} new results"
-        content = render_email keyword, group
+        subject, content = render_email keyword, group
         
         if Email.user(email, subject, content)
           group.each do |delivery|
@@ -59,13 +58,17 @@ module Subscriptions
 
     def self.render_email(keyword, deliveries)
       content = ""
-      grouped = deliveries.group_by &:subscription_type
 
-      # grouped.each do |type, group|
-      #   content << "#{group.size} new #{subscription_data[type.to_sym][:description]}"
+      grouped = deliveries.group_by &:subscription_type
+      only_one = grouped.keys.size == 1
+      descriptor = only_one ? subscription_data[grouped.keys.first.to_s][:description] : "things"
+
+      subject = "#{keyword} - #{deliveries.size} new #{descriptor}"
 
       grouped.each do |type, group|
-        content << "- #{group.size} new #{subscription_data[type][:description]}\n\n\n"
+        unless only_one
+          content << "- #{group.size} new #{subscription_data[type][:description]}\n\n\n"
+        end
 
         group.each do |delivery|
           item = Subscriptions::Result.new(
@@ -80,7 +83,10 @@ module Subscriptions
         content << "\n"
       end
 
-      content
+      content << "----------------\nManage your subscriptions on the web at http://#{config[:hostname]}."
+      content << "\n\nThese notifications are powered by the Sunlight Foundation (sunlightfoundation.com), a non-profit, non-partisan institution that uses cutting-edge technology and ideas to make government transparent and accountable."
+
+      return subject, content
     end
 
     def self.render_item(subscription_type, keyword, item)

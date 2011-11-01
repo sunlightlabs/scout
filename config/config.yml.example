@@ -1,3 +1,6 @@
+# hostname that will be used in emails (include port if needed)
+:hostname: localhost:8080
+
 :mongoid:
   host: localhost
   database: rtc

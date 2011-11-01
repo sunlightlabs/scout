@@ -82,8 +82,8 @@ namespace :test do
 
   desc "Send a test report of a subscription"
   task :email_result => :environment do
-    types = ENV['type'].split(",")
-    keywords = ENV['keyword'].split(",")
+    types = ENV['types'].split(",")
+    keywords = ENV['keywords'].split(",")
     email = ENV['email']
     max = ENV['max'] || 2
 
