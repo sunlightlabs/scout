@@ -2,7 +2,7 @@
 <% if speech['bioguide_id'] %>
   <h2>
     <%= speaker_name speech %>
-    <a href="<%= capitolwords_url speech %>">said</a>:
+    <a href="<%= speech['capitolwords_url'] %>">said</a>:
   </h2>
 <% end %>
 
