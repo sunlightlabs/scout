@@ -9,6 +9,8 @@ module Subscriptions
         # don't do anything!
       end
       
+      # show everything that comes up;
+      # the "check" poll filters down to anything updated since right now
       def self.check!(subscription) 
         Subscriptions::Manager.poll(subscription, :check).each do |item|
           Subscriptions::Manager.schedule_delivery! subscription, item

@@ -26,7 +26,7 @@ require 'subscriptions/deliverance'
 def subscription_data 
   {
     'federal_bills' => {
-      :name => "Congress' Bills",
+      :name => "Congressional Bills",
       :description => "bill(s) in Congress",
       :group => "congress",
       :order => 1,
@@ -34,17 +34,23 @@ def subscription_data
     },
     'state_bills' => {
       :name => "State Bills",
-      :description => "bill(s) in the states",
+      :description => "state bill(s)",
       :group => "states",
-      :order => 3,
+      :order => 4,
       :color => "#467A62"
     },
     'congressional_record' => {
-      :name => "Congress' Speeches",
+      :name => "Congressional Speeches",
       :description => "speech(es)",
       :group => "congress",
       :order => 2,
       :color => "#51467A"
+    },
+    'committee_hearings' => {
+      :name => "Senate Hearings",
+      :description => "hearing(s)",
+      :group => "congress",
+      :order => 3
     }
   }
 end

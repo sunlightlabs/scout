@@ -3,8 +3,8 @@ module Subscriptions
 
     class CongressionalRecord
       
-      # MAX_ITEMS = 20
       
+
       
       # 1) does the initial poll, 
       # 2) stores every item ID as seen 

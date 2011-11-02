@@ -6,14 +6,6 @@
   <h3><%= bill['official_title'] %></h3>
 <% end %>
 
-<% if item.data['search']['highlight'] %>
-  <dl class="highlight">
-    <dd class="content">
-      <%= bill_highlight item %>
-    </dd>
-  </dl>
-<% end %>
-
 <div class="subtitle">
   <span class="code"><%= bill_code bill['bill_type'], bill['number'] %></span>
   <span class="version">as <%= bill_version item.data['version_code'] %></span>
@@ -25,6 +17,14 @@
     <a class="file xml" href="<%= item.data['urls']['xml'] %>">HTML</a>
   <% end %>
 </div>
+
+<% if item.data['search']['highlight'] %>
+  <dl class="highlight">
+    <dd class="content">
+      <%= bill_highlight item %>
+    </dd>
+  </dl>
+<% end %>
 
 <section class="more">
   <span>More:</span>

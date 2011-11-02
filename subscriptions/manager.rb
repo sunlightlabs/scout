@@ -6,7 +6,20 @@ module Subscriptions
   class Manager
     
     def self.initialize!(subscription)
-      subscription.adapter.initialize! subscription
+
+      # allow overrides by individual adapters
+      if subscription.adapter.respond_to?(:initialize!)
+        subscription.adapter.initialize! subscription
+      
+      else
+        # default strategy:
+        # 1) does the initial poll
+        # 2) stores every item ID as seen 
+
+        Subscriptions::Manager.poll(subscription, :initialize).each do |item|
+          SeenId.create! :subscription_id => subscription.id, :item_id => item.id
+        end
+      end
       
       subscription.initialized = true
       subscription.last_checked_at = Time.now
@@ -14,7 +27,25 @@ module Subscriptions
     end
     
     def self.check!(subscription)
-      subscription.adapter.check! subscription
+      
+      # allow overrides by individual adapters
+      if subscription.adapter.respond_to?(:check!)
+        subscription.adapter.check! subscription
+
+      else
+        # default strategy:
+        # 1) does a poll
+        # 2) stores any items as yet unseen by this subscription in seen_ids
+        # 3) stores any items as yet unseen by this subscription in the delivery queue
+        if results = Subscriptions::Manager.poll(subscription, :check)
+          results.each do |item|
+            unless SeenId.where(:subscription_id => subscription.id, :item_id => item.id).first
+              SeenId.create! :subscription_id => subscription.id, :item_id => item.id
+              Subscriptions::Manager.schedule_delivery! subscription, item
+            end
+          end
+        end
+      end
       
       subscription.last_checked_at = Time.now
       subscription.save!

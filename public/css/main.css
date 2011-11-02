@@ -400,7 +400,8 @@ section.results .content {
 }
 
 section.results .subtitle {
-  font-size: 100%;
+  font-size: 90%; color: #333;
+  margin-bottom: 10px;
 }
 
 

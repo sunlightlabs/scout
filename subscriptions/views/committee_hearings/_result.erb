@@ -1,0 +1,19 @@
+<% hearing = item.data %>
+<h2>
+  <%= hearing['committee']['name'] %>
+</h2>
+
+<div class="subtitle">
+  <%= hearing['occurs_at'].strftime("%A, %B %d") %>, <%= hearing['time_of_day'] %>
+</div>
+
+<dl class="highlight content">
+  <dd>
+    <%= highlight hearing['description'], keyword %>
+  </dd>
+</dl>
+
+<section class="more">
+  <span>More:</span>
+  <a href="http://www.senate.gov/pagelayout/committees/b_three_sections_with_teasers/committee_hearings.htm">Upcoming Senate Hearings</a>
+</section>
