@@ -186,6 +186,11 @@ section.sidebar div.subscribe_message {
 
 section.sidebar div.subscribe_message span {
   display: none;
+  color: #333333;
+}
+
+section.sidebar div.subscribe_message span.update {
+  color: #cc0000;
 }
 
 section.sidebar div.save.buttons {
