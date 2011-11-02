@@ -259,7 +259,9 @@ module Subscriptions
     
     def speaker_name(speech)
       title = (speech['chamber'] == 'Senate') ? 'Sen' : 'Rep'
-      "#{title}. #{speech['speaker_first']} #{speech['speaker_last']}"
+      party = speech['speaker_party']
+      state = speech['speaker_state']
+      "#{title}. #{speech['speaker_first']} #{speech['speaker_last']} (#{party}-#{state})"
     end
     
     def speaker_url(speech)
