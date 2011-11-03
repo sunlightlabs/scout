@@ -17,6 +17,8 @@ module Subscriptions
         # 2) stores every item ID as seen 
 
         Subscriptions::Manager.poll(subscription, :initialize).each do |item|
+          # don't check if the seen ID already exists, for anticipated performance reasons
+          # the user waits on initialization to complete in the front end
           SeenId.create! :subscription_id => subscription.id, :item_id => item.id
         end
       end
