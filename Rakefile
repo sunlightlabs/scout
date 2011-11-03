@@ -84,7 +84,7 @@ namespace :test do
   task :email_result => :environment do
     types = ENV['types'].split(",")
     keywords = ENV['keywords'].split(",")
-    email = ENV['email']
+    email = ENV['email'] || config[:admin][:email]
     max = ENV['max'] || 2
 
     if types.empty? or keywords.empty?
