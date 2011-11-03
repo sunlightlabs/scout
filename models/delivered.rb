@@ -2,13 +2,17 @@
 
 class Delivered
   include Mongoid::Document
+  include Mongoid::Timestamps
   
   field :delivered_at, :type => Time
-  field :deliveries, :type => Array
-  field :contents
+  field :items, :type => Array
+  field :subscription_types, :type => Array
+  field :keyword
+  field :content
   
   index :delivered_at
   
-  validates_presence_of :deliveries
   validates_presence_of :delivered_at
+  validates_presence_of :keyword
+  validates_presence_of :content
 end

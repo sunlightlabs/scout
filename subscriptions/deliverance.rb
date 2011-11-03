@@ -37,8 +37,10 @@ module Subscriptions
 
           # shouldn't be a risk of failure
           delivered = Delivered.create!(
-            :deliveries => group.map {|d| d.attributes},
+            :items => group.map {|d| d.item},
+            :subscription_types => group.map {|d| d.subscription_type}.uniq,
             :delivered_at => Time.now,
+            :keyword => keyword,
             :user_email => email,
             :content => content
           )
