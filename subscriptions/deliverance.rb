@@ -87,6 +87,7 @@ module Subscriptions
 
       content << "----------------\nManage your subscriptions on the web at http://#{config[:hostname]}."
       content << "\n\nThese notifications are powered by the Sunlight Foundation (sunlightfoundation.com), a non-profit, non-partisan institution that uses cutting-edge technology and ideas to make government transparent and accountable."
+      content << "\n\nYou may want to add this email address to your contact list to avoid your notifications being flagged as spam."
 
       return subject, content
     end
