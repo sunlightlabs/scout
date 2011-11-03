@@ -36,7 +36,7 @@ def subscription_data
       :name => "State Bills",
       :description => "state bill(s)",
       :group => "states",
-      :order => 4,
+      :order => 5,
       :color => "#467A62"
     },
     'congressional_record' => {
@@ -51,6 +51,12 @@ def subscription_data
       :description => "hearing(s)",
       :group => "congress",
       :order => 3
+    },
+    'gao_reports' => {
+      :name => "GAO Reports",
+      :descriptions => "report(s) by GAO",
+      :group => "executive",
+      :order => 4
     }
   }
 end

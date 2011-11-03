@@ -1,0 +1,10 @@
+<% report = item.data %>
+<h3 class="highlight">
+  <%= highlight report['title'], keyword %>
+</h3>
+
+<section class="more">
+  <span>More:</span>
+  <a href="<%= report['url'] %>">Summary</a>
+  <a href="<%= report['pdf_url'] %>">PDF</a>
+</section>

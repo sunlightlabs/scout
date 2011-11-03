@@ -371,7 +371,7 @@ section.results li.result h2 {
 }
 
 section.results li.result h3 {
-  margin-bottom: 10px; font-size: 100%;
+  margin-bottom: 10px; font-size: 100%; line-height: 24px;
 }
 
 section.results li.result dl.highlight dt {
@@ -407,10 +407,6 @@ section.results .subtitle {
 
 /* federal bill results */
 
-section.results li.federal_bills span.code {
-  
-}
-
 section.results li.federal_bills span.version {
   font-weight: normal; 
 }
@@ -426,14 +422,6 @@ section.results li.federal_bills span.dates {
 
 section.results li.federal_bills span.dates strong {
   font-style: italic;
-}
-
-section.results li.state_bills h2 a.read {
-  
-}
-
-section.results li.state_bills h3 {
-  
 }
 
 section.results li.state_bills div.subjects {
