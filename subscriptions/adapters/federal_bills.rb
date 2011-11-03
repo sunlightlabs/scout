@@ -5,29 +5,6 @@ module Subscriptions
       
       MAX_ITEMS = 20
       
-      
-      # 1) does the initial poll, 
-      # 2) stores every item ID as seen 
-      def self.initialize!(subscription)
-        Subscriptions::Manager.poll(subscription, :initialize).each do |item|
-          SeenId.create! :subscription_id => subscription.id, :item_id => item.id
-        end
-      end
-      
-      # 1) does a poll
-      # 2) stores any items as yet unseen by this subscription in seen_ids
-      # 3) stores any items as yet unseen by this subscription in the delivery queue
-      def self.check!(subscription)
-        if results = Subscriptions::Manager.poll(subscription, :check)
-          results.each do |item|
-            unless SeenId.where(:subscription_id => subscription.id, :item_id => item.id).first
-              SeenId.create! :subscription_id => subscription.id, :item_id => item.id
-              Subscriptions::Manager.schedule_delivery! subscription, item
-            end
-          end
-        end
-      end
-      
       # non-destructive, searches for example results
       def self.search(subscription)
         Subscriptions::Manager.poll subscription, :search
@@ -103,7 +80,7 @@ module Subscriptions
         bill_version['issued_on'] = noon_utc_for bill_version['issued_on']
         
         Subscriptions::Result.new(
-          :id => bill_version["bill_version_id"],
+          :id => bill_version["bill"]["bill_id"],
           :date => bill_version["issued_on"],
           :data => bill_version
         )
