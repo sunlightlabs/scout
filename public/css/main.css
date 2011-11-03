@@ -199,7 +199,7 @@ section.sidebar div.save.buttons {
 
 section.sidebar div.save.buttons button {
   width: 100%;
-  padding: 15px 10px;
+  height: 80px;
   font-size: 200%;
   color: #444;
 }
@@ -214,6 +214,10 @@ section.sidebar div.save.buttons button.save,
 section.sidebar div.save.buttons button.update {
   color: #335577;
   background-color: #e5e5e5;
+}
+
+section.sidebar div.save.buttons button.update {
+  font-size: 150%;
 }
 
 section.sidebar div.save.buttons button.save:hover {
