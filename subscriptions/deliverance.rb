@@ -6,46 +6,50 @@ module Subscriptions
   module Deliverance
 
     def self.deliver!
-      total = 0
+      delivereds = []
 
       # group by emails, send one per user per keyword
       emails = Delivery.all.distinct :user_email
       emails.each do |email|
-        total += deliver_for_user!(email)
+        delivereds << deliver_for_user!(email)
       end
 
       # Temporary, but for now I want to know when emails go out
-      if total > 0
-        Email.admin "Sent #{total} emails among [#{emails.join ', '}]"
+      if delivereds.size > 0
+        msgs = delivereds.map(&:to_s).join "\n"
+        Email.admin "Sent #{delivereds.size} emails among [#{emails.join ', '}]\n\n#{msgs}"
       end
     end
 
     def self.deliver_for_user!(email)
       failures = 0
-      successes = 0
+      successes = []
 
       deliveries = Delivery.where(:user_email => email).all.to_a
 
       # group the deliveries by keyword
-      deliveries.group_by(&:subscription_keyword).each do |keyword, group|
-        subject, content = render_email keyword, group
+      deliveries.group_by(&:subscription_keyword).each do |keyword, for_keyword|
+        grouped = for_keyword.group_by &:subscription_type
+
+        subject, content = render_email keyword, for_keyword, grouped
         
         if Email.user(email, subject, content)
-          group.each do |delivery|
+          for_keyword.each do |delivery|
             delivery.destroy
           end
 
           # shouldn't be a risk of failure
           delivered = Delivered.create!(
-            :items => group.map {|d| d.item},
-            :subscription_types => group.map {|d| d.subscription_type}.uniq,
+            :items => for_keyword.map {|d| d.item},
+            :subscription_types => grouped.keys.inject({}) {|memo, key| memo[key] = grouped[key].size; memo},
             :delivered_at => Time.now,
             :keyword => keyword,
             :user_email => email,
+            :subject => subject,
             :content => content
           )
 
-          successes += 1
+          successes << delivered
         else
           failures += 1
         end
@@ -58,10 +62,9 @@ module Subscriptions
       successes
     end
 
-    def self.render_email(keyword, deliveries)
+    def self.render_email(keyword, deliveries, grouped)
       content = ""
 
-      grouped = deliveries.group_by &:subscription_type
       only_one = grouped.keys.size == 1
       descriptor = only_one ? subscription_data[grouped.keys.first.to_s][:description] : "things"
 

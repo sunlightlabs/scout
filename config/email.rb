@@ -15,7 +15,7 @@ module Email
     
     body += attrs.inspect
       
-    if config[:admin][:email].present?
+    if config[:email][:from].present? and config[:admin][:email].present?
       begin
         Pony.mail config[:email].merge(
           :subject => subject, 
@@ -31,7 +31,7 @@ module Email
   end
 
   def self.admin(message)
-    if config[:admin][:email].present?
+    if config[:email][:from].present? and config[:admin][:email].present?
       begin
         Pony.mail config[:email].merge(
           :subject => "[ADMIN] #{message}",

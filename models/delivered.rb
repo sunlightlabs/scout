@@ -5,9 +5,10 @@ class Delivered
   include Mongoid::Timestamps
   
   field :delivered_at, :type => Time
-  field :items, :type => Array
-  field :subscription_types, :type => Array
+  field :items, :type => Hash
+  field :subscription_types, :type => Hash
   field :keyword
+  field :subject
   field :content
   
   index :delivered_at
@@ -15,4 +16,8 @@ class Delivered
   validates_presence_of :delivered_at
   validates_presence_of :keyword
   validates_presence_of :content
+
+  def to_s
+    "[#{user_email}] #{keyword} (#{items.size}) - #{subscription_types.map {|type, n| "#{type} (#{n})"}.join ', '}"
+  end
 end

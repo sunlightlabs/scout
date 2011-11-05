@@ -81,9 +81,9 @@ namespace :test do
   end
 
   desc "Send a test report of a subscription"
-  task :email_result => :environment do
-    types = ENV['types'].split(",")
-    keywords = ENV['keywords'].split(",")
+  task :email_user => :environment do
+    types = (ENV['types'] || "").split(",")
+    keywords = (ENV['keywords'] || "").split(",")
     email = ENV['email'] || config[:admin][:email]
     max = ENV['max'] || 2
 
@@ -122,7 +122,11 @@ namespace :test do
 
     end
 
-    Subscriptions::Deliverance.deliver_for_user! email
+    if ENV['send_all'].present?
+      Subscriptions::Deliverance.deliver!
+    else
+      Subscriptions::Deliverance.deliver_for_user! email
+    end
 
   end
 
