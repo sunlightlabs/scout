@@ -17,7 +17,7 @@ module Subscriptions
       # Temporary, but for now I want to know when emails go out
       if delivereds.size > 0
         msgs = delivereds.map(&:to_s).join "\n"
-        Email.admin "Sent #{delivereds.size} emails among [#{emails.join ', '}]\n\n#{msgs}"
+        Email.admin "Sent #{delivereds.size} emails among [#{emails.join ', '}]", msgs
       end
     end
 
@@ -40,7 +40,7 @@ module Subscriptions
 
           # shouldn't be a risk of failure
           delivered = Delivered.create!(
-            :items => for_keyword.map {|d| d.item},
+            :deliveries => for_keyword.map {|d| d.attributes},
             :subscription_types => grouped.keys.inject({}) {|memo, key| memo[key] = grouped[key].size; memo},
             :delivered_at => Time.now,
             :keyword => keyword,

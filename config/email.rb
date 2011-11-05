@@ -30,12 +30,12 @@ module Email
     end
   end
 
-  def self.admin(message)
+  def self.admin(subject, body = nil)
     if config[:email][:from].present? and config[:admin][:email].present?
       begin
         Pony.mail config[:email].merge(
-          :subject => "[ADMIN] #{message}",
-          :body => message,
+          :subject => "[ADMIN] #{subject}",
+          :body => body || subject,
           :to => config[:admin][:email]
         )
       rescue Errno::ECONNREFUSED
@@ -43,8 +43,8 @@ module Email
       end
     else
       puts "(No admin email, not sending real email)"
+      puts "\n[ADMIN EMAIL] #{subject}\n\n#{body}"
     end
-    puts "\n[ADMIN EMAIL] #{message}"
   end
 
   def self.exception_message(report)
