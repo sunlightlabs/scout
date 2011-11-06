@@ -18,6 +18,6 @@ class Delivered
   validates_presence_of :content
 
   def to_s
-    "[#{user_email}] #{keyword} (#{deliveries.size}) - #{subscription_types.map {|type, n| "#{type} (#{n})"}.join ', '}"
+    "[#{user_email}] #{keyword} (#{deliveries.size})\n\t#{subscription_types.map {|type, n| "#{type} (#{n})"}.join ', '}\n\t#{_id}"
   end
 end

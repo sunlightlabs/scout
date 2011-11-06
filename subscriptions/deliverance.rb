@@ -16,7 +16,7 @@ module Subscriptions
 
       # Temporary, but for now I want to know when emails go out
       if delivereds.size > 0
-        msgs = delivereds.map(&:to_s).join "\n"
+        msgs = delivereds.map(&:to_s).join "\n\n"
         Email.admin "Sent #{delivereds.size} emails among [#{emails.join ', '}]", msgs
       end
     end
