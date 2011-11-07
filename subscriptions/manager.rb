@@ -79,7 +79,12 @@ module Subscriptions
       
       puts "\n[#{adapter}][#{function}][#{subscription.id}] #{url}\n\n" if config[:debug][:output_urls]
       
-      response = HTTParty.get url
+      begin
+        response = HTTParty.get url
+      rescue Timeout::Error => ex
+        Email.report Report.warning("Poll", "[#{subscription.subscription_type}][#{function}][#{subscription.keyword}] poll timeout, returned an empty list")
+        return [] # should be return nil, when we refactor this to properly accomodate failures in initialization, checking, and searching
+      end
       
       # insert the subscription onto each result
       results = adapter.items_for(response)
