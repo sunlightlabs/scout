@@ -6,14 +6,15 @@ module Email
     subject = "[#{report.status}] #{report.source} | #{report.message}"
       
     body = ""
-    if report[:exception]
+    if report[:attached]['exception']
       body += exception_message(report)
     end
     
     attrs = report.attributes.dup
     [:status, :created_at, :updated_at, :_id, :message, :exception, :read, :source].each {|key| attrs.delete key.to_s}
-    
-    body += attrs.inspect
+    attrs['attached'].delete 'exception'
+    attrs.delete('attached') if attrs['attached'].empty?
+    body += attrs.inspect if attrs.any?
       
     if config[:email][:from].present? and config[:admin][:email].present?
       begin
@@ -50,11 +51,11 @@ module Email
   def self.exception_message(report)
     
     msg = ""
-    msg += "#{report[:exception]['type']}: #{report[:exception]['message']}" 
+    msg += "#{report[:attached]['exception']['type']}: #{report[:attached]['exception']['message']}" 
     msg += "\n\n"
     
-    if report[:exception]['backtrace'].respond_to?(:each)
-      report[:backtrace]['backtrace'].each {|line| msg += "#{line}\n"}
+    if report[:attached]['exception']['backtrace'].respond_to?(:each)
+      report[:attached]['exception']['backtrace'].each {|line| msg += "#{line}\n"}
       msg += "\n\n"
     end
     

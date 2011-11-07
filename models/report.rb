@@ -31,7 +31,7 @@ class Report
 
   def self.exception(source, message, exception)
     file 'FAILURE', source, message, {
-      :exception => {
+      'exception' => {
         'backtrace' => exception.backtrace, 
         'message' => exception.message, 
         'type' => exception.class.to_s
