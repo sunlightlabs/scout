@@ -11,7 +11,7 @@ module Subscriptions
       # group by emails, send one per user per keyword
       emails = Delivery.all.distinct :user_email
       emails.each do |email|
-        delivereds << deliver_for_user!(email)
+        delivereds += deliver_for_user!(email)
       end
 
       # Temporary, but for now I want to know when emails go out
