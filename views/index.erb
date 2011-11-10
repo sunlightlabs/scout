@@ -4,7 +4,7 @@
 
 <section class="signup">
 
-  <form action="/users/new" method="post">
+  <form action="/users/new" method="post" id="signup_form">
     <input class="email" type="email" placeholder="your email address" name="email" />
 
     <!--<input class="submit" type="submit" value="Go" />-->
@@ -12,5 +12,9 @@
       Go
     </button>
   </form>
+
+  <script type="text/javascript">
+    H5F.setup(document.getElementById("signup_form"));
+  </script>
 
 </section>
