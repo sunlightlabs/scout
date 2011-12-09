@@ -19,10 +19,10 @@ module Subscriptions
       }[short]
     end
     
-    def bill_highlight(item)
+    def bill_highlight(item, keyword)
       highlighting = item.data['search']['highlight']
       field = highlighting.keys.sort_by {|k| highlight_priority k}.first
-      highlighting[field]
+      excerpt highlighting[field].first, keyword
     end
     
     def govtrack_type(bill_type)
@@ -239,21 +239,51 @@ module Subscriptions
     end
     
     def speech_selection(speech, keyword)
-      speech['speaking'].select do |paragraph|
+      first = speech['speaking'].select do |paragraph|
         paragraph =~ /#{keyword}/i
       end.first
+      excerpt first, keyword
     end
 
     def speech_highlight(speech, keyword)
       if selection = speech_selection(speech, keyword)
-        highlight selection, keyword
+        excerpt selection, keyword
       end
     end
     
-    # when client-side highlighting is necessary
-    def highlight(text, keyword)
-      text.gsub(/#{keyword}/i) do |word|
-        "<em class=\"highlight\">#{word}</em>"
+    # client-side truncation and highlighting
+    def excerpt(text, keyword, highlight = true)
+      word = keyword.size
+      length = text.size
+      index = text =~ /#{keyword}/i || 0
+      max = 500
+      buffer = 100
+
+      range = nil
+      if (index + word) < (max - buffer)
+        range = 0..max
+      else
+        finish = nil
+        if (index + word + buffer) < length
+          finish = index + word + buffer
+        else
+          finish = length
+        end
+        start = finish - max
+        range = start..finish
+      end
+
+      # range = 0..-1
+      truncated = text[range]
+      truncated = "..." + truncated if range.begin > 0
+      truncated = truncated + "..." if range.end < length
+
+      if highlight
+        truncated.gsub(/#{keyword}/i) do |word|
+          "<em class=\"highlight\">#{word}</em>"
+        end
+      else
+        truncated
       end
     end
     
