@@ -29,7 +29,7 @@ module Subscriptions
         url << "&order=issued_on"
         url << "&sections=#{sections.join ','}"
         url << "&highlight=true&highlight_size=500"
-        url << "&highlight_tags=%20,%20"
+        url << "&highlight_tags=,"
         
         url
       end
