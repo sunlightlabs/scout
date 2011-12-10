@@ -19,10 +19,10 @@ module Subscriptions
       }[short]
     end
     
-    def bill_highlight(item, keyword)
+    def bill_highlight(item, keyword, highlight = true)
       highlighting = item.data['search']['highlight']
       field = highlighting.keys.sort_by {|k| highlight_priority k}.first
-      excerpt highlighting[field].first, keyword
+      excerpt highlighting[field].first, keyword, highlight
     end
     
     def govtrack_type(bill_type)

@@ -4,6 +4,9 @@
 <%= item.data['bill']['official_title'] %>
 <% end %>
 
+ <% if item.data['search']['highlight'] %>
+<%= bill_highlight item, keyword, false %>
+ <% end %>
 
 GovTrack: <%= govtrack_url item %>
 OpenCongress: <%= opencongress_url item %>
