@@ -242,12 +242,11 @@ module Subscriptions
       first = speech['speaking'].select do |paragraph|
         paragraph =~ /#{keyword}/i
       end.first
-      excerpt first, keyword
     end
 
-    def speech_highlight(speech, keyword)
+    def speech_excerpt(speech, keyword, highlight = true)
       if selection = speech_selection(speech, keyword)
-        excerpt selection, keyword
+        excerpt selection, keyword, highlight
       end
     end
     
