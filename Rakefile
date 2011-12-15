@@ -112,7 +112,7 @@ namespace :test do
         results = subscription.search
         if results.empty?
           puts "\tNo results, nothing to deliver."
-          return
+          next
         end
 
         results.first(max).each do |result|
