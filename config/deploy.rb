@@ -6,7 +6,7 @@ set :sock, "#{user}.sock"
 
 set :deploy_to, "/projects/#{user}/"
 set :local_bin, "/projects/#{user}/.gem/ruby/1.8/bin"
-set :domain, 'dupont.sunlightlabs.net'
+set :domain, 'ec2-50-16-84-118.compute-1.amazonaws.com'
 
 
 set :scm, :git
