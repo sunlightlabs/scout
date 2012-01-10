@@ -45,18 +45,6 @@ def subscription_data
       :group => "congress",
       :order => 2,
       :color => "#51467A"
-    },
-    'committee_hearings' => {
-      :name => "Senate Hearings",
-      :description => "hearing(s)",
-      :group => "congress",
-      :order => 3
-    },
-    'gao_reports' => {
-      :name => "GAO Reports",
-      :descriptions => "report(s) by GAO",
-      :group => "executive",
-      :order => 4
     }
   }
 end
