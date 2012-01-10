@@ -20,30 +20,11 @@
 
 <body>
 
-  <header>
-    <!-- <h1>
-      government
-    </h1> -->
-    
-    <h2>
-      search government, get notified
-    </h2>
-  
-    <% if logged_in? %>
-      <div class="login">
-        <span>
-          <%= current_user.email %>
-        </span>
-        <a class="logout" href="/logout">logout</a>
-      </div>
-    <% end %>
-    
-    <%= styled_flash %>
+  <header><!-- hidden -->
+    <% yield_content :header %>
   </header>
-  
-  <section class="main">
-    <%= yield %>
-  </section>
+
+  <%= yield %>
   
 </body>
 

@@ -1,38 +1,53 @@
-<section class="entry">
-  <% if defined?(keyword) and keyword.errors.any? %>
-    <div class="errors">
-      <% keyword.errors.full_messages.each do |msg| %>
-        <span><%= msg %></span>
-      <% end %>
-    </div>
-  <% end %>
-  
-  <form class="search" action="/search" method="get" onsubmit="return false">
-    <input type="text" class="query" name="keyword" placeholder="keyword or phrase" />
-    
-    <!-- filled in with ID of saved search if one is loaded -->
-    <input type="hidden" id="keyword_id" name="keyword_id" />
-    
-    <!-- filled in with keyword that populates the current search results -->
-    <input type="hidden" id="keyword_searched" name="keyword_searched" />
-    
-    <div class="buttons">
-      <button class="image search">Search</button>
-    </div>
-  </form>
-</section>
+<section class="main">
 
-<section class="results" id="results">
-  <div class="loading_container">
-    <span>searching through many things...</span>
-  </div>
-  
-  <div class="container">
-    <!-- results get loaded in here -->
-  </div>
+  <section class="entry">
+    <% if defined?(keyword) and keyword.errors.any? %>
+      <div class="errors">
+        <% keyword.errors.full_messages.each do |msg| %>
+          <span><%= msg %></span>
+        <% end %>
+      </div>
+    <% end %>
+    
+    <form class="search" action="/search" method="get" onsubmit="return false">
+      <input type="text" class="query" name="keyword" placeholder="keyword or phrase" />
+      
+      <!-- filled in with ID of saved search if one is loaded -->
+      <input type="hidden" id="keyword_id" name="keyword_id" />
+      
+      <!-- filled in with keyword that populates the current search results -->
+      <input type="hidden" id="keyword_searched" name="keyword_searched" />
+      
+      <div class="buttons">
+        <button class="image search">Search</button>
+      </div>
+    </form>
+  </section>
+
+  <section class="results" id="results">
+    <%= styled_flash %>
+    
+    <div class="loading_container">
+      <span>searching through many things...</span>
+    </div>
+    
+    <div class="container">
+      <!-- results get loaded in here -->
+    </div>
+  </section>
+
 </section>
 
 <section class="sidebar">
+
+  <% if logged_in? %>
+    <div class="login">
+      <span>
+        <%= current_user.email %>
+      </span>
+      <a class="logout" href="/logout">logout</a>
+    </div>
+  <% end %>
 
   <div class="subscribe_message">
     <span class="update">Your filters have changed.</span>
@@ -92,7 +107,7 @@
     <% end %>
   </ul>
 
-</ul>
+</section>
 
 <script type="text/javascript">
   
