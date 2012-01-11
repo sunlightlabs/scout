@@ -40,10 +40,13 @@ module Subscriptions
 
           # shouldn't be a risk of failure
           delivered = Delivered.create!(
-            :deliveries => for_keyword.map {|d| d.attributes},
+            :deliveries => for_keyword.map {|delivery| delivery.attributes.dup},
+            
+            # each email can have multiple subscription_types within the same keyword though
             :subscription_types => grouped.keys.inject({}) {|memo, key| memo[key] = grouped[key].size; memo},
-            :delivered_at => Time.now,
+
             :keyword => keyword,
+            :delivered_at => Time.now,
             :user_email => email,
             :subject => subject,
             :content => content
@@ -77,9 +80,9 @@ module Subscriptions
 
         group.each do |delivery|
           item = Subscriptions::Result.new(
-            :id => delivery.item['id'],
-            :date => delivery.item['date'],
-            :data => delivery.item['data']
+            :id => delivery.item_id,
+            :date => delivery.item_date,
+            :data => delivery.item_data
           )
 
           content << render_item(delivery.subscription_type, delivery.subscription_keyword, item)

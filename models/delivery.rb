@@ -19,13 +19,20 @@ class Delivery
   field :subscription_type
   field :subscription_keyword
   
-  field :item, :type => Hash, :default => {}
+  # item details
+  field :item_id
+  field :item_date, :type => Time
+  field :item_data, :type => Hash, :default => {}
   
   index :subscription_type
   index :user_email
   
   validates_presence_of :subscription_id
   validates_presence_of :subscription_type
+  validates_presence_of :subscription_keyword
   validates_presence_of :user_id
   validates_presence_of :user_email
+  validates_presence_of :item_id
+  validates_presence_of :item_date
+  validates_presence_of :item_data
 end

@@ -64,11 +64,9 @@ module Subscriptions
         :subscription_type => subscription.subscription_type,
         :subscription_keyword => subscription.keyword,
         
-        :item => {
-          :id => item.id,
-          :date => item.date,
-          :data => item.data
-        }
+        :item_id => item.id,
+        :item_date => item.date,
+        :item_data => item.data
       )
     end
     
