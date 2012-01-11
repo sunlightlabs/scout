@@ -8,9 +8,15 @@ a {color: #335577;}
 
 header, footer, section.main, section.signup {
   width: 880px; 
-  margin-left: 50px;
-  margin-right: 50px;
   position: relative;
+}
+
+header, footer, section.main section.results, section.signup {
+  margin: 0 50px;
+}
+
+section.main section.entry {
+  margin-left: 75px;
 }
 
 /* signup page only */
@@ -120,9 +126,6 @@ section.signup button {
 /* buttons */
 
 button {
-  border-color: #8F8F8F;
-  border-width: 1px;
-  border-radius: 5px;
   background-color: transparent;
   overflow: hidden;
   cursor: pointer;
@@ -138,12 +141,16 @@ button.image {
   line-height: 1 !important;
   background-position: center;
   background-repeat: no-repeat;
+  border: none;
 }
 
 button.text {
   padding: 10px 15px;
   font-size: 100%;
   color: #4c4c4c;
+  border-color: #8F8F8F;
+  border-width: 1px;
+  border-radius: 5px;
 }
 
 button.text.image {
@@ -182,7 +189,6 @@ section.entry button.search {
 
 section.sidebar div.subscribe_message {
   height: 40px;
-  xmargin-bottom: 20px;
   text-align: center;
 }
 
@@ -310,7 +316,7 @@ ul.subscriptions li.keyword section.delivery span.email {
 
 }
 
-/* results section */
+/*   section */
 
 section.results div.loading_container img {
   margin-top: 10px;
