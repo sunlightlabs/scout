@@ -79,7 +79,7 @@ module Subscriptions
       
       begin
         response = HTTParty.get url
-      rescue Timeout::Error => ex
+      rescue Timeout::Error, Errno::ETIMEDOUT => ex
         Email.report Report.warning("Poll", "[#{subscription.subscription_type}][#{function}][#{subscription.keyword}] poll timeout, returned an empty list")
         return [] # should be return nil, when we refactor this to properly accomodate failures in initialization, checking, and searching
       end
