@@ -85,10 +85,10 @@ namespace :test do
     types = (ENV['types'] || "").split(",")
     keywords = (ENV['keywords'] || "").split(",")
     email = ENV['email'] || config[:admin][:email]
-    max = ENV['max'] || 2
+    max = (ENV['max'] || ENV['limit'] || 2).to_i
 
     if types.empty? or keywords.empty?
-      puts "Enter 'type' and 'keyword' parameters."
+      puts "Enter 'types' and 'keywords' parameters."
       return
     end
 
