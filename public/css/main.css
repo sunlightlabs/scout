@@ -430,3 +430,7 @@ section.results li.federal_bills span.dates strong {
 section.results li.state_bills div.subjects {
   margin-top: 8px; font-size: 90%;
 }
+
+section.results li.regulations span.stage {
+  font-weight: bold;
+}
