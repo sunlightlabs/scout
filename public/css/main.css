@@ -370,7 +370,7 @@ section.results span.result_type {
 }
 
 section.results li.result h2 {
-  margin-bottom: 10px; font-size: 125%;
+  margin-bottom: 10px; font-size: 125%; line-height: 28px;
 }
 
 section.results li.result h3 {

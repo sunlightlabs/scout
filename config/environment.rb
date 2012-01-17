@@ -29,22 +29,25 @@ def subscription_data
       :name => "Congressional Bills",
       :description => "bill(s) in Congress",
       :group => "congress",
-      :order => 1,
-      :color => "#46517A"
+      :order => 1
     },
     'state_bills' => {
       :name => "State Bills",
       :description => "state bill(s)",
       :group => "states",
-      :order => 5,
-      :color => "#467A62"
+      :order => 3
     },
     'congressional_record' => {
       :name => "Congressional Speeches",
       :description => "speech(es)",
       :group => "congress",
-      :order => 2,
-      :color => "#51467A"
+      :order => 2
+    },
+    'regulations' => {
+      :name => "Federal Regulations",
+      :description => "regulation(s)",
+      :group => "regulations",
+      :order => 4
     }
   }
 end

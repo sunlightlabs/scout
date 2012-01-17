@@ -285,6 +285,14 @@ module Subscriptions
         truncated
       end
     end
+
+    def truncate(string, length)
+      if string.size > (length + 3)
+        string[0...length] + "..."
+      else
+        string
+      end
+    end
     
     def speaker_name(speech)
       title = (speech['chamber'] == 'Senate') ? 'Sen' : 'Rep'

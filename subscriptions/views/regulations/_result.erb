@@ -1,0 +1,18 @@
+<% regulation = item.data %>
+
+<h3><%= regulation['title'] %></h3>
+
+<dl class="highlight">
+  <dd class="content">
+    <% if regulation['abstract'] %>
+      <%= excerpt regulation['abstract'], keyword %>
+    <% else %>
+      (Couldn't locate an abstract.)
+    <% end %>
+  </dd>
+</dl>
+
+<section class="more">
+  <span>More:</span>
+  <a href="<%= regulation['federal_register_url'] %>">Federal Register</a>
+</section>
