@@ -2,6 +2,14 @@
 
 <h3><%= regulation['title'] %></h3>
 
+<div class="subtitle">
+  <%= regulation_stage regulation['stage'] %>
+  <% if regulation['agency_names'].any? %>
+    by the
+    <%= regulation['agency_names'].join ', ' %>
+  <% end %>
+</div>
+
 <dl class="highlight">
   <dd class="content">
     <% if regulation['abstract'] %>

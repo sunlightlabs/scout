@@ -304,5 +304,12 @@ module Subscriptions
     def speaker_url(speech)
       "http://capitolwords.org/legislator/#{speech['bioguide_id']}"
     end
+
+    def regulation_stage(stage)
+      {
+        :proposed => "Proposed Rule",
+        :final => "Final Rule"
+      }[stage.to_sym] || "Rule"
+    end
   end
 end
