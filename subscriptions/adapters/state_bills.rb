@@ -5,18 +5,6 @@ module Subscriptions
       
       MAX_ITEMS = 20
       
-      def self.initialize!(subscription)
-        # don't do anything!
-      end
-      
-      # show everything that comes up;
-      # the "check" poll filters down to anything updated since right now
-      def self.check!(subscription) 
-        Subscriptions::Manager.poll(subscription, :check).each do |item|
-          Subscriptions::Manager.schedule_delivery! subscription, item
-        end
-      end
-      
       def self.search(subscription)
         Subscriptions::Manager.poll subscription, :search
       end
@@ -31,11 +19,11 @@ module Subscriptions
         
         url = "#{endpoint}/bills/?apikey=#{api_key}"
         
-        if function == :search
+        if function == :search or function == :initialize
           url << "&fields=#{fields.join ','}"
           url << "&q=#{query}"
-          url << "&sort=updated_at"
           url << "&search_window=term"
+          url << "&sort=updated_at"
           
         elsif function == :check
           updated_since = subscription.last_checked_at.strftime("%Y-%m-%dT%H:%M:%S")
@@ -51,8 +39,10 @@ module Subscriptions
       
       # takes parsed response and returns an array where each item is 
       # a hash containing the id, title, and post date of each item found
-      def self.items_for(response)
-        response.first(MAX_ITEMS).map {|bill| item_for bill}
+      def self.items_for(response, function)
+        # for searching, only return the first "page" of items, otherwise, handle any and all
+        items = (function == :search) ? response.first(MAX_ITEMS) : response
+        items.map {|bill| item_for bill}
       end
       
       

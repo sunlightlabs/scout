@@ -85,7 +85,7 @@ module Subscriptions
       end
       
       # insert the subscription onto each result
-      results = adapter.items_for(response)
+      results = adapter.items_for(response, function)
       
       if results
         results.map do |result| 

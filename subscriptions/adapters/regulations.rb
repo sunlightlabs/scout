@@ -35,7 +35,7 @@ module Subscriptions
       
       # takes parsed response and returns an array where each item is 
       # a hash containing the id, title, and post date of each item found
-      def self.items_for(response)
+      def self.items_for(response, function)
         return nil unless response['regulations']
         
         response['regulations'].map do |regulation|
