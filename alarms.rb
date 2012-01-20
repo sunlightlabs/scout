@@ -126,42 +126,34 @@ put '/keyword/:keyword_id/resubscribe' do
   end
 end
 
-get '/search' do
+get '/search/:subscription_type' do
   requires_login
   
-  items = []
-  subscribed_to = nil
+  results = []
+  # subscribed_to = nil
 
-  if params[:keyword_id] and (keyword = Keyword.where(:user_id => current_user.id, :_id => BSON::ObjectId(params[:keyword_id].strip)).first)
-    subscribed_to = keyword.subscriptions.map {|s| s.subscription_type}
-  end
+  # if params[:keyword_id] and (keyword = Keyword.where(:user_id => current_user.id, :_id => BSON::ObjectId(params[:keyword_id].strip)).first)
+  #   subscribed_to = keyword.subscriptions.map {|s| s.subscription_type}
+  # end
 
-  # search through every subscription type, even if it's not enabled for this search term
-  # so that results are available client side
-  subscription_types.keys.each do |subscription_type|
-    # make new, temporary subscription items
-    results = current_user.subscriptions.new(
-      :keyword => params[:keyword], 
-      :subscription_type => subscription_type
-    ).search
+  # make new, temporary subscription items
+  results = current_user.subscriptions.new(
+    :keyword => params[:keyword], 
+    :subscription_type => params[:subscription_type]
+  ).search
     
-    # if results is nil, it usually indicates an error in one of the remote services -
-    # this would be where to catch it and display something
-    if results.nil?
-      puts "[#{subscription_type}][#{params[:keyword]}][search] ERROR while loading this"
-    end
-
-
-    if results and results.any?
-      items += results
-    end
+  # if results is nil, it usually indicates an error in one of the remote services -
+  # this would be where to catch it and display something
+  if results.nil?
+    puts "[#{subscription_type}][#{params[:keyword]}][search] ERROR while loading this"
+    results = []
   end
   
-  items = items.sort {|a, b| b.date <=> a.date}
+  results = results.sort {|a, b| b.date <=> a.date}
   
   erb :results, :layout => false, :locals => {
-    :items => items, 
-    :subscribed_to => subscribed_to,
+    :items => results, 
+    # :subscribed_to => subscribed_to,
     :keyword => params[:keyword]
   }
 end

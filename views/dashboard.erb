@@ -27,13 +27,35 @@
   <section class="results" id="results">
     <%= styled_flash %>
     
-    <div class="loading_container">
-      <span>searching through many things...</span>
-    </div>
-    
+    <% sorted_types = subscription_types.sort_by {|k, v| v[:order]} %>
+    <ul class="tabs">
+      <% sorted_types.each do |type, data| %>
+        <li class="<%= type %> <%= type == sorted_types.first.first ? "first active" : "" %>" 
+            data-type="<%= type %>"
+            >
+            <%= data[:name] %>
+        </li>
+      <% end %>
+    </ul>
+
     <div class="container">
-      <!-- results get loaded in here -->
+      <% sorted_types.each do |type, data| %>
+        <div class="tab <%= type %>" 
+          data-type="<%= type %>"
+          >
+
+          <div class="loading_container">
+            <span>searching...</span>
+          </div>
+
+          <div class="results_list">
+            <!-- results for each subscription type get loaded in here -->
+          </div>
+
+        </div>
+      <% end %>
     </div>
+
   </section>
 
 </section>
@@ -48,58 +70,6 @@
       <a class="logout" href="/logout">logout</a>
     </div>
   <% end %>
-
-  <div class="subscribe_message">
-    <span class="update">Your filters have changed.</span>
-    <span class="save">Be notified when new things come up.</span>
-    <span class="saved">You will be notified.</span>
-  </div>
-
-  <div class="save buttons">
-    <button class="text nothing" disabled>
-      Subscribe
-    </button> 
-    
-    <button class="text save" style="display: none">
-      Subscribe
-    </button>
-    
-    <button class="text saving" disabled style="display: none">
-      Subscribing...
-    </button>
-    
-    <button class="text saved" disabled style="display: none">
-      Subscribe
-    </button>
-
-    <button class="text update" style="display: none">
-      Update subscription
-    </button>
-  </div>
-  
-  <style>
-    <% subscription_types.each do |type, data| %>
-/*      section.sidebar ul.filters li button.filter.<%= type %>.on {background-color: <%= data[:color] %>;}
-      section.results li.result.<%= type %> {border-left-color: <%= data[:color] %>;}*/
-    <% end %>
-  </style>
-
-  <ul class="filters">
-    <% subscription_types.sort_by {|k, v| v[:order]}.each do |type, data| %>
-      <li>
-        <button class="text filter <%= type %> off" 
-          data-group="<%= data[:group] %>" 
-          data-type="<%= type %>"
-          disabled
-          >
-          <span class="status">off</span>
-          <span class="name">
-            <%= data[:name] %>
-          </span>
-        </button>
-      </li>
-    <% end %>
-  </ul>
   
   <ul class="subscriptions">
     <% keywords.each do |keyword, subscriptions| %>
@@ -113,57 +83,57 @@
   
   $(function() {
     
-    $("button.save, button.update").click(function() {
-      var keyword = $("#keyword_searched").val();
-      var keyword_id = $("#keyword_id").val();
+    // $("button.save, button.update").click(function() {
+    //   var keyword = $("#keyword_searched").val();
+    //   var keyword_id = $("#keyword_id").val();
 
-      showSave("saving");
+    //   showSave("saving");
       
-      var selected_types = [];
-      $("button.filter.on").each(function(i, elem) {
-        selected_types[selected_types.length] = $(elem).data("type");
-      });
+    //   var selected_types = [];
+    //   $("button.filter.on").each(function(i, elem) {
+    //     selected_types[selected_types.length] = $(elem).data("type");
+    //   });
 
-      if (keyword_id) {
+    //   if (keyword_id) {
         
-        $.post("/keyword/" + keyword_id + "/resubscribe", {
-          _method: "put",
-          keyword: keyword,
-          "subscription_types[]": selected_types
-        }, function(data) {
-          console.log("Subscription updated: " + data.keyword_id);
+    //     $.post("/keyword/" + keyword_id + "/resubscribe", {
+    //       _method: "put",
+    //       keyword: keyword,
+    //       "subscription_types[]": selected_types
+    //     }, function(data) {
+    //       console.log("Subscription updated: " + data.keyword_id);
           
-          showSave("saved");
+    //       showSave("saved");
 
-          $("ul.subscriptions #keyword-" + data.keyword_id).replaceWith(data.pane);
-          if ($("#keyword_searched").val() == keyword)
-            selectKeyword(data.keyword_id);
-        })
-        .error(function() {
-          console.log("Error creating subscription.");
-          showSave("save");
-        });
+    //       $("ul.subscriptions #keyword-" + data.keyword_id).replaceWith(data.pane);
+    //       if ($("#keyword_searched").val() == keyword)
+    //         selectKeyword(data.keyword_id);
+    //     })
+    //     .error(function() {
+    //       console.log("Error creating subscription.");
+    //       showSave("save");
+    //     });
 
-      } else {
-        $.post("/keywords", {
-          keyword: keyword,
-          "subscription_types[]": selected_types
-        }, function(data) {
-          console.log("Subscription created: " + data.keyword_id);
+    //   } else {
+    //     $.post("/keywords", {
+    //       keyword: keyword,
+    //       "subscription_types[]": selected_types
+    //     }, function(data) {
+    //       console.log("Subscription created: " + data.keyword_id);
           
-          showSave("saved");
+    //       showSave("saved");
 
-          $("ul.subscriptions").prepend(data.pane);
+    //       $("ul.subscriptions").prepend(data.pane);
 
-          if ($("#keyword_searched").val() == keyword)
-            selectKeyword(data.keyword_id);
-        })
-        .error(function() {
-          console.log("Error creating subscription.");
-          showSave("save");
-        });
-      }
-    });
+    //       if ($("#keyword_searched").val() == keyword)
+    //         selectKeyword(data.keyword_id);
+    //     })
+    //     .error(function() {
+    //       console.log("Error creating subscription.");
+    //       showSave("save");
+    //     });
+    //   }
+    // });
     
     $("li.keyword button.remove").live("click", function() {
       var keyword_id = $(this).data("keyword_id");
@@ -179,7 +149,7 @@
           // if the current search was removed
           if ($("#keyword_id").val() == keyword_id) {
             selectKeyword();
-            showSave("save");
+            //showSave("save");
           }
         })
         .error(function() {
@@ -195,7 +165,7 @@
       var keyword_id = $(this).data("keyword_id");
       
       $("input.query").val(keyword);
-      searchFor(keyword, keyword_id);
+      startSearch(keyword, keyword_id);
       
       return false;
     });
@@ -204,50 +174,52 @@
       var keyword = $("input.query").val();
       if (keyword) keyword = keyword.trim();
       if (!keyword) return;
-      //if ($("#keyword_searched").val() == keyword) return;
       
-      searchFor(keyword);
+      startSearch(keyword);
       return false;
     });
-    
-    $("ul.filters button").click(function() {
-      var elem = $(this);
-      var status = elem.find("span.status");
-      var type = elem.data("type");
 
-      if ($("#keyword_id").val())
-        showSave("update");
-      
-      if (elem.hasClass("on")) {
-        elem.removeClass("on").addClass("off");
-        status.html("off");
-        $("section.results li.result." + type).hide();
-        dateScan();
-      } else {
-        elem.removeClass("off").addClass("on");
-        status.html("on");
-        $("section.results li.result." + type).show();
-        dateScan();
-      }
-      
-      return false;
-    }).prop("disabled", true);
+    $("ul.tabs li").click(function() {
+      selectTab($(this).data("type"));
+    });
     
-    function dateScan() {
-      var someShowing = false;
-      $("section.results p.date").each(function(i, elem) {
-        if ($(elem).nextUntil("p.date", "li:visible").size() == 0) {
-          $(elem).hide();
-        } else {
-          $(elem).show();
-          someShowing = true;
-        }
+    function selectTab(type) {
+      $("div.container div.tab").hide();
+      $("div.container div.tab." + type).show();
+      $("ul.tabs li").removeClass("active");
+      $("ul.tabs li." + type).addClass("active");
+    }
+  
+    function startSearch(keyword, keyword_id) {
+      $("#results div.results_list").html("");
+      $("#results div.loading_container").show();
+      
+      $("#keyword_searched").val(keyword);
+      selectKeyword(keyword_id);
+
+      $("#results div.tab").each(function(i, elem) {
+        var subscription_type = $(elem).data("type");
+        if (i == 0)
+          selectTab(subscription_type);
+        searchFor(keyword, keyword_id, subscription_type);
       });
-      if (someShowing)
-        $("p.none.left").hide();
-      else
-        $("p.none.left").show();
+    }
 
+    function searchFor(keyword, keyword_id, subscription_type) {
+      var tab = $("#results div.tab." + subscription_type);
+
+      $.get("/search/" + subscription_type, {
+        keyword: keyword,
+        keyword_id: keyword_id
+      }, function(data) {
+        
+        tab.find("div.loading_container").hide();
+        tab.find("div.results_list").html(data);
+      })
+      .error(function() {
+        tab.find("div.loading_container").hide();
+        tab.find("div.results_list").html("<p class=\"error\">Error loading results.</p>");
+      });
     }
 
     function selectKeyword(keyword_id) {
@@ -258,42 +230,5 @@
         $("li.keyword#keyword-" + keyword_id).addClass("current");
     }
 
-    function showSave(name) {
-      $("section.sidebar div.subscribe_message span").hide();
-      $("section.sidebar div.subscribe_message span." + name).show();
-
-      $("section.sidebar div.save.buttons button").hide();
-      $("section.sidebar button." + name).show();
-    }
-    
-    function searchFor(keyword, keyword_id) {
-      showSave("nothing");
-      
-      $("#results div.container").html("");
-      $("#results div.loading_container").show();
-      
-      $("#keyword_searched").val(keyword);
-      selectKeyword(keyword_id);
-      
-      $("ul.filters button").prop("disabled", true).removeClass("on").addClass("off")
-        .find("span.status").html("off");
-      
-      $.get("/search", {
-        keyword: keyword,
-        keyword_id: keyword_id
-      }, function(data) {
-        $("#results div.loading_container").hide();
-        $("#results div.container").html(data);
-        
-        if (keyword_id)
-          showSave("saved");
-        else
-          showSave("save");
-      })
-      .error(function() {
-        $("#results div.loading_container").hide();
-        $("#results div.container").html("<p class=\"error\">Error loading results.</p>");
-      });
-    }
   });
 </script>

@@ -1,45 +1,24 @@
-<script type="text/javascript">
-  $("ul.filters button").prop("disabled", false);
 
-  // initialize them all as on
-  $("ul.filters button").removeClass("off").addClass("on")
-        .find("span.status").html("on");
+  <% if items.any? %>
 
-  // for any we're not subscribed_to, turn them off
-  <% subscription_types.keys.each do |type| %>
-    <% if subscribed_to and !subscribed_to.include?(type.to_s) %>
-     $("ul.filters button.<%= type %>").click();
-    <% end %>
-  <% end %>
-</script>
-
-<p class="none atAll" <%= "style=\"display: none\"" if items.any? %>>
-    No results found for this search.
-</p>
-
-<p class="none left" style="display: none">
-  No results for the currently selected filters.
-</p>
-
-<% if items.any? %>
-
-  <ul>
-    <% current_date = nil %>
-    <% items.each do |item| %>
-    
-      <% if item.date.strftime("%Y-%m-%d") != current_date %>
-        <p class="date"><%= long_date item.date %></p>
-        <% current_date = item.date.strftime("%Y-%m-%d") %>
+    <ul class="items">
+      <% current_date = nil %>
+      <% items.each do |item| %>
+      
+        <% if item.date.strftime("%Y-%m-%d") != current_date %>
+          <p class="date"><%= long_date item.date %></p>
+          <% current_date = item.date.strftime("%Y-%m-%d") %>
+        <% end %>
+        
+        <li class="result <%= item.subscription.subscription_type %>">
+          <%= partial :"subscriptions/#{item.subscription.subscription_type}/result", :locals => {:item => item, :keyword => keyword} %>
+        </li>
+        
       <% end %>
-      
-      <li class="result <%= item.subscription.subscription_type %>">
-        <span class="result_type">
-          <%= subscription_types[item.subscription.subscription_type][:name] %>
-        </span>
-        <%= partial :"subscriptions/#{item.subscription.subscription_type}/result", :locals => {:item => item, :keyword => keyword} %>
-      </li>
-      
-    <% end %>
-  </ul>
-
-<% end %>
+    </ul>
+    
+  <% else %>
+    <p class="none atAll">
+        No results found for this search.
+    </p>
+  <% end %>

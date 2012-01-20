@@ -6,18 +6,15 @@ em, strong {font-weight: normal; font-style: normal;}
 ul, ol {list-style-type: none;}
 a {color: #335577;}
 
-header, footer, section.main, section.signup {
+header, section.main, section.signup {
   width: 880px; 
   position: relative;
 }
 
-header, footer, section.main section.results, section.signup {
-  margin: 0 50px;
+header, section.entry, section.main section.results, section.signup {
+  padding: 0 20px;
 }
 
-section.main section.entry {
-  margin-left: 75px;
-}
 
 /* signup page only */
 
@@ -65,16 +62,7 @@ section.main section.results div.loading_container {
   display: none; margin: 0 auto; width: 80%;
 }
 
-section.main section.results div.container {width: 625px;}
-
-footer { /* hidden */
-  text-align: center;
-  font-size: 90%;
-  line-height: 25px;
-  clear: both;
-  padding-top: 30px;
-  display: none;
-}
+section.main section.results div.results_list {width: 625px;}
 
 
 
@@ -97,7 +85,6 @@ footer { /* hidden */
 
 section.sidebar div.login {
   font-size: 90%;
-  border-bottom: 1px solid #8F8F8F;
   padding-bottom: 10px;
   margin-bottom: 10px;
   color: #444;
@@ -185,9 +172,9 @@ section.entry button.search {
 }
 
 
-/* subscription display */
 
-section.sidebar div.subscribe_message {
+
+/*section.sidebar div.subscribe_message {
   height: 40px;
   text-align: center;
 }
@@ -239,47 +226,67 @@ section.sidebar div.save.buttons button.saved {
   opacity: 0.35;
 }
 
-section.sidebar ul.filters {
-  padding-bottom: 10px;
-}
+*/
 
-section.sidebar ul.filters li {
-  margin: 10px 0;
-}
 
-section.sidebar ul.filters li button.filter {
-  padding: 0px;
-  width: 100%;
-  text-align: left;
-  color: #f5f5f5;
-  background-color: #C7DBF1; color: #444;
-}
+/* results  section */
 
-section.sidebar ul.filters li button.filter:disabled {
-  opacity: 0.35; background-color: #aaa;
-}
+/* tabs */
 
-section.sidebar ul.filters li button.filter span.status {
-  padding: 5px 7px;
-  font-size: 80%;
-  text-transform: uppercase;
-  border-right: 1px solid #777;
+section.results {}
+section.results ul.tabs {}
+section.results ul.tabs li {
   display: inline-block;
-  font-weight: bold;
+  float: left;
+  margin: 0; padding: 15px;
+  min-width: 150px;
+  font-size: 80%;
+
+  border: 0px solid #9f9f9f;
+  background-color: #e5e5e5;
+  border-right-width: 1px;
+
+  cursor: pointer;
 }
-section.sidebar ul.filters li button.filter span.name {
-  padding: 5px 7px; display: inline-block;
-  font-size: 90%;
+section.results ul.tabs li:hover {background-color: #d5d5d5;}
+section.results ul.tabs li.active {background-color: #c5c5c5;}
+section.results ul.tabs li.first {border-left-width: 1px;}
+
+/* hide all but the first tab on start */
+section.results div.container {clear: both; padding-top: 20px;}
+section.results div.container div.tab {display: none;}
+section.results div.container div.tab:first-child {display: block;}
+section.results div.container div.tab.active {display: block;}
+
+section.results div.tab div.loading_container img {
+  margin-top: 10px;
 }
 
-section.sidebar ul.filters li button.filter span.results {
-  padding: 5px 7px; display: inline-block; 
-  float: right; font-size: 80%;
-  border-left: 1px solid #777;
+section.results div.tab div.loading_container span {
+  color: #444; font-size: 150%;
+  display: block;
+  padding-top: 20px; padding: 20px;
+  padding-left: 50px;
+  background-position: left;
+  background-image: url(/images/loader-32.gif);
+  background-repeat: no-repeat;
 }
-section.sidebar ul.filters li button.filter.off {
-   opacity: 0.35;
+
+section.results ul.items {
+  list-style-type: none;
+  margin-top: -30px;
 }
+
+section.results ul.items p.date {
+  font-size: 120%;
+  width: 100%;
+  margin-top: 50px; margin-bottom: 10px;
+  text-align: center;
+  color: #335577;
+}
+
+
+/* subscription display */
 
 ul.subscriptions li.keyword {
   width: 100%; position: relative;
@@ -312,52 +319,11 @@ ul.subscriptions li.keyword section.delivery {
   font-size: 80%; color: #888;
 }
 
-ul.subscriptions li.keyword section.delivery span.email {
-
-}
-
-/*   section */
-
-section.results div.loading_container img {
-  margin-top: 10px;
-}
-
-section.results div.loading_container span {
-  color: #444; font-size: 150%;
-  display: block;
-  padding-top: 20px; padding: 20px;
-  padding-left: 50px;
-  background-position: left;
-  background-image: url(/images/loader-32.gif);
-  background-repeat: no-repeat;
-}
-
-section.results p.none {
-  
-}
-
-section.results ul {
-  list-style-type: none;
-  margin-top: -30px;
-}
-
-section.results ul p.date {
-  font-size: 120%;
-  width: 100%;
-  margin-top: 50px; margin-bottom: 10px;
-  text-align: center;
-  color: #335577;
-}
-
-
 /* common to results */
 
 section.results li.result {
   width: 630px;
-  border-left-width: 3px;
-  border-left-style: solid;
-  border-radius: 15px;
-  border-left-color: #579;
+  border-top: 1px solid #c5c5c5;
   padding: 15px 0px 15px 15px;
   margin-bottom: 40px;
 }
@@ -382,9 +348,14 @@ section.results li.result dl.highlight dt {
   margin-bottom: 5px;
 }
 
+section.results li.result dl.highlight dd {
+  font-family: serif;
+}
+
 section.results em.highlight, section.results .highlight em {
   font-weight: bold; 
   font-style: normal; 
+  font-family: serif;
   color: #aa0000;
   padding: 2px 0px;
   background-color: #dddddd;

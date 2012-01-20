@@ -5,23 +5,6 @@ module GeneralHelpers
   def subscription_types
     @subscription_types ||= subscription_data
   end
-
-  def subscription_groups
-    @subscription_groups ||= {
-      "congress" => {
-        :name  => "Congress",
-        :types => ["federal_bills", "congressional_record"],
-        :color => "#46517A",
-        :order => 1
-      },
-      "states" => {
-        :name => "States",
-        :types => ["state_bills"],
-        :color => "#467A49",
-        :order => 2
-      }
-    }
-  end
   
   def h(text)
     Rack::Utils.escape_html(text)

@@ -28,24 +28,28 @@ def subscription_data
     'federal_bills' => {
       :name => "Congressional Bills",
       :description => "bill(s) in Congress",
+      :search => "bills in Congress",
       :group => "congress",
       :order => 1
     },
     'state_bills' => {
       :name => "State Bills",
       :description => "state bill(s)",
+      :search => "bills in the states",
       :group => "states",
       :order => 3
     },
     'congressional_record' => {
       :name => "Congressional Speeches",
       :description => "speech(es)",
+      :search => "speeches from Congress",
       :group => "congress",
       :order => 2
     },
     'regulations' => {
       :name => "Federal Regulations",
       :description => "regulation(s)",
+      :search => "regulations",
       :group => "regulations",
       :order => 4
     }
