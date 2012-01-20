@@ -14,7 +14,6 @@
 
 <% if state_in_og?(bill['state']) or state_source_info?(bill) %>
   <section class="more">
-    <span>More:</span>
     
     <% if state_in_og?(bill['state']) %>
       <a href="<%= opengovernment_url bill %>">OpenGovernment</a>

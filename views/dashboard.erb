@@ -56,6 +56,10 @@
       <% end %>
     </div>
 
+    <div class="introduction">
+      
+    </div>
+
   </section>
 
 </section>
@@ -206,6 +210,9 @@
     }
 
     function searchFor(keyword, keyword_id, subscription_type) {
+      $("#results ul.tabs").show();
+      $("#results div.container").show();
+
       var tab = $("ul.tabs li." + subscription_type);
       var container = $("#results div.tab." + subscription_type);
 

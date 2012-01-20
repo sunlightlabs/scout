@@ -21,13 +21,21 @@ module GeneralHelpers
   def long_date(time)
     time.strftime "%B #{time.day}, %Y" # remove 0-prefix
   end
-  
+
   def short_date(time)
     time.strftime "%m-%d-%Y"
   end
   
   def just_date(date)
-    date.strftime "%B #{date.day}"
+    date.strftime "%b #{date.day}"
+  end
+
+  def just_date_year(date)
+    # if date.year == Time.now.year
+    #   just_date date
+    # else
+      date.strftime "%b #{date.day}, %Y"
+    # end
   end
   
   def very_short_date(time)

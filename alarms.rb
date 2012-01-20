@@ -145,7 +145,7 @@ get '/search/:subscription_type' do
   # if results is nil, it usually indicates an error in one of the remote services -
   # this would be where to catch it and display something
   if results.nil?
-    puts "[#{subscription_type}][#{params[:keyword]}][search] ERROR while loading this"
+    puts "[#{params[:subscription_type]}][#{params[:keyword]}][search] ERROR while loading this"
     results = []
   end
   
