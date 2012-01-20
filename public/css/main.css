@@ -1,5 +1,8 @@
-* {font-family: Ubuntu, sans-serif;}
-body {background-color: #f9f9f9;}
+* {}
+body {
+  background-color: #f9f9f9;
+  font-family: Ubuntu, sans-serif;
+}
 
 h1, h2, h3, h4, h5, h6 {font-weight: normal;}
 em, strong {font-weight: normal; font-style: normal;}
@@ -55,15 +58,12 @@ section.main section.entry {
 
 section.main section.results {
   position: absolute; left: 0;
-  width: 880px; margin-right: 30px;
+  width: 880px;
 }
 
 section.main section.results div.loading_container {
   display: none; margin: 0 auto; width: 80%;
 }
-
-section.main section.results div.results_list {width: 625px;}
-
 
 
 #flash div.flash {
@@ -239,7 +239,7 @@ section.results ul.tabs li {
   display: inline-block;
   float: left;
   margin: 0; padding: 15px;
-  min-width: 150px;
+  min-width: 180px;
   font-size: 80%;
 
   border: 0px solid #9f9f9f;
@@ -251,6 +251,12 @@ section.results ul.tabs li {
 section.results ul.tabs li:hover {background-color: #d5d5d5;}
 section.results ul.tabs li.active {background-color: #c5c5c5;}
 section.results ul.tabs li.first {border-left-width: 1px;}
+section.results ul.tabs li.loading {
+  background-position: 95% 50%;
+  background-image: url(/images/loader-16.gif);
+  background-repeat: no-repeat;
+  color: #8f8f8f; 
+}
 
 /* hide all but the first tab on start */
 section.results div.container {clear: both; padding-top: 20px;}
@@ -265,24 +271,24 @@ section.results div.tab div.loading_container img {
 section.results div.tab div.loading_container span {
   color: #444; font-size: 150%;
   display: block;
-  padding-top: 20px; padding: 20px;
-  padding-left: 50px;
+  padding-top: 20px; padding: 20px; padding-left: 50px;
   background-position: left;
   background-image: url(/images/loader-32.gif);
   background-repeat: no-repeat;
 }
 
+section.main section.results div.results_list {width: 625px;}
+
 section.results ul.items {
   list-style-type: none;
-  margin-top: -30px;
+  margin-top: -20px;
 }
 
-section.results ul.items p.date {
-  font-size: 120%;
-  width: 100%;
-  margin-top: 50px; margin-bottom: 10px;
-  text-align: center;
-  color: #335577;
+section.results li.result {
+  font-family: serif;
+  width: 630px;
+  xborder-bottom: 1px solid #c5c5c5;
+  padding: 30px 0;
 }
 
 
@@ -321,20 +327,6 @@ ul.subscriptions li.keyword section.delivery {
 
 /* common to results */
 
-section.results li.result {
-  width: 630px;
-  border-top: 1px solid #c5c5c5;
-  padding: 15px 0px 15px 15px;
-  margin-bottom: 40px;
-}
-
-section.results span.result_type {
-  display: block;
-  margin-bottom: 10px;
-  font-size: 90%;
-  color: #444;
-}
-
 section.results li.result h2 {
   margin-bottom: 10px; font-size: 125%; line-height: 28px;
 }
@@ -348,14 +340,9 @@ section.results li.result dl.highlight dt {
   margin-bottom: 5px;
 }
 
-section.results li.result dl.highlight dd {
-  font-family: serif;
-}
-
 section.results em.highlight, section.results .highlight em {
   font-weight: bold; 
-  font-style: normal; 
-  font-family: serif;
+  font-style: normal;
   color: #aa0000;
   padding: 2px 0px;
   background-color: #dddddd;
@@ -370,7 +357,7 @@ section.results li.result section.more a {
 }
 
 section.results .content {
-  padding: 10px; color: #444; line-height: 20px; font-size: 90%;
+  padding: 10px 0; color: #444; line-height: 20px; font-size: 90%;
 }
 
 section.results .subtitle {

@@ -206,19 +206,23 @@
     }
 
     function searchFor(keyword, keyword_id, subscription_type) {
-      var tab = $("#results div.tab." + subscription_type);
+      var tab = $("ul.tabs li." + subscription_type);
+      var container = $("#results div.tab." + subscription_type);
+
+      tab.addClass("loading").removeClass("error");
 
       $.get("/search/" + subscription_type, {
         keyword: keyword,
         keyword_id: keyword_id
       }, function(data) {
-        
-        tab.find("div.loading_container").hide();
-        tab.find("div.results_list").html(data);
+        tab.removeClass("loading");
+        container.find("div.loading_container").hide();
+        container.find("div.results_list").html(data);
       })
       .error(function() {
-        tab.find("div.loading_container").hide();
-        tab.find("div.results_list").html("<p class=\"error\">Error loading results.</p>");
+        tab.removeClass("loading").addClass("error");
+        container.find("div.loading_container").hide();
+        container.find("div.results_list").html("<p class=\"error\">Error loading results.</p>");
       });
     }
 

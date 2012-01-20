@@ -5,11 +5,6 @@
       <% current_date = nil %>
       <% items.each do |item| %>
       
-        <% if item.date.strftime("%Y-%m-%d") != current_date %>
-          <p class="date"><%= long_date item.date %></p>
-          <% current_date = item.date.strftime("%Y-%m-%d") %>
-        <% end %>
-        
         <li class="result <%= item.subscription.subscription_type %>">
           <%= partial :"subscriptions/#{item.subscription.subscription_type}/result", :locals => {:item => item, :keyword => keyword} %>
         </li>
