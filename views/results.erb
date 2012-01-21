@@ -23,7 +23,15 @@
     </ul>
     
   <% else %>
-    <p class="none atAll">
+    <div class="none">
+      <p>
         No results found for this search.
-    </p>
+      </p>
+      <button class="text refresh"
+        data-type="<%= subscription_type %>"
+        data-keyword="<%= keyword %>"
+        >
+        Refresh
+      </button>
+    </div>
   <% end %>

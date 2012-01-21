@@ -48,6 +48,17 @@
             <span>searching...</span>
           </div>
 
+          <div class="header">
+            <span class="description">
+              <!-- test text -->
+              Federal regulations matching "freedom"
+            </span>
+
+            <button class="text">
+              Follow
+            </button>
+          </div>
+
           <div class="results_list">
             <!-- results for each subscription type get loaded in here -->
           </div>
@@ -186,6 +197,10 @@
     $("ul.tabs li").click(function() {
       selectTab($(this).data("type"));
     });
+
+    $("section.results div.tab").on("click", "button.refresh", function() {
+      searchFor($(this).data("keyword"), null, $(this).data("type"));
+    });
     
     function selectTab(type) {
       $("div.container div.tab").hide();
@@ -195,9 +210,15 @@
     }
   
     function startSearch(keyword, keyword_id) {
-      $("#results div.results_list").html("");
-      $("#results div.loading_container").show();
+      $("#results ul.tabs").show();
+
+      $("#results div.container").show();
+      $("#results div.container div.results_list").html("");
       
+      // show all loading spinners, hide all description headers
+      $("#results div.tab div.loading_container").show();
+      $("#results div.tab div.header").hide();
+
       $("#keyword_searched").val(keyword);
       selectKeyword(keyword_id);
 
@@ -210,9 +231,6 @@
     }
 
     function searchFor(keyword, keyword_id, subscription_type) {
-      $("#results ul.tabs").show();
-      $("#results div.container").show();
-
       var tab = $("ul.tabs li." + subscription_type);
       var container = $("#results div.tab." + subscription_type);
 
@@ -224,7 +242,9 @@
       }, function(data) {
         tab.removeClass("loading");
         container.find("div.loading_container").hide();
-        container.find("div.results_list").html(data);
+        container.find("div.header").show();
+        container.find("div.header span.description").html(data.description);
+        container.find("div.results_list").html(data.html);
       })
       .error(function() {
         tab.removeClass("loading").addClass("error");

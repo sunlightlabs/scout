@@ -1,6 +1,6 @@
 body {
   background-color: #f9f9f9;
-  font-family: Ubuntu, sans-serif;
+  font-family: "Droid Serif";
 }
 
 h1, h2, h3, h4, h5, h6 {font-weight: normal;}
@@ -61,7 +61,7 @@ section.main section.results {
 }
 
 section.main section.results div.loading_container {
-  display: none; margin: 0 auto; width: 80%;
+  display: none; margin: 0px auto; width: 80%; padding-top: 30px;
 }
 
 
@@ -233,12 +233,14 @@ section.sidebar div.save.buttons button.saved {
 /* tabs */
 
 section.results {}
-section.results ul.tabs {display: none;}
+section.results ul.tabs {
+  display: none;
+}
 section.results ul.tabs li {
   display: inline-block;
   float: left;
   margin: 0; padding: 15px;
-  min-width: 180px;
+  min-width: 170px;
   font-size: 80%;
 
   border: 0px solid #9f9f9f;
@@ -261,11 +263,27 @@ section.results ul.tabs li.loading {
 section.results div.container {
   display: none; 
   clear: both; 
-  padding-top: 20px;
 }
 section.results div.container div.tab {display: none;}
 section.results div.container div.tab:first-child {display: block;}
 section.results div.container div.tab.active {display: block;}
+
+section.results div.header {
+  background-color: #c5c5c5;
+  padding: 10px; position: relative;
+  height: 50px;
+}
+section.results div.header span.description {
+  font-size: 150%; line-height: 50px; 
+  position: relative; left: 30px;
+}
+
+section.results div.header button {
+  position: absolute; right: 30px;
+  background-color: #f9f9f9;
+  font-weight: bold;
+  font-size: 125%;
+}
 
 section.results div.tab div.loading_container img {
   margin-top: 10px;
@@ -280,16 +298,32 @@ section.results div.tab div.loading_container span {
   background-repeat: no-repeat;
 }
 
-section.main section.results div.results_list {}
+section.results div.tab div.none {
+  margin-top: 50px;
+  text-align: center;
+}
+
+section.results div.tab div.none p {
+  font-size: 125%;
+  width: 100%;
+}
+
+section.results div.tab div.none button.refresh {
+  margin: 0 auto; width: 100px;
+  margin-top: 30px;
+  background-color: #f9f9f9;
+}
+
+section.results div.results_list {}
 
 section.results ul.items {
   list-style-type: none;
-  margin-top: -20px;
+  margin-top: 0px;
 }
 
 section.results li.result {
   clear: both; float: left;
-  font-family: serif;
+  
   padding: 30px 0 20px 0;
 }
 
@@ -298,7 +332,7 @@ section.results li.result div.left {
 }
 section.results li.result div.right {float: left; width: 630px;}
 section.results li.result div.left p.date {
-  font-size: 125%; color: #6f6f6f;
+  font-size: 125%; color: #6f6f6f; padding-left: 10px;
 }
 
 /* common to results */

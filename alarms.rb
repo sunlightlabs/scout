@@ -129,33 +129,40 @@ end
 get '/search/:subscription_type' do
   requires_login
   
+  keyword = params[:keyword].strip
+  subscription_type = params[:subscription_type]
+
   results = []
-  # subscribed_to = nil
-
-  # if params[:keyword_id] and (keyword = Keyword.where(:user_id => current_user.id, :_id => BSON::ObjectId(params[:keyword_id].strip)).first)
-  #   subscribed_to = keyword.subscriptions.map {|s| s.subscription_type}
-  # end
-
+  
   # make new, temporary subscription items
   results = current_user.subscriptions.new(
-    :keyword => params[:keyword], 
+    :keyword => keyword,
     :subscription_type => params[:subscription_type]
   ).search
     
   # if results is nil, it usually indicates an error in one of the remote services -
   # this would be where to catch it and display something
   if results.nil?
-    puts "[#{params[:subscription_type]}][#{params[:keyword]}][search] ERROR while loading this"
+    puts "[#{subscription_type}][#{params[:keyword]}][search] ERROR while loading this"
     results = []
   end
   
   results = results.sort {|a, b| b.date <=> a.date}
   
-  erb :results, :layout => false, :locals => {
+  html = erb :results, :layout => false, :locals => {
     :items => results, 
+    :subscription_type => subscription_type,
     # :subscribed_to => subscribed_to,
-    :keyword => params[:keyword]
+    :keyword => keyword
   }
+
+  headers["Content-Type"] = "application/json"
+  
+  {
+    :count => results.size,
+    :description => "#{subscription_data[params[:subscription_type]][:search]} matching \"#{keyword}\"",
+    :html => html
+  }.to_json
 end
 
 delete '/keyword/:id' do
