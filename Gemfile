@@ -20,4 +20,8 @@ group :development do
   gem 'wirble'
 end
 
+group :test do
+  gem 'rack-test', '0.6.1'
+end
+
 gem 'httparty', '0.7.8'

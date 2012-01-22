@@ -170,63 +170,14 @@ section.entry button.search {
   background-image: url(/images/search-64.png);
 }
 
-
-
-
-/*section.sidebar div.subscribe_message {
-  height: 40px;
-  text-align: center;
+section.results div.header button.follow {}
+section.results div.header button.follow:hover {}
+section.results div.header button.follow.unfollow {
+  background-color: #d5d5d5;
 }
-
-section.sidebar div.subscribe_message span {
-  display: none;
-  color: #333333;
+section.results div.header button.follow.unfollow:hover {
+  background-color: #f9f9f9; 
 }
-
-section.sidebar div.subscribe_message span.update {
-  color: #cc0000;
-}
-
-section.sidebar div.save.buttons {
-  margin-bottom: 20px;
-}
-
-section.sidebar div.save.buttons button {
-  width: 100%;
-  height: 80px;
-  font-size: 200%;
-  color: #444;
-}
-
-section.sidebar div.save.buttons button.nothing {
-  background-color: #c5c5c5;
-  opacity: 0.35;
-  cursor: default;
-}
-
-section.sidebar div.save.buttons button.save,
-section.sidebar div.save.buttons button.update {
-  color: #335577;
-  background-color: #e5e5e5;
-}
-
-section.sidebar div.save.buttons button.update {
-  font-size: 150%;
-}
-
-section.sidebar div.save.buttons button.save:hover {
-  background-color: #c5c5c5;
-}
-
-section.sidebar div.save.buttons button.saving,
-section.sidebar div.save.buttons button.saved {
-  cursor: default;
-  background-color: #c5c5c5;
-  opacity: 0.35;
-}
-
-*/
-
 
 /* results  section */
 
@@ -285,8 +236,10 @@ section.results div.header button {
   font-size: 125%;
 }
 
-section.results div.tab div.loading_container img {
-  margin-top: 10px;
+section.results div.tab div.system_error {
+  padding-top: 30px; font-size: 125%; 
+  width: 100%; text-align: center;
+  display: none;
 }
 
 section.results div.tab div.loading_container span {
@@ -299,12 +252,12 @@ section.results div.tab div.loading_container span {
 }
 
 section.results div.tab div.none {
-  margin-top: 50px;
+  padding-top: 50px;
   text-align: center;
 }
 
 section.results div.tab div.none p {
-  font-size: 125%;
+  font-size: 125%; 
   width: 100%;
 }
 

@@ -24,3 +24,12 @@
   </section>
   
 </li>
+
+<script type="text/javascript">
+  var subscriptions = {};
+  <% keyword.subscriptions.each do |subscription| %>
+    subscriptions['<%= subscription.subscription_type %>'] = '<%= subscription._id.to_s %>';
+  <% end %>
+
+  $("li#keyword-<%= keyword.id %>").data("subscriptions", subscriptions)
+</script>

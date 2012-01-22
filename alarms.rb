@@ -58,29 +58,44 @@ end
 get '/dashboard' do
   requires_login
   
-  erb :dashboard, :locals => {:keywords => current_user.keywords.desc(:created_at).all.map {|k| [k, k.subscriptions]}}
+  erb :dashboard, :locals => {
+    :keywords => current_user.keywords.desc(:created_at).all.map {|k| [k, k.subscriptions]}
+  }
 end
 
 
-post '/keywords' do
+post '/subscriptions' do
   requires_login
 
-  keyword = current_user.keywords.new :keyword => params[:keyword]
-  subscriptions = params[:subscription_types].map do |type| 
-    current_user.subscriptions.new :keyword => params[:keyword], :subscription_type => type.to_s
+  phrase = params[:keyword].strip
+  subscription_type = params[:subscription_type]
+  new_keyword = false
+
+  # if this is editing an existing one, find it
+  if params[:keyword_id].present?
+    keyword = current_user.keywords.where(:_id => BSON::ObjectId(params[:keyword_id].strip), :keyword => phrase).first
   end
   
+  # default to a new one
+  if keyword.nil?
+    keyword = current_user.keywords.new :keyword => phrase
+    new_keyword = true
+  end
+  
+  subscription = current_user.subscriptions.new :keyword => phrase, :subscription_type => subscription_type
+  
+  headers["Content-Type"] = "application/json"
+
   # make sure keyword has the same validations as subscriptions
-  if keyword.valid? and subscriptions.reject {|s| s.valid?}.empty?
+  if keyword.valid? and subscription.valid?
     keyword.save!
-    subscriptions.each do |subscription| 
-      subscription[:keyword_id] = keyword._id
-      subscription.save!
-    end
+    subscription[:keyword_id] = keyword._id
+    subscription.save!
     
-    headers["Content-Type"] = "application/json"
     {
       :keyword_id => keyword._id.to_s,
+      :subscription_id => subscription._id.to_s,
+      :new_keyword => new_keyword,
       :pane => partial(:"partials/keyword", :locals => {:keyword => keyword})
     }.to_json
   else
@@ -144,10 +159,11 @@ get '/search/:subscription_type' do
   # this would be where to catch it and display something
   if results.nil?
     puts "[#{subscription_type}][#{params[:keyword]}][search] ERROR while loading this"
-    results = []
   end
   
-  results = results.sort {|a, b| b.date <=> a.date}
+  if results
+    results = results.sort {|a, b| b.date <=> a.date}
+  end
   
   html = erb :results, :layout => false, :locals => {
     :items => results, 
@@ -159,10 +175,36 @@ get '/search/:subscription_type' do
   headers["Content-Type"] = "application/json"
   
   {
-    :count => results.size,
+    :count => (results ? results.size : -1),
     :description => "#{subscription_data[params[:subscription_type]][:search]} matching \"#{keyword}\"",
     :html => html
   }.to_json
+end
+
+# delete the subscription, and, if it's the last subscription under the keyword, delete the keyword
+delete '/subscription/:id' do
+  requires_login
+
+  if subscription = Subscription.where(:user_id => current_user.id, :_id => BSON::ObjectId(params[:id].strip)).first
+    halt 404 unless keyword = Keyword.where(:user_id => current_user.id, :_id => subscription.keyword_id).first
+
+    deleted_keyword = false
+
+    if keyword.subscriptions.count == 1
+      keyword.destroy
+      deleted_keyword = true
+    end
+
+    subscription.destroy
+
+    headers["Content-Type"] = "application/json"
+    {
+      :deleted_keyword => deleted_keyword,
+      :keyword_id => keyword._id.to_s
+    }.to_json
+  else
+    halt 404
+  end
 end
 
 delete '/keyword/:id' do

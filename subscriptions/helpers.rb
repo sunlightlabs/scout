@@ -252,6 +252,7 @@ module Subscriptions
     
     # client-side truncation and highlighting
     def excerpt(text, keyword, highlight = true)
+      text = text.strip
       word = keyword.size
       length = text.size
       index = text =~ /#{keyword}/i || 0
@@ -274,7 +275,7 @@ module Subscriptions
 
       # range = 0..-1
       truncated = text[range]
-      truncated = "..." + truncated if range.begin > 0
+      truncated = "..." + truncated if (range.begin > 0) || (text[0..0].upcase != text[0..0])
       truncated = truncated + "..." if range.end < length
 
       if highlight
