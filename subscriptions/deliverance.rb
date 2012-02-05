@@ -68,6 +68,18 @@ module Subscriptions
     def self.render_email(keyword, deliveries, grouped)
       content = ""
 
+      unsupported = []
+      grouped.keys.each do |key|
+        unless subscription_data[key.to_s]
+          unsupported << key.to_s
+          grouped.delete key
+        end
+      end
+
+      if unsupported.any?
+        Email.report Report.warning("Delivery", "Delivery scheduled of unsupported types, skipped", :unsupported => unsupported)
+      end
+
       only_one = grouped.keys.size == 1
       descriptor = only_one ? subscription_data[grouped.keys.first.to_s][:description] : "things"
 
