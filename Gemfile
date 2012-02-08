@@ -19,6 +19,7 @@ group :development do
   gem 'sinatra-reloader', '0.5.0'
   gem 'wirble'
   gem 'rack', '1.4.0'
+  gem 'unicorn'
 end
 
 group :test do
