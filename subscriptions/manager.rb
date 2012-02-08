@@ -17,8 +17,8 @@ module Subscriptions
         # 2) stores every item ID as seen 
 
         Subscriptions::Manager.poll(subscription, :initialize).each do |item|
-          # don't check if the seen ID already exists, for anticipated performance reasons
-          # the user waits on initialization to complete in the front end
+          # don't check if the seen ID already exists, for 
+          # anticipated performance reasons (yes, premature optimization)
           SeenId.create! :subscription_id => subscription.id, :item_id => item.id
         end
       end
@@ -41,8 +41,10 @@ module Subscriptions
         # 3) stores any items as yet unseen by this subscription in the delivery queue
         if results = Subscriptions::Manager.poll(subscription, :check)
           results.each do |item|
+
             unless SeenId.where(:subscription_id => subscription.id, :item_id => item.id).first
               SeenId.create! :subscription_id => subscription.id, :item_id => item.id
+
               Subscriptions::Manager.schedule_delivery! subscription, item
             end
           end

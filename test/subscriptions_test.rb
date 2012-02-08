@@ -14,6 +14,8 @@ set :environment, :test
 class SubscriptionsTest < Test::Unit::TestCase
   include Rack::Test::Methods
 
+  # helpers
+
   def app
     Sinatra::Application
   end
@@ -24,10 +26,10 @@ class SubscriptionsTest < Test::Unit::TestCase
 
   def login
     {"rack.session" => {'user_email' => current_user.email}}
-    #{'rack.session' => {'user_email' => 'kprojection@gmail.com'}}
   end
 
 
+  # begin actual tests
 
   def test_create_subscriptions_without_login
     post '/subscriptions', :keyword => "testing", :subscription_type => "federal_bills"
