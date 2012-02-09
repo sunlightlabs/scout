@@ -43,6 +43,11 @@ module Subscriptions
           results.each do |item|
 
             unless SeenId.where(:subscription_id => subscription.id, :item_id => item.id).first
+              unless item.id
+                Email.report Report.warning("Check", "[#{subscription.subscription_type}][#{subscription.keyword}] item with an empty ID")
+                next
+              end
+
               SeenId.create! :subscription_id => subscription.id, :item_id => item.id
 
               Subscriptions::Manager.schedule_delivery! subscription, item
