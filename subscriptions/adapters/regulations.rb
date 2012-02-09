@@ -21,7 +21,7 @@ module Subscriptions
           endpoint = "http://api.realtimecongress.org/api/v1"
         end
         
-        sections = %w{ stage title abstract regulation_id fr_id rins docket_ids published_at effective_at federal_register_url agency_names agency_ids }
+        sections = %w{ stage title abstract document_number rins docket_ids published_at effective_at federal_register_url agency_names agency_ids }
         
         url = "#{endpoint}/regulations.json?apikey=#{api_key}"
         url << "&per_page=#{MAX_ITEMS}"
@@ -49,7 +49,7 @@ module Subscriptions
       
       def self.item_for(regulation)
         Subscriptions::Result.new(
-          :id => regulation["fr_id"],
+          :id => regulation["document_number"],
           :date => regulation["published_at"],
           :data => regulation
         )
