@@ -23,12 +23,15 @@ module Subscriptions
         
         sections = %w{ stage title abstract document_number rins docket_ids published_at effective_at federal_register_url agency_names agency_ids }
         
-        url = "#{endpoint}/regulations.json?apikey=#{api_key}"
+        url = "#{endpoint}/search/regulations.json?apikey=#{api_key}"
         url << "&per_page=#{MAX_ITEMS}"
-        url << "&search=#{query}"
+        url << "&query=#{query}"
         url << "&order=published_at"
         url << "&sections=#{sections.join ','}"
-        
+        url << "&highlight=true"
+        url << "&highlight_size=500"
+        url << "&highlight_tags=,"
+
         url
       end
       

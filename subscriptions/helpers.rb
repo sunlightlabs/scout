@@ -19,10 +19,18 @@ module Subscriptions
       }[short]
     end
     
-    def bill_highlight(item, keyword, highlight = true)
+    def fulltext_highlight(item, keyword, priorities, highlight = true)
       highlighting = item.data['search']['highlight']
-      field = highlighting.keys.sort_by {|k| highlight_priority k}.first
+      field = highlighting.keys.sort_by {|k| priorities[k]}.first
       excerpt highlighting[field].first, keyword, highlight
+    end
+
+    def bill_highlight(item, keyword, highlight = true)
+      fulltext_highlight item, keyword, bill_priorities, highlight
+    end
+
+    def regulation_highlight(item, keyword, highlight = true)
+      fulltext_highlight item, keyword, regulation_priorities, highlight
     end
     
     def govtrack_type(bill_type)
@@ -76,7 +84,7 @@ module Subscriptions
       }[field]
     end
     
-    def highlight_priority(field)
+    def bill_priorities
       {
         "bill__summary" => 1,
         "full_text" => 2,
@@ -84,7 +92,15 @@ module Subscriptions
         "bill__official_title" => 4,
         "bill__short_title" => 5,
         "bill__popular_title" => 6
-      }[field]
+      }
+    end
+
+    def regulation_priorities
+      {
+        'abstract' => 1,
+        'full_text' => 2,
+        'title' => 3
+      }
     end
     
     # adapted from http://www.gpoaccess.gov/bills/glossary.html

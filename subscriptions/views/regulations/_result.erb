@@ -10,15 +10,13 @@
   <% end %>
 </div>
 
-<dl class="highlight">
-  <dd class="content">
-    <% if regulation['abstract'] %>
-      <%= excerpt regulation['abstract'], keyword %>
-    <% else %>
-      (Couldn't locate an abstract.)
-    <% end %>
-  </dd>
-</dl>
+<% if regulation['search']['highlight'] %>
+  <dl class="highlight">
+    <dd class="content">
+      <%= regulation_highlight item, keyword %>
+    </dd>
+  </dl>
+<% end %>
 
 <section class="more">
   <a href="<%= regulation['federal_register_url'] %>">Federal Register</a>

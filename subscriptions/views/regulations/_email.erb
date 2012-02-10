@@ -1,5 +1,7 @@
 <%= item.data['title'] %> (<%= regulation_stage item.data['stage'] %>)
 
-<%= truncate item.data['abstract'], 250 %>
+ <% if item.data['search']['highlight'] %>
+<%= regulation_highlight item, keyword, false %>
+ <% end %>
 
 Details: <%= item.data['federal_register_url'] %>
