@@ -18,10 +18,11 @@
     </button>
   </form>
 
-  <section class="delivery">
-    
-    <span class="email">Email immediately</span>
-  </section>
+  <section class="types">
+    <%= keyword.subscriptions.map do |subscription|
+      subscription_types[subscription.subscription_type][:name]
+    end.join(", ") %>
+  </ul>
   
 </li>
 

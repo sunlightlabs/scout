@@ -173,10 +173,11 @@ section.entry button.search {
 section.results div.header button.follow {}
 section.results div.header button.follow:hover {}
 section.results div.header button.follow.unfollow {
-  background-color: #d5d5d5;
+  background-color: #4c4c4c;
+  color: #f9f9f9;
 }
 section.results div.header button.follow.unfollow:hover {
-  background-color: #f9f9f9; 
+  background-color: #8c8c8c; 
 }
 
 /* results  section */
@@ -380,12 +381,12 @@ ul.subscriptions li.keyword button.remove {
   height: 22px;
   
   background-image: url(/images/x-18.png);
-  background-color: #eeeeee;
+  background-color: transparent;
   
-  position: absolute; right: 0; top: 30px;
+  position: absolute; right: 0; top: 22px;
 }
 
-ul.subscriptions li.keyword section.delivery {
-  margin-top: 15px; 
+ul.subscriptions li.keyword section.types {
+  margin-top: 10px; 
   font-size: 80%; color: #888;
 }
