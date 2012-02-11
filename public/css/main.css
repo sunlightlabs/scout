@@ -37,7 +37,6 @@ section.signup {
 /* general layout */
 
 section.sidebar {
-  clear: both;
   position: absolute; right: 0; 
   width: 280px; min-height: 500px;
   
@@ -147,6 +146,8 @@ button.text.image {
 
 /* adding new subscriptions */
 
+section.entry {position: relative;}
+
 section.entry div.errors {
   color: #c42323;
   font-size: 90%;
@@ -155,15 +156,15 @@ section.entry div.errors {
 
 section.entry input[type=text] {
   font-size: 250%;
-  float: left;
+  position: absolute; left: 10px;
   padding: 10px 10px; 
   width: 760px;
 }
 
 /* adapted from http://stackoverflow.com/questions/600438/css-to-hide-input-button-value-text */
 section.entry button.search {
-  float: left;
-  margin-left: 10px;
+  position: absolute; left: 800px;
+  
   width: 75px;
   height: 75px;
   border: none;
@@ -184,21 +185,19 @@ section.results div.header button.follow.unfollow:hover {
 
 /* tabs */
 
-section.results {}
 section.results ul.tabs {
   display: none;
 }
 section.results ul.tabs li {
   display: inline-block;
-  float: left;
+  
   margin: 0; padding: 15px;
   min-width: 170px;
   font-size: 80%;
 
   border: 0px solid #9f9f9f;
   background-color: #e5e5e5;
-  border-right-width: 1px;
-
+  
   cursor: pointer;
 }
 section.results ul.tabs li:hover {background-color: #d5d5d5;}
@@ -214,7 +213,7 @@ section.results ul.tabs li.loading {
 /* hide all but the first tab on start */
 section.results div.container {
   display: none; 
-  clear: both; 
+  
 }
 section.results div.container div.tab {display: none;}
 section.results div.container div.tab:first-child {display: block;}
@@ -276,15 +275,20 @@ section.results ul.items {
 }
 
 section.results li.result {
-  clear: both; float: left;
-  
+  xposition: relative;
   padding: 30px 0 20px 0;
 }
 
 section.results li.result div.left {
-  float: left; width: 150px;
+  xposition: absolute; xleft: 30px; 
+  width: 150px;
+  display: inline-block; vertical-align: top;
 }
-section.results li.result div.right {float: left; width: 630px;}
+section.results li.result div.right {
+  xposition: absolute; xleft: 180px; 
+  width: 630px;
+  display: inline-block; vertical-align: top;
+}
 section.results li.result div.left p.date {
   font-size: 125%; color: #6f6f6f; padding-left: 10px;
 }
@@ -362,7 +366,7 @@ section.results li.regulations span.stage {
 
 ul.subscriptions li.keyword {
   width: 100%; position: relative;
-  padding: 20px 0 30px 0; clear: both;
+  padding: 20px 0 30px 0;
   border-top: 1px solid #d5d5d5;
 }
 
