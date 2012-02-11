@@ -159,10 +159,13 @@ delete '/subscription/:id' do
 
     subscription.destroy
 
+    pane = deleted_keyword ? nil : partial(:"partials/keyword", :locals => {:keyword => keyword})
+
     headers["Content-Type"] = "application/json"
     {
       :deleted_keyword => deleted_keyword,
-      :keyword_id => keyword._id.to_s
+      :keyword_id => keyword._id.to_s,
+      :pane => pane
     }.to_json
   else
     halt 404

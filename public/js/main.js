@@ -26,6 +26,11 @@ $(function() {
 
             if (data.deleted_keyword)
               $("#keyword-" + data.keyword_id).remove();
+            else {
+              $("li.keyword#keyword-" + data.keyword_id).replaceWith(data.pane);
+              $("li.keyword#keyword-" + data.keyword_id).addClass("current"); // must re-find to work
+            }
+            
 
             button.data("subscription_id", null);
           }
@@ -50,6 +55,9 @@ $(function() {
               $("ul.subscriptions").prepend(data.pane);
               $("li.keyword#keyword-" + data.keyword_id).addClass("current");
               $("#keyword_id").val(data.keyword_id);
+            } else {
+              $("li.keyword#keyword-" + data.keyword_id).replaceWith(data.pane);
+              $("li.keyword#keyword-" + data.keyword_id).addClass("current") // must re-find to work
             }
           }
         )
@@ -163,7 +171,8 @@ $(function() {
       container.find("div.header").hide();
 
       // remove any selected keyword
-      $("li.keyword").removeClass("current");
+      if (!keyword_id)
+        $("li.keyword").removeClass("current");
 
       $.get("/search/" + subscription_type, {
         keyword: keyword,
