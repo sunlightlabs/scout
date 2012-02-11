@@ -180,13 +180,14 @@ $(function() {
         page: 1
       }, function(data) {
 
+        tab.removeClass("loading");
+        container.find("div.loading_container").hide();
+        container.find("div.results_list").html(data.html);
+
         // error
         if (data.count < 0)  {
           tab.addClass("error");
         } else {
-          if (data.count == 0)
-            tab.addClass("empty");
-
           container.find("div.header").show();
           container.find("div.header span.description").html(data.description);
 
@@ -204,11 +205,11 @@ $(function() {
             button.data("subscription_id", null);
             showSave(subscription_type, "follow");
           }
-        }
 
-        tab.removeClass("loading");
-        container.find("div.loading_container").hide();
-        container.find("div.results_list").html(data.html);
+          if (data.count == 0)
+            tab.addClass("empty");
+          
+        }
 
       }).error(function() {
         tab.removeClass("loading");
