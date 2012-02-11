@@ -45,7 +45,7 @@ section.sidebar {
 }
 
 section.main {
-  height: 0;
+  
 }
 
 section.main section.entry {
@@ -81,6 +81,7 @@ section.main section.results div.loading_container {
 
 /* login/signup */
 
+section.sidebar {top: 0;}
 section.sidebar div.login {
   font-size: 90%;
   padding-bottom: 10px;
@@ -275,12 +276,10 @@ section.results ul.items {
 }
 
 section.results li.result {
-  xposition: relative;
   padding: 30px 0 20px 0;
 }
 
 section.results li.result div.left {
-  xposition: absolute; xleft: 30px; 
   width: 150px;
   display: inline-block; vertical-align: top;
 }
