@@ -5,11 +5,11 @@ module Subscriptions
       
       MAX_ITEMS = 20
       
-      def self.search(subscription)
-        Subscriptions::Manager.poll subscription, :search
+      def self.search(subscription, options = {})
+        Subscriptions::Manager.poll subscription, :search, options
       end
       
-      def self.url_for(subscription, function)
+      def self.url_for(subscription, function, options = {})
         api_key = config[:subscriptions][:sunlight_api_key]
         query = URI.escape subscription.keyword
         
@@ -27,6 +27,10 @@ module Subscriptions
         url << "&order=occurs_at"
         url << "&sections=#{sections.join ','}"
         url << "&chamber=senate"
+
+        if options[:page]
+          url << "&page=#{options[:page]}"
+        end
         
         url
       end
@@ -34,7 +38,7 @@ module Subscriptions
       
       # takes parsed response and returns an array where each item is 
       # a hash containing the id, title, and post date of each item found
-      def self.items_for(response, function)
+      def self.items_for(response, function, options = {})
         return nil unless response['committee_hearings']
         
         response['committee_hearings'].map do |hearing|

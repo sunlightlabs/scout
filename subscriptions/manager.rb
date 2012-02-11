@@ -78,9 +78,9 @@ module Subscriptions
     end
     
     # function is one of [:search, :initialize, :check]
-    def self.poll(subscription, function = :search)
+    def self.poll(subscription, function = :search, options = {})
       adapter = subscription.adapter
-      url = adapter.url_for subscription, function
+      url = adapter.url_for subscription, function, options
       
       puts "\n[#{adapter}][#{function}][#{subscription.id}] #{url}\n\n" if config[:debug][:output_urls]
       
@@ -91,10 +91,10 @@ module Subscriptions
         return [] # should be return nil, when we refactor this to properly accomodate failures in initialization, checking, and searching
       end
       
-      # insert the subscription onto each result
-      results = adapter.items_for(response, function)
+      results = adapter.items_for response, function, options
       
       if results
+        # insert a reference to the subscription in every search result
         results.map do |result| 
           result.subscription = subscription
           result

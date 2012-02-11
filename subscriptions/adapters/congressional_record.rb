@@ -4,12 +4,12 @@ module Subscriptions
     class CongressionalRecord
       
       # non-destructive, searches for example results
-      def self.search(subscription)
-        Subscriptions::Manager.poll subscription, :search
+      def self.search(subscription, options = {})
+        Subscriptions::Manager.poll subscription, :search, options
       end
       
       # ignore function, all polls look for the same information
-      def self.url_for(subscription, function)
+      def self.url_for(subscription, function, options = {})
         api_key = config[:subscriptions][:sunlight_api_key]
         query = URI.escape subscription.keyword
         
@@ -18,6 +18,10 @@ module Subscriptions
         url = "#{endpoint}/text.json?apikey=#{api_key}"
         url << "&phrase=#{query}"
         url << "&sort=date%20desc"
+
+        if options[:page]
+          url << "&page=#{options[:page]}"
+        end
         
         url
       end
@@ -25,7 +29,7 @@ module Subscriptions
       
       # takes parsed response and returns an array where each item is 
       # a hash containing the id, title, and post date of each item found
-      def self.items_for(response, function)
+      def self.items_for(response, function, options = {})
         return nil unless response['results']
         
         #TODO: hopefully get the API changed to allow filtering on only spoken results

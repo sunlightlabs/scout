@@ -176,7 +176,8 @@ $(function() {
 
       $.get("/search/" + subscription_type, {
         keyword: keyword,
-        keyword_id: keyword_id
+        keyword_id: keyword_id,
+        page: 1
       }, function(data) {
 
         // error

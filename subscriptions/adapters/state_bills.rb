@@ -5,12 +5,12 @@ module Subscriptions
       
       MAX_ITEMS = 20
       
-      def self.search(subscription)
-        Subscriptions::Manager.poll subscription, :search
+      def self.search(subscription, options = {})
+        Subscriptions::Manager.poll subscription, :search, options
       end
         
       
-      def self.url_for(subscription, function)
+      def self.url_for(subscription, function, options = {})
         endpoint = "http://openstates.org/api/v1"
         api_key = config[:subscriptions][:sunlight_api_key]
         query = URI.escape subscription.keyword
@@ -39,9 +39,16 @@ module Subscriptions
       
       # takes parsed response and returns an array where each item is 
       # a hash containing the id, title, and post date of each item found
-      def self.items_for(response, function)
+      def self.items_for(response, function, options = {})
+
+        # OpenStates API does not have server-side pagination - so we do it here
+        page = options[:page] || 1
+        beginning = MAX_ITEMS * (page - 1) # index of first item
+        ending = (beginning + MAX_ITEMS) - 1  # index of last item
+
         # for searching, only return the first "page" of items, otherwise, handle any and all
-        items = (function == :search) ? response.first(MAX_ITEMS) : response
+        items = (function == :search) ? response[beginning..ending] : response
+
         items.map {|bill| item_for bill}
       end
       

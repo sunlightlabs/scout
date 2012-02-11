@@ -116,7 +116,7 @@ get '/search/:subscription_type' do
   results = current_user.subscriptions.new(
     :keyword => keyword,
     :subscription_type => params[:subscription_type]
-  ).search
+  ).search(:page => (params[:page] ? params[:page].to_i : 1))
     
   # if results is nil, it usually indicates an error in one of the remote services -
   # this would be where to catch it and display something

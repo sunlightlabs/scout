@@ -6,12 +6,12 @@ module Subscriptions
       MAX_ITEMS = 40
       
       # non-destructive, searches for example results
-      def self.search(subscription)
-        Subscriptions::Manager.poll subscription, :search
+      def self.search(subscription, options = {})
+        Subscriptions::Manager.poll subscription, :search, options
       end
       
       # ignore function, all polls look for the same information
-      def self.url_for(subscription, function)
+      def self.url_for(subscription, function, options = {})
         api_key = config[:subscriptions][:sunlight_api_key]
         query = URI.escape subscription.keyword
         
@@ -32,13 +32,17 @@ module Subscriptions
         url << "&highlight_size=500"
         url << "&highlight_tags=,"
 
+        if options[:page]
+          url << "&page=#{options[:page]}"
+        end
+
         url
       end
       
       
       # takes parsed response and returns an array where each item is 
       # a hash containing the id, title, and post date of each item found
-      def self.items_for(response, function)
+      def self.items_for(response, function, options = {})
         return nil unless response['regulations']
         
         response['regulations'].map do |regulation|
