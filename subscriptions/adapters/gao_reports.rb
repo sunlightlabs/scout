@@ -3,8 +3,6 @@ module Subscriptions
 
     class GaoReports
       
-      MAX_ITEMS = 20
-      
       def self.search(subscription, options = {})
         Subscriptions::Manager.poll subscription, :search, options
       end
@@ -20,9 +18,11 @@ module Subscriptions
         end
         
         sections = %w{ basic gao_id pdf_url }
+
+        per_page = (function == :search) ? 20 : 40
         
         url = "#{endpoint}/documents.json?apikey=#{api_key}"
-        url << "&per_page=#{MAX_ITEMS}"
+        url << "&per_page=#{per_page}"
         url << "&search=#{query}"
         url << "&order=posted_at"
         url << "&sections=#{sections.join ','}"

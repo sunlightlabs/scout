@@ -3,14 +3,10 @@ module Subscriptions
 
     class FederalBills
       
-      MAX_ITEMS = 20
-      
-      # non-destructive, searches for example results
       def self.search(subscription, options = {})
         Subscriptions::Manager.poll subscription, :search, options
       end
       
-      # ignore function, all polls look for the same information
       def self.url_for(subscription, function, options = {})
         api_key = config[:subscriptions][:sunlight_api_key]
         query = URI.escape subscription.keyword
@@ -22,9 +18,11 @@ module Subscriptions
         end
         
         sections = %w{ bill.bill_id bill.bill_type bill.number bill.short_title bill.official_title bill.introduced_at bill.last_action_at bill.last_action version_code bill_version_id bill.session urls.pdf urls.xml issued_on }
+
+        per_page = (function == :search) ? 20 : 40
         
         url = "#{endpoint}/search/bill_versions.json?apikey=#{api_key}"
-        url << "&per_page=#{MAX_ITEMS}"
+        url << "&per_page=#{per_page}"
         url << "&query=#{query}"
         url << "&order=issued_on"
         url << "&sections=#{sections.join ','}"

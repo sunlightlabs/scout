@@ -3,8 +3,6 @@ module Subscriptions
 
     class StateBills
       
-      MAX_ITEMS = 20
-      
       def self.search(subscription, options = {})
         Subscriptions::Manager.poll subscription, :search, options
       end
@@ -40,11 +38,12 @@ module Subscriptions
       # takes parsed response and returns an array where each item is 
       # a hash containing the id, title, and post date of each item found
       def self.items_for(response, function, options = {})
+        per_page = 20
 
         # OpenStates API does not have server-side pagination - so we do it here
         page = options[:page] || 1
-        beginning = MAX_ITEMS * (page - 1) # index of first item
-        ending = (beginning + MAX_ITEMS) - 1  # index of last item
+        beginning = per_page * (page - 1) # index of first item
+        ending = (beginning + per_page) - 1  # index of last item
 
         # for searching, only return the first "page" of items, otherwise, handle any and all
         items = (function == :search) ? response[beginning..ending] : response

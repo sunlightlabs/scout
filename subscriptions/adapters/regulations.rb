@@ -3,14 +3,10 @@ module Subscriptions
 
     class Regulations
       
-      MAX_ITEMS = 40
-      
-      # non-destructive, searches for example results
       def self.search(subscription, options = {})
         Subscriptions::Manager.poll subscription, :search, options
       end
       
-      # ignore function, all polls look for the same information
       def self.url_for(subscription, function, options = {})
         api_key = config[:subscriptions][:sunlight_api_key]
         query = URI.escape subscription.keyword
@@ -23,8 +19,10 @@ module Subscriptions
         
         sections = %w{ stage title abstract document_number rins docket_ids published_at effective_at federal_register_url agency_names agency_ids }
         
+        per_page = (function == :search) ? 20 : 40
+
         url = "#{endpoint}/search/regulations.json?apikey=#{api_key}"
-        url << "&per_page=#{MAX_ITEMS}"
+        url << "&per_page=#{per_page}"
         url << "&query=#{query}"
         url << "&order=published_at"
         url << "&sections=#{sections.join ','}"
