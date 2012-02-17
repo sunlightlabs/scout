@@ -104,7 +104,7 @@
         Search away, but you'll have to provide an email to save alerts.
       </span>
       <form action="/users/new" method="post" id="signup_form">
-        <input class="redirect" class="redirect" type="hidden" value="<%= params[:redirect] %>" />
+        <input class="redirect" name="redirect" type="hidden" />
         <input class="email" type="email" placeholder="your email" name="email" />
 
         <button class="text login">Go</button>

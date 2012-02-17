@@ -120,6 +120,11 @@ $(function() {
       return false;
     });
     
+    $("form#signup_form").submit(function() {
+      $(this).find("input.redirect").val(window.location.pathname);
+      return true;
+    })
+
     $("form.search").submit(function() {
       var keyword = $("input.query").val();
       if (keyword) keyword = keyword.trim();

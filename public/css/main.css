@@ -8,12 +8,12 @@ em, strong {font-weight: normal; font-style: normal;}
 ul, ol {list-style-type: none;}
 a {color: #335577;}
 
-header, section.main, section.signup {
+header, section.main {
   width: 880px; 
   position: relative;
 }
 
-header, section.entry, section.main section.results, section.signup {
+header, section.entry, section.main section.results {
   padding: 0 20px;
 }
 
@@ -26,10 +26,6 @@ header h2 {
   margin-bottom: 30px;
   margin-top: 20px;
   color: #335577;
-}
-
-section.signup {
-  text-align: center;
 }
 
 
