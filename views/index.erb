@@ -7,7 +7,8 @@
 <section class="signup">
 
   <form action="/users/new" method="post" id="signup_form">
-    <input class="email" type="email" placeholder="your email address" name="email" />
+    <input class="redirect" class="redirect" type="hidden" value="<%= params[:redirect] %>" />
+    <input class="email" type="email" placeholder="your email" name="email" />
 
     <button class="text">
       Go

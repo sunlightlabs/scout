@@ -22,26 +22,28 @@ end
 
 # routes
 
-get '/' do
-  if logged_in?
-    redirect '/dashboard'
-  else
-    erb :index
-  end
+get '/dashboard' do
+  redirect '/'
+end
+
+get '/login' do
+  erb :index
 end
 
 post '/users/new' do
-  redirect '/' if params[:email].blank?
+  redirect '/login' if params[:email].blank?
   params[:email] = params[:email].strip
   
+  destination = params[:redirect] || '/'
+
   if user = User.where(:email => params[:email]).first
     log_in user
-    redirect '/dashboard'
+    redirect destination
   else
     if user = User.create(:email => params[:email])
       log_in user
       flash[:success] = "Your account has been created."
-      redirect '/dashboard'
+      redirect destination
     else
       flash.now[:failure] = "There was a problem with your email address."
       erb :index, :locals => {:email => params[:email]}
@@ -55,11 +57,11 @@ get '/logout' do
 end
 
 
-get '/dashboard' do
-  requires_login
+get '/' do
+  keywords = logged_in? ? current_user.keywords.desc(:created_at).all.map {|k| [k, k.subscriptions]} : []
   
   erb :dashboard, :locals => {
-    :keywords => current_user.keywords.desc(:created_at).all.map {|k| [k, k.subscriptions]}
+    :keywords =>keywords
   }
 end
 
@@ -105,15 +107,13 @@ post '/subscriptions' do
 end
 
 get '/search/:subscription_type' do
-  requires_login
-  
   keyword = params[:keyword].strip
   subscription_type = params[:subscription_type]
 
   results = []
   
   # make new, temporary subscription items
-  results = current_user.subscriptions.new(
+  results = Subscription.new(
     :keyword => keyword,
     :subscription_type => params[:subscription_type]
   ).search(:page => (params[:page] ? params[:page].to_i : 1))

@@ -56,12 +56,22 @@
             <span class="description">
             </span>
 
-            <button class="text follow"
-              data-type="<%= type %>"
-              >
-              Follow
-            </button>
+            <% if logged_in? %>
+              <button class="text follow"
+                data-type="<%= type %>"
+                >
+                Follow
+              </button>
+            <% end %>
           </div>
+
+          <% unless logged_in? %>
+            <div class="header logged_out">
+              <span>
+                To follow this search and be notified when new items appear, enter your email on the right.
+              </span>
+            </div>
+          <% end %>
 
           <div class="results_list">
             <!-- results for each subscription type get loaded in here -->
@@ -80,15 +90,27 @@
 </section>
 
 <section class="sidebar">
-
-  <% if logged_in? %>
-    <div class="login">
+  <div class="login">
+    <% if logged_in? %>
       <span>
         <%= current_user.email %>
       </span>
+      <br/>
       <a class="logout" href="/logout">logout</a>
-    </div>
-  <% end %>
+    <% else %>
+      <span class="logged_out">
+        You are not logged in.
+        <br/><br/>
+        Search away, but you'll have to provide an email to save alerts.
+      </span>
+      <form action="/users/new" method="post" id="signup_form">
+        <input class="redirect" class="redirect" type="hidden" value="<%= params[:redirect] %>" />
+        <input class="email" type="email" placeholder="your email" name="email" />
+
+        <button class="text login">Go</button>
+      </form>
+    <% end %>
+  </div>
   
   <ul class="subscriptions">
     <% keywords.each do |keyword, subscriptions| %>

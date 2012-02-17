@@ -32,20 +32,20 @@ def subscription_data
       :group => "congress",
       :order => 1
     },
-    'state_bills' => {
-      :name => "State Bills",
-      :description => "state bill(s)",
-      :search => "Bills in the states",
-      :group => "states",
-      :order => 3
-    },
-    'congressional_record' => {
-      :name => "Congressional Speeches",
-      :description => "speech(es)",
-      :search => "Speeches from Congress",
-      :group => "congress",
-      :order => 2
-    },
+    # 'state_bills' => {
+    #   :name => "State Bills",
+    #   :description => "state bill(s)",
+    #   :search => "Bills in the states",
+    #   :group => "states",
+    #   :order => 3
+    # },
+    # 'congressional_record' => {
+    #   :name => "Congressional Speeches",
+    #   :description => "speech(es)",
+    #   :search => "Speeches from Congress",
+    #   :group => "congress",
+    #   :order => 2
+    # },
     'regulations' => {
       :name => "Federal Regulations",
       :description => "regulation(s)",
