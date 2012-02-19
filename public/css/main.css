@@ -186,7 +186,7 @@ section.results div.header.logged_out span {
 /* tabs */
 
 section.results ul.tabs {
-  display: none;
+  
 }
 section.results ul.tabs li {
   display: inline-block;
@@ -211,10 +211,7 @@ section.results ul.tabs li.loading {
 }
 
 /* hide all but the first tab on start */
-section.results div.container {
-  display: none; 
-  
-}
+section.results div.container {}
 section.results div.container div.tab {display: none;}
 section.results div.container div.tab:first-child {display: block;}
 section.results div.container div.tab.active {display: block;}

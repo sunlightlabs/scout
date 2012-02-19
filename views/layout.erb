@@ -22,11 +22,68 @@
 
 <body>
 
-  <header><!-- hidden -->
-    <% yield_content :header %>
-  </header>
+  <section class="main">
 
-  <%= yield %>
+    <section class="entry">
+      <% if defined?(keyword) and keyword.errors.any? %>
+        <div class="errors">
+          <% keyword.errors.full_messages.each do |msg| %>
+            <span><%= msg %></span>
+          <% end %>
+        </div>
+      <% end %>
+      
+      <form class="search" action="/search" method="get" onsubmit="return false">
+        <input type="text" class="query" name="keyword" placeholder="keyword or phrase" />
+        
+        <!-- filled in with ID of saved search if one is loaded -->
+        <input type="hidden" id="keyword_id" name="keyword_id" />
+        
+        <!-- filled in with keyword that populates the current search results -->
+        <input type="hidden" id="keyword_searched" name="keyword_searched" />
+        
+        <div class="buttons">
+          <button class="image search">Search</button>
+        </div>
+      </form>
+    </section>
+    
+    <section id="content">
+      <%= yield %>
+    </section>
+
+  </section>
+
+  <section class="sidebar">
+    <div class="login">
+      <% if logged_in? %>
+        <span>
+          <%= current_user.email %>
+        </span>
+        <br/>
+        <a class="logout" href="/logout">logout</a>
+      <% else %>
+        <span class="logged_out">
+          You are not logged in.
+          <br/><br/>
+          Search away, but you'll have to provide an email to save alerts.
+        </span>
+        <form action="/users/new" method="post" id="signup_form">
+          <input class="redirect" name="redirect" type="hidden" />
+          <input class="email" type="email" placeholder="your email" name="email" />
+
+          <button class="text login">Go</button>
+        </form>
+      <% end %>
+    </div>
+    
+    <ul class="subscriptions">
+      <% keywords.each do |keyword, subscriptions| %>
+        <%= partial :"partials/keyword", :locals => {:keyword => keyword, :subscriptions => subscriptions} %>
+      <% end %>
+    </ul>
+
+  </section>
   
 </body>
 

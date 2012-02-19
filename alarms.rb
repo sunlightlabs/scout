@@ -26,10 +26,6 @@ get '/dashboard' do
   redirect '/'
 end
 
-get '/login' do
-  erb :index
-end
-
 post '/users/new' do
   redirect '/login' if params[:email].blank?
   params[:email] = params[:email].strip
@@ -59,13 +55,21 @@ end
 
 
 get '/' do
-  keywords = logged_in? ? current_user.keywords.desc(:created_at).all.map {|k| [k, k.subscriptions]} : []
-  
-  erb :dashboard, :locals => {
-    :keywords =>keywords
-  }
+  erb :index, :locals => {:keywords => user_keywords}
 end
 
+get '/results' do
+  keyword_keyword = params[:keyword]
+  keyword_id = params[:keyword_id]
+  sorted_types = subscription_types.sort_by {|k, v| v[:order]}
+
+  erb :results, :layout => false, :locals => {
+    :types => sorted_types,
+    :keyword_keyword => keyword_keyword, # a string, not a Keyword
+    :keyword_id => keyword_id,
+    :keywords => user_keywords
+  }
+end
 
 post '/subscriptions' do
   requires_login
@@ -129,7 +133,7 @@ get '/search/:subscription_type' do
     results = results.sort {|a, b| b.date <=> a.date}
   end
   
-  html = erb :results, :layout => false, :locals => {
+  html = erb :items, :layout => false, :locals => {
     :items => results, 
     :subscription_type => subscription_type,
     :keyword => keyword
@@ -192,6 +196,10 @@ end
 # auth helpers
 
 helpers do
+  def user_keywords
+    logged_in? ? current_user.keywords.desc(:created_at).all.map {|k| [k, k.subscriptions]} : []
+  end
+
   def logged_in?
     !current_user.nil?
   end
