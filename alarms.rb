@@ -58,15 +58,13 @@ get '/' do
   erb :index, :locals => {:keywords => user_keywords}
 end
 
-get '/results' do
+get '/search/:keyword' do
   keyword_keyword = params[:keyword]
-  keyword_id = params[:keyword_id]
   sorted_types = subscription_types.sort_by {|k, v| v[:order]}
 
-  erb :results, :layout => false, :locals => {
+  erb :search, :layout => false, :locals => {
     :types => sorted_types,
     :keyword_keyword => keyword_keyword, # a string, not a Keyword
-    :keyword_id => keyword_id,
     :keywords => user_keywords
   }
 end
@@ -111,7 +109,7 @@ post '/subscriptions' do
   
 end
 
-get '/search/:subscription_type' do
+get '/search/:keyword/:subscription_type' do
   keyword = params[:keyword].strip
   subscription_type = params[:subscription_type]
 

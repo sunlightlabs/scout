@@ -1,12 +1,68 @@
 $(function() {
   
-  $("div.tab").on("mouseover", "button.follow.unfollow", function() {
+  $("li.keyword").on("click", "button.remove", function() {
+    var keyword_id = $(this).data("keyword_id");
+    var keyword = $(this).data("keyword");
+    
+    if (confirm("Remove the saved search \"" + keyword + "\"?")) {
+      $.post("/keyword/" + keyword_id, {
+        _method: "delete"
+      }, function(data) {
+        console.log("Keyword by ID " + keyword_id + " removed.");
+        $("#keyword-" + keyword_id).remove();
+      })
+      .error(function() {
+        showError("Error removing saved search.");
+      });
+    }
+    
+    return false;
+  });
+  
+  $("li.keyword").on("click", "h2 a", function() {
+    var keyword = $(this).data("keyword");
+    var keyword_id = $(this).data("keyword_id");
+    
+    $("input.query").val(keyword);
+
+    // bold the word
+    $("li.keyword").removeClass("current");
+    $("li.keyword#keyword-" + keyword_id).addClass("current");
+
+    startSearch(keyword, keyword_id);
+    
+    return false;
+  });
+  
+  $("form#signup_form").submit(function() {
+    $(this).find("input.redirect").val(window.location.pathname);
+    return true;
+  })
+
+  $("form.search").submit(function() {
+    var keyword = $("input.query").val();
+    if (keyword) keyword = keyword.trim();
+    if (!keyword) return;
+    
+    startSearch(keyword);
+    return false;
+  });
+
+  $("#content").on("click", "ul.tabs li", function() {
+    selectTab($(this).data("type"));
+  });
+
+  $("#content").on("click", "section.results div.tab button.refresh", function() {
+    searchFor($(this).data("keyword"), null, $(this).data("type"));
+  });
+
+  $("#content").on("mouseover", "div.tab button.follow.unfollow", function() {
     $(this).html("Unfollow");
   }).on("mouseout", "button.follow.unfollow", function() {
     $(this).html("Following");
   });
 
-  $("div.tab").on("click", "button.follow", function() {
+  $("#content").on("click", "div.tab button.follow", function() {
     var subscription_type = $(this).data("type");
     var keyword = $("#keyword_searched").val();
     var keyword_id = $("#keyword_id").val();
@@ -68,62 +124,6 @@ $(function() {
     }
 
   });
-
-  $("li.keyword").on("click", "button.remove", function() {
-    var keyword_id = $(this).data("keyword_id");
-    var keyword = $(this).data("keyword");
-    
-    if (confirm("Remove the saved search \"" + keyword + "\"?")) {
-      $.post("/keyword/" + keyword_id, {
-        _method: "delete"
-      }, function(data) {
-        console.log("Keyword by ID " + keyword_id + " removed.");
-        $("#keyword-" + keyword_id).remove();
-      })
-      .error(function() {
-        showError("Error removing saved search.");
-      });
-    }
-    
-    return false;
-  });
-  
-  $("li.keyword").on("click", "h2 a", function() {
-    var keyword = $(this).data("keyword");
-    var keyword_id = $(this).data("keyword_id");
-    
-    $("input.query").val(keyword);
-
-    // bold the word
-    $("li.keyword").removeClass("current");
-    $("li.keyword#keyword-" + keyword_id).addClass("current");
-
-    startSearch(keyword, keyword_id);
-    
-    return false;
-  });
-  
-  $("form#signup_form").submit(function() {
-    $(this).find("input.redirect").val(window.location.pathname);
-    return true;
-  })
-
-  $("form.search").submit(function() {
-    var keyword = $("input.query").val();
-    if (keyword) keyword = keyword.trim();
-    if (!keyword) return;
-    
-    startSearch(keyword);
-    return false;
-  });
-
-  $("#content").on("click", "ul.tabs li", function() {
-    selectTab($(this).data("type"));
-  });
-
-  $("#content").on("click", "section.results div.tab button.refresh", function() {
-    searchFor($(this).data("keyword"), null, $(this).data("type"));
-  });
   
 });
 
@@ -138,10 +138,7 @@ function startSearch(keyword, keyword_id) {
   $("#keyword_searched").val(keyword);
   $("#keyword_id").val(keyword_id);
 
-  $.get("/results", {
-    keyword: keyword,
-    keyword_id: keyword_id
-  }, function(html) {
+  $.get("/search/" + encodeURIComponent(keyword), function(html) {
     $("#content").html(html);
   }).error(function() {
     showError("Some error while asking for the results template, shouldn't happen.");
@@ -163,8 +160,7 @@ function searchFor(keyword, keyword_id, subscription_type) {
   if (!keyword_id)
     $("li.keyword").removeClass("current");
   
-  $.get("/search/" + subscription_type, {
-    keyword: keyword,
+  $.get("/search/" + encodeURIComponent(keyword) + "/" + subscription_type, {
     keyword_id: keyword_id,
     page: 1
   }, function(data) {
