@@ -160,10 +160,7 @@ function searchFor(keyword, keyword_id, subscription_type) {
   if (!keyword_id)
     $("li.keyword").removeClass("current");
   
-  $.get("/search/" + encodeURIComponent(keyword) + "/" + subscription_type, {
-    keyword_id: keyword_id,
-    page: 1
-  }, function(data) {
+  $.get("/search/" + encodeURIComponent(keyword) + "/" + subscription_type, function(data) {
 
     tab.removeClass("loading");
     container.find("div.loading_container").hide();
