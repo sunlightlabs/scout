@@ -62,7 +62,7 @@ get '/search/:keyword' do
   keyword_keyword = params[:keyword]
   sorted_types = subscription_types.sort_by {|k, v| v[:order]}
 
-  erb :search, :layout => false, :locals => {
+  erb :search, :layout => !pjax?, :locals => {
     :types => sorted_types,
     :keyword_keyword => keyword_keyword, # a string, not a Keyword
     :keywords => user_keywords
@@ -194,6 +194,11 @@ end
 # auth helpers
 
 helpers do
+
+  def pjax?
+    (request.env['HTTP_X_PJAX'] or params[:pjax]) ? true : false
+  end
+
   def user_keywords
     logged_in? ? current_user.keywords.desc(:created_at).all.map {|k| [k, k.subscriptions]} : []
   end

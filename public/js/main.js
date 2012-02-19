@@ -138,10 +138,13 @@ function startSearch(keyword, keyword_id) {
   $("#keyword_searched").val(keyword);
   $("#keyword_id").val(keyword_id);
 
-  $.get("/search/" + encodeURIComponent(keyword), function(html) {
-    $("#content").html(html);
-  }).error(function() {
-    showError("Some error while asking for the results template, shouldn't happen.");
+  $.pjax({
+    url: "/search/" + encodeURIComponent(keyword),
+    container: "#content",
+    error: function() {
+      showError("Some error while asking for the results template, shouldn't happen.");
+    },
+    timeout: 3000
   });
 }
 

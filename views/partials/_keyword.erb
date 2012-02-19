@@ -1,6 +1,6 @@
 <li class="keyword" id="keyword-<%= keyword.id %>">
   <h2>
-    <a href="#" onclick="return false" 
+    <a href="/search/<%= form_escape keyword.keyword %>" onclick="return false" 
       data-keyword="<%= form_escape keyword.keyword %>"
       data-keyword_id="<%= form_escape keyword.id %>"
       >
