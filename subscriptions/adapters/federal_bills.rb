@@ -35,6 +35,23 @@ module Subscriptions
         
         url
       end
+
+      def self.find_url(item_id)
+        api_key = config[:subscriptions][:sunlight_api_key]
+        if config[:subscriptions][:rtc_endpoint].present?
+          endpoint = config[:subscriptions][:rtc_endpoint]
+        else
+          endpoint = "http://api.realtimecongress.org/api/v1"
+        end
+        
+        sections = %w{ bill_id bill_type number short_title official_title introduced_at last_action_at last_action last_version.version_code last_version.bill_version_id session last_version.urls.pdf last_version.urls.xml last_version.issued_on }
+
+        url = "#{endpoint}/bills.json?apikey=#{api_key}"
+        url << "&bill_id=#{item_id}"
+        url << "&sections=#{sections.join ','}"
+
+        url
+      end
       
       
       # takes parsed response and returns an array where each item is 
@@ -48,10 +65,9 @@ module Subscriptions
       end
       
       
-      
-      # internal
-      
       def self.item_for(bill)
+        bill = bill['bills'][0] if bill['bills'] # accept either the original response or one of the results
+
         bill['last_version']['issued_on'] = noon_utc_for bill['last_version']['issued_on']
         
         Subscriptions::Result.new(

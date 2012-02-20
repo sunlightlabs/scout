@@ -264,11 +264,24 @@ section.results div.tab div.none button.refresh {
   background-color: #f9f9f9;
 }
 
-section.results div.results_list {}
-
 section.results ul.items {
   list-style-type: none;
   margin-top: 0px;
+  padding-bottom: 30px; margin-bottom: 30px;
+}
+
+div.next_page button.text.page {
+  width: 400px; 
+  position: absolute; left: 170px;
+}
+
+div.next_page p {
+  color: #444; font-size: 150%;
+  display: none;
+  padding-top: 20px; padding: 20px; padding-left: 50px;
+  background-position: left;
+  background-image: url(/images/loader-32.gif);
+  background-repeat: no-repeat;
 }
 
 section.results li.result {
@@ -280,7 +293,6 @@ section.results li.result div.left {
   display: inline-block; vertical-align: top;
 }
 section.results li.result div.right {
-  xposition: absolute; xleft: 180px; 
   width: 630px;
   display: inline-block; vertical-align: top;
 }

@@ -16,6 +16,7 @@
     <% types.each do |type, data| %>
       <div class="tab <%= type %>" 
         data-type="<%= type %>"
+        data-current_page="1"
         >
 
         <div class="loading_container">
@@ -48,9 +49,9 @@
           </div>
         <% end %>
 
-        <div class="results_list">
+        <ul class="items">
           <!-- results for each subscription type get loaded in here -->
-        </div>
+        </ul>
 
       </div>
     <% end %>

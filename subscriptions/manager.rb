@@ -103,6 +103,23 @@ module Subscriptions
         nil
       end
     end
+
+    # given a type of adapter, and an item ID, fetch the item and return a Result item
+    def self.find(adapter_type, item_id)
+      adapter = Subscription.adapter_for adapter_type
+      url = adapter.find_url item_id
+      
+      puts "\n[#{adapter}][find][#{item_id}] #{url}\n\n" if config[:debug][:output_urls]
+      
+      begin
+        response = HTTParty.get url
+      rescue Timeout::Error, Errno::ETIMEDOUT => ex
+        Email.report Report.warning("Find", "[#{adapter_type}][find][#{item_id}] find timeout, returned nil")
+        return nil
+      end
+      
+      adapter.item_for response
+    end
     
   end
   
@@ -121,7 +138,7 @@ module Subscriptions
       self.id = options[:id]
       self.date = options[:date]
       self.data = options[:data]
-      self.subscription = options[:subscription]
+      self.subscription = options[:subscription] # used when returning lists of results
     end
     
   end

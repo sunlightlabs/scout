@@ -1,8 +1,8 @@
 module Subscriptions
   module Helpers
 
-    def item_path(subscription_type, item)
-      "/#{subscription_type}/#{item.id}"
+    def item_path(item_type, item)
+      "/#{item_type}/#{item.id}"
     end
     
     def bill_code(type, number)

@@ -1,39 +1,50 @@
-<% if items and items.any? %>
-
-  <ul class="items">
-    <% current_date = nil %>
-    <% items.each do |item| %>
-    
-      <li class="result <%= item.subscription.subscription_type %>">
-        <div class="left">
-          <p class="date">
-            
-              <%= just_date_year item.date %>
-              <% current_date = item.date.strftime("%Y-%m-%d") %>
-            
-          </p>
-        </div>
-        <div class="right">
-          <%= partial :"subscriptions/#{item.subscription.subscription_type}/result", :locals => {:item => item, :keyword => keyword} %>
-        </div>
-      </li>
-      
-    <% end %>
-  </ul>
+<% if items and items.any? %>  
+  <% current_date = nil %>
+  <% items.each do |item| %>
   
+    <li class="result <%= item.subscription.subscription_type %>">
+      <div class="left">
+        <p class="date">
+          <%= just_date_year item.date %>
+          <% current_date = item.date.strftime("%Y-%m-%d") %>
+        </p>
+      </div>
+      <div class="right">
+        <%= partial :"subscriptions/#{item.subscription.subscription_type}/result", :locals => {:item => item, :keyword => keyword} %>
+      </div>
+    </li>
+
+  <% end %>
+
+  <div class="next_page">
+    <button class="text page <%= subscription_type %>"
+      data-keyword="<%= form_escape params[:keyword] %>"
+      data-type="<%= subscription_type %>"
+      >
+      Load more results
+    </button>
+    <p>
+      Loading more results...
+    </p>
+  </div>
+
 <% else %>
   <div class="none">
     <% if items %>
-      <p>No results found for this search.</p>
+      <% if params[:page] and (params[:page].to_i > 1) %>
+        <p>End of results.</p>
+      <% else items %>
+        <p>No results found for this search.</p>
+      <% end %>
     <% else %>
       <p class="error">There was an error during the search. You can try again.</p>
+      
+      <button class="text refresh"
+        data-type="<%= subscription_type %>"
+        data-keyword="<%= keyword %>"
+        >
+        Refresh
+      </button>
     <% end %>
-    
-    <button class="text refresh"
-      data-type="<%= subscription_type %>"
-      data-keyword="<%= keyword %>"
-      >
-      Refresh
-    </button>
   </div>
 <% end %>

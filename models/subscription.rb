@@ -35,7 +35,11 @@ class Subscription
   
   # adapter class associated with a particular subscription
   def adapter
-    "Subscriptions::Adapters::#{subscription_type.camelize}".constantize rescue nil
+    Subscription.adapter_for subscription_type
+  end
+
+  def self.adapter_for(type)
+    "Subscriptions::Adapters::#{type.camelize}".constantize rescue nil
   end
   
   def search(options = {})

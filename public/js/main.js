@@ -115,6 +115,26 @@ $(function() {
     }
 
   });
+
+  $("#content").on("click", "ul.items button.page", function() {
+    var keyword = $(this).data("keyword");
+    var keyword_slug = encodeURIComponent(keyword);
+    var subscription_type = $(this).data("type");
+    var container = $("#results div.tab." + subscription_type);
+
+    var next_page = container.data("current_page") + 1;
+
+    var page_container = $(this).parent();
+    var loader = page_container.find("p");
+    $(this).remove();
+    loader.show();
+
+    $.get("/search/" + keyword_slug + "/" + subscription_type, {page: next_page}, function(data) {
+      page_container.remove();
+      container.find("ul.items").append(data.html);
+      container.data("current_page", next_page);
+    });
+  });
   
 });
 
@@ -143,7 +163,7 @@ function searchFor(keyword, subscription_type) {
   // reset elements inside tab
   tab.addClass("loading").removeClass("error");
   container.find("div.system_error").hide();
-  container.find("div.results_list").html("");
+  container.find("ul.items").html("");
   container.find("div.loading_container").show();
   container.find("div.header").hide();
 
@@ -152,7 +172,7 @@ function searchFor(keyword, subscription_type) {
 
     tab.removeClass("loading");
     container.find("div.loading_container").hide();
-    container.find("div.results_list").html(data.html);
+    container.find("ul.items").html(data.html);
 
     // error
     if (data.count < 0)  {

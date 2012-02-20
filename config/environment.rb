@@ -23,6 +23,17 @@ Dir.glob('subscriptions/adapters/*.rb').each {|filename| load filename}
 require 'subscriptions/manager'
 require 'subscriptions/deliverance'
 
+# maps types of items to the subscription adapter they can be found with
+def item_data
+  {
+    'bill' => {
+      :name => "Bill",
+      :adapter => "federal_bills"
+    }
+  }
+end
+
+# maps each type of subscription adapter to their display information
 def subscription_data 
   data = {
     'federal_bills' => {

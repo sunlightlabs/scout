@@ -69,6 +69,30 @@ get '/search/:keyword' do
   }
 end
 
+# needs to be last of the get /x/y form, to catch 
+# get '/:subscription_type/:item_id'
+get(/^\/(#{item_data.keys.join '|'})\/([^\/]+)(?:\/[^\/])?\/?/) do
+  item_type = params[:captures][0]
+  item_id = params[:captures][1]
+
+  erb :show, :locals => {
+    :item_type => item_type, 
+    :item_id => item_id, 
+    :keywords => user_keywords
+  }
+end
+
+get(/^\/find\/(#{item_data.keys.join '|'})\/([^\/]+)$/) do
+  p params[:captures]
+  item_type = params[:captures][0]
+  item_id = params[:captures][1]
+  subscription_type = item_data[item_type][:adapter]
+
+  item = Subscriptions::Manager.find subscription_type, item_id
+
+  item.data['official_title']
+end
+
 post '/subscriptions' do
   requires_login
 
