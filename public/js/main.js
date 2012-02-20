@@ -27,7 +27,7 @@ $(function() {
   });
   
   $("form#signup_form").submit(function() {
-    $(this).find("input.redirect").val(window.location.pathname);
+    $(this).find("input.redirect").val(window.location.pathname + window.location.hash);
     return true;
   })
 
@@ -139,10 +139,13 @@ $(function() {
 });
 
 function selectTab(type) {
-  $("div.container div.tab").hide();
-  $("div.container div.tab." + type).show();
-  $("ul.tabs li").removeClass("active");
-  $("ul.tabs li." + type).addClass("active");
+  if ($("ul.tabs li." + type).size() > 0) {
+    $("div.container div.tab").hide();
+    $("div.container div.tab." + type).show();
+    $("ul.tabs li").removeClass("active");
+    $("ul.tabs li." + type).addClass("active");
+    window.location.hash = "#" + type;
+  }
 }
 
 function startSearch(keyword) {

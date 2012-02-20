@@ -74,5 +74,11 @@
     $("li.keyword").removeClass("current");
     $("li.keyword#keyword-" + keyword_id).addClass("current");
     $("input.query").val(display_keyword);
+
+    // if there's an anchor with the active type, select it
+    if (window.location.hash) {
+      var active_tab = window.location.hash.replace("#", "");
+      selectTab(active_tab);
+    }
   });
 </script>
