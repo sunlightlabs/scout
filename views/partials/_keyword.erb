@@ -19,7 +19,7 @@
   </form>
 
   <section class="types">
-    <%= keyword.subscriptions.map do |subscription|
+    <%= keyword.subscriptions.sort_by(&:subscription_type).map do |subscription|
       subscription_types[subscription.subscription_type][:name]
     end.join(", ") %>
   </section>
