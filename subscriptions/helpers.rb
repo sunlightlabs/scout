@@ -1,5 +1,9 @@
 module Subscriptions
   module Helpers
+
+    def item_path(subscription_type, item)
+      "/#{subscription_type}/#{item.id}"
+    end
     
     def bill_code(type, number)
       "#{bill_type type} #{number}"
@@ -11,11 +15,11 @@ module Subscriptions
         "hr" => "H.R.",
         "hres" => "H.Res.",
         "hjres" => "H.J.Res.",
-        "hcres" => "H.C.Res.",
+        "hcres" => "H.Con.Res.",
         "s" => "S.",
         "sres" => "S.Res.",
         "sjres" => "S.J.Res.",
-        "scres" => "S.C.Res."
+        "scres" => "S.Con.Res."
       }[short]
     end
     
@@ -55,19 +59,19 @@ module Subscriptions
     end
     
     def opencongress_url(item)
-      bill = item.data['bill']
+      bill = item.data
       id = "#{bill['session']}-#{govtrack_type bill['bill_type']}#{bill['number']}"
       "http://www.opencongress.org/bill/#{id}/show"
     end
     
     def govtrack_url(item)
-      bill = item.data['bill']
+      bill = item.data
       id = "#{govtrack_type bill['bill_type']}#{bill['session']}-#{bill['number']}"
       "http://www.govtrack.us/congress/bill.xpd?bill=#{id}"
     end
     
     def thomas_url(item)
-      bill = item.data['bill']
+      bill = item.data
       id = "#{bill['session']}#{thomas_type bill['bill_type']}#{bill['number']}"
       "http://hdl.loc.gov/loc.uscongress/legislation.#{id}"
     end
@@ -75,23 +79,23 @@ module Subscriptions
     # unused    
     def highlight_field(field)
       {
-        "full_text" => "the full text",
-        "bill__summary" => "the CRS summary",
-        "bill__official_title" => "the official title",
-        "bill__short_title" => "the shorthand title",
-        "bill__popular_title" => "the common parlance",
-        "bill__keywords" => "the tagged subjects"
+        "versions" => "the full text",
+        "summary" => "the CRS summary",
+        "official_title" => "the official title",
+        "short_title" => "the shorthand title",
+        "popular_title" => "the common parlance",
+        "keywords" => "the tagged subjects"
       }[field]
     end
     
     def bill_priorities
       {
-        "bill__summary" => 1,
-        "full_text" => 2,
-        "bill__keywords" => 3,
-        "bill__official_title" => 4,
-        "bill__short_title" => 5,
-        "bill__popular_title" => 6
+        "summary" => 1,
+        "versions" => 2,
+        "keywords" => 3,
+        "official_title" => 4,
+        "short_title" => 5,
+        "popular_title" => 6
       }
     end
 

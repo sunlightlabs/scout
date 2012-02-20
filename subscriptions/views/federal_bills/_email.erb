@@ -1,7 +1,7 @@
-<%= bill_code item.data['bill']['bill_type'], item.data['bill']['number'] %> - <% if item.data['bill']['short_title'].present? %>
-<%= item.data['bill']['short_title'] %>
+<%= bill_code item.data['bill_type'], item.data['number'] %> - <% if item.data['short_title'].present? %>
+<%= item.data['short_title'] %>
 <% else %>
-<%= item.data['bill']['official_title'] %>
+<%= item.data['official_title'] %>
 <% end %>
 
  <% if item.data['search']['highlight'] %>

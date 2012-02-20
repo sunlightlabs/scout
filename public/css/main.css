@@ -331,9 +331,8 @@ section.results .subtitle {
 
 /* federal bill results */
 
-section.results li.federal_bills span.version {
-  font-weight: normal; 
-}
+section.results li.federal_bills span.code {font-weight: bold;}
+
 
 section.results li.federal_bills a.file {
   margin-left: 5px;
