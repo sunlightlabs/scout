@@ -270,9 +270,11 @@ section.results ul.items {
   padding-bottom: 30px; margin-bottom: 30px;
 }
 
+div.next_page {margin-top: 30px;}
+
 div.next_page button.text.page {
-  width: 400px; 
-  position: absolute; left: 170px;
+  width: 100%; 
+  font-size: 150%;
 }
 
 div.next_page p {
