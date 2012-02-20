@@ -260,7 +260,7 @@ module Subscriptions
     
     def speech_selection(speech, keyword)
       first = speech['speaking'].select do |paragraph|
-        paragraph =~ /#{keyword}/i
+        paragraph =~ excerpt_pattern(keyword)
       end.first
     end
 
@@ -269,6 +269,10 @@ module Subscriptions
         excerpt selection, keyword, highlight
       end
     end
+
+    def excerpt_pattern(keyword)
+      /#{keyword.gsub(' ', '[\-]')}/i
+    end
     
     # client-side truncation and highlighting
     def excerpt(text, keyword, highlight = true)
@@ -276,7 +280,8 @@ module Subscriptions
       text = text.strip
       word = keyword.size
       length = text.size
-      index = text =~ /#{keyword}/i || 0
+      
+      index = text =~ excerpt_pattern(keyword) || 0
       max = 500
       buffer = 100
 
@@ -299,7 +304,7 @@ module Subscriptions
       truncated = truncated + "..." if range.end < length
 
       if highlight
-        truncated.gsub(/#{keyword}/i) do |word|
+        truncated.gsub(excerpt_pattern(keyword)) do |word|
           "<em class=\"highlight\">#{word}</em>"
         end
       else
