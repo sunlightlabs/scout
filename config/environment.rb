@@ -24,7 +24,7 @@ require 'subscriptions/manager'
 require 'subscriptions/deliverance'
 
 def subscription_data 
-  {
+  data = {
     'federal_bills' => {
       :name => "Congressional Bills",
       :description => "bill(s) in Congress",
@@ -54,4 +54,12 @@ def subscription_data
       :order => 4
     }
   }
+  
+  if config[:hide_subscription_types]
+    config[:hide_subscription_types].each do |type|
+      data.delete type.to_s
+    end
+  end
+
+  data
 end

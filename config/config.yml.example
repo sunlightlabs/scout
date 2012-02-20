@@ -31,3 +31,7 @@
 :debug:
   # outputs polled URLs to STDOUT
   :output_urls: false
+
+# list of subscription types to hide (default to showing everything)
+:hide_subscription_types:
+  - 
