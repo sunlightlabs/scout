@@ -20,7 +20,7 @@ module Subscriptions
         url << "&sort=date%20desc"
 
         if options[:page]
-          url << "&page=#{options[:page]}"
+          url << "&page=#{options[:page].to_i - 1}"
         end
         
         url
