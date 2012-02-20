@@ -19,6 +19,23 @@
   <script src="/js/jquery.placehold-0.3.min.js"></script>
   <script src="/js/h5f.min.js"></script>
   <script src="/js/main.js"></script>
+
+  <script type="text/javascript">
+    // client-side map of a user's keywords and subscriptions, 
+    // complete with delicious database IDs (will swap this with a slug or something later)
+    var user_subscriptions = {};
+    var keyword;
+    <% keywords.each do |keyword, subscriptions| %>
+      keyword = encodeURIComponent("<%= form_escape keyword.keyword %>");
+      user_subscriptions[keyword] = {
+        keyword_id: "<%= keyword._id.to_s %>",
+        subscriptions: {}
+      };
+      <% subscriptions.each do |subscription| %>
+        user_subscriptions[keyword].subscriptions.<%= subscription.subscription_type %> = '<%= subscription._id.to_s %>';
+      <% end %>
+    <% end %>
+  </script>
 </head>
 
 <body>
@@ -38,10 +55,10 @@
         <input type="text" class="query" name="keyword" placeholder="keyword or phrase" />
         
         <!-- filled in with ID of saved search if one is loaded -->
-        <input type="hidden" id="keyword_id" name="keyword_id" />
+        <!-- <input type="hidden" id="keyword_id" name="keyword_id" /> -->
         
         <!-- filled in with keyword that populates the current search results -->
-        <input type="hidden" id="keyword_searched" name="keyword_searched" />
+        <!-- <input type="hidden" id="keyword_searched" name="keyword_searched" /> -->
         
         <div class="buttons">
           <button class="image search">Search</button>
@@ -83,6 +100,16 @@
         <%= partial :"partials/keyword", :locals => {:keyword => keyword, :subscriptions => subscriptions} %>
       <% end %>
     </ul>
+
+    <script type="text/javascript">
+      // if we're coming in from a permalink, set up anything that would have otherwise been set up along the way
+      <% if params[:keyword] %>
+        var initial_keyword = encodeURIComponent("<%= form_escape params[:keyword] %>");
+        var keyword_id = user_subscriptions[initial_keyword] ? user_subscriptions[initial_keyword].keyword_id : null;
+
+        $("input.query").val(initial_keyword);
+      <% end %>
+    </script>
 
   </section>
   

@@ -27,10 +27,12 @@
 </li>
 
 <script type="text/javascript">
-  var subscriptions = {};
+  // will overwrite the same data on initial load, but guarantees that 
+  // new subscriptions added dynamically will keep the master map up to date
+  var keyword = encodeURIComponent("<%= form_escape keyword.keyword %>");
+  user_subscriptions[keyword] = {subscriptions: {}}
   <% keyword.subscriptions.each do |subscription| %>
-    subscriptions['<%= subscription.subscription_type %>'] = '<%= subscription._id.to_s %>';
+    user_subscriptions[keyword].keyword_id = "<%= keyword._id.to_s %>";
+    user_subscriptions[keyword].subscriptions.<%= subscription.subscription_type %> = "<%= subscription._id.to_s %>";
   <% end %>
-
-  $("li#keyword-<%= keyword.id %>").data("subscriptions", subscriptions)
 </script>

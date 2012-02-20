@@ -33,6 +33,7 @@
           <% if logged_in? %>
             <button class="text follow"
               data-type="<%= type %>"
+              data-keyword="<%= form_escape keyword_keyword %>"
               >
               Follow
             </button>
@@ -59,8 +60,18 @@
 </section>
 
 <script type="text/javascript">
-  var keyword_id = $("#keyword_id").val();
-  <% types.each do |subscription_type, data| %>
-    searchFor("<%= keyword_keyword %>", keyword_id, "<%= subscription_type %>");
-  <% end %>
+  // put in a delay block in case this is being rendered before the layout
+  $(function() {
+    var keyword = encodeURIComponent("<%= params[:keyword] %>");
+    var display_keyword = "<%= form_escape params[:keyword] %>";
+    var keyword_id = user_subscriptions[keyword] ? user_subscriptions[keyword].keyword_id : null;
+
+    <% types.each do |subscription_type, data| %>
+      searchFor("<%= keyword_keyword %>", "<%= subscription_type %>");
+    <% end %>
+
+    $("li.keyword").removeClass("current");
+    $("li.keyword#keyword-" + keyword_id).addClass("current");
+    $("input.query").val(display_keyword);
+  });
 </script>

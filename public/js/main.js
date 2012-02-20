@@ -1,6 +1,6 @@
 $(function() {
   
-  $("li.keyword").on("click", "button.remove", function() {
+  $("ul.subscriptions").on("click", "li.keyword button.remove", function() {
     var keyword_id = $(this).data("keyword_id");
     var keyword = $(this).data("keyword");
     
@@ -8,8 +8,7 @@ $(function() {
       $.post("/keyword/" + keyword_id, {
         _method: "delete"
       }, function(data) {
-        console.log("Keyword by ID " + keyword_id + " removed.");
-        $("#keyword-" + keyword_id).remove();
+        keywordRemoved(keyword, keyword_id);
       })
       .error(function() {
         showError("Error removing saved search.");
@@ -19,17 +18,10 @@ $(function() {
     return false;
   });
   
-  $("li.keyword").on("click", "h2 a", function() {
+  $("ul.subscriptions").on("click", "li.keyword h2 a", function() {
     var keyword = $(this).data("keyword");
-    var keyword_id = $(this).data("keyword_id");
     
-    $("input.query").val(keyword);
-
-    // bold the word
-    $("li.keyword").removeClass("current");
-    $("li.keyword#keyword-" + keyword_id).addClass("current");
-
-    startSearch(keyword, keyword_id);
+    startSearch(keyword);
     
     return false;
   });
@@ -53,7 +45,7 @@ $(function() {
   });
 
   $("#content").on("click", "section.results div.tab button.refresh", function() {
-    searchFor($(this).data("keyword"), null, $(this).data("type"));
+    searchFor($(this).data("keyword"), $(this).data("type"));
   });
 
   $("#content").on("mouseover", "div.tab button.follow.unfollow", function() {
@@ -64,9 +56,10 @@ $(function() {
 
   $("#content").on("click", "div.tab button.follow", function() {
     var subscription_type = $(this).data("type");
-    var keyword = $("#keyword_searched").val();
-    var keyword_id = $("#keyword_id").val();
-
+    var keyword = $(this).data("keyword");
+    var keyword_slug = encodeURIComponent(keyword);
+    var keyword_id = user_subscriptions[keyword_slug] ? user_subscriptions[keyword_slug].keyword_id : null;
+    
     var button = $(this);
 
     // unfollow the subscription
@@ -81,13 +74,12 @@ $(function() {
           console.log("Subscription deleted: " + subscription_id);
 
           if (data.deleted_keyword)
-            $("#keyword-" + data.keyword_id).remove();
+            keywordRemoved(keyword, keyword_id);
           else {
             $("li.keyword#keyword-" + data.keyword_id).replaceWith(data.pane);
             $("li.keyword#keyword-" + data.keyword_id).addClass("current"); // must re-find to work
           }
           
-
           button.data("subscription_id", null);
         }
       )
@@ -100,7 +92,7 @@ $(function() {
       showSave(subscription_type, "unfollow");
       $.post("/subscriptions", {
           keyword: keyword,
-          keyword_id: keyword_id,
+          keyword_id: keyword_id || "",
           subscription_type: subscription_type
         }, 
         function(data) {
@@ -110,7 +102,6 @@ $(function() {
           if (data.new_keyword) {
             $("ul.subscriptions").prepend(data.pane);
             $("li.keyword#keyword-" + data.keyword_id).addClass("current");
-            $("#keyword_id").val(data.keyword_id);
           } else {
             $("li.keyword#keyword-" + data.keyword_id).replaceWith(data.pane);
             $("li.keyword#keyword-" + data.keyword_id).addClass("current") // must re-find to work
@@ -134,10 +125,7 @@ function selectTab(type) {
   $("ul.tabs li." + type).addClass("active");
 }
 
-function startSearch(keyword, keyword_id) {
-  $("#keyword_searched").val(keyword);
-  $("#keyword_id").val(keyword_id);
-
+function startSearch(keyword) {
   $.pjax({
     url: "/search/" + encodeURIComponent(keyword),
     container: "#content",
@@ -148,7 +136,7 @@ function startSearch(keyword, keyword_id) {
   });
 }
 
-function searchFor(keyword, keyword_id, subscription_type) {
+function searchFor(keyword, subscription_type) {
   var tab = $("ul.tabs li." + subscription_type);
   var container = $("#results div.tab." + subscription_type);
 
@@ -159,11 +147,8 @@ function searchFor(keyword, keyword_id, subscription_type) {
   container.find("div.loading_container").show();
   container.find("div.header").hide();
 
-  // remove any selected keyword
-  if (!keyword_id)
-    $("li.keyword").removeClass("current");
-  
-  $.get("/search/" + encodeURIComponent(keyword) + "/" + subscription_type, function(data) {
+  var keyword_slug = encodeURIComponent(keyword);
+  $.get("/search/" + keyword_slug + "/" + subscription_type, function(data) {
 
     tab.removeClass("loading");
     container.find("div.loading_container").hide();
@@ -177,15 +162,11 @@ function searchFor(keyword, keyword_id, subscription_type) {
       container.find("div.header span.description").html(data.description);
 
       var button = $("div.tab." + subscription_type + " button.follow");
-      if (keyword_id) {
-        var subscriptions = $("li#keyword-" + keyword_id).data("subscriptions");
-        if (subscriptions && subscriptions[subscription_type]) {
-          button.data("subscription_id", subscriptions[subscription_type]);
-          showSave(subscription_type, "unfollow");
-        } else {
-          button.data("subscription_id", null);
-          showSave(subscription_type, "follow");
-        }
+
+      var subscriptions = user_subscriptions[keyword_slug]; // global!
+      if (subscriptions && subscriptions.subscriptions[subscription_type]) {
+        button.data("subscription_id", subscriptions.subscriptions[subscription_type]);
+        showSave(subscription_type, "unfollow");
       } else {
         button.data("subscription_id", null);
         showSave(subscription_type, "follow");
@@ -218,4 +199,10 @@ function showSave(subscription_type, status) {
     button.addClass("unfollow");
     button.html("Following");
   }
+}
+
+function keywordRemoved(keyword, keyword_id) {
+  console.log("Keyword by ID " + keyword_id + " removed.");
+  $("#keyword-" + keyword_id).remove();
+  delete user_subscriptions[encodeURIComponent(keyword)];
 }
