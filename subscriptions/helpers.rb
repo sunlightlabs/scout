@@ -271,7 +271,7 @@ module Subscriptions
     end
 
     def excerpt_pattern(keyword)
-      /#{keyword.gsub(' ', '[\-]')}/i
+      /#{keyword.gsub(' ', '[\s\-]')}/i
     end
     
     # client-side truncation and highlighting
