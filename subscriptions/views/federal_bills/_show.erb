@@ -1,10 +1,24 @@
 <% bill = item.data %>
+<% version = item.data['last_version'] %>
 
 <header>
-    <h4><%= bill_code bill['bill_type'], bill['number'] %></h4>
-    <% if bill['short_title'].present? %>
-        <h2><%= bill['short_title'] %></h2>
-    <% else %>
-        <h3><%= bill['official_title'] %></h3>
-    <% end %>
+    <div class="titles">
+        <h4><%= bill_code bill['bill_type'], bill['number'] %></h4>
+        <% if bill['short_title'].present? %>
+            <h2><%= bill['short_title'] %></h2>
+        <% else %>
+            <h3><%= bill['official_title'] %></h3>
+        <% end %>
+    </div>
 </header>
+
+<section class="detail">
+    <span class="version"><%= bill_version version['version_code'] %></span>
+    <span class="issued_on">on <%= very_short_date version['issued_on'] %></span>
+    <% if version['urls'] and version['urls']['pdf'] %>
+        <a class="file pdf" href="<%= version['urls']['pdf'] %>">PDF</a>
+    <% end %>
+    <% if version['urls'] and version['urls']['xml'] %>
+        <a class="file xml" href="<%= version['urls']['xml'] %>">HTML</a>
+    <% end %>
+</section>

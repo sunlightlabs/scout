@@ -162,11 +162,6 @@ section.entry button.search {
 section header {
   background-color: #c5c5c5;
   padding: 10px; position: relative;
-  height: 50px;
-}
-section header span.description {
-  font-size: 150%; line-height: 50px; 
-  position: relative; left: 30px;
 }
 
 section header button {
@@ -185,7 +180,16 @@ section header button.follow.unfollow:hover, section header button.track.untrack
   background-color: #8c8c8c; 
 }
 
-section.results div.logged_out {
+section.results header {
+  height: 50px;
+}
+
+section.results header span.description {
+  font-size: 150%; line-height: 50px; 
+  position: relative; left: 30px;
+}
+
+section div.logged_out {
   padding: 10px; position: relative;
   height: 17px; 
   background-color: #646464; color: #f5f5f5;
@@ -273,13 +277,13 @@ section.results li.result {
 }
 
 section.results li.result div.left {
-  width: 120px;
+  width: 130px;
   display: inline-block; vertical-align: top;
   padding: 0 30px 0 0px;
 }
 
 section.results li.result div.right {
-  width: 660px;
+  width: 650px;
   display: inline-block; vertical-align: top;
 }
 section.results li.result div.left p.date {
@@ -395,5 +399,17 @@ ul.subscriptions li.keyword section.types {
 
 section.show {}
 section.show header {
-  
+  padding: 15px 10px;
+}
+
+section.show header div.titles {
+  position: relative; left: 10px; width: 75%;
+}
+
+section.show header h4 {font-size: 100%; color: #434343;}
+section.show header h2 {font-size: 125%; margin-top: 10px;}
+section.show header h3 {font-size: 100%; margin-top: 10px;}
+
+section.show section.detail {
+  padding: 20px 0;
 }
