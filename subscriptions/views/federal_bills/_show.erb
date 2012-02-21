@@ -1,0 +1,10 @@
+<% bill = item.data %>
+
+<header>
+    <h4><%= bill_code bill['bill_type'], bill['number'] %></h4>
+    <% if bill['short_title'].present? %>
+        <h2><%= bill['short_title'] %></h2>
+    <% else %>
+        <h3><%= bill['official_title'] %></h3>
+    <% end %>
+</header>

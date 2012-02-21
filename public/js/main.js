@@ -135,6 +135,17 @@ $(function() {
       container.data("current_page", next_page);
     });
   });
+
+  $("#content").on("click", "ul.items div.more a", function() {
+    $.pjax({
+      url: $(this).attr("href"),
+      container: "#content",
+      error: function() {
+        showError("Some error while asking for the show template, shouldn't happen.");
+      }
+    });
+    return false;
+  });
   
 });
 
@@ -154,8 +165,7 @@ function startSearch(keyword) {
     container: "#content",
     error: function() {
       showError("Some error while asking for the results template, shouldn't happen.");
-    },
-    timeout: 3000
+    }
   });
 }
 
@@ -168,7 +178,8 @@ function searchFor(keyword, subscription_type) {
   container.find("div.system_error").hide();
   container.find("ul.items").html("");
   container.find("div.loading_container").show();
-  container.find("div.header").hide();
+  container.find("header").hide();
+  container.find("div.logged_out").hide();
 
   var keyword_slug = encodeURIComponent(keyword);
   $.get("/search/" + keyword_slug + "/" + subscription_type, function(data) {
@@ -181,8 +192,9 @@ function searchFor(keyword, subscription_type) {
     if (data.count < 0)  {
       tab.addClass("error");
     } else {
-      container.find("div.header").show();
-      container.find("div.header span.description").html(data.description);
+      container.find("header").show();
+      container.find("div.logged_out").show();
+      container.find("header span.description").html(data.description);
 
       var button = $("div.tab." + subscription_type + " button.follow");
 

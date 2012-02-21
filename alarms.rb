@@ -75,7 +75,7 @@ get(/^\/(#{item_data.keys.join '|'})\/([^\/]+)(?:\/[^\/])?\/?/) do
   item_type = params[:captures][0]
   item_id = params[:captures][1]
 
-  erb :show, :locals => {
+  erb :show, :layout => !pjax?, :locals => {
     :item_type => item_type, 
     :item_id => item_id, 
     :keywords => user_keywords
@@ -83,14 +83,21 @@ get(/^\/(#{item_data.keys.join '|'})\/([^\/]+)(?:\/[^\/])?\/?/) do
 end
 
 get(/^\/find\/(#{item_data.keys.join '|'})\/([^\/]+)$/) do
-  p params[:captures]
   item_type = params[:captures][0]
   item_id = params[:captures][1]
   subscription_type = item_data[item_type][:adapter]
 
   item = Subscriptions::Manager.find subscription_type, item_id
 
-  item.data['official_title']
+  html = erb :"subscriptions/#{subscription_type}/_show", :layout => false, :locals => {
+    :item_type => item_type, 
+    :item => item
+  }
+
+  headers["Content-Type"] = "application/json"
+  {
+    :html => html
+  }.to_json
 end
 
 post '/subscriptions' do
@@ -220,7 +227,7 @@ end
 helpers do
 
   def pjax?
-    (request.env['HTTP_X_PJAX'] or params[:pjax]) ? true : false
+    (request.env['HTTP_X_PJAX'] or params[:_pjax]) ? true : false
   end
 
   def user_keywords
