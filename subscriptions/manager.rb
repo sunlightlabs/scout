@@ -74,7 +74,8 @@ module Subscriptions
         :item_id => item.id,
         :item_date => item.date,
         :item_data => item.data,
-        :item_search_url => item.url
+        :item_search_url => item.search_url,
+        :item_url => item.url
       )
     end
     
