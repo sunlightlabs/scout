@@ -129,7 +129,7 @@ $(function() {
     $(this).remove();
     loader.show();
 
-    $.get("/search/" + keyword_slug + "/" + subscription_type, {page: next_page}, function(data) {
+    $.get("/items/" + keyword_slug + "/" + subscription_type, {page: next_page}, function(data) {
       page_container.remove();
       container.find("ul.items").append(data.html);
       container.data("current_page", next_page);
@@ -182,7 +182,7 @@ function searchFor(keyword, subscription_type) {
   container.find("div.logged_out").hide();
 
   var keyword_slug = encodeURIComponent(keyword);
-  $.get("/search/" + keyword_slug + "/" + subscription_type, function(data) {
+  $.get("/items/" + keyword_slug + "/" + subscription_type, function(data) {
 
     tab.removeClass("loading");
     container.find("div.loading_container").hide();

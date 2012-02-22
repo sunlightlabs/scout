@@ -69,9 +69,9 @@ get '/search/:keyword' do
   }
 end
 
-# needs to be last of the get /x/y form, to catch 
-# get '/:subscription_type/:item_id'
-get(/^\/(#{item_data.keys.join '|'})\/([^\/]+)(?:\/[^\/])?\/?/) do
+# landing page for item
+# get '/:item_type/:item_id'
+get(/^\/(#{item_data.keys.join '|'})\/([^\/]+)\/?/) do
   item_type = params[:captures][0]
   item_id = params[:captures][1]
 
@@ -82,6 +82,8 @@ get(/^\/(#{item_data.keys.join '|'})\/([^\/]+)(?:\/[^\/])?\/?/) do
   }
 end
 
+# actual JSON data for item
+# get '/:find/:item_type/:item_id' 
 get(/^\/find\/(#{item_data.keys.join '|'})\/([^\/]+)$/) do
   item_type = params[:captures][0]
   item_id = params[:captures][1]
@@ -142,7 +144,7 @@ post '/subscriptions' do
   
 end
 
-get '/search/:keyword/:subscription_type' do
+get '/items/:keyword/:subscription_type' do
   keyword = params[:keyword].strip
   subscription_type = params[:subscription_type]
 
