@@ -17,7 +17,7 @@ module Subscriptions
           endpoint = "http://api.realtimecongress.org/api/v1"
         end
         
-        sections = %w{ bill_id bill_type number short_title official_title introduced_at last_action_at last_action last_version.version_code last_version.bill_version_id session last_version.urls.pdf last_version.urls.xml last_version.issued_on }
+        sections = %w{ bill_id bill_type number short_title latest_upcoming official_title introduced_at last_action_at last_action session last_version }
 
         per_page = (function == :search) ? 20 : 40
         
@@ -44,7 +44,9 @@ module Subscriptions
           endpoint = "http://api.realtimecongress.org/api/v1"
         end
         
-        sections = %w{ bill_id bill_type number short_title official_title introduced_at last_action_at last_action last_version.version_code last_version.bill_version_id session last_version.urls.pdf last_version.urls.xml last_version.issued_on }
+        sections = %w{ bill_id bill_type number session short_title official_title introduced_at last_action_at last_action last_version 
+          summary sponsor cosponsors_count latest_upcoming
+          }
 
         url = "#{endpoint}/bills.json?apikey=#{api_key}"
         url << "&bill_id=#{item_id}"
@@ -67,6 +69,7 @@ module Subscriptions
       
       def self.item_for(bill)
         bill = bill['bills'][0] if bill['bills'] # accept either the original response or one of the results
+        return nil unless bill
 
         bill['last_version']['issued_on'] = noon_utc_for bill['last_version']['issued_on']
         

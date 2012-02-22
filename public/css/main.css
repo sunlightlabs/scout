@@ -74,6 +74,11 @@ button {
   cursor: pointer;
 }
 
+button.action {
+  display: inline-block; margin: 5px 10px 5px 0; padding: 10px 30px; 
+  border-radius: 3px; border: 1px solid #336699;
+} button.action:hover {background-color: #336699; color: #fff;}
+
 button:hover {
   background-color: #e5e5e5;
 }
@@ -400,13 +405,35 @@ section.show header {
 }
 
 section.show header div.titles {
-  position: relative; left: 10px; width: 75%;
+  position: relative; width: 75%;
 }
 
 section.show header h4 {font-size: 100%; color: #434343;}
 section.show header h2 {font-size: 125%; margin-top: 10px;}
 section.show header h3 {font-size: 100%; margin-top: 10px;}
 
-section.show section.detail {
-  padding: 20px 0;
+section.show .detail {
+  padding: 20px 10px; width: 630px;
 }
+
+section.show .detail h2 {font-weight: bold; margin-bottom: 10px;}
+
+section.show .detail .summary {
+  line-height: 21px; margin-bottom: 20px; font-size: 90%;
+}
+
+section.show .detail .latest_version {
+  margin-bottom: 20px;
+}
+
+section.show .detail .latest_version p {margin: 10px 0;}
+section.show .detail .sponsor {margin-bottom: 20px;}
+section.show .detail .sponsor img {display: inline-block; margin-right: 10px;}
+section.show .detail .sponsor h3 {display: inline-block; vertical-align: top;}
+section.show .detail .file {display: inline-block; margin: 0 5px;}
+section.show .detail .resources {margin-bottom: 20px;}
+section.show .detail .resources a {
+  display: inline-block; margin: 5px 10px 5px 0; padding: 10px 30px; 
+  border-radius: 3px; border: 1px solid #336699;
+  text-decoration: none;
+} section.show .detail .resources a:hover {background-color: #336699; color: #fff;}

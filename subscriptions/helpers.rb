@@ -326,6 +326,25 @@ module Subscriptions
       state = speech['speaker_state']
       "#{title}. #{speech['speaker_first']} #{speech['speaker_last']} (#{party}-#{state})"
     end
+
+    def legislator_name(legislator)
+      titled_name = "#{legislator['title']}. #{(legislator['nickname'].to_s != "") ? legislator['nickname'] : legislator['first_name']} #{legislator['last_name']}"
+      "#{titled_name} [#{legislator['party']}-#{legislator['state']}]"
+    end
+
+    def bill_summary(bill)
+      summary = bill['summary'].dup
+      summary.sub! /^\d+\/\d+\/\d+--.+?\.\s*/, ""
+      summary.sub! /(\(This measure.+?\))\n*\s*/, ""
+      if bill['short_title']
+        summary.sub! /^#{bill['short_title']} - /, ""
+      end
+      summary
+    end
+
+    def legislator_image(legislator)
+      "http://assets.sunlightfoundation.com/moc/40x50/#{legislator['bioguide_id']}.jpg"
+    end
     
     def speaker_url(speech)
       "http://capitolwords.org/legislator/#{speech['bioguide_id']}"

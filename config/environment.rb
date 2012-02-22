@@ -40,7 +40,7 @@ def subscription_data
       :name => "Congressional Bills",
       :description => "bill(s) in Congress",
       :search => "Bills in Congress",
-      :group => "congress",
+      :item => 'bill',
       :order => 1
     },
     'state_bills' => {

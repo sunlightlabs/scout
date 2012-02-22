@@ -87,7 +87,9 @@ get(/^\/find\/(#{item_data.keys.join '|'})\/([^\/]+)$/) do
   item_id = params[:captures][1]
   subscription_type = item_data[item_type][:adapter]
 
-  item = Subscriptions::Manager.find subscription_type, item_id
+  unless item = Subscriptions::Manager.find(subscription_type, item_id)
+    halt 404 and return
+  end
 
   html = erb :"subscriptions/#{subscription_type}/_show", :layout => false, :locals => {
     :item_type => item_type, 

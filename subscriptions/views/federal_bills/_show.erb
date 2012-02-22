@@ -13,12 +13,53 @@
 </header>
 
 <section class="detail">
-    <span class="version"><%= bill_version version['version_code'] %></span>
-    <span class="issued_on">on <%= very_short_date version['issued_on'] %></span>
-    <% if version['urls'] and version['urls']['pdf'] %>
-        <a class="file pdf" href="<%= version['urls']['pdf'] %>">PDF</a>
-    <% end %>
-    <% if version['urls'] and version['urls']['xml'] %>
-        <a class="file xml" href="<%= version['urls']['xml'] %>">HTML</a>
-    <% end %>
+    <h2>Resources</h2>
+    <div class="resources">
+        <a target="_blank" href="<%= govtrack_url item %>">GovTrack.us</a>
+        <a target="_blank" href="<%= opencongress_url item %>">OpenCongress.org</a>
+        <a target="_blank" href="<%= thomas_url item %>">THOMAS.gov</a>
+    </div>
+    <h2>Official Summary</h2>
+    <div class="summary">
+        <% if bill['summary'] %>
+            <% formatted = bill_summary bill %>
+            <% truncated = truncate formatted, 700 %>
+            <% if formatted == truncated %>
+                <%= formatted %>
+            <% else %>
+                <%= truncated %>
+            <% end %>
+        <% else %>
+            (No summary available from the Congressional Research Service.)
+        <% end %>
+    </div>
+    <h2>Latest Version</h2>
+    <div class="latest_version">
+        <p>
+            Full text:
+            <% if version['urls'] and version['urls']['pdf'] %>
+                <a class="file pdf" href="<%= version['urls']['pdf'] %>">PDF</a>
+            <% end %>
+            <% if version['urls'] and version['urls']['xml'] %>
+                <a class="file xml" href="<%= version['urls']['xml'] %>">HTML</a>
+            <% end %>
+        </p>
+        <p>
+            <%= bill_version version['version_code'] %>, issued on <%= very_short_date version['issued_on'] %>
+        </p>
+    </div>
+    <h2>Sponsor</h2>
+    <div class="sponsor">
+        <% if bill['sponsor'] %>
+            <h3><%= legislator_name bill['sponsor'] %></h3>
+        <% else %>
+            <h4>(no sponsor for this bill)
+        <% end %>
+        <% if bill['cosponsors_count'] > 0 %>
+            + <%= bill['cosponsors_count'] %> cosponsor(s)
+        <% end %>
+    </div>
+</section>
+
+<section class="track">
 </section>
