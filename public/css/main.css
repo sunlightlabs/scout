@@ -409,7 +409,7 @@ section.show header div.titles {
 }
 
 section.show header h4 {font-size: 100%; color: #434343;}
-section.show header h2 {font-size: 125%; margin-top: 10px;}
+section.show header h2 {font-size: 125%; margin-top: 10px; line-height: 23px;}
 section.show header h3 {font-size: 100%; margin-top: 10px;}
 
 section.show .detail {

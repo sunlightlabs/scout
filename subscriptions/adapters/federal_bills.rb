@@ -71,11 +71,17 @@ module Subscriptions
         bill = bill['bills'][0] if bill['bills'] # accept either the original response or one of the results
         return nil unless bill
 
-        bill['last_version']['issued_on'] = noon_utc_for bill['last_version']['issued_on']
+        date = nil
+        if bill['last_version']
+          bill['last_version']['issued_on'] = noon_utc_for bill['last_version']['issued_on']
+          date = bill['last_version']['issued_on']
+        else
+          date = bill['last_action_at']
+        end
         
         Subscriptions::Result.new(
           :id => bill["bill_id"],
-          :date => bill['last_version']["issued_on"],
+          :date => date,
           :data => bill,
 
           # reference to a URL to find more details on this object, for debugging purposes

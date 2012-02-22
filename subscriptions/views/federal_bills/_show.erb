@@ -35,18 +35,22 @@
     </div>
     <h2>Latest Version</h2>
     <div class="latest_version">
-        <p>
-            Full text:
-            <% if version['urls'] and version['urls']['pdf'] %>
-                <a class="file pdf" href="<%= version['urls']['pdf'] %>">PDF</a>
-            <% end %>
-            <% if version['urls'] and version['urls']['xml'] %>
-                <a class="file xml" href="<%= version['urls']['xml'] %>">HTML</a>
-            <% end %>
-        </p>
-        <p>
-            <%= bill_version version['version_code'] %>, issued on <%= very_short_date version['issued_on'] %>
-        </p>
+        <% if version %>
+            <p>
+                Full text:
+                <% if version['urls'] and version['urls']['pdf'] %>
+                    <a class="file pdf" href="<%= version['urls']['pdf'] %>">PDF</a>
+                <% end %>
+                <% if version['urls'] and version['urls']['xml'] %>
+                    <a class="file xml" href="<%= version['urls']['xml'] %>">HTML</a>
+                <% end %>
+            </p>
+            <p>
+                <%= bill_version version['version_code'] %>, issued on <%= very_short_date version['issued_on'] %>
+            </p>
+        <% else %>
+            No version information available from GPO right now.
+        <% end %>
     </div>
     <h2>Sponsor</h2>
     <div class="sponsor">
