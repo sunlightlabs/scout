@@ -136,7 +136,7 @@ $(function() {
     });
   });
 
-  $("#content").on("click", "ul.items div.more a", function() {
+  $("#content").on("click", "ul.items section.more a.landing", function() {
     $.pjax({
       url: $(this).attr("href"),
       container: "#content",

@@ -290,9 +290,6 @@ section.results li.result div.left p.date {
   font-size: 125%; color: #6f6f6f; text-align: right;
 }
 
-section.results li.result div.more {margin-top: 10px; text-align: right;}
-section.results li.result div.more a {font-size: 125%; color: #192F8C;}
-
 
 /* common to results */
 

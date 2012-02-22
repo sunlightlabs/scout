@@ -73,7 +73,8 @@ module Subscriptions
         
         :item_id => item.id,
         :item_date => item.date,
-        :item_data => item.data
+        :item_data => item.data,
+        :item_search_url => item.url
       )
     end
     
@@ -94,9 +95,12 @@ module Subscriptions
       results = adapter.items_for response, function, options
       
       if results
-        # insert a reference to the subscription in every search result
         results.map do |result| 
+          # insert a reference to the subscription that generated result
           result.subscription = subscription
+
+          # insert a reference to the URL this result was found in
+          result.search_url = url
           result
         end
       else
@@ -132,13 +136,19 @@ module Subscriptions
     include Subscriptions::Helpers
     include GeneralHelpers
     
-    attr_accessor :id, :date, :data, :subscription
+    attr_accessor :id, :date, :data, :subscription, :search_url, :url
     
     def initialize(options)
       self.id = options[:id]
       self.date = options[:date]
       self.data = options[:data]
-      self.subscription = options[:subscription] # used when returning lists of results
+
+      # used when returning lists of results (set by manager)
+      self.search_url = options[:search_url]
+      self.subscription = options[:subscription]
+
+      # used as a reference to find the exact item if needed (set by specific adapter)
+      self.url = options[:url]
     end
     
   end

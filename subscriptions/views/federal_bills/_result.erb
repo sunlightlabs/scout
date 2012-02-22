@@ -28,6 +28,7 @@
 <% end %>
 
 <section class="more">
-  <a href="<%= govtrack_url item %>">GovTrack</a>
-  <a href="<%= opencongress_url item %>">OpenCongress</a>
+  <a class="landing" href="<%= item_path subscription_types[item.subscription.subscription_type][:landing], item %>">
+    More information &raquo;
+  </a>
 </section>

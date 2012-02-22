@@ -6,13 +6,6 @@
         <p class="date">
           <%= just_date_year item.date %>
         </p>
-        <% if subscription_types[item.subscription.subscription_type][:landing] %>
-          <div class="more">
-            <a href="<%= item_path subscription_types[item.subscription.subscription_type][:landing], item %>">
-              More
-            </a>
-          </div>
-        <% end %>
       </div>
       <div class="right">
         <%= partial :"subscriptions/#{item.subscription.subscription_type}/result", :locals => {:item => item, :keyword => keyword} %>

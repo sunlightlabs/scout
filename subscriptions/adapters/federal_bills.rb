@@ -73,7 +73,10 @@ module Subscriptions
         Subscriptions::Result.new(
           :id => bill["bill_id"],
           :date => bill['last_version']["issued_on"],
-          :data => bill
+          :data => bill,
+
+          # reference to a URL to find more details on this object, for debugging purposes
+          :url => find_url(bill["bill_id"])
         )
       end
       
