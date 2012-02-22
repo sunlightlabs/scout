@@ -76,7 +76,7 @@ button {
 
 button.action {
   display: inline-block; margin: 5px 10px 5px 0; padding: 10px 30px; 
-  border-radius: 3px; border: 1px solid #336699;
+  border-radius: 3px; border: 1px solid #336699; color: #336699;
 } button.action:hover {background-color: #336699; color: #fff;}
 
 button:hover {
@@ -263,7 +263,7 @@ section.results ul.items {
 
 div.next_page {margin-top: 30px;}
 
-div.next_page button.text.page {
+div.next_page button.action.page {
   width: 100%; 
   font-size: 150%;
 }
