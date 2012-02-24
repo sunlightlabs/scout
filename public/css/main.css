@@ -139,6 +139,11 @@ button.text.login {
 }
 
 
+/* intro page */
+
+section.introduction p {padding: 10px 20px; line-height: 32px; font-size: 125%;}
+
+
 /* adding new subscriptions */
 
 section.entry div.errors {
