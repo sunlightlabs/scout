@@ -5,9 +5,13 @@ class Keyword
   include Mongoid::Timestamps
   
   field :keyword
+  field :keyword_type
+  field :keyword_name # display name, for non-keyword subscriptions
+  field :keyword_item, :type => Hash # holds metadata about the item being subscribed to
   
   index :keyword
   index :user_id
+  index :keyword_type
   
   validates_presence_of :user_id
   validates_presence_of :keyword

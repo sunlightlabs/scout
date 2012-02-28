@@ -18,13 +18,22 @@ $(function() {
     return false;
   });
   
-  $("ul.subscriptions").on("click", "li.keyword h2 a", function() {
+  $("ul.subscriptions").on("click", "li.keyword.search h2 a", function() {
     var keyword = $(this).data("keyword");
     
-    startSearch(keyword);
+    loadContent("/search/" + encodeURIComponent(keyword));
     
     return false;
   });
+
+  $("ul.subscriptions").on("click", "li.keyword.item h2 a", function() {
+    var keyword = $(this).data("keyword");
+    var keyword_type = $(this).data("keyword_type");
+
+    loadContent("/" + keyword_type + "/" + keyword);
+
+    return false;
+  });  
   
   $("form#signup_form").submit(function() {
     $(this).find("input.redirect").val(window.location.pathname + window.location.hash);
@@ -36,7 +45,8 @@ $(function() {
     if (keyword) keyword = keyword.trim();
     if (!keyword) return;
     
-    startSearch(keyword);
+    loadContent("/search/" + encodeURIComponent(keyword));
+    
     return false;
   });
 
@@ -137,17 +147,21 @@ $(function() {
   });
 
   $("#content").on("click", "ul.items section.more a.landing", function() {
-    $.pjax({
-      url: $(this).attr("href"),
-      container: "#content",
-      error: function() {
-        showError("Some error while asking for the show template, shouldn't happen.");
-      }
-    });
+    loadContent($(this).attr("href"));
     return false;
   });
   
 });
+
+function loadContent(href) {
+  $.pjax({
+      url: href,
+      container: "#content",
+      error: function() {
+        showError("Error asking for: " + href);
+      }
+    });
+}
 
 function selectTab(type) {
   if ($("ul.tabs li." + type).size() > 0) {
@@ -157,16 +171,6 @@ function selectTab(type) {
     $("ul.tabs li." + type).addClass("active");
     window.location.hash = "#" + type;
   }
-}
-
-function startSearch(keyword) {
-  $.pjax({
-    url: "/search/" + encodeURIComponent(keyword),
-    container: "#content",
-    error: function() {
-      showError("Some error while asking for the results template, shouldn't happen.");
-    }
-  });
 }
 
 function searchFor(keyword, subscription_type) {

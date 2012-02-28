@@ -8,12 +8,18 @@
 
 <script type="text/javascript">
   // put in a delay block in case this is being rendered before the layout
-  var item_type = "<%= item_type %>";
-  var item_id = "<%= item_id %>";
-  var container = $("#item-" + item_id);
-  container.find(".loading_container").show();
-
   $(function() {
+    var item_type = "<%= item_type %>";
+    var item_id = "<%= item_id %>";
+    var container = $("#item-" + item_id);
+    container.find(".loading_container").show();
+
+    var subscription = $("li.keyword h2 a[data-keyword='" + item_id + "'][data-keyword_type='" + item_type + "']");
+    if (subscription) {
+      $("li.keyword").removeClass("current");
+      subscription.parents("li.keyword").addClass("current");
+    }
+
     $.get("/find/" + item_type + "/" + item_id, {}, function(data) {
       container.html(data.html);
     }).error(function() {

@@ -1,10 +1,11 @@
-<li class="keyword" id="keyword-<%= keyword.id %>">
+<li class="keyword <%= keyword.keyword_type ? "item #{keyword.keyword_type}" : "search" %>" id="keyword-<%= keyword.id %>">
   <h2>
     <a href="/search/<%= form_escape keyword.keyword %>" onclick="return false" 
       data-keyword="<%= form_escape keyword.keyword %>"
       data-keyword_id="<%= form_escape keyword.id %>"
+      data-keyword_type="<%= keyword.keyword_type %>"
       >
-      <%= keyword.keyword %>
+      <%= keyword.keyword_name || keyword.keyword %>
     </a>
   </h2>
   

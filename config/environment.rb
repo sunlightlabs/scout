@@ -28,7 +28,10 @@ def item_data
   {
     'bill' => {
       :name => "Bill",
-      :adapter => "federal_bills"
+      :adapter => "federal_bills",
+      :subscriptions => [
+        'federal_bills_activity'
+      ]
     }
   }
 end
@@ -47,21 +50,18 @@ def subscription_data
       :name => "State Bills",
       :description => "state bill(s)",
       :search => "Bills in the states",
-      :group => "states",
       :order => 3
     },
     'congressional_record' => {
       :name => "Congressional Speeches",
       :description => "speech(es)",
       :search => "Speeches from Congress",
-      :group => "congress",
       :order => 2
     },
     'regulations' => {
       :name => "Federal Regulations",
       :description => "regulation(s)",
       :search => "Federal regulations",
-      :group => "regulations",
       :order => 4
     }
   }
