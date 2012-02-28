@@ -69,9 +69,23 @@
             No version information available from GPO right now.
         <% end %>
     </div>
+    
+    <% if item.data['latest_upcoming'] and item.data['latest_upcoming'].any? %>
+        <h2>Coming Up on the Floor</h2>
+        <ul class="upcoming_floor">
+            <% item.data['latest_upcoming'].each do |upcoming| %>
+                <span class="date"><%= just_date upcoming['legislative_day'] %></span>
+                - 
+                <a href="<%= upcoming['permalink'] %>">
+                    <%= upcoming['chamber'].capitalize %> Floor
+                </a>
+            <% end %>
+        </ul>
+    <% end %>
+
     <h2>Recent Activity</h2>
     <ul class="activity">
-        <% item.data['actions'].reverse[0...10].each do |action| %>
+        <% item.data['actions'].reverse[0...5].each do |action| %>
             <li>
                 <span class="date"><%= just_date action['acted_at'] %></span>
                 -
@@ -79,6 +93,7 @@
             </li>
         <% end %>
     </ul>
+
 </section>
 
 <section class="track">
