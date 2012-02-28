@@ -123,7 +123,7 @@ post '/keywords/track' do
 
   keyword = current_user.keywords.new :keyword_type => item_type, :keyword => item_id, :keyword_name => keyword_name, :keyword_item => item.data
 
-  subscriptions = item_data[item_type][:subscriptions].map do |subscription_type|
+  subscriptions = item_data[item_type][:subscriptions].keys.map do |subscription_type|
     current_user.subscriptions.new :keyword => item_id, :subscription_type => subscription_type
   end
 

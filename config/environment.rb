@@ -29,9 +29,9 @@ def item_data
     'bill' => {
       :name => "Bill",
       :adapter => "federal_bills",
-      :subscriptions => [
-        'federal_bills_activity'
-      ]
+      :subscriptions => {
+        'federal_bills_activity' => "Legislative Activity"
+      }
     }
   }
 end
