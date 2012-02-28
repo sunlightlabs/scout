@@ -43,7 +43,7 @@ class Subscription
   end
   
   def search(options = {})
-    adapter.search self, options
+    Subscriptions::Manager.search self, options
   end
   
   after_create :initialize_self

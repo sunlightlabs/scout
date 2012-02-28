@@ -3,12 +3,6 @@ module Subscriptions
 
     class CongressionalRecord
       
-      # non-destructive, searches for example results
-      def self.search(subscription, options = {})
-        Subscriptions::Manager.poll subscription, :search, options
-      end
-      
-      # ignore function, all polls look for the same information
       def self.url_for(subscription, function, options = {})
         api_key = config[:subscriptions][:sunlight_api_key]
         query = URI.escape subscription.keyword

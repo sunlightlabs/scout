@@ -3,10 +3,6 @@ module Subscriptions
 
     class CommitteeHearings
       
-      def self.search(subscription, options = {})
-        Subscriptions::Manager.poll subscription, :search, options
-      end
-      
       def self.url_for(subscription, function, options = {})
         api_key = config[:subscriptions][:sunlight_api_key]
         query = URI.escape subscription.keyword

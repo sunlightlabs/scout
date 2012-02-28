@@ -3,11 +3,6 @@ module Subscriptions
 
     class StateBills
       
-      def self.search(subscription, options = {})
-        Subscriptions::Manager.poll subscription, :search, options
-      end
-        
-      
       def self.url_for(subscription, function, options = {})
         endpoint = "http://openstates.org/api/v1"
         api_key = config[:subscriptions][:sunlight_api_key]

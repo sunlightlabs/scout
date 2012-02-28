@@ -4,6 +4,10 @@ require 'subscriptions/helpers'
 module Subscriptions
 
   class Manager
+
+    def self.search(subscription, options = {})
+      poll subscription, :search, options
+    end
     
     def self.initialize!(subscription)
 
