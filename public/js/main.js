@@ -64,6 +64,53 @@ $(function() {
     $(this).html("Following");
   });
 
+  $("#content").on("mouseover", "button.track.untrack", function() {
+    $(this).html("Untrack");
+  }).on("mouseout", "button.track.untrack", function() {
+    $(this).html("Tracking");
+  });
+
+  $("#content").on("click", "section.show button.track", function() {
+    var item_type = $(this).data("item_type");
+    var item_id = $(this).data("item_id");
+    var keyword_name = $(this).data("keyword_name");
+    var button = $(this);
+
+    if (button.hasClass("untrack")) {
+      var keyword_id = button.data("keyword_id");
+      button.html("Track").removeClass("untrack");
+      $.post("/keywords/untrack", {
+        _method: "delete",
+        keyword_id: keyword_id
+      }, function(data) {
+        console.log("Tracking keyword deleted: " + keyword_id);
+          $("#keyword-" + keyword_id).remove();
+          button.data("keyword_id", null);
+      }).error(function() {
+        showError("Error deleting tracking keyword: " + keyword_id);
+        button.html("Untrack").addClass("untrack");
+      });
+    } else {
+      button.html("Untrack").addClass("untrack");
+      $.post("/keywords/track", {
+          item_id: item_id,
+          item_type: item_type,
+          keyword_name: keyword_name
+        }, 
+        function(data) {
+          console.log("Tracking keyword created: " + data.keyword_id);
+          button.data("keyword_id", data.keyword_id);
+          $("ul.subscriptions").prepend(data.pane);
+          $("li.keyword#keyword-" + data.keyword_id).addClass("current");
+        }
+      ).error(function() {
+        showError("Error tracking item.");
+        button.html("Track").removeClass("untrack");
+      });
+
+    }
+  });
+
   $("#content").on("click", "div.tab button.follow", function() {
     var subscription_type = $(this).data("type");
     var keyword = $(this).data("keyword");

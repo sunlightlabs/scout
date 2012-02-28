@@ -6,9 +6,6 @@ class Subscription
   field :initialized, :type => Boolean, :default => false
   field :keyword
   field :last_checked_at, :type => Time
-  
-  # catch-all used for subscription adapter specific memo data
-  field :memo, :type => Hash, :default => {}
     
   index :subscription_type
   index :initialized

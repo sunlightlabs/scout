@@ -19,11 +19,13 @@
     </button>
   </form>
 
-  <section class="types">
-    <%= keyword.subscriptions.sort_by(&:subscription_type).map do |subscription|
-      subscription_types[subscription.subscription_type][:name]
-    end.join(", ") %>
-  </section>
+  <% unless keyword.keyword_type %>
+    <section class="types">
+      <%= keyword.subscriptions.sort_by(&:subscription_type).map do |subscription|
+        subscription_types[subscription.subscription_type][:name]
+      end.join(", ") %>
+    </section>
+  <% end %>
   
 </li>
 

@@ -50,7 +50,21 @@ module Subscriptions
 
         url
       end
-      
+
+      # display name for the item as keyword
+      def self.item_name(item)
+        code = {
+          "hr" => "H.R.",
+          "hres" => "H.Res.",
+          "hjres" => "H.J.Res.",
+          "hcres" => "H.Con.Res.",
+          "s" => "S.",
+          "sres" => "S.Res.",
+          "sjres" => "S.J.Res.",
+          "scres" => "S.Con.Res."
+        }[item['data']['code']]
+        "#{code} #{number}"
+      end
       
       # takes parsed response and returns an array where each item is 
       # a hash containing the id, title, and post date of each item found

@@ -75,10 +75,16 @@ get(/^\/(#{item_data.keys.join '|'})\/([^\/]+)\/?/) do
   item_type = params[:captures][0]
   item_id = params[:captures][1]
 
+  keyword = nil
+  if logged_in?
+    keyword = current_user.keywords.where(:keyword => item_id, :keyword_type => item_type).first
+  end
+
   erb :show, :layout => !pjax?, :locals => {
     :item_type => item_type, 
     :item_id => item_id, 
-    :keywords => user_keywords
+    :keywords => user_keywords,
+    :keyword => keyword
   }
 end
 
@@ -102,6 +108,53 @@ get(/^\/find\/(#{item_data.keys.join '|'})\/([^\/]+)$/) do
   {
     :html => html
   }.to_json
+end
+
+post '/keywords/track' do
+  requires_login
+
+  item_type = params[:item_type]
+  item_id = params[:item_id]
+  keyword_name = params[:keyword_name]
+
+  unless item = Subscriptions::Manager.find(item_data[item_type][:adapter], item_id)
+    halt 404 and return
+  end
+
+  keyword = current_user.keywords.new :keyword_type => item_type, :keyword => item_id, :keyword_name => keyword_name, :keyword_item => item.data
+
+  subscriptions = item_data[item_type][:subscriptions].map do |subscription_type|
+    current_user.subscriptions.new :keyword => item_id, :subscription_type => subscription_type
+  end
+
+  if keyword.valid? and (subscriptions.reject {|s| s.valid?}.empty?)
+    keyword.save!
+    subscriptions.each do |s|
+      s[:keyword_id] = keyword._id
+      s.save!
+    end
+
+    headers["Content-Type"] = "application/json"
+    {
+      :keyword_id => keyword._id.to_s,
+      :pane => partial(:"partials/keyword", :locals => {:keyword => keyword})
+    }.to_json
+  else
+    halt 500
+  end
+end
+
+delete '/keywords/untrack' do
+  unless keyword = current_user.keywords.where(:_id => BSON::ObjectId(params[:keyword_id].strip)).first
+    halt 404 and return
+  end
+
+  subscriptions = keyword.subscriptions.to_a
+    
+  keyword.destroy
+  subscriptions.each {|s| s.destroy}
+  
+  halt 200
 end
 
 post '/subscriptions' do
@@ -213,7 +266,7 @@ end
 delete '/keyword/:id' do
   requires_login
   
-  if keyword = Keyword.where(:user_id => current_user.id, :_id => BSON::ObjectId(params[:id].strip)).first
+  if keyword = current_user.keywords.where(:_id => BSON::ObjectId(params[:id].strip)).first
     subscriptions = keyword.subscriptions.to_a
     
     keyword.destroy
