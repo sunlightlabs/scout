@@ -443,9 +443,9 @@ section.show .detail .latest_version {
 }
 
 section.show .detail .latest_version p {margin: 10px 0;}
-section.show .detail .sponsor {margin-bottom: 20px;}
-section.show .detail .sponsor img {display: inline-block; margin-right: 10px;}
-section.show .detail .sponsor h3 {display: inline-block; vertical-align: top;}
+section.show .detail .activity {margin-bottom: 20px;}
+section.show .detail .activity li {margin: 10px 5px; font-size: 90%; line-height: 22px;}
+section.show .detail .activity li span.date {font-weight: bold;}
 section.show .detail .file {display: inline-block; margin: 0 5px;}
 section.show .detail .resources {margin-bottom: 20px;}
 section.show .detail .resources a {

@@ -41,7 +41,7 @@ module Subscriptions
         end
         
         sections = %w{ bill_id bill_type number session short_title official_title introduced_at last_action_at last_action last_version 
-          summary sponsor cosponsors_count latest_upcoming
+          summary sponsor cosponsors_count latest_upcoming actions
           }
 
         url = "#{endpoint}/bills.json?apikey=#{api_key}"
