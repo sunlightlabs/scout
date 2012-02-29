@@ -64,6 +64,18 @@ def subscription_data
       :description => "regulation(s)",
       :search => "Federal regulations",
       :order => 4
+    },
+    'committee_hearings' => {
+      :name => "Senate Committee Hearings",
+      :description => "hearing(s)",
+      :search => "Senate hearings",
+      :order => 5
+    },
+    'gao_reports' => {
+      :name => "GAO Reports",
+      :description => "GAO report(s)",
+      :search => "GAO reports",
+      :order => 6
     }
   }
   
