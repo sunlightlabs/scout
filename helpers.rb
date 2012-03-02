@@ -13,6 +13,10 @@ module GeneralHelpers
   def form_escape(string)
     string.to_s.gsub "\"", "&quot;"
   end
+
+  def js_escape(string)
+    URI.decode(string.to_s).gsub "\"", "\\\""
+  end
   
   def url_escape(url)
     URI.escape url

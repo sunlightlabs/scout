@@ -59,7 +59,7 @@ get '/' do
 end
 
 get '/search/:keyword' do
-  keyword_keyword = params[:keyword]
+  keyword_keyword = params[:keyword].gsub("\"", "")
   sorted_types = subscription_types.sort_by {|k, v| v[:order]}
 
   erb :search, :layout => !pjax?, :locals => {

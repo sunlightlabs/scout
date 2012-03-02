@@ -63,12 +63,12 @@
 <script type="text/javascript">
   // put in a delay block in case this is being rendered before the layout
   $(function() {
-    var keyword = encodeURIComponent("<%= params[:keyword] %>");
-    var display_keyword = "<%= form_escape params[:keyword] %>";
+    var keyword = encodeURIComponent("<%= js_escape keyword_keyword %>");
+    var display_keyword = "<%= js_escape keyword_keyword %>";
     var keyword_id = user_subscriptions[keyword] ? user_subscriptions[keyword].keyword_id : null;
 
     <% types.each do |subscription_type, data| %>
-      searchFor("<%= keyword_keyword %>", "<%= subscription_type %>");
+      searchFor("<%= js_escape keyword_keyword %>", "<%= subscription_type %>");
     <% end %>
 
     $("li.keyword").removeClass("current");

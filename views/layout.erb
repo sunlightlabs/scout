@@ -26,7 +26,7 @@
     var user_subscriptions = {};
     var keyword;
     <% keywords.each do |keyword, subscriptions| %>
-      keyword = encodeURIComponent("<%= form_escape keyword.keyword %>");
+      keyword = encodeURIComponent("<%= js_escape keyword.keyword %>");
       user_subscriptions[keyword] = {
         keyword_id: "<%= keyword._id.to_s %>",
         subscriptions: {}
@@ -104,7 +104,7 @@
     <script type="text/javascript">
       // if we're coming in from a permalink, set up anything that would have otherwise been set up along the way
       <% if params[:keyword] %>
-        var initial_keyword = encodeURIComponent("<%= form_escape params[:keyword] %>");
+        var initial_keyword = encodeURIComponent("<%= js_escape params[:keyword] %>");
         var keyword_id = user_subscriptions[initial_keyword] ? user_subscriptions[initial_keyword].keyword_id : null;
 
         $("input.query").val(initial_keyword);
