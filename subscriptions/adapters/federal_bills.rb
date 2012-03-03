@@ -88,6 +88,12 @@ module Subscriptions
         else
           date = bill['last_action_at']
         end
+
+        if bill['latest_upcoming']
+          bill['latest_upcoming'].each do |upcoming|
+            upcoming['legislative_day'] = noon_utc_for upcoming['legislative_day']
+          end
+        end
         
         Subscriptions::Result.new(
           :id => bill["bill_id"],
