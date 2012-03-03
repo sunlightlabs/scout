@@ -206,7 +206,8 @@ function loadContent(href) {
       container: "#content",
       error: function() {
         showError("Error asking for: " + href);
-      }
+      },
+      timeout: 10000
     });
 }
 
