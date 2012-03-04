@@ -1,12 +1,10 @@
 <% bill = item.data %>
 [<%= state_name bill['state'] %>] <%= excerpt bill['title'], keyword, false %>
-  
-<% if state_in_og?(bill['state']) %>
-<%= opengovernment_url bill %>
-<% elsif state_version_info?(bill) %>
-<%= bill['versions'].last['url'] %>
+
+<% if state_version_info?(bill) %>
+<%= URI.encode bill['versions'].last['url'] %>
 <% elsif state_source_info?(bill) %>
 <% bill['sources'].each do |source| %>
-<%= source['url'] %>
+<%= URI.encode source['url'] %>
 <% end %>
 <% end %>

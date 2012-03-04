@@ -1,10 +1,6 @@
 <% bill = item.data %>
 <h2>
-  <% if state_version_info?(bill) %>
-    <a class="read" href="<%= bill['versions'].last['url'] %>">A bill from</a>
-  <% else %>
-    A bill from
-  <% end %>
+  A bill from
   <span class="state"><%= state_name bill['state'] %></span>:
 </h2>
 
@@ -12,20 +8,12 @@
   <%= excerpt bill['title'], keyword %>
 </p>
 
-<% if state_in_og?(bill['state']) or state_source_info?(bill) %>
+<% if state_source_info?(bill) %>
   <section class="more">
-    
-    <% if state_in_og?(bill['state']) %>
-      <a href="<%= opengovernment_url bill %>">OpenGovernment</a>
+    <% if state_version_info?(bill) %>
+      <a class="read" href="<%= bill['versions'].last['url'] %>">Read</a>
     <% end %>
-    
-    <% if state_source_info?(bill) %>
-      <% more_than_one = (bill['sources'].size > 1) %>
-      <% bill['sources'].each_with_index do |source, i| %>
-        <a href="<%= source['url'] %>">Source<%= " #{i+1}" if more_than_one %></a>
-      <% end %>
-    <% end %>
-    
+
   </section>
 <% end %>
  

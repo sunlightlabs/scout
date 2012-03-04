@@ -234,28 +234,12 @@ module Subscriptions
       }[code.to_s.upcase]
     end
     
-    def state_in_og?(code)
-      ["CA", "LA", "MD", "MN", "TX"].include? code.to_s.upcase
-    end
-    
     def state_version_info?(bill)
       bill['versions'] and bill['versions'].any?
     end
     
     def state_source_info?(bill)
       bill['sources'] and bill['sources'].any?
-    end
-    
-    def opengovernment_url(bill)
-      state = bill['state'].to_s.downcase
-      bill_id = bill['bill_id'].downcase.gsub(' ', '-')
-      session = bill['session']
-      
-      # if state == "wi"
-      #   session = bill['session'].downcase.gsub(' ', '-')
-      # end
-      
-      "http://#{state}.opengovernment.org/sessions/#{session}/bills/#{bill_id}"
     end
     
     def speech_selection(speech, keyword)
