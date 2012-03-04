@@ -8,5 +8,4 @@
 <%= bill_highlight item, keyword, false %>
  <% end %>
 
-GovTrack: <%= govtrack_url item %>
-OpenCongress: <%= opencongress_url item %>
+http://<%= config[:hostname] %>/bill/<%= item.id %>

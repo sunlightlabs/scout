@@ -1,6 +1,6 @@
 <% speech = item.data %>
 <% if speech['bioguide_id'] %>
-<%= speaker_name speech %> said:
+<%= just_date item.date %> - <%= speaker_name speech %> said:
 <% end %>
 
 "<%= speech_excerpt speech, keyword, false %>"
