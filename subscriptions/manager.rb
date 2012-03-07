@@ -23,7 +23,7 @@ module Subscriptions
         Subscriptions::Manager.poll(subscription, :initialize).each do |item|
           # don't check if the seen ID already exists, for 
           # anticipated performance reasons (yes, premature optimization)
-          SeenId.create! :subscription_id => subscription.id, :item_id => item.id
+          mark_as_seen! subscription, item
         end
       end
       
@@ -52,9 +52,8 @@ module Subscriptions
                 next
               end
 
-              SeenId.create! :subscription_id => subscription.id, :item_id => item.id
-
-              Subscriptions::Manager.schedule_delivery! subscription, item
+              mark_as_seen! subscription, item
+              schedule_delivery! subscription, item
             end
           end
         end
@@ -82,13 +81,28 @@ module Subscriptions
         :item_url => item.url
       )
     end
+
+    def self.mark_as_seen!(subscription, item)
+      SeenId.create! :subscription_id => subscription.id, :item_id => item.id
+      SeenItem.create!(
+        :subscription_id => subscription.id,
+        :subscription_type => subscription.subscription_type,
+        :subscription_keyword => subscription.keyword,
+
+        :item_id => item.id,
+        :item_data => item.data,
+        :item_date => item.date,
+        :item_search_url => item.search_url,
+        :item_url => item.url
+      )
+    end
     
     # function is one of [:search, :initialize, :check]
     def self.poll(subscription, function = :search, options = {})
       adapter = subscription.adapter
       url = adapter.url_for subscription, function, options
       
-      puts "\n[#{adapter}][#{function}][#{subscription.id}] #{url}\n\n" if config[:debug][:output_urls]
+      puts "\n[#{subscription.subscription_type}][#{function}][#{subscription.keyword}][#{subscription.id}] #{url}\n\n" if config[:debug][:output_urls]
       
       begin
         response = HTTParty.get url
