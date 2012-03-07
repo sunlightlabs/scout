@@ -5,6 +5,10 @@ module GeneralHelpers
   def subscription_types
     @subscription_types ||= subscription_data
   end
+
+  def rss_date(time)
+    time.strftime "%a, %d %b %Y %H:%M:%S %T"
+  end
   
   def h(text)
     Rack::Utils.escape_html(text)

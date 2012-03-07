@@ -1,0 +1,12 @@
+<% bill = item.data %>
+<item>
+  <title>
+    <%= state_name bill['state'] %> - <%= bill['bill_id'] %>
+  </title>
+  <description><![CDATA[
+    <%= excerpt bill['title'], keyword %>
+  ]]></description>
+    
+  <link><%= bill['versions'].last['url'] %></link>
+  <pubDate><%= rss_date item.date %></pubDate>
+</item>

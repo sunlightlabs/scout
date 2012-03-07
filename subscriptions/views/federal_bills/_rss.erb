@@ -1,0 +1,15 @@
+<% bill = item.data %>
+<item>
+  <title><%= bill['short_title'].present? ? bill['short_title'] : bill['official_title'] %></title>
+  <% if bill['search']['highlight'] %>
+      <description><![CDATA[
+        <%= bill_highlight item, keyword %>
+      ]]></description>
+  <% elsif bill['summary'].present? %>
+    <%= bill['summary'] %>
+  <% else %>
+    No excerpt or summary available.
+  <% end %>
+  <link>http://<%= config[:hostname] %><%= item_path subscription_types[item.subscription.subscription_type][:item], item.item_id %></link>
+  <pubDate><%= rss_date item.date %></pubDate>
+</item>

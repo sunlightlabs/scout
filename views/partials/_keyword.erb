@@ -1,4 +1,7 @@
 <li class="keyword <%= keyword.keyword_type ? "item #{keyword.keyword_type}" : "search" %>" id="keyword-<%= keyword.id %>">
+  <a class="rss" href="/keyword/<%= keyword.id %>.rss">
+    <img src="/images/rss-32.png" />
+  </a>
   <h2>
     <a href="/search/<%= form_escape keyword.keyword %>" onclick="return false" 
       data-keyword="<%= form_escape keyword.keyword %>"

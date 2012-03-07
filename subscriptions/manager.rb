@@ -20,6 +20,10 @@ module Subscriptions
         # 1) does the initial poll
         # 2) stores every item ID as seen 
 
+        # make initialization idempotent, remove any existing seen items first
+        subscription.seen_ids.delete_all
+        subscription.seen_items.delete_all
+
         Subscriptions::Manager.poll(subscription, :initialize).each do |item|
           # don't check if the seen ID already exists, for 
           # anticipated performance reasons (yes, premature optimization)

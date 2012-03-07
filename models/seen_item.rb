@@ -32,4 +32,12 @@ class SeenItem
 
   validates_presence_of :subscription_id
   validates_presence_of :item_id
+
+  def date
+    item_date
+  end
+
+  def data
+    item_data
+  end
 end

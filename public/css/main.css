@@ -316,7 +316,7 @@ section.results li.result dl.highlight dt {
   margin-bottom: 5px;
 }
 
-section.results em.highlight, section.results .highlight em {
+section.results strong.highlight, section.results .highlight strong {
   font-weight: bold; 
   font-style: normal;
   color: #aa0000;
@@ -378,17 +378,24 @@ ul.subscriptions li.keyword {
 }
 
 ul.subscriptions li.keyword.current h2 {
-  font-weight: bold;
+  font-weight: bold; display: inline;
 }
 
-ul.subscriptions li.keyword.item {
-  
+ul.subscriptions li.keyword a.rss {
+  text-decoration: none; 
+}
+
+ul.subscriptions li.keyword a.rss img {
+  display: inline;
+  width: 16px; height: 16px;
+  margin-right: 5px;
 }
 
 ul.subscriptions li.keyword h2 {
   font-weight: normal;
   font-size: 150%;
   width: 250px;
+  display: inline;
 }
 
 ul.subscriptions li.keyword button.remove {

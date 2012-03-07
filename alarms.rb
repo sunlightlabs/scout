@@ -145,13 +145,32 @@ post '/keywords/track' do
 end
 
 get '/keyword/*.*' do |keyword_id, ext|
-  requires_login
+  # do not require login
+  # for RSS, want readers and bots to access it freely
+  # for SMS, want users on phones to see items easily without logging in
 
-  unless keyword = current_user.keywords.where(:_id => BSON::ObjectId(keyword_id.strip)).first
+  unless keyword = Keyword.where(:_id => BSON::ObjectId(keyword_id.strip)).first
     halt 404 and return
   end
 
+  
+  page = (params[:page] || 1).to_i
+  page = 1 if page <= 0 or page > 200000000
+  per_page = 20
 
+  items = SeenItem.where(:keyword_id => keyword.id).desc(:item_date)
+  items.skip(per_page * (page - 1)).limit(per_page)
+
+  if ext == 'rss'
+    headers["Content-Type"] = "application/rss+xml"
+    erb :"rss", :layout => false, :locals => {
+      :items => items, 
+      :keyword => keyword,
+      :url => request.url
+    }
+  else
+
+  end
 end
 
 delete '/keywords/untrack' do

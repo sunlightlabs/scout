@@ -1,8 +1,8 @@
 module Subscriptions
   module Helpers
 
-    def item_path(item_type, item)
-      "/#{item_type}/#{item.id}"
+    def item_path(item_type, item_id)
+      "/#{item_type}/#{item_id}"
     end
     
     def bill_code(type, number)
@@ -289,7 +289,7 @@ module Subscriptions
 
       if highlight
         truncated.gsub(excerpt_pattern(keyword)) do |word|
-          "<em class=\"highlight\">#{word}</em>"
+          "<strong class=\"highlight\">#{word}</strong>"
         end
       else
         truncated
