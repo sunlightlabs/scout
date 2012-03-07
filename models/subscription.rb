@@ -5,6 +5,7 @@ class Subscription
   field :subscription_type
   field :initialized, :type => Boolean, :default => false
   field :keyword
+  field :keyword_id
   field :last_checked_at, :type => Time
     
   index :subscription_type
@@ -13,7 +14,8 @@ class Subscription
   index :keyword
   index :last_checked_at
   
-  has_many :seen_ids
+  has_many :seen_ids, :dependent => :delete
+  has_many :seen_items, :dependent => :delete
   has_many :deliveries
   belongs_to :user
   

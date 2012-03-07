@@ -144,7 +144,19 @@ post '/keywords/track' do
   end
 end
 
+get '/keyword/*.*' do |keyword_id, ext|
+  requires_login
+
+  unless keyword = current_user.keywords.where(:_id => BSON::ObjectId(keyword_id.strip)).first
+    halt 404 and return
+  end
+
+
+end
+
 delete '/keywords/untrack' do
+  requires_login
+
   unless keyword = current_user.keywords.where(:_id => BSON::ObjectId(params[:keyword_id].strip)).first
     halt 404 and return
   end
@@ -152,7 +164,9 @@ delete '/keywords/untrack' do
   subscriptions = keyword.subscriptions.to_a
     
   keyword.destroy
-  subscriptions.each {|s| s.destroy}
+  subscriptions.each do |subscription| 
+    subscription.destroy
+  end
   
   halt 200
 end
@@ -270,7 +284,9 @@ delete '/keyword/:id' do
     subscriptions = keyword.subscriptions.to_a
     
     keyword.destroy
-    subscriptions.each {|s| s.destroy}
+    subscriptions.each do |subscription|
+      subscription.destroy
+    end
     
     halt 200
   else

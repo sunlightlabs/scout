@@ -10,7 +10,9 @@ class SeenItem
   field :subscription_id
   field :subscription_type
   field :subscription_keyword
-  
+
+  field :keyword_id
+
   field :item_id
   field :item_data, :type => Hash
   field :item_date, :type => DateTime

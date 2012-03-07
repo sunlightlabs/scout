@@ -73,6 +73,8 @@ module Subscriptions
         :subscription_id => subscription.id,
         :subscription_type => subscription.subscription_type,
         :subscription_keyword => subscription.keyword,
+
+        :keyword_id => subscription.keyword_id,
         
         :item_id => item.id,
         :item_date => item.date,
@@ -88,6 +90,8 @@ module Subscriptions
         :subscription_id => subscription.id,
         :subscription_type => subscription.subscription_type,
         :subscription_keyword => subscription.keyword,
+
+        :keyword_id => subscription.keyword_id,
 
         :item_id => item.id,
         :item_data => item.data,
