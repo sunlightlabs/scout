@@ -1,0 +1,9 @@
+<% report = item.data %>
+<item>
+  <title><%= report['title'] %></title>
+  <description><![CDATA[
+    GAO Report
+  ]]></description>
+  <link><%= report['url'] %></link>
+  <pubDate><%= rss_date item.date %></pubDate>
+</item>

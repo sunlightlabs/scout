@@ -1,0 +1,11 @@
+<% hearing = item.data %>
+<item>
+  <title>
+    <%= hearing['committee']['name'] %> - <%= hearing['occurs_at'].strftime("%A, %B %d") %>, <%= hearing['time_of_day'] %>
+  </title>
+  <description><![CDATA[
+    <%= excerpt hearing['description'], keyword %>
+  ]]></description>
+  <link>http://www.senate.gov/pagelayout/committees/b_three_sections_with_teasers/committee_hearings.htm</link>
+  <pubDate><%= rss_date item.date %></pubDate>
+</item>
