@@ -8,5 +8,6 @@
   ]]></description>
     
   <link><%= rss_encode bill['versions'].last['url'] %></link>
+  <guid><%= rss_encode bill['versions'].last['url'] %></guid>
   <pubDate><%= rss_date item.date %></pubDate>
 </item>

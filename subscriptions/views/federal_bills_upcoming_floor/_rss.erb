@@ -10,5 +10,6 @@
   ]]></description>
     
   <link><%= upcoming['permalink'] %></link>
+  <guid>http://<%= config[:hostname] %><%= item_path 'bill', keyword %>#upcoming-<%= upcoming['legislative_day'].strftime("%Y%m%d") %>-<%= upcoming['chamber'] %></guid>
   <pubDate><%= rss_date item.date %></pubDate>
 </item>

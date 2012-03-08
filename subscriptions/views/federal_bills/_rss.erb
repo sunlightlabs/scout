@@ -11,5 +11,6 @@
     No excerpt or summary available.
   <% end %>
   <link>http://<%= config[:hostname] %><%= item_path 'bill', item.item_id %></link>
+  <guid>http://<%= config[:hostname] %><%= item_path 'bill', item.item_id %></guid>
   <pubDate><%= rss_date item.date %></pubDate>
 </item>
