@@ -1,0 +1,14 @@
+<% upcoming = item.data %>
+<% bill_fields = bill_fields_from keyword %>
+<% bill_code = bill_code bill_fields[0], bill_fields[1] %>
+<item>
+  <title>
+    <%= bill_code %> - <%= just_date upcoming['legislative_day'] %> - Scheduled for the Floor
+  </title>
+  <description><![CDATA[
+     Coming up on the <%= upcoming['chamber'].capitalize %> Floor
+  ]]></description>
+    
+  <link><%= upcoming['permalink'] %></link>
+  <pubDate><%= rss_date item.date %></pubDate>
+</item>

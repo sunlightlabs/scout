@@ -8,6 +8,17 @@ module Subscriptions
     def bill_code(type, number)
       "#{bill_type type} #{number}"
     end
+
+    def bill_fields_from(bill_id)
+      type = bill_id.gsub /[^a-z]/, ''
+      number = bill_id.match(/[a-z]+(\d+)-/)[1].to_i
+      session = bill_id.match(/-(\d+)$/)[1].to_i
+      
+      code = "#{type}#{number}"
+      chamber = {'h' => 'house', 's' => 'senate'}[type.first.downcase]
+      
+      [type, number, session, code, chamber]
+    end
     
     # standardized in accordance with http://www.gpoaccess.gov/bills/glossary.html
     def bill_type(short)
