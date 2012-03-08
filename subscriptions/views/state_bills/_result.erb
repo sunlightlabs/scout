@@ -1,7 +1,6 @@
 <% bill = item.data %>
 <h2>
-  A bill from
-  <span class="state"><%= state_name bill['state'] %></span>:
+  <%= bill['bill_id'] %> from <span class="state"><%= state_name bill['state'] %></span>
 </h2>
 
 <p class="content">
