@@ -9,6 +9,10 @@ module GeneralHelpers
   def rss_date(time)
     time.strftime "%a, %d %b %Y %H:%M:%S %Z"
   end
+
+  def rss_encode(link)
+    link.gsub "&", "&amp;"
+  end
   
   def h(text)
     Rack::Utils.escape_html(text)

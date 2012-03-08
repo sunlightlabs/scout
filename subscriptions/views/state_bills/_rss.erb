@@ -7,6 +7,6 @@
     <%= excerpt bill['title'], keyword %>
   ]]></description>
     
-  <link><%= bill['versions'].last['url'] %></link>
+  <link><%= rss_encode bill['versions'].last['url'] %></link>
   <pubDate><%= rss_date item.date %></pubDate>
 </item>
