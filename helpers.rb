@@ -7,7 +7,7 @@ module GeneralHelpers
   end
 
   def rss_date(time)
-    time.strftime "%a, %d %b %Y %H:%M:%S %Z"
+    time.strftime "%a, %d %b %Y %H:%M:%S %z"
   end
 
   def rss_encode(link)
