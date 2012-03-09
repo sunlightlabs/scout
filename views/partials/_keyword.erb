@@ -24,12 +24,14 @@
 
   <section class="types">
     <%= keyword.subscriptions.sort_by(&:subscription_type).map do |subscription|
-      if keyword.keyword_type
+      if keyword.keyword_type and item_data[keyword.keyword_type]
         item_data[keyword.keyword_type][:subscriptions][subscription.subscription_type]
-      else 
+      elsif subscription_types[subscription.subscription_type]
         subscription_types[subscription.subscription_type][:name]
+      else
+        nil
       end
-    end.join(", ") %>
+    end.compact.join(", ") %>
   </section>
   
 </li>
