@@ -43,7 +43,7 @@
   <section class="main">
 
     <section class="entry">
-      <% if defined?(keyword) and keyword.errors.any? %>
+      <% if defined?(keyword) and keyword and keyword.errors.any? %>
         <div class="errors">
           <% keyword.errors.full_messages.each do |msg| %>
             <span><%= msg %></span>
