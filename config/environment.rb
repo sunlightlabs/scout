@@ -33,14 +33,21 @@ def item_data
         'federal_bills_activity' => {
           :name => "Legislative Activity",
           :description => ""
-        'federal_bills_upcoming_floor' => "Upcoming Floor Appearances"
+        },
+        'federal_bills_upcoming_floor' => {
+          :name => "Upcoming Floor Appearances",
+          :description => ""
+        }
       }
     },
     'state_bill' => {
       :name => "State Bill",
       :adapter => "state_bills",
       :subscriptions => {
-        ''
+        'state_bills_activity' => {
+          :name => "Legislative Activity",
+          :description => ""
+        }
       }
     }
   }
