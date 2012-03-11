@@ -10,7 +10,7 @@ set :domain, 'ec2-50-16-84-118.compute-1.amazonaws.com'
 
 
 set :scm, :git
-set :repository, "git@github.com:sunlightlabs/alarms.git"
+set :repository, "git@github.com:sunlightlabs/scout.git"
 set :branch, 'master'
 
 set :deploy_via, :remote_cache

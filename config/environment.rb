@@ -30,8 +30,17 @@ def item_data
       :name => "Bill",
       :adapter => "federal_bills",
       :subscriptions => {
-        'federal_bills_activity' => "Legislative Activity",
+        'federal_bills_activity' => {
+          :name => "Legislative Activity",
+          :description => ""
         'federal_bills_upcoming_floor' => "Upcoming Floor Appearances"
+      }
+    },
+    'state_bill' => {
+      :name => "State Bill",
+      :adapter => "state_bills",
+      :subscriptions => {
+        ''
       }
     }
   }

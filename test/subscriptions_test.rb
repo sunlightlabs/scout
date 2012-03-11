@@ -5,7 +5,7 @@ require 'test/unit'
 require 'rack/test'
 
 require 'bundler/setup'
-require 'alarms'
+require 'scout'
 
 
 set :environment, :test
