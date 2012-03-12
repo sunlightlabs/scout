@@ -10,24 +10,12 @@
             <h3><%= bill['official_title'] %></h3>
         <% end %>
     </div>
-    <% if logged_in? %>
-        <button class="text track"
-          data-item_type="<%= item_type %>"
-          data-item_id="<%= item.id %>"
-          data-keyword_name="<%= bill_code bill['bill_type'], bill['number'] %>"
-          >
-          Track
-        </button>
-    <% end %>
+    <%= partial :"partials/track", :locals => {
+        :keyword_name => bill_code(bill['bill_type'], bill['number']),
+        :item => item,
+        :item_type => item_type
+    } %>
 </header>
-
-<% unless logged_in? %>
-  <div class="logged_out">
-    <span>
-      To track this bill and be notified on new activity, enter your email on the right.
-    </span>
-  </div>
-<% end %>
 
 <section class="detail">
     <h2>Resources</h2>
@@ -39,13 +27,7 @@
     <h2>Official Summary</h2>
     <div class="summary">
         <% if bill['summary'] %>
-            <% formatted = bill_summary bill %>
-            <% truncated = truncate formatted, 700 %>
-            <% if formatted == truncated %>
-                <%= formatted %>
-            <% else %>
-                <%= truncated %>
-            <% end %>
+            <%= truncate bill_summary(bill), 700 %>
         <% else %>
             (No summary available from the Congressional Research Service.)
         <% end %>
