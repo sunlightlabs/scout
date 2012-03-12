@@ -49,8 +49,8 @@ module Subscriptions
         if results = Subscriptions::Manager.poll(subscription, :check)
           results.each do |item|
 
-            unless SeenItem.where(:subscription_id => subscription.id, :item_id => item.id).first
-              unless item.id
+            unless SeenItem.where(:subscription_id => subscription.id, :item_id => item.item_id).first
+              unless item.item_id
                 Email.report Report.warning("Check", "[#{subscription.subscription_type}][#{subscription.keyword}] item with an empty ID")
                 next
               end
@@ -67,7 +67,7 @@ module Subscriptions
     end
     
     def self.schedule_delivery!(subscription, item)
-      puts "[#{subscription.user.email}][#{subscription.subscription_type}][#{subscription.keyword}](#{item.id}) Scheduling delivery"
+      puts "[#{subscription.user.email}][#{subscription.subscription_type}][#{subscription.keyword}](#{item.item_id}) Scheduling delivery"
       
       Delivery.create!(
         :user_id => subscription.user.id,
