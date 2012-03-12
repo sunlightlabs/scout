@@ -14,7 +14,6 @@ class Subscription
   index :keyword
   index :last_checked_at
   
-  has_many :seen_ids, :dependent => :delete
   has_many :seen_items, :dependent => :delete
   has_many :deliveries
   belongs_to :user

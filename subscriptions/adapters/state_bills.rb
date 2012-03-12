@@ -55,8 +55,8 @@ module Subscriptions
         slug = bill['bill_id'].downcase.tr " ", "-"
         id = "#{bill['state']}-#{slug}"
         
-        Subscriptions::Result.new(
-          :id => id,
+        SeenItem.new(
+          :item_id => id,
           :date => bill["updated_at"],
           :data => bill
         )

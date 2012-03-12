@@ -21,11 +21,10 @@ module Subscriptions
         # 2) stores every item ID as seen 
 
         # make initialization idempotent, remove any existing seen items first
-        subscription.seen_ids.delete_all
         subscription.seen_items.delete_all
 
         Subscriptions::Manager.poll(subscription, :initialize).each do |item|
-          # don't check if the seen ID already exists, for 
+          # don't check if the seen item already exists, for 
           # anticipated performance reasons (yes, premature optimization)
           mark_as_seen! subscription, item
         end
@@ -50,7 +49,7 @@ module Subscriptions
         if results = Subscriptions::Manager.poll(subscription, :check)
           results.each do |item|
 
-            unless SeenId.where(:subscription_id => subscription.id, :item_id => item.id).first
+            unless SeenItem.where(:subscription_id => subscription.id, :item_id => item.id).first
               unless item.id
                 Email.report Report.warning("Check", "[#{subscription.subscription_type}][#{subscription.keyword}] item with an empty ID")
                 next
@@ -80,29 +79,15 @@ module Subscriptions
 
         :keyword_id => subscription.keyword_id,
         
-        :item_id => item.id,
+        :item_id => item.item_id,
         :item_date => item.date,
         :item_data => item.data,
-        :item_search_url => item.search_url,
-        :item_url => item.url
+        :item_search_url => item.search_url
       )
     end
 
     def self.mark_as_seen!(subscription, item)
-      SeenId.create! :subscription_id => subscription.id, :item_id => item.id
-      SeenItem.create!(
-        :subscription_id => subscription.id,
-        :subscription_type => subscription.subscription_type,
-        :subscription_keyword => subscription.keyword,
-
-        :keyword_id => subscription.keyword_id,
-
-        :item_id => item.id,
-        :item_data => item.data,
-        :item_date => item.date,
-        :item_search_url => item.search_url,
-        :item_url => item.url
-      )
+      item.save!
     end
     
     # function is one of [:search, :initialize, :check]
@@ -119,23 +104,31 @@ module Subscriptions
         return [] # should be return nil, when we refactor this to properly accomodate failures in initialization, checking, and searching
       end
       
-      results = adapter.items_for response, function, options
+      items = adapter.items_for response, function, options
       
-      if results
-        results.map do |result| 
-          # insert a reference to the subscription that generated result
-          result.subscription = subscription
+      if items
+        items.map do |item| 
 
-          # insert a reference to the URL this result was found in
-          result.search_url = url
-          result
+          item.attributes = {
+            # insert a reference to the subscription that generated result
+            :subscription => subscription,
+            # :subscription_id => subscription.id,
+            :subscription_type => subscription.subscription_type,
+            :subscription_keyword => subscription.keyword,
+            :keyword_id => subscription.keyword_id,
+
+            # insert a reference to the URL this result was found in  
+            :search_url => url
+          }
+
+          item
         end
       else
         nil
       end
     end
 
-    # given a type of adapter, and an item ID, fetch the item and return a Result item
+    # given a type of adapter, and an item ID, fetch the item and return a seen item
     def self.find(adapter_type, item_id)
       adapter = Subscription.adapter_for adapter_type
       url = adapter.find_url item_id
@@ -150,32 +143,6 @@ module Subscriptions
       end
       
       adapter.item_for response
-    end
-    
-  end
-  
-  
-  # utility class returned by adapters, then used to render displays and create various items in the database
-  class Result
-    
-    # done so that when a template is rendered with this item as the context, 
-    # it has all the subscription display helpers available to it
-    include Subscriptions::Helpers
-    include GeneralHelpers
-    
-    attr_accessor :id, :date, :data, :subscription, :search_url, :url
-    
-    def initialize(options)
-      self.id = options[:id]
-      self.date = options[:date]
-      self.data = options[:data]
-
-      # used when returning lists of results (set by manager)
-      self.search_url = options[:search_url]
-      self.subscription = options[:subscription]
-
-      # used as a reference to find the exact item if needed (set by specific adapter)
-      self.url = options[:url]
     end
     
   end

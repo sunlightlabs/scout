@@ -7,22 +7,19 @@ class SeenItem
 
   belongs_to :subscription
 
+  # origin subscription
   field :subscription_id
   field :subscription_type
   field :subscription_keyword
 
+  # for convenience, keyword object this came from
   field :keyword_id
 
+  # result fields from remote source
   field :item_id
-  field :item_data, :type => Hash
-  field :item_date, :type => DateTime
-
-  # fields inherited from item, if present
-
-  # search URL that originally produced this item
-  field :item_search_url
-  # to look up full details on item, if supported
-  field :item_url 
+  field :data, :type => Hash
+  field :date, :type => DateTime
+  field :search_url # search URL that originally produced this item
 
 
   index [
@@ -33,11 +30,7 @@ class SeenItem
   validates_presence_of :subscription_id
   validates_presence_of :item_id
 
-  def date
-    item_date
-  end
-
-  def data
-    item_data
+  def url
+    subscription.adapter.find_url item_id, data
   end
 end

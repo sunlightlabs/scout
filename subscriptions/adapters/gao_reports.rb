@@ -47,8 +47,9 @@ module Subscriptions
       # internal
       
       def self.item_for(report)
-        Subscriptions::Result.new(
-          :id => report['gao_id'],
+        
+        SeenItem.new(
+          :item_id => report['gao_id'],
           :date => report['posted_at'],
           :data => report
         )

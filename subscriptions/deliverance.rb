@@ -91,8 +91,8 @@ module Subscriptions
         end
 
         group.each do |delivery|
-          item = Subscriptions::Result.new(
-            :id => delivery.item_id,
+          item = SeenItem.new(
+            :item_id => delivery.item_id,
             :date => delivery.item_date,
             :data => delivery.item_data
           )

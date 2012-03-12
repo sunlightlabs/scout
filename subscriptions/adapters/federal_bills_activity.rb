@@ -39,17 +39,16 @@ module Subscriptions
         actions
       end
       
+
+      # private
       
       def self.item_for(bill_id, i, action)
         return nil unless action
 
-        Subscriptions::Result.new(
-          :id => "#{bill_id}-action-#{i}",
+        SeenItem.new(
+          :item_id => "#{bill_id}-action-#{i}",
           :date => action['acted_at'],
-          :data => action,
-
-          # reference to a URL to find more details on this object, for debugging purposes
-          :url => url_for_bill(bill_id)
+          :data => action
         )
       end
       

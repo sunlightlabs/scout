@@ -50,8 +50,8 @@ module Subscriptions
 
         id = "#{hearing['committee_id']}-#{hearing['occurs_at'].utc.xmlschema}"
 
-        Subscriptions::Result.new(
-          :id => id,
+        SeenItem.new(
+          :item_id => id,
           :date => hearing['occurs_at'],
           :data => hearing
         )

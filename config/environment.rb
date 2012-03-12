@@ -39,17 +39,17 @@ def item_data
           :description => ""
         }
       }
-    },
-    'state_bill' => {
-      :name => "State Bill",
-      :adapter => "state_bills",
-      :subscriptions => {
-        'state_bills_activity' => {
-          :name => "Legislative Activity",
-          :description => ""
-        }
-      }
     }
+    # 'state_bill' => {
+    #   :name => "State Bill",
+    #   :adapter => "state_bills",
+    #   :subscriptions => {
+    #     'state_bills_activity' => {
+    #       :name => "Legislative Activity",
+    #       :description => ""
+    #     }
+    #   }
+    # }
   }
 end
 

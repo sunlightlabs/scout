@@ -1,7 +1,7 @@
 <% if items and items.any? %>  
   <% items.each do |item| %>
   
-    <li class="result <%= item.subscription.subscription_type %>">
+    <li class="result <%= item.subscription_type %>">
       <div class="left">
         <p class="date">
           <%= just_date_year item.date %>

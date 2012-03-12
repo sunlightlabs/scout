@@ -49,8 +49,9 @@ module Subscriptions
       # internal
       
       def self.item_for(regulation)
-        Subscriptions::Result.new(
-          :id => regulation["document_number"],
+        
+        SeenItem.new(
+          :item_id => regulation["document_number"],
           :date => regulation["published_at"],
           :data => regulation
         )

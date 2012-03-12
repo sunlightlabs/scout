@@ -32,7 +32,7 @@ module Subscriptions
         url
       end
 
-      def self.find_url(item_id)
+      def self.find_url(item_id, data = {})
         api_key = config[:subscriptions][:sunlight_api_key]
         if config[:subscriptions][:rtc_endpoint].present?
           endpoint = config[:subscriptions][:rtc_endpoint]
@@ -95,13 +95,10 @@ module Subscriptions
           end
         end
         
-        Subscriptions::Result.new(
-          :id => bill["bill_id"],
+        SeenItem.new(
+          :item_id => bill["bill_id"],
           :date => date,
-          :data => bill,
-
-          # reference to a URL to find more details on this object, for debugging purposes
-          :url => find_url(bill["bill_id"])
+          :data => bill
         )
       end
       

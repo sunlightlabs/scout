@@ -41,13 +41,10 @@ module Subscriptions
 
         upcoming['legislative_day'] = noon_utc_for upcoming['legislative_day']
 
-        Subscriptions::Result.new(
-          :id => upcoming['permalink'],
+        SeenItem.new(
+          :item_id => upcoming['permalink'],
           :date => upcoming['legislative_day'],
-          :data => upcoming,
-
-          # reference to a URL to find more details on this object, for debugging purposes
-          :url => url_for_upcoming(upcoming['bill_id'])
+          :data => upcoming
         )
       end
 

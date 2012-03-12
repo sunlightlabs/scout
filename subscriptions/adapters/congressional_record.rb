@@ -48,8 +48,8 @@ module Subscriptions
           result['page_slug'] = matches.first
         end
         
-        Subscriptions::Result.new(
-          :id => "#{result["origin_url"]}-#{result['order']}",
+        SeenItem.new(
+          :item_id => "#{result["origin_url"]}-#{result['order']}",
           :date => result['date'],
           :data => result
         )
