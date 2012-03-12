@@ -5,6 +5,22 @@ require 'tilt'
 module Subscriptions
   module Deliverance
 
+    # dummy proxy class to provide a context with helper modules included so that ERB can render properly
+    class SeenItemProxy
+      include GeneralHelpers
+      include ::Subscriptions::Helpers
+
+      attr_accessor :item
+
+      def method_missing(m, *args, &block)
+        item.send m, *args, &block
+      end
+
+      def initialize(item)
+        self.item = item
+      end
+    end
+
     def self.deliver!
       delivereds = []
 
@@ -91,11 +107,11 @@ module Subscriptions
         end
 
         group.each do |delivery|
-          item = SeenItem.new(
+          item = SeenItemProxy.new(SeenItem.new(
             :item_id => delivery.item_id,
             :date => delivery.item_date,
             :data => delivery.item_data
-          )
+          ))
 
           content << render_item(delivery.subscription_type, delivery.subscription_keyword, item)
           content << "\n\n\n"
