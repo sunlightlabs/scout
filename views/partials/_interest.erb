@@ -1,5 +1,5 @@
 <li class="keyword <%= "item" if interest.item? %> <%= interest.interest_type %>" id="keyword-<%= interest.id %>">
-  <a class="rss" href="/keyword/<%= interest.id %>.rss">
+  <a class="rss" href="/interest/<%= interest.id %>.rss">
     <img src="/images/rss-32.png" />
   </a>
   <h2>
@@ -12,7 +12,7 @@
     </a>
   </h2>
   
-  <form method="post" action="/keyword/<%= interest.id %>" onsubmit="return false">
+  <form method="post" action="/interest/<%= interest.id %>" onsubmit="return false">
     <input type="hidden" name="_method" value="delete" />
     
     <button class="remove image" 
