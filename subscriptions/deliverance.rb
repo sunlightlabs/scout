@@ -86,7 +86,7 @@ module Subscriptions
 
       unsupported = []
       grouped.keys.each do |key|
-        unless subscription_data[key.to_s]
+        unless search_data[key.to_s]
           unsupported << key.to_s
           grouped.delete key
         end
@@ -97,13 +97,13 @@ module Subscriptions
       end
 
       only_one = grouped.keys.size == 1
-      descriptor = only_one ? subscription_data[grouped.keys.first.to_s][:description] : "things"
+      descriptor = only_one ? search_data[grouped.keys.first.to_s][:description] : "things"
 
       subject = "#{interest_in} - #{deliveries.size} new #{descriptor}"
 
       grouped.each do |type, group|
         unless only_one
-          content << "- #{group.size} new #{subscription_data[type][:description]}\n\n\n"
+          content << "- #{group.size} new #{search_data[type][:description]}\n\n\n"
         end
 
         group.each do |delivery|
