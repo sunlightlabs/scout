@@ -3,7 +3,7 @@
 
 :mongoid:
   host: localhost
-  database: rtc
+  database: scout
   raise_not_found_error: false
 
 :log_file: /dev/null
