@@ -4,7 +4,7 @@ module Subscriptions
     class FederalBillsUpcomingFloor
       
       def self.url_for(subscription, function, options = {})
-        url_for_upcoming subscription.keyword, options
+        url_for_upcoming subscription.interest_in, options
       end
 
       def self.url_for_upcoming(bill_id, options = {})
@@ -26,7 +26,7 @@ module Subscriptions
       end
 
       def self.item_path(item)
-        "/bill/#{item.subscription_keyword}#upcoming-#{item['data']['legislative_day'].strftime("%Y%m%d")}-#{item['data']['chamber']}"
+        "/bill/#{item.subscription_interest_in}#upcoming-#{item['data']['legislative_day'].strftime("%Y%m%d")}-#{item['data']['chamber']}"
       end
       
       # takes parsed response and returns an array where each item is 
@@ -46,7 +46,7 @@ module Subscriptions
         upcoming['legislative_day'] = noon_utc_for upcoming['legislative_day']
 
         SeenItem.new(
-          :item_id => upcoming['permalink'],
+          :item_id => upcoming['permalink'] || "#{upcoming['legislative_day'].strftime "%Y%m%d"}-#{upcoming['chamber']}",
           :date => upcoming['legislative_day'],
           :data => upcoming
         )

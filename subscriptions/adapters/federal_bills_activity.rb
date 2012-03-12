@@ -4,7 +4,7 @@ module Subscriptions
     class FederalBillsActivity
       
       def self.url_for(subscription, function, options = {})
-        url_for_bill subscription.keyword, options
+        url_for_bill subscription.interest_in, options
       end
 
       def self.url_for_bill(bill_id, options = {})
@@ -26,7 +26,7 @@ module Subscriptions
       end
 
       def self.item_path(item)
-        "/bill/#{item.subscription_keyword}#action-#{item['data']['acted_at'].to_i}"
+        "/bill/#{item.subscription_interest_in}#action-#{item['data']['acted_at'].to_i}"
       end
       
       # takes parsed response and returns an array where each item is 

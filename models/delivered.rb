@@ -7,17 +7,17 @@ class Delivered
   field :delivered_at, :type => Time
   field :deliveries, :type => Array
   field :subscription_types, :type => Hash
-  field :keyword
+  field :interest_in
   field :subject
   field :content
   
   index :delivered_at
   
   validates_presence_of :delivered_at
-  validates_presence_of :keyword
+  validates_presence_of :interest_in
   validates_presence_of :content
 
   def to_s
-    "[#{user_email}] #{keyword} (#{deliveries.size})\n\t#{subscription_types.map {|type, n| "#{type} (#{n})"}.join ', '}\n\t#{_id}"
+    "[#{user_email}] #{interest_in} (#{deliveries.size})\n\t#{subscription_types.map {|type, n| "#{type} (#{n})"}.join ', '}\n\t#{_id}"
   end
 end

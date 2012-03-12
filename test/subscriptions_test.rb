@@ -32,20 +32,20 @@ class SubscriptionsTest < Test::Unit::TestCase
   # begin actual tests
 
   def test_create_subscriptions_without_login
-    post '/subscriptions', :keyword => "testing", :subscription_type => "federal_bills"
+    post '/subscriptions', :interest => "testing", :subscription_type => "federal_bills"
     assert_equal 302, last_response.status
   end
 
-  def test_create_subscription_on_new_keyword
-    keywords_count = Keyword.count
+  def test_create_subscription_on_new_interest
+    interests_count = Interest.count
     subscriptions_count = Subscription.count
 
-    post '/subscriptions', {:keyword => "testing", :subscription_type => "federal_bills"}, login
+    post '/subscriptions', {:interest => "testing", :subscription_type => "federal_bills"}, login
     
     assert_equal 200, last_response.status
     assert_equal "application/json", last_response.headers['Content-Type']
 
-    assert_equal keywords_count + 1, Keyword.count
+    assert_equal interests_count + 1, Interest.count
     assert_equal subscriptions_count + 1, Subscription.count
   end
 

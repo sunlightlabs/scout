@@ -22,9 +22,9 @@
 
     $.get("/find/" + item_type + "/" + item_id, {}, function(data) {
       container.html(data.html);
-      <% if keyword %>
+      <% if interest %>
         $("section.show button.track").html("Tracking").addClass("untrack");
-        $("section.show button.track").data("keyword_id", "<%= keyword._id %>");
+        $("section.show button.track").data("keyword_id", "<%= interest.id %>");
       <% end %>
     }).error(function() {
       showError("Couldn't load " + item_type + " with id " + item_id);

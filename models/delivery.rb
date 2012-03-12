@@ -17,7 +17,7 @@ class Delivery
   # core fields needed to deliver the goods
   field :user_email
   field :subscription_type
-  field :subscription_keyword
+  field :subscription_interest_in
   
   # item details
   field :item_id
@@ -29,7 +29,7 @@ class Delivery
   
   validates_presence_of :subscription_id
   validates_presence_of :subscription_type
-  validates_presence_of :subscription_keyword
+  validates_presence_of :subscription_interest_in
   validates_presence_of :user_id
   validates_presence_of :user_email
   validates_presence_of :item_id

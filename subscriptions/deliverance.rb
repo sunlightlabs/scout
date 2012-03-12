@@ -24,7 +24,7 @@ module Subscriptions
     def self.deliver!
       delivereds = []
 
-      # group by emails, send one per user per keyword
+      # group by emails, send one per user per interest
       emails = Delivery.all.distinct :user_email
       emails.each do |email|
         delivereds += deliver_for_user!(email)
@@ -43,25 +43,25 @@ module Subscriptions
 
       deliveries = Delivery.where(:user_email => email).all.to_a
 
-      # group the deliveries by keyword
-      deliveries.group_by(&:subscription_keyword).each do |keyword, for_keyword|
-        grouped = for_keyword.group_by &:subscription_type
+      # group the deliveries by interest
+      deliveries.group_by(&:subscription_interest_in).each do |interest_in, for_interest|
+        grouped = for_interest.group_by &:subscription_type
 
-        subject, content = render_email keyword, for_keyword, grouped
+        subject, content = render_email interest_in, for_interest, grouped
         
         if Email.user(email, subject, content)
-          for_keyword.each do |delivery|
+          for_interest.each do |delivery|
             delivery.destroy
           end
 
           # shouldn't be a risk of failure
           delivered = Delivered.create!(
-            :deliveries => for_keyword.map {|delivery| delivery.attributes.dup},
+            :deliveries => for_interest.map {|delivery| delivery.attributes.dup},
             
-            # each email can have multiple subscription_types within the same keyword though
+            # each email can have multiple subscription_types within the same interest though
             :subscription_types => grouped.keys.inject({}) {|memo, key| memo[key] = grouped[key].size; memo},
 
-            :keyword => keyword,
+            :interest_in => interest_in,
             :delivered_at => Time.now,
             :user_email => email,
             :subject => subject,
@@ -81,7 +81,7 @@ module Subscriptions
       successes
     end
 
-    def self.render_email(keyword, deliveries, grouped)
+    def self.render_email(interest_in, deliveries, grouped)
       content = ""
 
       unsupported = []
@@ -99,7 +99,7 @@ module Subscriptions
       only_one = grouped.keys.size == 1
       descriptor = only_one ? subscription_data[grouped.keys.first.to_s][:description] : "things"
 
-      subject = "#{keyword} - #{deliveries.size} new #{descriptor}"
+      subject = "#{interest_in} - #{deliveries.size} new #{descriptor}"
 
       grouped.each do |type, group|
         unless only_one
@@ -113,7 +113,7 @@ module Subscriptions
             :data => delivery.item_data
           ))
 
-          content << render_item(delivery.subscription_type, delivery.subscription_keyword, item)
+          content << render_item(delivery.subscription_type, delivery.subscription_interest_in, item)
           content << "\n\n\n"
         end
         content << "\n"
@@ -126,9 +126,9 @@ module Subscriptions
       return subject, content
     end
 
-    def self.render_item(subscription_type, keyword, item)
+    def self.render_item(subscription_type, interest_in, item)
       template = Tilt::ERBTemplate.new "views/subscriptions/#{subscription_type}/_email.erb"
-      template.render item, :item => item, :keyword => keyword, :trim => false
+      template.render item, :item => item, :interest => interest_in, :trim => false
     end
 
   end

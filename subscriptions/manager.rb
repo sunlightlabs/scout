@@ -24,8 +24,7 @@ module Subscriptions
         subscription.seen_items.delete_all
 
         Subscriptions::Manager.poll(subscription, :initialize).each do |item|
-          # don't check if the seen item already exists, for 
-          # anticipated performance reasons (yes, premature optimization)
+          p item
           mark_as_seen! subscription, item
         end
       end
@@ -51,7 +50,7 @@ module Subscriptions
 
             unless SeenItem.where(:subscription_id => subscription.id, :item_id => item.item_id).first
               unless item.item_id
-                Email.report Report.warning("Check", "[#{subscription.subscription_type}][#{subscription.keyword}] item with an empty ID")
+                Email.report Report.warning("Check", "[#{subscription.subscription_type}][#{subscription.interest_in}] item with an empty ID")
                 next
               end
 
@@ -67,7 +66,7 @@ module Subscriptions
     end
     
     def self.schedule_delivery!(subscription, item)
-      puts "[#{subscription.user.email}][#{subscription.subscription_type}][#{subscription.keyword}](#{item.item_id}) Scheduling delivery"
+      puts "[#{subscription.user.email}][#{subscription.subscription_type}][#{subscription.interest_in}](#{item.item_id}) Scheduling delivery"
       
       Delivery.create!(
         :user_id => subscription.user.id,
@@ -75,9 +74,9 @@ module Subscriptions
         
         :subscription_id => subscription.id,
         :subscription_type => subscription.subscription_type,
-        :subscription_keyword => subscription.keyword,
+        :subscription_interest_in => subscription.interest_in,
 
-        :keyword_id => subscription.keyword_id,
+        :interest_id => subscription.interest_id,
         
         :item_id => item.item_id,
         :item_date => item.date,
@@ -95,12 +94,12 @@ module Subscriptions
       adapter = subscription.adapter
       url = adapter.url_for subscription, function, options
       
-      puts "\n[#{subscription.subscription_type}][#{function}][#{subscription.keyword}][#{subscription.id}] #{url}\n\n" if config[:debug][:output_urls]
+      puts "\n[#{subscription.subscription_type}][#{function}][#{subscription.interest_in}][#{subscription.id}] #{url}\n\n" if config[:debug][:output_urls]
       
       begin
         response = HTTParty.get url
       rescue Timeout::Error, Errno::ETIMEDOUT => ex
-        Email.report Report.warning("Poll", "[#{subscription.subscription_type}][#{function}][#{subscription.keyword}] poll timeout, returned an empty list")
+        Email.report Report.warning("Poll", "[#{subscription.subscription_type}][#{function}][#{subscription.interest_in}] poll timeout, returned an empty list")
         return [] # should be return nil, when we refactor this to properly accomodate failures in initialization, checking, and searching
       end
       
@@ -114,8 +113,8 @@ module Subscriptions
             :subscription => subscription,
             # :subscription_id => subscription.id,
             :subscription_type => subscription.subscription_type,
-            :subscription_keyword => subscription.keyword,
-            :keyword_id => subscription.keyword_id,
+            :subscription_interest_in => subscription.interest_in,
+            :interest_id => subscription.interest_id,
 
             # insert a reference to the URL this result was found in  
             :search_url => url

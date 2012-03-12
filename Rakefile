@@ -52,7 +52,7 @@ namespace :subscriptions do
   
   namespace :deliver do
 
-    desc "Deliver outstanding emails, grouped by keywords"
+    desc "Deliver outstanding emails, grouped by interests"
     task :email => :environment do
       begin
         Subscriptions::Deliverance.deliver!      
@@ -83,12 +83,12 @@ namespace :test do
   desc "Send a test report of a subscription"
   task :email_user => :environment do
     types = (ENV['types'] || "").split(",")
-    keywords = (ENV['keywords'] || "").split(",")
+    interests = (ENV['interests'] || "").split(",")
     email = ENV['email'] || config[:admin][:email]
     max = (ENV['max'] || ENV['limit'] || 2).to_i
 
-    if types.empty? or keywords.empty?
-      puts "Enter 'types' and 'keywords' parameters."
+    if types.empty? or interests.empty?
+      puts "Enter 'types' and 'interests' parameters."
       return
     end
 
@@ -100,15 +100,15 @@ namespace :test do
     # clear out any deliveries for this user
     Delivery.where(:user_email => email).delete_all
 
-    keywords.each do |keyword|
+    interests.each do |interest|
       types.each do |type|
 
         subscription = admin.subscriptions.new(
-          :keyword => keyword,
+          :interest_in => interest,
           :subscription_type => type
         )
 
-        puts "Searching for #{type} results for #{keyword}..."
+        puts "Searching for #{type} results for #{interest}..."
         results = subscription.search
         if results.empty?
           puts "\tNo results, nothing to deliver."

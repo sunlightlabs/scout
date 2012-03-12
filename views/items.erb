@@ -8,7 +8,7 @@
         </p>
       </div>
       <div class="right">
-        <%= partial :"subscriptions/#{item.subscription.subscription_type}/result", :locals => {:item => item, :keyword => keyword} %>
+        <%= partial :"subscriptions/#{item.subscription.subscription_type}/result", :locals => {:item => item, :interest => interest_in} %>
       </div>
     </li>
 
@@ -16,7 +16,7 @@
 
   <div class="next_page">
     <button class="action page <%= subscription_type %>"
-      data-keyword="<%= form_escape params[:keyword] %>"
+      data-keyword="<%= form_escape interest_in %>"
       data-type="<%= subscription_type %>"
       >
       Load more results
@@ -39,7 +39,7 @@
       
       <button class="text refresh"
         data-type="<%= subscription_type %>"
-        data-keyword="<%= keyword %>"
+        data-keyword="<%= interest %>"
         >
         Refresh
       </button>

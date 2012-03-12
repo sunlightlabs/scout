@@ -10,10 +10,10 @@ class SeenItem
   # origin subscription
   field :subscription_id
   field :subscription_type
-  field :subscription_keyword
+  field :subscription_interest_in
 
-  # for convenience, keyword object this came from
-  field :keyword_id
+  # for convenience, interest object this came from
+  field :interest_id
 
   # result fields from remote source
   field :item_id

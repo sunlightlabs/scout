@@ -6,7 +6,7 @@ module Subscriptions
       def self.url_for(subscription, function, options = {})
         endpoint = "http://openstates.org/api/v1"
         api_key = config[:subscriptions][:sunlight_api_key]
-        query = URI.escape subscription.keyword
+        query = URI.escape subscription.interest_in
         
         fields = %w{ bill_id subjects state chamber updated_at title sources versions session }
         

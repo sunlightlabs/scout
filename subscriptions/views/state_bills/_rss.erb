@@ -4,7 +4,7 @@
     <%= state_name bill['state'] %> - <%= bill['bill_id'] %>
   </title>
   <description><![CDATA[
-    <%= excerpt bill['title'], keyword %>
+    <%= excerpt bill['title'], interest %>
   ]]></description>
     
   <link><%= rss_encode bill['versions'].last['url'] %></link>

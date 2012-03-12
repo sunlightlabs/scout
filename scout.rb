@@ -55,17 +55,17 @@ end
 
 
 get '/' do
-  erb :index, :locals => {:keywords => user_keywords}
+  erb :index, :locals => {:interests => user_interests}
 end
 
-get '/search/:keyword' do
-  keyword_keyword = params[:keyword].gsub("\"", "")
+get '/search/:interest' do
+  interest_in = params[:interest].gsub("\"", "")
   sorted_types = subscription_types.sort_by {|k, v| v[:order]}
 
   erb :search, :layout => !pjax?, :locals => {
     :types => sorted_types,
-    :keyword_keyword => keyword_keyword, # a string, not a Keyword
-    :keywords => user_keywords
+    :interest_in => interest_in,
+    :interests => user_interests
   }
 end
 
@@ -75,16 +75,16 @@ get(/^\/(#{item_data.keys.join '|'})\/([^\/]+)\/?/) do
   item_type = params[:captures][0]
   item_id = params[:captures][1]
 
-  keyword = nil
+  interest = nil
   if logged_in?
-    keyword = current_user.keywords.where(:keyword => item_id, :keyword_type => item_type).first
+    interest = current_user.interests.where(:interest => item_id, :interest_type => item_type).first
   end
 
   erb :show, :layout => !pjax?, :locals => {
     :item_type => item_type, 
     :item_id => item_id, 
-    :keywords => user_keywords,
-    :keyword => keyword
+    :interests => user_interests,
+    :interest => interest
   }
 end
 
@@ -110,46 +110,45 @@ get(/^\/find\/(#{item_data.keys.join '|'})\/([^\/]+)$/) do
   }.to_json
 end
 
-post '/keywords/track' do
+post '/interest/track' do
   requires_login
 
   item_type = params[:item_type]
   item_id = params[:item_id]
-  keyword_name = params[:keyword_name]
-
+  
   unless item = Subscriptions::Manager.find(item_data[item_type][:adapter], item_id)
     halt 404 and return
   end
 
-  keyword = current_user.keywords.new :keyword_type => item_type, :keyword => item_id, :keyword_name => keyword_name, :keyword_item => item.data
+  interest = current_user.interests.new :interest_type => item_type, :in => item_id, :data => item.data
 
   subscriptions = item_data[item_type][:subscriptions].keys.map do |subscription_type|
-    current_user.subscriptions.new :keyword => item_id, :subscription_type => subscription_type
+    current_user.subscriptions.new :interest_in => item_id, :subscription_type => subscription_type
   end
 
-  if keyword.valid? and (subscriptions.reject {|s| s.valid?}.empty?)
-    keyword.save!
+  if interest.valid? and (subscriptions.reject {|s| s.valid?}.empty?)
+    interest.save!
     subscriptions.each do |s|
-      s[:keyword_id] = keyword._id
+      s[:interest_id] = interest.id
       s.save!
     end
 
     headers["Content-Type"] = "application/json"
     {
-      :keyword_id => keyword._id.to_s,
-      :pane => partial(:"partials/keyword", :locals => {:keyword => keyword})
+      :interest_id => interest.id.to_s,
+      :pane => partial(:"partials/interest", :locals => {:interest => interest})
     }.to_json
   else
     halt 500
   end
 end
 
-get '/keyword/*.*' do |keyword_id, ext|
+get '/interest/*.*' do |interest_id, ext|
   # do not require login
   # for RSS, want readers and bots to access it freely
   # for SMS, want users on phones to see items easily without logging in
 
-  unless keyword = Keyword.where(:_id => BSON::ObjectId(keyword_id.strip)).first
+  unless interest = Interest.find(interest_id.strip)
     halt 404 and return
   end
 
@@ -158,14 +157,14 @@ get '/keyword/*.*' do |keyword_id, ext|
   page = 1 if page <= 0 or page > 200000000
   per_page = 20
 
-  items = SeenItem.where(:keyword_id => keyword.id).desc(:date)
+  items = SeenItem.where(:interest_id => interest.id).desc(:date)
   items.skip(per_page * (page - 1)).limit(per_page)
 
   if ext == 'rss'
     headers["Content-Type"] = "application/rss+xml"
     erb :"rss", :layout => false, :locals => {
       :items => items, 
-      :keyword => keyword,
+      :interest => interest,
       :url => request.url
     }
   else
@@ -173,16 +172,16 @@ get '/keyword/*.*' do |keyword_id, ext|
   end
 end
 
-delete '/keywords/untrack' do
+delete '/interest/untrack' do
   requires_login
 
-  unless keyword = current_user.keywords.where(:_id => BSON::ObjectId(params[:keyword_id].strip)).first
+  unless interest = current_user.interests.where(:_id => BSON::ObjectId(params[:interest_id].strip)).first
     halt 404 and return
   end
 
-  subscriptions = keyword.subscriptions.to_a
+  subscriptions = interest.subscriptions.to_a
     
-  keyword.destroy
+  interest.destroy
   subscriptions.each do |subscription| 
     subscription.destroy
   end
@@ -193,36 +192,36 @@ end
 post '/subscriptions' do
   requires_login
 
-  phrase = params[:keyword].strip
+  phrase = params[:interest].strip
   subscription_type = params[:subscription_type]
-  new_keyword = false
+  new_interest = false
 
   # if this is editing an existing one, find it
-  if params[:keyword_id].present?
-    keyword = current_user.keywords.where(:_id => BSON::ObjectId(params[:keyword_id].strip), :keyword => phrase).first
+  if params[:interest_id].present?
+    interest = current_user.interests.find params[:interest_id]
   end
-  
+
   # default to a new one
-  if keyword.nil?
-    keyword = current_user.keywords.new :keyword => phrase
-    new_keyword = true
+  if interest.nil?
+    interest = current_user.interests.new :in => phrase, :interest_type => "search"
+    new_interest = true
   end
   
-  subscription = current_user.subscriptions.new :keyword => phrase, :subscription_type => subscription_type
+  subscription = current_user.subscriptions.new :interest_in => phrase, :subscription_type => subscription_type
   
   headers["Content-Type"] = "application/json"
 
-  # make sure keyword has the same validations as subscriptions
-  if keyword.valid? and subscription.valid?
-    keyword.save!
-    subscription[:keyword_id] = keyword._id
+  # make sure interest has the same validations as subscriptions
+  if interest.valid? and subscription.valid?
+    interest.save!
+    subscription[:interest_id] = interest.id
     subscription.save!
     
     {
-      :keyword_id => keyword._id.to_s,
-      :subscription_id => subscription._id.to_s,
-      :new_keyword => new_keyword,
-      :pane => partial(:"partials/keyword", :locals => {:keyword => keyword})
+      :interest_id => interest.id.to_s,
+      :subscription_id => subscription.id.to_s,
+      :new_interest => new_interest,
+      :pane => partial(:"partials/interest", :locals => {:interest => interest})
     }.to_json
   else
     halt 500
@@ -230,22 +229,22 @@ post '/subscriptions' do
   
 end
 
-get '/items/:keyword/:subscription_type' do
-  keyword = params[:keyword].strip
+get '/items/:interest/:subscription_type' do
+  interest_in = params[:interest].strip
   subscription_type = params[:subscription_type]
 
   results = []
   
   # make new, temporary subscription items
   results = Subscription.new(
-    :keyword => keyword,
+    :interest_in => interest_in,
     :subscription_type => params[:subscription_type]
   ).search(:page => (params[:page] ? params[:page].to_i : 1))
     
   # if results is nil, it usually indicates an error in one of the remote services -
   # this would be where to catch it and display something
   if results.nil?
-    puts "[#{subscription_type}][#{params[:keyword]}][search] ERROR while loading this"
+    puts "[#{subscription_type}][#{interest_in}][search] ERROR while loading this"
   end
   
   if results
@@ -255,40 +254,40 @@ get '/items/:keyword/:subscription_type' do
   html = erb :items, :layout => false, :locals => {
     :items => results, 
     :subscription_type => subscription_type,
-    :keyword => keyword
+    :interest_in => interest_in
   }
 
   headers["Content-Type"] = "application/json"
   
   {
     :count => (results ? results.size : -1),
-    :description => "#{subscription_data[params[:subscription_type]][:search]} matching \"#{keyword}\"",
+    :description => "#{subscription_data[params[:subscription_type]][:search]} matching \"#{interest_in}\"",
     :html => html
   }.to_json
 end
 
-# delete the subscription, and, if it's the last subscription under the keyword, delete the keyword
+# delete the subscription, and, if it's the last subscription under the interest, delete the interest
 delete '/subscription/:id' do
   requires_login
 
   if subscription = Subscription.where(:user_id => current_user.id, :_id => BSON::ObjectId(params[:id].strip)).first
-    halt 404 unless keyword = Keyword.where(:user_id => current_user.id, :_id => subscription.keyword_id).first
+    halt 404 unless interest = Interest.where(:user_id => current_user.id, :_id => subscription.interest_id).first
 
-    deleted_keyword = false
+    deleted_interest = false
 
-    if keyword.subscriptions.count == 1
-      keyword.destroy
-      deleted_keyword = true
+    if interest.subscriptions.count == 1
+      interest.destroy
+      deleted_interest = true
     end
 
     subscription.destroy
 
-    pane = deleted_keyword ? nil : partial(:"partials/keyword", :locals => {:keyword => keyword})
+    pane = deleted_interest ? nil : partial(:"partials/interest", :locals => {:interest => interest})
 
     headers["Content-Type"] = "application/json"
     {
-      :deleted_keyword => deleted_keyword,
-      :keyword_id => keyword._id.to_s,
+      :deleted_interest => deleted_interest,
+      :interest_id => interest.id.to_s,
       :pane => pane
     }.to_json
   else
@@ -296,13 +295,13 @@ delete '/subscription/:id' do
   end
 end
 
-delete '/keyword/:id' do
+delete '/interest/:id' do
   requires_login
   
-  if keyword = current_user.keywords.where(:_id => BSON::ObjectId(params[:id].strip)).first
-    subscriptions = keyword.subscriptions.to_a
+  if interest = current_user.interests.where(:_id => BSON::ObjectId(params[:id].strip)).first
+    subscriptions = interest.subscriptions.to_a
     
-    keyword.destroy
+    interest.destroy
     subscriptions.each do |subscription|
       subscription.destroy
     end
@@ -322,8 +321,8 @@ helpers do
     (request.env['HTTP_X_PJAX'] or params[:_pjax]) ? true : false
   end
 
-  def user_keywords
-    logged_in? ? current_user.keywords.desc(:created_at).all.map {|k| [k, k.subscriptions]} : []
+  def user_interests
+    logged_in? ? current_user.interests.desc(:created_at).all.map {|k| [k, k.subscriptions]} : []
   end
 
   def logged_in?

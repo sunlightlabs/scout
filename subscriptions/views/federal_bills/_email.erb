@@ -5,7 +5,7 @@
 <% end %>
 
  <% if item.data['search']['highlight'] %>
-<%= bill_highlight item, keyword, false %>
+<%= bill_highlight item, interest, false %>
  <% end %>
 
 http://<%= config[:hostname] %>/bill/<%= item.item_id %>

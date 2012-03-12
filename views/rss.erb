@@ -9,7 +9,7 @@
     
     <% # these are SeenItem's, not Subscription::Manager::Result's %>
     <% items.each do |item| %>
-      <%= partial :"subscriptions/#{item.subscription.subscription_type}/rss", :locals => {:item => item, :keyword => keyword.keyword} %>
+      <%= partial :"subscriptions/#{item.subscription.subscription_type}/rss", :locals => {:item => item, :interest => interest.in} %>
     <% end %>
   </channel>
 </rss>

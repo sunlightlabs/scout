@@ -5,7 +5,7 @@ module Subscriptions
       
       def self.url_for(subscription, function, options = {})
         api_key = config[:subscriptions][:sunlight_api_key]
-        query = URI.escape subscription.keyword
+        query = URI.escape subscription.interest_in
         
         if config[:subscriptions][:rtc_endpoint].present?
           endpoint = config[:subscriptions][:rtc_endpoint]
@@ -55,8 +55,8 @@ module Subscriptions
         "/bill/#{item.item_id}"
       end
 
-      # display name for the item as keyword
-      def self.item_name(item)
+      # display name for the item as interest
+      def self.item_name(data)
         code = {
           "hr" => "H.R.",
           "hres" => "H.Res.",
@@ -66,8 +66,8 @@ module Subscriptions
           "sres" => "S.Res.",
           "sjres" => "S.J.Res.",
           "scres" => "S.Con.Res."
-        }[item['data']['code']]
-        "#{code} #{number}"
+        }[data['bill_type']]
+        "#{code} #{data['number']}"
       end
       
       # takes parsed response and returns an array where each item is 

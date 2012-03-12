@@ -25,14 +25,14 @@
     // complete with delicious database IDs (will swap this with a slug or something later)
     var user_subscriptions = {};
     var keyword;
-    <% keywords.each do |keyword, subscriptions| %>
-      keyword = encodeURIComponent("<%= js_escape keyword.keyword %>");
+    <% interests.each do |interest, subscriptions| %>
+      keyword = encodeURIComponent("<%= js_escape interest.in %>");
       user_subscriptions[keyword] = {
-        keyword_id: "<%= keyword._id.to_s %>",
+        keyword_id: "<%= interest.id.to_s %>",
         subscriptions: {}
       };
       <% subscriptions.each do |subscription| %>
-        user_subscriptions[keyword].subscriptions.<%= subscription.subscription_type %> = '<%= subscription._id.to_s %>';
+        user_subscriptions[keyword].subscriptions.<%= subscription.subscription_type %> = '<%= subscription.id.to_s %>';
       <% end %>
     <% end %>
   </script>
@@ -43,9 +43,9 @@
   <section class="main">
 
     <section class="entry">
-      <% if defined?(keyword) and keyword and keyword.errors.any? %>
+      <% if defined?(interest) and interest and interest.errors.any? %>
         <div class="errors">
-          <% keyword.errors.full_messages.each do |msg| %>
+          <% interest.errors.full_messages.each do |msg| %>
             <span><%= msg %></span>
           <% end %>
         </div>
@@ -53,12 +53,6 @@
       
       <form class="search" action="/search" method="get" onsubmit="return false">
         <input type="text" class="query" name="keyword" placeholder="keyword or phrase" />
-        
-        <!-- filled in with ID of saved search if one is loaded -->
-        <!-- <input type="hidden" id="keyword_id" name="keyword_id" /> -->
-        
-        <!-- filled in with keyword that populates the current search results -->
-        <!-- <input type="hidden" id="keyword_searched" name="keyword_searched" /> -->
         
         <div class="buttons">
           <button class="image search">Search</button>
@@ -96,18 +90,18 @@
     </div>
     
     <ul class="subscriptions">
-      <% keywords.each do |keyword, subscriptions| %>
-        <%= partial :"partials/keyword", :locals => {:keyword => keyword, :subscriptions => subscriptions} %>
+      <% interests.each do |interest, subscriptions| %>
+        <%= partial :"partials/interest", :locals => {:interest => interest, :subscriptions => subscriptions} %>
       <% end %>
     </ul>
 
     <script type="text/javascript">
       // if we're coming in from a permalink, set up anything that would have otherwise been set up along the way
-      <% if params[:keyword] %>
-        var initial_keyword = encodeURIComponent("<%= js_escape params[:keyword] %>");
-        var keyword_id = user_subscriptions[initial_keyword] ? user_subscriptions[initial_keyword].keyword_id : null;
+      <% if params[:interest] %>
+        var initial_interest = encodeURIComponent("<%= js_escape params[:interest] %>");
+        var keyword_id = user_subscriptions[initial_interest] ? user_subscriptions[initial_interest].keyword_id : null;
 
-        $("input.query").val(initial_keyword);
+        $("input.query").val(initial_interest);
       <% end %>
     </script>
 

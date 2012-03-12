@@ -6,6 +6,18 @@ module GeneralHelpers
     @subscription_types ||= subscription_data
   end
 
+  def interest_path(interest)
+    "/#{interest.interest_type}/#{form_escape interest.in}"
+  end
+
+  def interest_name(interest)
+    if interest.item?
+      Subscription.adapter_for(item_data[interest.interest_type][:adapter]).item_name(interest.data)
+    else
+      interest.in
+    end
+  end
+
   def rss_date(time)
     time.strftime "%a, %d %b %Y %H:%M:%S %z"
   end

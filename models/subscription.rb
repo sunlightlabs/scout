@@ -4,26 +4,26 @@ class Subscription
   
   field :subscription_type
   field :initialized, :type => Boolean, :default => false
-  field :keyword
-  field :keyword_id
+  field :interest_in
+  field :interest_id
   field :last_checked_at, :type => Time
     
   index :subscription_type
   index :initialized
   index :user_id
-  index :keyword
+  index :interest_in
   index :last_checked_at
   
   has_many :seen_items, :dependent => :delete
   has_many :deliveries
   belongs_to :user
+  belongs_to :interest
   
   validates_presence_of :user_id
   validates_presence_of :subscription_type
   
-  # will eventually refer to individual subscription type's validation method
   validate do
-    if keyword.blank?
+    if interest_in.blank?
       errors.add(:base, "Enter a keyword or phrase to subscribe to.")
     end
   end

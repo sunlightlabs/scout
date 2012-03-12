@@ -34,7 +34,7 @@
           <% if logged_in? %>
             <button class="text follow"
               data-type="<%= type %>"
-              data-keyword="<%= form_escape keyword_keyword %>"
+              data-keyword="<%= form_escape interest_in %>"
               >
               Follow
             </button>
@@ -63,12 +63,12 @@
 <script type="text/javascript">
   // put in a delay block in case this is being rendered before the layout
   $(function() {
-    var keyword = encodeURIComponent("<%= js_escape keyword_keyword %>");
-    var display_keyword = "<%= js_escape keyword_keyword %>";
+    var keyword = encodeURIComponent("<%= js_escape interest_in %>");
+    var display_keyword = "<%= js_escape interest_in %>";
     var keyword_id = user_subscriptions[keyword] ? user_subscriptions[keyword].keyword_id : null;
 
     <% types.each do |subscription_type, data| %>
-      searchFor("<%= js_escape keyword_keyword %>", "<%= subscription_type %>");
+      searchFor("<%= js_escape interest_in %>", "<%= subscription_type %>");
     <% end %>
 
     $("li.keyword").removeClass("current");

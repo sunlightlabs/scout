@@ -5,7 +5,7 @@ $(function() {
     var keyword = $(this).data("keyword");
     
     if (confirm("Remove the saved search \"" + keyword + "\"?")) {
-      $.post("/keyword/" + keyword_id, {
+      $.post("/interest/" + keyword_id, {
         _method: "delete"
       }, function(data) {
         keywordRemoved(keyword, keyword_id);
@@ -73,35 +73,33 @@ $(function() {
   $("#content").on("click", "section.show button.track", function() {
     var item_type = $(this).data("item_type");
     var item_id = $(this).data("item_id");
-    var keyword_name = $(this).data("keyword_name");
     var button = $(this);
 
     if (button.hasClass("untrack")) {
       var keyword_id = button.data("keyword_id");
       button.html("Track").removeClass("untrack");
-      $.post("/keywords/untrack", {
+      $.post("/interest/untrack", {
         _method: "delete",
-        keyword_id: keyword_id
+        interest_id: keyword_id
       }, function(data) {
-        console.log("Tracking keyword deleted: " + keyword_id);
+        showError("Tracking interest deleted: " + keyword_id);
           $("#keyword-" + keyword_id).remove();
           button.data("keyword_id", null);
       }).error(function() {
-        showError("Error deleting tracking keyword: " + keyword_id);
+        showError("Error deleting tracking interest: " + keyword_id);
         button.html("Untrack").addClass("untrack");
       });
     } else {
       button.html("Untrack").addClass("untrack");
-      $.post("/keywords/track", {
+      $.post("/interest/track", {
           item_id: item_id,
-          item_type: item_type,
-          keyword_name: keyword_name
+          item_type: item_type
         }, 
         function(data) {
-          console.log("Tracking keyword created: " + data.keyword_id);
-          button.data("keyword_id", data.keyword_id);
+          showError("Tracking interest created: " + data.interest_id);
+          button.data("keyword_id", data.interest_id);
           $("ul.subscriptions").prepend(data.pane);
-          $("li.keyword#keyword-" + data.keyword_id).addClass("current");
+          $("li.keyword#keyword-" + data.interest_id).addClass("current");
         }
       ).error(function() {
         showError("Error tracking item.");
@@ -128,13 +126,13 @@ $(function() {
           _method: "delete"
         }, 
         function(data) {
-          console.log("Subscription deleted: " + subscription_id);
+          showError("Subscription deleted: " + subscription_id);
 
-          if (data.deleted_keyword)
+          if (data.deleted_interest)
             keywordRemoved(keyword, keyword_id);
           else {
-            $("li.keyword#keyword-" + data.keyword_id).replaceWith(data.pane);
-            $("li.keyword#keyword-" + data.keyword_id).addClass("current"); // must re-find to work
+            $("li.keyword#keyword-" + data.interest_id).replaceWith(data.pane);
+            $("li.keyword#keyword-" + data.interest_id).addClass("current"); // must re-find to work
           }
           
           button.data("subscription_id", null);
@@ -148,20 +146,20 @@ $(function() {
     } else {
       showSave(subscription_type, "unfollow");
       $.post("/subscriptions", {
-          keyword: keyword,
-          keyword_id: keyword_id || "",
+          interest: keyword,
+          interest_id: keyword_id || "",
           subscription_type: subscription_type
         }, 
         function(data) {
-          console.log("Subscription created: " + data.subscription_id + ", under keyword " + data.keyword_id);    
+          showError("Subscription created: " + data.subscription_id + ", under interest " + data.interest_id);    
           button.data("subscription_id", data.subscription_id);
 
-          if (data.new_keyword) {
+          if (data.new_interest) {
             $("ul.subscriptions").prepend(data.pane);
-            $("li.keyword#keyword-" + data.keyword_id).addClass("current");
+            $("li.keyword#keyword-" + data.interest_id).addClass("current");
           } else {
-            $("li.keyword#keyword-" + data.keyword_id).replaceWith(data.pane);
-            $("li.keyword#keyword-" + data.keyword_id).addClass("current") // must re-find to work
+            $("li.keyword#keyword-" + data.interest_id).replaceWith(data.pane);
+            $("li.keyword#keyword-" + data.interest_id).addClass("current") // must re-find to work
           }
         }
       )
@@ -288,8 +286,8 @@ function showSave(subscription_type, status) {
   }
 }
 
-function keywordRemoved(keyword, keyword_id) {
-  console.log("Keyword by ID " + keyword_id + " removed.");
-  $("#keyword-" + keyword_id).remove();
-  delete user_subscriptions[encodeURIComponent(keyword)];
+function keywordRemoved(interest, interest_id) {
+  showError("Interest by ID " + interest_id + " removed.");
+  $("#keyword-" + interest_id).remove();
+  delete user_subscriptions[encodeURIComponent(interest)];
 }
