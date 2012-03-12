@@ -24,7 +24,7 @@ require 'subscriptions/manager'
 require 'subscriptions/deliverance'
 
 # maps types of items to the subscription adapter they can be found with
-def item_data
+def interest_data
   {
     'bill' => {
       :name => "Bill",
@@ -39,7 +39,7 @@ def item_data
           :description => ""
         }
       }
-    }
+    },
     # 'state_bill' => {
     #   :name => "State Bill",
     #   :adapter => "state_bills",
@@ -54,7 +54,7 @@ def item_data
 end
 
 # maps each type of subscription adapter to their display information
-def subscription_data 
+def search_data
   data = {
     'federal_bills' => {
       :name => "Congressional Bills",

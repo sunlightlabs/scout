@@ -2,8 +2,8 @@
 module GeneralHelpers
   
   # index of subscription adapters and associated copy
-  def subscription_types
-    @subscription_types ||= subscription_data
+  def search_subscriptions
+    @search_subscriptions ||= search_subscription_data
   end
 
   def interest_path(interest)
@@ -12,7 +12,7 @@ module GeneralHelpers
 
   def interest_name(interest)
     if interest.item?
-      Subscription.adapter_for(item_data[interest.interest_type][:adapter]).item_name(interest.data)
+      Subscription.adapter_for(interest_data[interest.interest_type][:adapter]).item_name(interest.data)
     else
       interest.in
     end

@@ -24,10 +24,10 @@
 
   <section class="types">
     <%= interest.subscriptions.sort_by(&:subscription_type).map do |subscription|
-      if interest.interest_type and item_data[interest.interest_type]
-        item_data[interest.interest_type][:subscriptions][subscription.subscription_type][:name]
-      elsif subscription_types[subscription.subscription_type]
-        subscription_types[subscription.subscription_type][:name]
+      if interest.interest_type and interest_data[interest.interest_type]
+        interest_data[interest.interest_type][:subscriptions][subscription.subscription_type][:name]
+      elsif search_data[subscription.subscription_type]
+        search_data[subscription.subscription_type][:name]
       else
         nil
       end

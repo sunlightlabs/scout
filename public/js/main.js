@@ -93,7 +93,7 @@ $(function() {
       button.html("Untrack").addClass("untrack");
       $.post("/interest/track", {
           item_id: item_id,
-          item_type: item_type
+          interest_type: item_type
         }, 
         function(data) {
           showError("Tracking interest created: " + data.interest_id);

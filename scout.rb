@@ -60,7 +60,7 @@ end
 
 get '/search/:interest' do
   interest_in = params[:interest].gsub("\"", "")
-  sorted_types = subscription_types.sort_by {|k, v| v[:order]}
+  sorted_types = search_data.sort_by {|k, v| v[:order]}
 
   erb :search, :layout => !pjax?, :locals => {
     :types => sorted_types,
@@ -70,18 +70,18 @@ get '/search/:interest' do
 end
 
 # landing page for item
-# get '/:item_type/:item_id'
-get(/^\/(#{item_data.keys.join '|'})\/([^\/]+)\/?/) do
-  item_type = params[:captures][0]
+# get '/:interest_type/:item_id'
+get(/^\/(#{interest_data.keys.join '|'})\/([^\/]+)\/?/) do
+  interest_type = params[:captures][0]
   item_id = params[:captures][1]
 
   interest = nil
   if logged_in?
-    interest = current_user.interests.where(:interest => item_id, :interest_type => item_type).first
+    interest = current_user.interests.where(:in => item_id, :interest_type => interest_type).first
   end
 
   erb :show, :layout => !pjax?, :locals => {
-    :item_type => item_type, 
+    :interest_type => interest_type, 
     :item_id => item_id, 
     :interests => user_interests,
     :interest => interest
@@ -89,18 +89,18 @@ get(/^\/(#{item_data.keys.join '|'})\/([^\/]+)\/?/) do
 end
 
 # actual JSON data for item
-# get '/:find/:item_type/:item_id' 
-get(/^\/find\/(#{item_data.keys.join '|'})\/([^\/]+)$/) do
-  item_type = params[:captures][0]
+# get '/:find/:interest_type/:item_id' 
+get(/^\/find\/(#{interest_data.keys.join '|'})\/([^\/]+)$/) do
+  interest_type = params[:captures][0]
   item_id = params[:captures][1]
-  subscription_type = item_data[item_type][:adapter]
+  subscription_type = interest_data[interest_type][:adapter]
 
   unless item = Subscriptions::Manager.find(subscription_type, item_id)
     halt 404 and return
   end
 
   html = erb :"subscriptions/#{subscription_type}/_show", :layout => false, :locals => {
-    :item_type => item_type, 
+    :interest_type => interest_type, 
     :item => item
   }
 
@@ -113,24 +113,24 @@ end
 post '/interest/track' do
   requires_login
 
-  item_type = params[:item_type]
+  interest_type = params[:interest_type]
   item_id = params[:item_id]
   
-  unless item = Subscriptions::Manager.find(item_data[item_type][:adapter], item_id)
+  unless item = Subscriptions::Manager.find(interest_data[interest_type][:adapter], item_id)
     halt 404 and return
   end
 
-  interest = current_user.interests.new :interest_type => item_type, :in => item_id, :data => item.data
+  interest = current_user.interests.new :interest_type => interest_type, :in => item_id, :data => item.data
 
-  subscriptions = item_data[item_type][:subscriptions].keys.map do |subscription_type|
+  subscriptions = interest_data[interest_type][:subscriptions].keys.map do |subscription_type|
     current_user.subscriptions.new :interest_in => item_id, :subscription_type => subscription_type
   end
 
   if interest.valid? and (subscriptions.reject {|s| s.valid?}.empty?)
     interest.save!
-    subscriptions.each do |s|
-      s[:interest_id] = interest.id
-      s.save!
+    subscriptions.each do |subscription|
+      subscription[:interest_id] = interest.id
+      subscription.save!
     end
 
     headers["Content-Type"] = "application/json"
@@ -261,7 +261,7 @@ get '/items/:interest/:subscription_type' do
   
   {
     :count => (results ? results.size : -1),
-    :description => "#{subscription_data[params[:subscription_type]][:search]} matching \"#{interest_in}\"",
+    :description => "#{search_data[params[:subscription_type]][:search]} matching \"#{interest_in}\"",
     :html => html
   }.to_json
 end

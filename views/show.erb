@@ -1,4 +1,4 @@
-<section class="show <%= item_type %>" id="item-<%= item_id %>">
+<section class="show <%= interest_type %>" id="item-<%= item_id %>">
 
   <div class="loading_container">
     <span>loading...</span>
@@ -9,7 +9,7 @@
 <script type="text/javascript">
   // put in a delay block in case this is being rendered before the layout
   $(function() {
-    var item_type = "<%= item_type %>";
+    var item_type = "<%= interest_type %>";
     var item_id = "<%= item_id %>";
     var container = $("#item-" + item_id);
     container.find(".loading_container").show();
