@@ -56,11 +56,13 @@
         <h2>Coming Up on the Floor</h2>
         <ul class="upcoming_floor">
             <% item.data['latest_upcoming'].each do |upcoming| %>
-                <span class="date"><%= just_date upcoming['legislative_day'] %></span>
-                - 
-                <a href="<%= upcoming['permalink'] %>">
-                    <%= upcoming['chamber'].capitalize %> Floor
-                </a>
+                <li>
+                    <span class="date"><%= just_date upcoming['legislative_day'] %></span>
+                    - 
+                    <a href="<%= upcoming['permalink'] %>">
+                        <%= upcoming['chamber'].capitalize %> Floor
+                    </a>
+                </li>
             <% end %>
         </ul>
     <% end %>

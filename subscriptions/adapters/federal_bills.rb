@@ -51,6 +51,10 @@ module Subscriptions
         url
       end
 
+      def self.item_path(item)
+        "/bill/#{item.item_id}"
+      end
+
       # display name for the item as keyword
       def self.item_name(item)
         code = {

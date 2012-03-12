@@ -31,6 +31,8 @@ class SeenItem
   validates_presence_of :item_id
 
   def url
-    subscription.adapter.find_url item_id, data
+    if subscription.adapter.respond_to? :find_url
+      subscription.adapter.find_url item_id, data
+    end
   end
 end

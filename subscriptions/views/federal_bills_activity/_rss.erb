@@ -9,7 +9,7 @@
     <%= action['text'] %>
   ]]></description>
     
-  <link>http://<%= config[:hostname] %><%= item_path 'bill', keyword %></link>
-  <guid>http://<%= config[:hostname] %><%= item_path 'bill', keyword %>#action-<%= action['acted_at'].to_i %></guid>
+  <link>http://<%= config[:hostname] %><%= item_path item %></link>
+  <guid>http://<%= config[:hostname] %><%= item_path item %></guid>
   <pubDate><%= rss_date item.date %></pubDate>
 </item>

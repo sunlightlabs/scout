@@ -451,6 +451,7 @@ section.show .detail .latest_version {
 
 section.show .detail .latest_version p {margin: 10px 0;}
 section.show .detail .upcoming_floor {margin-bottom: 20px;}
+section.show .detail .upcoming_floor li {margin: 10px 0;}
 
 section.show .detail .activity {margin-bottom: 20px;}
 section.show .detail .activity li {margin: 10px 5px; font-size: 90%; line-height: 22px;}

@@ -2,8 +2,7 @@ module Subscriptions
   module Helpers
 
     def item_path(item)
-      item_type = subscription_types[item.subscription_type][:item]
-      "/#{item_type}/#{item.item_id}"
+      item.subscription.adapter.item_path item
     end
     
     def bill_code(type, number)

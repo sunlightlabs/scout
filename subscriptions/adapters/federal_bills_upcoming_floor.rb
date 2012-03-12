@@ -24,6 +24,10 @@ module Subscriptions
         
         url
       end
+
+      def self.item_path(item)
+        "/bill/#{item.subscription_keyword}#upcoming-#{item['data']['legislative_day'].strftime("%Y%m%d")}-#{item['data']['chamber']}"
+      end
       
       # takes parsed response and returns an array where each item is 
       # a hash containing the id, title, and post date of each item found

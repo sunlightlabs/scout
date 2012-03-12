@@ -158,7 +158,7 @@ get '/keyword/*.*' do |keyword_id, ext|
   page = 1 if page <= 0 or page > 200000000
   per_page = 20
 
-  items = SeenItem.where(:keyword_id => keyword.id).desc(:item_date)
+  items = SeenItem.where(:keyword_id => keyword.id).desc(:date)
   items.skip(per_page * (page - 1)).limit(per_page)
 
   if ext == 'rss'
