@@ -29,6 +29,10 @@ module Subscriptions
         
         url
       end
+
+      def self.description(number, subscription, interest)
+        "#{number} committee #{number > 1 ? "hearings" : "hearing"}"
+      end
       
       
       # takes parsed response and returns an array where each item is 

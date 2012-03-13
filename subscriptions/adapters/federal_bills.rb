@@ -51,12 +51,15 @@ module Subscriptions
         url
       end
 
+      def self.description(number, subscription, interest)
+        "#{number} #{number > 1 ? "bills" : "bill"} in Congress"
+      end
+
       def self.item_path(item)
         "/bill/#{item.item_id}"
       end
 
-      # display name for the item as interest
-      def self.item_name(data)
+      def self.interest_name(interest)
         code = {
           "hr" => "H.R.",
           "hres" => "H.Res.",
@@ -66,8 +69,8 @@ module Subscriptions
           "sres" => "S.Res.",
           "sjres" => "S.J.Res.",
           "scres" => "S.Con.Res."
-        }[data['bill_type']]
-        "#{code} #{data['number']}"
+        }[interest.data['bill_type']]
+        "#{code} #{interest.data['number']}"
       end
       
       # takes parsed response and returns an array where each item is 

@@ -18,7 +18,7 @@ module Deliveries
           
           content = render_interest interest, deliveries
           content = render_final content
-          subject = "[Scout] #{interest_name interest} - new activity"
+          subject = "#{interest_name interest} - new activity"
 
           if email_user email, subject, content
             deliveries.each &:delete
@@ -88,13 +88,15 @@ module Deliveries
 
       content = ""
       grouped.each do |subscription, group|
-        if interest.search?
-          description = search_data[subscription.subscription_type][:description]
-        else
-          description = interest_data[interest.interest_type][:subscriptions][subscription.subscription_type][:description]
-        end
+        # if interest.search?
+        #   description = search_data[subscription.subscription_type][:description]
+        # else
+        #   description = interest_data[interest.interest_type][:subscriptions][subscription.subscription_type][:description]
+        # end
 
-        content << "- #{group.size} new #{description}\n\n\n"
+        description = subscription.adapter.description group.size, subscription, interest
+
+        content << "- #{description}\n\n\n"
 
         group.each do |delivery|
           item = Deliveries::SeenItemProxy.new(SeenItem.new(
@@ -114,7 +116,7 @@ module Deliveries
 
     def self.interest_name(interest)
       if interest.item?
-        Subscription.adapter_for(interest_data[interest.interest_type][:adapter]).item_name(interest.data)
+        Subscription.adapter_for(interest_data[interest.interest_type][:adapter]).interest_name(interest)
       else
         interest.in
       end

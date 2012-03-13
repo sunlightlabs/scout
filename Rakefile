@@ -103,7 +103,7 @@ namespace :test do
     user.interests.each do |interest|
       interest.subscriptions.each do |subscription|
 
-        puts "Searching for #{subscription.subscription_type} results for #{interest}..."
+        puts "Searching for #{subscription.subscription_type} results for #{interest.in}..."
         items = subscription.search
         if items.empty?
           puts "\tNo results, nothing to deliver."

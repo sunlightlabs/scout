@@ -33,12 +33,10 @@ def interest_data
       :adapter => "federal_bills",
       :subscriptions => {
         'federal_bills_activity' => {
-          :name => "Legislative Activity",
-          :description => "action(s) in Congress"
+          :name => "Legislative Activity"
         },
         'federal_bills_upcoming_floor' => {
-          :name => "Upcoming Floor Appearances",
-          :description => "upcoming appearance(s) on the floor"
+          :name => "Upcoming Floor Appearances"
         }
       }
     },
@@ -60,38 +58,32 @@ def search_data
   data = {
     'federal_bills' => {
       :name => "Congressional Bills",
-      :description => "bill(s) in Congress",
       :search => "Bills in Congress",
       :item => 'bill',
       :order => 1
     },
     'state_bills' => {
       :name => "State Bills",
-      :description => "state bill(s)",
       :search => "Bills in the states",
       :order => 3
     },
     'congressional_record' => {
       :name => "Congressional Speeches",
-      :description => "speech(es)",
       :search => "Speeches from Congress",
       :order => 2
     },
     'regulations' => {
       :name => "Federal Regulations",
-      :description => "regulation(s)",
       :search => "Federal regulations",
       :order => 4
     },
     'committee_hearings' => {
-      :name => "Senate Committee Hearings",
-      :description => "hearing(s)",
+      :name => "Senate Hearings",
       :search => "Senate hearings",
       :order => 5
     },
     'gao_reports' => {
       :name => "GAO Reports",
-      :description => "GAO report(s)",
       :search => "GAO reports",
       :order => 6
     }

@@ -25,6 +25,10 @@ module Subscriptions
         url
       end
 
+      def self.description(number, subscription, interest)
+        "#{number} #{number > 1 ? "notices" : "notice"} of upcoming floor activity for #{FederalBills.interest_name interest}"
+      end
+
       def self.item_path(item)
         "/bill/#{item.subscription_interest_in}#action-#{item['data']['acted_at'].to_i}"
       end

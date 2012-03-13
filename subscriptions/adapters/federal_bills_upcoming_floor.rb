@@ -25,6 +25,10 @@ module Subscriptions
         url
       end
 
+      def self.description(number, subscription, interest)
+        "#{number} #{number > 1 ? "actions" : "action"} on #{FederalBills.interest_name interest}"
+      end
+
       def self.item_path(item)
         "/bill/#{item.subscription_interest_in}#upcoming-#{item['data']['legislative_day'].strftime("%Y%m%d")}-#{item['data']['chamber']}"
       end

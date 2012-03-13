@@ -12,7 +12,7 @@ module GeneralHelpers
 
   def interest_name(interest)
     if interest.item?
-      Subscription.adapter_for(interest_data[interest.interest_type][:adapter]).item_name(interest.data)
+      Subscription.adapter_for(interest_data[interest.interest_type][:adapter]).interest_name(interest)
     else
       interest.in
     end

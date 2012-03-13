@@ -19,7 +19,10 @@ module Subscriptions
         
         url
       end
-      
+
+      def self.description(number, subscription, interest)
+        "#{number} #{number > 1 ? "speeches" : "speech"} on the floor of Congress"
+      end
       
       # takes parsed response and returns an array where each item is 
       # a hash containing the id, title, and post date of each item found

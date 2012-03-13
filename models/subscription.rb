@@ -7,6 +7,9 @@ class Subscription
   field :interest_in
   field :interest_id
   field :last_checked_at, :type => Time
+
+  # arbitrary set of parameters that may refine or alter the subscription (e.g. "state" => "NY")
+  field :data, :type => Hash
   
   index :subscription_type
   index :initialized

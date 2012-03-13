@@ -45,6 +45,10 @@ module Subscriptions
 
         items.map {|bill| item_for bill}
       end
+
+      def self.description(number, subscription, interest)
+        "#{number} #{number > 1 ? "bills" : "bill"} in the states"
+      end
       
       
       # internal
