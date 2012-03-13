@@ -9,6 +9,7 @@ class Delivery
   include Mongoid::Timestamps
   
   belongs_to :subscription
+  belongs_to :interest
   
   # references to other tables, shouldn't be needed but useful for debugging and archival
   field :subscription_id
