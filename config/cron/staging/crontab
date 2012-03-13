@@ -1,4 +1,29 @@
-# check each subscription type at the appropriate interval
+######## Polling tasks #########
+
+# keyword search subscriptions
 
 # federal bills - daily, bounded by THOMAS/GPO/GovTrack
-0 3 * * *    /projects/alarms/current/config/cron/staging/check.sh federal_bills
+0 8,14 * * *  /projects/alarms/current/config/cron/staging/check.sh federal_bills
+
+# state bills - once an hour, Open States scrapers running throughout the day, but no need to be real time
+0 * * * *     /projects/alarms/current/config/cron/staging/check.sh state_bills
+
+# congressional_record - daily, bounded by GPO
+0 8,14 * * *  /projects/alarms/current/config/cron/staging/check.sh congressional_record
+
+# regulations - once an hour, FederalRegister.gov updates at unknown intervals
+0 * * * *     /projects/alarms/current/config/cron/staging/check.sh regulations
+
+
+# item-specific subscriptions
+
+# federal_bills_activity - daily, bounded by THOMAS/GovTrack
+0 8,14 * * *  /projects/alarms/current/config/cron/staging/check.sh federal_bills_activity
+
+# federal_bills_upcoming_floor - every 5 minutes, bounded by party leadership
+*/5 * * * *   /projects/alarms/current/config/cron/staging/check.sh federal_bills_upcoming_floor
+
+
+
+
+# keep the newline below
