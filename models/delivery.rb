@@ -34,7 +34,5 @@ class Delivery
   validates_presence_of :subscription_interest_in
   validates_presence_of :user_id
   validates_presence_of :user_email
-  validates_presence_of :item_id
-  validates_presence_of :item_date
-  validates_presence_of :item_data
+  validates_presence_of :item
 end

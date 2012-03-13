@@ -17,12 +17,4 @@ class Receipt
   
   validates_presence_of :delivered_at
   validates_presence_of :content
-
-  def to_s
-    "[#{user_email}](#{deliveries.size}) #{subject}"
-  end
-
-  def subscription_types
-    
-  end
 end

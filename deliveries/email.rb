@@ -18,11 +18,11 @@ module Deliveries
           
           content = render_interest interest, deliveries
           content = render_final content
-          subject = "#{interest_name interest} - new activity"
+          subject = "#{Deliveries::Manager.interest_name interest} - new activity"
 
           if email_user email, subject, content
             deliveries.each &:delete
-            successes << save_receipt!(user, deliveries, subject, content)
+            successes << save_receipt!(frequency, user, deliveries, subject, content)
           else
             failures += 1
           end
@@ -33,14 +33,16 @@ module Deliveries
       end
 
       if successes.any?
-        Admin.report Report.success("Delivery", "Delivered #{successes.size} emails to #{email}")
+        Report.success("Delivery", "Delivered #{successes.size} emails to #{email}")
       end
 
       successes
     end
 
-    def self.save_receipt!(user, deliveries, subject, content)
+    def self.save_receipt!(frequency, user, deliveries, subject, content)
       Receipt.create!(
+        :frequency => frequency,
+
         :deliveries => deliveries.map {|delivery| delivery.attributes.dup},
 
         :user_email => user.email,
@@ -52,37 +54,6 @@ module Deliveries
       )
     end
 
-      # one email containing everything
-      #elsif frequency == 'digest'
-
-                
-
-      # else
-      #   Admin.message "User #{email} has unsupported frequency (#{frequency}"
-      #   return
-      # end
-
-    #   deliveries.group_by(&:subscription_interest_in).each do |interest_in, for_interest|
-    #     grouped = for_interest.group_by &:subscription_type
-
-    #     subject, content = render_email interest_in, for_interest, grouped
-        
-    #     if email_user(email, subject, content)
-    #       for_interest.each do |delivery|
-    #         delivery.destroy
-    #       end
-
-    #       # shouldn't be a risk of failure
-
-
-    #       successes << receipt
-    #     else
-    #       failures += 1
-    #     end
-    #   end
-    
-
-    # deliveries are grouped by subscription object
     def self.render_interest(interest, deliveries)
       grouped = deliveries.group_by &:subscription
 
@@ -99,27 +70,14 @@ module Deliveries
         content << "- #{description}\n\n\n"
 
         group.each do |delivery|
-          item = Deliveries::SeenItemProxy.new(SeenItem.new(
-            :item_id => delivery.item_id,
-            :date => delivery.item_date,
-            :data => delivery.item_data
-          ))
-
-          content << render_item(subscription, interest, item)
+          content << render_delivery(subscription, interest, delivery)
           content << "\n\n\n"
         end
+
         content << "\n"
       end
 
       content
-    end
-
-    def self.interest_name(interest)
-      if interest.item?
-        Subscription.adapter_for(interest_data[interest.interest_type][:adapter]).interest_name(interest)
-      else
-        interest.in
-      end
     end
 
     def self.render_final(content)
@@ -129,15 +87,13 @@ module Deliveries
       content
     end
 
-    # render an item into its delivery content
-    def self.render_item(subscription, interest, item)
+    # render a Delivery into its email content
+    def self.render_delivery(subscription, interest, delivery)
+      item = Deliveries::SeenItemProxy.new(SeenItem.new(delivery.item))
       template = Tilt::ERBTemplate.new "views/subscriptions/#{subscription.subscription_type}/_email.erb"
       template.render item, :item => item, :subscription => subscription, :interest => interest, :trim => false
     end
 
-    # def self.email_user(email, subject, )
-
-    # internal
     # the actual mechanics of sending the email
     def self.email_user(email, subject, content)
       if config[:email][:from].present?

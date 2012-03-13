@@ -23,10 +23,17 @@ module Deliveries
 
       # Temporary, but for now I want to know when emails go out
       if receipts.any?
-        msgs = receipts.map(&:to_s).join "\n\n"
-        Admin.message "Sent #{receipts.size} notifications", msgs
+        Admin.message "Sent #{receipts.size} notifications", report_for(receipts)
       else
         puts "No notifications sent."
+      end
+    end
+
+    def self.interest_name(interest)
+      if interest.item?
+        Subscription.adapter_for(interest_data[interest.interest_type][:adapter]).interest_name(interest)
+      else
+        interest.in
       end
     end
 
@@ -45,12 +52,34 @@ module Deliveries
 
         :interest_id => subscription.interest_id,
         
-        :item_id => item.item_id,
-        :item_date => item.date,
-        :item_data => item.data,
-        :item_search_url => item.search_url
+        # drop the item into the delivery wholesale
+        :item => item.attributes.dup
       )
     end
+
+    def self.report_for(receipts)
+      report = ""
+      
+      receipts.group_by(&:user_email).each do |email, user_receipts|
+        user = User.where(:email => email).first
+        report << "#{user.to_admin} #{user_receipts.size} notifications"
+
+        user_receipts.each do |receipt|
+          receipt.deliveries.group_by {|d| d['interest_id']}.each do |interest_id, interest_deliveries|
+            interest = Interest.find interest_id
+            report << "\n\t#{interest_name interest} - #{interest_deliveries.size} things"
+            report << "\n\t\t"
+            report << interest_deliveries.group_by {|d| d['subscription_type']}.map do |subscription_type, subscription_deliveries|
+              "#{subscription_type} (#{subscription_deliveries.size})"
+            end.join(", ")
+          end
+          report << "\n\n"
+        end
+      end
+
+      report
+    end
+
   end
 
   # dummy proxy class to provide a context with helper modules included so that ERB can render properly
