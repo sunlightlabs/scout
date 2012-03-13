@@ -4,6 +4,24 @@ task :environment do
   require 'config/environment'
 end
 
+desc "Set the crontab in place for this environment"
+task :set_crontab => :environment do
+  environment = ENV['environment']
+  current_path = ENV['current_path']
+  
+  if environment.blank? or current_path.blank?
+    Admin.message "No environment or current path given, emailing and exiting."
+    exit
+  end
+  
+  if system("cat #{current_path}/config/cron/#{environment}/crontab | crontab")
+    puts "Successfully overwrote crontab."
+  else
+    Admin.message "Crontab overwriting failed on deploy."
+    puts "Unsuccessful in overwriting crontab, emailed report."
+  end
+end
+
 desc "Run through each model and create all indexes" 
 task :create_indexes => :environment do
   begin

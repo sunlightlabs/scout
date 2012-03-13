@@ -1,0 +1,4 @@
+# check each subscription type at the appropriate interval
+
+# federal bills - daily, bounded by THOMAS/GPO/GovTrack
+0 3 * * *    /projects/alarms/current/config/cron/staging/check.sh federal_bills

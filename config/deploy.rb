@@ -25,7 +25,7 @@ after "deploy", "deploy:cleanup"
 after "deploy:update_code", "deploy:shared_links"
 after "deploy:update_code", "deploy:bundle_install"
 after "deploy:update_code", "deploy:create_indexes"
-
+after "deploy", "deploy:set_cron"
 
 namespace :deploy do
   task :start do
@@ -51,6 +51,12 @@ namespace :deploy do
   desc "Run bundle install --local"
   task :bundle_install, :roles => :app, :except => {:no_release => true} do
     run "cd #{release_path} && #{local_bin}/bundle install --local"
+  end
+
+  # current_path is correct here because this happens after deploy, not after deploy:update_code
+  desc "Load the crontasks"
+  task :set_cron, :roles => :app, :except => {:no_release => true} do
+    run "cd #{current_path} && rake set_crontab environment=#{environment} current_path=#{current_path}"
   end
   
   desc "Get shared files into position"
