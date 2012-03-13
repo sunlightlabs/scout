@@ -77,16 +77,14 @@ namespace :subscriptions do
 end
   
 namespace :deliver do
-  namespace :email do
-    desc "Users who want a single daily email digest"
-    task :daily => :environment do
-      Deliveries::Manager.deliver! "delivery.mechanism" => "email", "delivery.email_frequency" => "daily"
-    end
+  desc "Users who want a single daily email digest"
+  task :email_digest => :environment do
+    Deliveries::Manager.deliver! "delivery.mechanism" => "email", "delivery.email_frequency" => "daily"
+  end
 
-    desc "Users who want emails whenever, per-interest"
-    task :immediate => :environment do
-      Deliveries::Manager.deliver! "delivery.mechanism" => "email", "delivery.email_frequency" => "immediate"
-    end
+  desc "Users who want emails whenever, per-interest"
+  task :email_immediate => :environment do
+    Deliveries::Manager.deliver! "delivery.mechanism" => "email", "delivery.email_frequency" => "immediate"
   end
 end
 

@@ -1,14 +1,22 @@
-######## Polling tasks #########
+######## Delivery tasks ########
+
+# email digests - once a day, in the morning
+
+# immediate emails - throughout the day, every 10 minutes
+*/10 * * * *  /projects/alarms/current/config/cron/staging/deliver.sh email_immediate
+
+
+######## Polling tasks  #########
 
 # keyword search subscriptions
 
-# federal bills - daily, bounded by THOMAS/GPO/GovTrack
+# bills in Congress - daily, bounded by THOMAS/GPO/GovTrack
 0 8,14 * * *  /projects/alarms/current/config/cron/staging/check.sh federal_bills
 
-# state bills - once an hour, Open States scrapers running throughout the day, but no need to be real time
+# bills in the states - once an hour, Open States scrapers running throughout the day, but no need to be real time
 0 * * * *     /projects/alarms/current/config/cron/staging/check.sh state_bills
 
-# congressional_record - daily, bounded by GPO
+# speeches in Congress - daily, bounded by GPO
 0 8,14 * * *  /projects/alarms/current/config/cron/staging/check.sh congressional_record
 
 # regulations - once an hour, FederalRegister.gov updates at unknown intervals
@@ -17,10 +25,10 @@
 
 # item-specific subscriptions
 
-# federal_bills_activity - daily, bounded by THOMAS/GovTrack
+# activity on bills in Congress - daily, bounded by THOMAS/GovTrack
 0 8,14 * * *  /projects/alarms/current/config/cron/staging/check.sh federal_bills_activity
 
-# federal_bills_upcoming_floor - every 5 minutes, bounded by party leadership
+# upcoming notices for bills in congress - every 5 minutes, bounded by party leadership
 */5 * * * *   /projects/alarms/current/config/cron/staging/check.sh federal_bills_upcoming_floor
 
 
