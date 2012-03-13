@@ -53,12 +53,15 @@ task :clear_data => :environment do
   end
 end
 
+subscription_types = Dir.glob('subscriptions/adapters/*.rb').map do |file|
+  File.basename file, File.extname(file)
+end
+
 namespace :subscriptions do
   
   namespace :check do
 
-    Dir.glob('subscriptions/adapters/*.rb').each do |file|
-      subscription_type = File.basename file, File.extname(file)
+    subscription_types.each do |subscription_type|
 
       desc "Check for new #{subscription_type} items for initialized subscriptions"
       task subscription_type.to_sym => :environment do
@@ -71,6 +74,10 @@ namespace :subscriptions do
           puts "Error during subscription checking, emailed report."
         end
       end
+    end
+
+    desc "Check all subscription types right now (admin usage)"
+    task :all => subscription_types.map {|type| "subscriptions:check:#{type}"} do
     end
 
   end
