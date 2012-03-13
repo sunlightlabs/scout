@@ -18,7 +18,7 @@ module Deliveries
           
           content = render_interest interest, deliveries
           content = render_final content
-          subject = "#{Deliveries::Manager.interest_name interest} - new activity"
+          subject = "#{Deliveries::Manager.interest_name interest} - #{deliveries.size} new things"
 
           if email_user email, subject, content
             deliveries.each &:delete

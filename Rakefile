@@ -114,6 +114,7 @@ namespace :test do
   task :email_user => :environment do
     email = ENV['email'] || config[:admin][:email]
     max = (ENV['max'] || ENV['limit'] || 2).to_i
+    only = ENV['only']
 
     unless user = User.where(:email => email).first
       puts "Can't find user by that email."
@@ -125,6 +126,9 @@ namespace :test do
 
     user.interests.each do |interest|
       interest.subscriptions.each do |subscription|
+        if only.present?
+          next unless subscription.subscription_type == "federal_bills"
+        end
 
         puts "Searching for #{subscription.subscription_type} results for #{interest.in}..."
         items = subscription.search
