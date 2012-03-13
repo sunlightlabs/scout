@@ -1,6 +1,7 @@
-<%= item.data['title'] %> (<%= regulation_stage item.data['stage'] %>)
- <% if item.data['search']['highlight'] %>
-<%= regulation_highlight item, interest, false %>
+<% regulation = item.data %>
+<%= regulation['title'] %> (<%= regulation_stage regulation['stage'] %>)
+ <% if regulation['search']['highlight'] %>
+<%= regulation_highlight item, interest.in, false %>
  <% end %>
 
-<%= item.data['federal_register_url'] %>
+<%= regulation['federal_register_url'] %>

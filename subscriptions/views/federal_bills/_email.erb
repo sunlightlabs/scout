@@ -1,11 +1,12 @@
-<%= bill_code item.data['bill_type'], item.data['number'] %> - <% if item.data['short_title'].present? %>
-<%= item.data['short_title'] %>
+<% bill = item.data %>
+<%= bill_code bill['bill_type'], bill['number'] %> - <% if bill['short_title'].present? %>
+<%= bill['short_title'] %>
 <% else %>
-<%= item.data['official_title'] %>
+<%= bill['official_title'] %>
 <% end %>
 
  <% if item.data['search']['highlight'] %>
-<%= bill_highlight item, interest, false %>
+<%= bill_highlight item, interest.in, false %>
  <% end %>
 
 http://<%= config[:hostname] %>/bill/<%= item.item_id %>

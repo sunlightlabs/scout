@@ -13,6 +13,7 @@ class Delivery
   # references to other tables, shouldn't be needed but useful for debugging and archival
   field :subscription_id
   field :user_id
+  field :interest_id
   
   # core fields needed to deliver the goods
   field :user_email

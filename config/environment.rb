@@ -15,13 +15,15 @@ end
 Dir.glob('models/*.rb').each {|filename| load filename}
 require 'helpers'
 
-# email utilities
-require 'config/email'
+# admin messages and reports
+require 'config/admin'
 
-# subscription-specific adapters and management
+# delivery management and mechanisms
+Dir.glob('deliveries/*.rb').each {|filename| load filename}
+
+# subscription management and adapters
 Dir.glob('subscriptions/adapters/*.rb').each {|filename| load filename}
 require 'subscriptions/manager'
-require 'subscriptions/deliverance'
 
 # maps types of items to the subscription adapter they can be found with
 def interest_data
@@ -32,11 +34,11 @@ def interest_data
       :subscriptions => {
         'federal_bills_activity' => {
           :name => "Legislative Activity",
-          :description => ""
+          :description => "action(s) in Congress"
         },
         'federal_bills_upcoming_floor' => {
           :name => "Upcoming Floor Appearances",
-          :description => ""
+          :description => "upcoming appearance(s) on the floor"
         }
       }
     },

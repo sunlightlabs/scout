@@ -29,13 +29,13 @@ class Report
     file 'SUCCESS', source, message, objects
   end
 
-  def self.exception(source, message, exception)
+  def self.exception(source, message, exception, objects = {})
     file 'FAILURE', source, message, {
       'exception' => {
         'backtrace' => exception.backtrace, 
         'message' => exception.message, 
         'type' => exception.class.to_s
-    }}
+    }.merge(objects)}
   end
   
   def to_s

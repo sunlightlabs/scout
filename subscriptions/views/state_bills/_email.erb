@@ -1,5 +1,5 @@
 <% bill = item.data %>
-[<%= state_name bill['state'] %>] <%= excerpt bill['title'], interest, false %>
+[<%= state_name bill['state'] %>] <%= excerpt bill['title'], interest.in, false %>
 
 <% if state_version_info?(bill) %>
 <%= URI.encode bill['versions'].last['url'] %>

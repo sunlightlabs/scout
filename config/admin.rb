@@ -1,6 +1,7 @@
 require 'pony'
 
-module Email
+# Used to send admin emails (reports, warnings, etc.)
+module Admin
 
   def self.report(report)
     subject = "[#{report.status}] #{report.source} | #{report.message}"
@@ -15,6 +16,8 @@ module Email
     attrs['attached'].delete 'exception'
     attrs.delete('attached') if attrs['attached'].empty?
     body += attrs.inspect if attrs.any?
+
+    body ||= report['message']
       
     if config[:email][:from].present? and config[:admin][:email].present?
       begin
@@ -31,7 +34,7 @@ module Email
     end
   end
 
-  def self.admin(subject, body = nil)
+  def self.message(subject, body = nil)
     if config[:email][:from].present? and config[:admin][:email].present?
       begin
         Pony.mail config[:email].merge(
@@ -61,27 +64,5 @@ module Email
     
     msg
   end
-
-  def self.user(email, subject, content)
-    if config[:email][:from].present?
-      begin
-        
-        Pony.mail config[:email].merge(
-          :to => email, 
-          :subject => subject, 
-          :body => content
-        )
-        
-        true
-      rescue Errno::ECONNREFUSED
-        false
-      end
-    else
-      puts "\n[USER] Would have delivered this to #{email}:"
-      puts "\nSubject: #{subject}"
-      puts "\n#{content}"
-      true # if no 'from' email is specified, we'll assume it's a dev environment or something
-    end
-  end
-
+  
 end

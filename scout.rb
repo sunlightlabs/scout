@@ -37,7 +37,16 @@ post '/users/new' do
     log_in user
     redirect destination
   else
-    if user = User.create(:email => params[:email])
+    user = User.new(
+      :email => params[:email],
+      # todo : read these from a form
+      :delivery => {
+        :mechanism => 'email',
+        :email_frequency => 'digest'
+      }
+    )
+
+    if user.save
       log_in user
       flash[:success] = "Your account has been created."
       redirect destination

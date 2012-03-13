@@ -24,7 +24,6 @@ module Subscriptions
         subscription.seen_items.delete_all
 
         Subscriptions::Manager.poll(subscription, :initialize).each do |item|
-          p item
           mark_as_seen! subscription, item
         end
       end
@@ -50,12 +49,12 @@ module Subscriptions
 
             unless SeenItem.where(:subscription_id => subscription.id, :item_id => item.item_id).first
               unless item.item_id
-                Email.report Report.warning("Check", "[#{subscription.subscription_type}][#{subscription.interest_in}] item with an empty ID")
+                Admin.report Report.warning("Check", "[#{subscription.subscription_type}][#{subscription.interest_in}] item with an empty ID")
                 next
               end
 
               mark_as_seen! subscription, item
-              schedule_delivery! subscription, item
+              Deliveries::Manager.schedule_delivery! subscription, item
             end
           end
         end
@@ -65,26 +64,6 @@ module Subscriptions
       subscription.save!
     end
     
-    def self.schedule_delivery!(subscription, item)
-      puts "[#{subscription.user.email}][#{subscription.subscription_type}][#{subscription.interest_in}](#{item.item_id}) Scheduling delivery"
-      
-      Delivery.create!(
-        :user_id => subscription.user.id,
-        :user_email => subscription.user.email,
-        
-        :subscription_id => subscription.id,
-        :subscription_type => subscription.subscription_type,
-        :subscription_interest_in => subscription.interest_in,
-
-        :interest_id => subscription.interest_id,
-        
-        :item_id => item.item_id,
-        :item_date => item.date,
-        :item_data => item.data,
-        :item_search_url => item.search_url
-      )
-    end
-
     def self.mark_as_seen!(subscription, item)
       item.save!
     end
@@ -99,7 +78,7 @@ module Subscriptions
       begin
         response = HTTParty.get url
       rescue Timeout::Error, Errno::ETIMEDOUT => ex
-        Email.report Report.warning("Poll", "[#{subscription.subscription_type}][#{function}][#{subscription.interest_in}] poll timeout, returned an empty list")
+        Admin.report Report.warning("Poll", "[#{subscription.subscription_type}][#{function}][#{subscription.interest_in}] poll timeout, returned an empty list")
         return [] # should be return nil, when we refactor this to properly accomodate failures in initialization, checking, and searching
       end
       
@@ -137,7 +116,7 @@ module Subscriptions
       begin
         response = HTTParty.get url
       rescue Timeout::Error, Errno::ETIMEDOUT => ex
-        Email.report Report.warning("Find", "[#{adapter_type}][find][#{item_id}] find timeout, returned nil")
+        Admin.report Report.warning("Find", "[#{adapter_type}][find][#{item_id}] find timeout, returned nil")
         return nil
       end
       

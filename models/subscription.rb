@@ -7,7 +7,7 @@ class Subscription
   field :interest_in
   field :interest_id
   field :last_checked_at, :type => Time
-    
+  
   index :subscription_type
   index :initialized
   index :user_id

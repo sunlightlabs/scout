@@ -1,23 +1,28 @@
 # transaction log of delivered emails
 
-class Delivered
+class Receipt
   include Mongoid::Document
   include Mongoid::Timestamps
   
-  field :delivered_at, :type => Time
   field :deliveries, :type => Array
-  field :subscription_types, :type => Hash
-  field :interest_in
+
+  field :user_email
+  field :user_delivery
+
   field :subject
   field :content
+  field :delivered_at, :type => Time
   
   index :delivered_at
   
   validates_presence_of :delivered_at
-  validates_presence_of :interest_in
   validates_presence_of :content
 
   def to_s
-    "[#{user_email}] #{interest_in} (#{deliveries.size})\n\t#{subscription_types.map {|type, n| "#{type} (#{n})"}.join ', '}\n\t#{_id}"
+    "[#{user_email}](#{deliveries.size}) #{subject}"
+  end
+
+  def subscription_types
+    
   end
 end

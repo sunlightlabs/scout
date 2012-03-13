@@ -9,7 +9,7 @@ class Interest
   field :interest_type
 
   # arbitrary metadata
-  #   saved search - parameters of the search (e.g. "state" => "NY")
+  #   saved search - TBD
   #   item - metadata about the item (e.g. "chamber" => "house")
   field :data, :type => Hash
   
@@ -25,5 +25,9 @@ class Interest
 
   def item?
     interest_type != "search"
+  end
+
+  def search?
+    interest_type == "search"
   end
 end
