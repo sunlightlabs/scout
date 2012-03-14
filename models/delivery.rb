@@ -1,8 +1,5 @@
 # queue of to-be-delivered items
-
 # designed to stay empty, inbox-zero style, with completed deliveries stored separately
-# designed to not depend on joining with other tables
-# designed to be extractable and potentially implemented elsewhere, e.g. as part of a separate queueing system
 
 class Delivery
   include Mongoid::Document
@@ -11,7 +8,6 @@ class Delivery
   belongs_to :subscription
   belongs_to :interest
   
-  # references to other tables, shouldn't be needed but useful for debugging and archival
   field :subscription_id
   field :user_id
   field :interest_id

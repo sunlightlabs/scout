@@ -26,7 +26,7 @@ module Subscriptions
       end
 
       def self.description(number, subscription, interest)
-        "#{number} #{number > 1 ? "actions" : "action"} on #{FederalBills.interest_name interest}"
+        "#{number} #{number > 1 ? "actions" : "action"}"
       end
 
       def self.item_path(item)

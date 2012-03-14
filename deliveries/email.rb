@@ -10,10 +10,10 @@ module Deliveries
       interests = user.interests.all
 
       # if sending whenever, then send one email per-interest
-      #if frequency == 'immediate'
+      if frequency == 'immediate'
 
         interests.each do |interest|
-          deliveries = Delivery.where(:interest_id => interest.id).all.to_a
+          deliveries = Delivery.where(:interest_id => interest.id, :user_id => user.id).all.to_a
           next unless deliveries.any?
           
           content = render_interest interest, deliveries
@@ -27,6 +27,30 @@ module Deliveries
             failures += 1
           end
         end
+      
+      else # digest all deliveries into one single email
+        content = ""
+
+        deliveries = Delivery.where(:user_id => user.id).all.to_a
+        next unless deliveries.any?
+
+        interests.each do |interest|
+          interest_deliveries = deliveries.select {|d| d.interest_id == interest.id}
+          next unless interest_deliveries.any?
+
+          content << render_interest(interest, interest_deliveries)
+        end
+        
+        content = render_final content
+        subject = "Daily digest - #{deliveries.size} new things"
+
+        if email_user email, subject, content
+          deliveries.each &:delete
+          successes << save_receipt!(frequency, user, deliveries, subject, content)
+        else
+          failures += 1
+        end
+      end
 
       if failures > 0
         Admin.report Report.failure("Delivery", "Failed to deliver #{failures} emails to #{email}")
@@ -42,6 +66,7 @@ module Deliveries
     def self.save_receipt!(frequency, user, deliveries, subject, content)
       Receipt.create!(
         :frequency => frequency,
+        :mechanism => "email",
 
         :deliveries => deliveries.map {|delivery| delivery.attributes.dup},
 
@@ -58,6 +83,7 @@ module Deliveries
       grouped = deliveries.group_by &:subscription
 
       content = ""
+
       grouped.each do |subscription, group|
         # if interest.search?
         #   description = search_data[subscription.subscription_type][:description]
@@ -67,7 +93,7 @@ module Deliveries
 
         description = subscription.adapter.description group.size, subscription, interest
 
-        content << "- #{description}\n\n\n"
+        content << "- #{Deliveries::Manager.interest_name interest} - #{description}\n\n\n"
 
         group.each do |delivery|
           content << render_delivery(subscription, interest, delivery)
