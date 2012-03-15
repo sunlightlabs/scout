@@ -8,25 +8,23 @@ module Deliveries
     def self.deliver!(user_options)
       receipts = []
 
-      begin
-        User.where(user_options).each do |user|
-          if user.delivery['mechanism'] == 'email'
-            receipts += Deliveries::Email.deliver_for_user! user
-          else
-            Admin.message "Unsure how to deliver to user #{user.email}, no known delivery mechanism"
-          end
+      User.where(user_options).each do |user|
+        if user.delivery['mechanism'] == 'email'
+          receipts += Deliveries::Email.deliver_for_user! user
+        else
+          Admin.message "Unsure how to deliver to user #{user.email}, no known delivery mechanism"
         end
-      rescue Exception => ex
-        Admin.report Report.exception("Delivery", "Problem during delivery.", ex)
-        puts "Error during delivery, emailed report."
       end
-
-      # Temporary, but for now I want to know when emails go out
+      
+      # Let admin know when emails go out
       if receipts.any?
         Admin.message "Sent #{receipts.size} notifications", report_for(receipts)
       else
         puts "No notifications sent."
       end
+    rescue Exception => ex
+      Admin.report Report.exception("Delivery", "Problem during delivery.", ex)
+      puts "Error during delivery, emailed report."
     end
 
     def self.interest_name(interest)
