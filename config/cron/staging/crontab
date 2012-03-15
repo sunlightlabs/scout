@@ -1,6 +1,7 @@
 ######## Delivery tasks ########
 
 # email digests - once a day, in the morning
+0 10 * * * * /projects/alarms/current/config/cron/staging/deliver.sh email_daily
 
 # immediate emails - throughout the day, every 10 minutes
 */10 * * * *  /projects/alarms/current/config/cron/staging/deliver.sh email_immediate

@@ -85,7 +85,7 @@ end
   
 namespace :deliver do
   desc "Users who want a single daily email digest"
-  task :email_digest => :environment do
+  task :email_daily => :environment do
     Deliveries::Manager.deliver! "delivery.mechanism" => "email", "delivery.email_frequency" => "daily"
   end
 

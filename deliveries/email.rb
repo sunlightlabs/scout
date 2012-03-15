@@ -28,27 +28,28 @@ module Deliveries
           end
         end
       
-      else # digest all deliveries into one single email
+      elsif frequency == 'daily' # digest all deliveries into one single email
         content = ""
 
         deliveries = Delivery.where(:user_id => user.id).all.to_a
-        next unless deliveries.any?
+        if deliveries.any?
 
-        interests.each do |interest|
-          interest_deliveries = deliveries.select {|d| d.interest_id == interest.id}
-          next unless interest_deliveries.any?
+          interests.each do |interest|
+            interest_deliveries = deliveries.select {|d| d.interest_id == interest.id}
+            next unless interest_deliveries.any?
 
-          content << render_interest(interest, interest_deliveries)
-        end
-        
-        content = render_final content
-        subject = "Daily digest - #{deliveries.size} new things"
+            content << render_interest(interest, interest_deliveries)
+          end
+          
+          content = render_final content
+          subject = "Daily digest - #{deliveries.size} new things"
 
-        if email_user email, subject, content
-          deliveries.each &:delete
-          successes << save_receipt!(frequency, user, deliveries, subject, content)
-        else
-          failures += 1
+          if email_user email, subject, content
+            deliveries.each &:delete
+            successes << save_receipt!(frequency, user, deliveries, subject, content)
+          else
+            failures += 1
+          end
         end
       end
 
