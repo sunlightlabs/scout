@@ -2,6 +2,9 @@ class Interest
   include Mongoid::Document
   include Mongoid::Timestamps
   
+  belongs_to :user
+  has_many :subscriptions
+
   # a search string or item ID
   field :in
 
@@ -10,7 +13,7 @@ class Interest
 
   # arbitrary metadata
   #   saved search - TBD
-  #   item - metadata about the item (e.g. "chamber" => "house")
+  #   item - metadata about the item (e.g. "chamber" => "house", "state" => "NY", "bill_id" => "hr2134-112")
   field :data, :type => Hash
   
   index :in
@@ -20,9 +23,6 @@ class Interest
   validates_presence_of :user_id
   validates_presence_of :in
   
-  belongs_to :user
-  has_many :subscriptions
-
   def item?
     interest_type != "search"
   end

@@ -107,9 +107,9 @@ module Subscriptions
     end
 
     # given a type of adapter, and an item ID, fetch the item and return a seen item
-    def self.find(adapter_type, item_id)
+    def self.find(adapter_type, item_id, data = {})
       adapter = Subscription.adapter_for adapter_type
-      url = adapter.find_url item_id
+      url = adapter.url_for_detail item_id, data
       
       puts "\n[#{adapter}][find][#{item_id}] #{url}\n\n" if config[:debug][:output_urls]
       
@@ -120,7 +120,7 @@ module Subscriptions
         return nil
       end
       
-      adapter.item_for response
+      adapter.item_detail_for response
     end
     
   end

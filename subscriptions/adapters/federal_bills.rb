@@ -32,7 +32,7 @@ module Subscriptions
         url
       end
 
-      def self.find_url(item_id, data = {})
+      def self.url_for_detail(item_id, data = {})
         api_key = config[:subscriptions][:sunlight_api_key]
         if config[:subscriptions][:rtc_endpoint].present?
           endpoint = config[:subscriptions][:rtc_endpoint]
@@ -82,10 +82,15 @@ module Subscriptions
           item_for bv
         end
       end
+
+      # parse response when asking for a single bill - RTC still returns an array of one
+      def self.item_detail_for(response)
+        item_for response['bills'][0]
+      end
       
-      
+      # internal
+
       def self.item_for(bill)
-        bill = bill['bills'][0] if bill['bills'] # accept either the original response or one of the results
         return nil unless bill
 
         date = nil
@@ -111,8 +116,7 @@ module Subscriptions
       
       # helper function to straighten dates into UTC times (necessary for serializing to BSON, sigh)
       def self.noon_utc_for(date)
-        time = date.to_time
-        time.getutc + (12-time.getutc.hour).hours
+        date.to_time.midnight + 12.hours
       end
       
     end
