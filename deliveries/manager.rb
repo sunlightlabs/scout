@@ -39,7 +39,7 @@ module Deliveries
 
     def self.schedule_delivery!(subscription, item)
       puts "[#{subscription.user.email}][#{subscription.subscription_type}][#{subscription.interest_in}](#{item.item_id}) Scheduling delivery"
-      
+
       Delivery.create!(
         :user_id => subscription.user.id,
         :user_email => subscription.user.email,

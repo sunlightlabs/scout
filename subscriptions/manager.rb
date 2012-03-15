@@ -35,6 +35,10 @@ module Subscriptions
     
     def self.check!(subscription)
       
+      # catch any items which suddenly appear, dated in the past, 
+      # that weren't caught during initialization or prior polls
+      backfills = []
+
       # allow overrides by individual adapters
       if subscription.adapter.respond_to?(:check!)
         subscription.adapter.check! subscription
@@ -54,10 +58,28 @@ module Subscriptions
               end
 
               mark_as_seen! subscription, item
+
+              # accumulate backfilled items to report per-subscription.
+              # buffer of 5 days, to allow for information to make its way through whatever 
+              # pipelines it has to go through (could eventually configure this per-adapter)
+              if item.date < 5.days.ago
+                backfills << {
+                  :subscription_id => subscription.id, 
+                  :url => item.search_url,
+                  :item_id => item.item_id, 
+                  :item => item.attributes
+                }
+                next
+              end
+
               Deliveries::Manager.schedule_delivery! subscription, item
             end
           end
         end
+      end
+
+      if backfills.any?
+        Admin.report Report.warning("Check", "[#{subscription.subscription_type}][#{subscription.interest_in}] #{backfills.size} backfills detected, not delivered, attached", :backfills => backfills)
       end
       
       subscription.last_checked_at = Time.now
