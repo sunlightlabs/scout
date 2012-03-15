@@ -38,8 +38,8 @@ module GeneralHelpers
     URI.decode(string.to_s).gsub "\"", "\\\""
   end
   
-  def url_escape(url)
-    URI.escape url
+  def id_escape(id)
+    id.gsub(" ", "_").gsub("|", "__")
   end
   
   def long_date(time)

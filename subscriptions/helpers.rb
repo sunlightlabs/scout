@@ -351,5 +351,18 @@ module Subscriptions
         :final => "Final Rule"
       }[stage.to_sym] || "Rule"
     end
+
+    def opengovernment_url(bill)
+      state = bill['state'].to_s.downcase
+      bill_id = bill['bill_id'].downcase.gsub(' ', '-')
+      session = bill['session']
+      
+      "http://#{state}.opengovernment.org/sessions/#{session}/bills/#{bill_id}"
+    end
+
+    def state_in_og?(code)
+      ["CA", "LA", "MD", "MN", "TX"].include? code.to_s.upcase
+    end
+
   end
 end

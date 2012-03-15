@@ -8,7 +8,7 @@ module Subscriptions
         api_key = config[:subscriptions][:sunlight_api_key]
         query = URI.escape subscription.interest_in
         
-        fields = %w{ bill_id subjects state chamber updated_at title sources versions session }
+        fields = %w{ bill_id subjects state chamber updated_at title sources versions session %2Bshort_title }
         
         url = "#{endpoint}/bills/?apikey=#{api_key}"
         
@@ -39,10 +39,10 @@ module Subscriptions
         endpoint = "http://openstates.org/api/v1"
         api_key = config[:subscriptions][:sunlight_api_key]
         
-        fields = %w{ bill_id state chamber updated_at title sources actions votes session }
+        fields = %w{ bill_id state chamber updated_at title sources actions votes session versions %2Bshort_title }
         
         # item_id is of the form ":state/:session/:chamber/:bill_id" (URI encoded already)
-        url = "#{endpoint}/bills/#{item_id}/?apikey=#{api_key}"
+        url = "#{endpoint}/bills/#{URI.encode item_id.gsub('__', '/').gsub('_', ' ')}/?apikey=#{api_key}"
         url << "&fields=#{fields.join ','}"
 
         url
@@ -59,7 +59,7 @@ module Subscriptions
         ending = (beginning + per_page) - 1  # index of last item
 
         # for searching, only return the first "page" of items, otherwise, handle any and all
-        items = (function == :search) ? response[beginning..ending] : response
+        items = (function == :search) ? (response[beginning..ending] || []) : response
 
         items.map {|bill| item_for bill}
       end
@@ -94,10 +94,10 @@ module Subscriptions
         session = URI.encode bill['session']
         chamber = URI.encode bill['chamber']
         state = URI.encode bill['state']
-        
+
         # save the item ID as a piece of the URL we can plug back into the OS API later
         SeenItem.new(
-          :item_id => "#{state}/#{session}/#{chamber}/#{bill_id}",
+          :item_id => [state, session, chamber, bill_id].join("__"),
           :date => bill["updated_at"],
           :data => bill
         )
