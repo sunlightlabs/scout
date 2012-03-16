@@ -463,3 +463,16 @@ section.show .detail .resources a {
   border-radius: 3px; border: 1px solid #336699;
   text-decoration: none;
 } section.show .detail .resources a:hover {background-color: #336699; color: #fff;}
+
+section.show .detail .votes {margin-bottom: 20px;}
+section.show .detail .votes li {margin: 10px 0; line-height: 25px;}
+section.show .detail .votes li div.left {
+  width: 80px;
+  display: inline-block; vertical-align: top;
+  padding: 0 30px 0 0px;
+}
+section.show .detail .votes li div.right {
+  display: inline-block; vertical-align: top;
+}
+section.show .detail .votes li span.date {font-weight: bold;}
+section.show .detail .votes li p.type {font-size: 80%;}

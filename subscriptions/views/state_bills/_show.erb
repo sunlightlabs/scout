@@ -43,6 +43,28 @@
             <% end %>
         <% end %>
     </div>
+
+    <% if bill['votes'] %>
+        <h2>Related Votes</h2>
+        <ul class="votes">
+            <% if bill['votes'].any? %>
+                <% bill['votes'].each do |vote| %>
+                    <li>
+                        <div class="left">
+                            <span class="date"><%= just_date vote['date'] %></span>
+                            <p class="type"><%= vote['type'].capitalize %></p>
+                        </div>
+                        <div class="right">
+                            <p><%= vote['motion'] %></p>
+                            <p><%= "#{vote['yes_count']}-#{vote['no_count']}-#{vote['other_count']}" %></p>
+                        </div>
+                    </li>
+                <% end %>
+            <% else %>
+                <p>No votes taken yet on this bill.</p>
+            <% end %>
+        </ul>
+    <% end %>
     
     <% if bill['actions'] %>
         <h2>Recent Activity</h2>

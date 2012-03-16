@@ -31,7 +31,7 @@ module Subscriptions
       end
 
       def self.item_path(item)
-        "/state_bill/#{URI.encode item.item_id}"
+        "/state_bill/#{item.item_id}"
       end
 
       def self.interest_name(interest)
