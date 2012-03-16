@@ -3,7 +3,7 @@
   <title><%= regulation['title'] %></title>
   <% if regulation['search']['highlight'] %>
     <description><![CDATA[
-      <%= regulation_highlight item, interest %>
+      <%= regulation_highlight item, interest.in %>
     ]]></description>
   <% else %>
     <description><%= regulation['abstract'] %></description>

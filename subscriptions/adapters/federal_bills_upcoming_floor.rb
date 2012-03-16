@@ -26,7 +26,7 @@ module Subscriptions
       end
 
       def self.description(number, subscription, interest)
-        "#{number} #{number > 1 ? "actions" : "action"}"
+        "#{number} #{number > 1 ? "notices" : "notice"} of upcoming floor activity"
       end
 
       def self.item_path(item)

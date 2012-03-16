@@ -4,6 +4,10 @@ module Subscriptions
     def item_path(item)
       item.subscription.adapter.item_path item
     end
+
+    def item_url(item)
+      "http://#{config[:hostname]}#{item_path item}"
+    end
     
     def bill_code(type, number)
       "#{bill_type type} #{number}"

@@ -3,7 +3,7 @@
   <title><%= bill['short_title'].present? ? bill['short_title'] : bill['official_title'] %></title>
   <% if bill['search']['highlight'] %>
       <description><![CDATA[
-        <%= bill_highlight item, interest %>
+        <%= bill_highlight item, interest.in %>
       ]]></description>
   <% elsif bill['summary'].present? %>
     <description><%= bill['summary'] %></description>

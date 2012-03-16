@@ -31,7 +31,11 @@ module Subscriptions
       end
 
       def self.item_path(item)
-        "/state_bill/#{item.item_id}"
+        "/state_bill/#{URI.encode item.item_id}"
+      end
+
+      def self.interest_name(interest)
+        interest.data['bill_id']
       end
 
       # item_id in this case is not actually the remote bill_id, since that's not specific enough
@@ -76,31 +80,36 @@ module Subscriptions
       
       def self.item_for(bill)
         # manually parse all of the dates - so lame, not sure why HTTParty is so bad at the format OpenStates uses
-        bill['updated_at'] = bill['updated_at'] ? noon_utc_for(bill['updated_at']) : nil
+
+        # updated_at is UTC, take it directly as such
+        bill['updated_at'] = bill['updated_at'] ? bill['updated_at'].to_time : nil
 
         if bill['actions']
           bill['actions'].each do |action|
-            action['date'] = noon_utc_for(action['date']) if action['date']
+            action['date'] = Time.parse(action['date']) if action['date']
           end
         end
 
         if bill['votes']
           bill['votes'].each do |vote|
-            vote['date'] = noon_utc_for(vote['date']) if vote['date']
+            vote['date'] = Time.parse(vote['date']) if vote['date']
           end
         end
-        
+
+        # save the item ID as a piece of the URL we can plug back into the OS API later
+        SeenItem.new(
+          :item_id => id_for(bill),
+          :date => bill["updated_at"],
+          :data => bill
+        )
+      end
+
+      def self.id_for(bill)
         bill_id = URI.encode bill['bill_id']
         session = URI.encode bill['session']
         chamber = URI.encode bill['chamber']
         state = URI.encode bill['state']
-
-        # save the item ID as a piece of the URL we can plug back into the OS API later
-        SeenItem.new(
-          :item_id => [state, session, chamber, bill_id].join("__"),
-          :date => bill["updated_at"],
-          :data => bill
-        )
+        [state, session, chamber, bill_id].join("__")
       end
 
       # cast dates with an unknown time zone to noon UTC, to make sure at least the day is always correct

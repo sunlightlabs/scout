@@ -45,7 +45,7 @@ def interest_data
       :adapter => "state_bills",
       :subscriptions => {
         'state_bills_activity' => {
-          :name => "Legislative Activity"
+          :name => "State Legislative Activity"
         }
       }
     }

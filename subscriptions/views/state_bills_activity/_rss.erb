@@ -1,12 +1,10 @@
 <% action = item.data %>
-<% bill_fields = bill_fields_from interest.in %>
-<% bill_code = bill_code bill_fields[0], bill_fields[1] %>
 <item>
   <title>
-    <%= bill_code %> - <%= just_date action['acted_at'] %> - New activity
+    <%= interest_name interest %> - <%= just_date action['date'] %> - New activity
   </title>
   <description><![CDATA[
-    <%= action['text'] %>
+    <%= action['action'] %>
   ]]></description>
     
   <link>http://<%= config[:hostname] %><%= item_path item %></link>

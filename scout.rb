@@ -123,7 +123,7 @@ post '/interest/track' do
   requires_login
 
   interest_type = params[:interest_type]
-  item_id = params[:item_id]
+  item_id = URI.decode params[:item_id] # can possibly have spaces, decode first
   
   unless item = Subscriptions::Manager.find(interest_data[interest_type][:adapter], item_id)
     halt 404 and return
