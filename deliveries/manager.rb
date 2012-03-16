@@ -35,7 +35,9 @@ module Deliveries
       end
     end
 
-    def self.schedule_delivery!(subscription, item)
+    def self.schedule_delivery!(item, subscription = nil)
+      # Allow subscription to be passed in to prevent a database lookup, but not necessary
+      subscription||= item.subscription
       puts "[#{subscription.user.email}][#{subscription.subscription_type}][#{subscription.interest_in}](#{item.item_id}) Scheduling delivery"
 
       Delivery.create!(

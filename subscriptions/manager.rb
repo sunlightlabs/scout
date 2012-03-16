@@ -67,7 +67,7 @@ module Subscriptions
                 next
               end
 
-              Deliveries::Manager.schedule_delivery! subscription, item
+              Deliveries::Manager.schedule_delivery! item, subscription
             end
           end
         end
