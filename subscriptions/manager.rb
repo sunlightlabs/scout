@@ -63,12 +63,7 @@ module Subscriptions
               # buffer of 5 days, to allow for information to make its way through whatever 
               # pipelines it has to go through (could eventually configure this per-adapter)
               if item.date < 5.days.ago
-                backfills << {
-                  :subscription_id => subscription.id, 
-                  :url => item.search_url,
-                  :item_id => item.item_id, 
-                  :item => item.attributes
-                }
+                backfills << item.attributes
                 next
               end
 
