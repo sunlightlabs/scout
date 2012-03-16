@@ -368,5 +368,17 @@ module Subscriptions
       ["CA", "LA", "MD", "MN", "TX"].include? code.to_s.upcase
     end
 
+    def state_vote_count(vote)
+      "#{vote['passed'] ? "Passed" : "Not Passed"}, #{vote['yes_count']}-#{vote['no_count']}-#{vote['other_count']}"
+    end
+
+    def state_vote_type(vote)
+      type = ""
+      if vote['committee'] or vote['motion'] =~ /committee/i
+        type = "Committee "
+      end
+      "#{type}#{vote['type'].capitalize}"
+    end
+
   end
 end

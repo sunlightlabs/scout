@@ -20,6 +20,7 @@ class SeenItem
   field :data, :type => Hash
   field :date, :type => Time
   field :search_url # search URL that originally produced this item
+  field :find_url # if this came from a find request, produce that URL
 
 
   index [

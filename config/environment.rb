@@ -33,10 +33,10 @@ def interest_data
       :adapter => "federal_bills",
       :subscriptions => {
         'federal_bills_activity' => {
-          :name => "Legislative Activity"
+          :name => "Activity"
         },
         'federal_bills_upcoming_floor' => {
-          :name => "Upcoming Floor Appearances"
+          :name => "Floor Schedule"
         }
       }
     },
@@ -45,7 +45,10 @@ def interest_data
       :adapter => "state_bills",
       :subscriptions => {
         'state_bills_activity' => {
-          :name => "State Legislative Activity"
+          :name => "Activity"
+        },
+        'state_bills_votes' => {
+          :name => "Votes"
         }
       }
     }

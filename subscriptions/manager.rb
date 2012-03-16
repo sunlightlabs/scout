@@ -107,7 +107,6 @@ module Subscriptions
           item.attributes = {
             # insert a reference to the subscription that generated result
             :subscription => subscription,
-            # :subscription_id => subscription.id,
             :subscription_type => subscription.subscription_type,
             :subscription_interest_in => subscription.interest_in,
             :interest_id => subscription.interest_id,
@@ -137,7 +136,9 @@ module Subscriptions
         return nil
       end
       
-      adapter.item_detail_for response
+      item = adapter.item_detail_for response
+      item[:find_url] = url
+      item
     end
     
   end

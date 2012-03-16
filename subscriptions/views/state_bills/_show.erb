@@ -48,15 +48,15 @@
         <h2>Related Votes</h2>
         <ul class="votes">
             <% if bill['votes'].any? %>
-                <% bill['votes'].each do |vote| %>
+                <% bill['votes'].reverse.each do |vote| %>
                     <li>
                         <div class="left">
                             <span class="date"><%= just_date vote['date'] %></span>
-                            <p class="type"><%= vote['type'].capitalize %></p>
+                            <p class="type"><%= state_vote_type vote %></p>
                         </div>
                         <div class="right">
-                            <p><%= vote['motion'] %></p>
-                            <p><%= "#{vote['yes_count']}-#{vote['no_count']}-#{vote['other_count']}" %></p>
+                            <p class="motion"><%= vote['motion'] %></p>
+                            <p class="vote_count"><%= state_vote_count vote %></p>
                         </div>
                     </li>
                 <% end %>
@@ -67,9 +67,9 @@
     <% end %>
     
     <% if bill['actions'] %>
-        <h2>Recent Activity</h2>
+        <h2>Activity</h2>
         <ul class="activity">
-            <% bill['actions'].reverse[0...5].each do |action| %>
+            <% bill['actions'].reverse.each do |action| %>
                 <li>
                     <span class="date"><%= just_date action['date'] %></span>
                     -
@@ -77,6 +77,11 @@
                 </li>
             <% end %>
         </ul>
+    <% end %>
+
+    <% if config[:debug][:link_to_json] %>
+        <h2>Developer</h2>
+        <a href="<%= item.find_url %>">JSON</a>
     <% end %>
 
 </section>

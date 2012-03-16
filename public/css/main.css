@@ -475,4 +475,5 @@ section.show .detail .votes li div.right {
   display: inline-block; vertical-align: top;
 }
 section.show .detail .votes li span.date {font-weight: bold;}
-section.show .detail .votes li p.type {font-size: 80%;}
+section.show .detail .votes li p.type {font-size: 80%; line-height: 18px;}
+section.show .detail .votes li div.right p.vote_count {font-size: 80%;}
