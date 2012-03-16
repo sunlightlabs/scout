@@ -127,7 +127,7 @@ section.sidebar div.login span.logged_out {
   margin-bottom: 10px; 
 }
 
-section.sidebar div.login form input.email {
+section.sidebar div.login input.email {
   font-size: 100%;
   width: 200px;
   padding: 5px 5px;
@@ -138,6 +138,17 @@ button.text.login {
   font-weight: bold;
 }
 
+section.sidebar div.login div.prefs {
+  margin: 10px 0;
+}
+
+section.sidebar div.login div.prefs input.radio {
+  margin: 0 0;
+}
+
+section.sidebar div.login div.prefs label.radio {
+  margin-left: 5px; margin-right: 15px; 
+}
 
 /* intro page */
 

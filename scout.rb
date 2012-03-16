@@ -57,6 +57,17 @@ post '/users/new' do
   end
 end
 
+put '/user' do
+  requires_login
+  
+  current_user.attributes = {
+    "delivery.email_frequency" => params[:email_frequency]
+  }
+
+  current_user.save!
+  halt 200
+end
+
 get '/logout' do
   log_out if logged_in?
   redirect '/'

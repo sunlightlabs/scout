@@ -1,4 +1,14 @@
 $(function() {
+
+  $("form#user_prefs :radio").change(function() {
+    var values = $.param({_method: "put"}) + "&" + $("form#user_prefs").serialize();
+    $.post("/user", values, function(data) {
+      // do nothing
+      console.log("Updated user.");
+    }).error(function() {
+      showError("Error updating user.");
+    });
+  })
   
   $("ul.subscriptions").on("click", "li.keyword button.remove", function() {
     var keyword_id = $(this).data("keyword_id");

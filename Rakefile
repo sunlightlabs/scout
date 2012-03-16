@@ -138,7 +138,7 @@ namespace :test do
         end
 
         items.first(max).each do |item|
-          delivery = Deliveries::Manager.schedule_delivery! subscription, item
+          delivery = Deliveries::Manager.schedule_delivery! item, subscription
         end
       end
 

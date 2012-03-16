@@ -72,7 +72,14 @@
         <span>
           <%= current_user.email %>
         </span>
-        <br/>
+        <div class="prefs">
+          <form action="/user" id="user_prefs" method="put">
+            <input type="radio" class="radio" name="email_frequency" value="immediate" <%= current_user.frequency == "immediate" ? "checked" : "" %> />
+            <label class="radio">Immediate</label>
+            <input type="radio" class="radio" name="email_frequency" value="daily" <%= current_user.frequency == "daily" ? "checked" : "" %> />
+            <label class="Radio">Daily Digest</label>
+          </form>
+        </div>
         <a class="logout" href="/logout">logout</a>
       <% else %>
         <span class="logged_out">
