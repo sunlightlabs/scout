@@ -11,9 +11,10 @@
   $(function() {
     var item_type = "<%= interest_type %>";
     var item_id = "<%= id_escape item_id %>";
-    window.item_id = item_id;
     var container = $("#item-" + item_id);
     container.find(".loading_container").show();
+
+    $("input.query").val('');
 
     var subscription = $("li.keyword h2 a[data-keyword='" + item_id + "'][data-keyword_type='" + item_type + "']");
     if (subscription) {
