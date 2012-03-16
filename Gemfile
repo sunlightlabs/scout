@@ -1,5 +1,7 @@
 source 'http://rubygems.org'
 
+gem 'json', '1.6.5'
+
 gem 'sinatra', '1.2.6'
 gem 'sinatra-content-for', '0.2'
 gem 'sinatra-flash', '0.3.0'

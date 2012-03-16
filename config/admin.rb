@@ -15,7 +15,7 @@ module Admin
     [:status, :created_at, :updated_at, :_id, :message, :exception, :read, :source].each {|key| attrs.delete key.to_s}
     attrs['attached'].delete 'exception'
     attrs.delete('attached') if attrs['attached'].empty?
-    body += attrs.inspect if attrs.any?
+    body += JSON.pretty_generate attrs if attrs.any?
 
     body ||= report['message']
       
@@ -30,7 +30,7 @@ module Admin
         puts "Couldn't email report, connection refused! Check system settings."
       end
     else
-      puts "\n[ADMIN EMAIL] #{body}"  
+      puts "\n[ADMIN EMAIL]\n#{body}"
     end
   end
 
