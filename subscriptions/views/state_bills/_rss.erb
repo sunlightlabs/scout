@@ -7,7 +7,7 @@
     <%= excerpt bill['title'], interest.in %>
   ]]></description>
     
-  <link><%= rss_encode bill['versions'].last['url'] %></link>
-  <guid><%= rss_encode bill['versions'].last['url'] %></guid>
+  <link><%= item_path item %></link>
+  <guid><%= item_path item %></guid>
   <pubDate><%= rss_date item.date %></pubDate>
 </item>
