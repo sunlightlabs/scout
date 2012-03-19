@@ -75,9 +75,9 @@ $(function() {
   });
 
   $("#content").on("mouseover", "button.track.untrack", function() {
-    $(this).html("Untrack");
+    $(this).html("Unfollow");
   }).on("mouseout", "button.track.untrack", function() {
-    $(this).html("Tracking");
+    $(this).html("Following");
   });
 
   $("#content").on("click", "section.show button.track", function() {
@@ -87,7 +87,7 @@ $(function() {
 
     if (button.hasClass("untrack")) {
       var keyword_id = button.data("keyword_id");
-      button.html("Track").removeClass("untrack");
+      button.html("Follow").removeClass("untrack");
       $.post("/interest/untrack", {
         _method: "delete",
         interest_id: keyword_id
@@ -97,10 +97,10 @@ $(function() {
           button.data("keyword_id", null);
       }).error(function() {
         showError("Error deleting tracking interest: " + keyword_id);
-        button.html("Untrack").addClass("untrack");
+        button.html("Unfollow").addClass("untrack");
       });
     } else {
-      button.html("Untrack").addClass("untrack");
+      button.html("Unfollow").addClass("untrack");
       $.post("/interest/track", {
           item_id: item_id,
           interest_type: item_type
@@ -113,7 +113,7 @@ $(function() {
         }
       ).error(function() {
         showError("Error tracking item.");
-        button.html("Track").removeClass("untrack");
+        button.html("Follow").removeClass("untrack");
       });
 
     }
