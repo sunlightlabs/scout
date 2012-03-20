@@ -132,7 +132,7 @@ namespace :test do
 
         puts "Searching for #{subscription.subscription_type} results for #{interest.in}..."
         items = subscription.search
-        if items.empty?
+        if items.nil? or items.empty?
           puts "\tNo results, nothing to deliver."
           next
         end
