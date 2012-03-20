@@ -32,7 +32,11 @@
 # upcoming notices for bills in congress - every 5 minutes, bounded by party leadership
 */5 * * * *   /projects/alarms/current/config/cron/staging/check.sh federal_bills_upcoming_floor
 
+# activity on bills in the States - once an hour, who knows when these will be updated
+0 * * * * /projects/alarms/current/config/cron/staging/check.sh state_bills_activity
 
+# activity on bills in the States - once an hour, who knows when these will be updated
+0 * * * * /projects/alarms/current/config/cron/staging/check.sh state_bills_votes
 
 
 # keep the newline below
