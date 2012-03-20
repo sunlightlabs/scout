@@ -20,7 +20,7 @@ gem 'pony', '1.3'
 group :development do
   gem 'sinatra-reloader', '0.5.0'
   gem 'wirble'
-  gem 'rack', '1.4.0'
+  gem 'rack', '1.4.1'
   gem 'unicorn'
 end
 
