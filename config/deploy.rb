@@ -1,12 +1,19 @@
 set :environment, (ENV['target'] || 'staging')
 
-set :user, 'alarms'
+if environment == 'production'
+  set :user, 'scout'
+  set :domain, 'scout.sunlightfoundation.com'
+else
+  set :user, 'alarms'
+  set :domain, 'ec2-50-16-84-118.compute-1.amazonaws.com'
+end
+
+
 set :application, user
 set :sock, "#{user}.sock"
 
 set :deploy_to, "/projects/#{user}/"
 set :local_bin, "/projects/#{user}/.gem/ruby/1.8/bin"
-set :domain, 'ec2-50-16-84-118.compute-1.amazonaws.com'
 
 
 set :scm, :git
@@ -21,11 +28,11 @@ role :app, domain
 role :web, domain
 
 set :use_sudo, false
-after "deploy", "deploy:cleanup"
 after "deploy:update_code", "deploy:shared_links"
 after "deploy:update_code", "deploy:bundle_install"
 after "deploy:update_code", "deploy:create_indexes"
 after "deploy", "deploy:set_cron"
+after "deploy", "deploy:cleanup"
 
 namespace :deploy do
   task :start do
