@@ -12,6 +12,7 @@
 :email:
   :via: :smtp
   :from:
+  :reply_to:
   :via_options:
     :address:
     :port:
