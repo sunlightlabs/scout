@@ -43,7 +43,7 @@ post '/users/new' do
       # todo : read these from a form
       :delivery => {
         :mechanism => 'email',
-        :email_frequency => 'digest'
+        :email_frequency => 'daily'
       }
     )
 
