@@ -1,5 +1,6 @@
 # hostname that will be used in emails (include port if needed)
 :hostname: localhost:8080
+:session_secret: # fill in with something unique per-deployment
 
 :mongoid:
   host: localhost

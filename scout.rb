@@ -8,6 +8,7 @@ set :logging, false
 set :views, 'views'
 set :public, 'public'
 set :sessions, true
+set :session_secret, config[:session_secret]
 
 configure(:development) do |config|
   require 'sinatra/reloader'
