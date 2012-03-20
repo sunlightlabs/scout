@@ -1,10 +1,10 @@
 ######## Delivery tasks ########
 
 # email digests - once a day, in the morning
-0 10 * * * /projects/scout/current/config/cron/staging/deliver.sh email_daily
+0 10 * * * /projects/scout/current/config/cron/production/deliver.sh email_daily
 
 # immediate emails - throughout the day, every 10 minutes
-*/10 * * * *  /projects/scout/current/config/cron/staging/deliver.sh email_immediate
+*/10 * * * *  /projects/scout/current/config/cron/production/deliver.sh email_immediate
 
 
 ######## Polling tasks  #########
@@ -12,25 +12,25 @@
 # keyword search subscriptions
 
 # bills in Congress - daily, bounded by THOMAS/GPO/GovTrack
-0 8,14 * * *  /projects/scout/current/config/cron/staging/check.sh federal_bills
+0 8,14 * * *  /projects/scout/current/config/cron/production/check.sh federal_bills
 
 # bills in the states - once an hour, Open States scrapers running throughout the day, but no need to be real time
-0 * * * *     /projects/scout/current/config/cron/staging/check.sh state_bills
+0 * * * *     /projects/scout/current/config/cron/production/check.sh state_bills
 
 # speeches in Congress - daily, bounded by GPO
-0 8,14 * * *  /projects/scout/current/config/cron/staging/check.sh congressional_record
+0 8,14 * * *  /projects/scout/current/config/cron/production/check.sh congressional_record
 
 # regulations - once an hour, FederalRegister.gov updates at unknown intervals
-0 * * * *     /projects/scout/current/config/cron/staging/check.sh regulations
+0 * * * *     /projects/scout/current/config/cron/production/check.sh regulations
 
 
 # item-specific subscriptions
 
 # activity on bills in Congress - daily, bounded by THOMAS/GovTrack
-0 8,14 * * *  /projects/scout/current/config/cron/staging/check.sh federal_bills_activity
+0 8,14 * * *  /projects/scout/current/config/cron/production/check.sh federal_bills_activity
 
 # upcoming notices for bills in congress - every 5 minutes, bounded by party leadership
-*/5 * * * *   /projects/scout/current/config/cron/staging/check.sh federal_bills_upcoming_floor
+*/5 * * * *   /projects/scout/current/config/cron/production/check.sh federal_bills_upcoming_floor
 
 
 
