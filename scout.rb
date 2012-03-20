@@ -12,11 +12,12 @@ set :sessions, true
 configure(:development) do |config|
   require 'sinatra/reloader'
   config.also_reload "config/environment.rb"
+  config.also_reload "config/admin.rb"
   config.also_reload "helpers.rb"
   config.also_reload "models/*.rb"
   config.also_reload "subscriptions/adapters/*.rb"
-  config.also_reload "subscriptions/manager.rb"
-  config.also_reload "subscriptions/helpers.rb"
+  config.also_reload "subscriptions/*.rb"
+  config.also_reload "deliveries/*.rb"
 end
 
 
