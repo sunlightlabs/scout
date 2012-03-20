@@ -55,6 +55,8 @@ module Subscriptions
       # takes parsed response and returns an array where each item is 
       # a hash containing the id, title, and post date of each item found
       def self.items_for(response, function, options = {})
+        return if response.is_a?(String)
+        
         per_page = 20
 
         # OpenStates API does not have server-side pagination - so we do it here
