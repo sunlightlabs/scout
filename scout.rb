@@ -32,7 +32,6 @@ post '/users/new' do
   params[:email] = params[:email].strip
   
   destination = params[:redirect] || '/'
-  puts destination
 
   if user = User.where(:email => params[:email]).first
     log_in user
