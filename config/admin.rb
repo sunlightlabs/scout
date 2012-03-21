@@ -6,7 +6,7 @@ module Admin
   def self.report(report)
     subject = "[#{report.status}] #{report.source} | #{report.message}"
       
-    body = ""
+    body = "#{report.id}\n\n"
     if report[:attached]['exception']
       body += exception_message(report)
     end
