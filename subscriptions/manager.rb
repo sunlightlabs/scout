@@ -60,9 +60,13 @@ module Subscriptions
               mark_as_seen! subscription, item
 
               # accumulate backfilled items to report per-subscription.
-              # buffer of 5 days, to allow for information to make its way through whatever 
+              # buffer of 8 days, to allow for information to make its way through whatever 
               # pipelines it has to go through (could eventually configure this per-adapter)
-              if item.date < 5.days.ago
+              
+              # Was 5 days, bumped it to 8 because of federal_bills. 
+              # The LOC takes 6 days or so to assign keywords, and sometimes GPO can apparently 
+              # take a week to publish bills.
+              if item.date < 8.days.ago
                 backfills << item.attributes
                 next
               end
