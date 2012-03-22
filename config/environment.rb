@@ -61,13 +61,13 @@ def search_data
     'federal_bills' => {
       :name => "Congressional Bills",
       :search => "Bills in Congress",
-      :item => 'bill',
       :order => 1
     },
     'state_bills' => {
       :name => "State Bills",
       :search => "Bills in the states",
-      :order => 3
+      :order => 3,
+      :filter => true
     },
     'congressional_record' => {
       :name => "Congressional Speeches",

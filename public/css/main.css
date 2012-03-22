@@ -219,6 +219,11 @@ section.results div.logged_out span {
   position: relative; left: 30px; padding: 5px; line-height: 17px;
 }
 
+section.results div.filter {
+  background-color: #c5c5c5;
+  padding: 10px 20px;
+}
+
 /* tabs */
 
 section.results ul.tabs li {

@@ -12,9 +12,10 @@ class Interest
   field :interest_type
 
   # arbitrary metadata
-  #   saved search - TBD
-  #   item - metadata about the item (e.g. "chamber" => "house", "state" => "NY", "bill_id" => "hr2134-112")
-  field :data, :type => Hash
+  #   keyword search - TBD
+  #   item - metadata about the related item 
+  #     (e.g. "chamber" => "house", "state" => "NY", "bill_id" => "hr2134-112")
+  field :data, :type => Hash, :default => {}
   
   index :in
   index :user_id

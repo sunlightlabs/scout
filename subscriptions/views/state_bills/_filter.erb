@@ -1,0 +1,7 @@
+<label for="state">Filter by state:</label>
+<select name="state" class="subscription_data">
+    <option value="">----</option>
+    <% state_map.keys.sort.each do |code| %>
+        <option value="<%= code %>"><%= state_map[code] %></option>
+    <% end %>
+</select>

@@ -193,7 +193,11 @@ module Subscriptions
     end
     
     def state_name(code)
-      {
+      state_map[code.to_s.upcase]
+    end
+
+    def state_map
+      @state_map ||= {
         "AL" => "Alabama",
         "AK" => "Alaska",
         "AZ" => "Arizona",
@@ -246,7 +250,7 @@ module Subscriptions
         "WV" => "West Virginia",
         "WI" => "Wisconsin",
         "WY" => "Wyoming"
-      }[code.to_s.upcase]
+      }
     end
     
     def state_version_info?(bill)

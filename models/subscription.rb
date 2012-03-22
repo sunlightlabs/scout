@@ -9,7 +9,7 @@ class Subscription
   field :last_checked_at, :type => Time
 
   # arbitrary set of parameters that may refine or alter the subscription (e.g. "state" => "NY")
-  field :data, :type => Hash
+  field :data, :type => Hash, :default => {}
   
   index :subscription_type
   index :initialized

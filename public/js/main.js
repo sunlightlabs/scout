@@ -194,7 +194,10 @@ $(function() {
     $(this).remove();
     loader.show();
 
-    $.get("/items/" + keyword_slug + "/" + subscription_type, {page: next_page}, function(data) {
+    var subscription_data = subscriptionData(subscription_type);
+    subscription_data.page = next_page;
+
+    $.get("/items/" + keyword_slug + "/" + subscription_type, subscription_data, function(data) {
       page_container.remove();
       container.find("ul.items").append(data.html);
       container.data("current_page", next_page);
@@ -229,6 +232,15 @@ function selectTab(type) {
   }
 }
 
+function subscriptionData(subscription_type) {
+  var container = $("#results div.tab." + subscription_type);
+  var subscription_data = {};
+  container.find("div.filter .subscription_data").each(function(i, elem) {
+    subscription_data["subscription_data[" + $(elem).prop("name") + "]"] = $(elem).val();
+  });
+  return subscription_data;
+}
+
 function searchFor(keyword, subscription_type) {
   var tab = $("ul.tabs li." + subscription_type);
   var container = $("#results div.tab." + subscription_type);
@@ -240,9 +252,13 @@ function searchFor(keyword, subscription_type) {
   container.find("div.loading_container").show();
   container.find("header").hide();
   container.find("div.logged_out").hide();
+  container.find("div.filter").hide();
+
+  // assemble hash of any filter options
+  var subscription_data = subscriptionData(subscription_type);
 
   var keyword_slug = encodeURIComponent(keyword);
-  $.get("/items/" + keyword_slug + "/" + subscription_type, function(data) {
+  $.get("/items/" + keyword_slug + "/" + subscription_type, subscription_data, function(data) {
 
     tab.removeClass("loading");
     container.find("div.loading_container").hide();
@@ -254,6 +270,7 @@ function searchFor(keyword, subscription_type) {
     } else {
       container.find("header").show();
       container.find("div.logged_out").show();
+      container.find("div.filter").show();
       container.find("header span.description").html(data.description);
 
       var button = $("div.tab." + subscription_type + " button.follow");

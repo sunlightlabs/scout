@@ -41,6 +41,15 @@
           <% end %>
         </header>
 
+        <% if data[:filter] %>
+          <div 
+            class="filter"
+            data-subscription_type="<%= type %>"
+            >
+            <%= partial :"subscriptions/#{type}/filter", :locals => {:interest_in => interest_in} %>
+          </div>
+        <% end %>
+
         <% unless logged_in? %>
           <div class="logged_out">
             <span>
@@ -63,12 +72,13 @@
 <script type="text/javascript">
   // put in a delay block in case this is being rendered before the layout
   $(function() {
-    var keyword = encodeURIComponent("<%= js_escape interest_in %>");
     var display_keyword = "<%= js_escape interest_in %>";
+    var keyword = encodeURIComponent(display_keyword);
+    
     var keyword_id = user_subscriptions[keyword] ? user_subscriptions[keyword].keyword_id : null;
 
     <% types.each do |subscription_type, data| %>
-      searchFor("<%= js_escape interest_in %>", "<%= subscription_type %>");
+      searchFor(display_keyword, "<%= subscription_type %>");
     <% end %>
 
     $("li.keyword").removeClass("current");
@@ -80,5 +90,10 @@
       var active_tab = window.location.hash.replace("#", "");
       selectTab(active_tab);
     }
+
+    $(".subscription_data").change(function() {
+        var subscription_type = $(this).parents("div.filter").data("subscription_type");
+        searchFor(display_keyword, subscription_type);
+    });
   });
 </script>

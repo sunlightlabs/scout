@@ -90,6 +90,7 @@ module Subscriptions
     end
     
     # function is one of [:search, :initialize, :check]
+    # options hash can contain epheremal modifiers for search (right now just a 'page' parameter)
     def self.poll(subscription, function = :search, options = {})
       adapter = subscription.adapter
       url = adapter.url_for subscription, function, options

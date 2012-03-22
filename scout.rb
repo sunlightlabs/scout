@@ -254,12 +254,13 @@ get '/items/:interest/:subscription_type' do
   interest_in = params[:interest].strip
   subscription_type = params[:subscription_type]
 
-  results = []
-  
+  params[:subscription_data] ||= {} # must default to empty hash
+
   # make new, temporary subscription items
   results = Subscription.new(
     :interest_in => interest_in,
-    :subscription_type => params[:subscription_type]
+    :subscription_type => params[:subscription_type],
+    :data => params[:subscription_data]
   ).search(:page => (params[:page] ? params[:page].to_i : 1))
     
   # if results is nil, it usually indicates an error in one of the remote services -

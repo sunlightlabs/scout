@@ -12,18 +12,18 @@ module Subscriptions
         
         url = "#{endpoint}/bills/?apikey=#{api_key}"
         
+        url << "&fields=#{fields.join ','}"
+        url << "&q=#{query}"
+        url << "&search_window=term"
+
+        if subscription.data['state']
+          url << "&state=#{subscription.data['state']}"
+        end
+
         if function == :search or function == :initialize
-          url << "&fields=#{fields.join ','}"
-          url << "&q=#{query}"
-          url << "&search_window=term"
           url << "&sort=updated_at"
-          
         elsif function == :check
           updated_since = subscription.last_checked_at.strftime("%Y-%m-%dT%H:%M:%S")
-          
-          url << "&fields=#{fields.join ','}"
-          url << "&q=#{query}"
-          url << "&search_window=term"
           url << "&updated_since=#{updated_since}"
         end
         
