@@ -8,7 +8,7 @@ module Subscriptions
         api_key = config[:subscriptions][:sunlight_api_key]
         query = URI.escape subscription.interest_in
         
-        fields = %w{ bill_id subjects state chamber updated_at title sources versions session %2Bshort_title }
+        fields = %w{ bill_id subjects state chamber created_at updated_at title sources versions session %2Bshort_title }
         
         url = "#{endpoint}/bills/?apikey=#{api_key}"
         
@@ -20,7 +20,7 @@ module Subscriptions
         end
 
         if function == :search or function == :initialize
-          url << "&sort=updated_at"
+          url << "&sort=created_at"
         elsif function == :check
           updated_since = subscription.last_checked_at.strftime("%Y-%m-%dT%H:%M:%S")
           url << "&updated_since=#{updated_since}"
@@ -49,7 +49,7 @@ module Subscriptions
         endpoint = "http://openstates.org/api/v1"
         api_key = config[:subscriptions][:sunlight_api_key]
         
-        fields = %w{ bill_id state chamber updated_at title sources actions votes session versions %2Bshort_title }
+        fields = %w{ bill_id state chamber created_at updated_at title sources actions votes session versions %2Bshort_title }
         
         # item_id is of the form ":state/:session/:chamber/:bill_id" (URI encoded already)
         url = "#{endpoint}/bills/#{URI.encode item_id.gsub('__', '/').gsub('_', ' ')}/?apikey=#{api_key}"
@@ -107,7 +107,7 @@ module Subscriptions
         # save the item ID as a piece of the URL we can plug back into the OS API later
         SeenItem.new(
           :item_id => id_for(bill),
-          :date => bill["updated_at"],
+          :date => bill["created_at"],
           :data => bill
         )
       end
