@@ -14,8 +14,7 @@ module Subscriptions
         
         url << "&fields=#{fields.join ','}"
         url << "&q=#{query}"
-        url << "&search_window=term"
-
+        
         if subscription.data['state']
           url << "&state=#{subscription.data['state']}"
         end
@@ -26,7 +25,14 @@ module Subscriptions
           updated_since = subscription.last_checked_at.strftime("%Y-%m-%dT%H:%M:%S")
           url << "&updated_since=#{updated_since}"
         end
-        
+
+        # allow searchers to see back indefinitely
+        if function == :search
+          url << "&search_window=all"
+        else
+          url << "&search_window=term"
+        end
+
         url
       end
 
