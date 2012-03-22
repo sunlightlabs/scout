@@ -2,7 +2,7 @@
 
 <header>
     <div class="titles">
-        <h4><%= bill['bill_id'] %></h4>
+        <h4><%= bill['bill_id'] %>, <%= long_date item.date %></h4>
         <% if bill['+short_title'] %>
             <h2><%= bill['+short_title'] %></h2>
         <% else %>
@@ -51,7 +51,7 @@
                 <% bill['votes'].reverse.each do |vote| %>
                     <li>
                         <div class="left">
-                            <span class="date"><%= just_date vote['date'] %></span>
+                            <span class="date"><%= just_date_year vote['date'] %></span>
                             <p class="type"><%= state_vote_type vote %></p>
                         </div>
                         <div class="right">
@@ -71,7 +71,7 @@
         <ul class="activity">
             <% bill['actions'].reverse.each do |action| %>
                 <li>
-                    <span class="date"><%= just_date action['date'] %></span>
+                    <span class="date"><%= just_date_year action['date'] %></span>
                     -
                     <%= action['action'] %>
                 </li>
