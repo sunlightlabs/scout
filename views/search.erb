@@ -58,6 +58,12 @@
           </div>
         <% end %>
 
+        <% if config[:debug][:link_to_json] %>
+          <div class="developer json search">
+            Developer: <a href="#">Original JSON</a>
+          </div>
+        <% end %>
+
         <ul class="items">
           <!-- results for each subscription type get loaded in here -->
         </ul>

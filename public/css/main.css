@@ -493,3 +493,11 @@ section.show .detail .votes li div.right {
 section.show .detail .votes li span.date {font-weight: bold;}
 section.show .detail .votes li p.type {font-size: 80%; line-height: 18px;}
 section.show .detail .votes li div.right p.vote_count {font-size: 80%;}
+
+div.developer {
+  display: none; padding: 20px;
+}
+
+div.developer h2 {
+  font-weight: bold; margin: 10px 0;
+}

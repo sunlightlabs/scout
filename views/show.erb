@@ -1,4 +1,8 @@
 <section class="show <%= interest_type %>" id="item-<%= id_escape item_id %>">
+  <div class="developer json show">
+    <h2>Developer</h2>
+    <a href="#">Original JSON</a>
+  </div>
 
   <div class="loading_container">
     <span>loading...</span>
@@ -23,7 +27,13 @@
     }
 
     $.get("/find/" + item_type + "/" + item_id, {}, function(data) {
-      container.html(data.html);
+      container.find(".loading_container").hide();
+      container.append(data.html);
+      
+      <% if config[:debug][:link_to_json] %>
+        container.find(".developer.json.show").show().find("a").attr("href", data.item_url);
+      <% end %>
+
       <% if interest %>
         $("section.show button.track").html("Tracking").addClass("untrack");
         $("section.show button.track").data("keyword_id", "<%= interest.id %>");

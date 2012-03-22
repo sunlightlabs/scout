@@ -127,7 +127,8 @@ get(/^\/find\/(#{interest_data.keys.join '|'})\/([^\/]+)$/) do
 
   headers["Content-Type"] = "application/json"
   {
-    :html => html
+    :html => html,
+    :item_url => item.find_url
   }.to_json
 end
 
@@ -281,10 +282,12 @@ get '/items/:interest/:subscription_type' do
 
   headers["Content-Type"] = "application/json"
   
+  count = results ? results.size : -1
   {
-    :count => (results ? results.size : -1),
+    :count => count,
     :description => "#{search_data[params[:subscription_type]][:search]} matching \"#{interest_in}\"",
-    :html => html
+    :html => html,
+    :search_url => (count > 0 ? results.first.search_url : nil)
   }.to_json
 end
 

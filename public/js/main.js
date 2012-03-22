@@ -250,6 +250,7 @@ function searchFor(keyword, subscription_type) {
   container.find("div.system_error").hide();
   container.find("ul.items").html("");
   container.find("div.loading_container").show();
+  container.find("div.developer.search").hide();
   container.find("header").hide();
   container.find("div.logged_out").hide();
   container.find("div.filter").hide();
@@ -263,6 +264,10 @@ function searchFor(keyword, subscription_type) {
     tab.removeClass("loading");
     container.find("div.loading_container").hide();
     container.find("ul.items").html(data.html);
+
+    if (data.search_url) {
+      container.find("div.developer.json.search").show().find("a").attr("href", data.search_url);
+    }
 
     // error
     if (data.count < 0)  {
