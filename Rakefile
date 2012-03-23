@@ -115,14 +115,7 @@ namespace :test do
     Admin.report Report.exception("Admin.report 2", "Testing exception reports", Exception.new("WOW! OUCH!!"))
   end
 
-  desc "Forces SMSes to be sent for the first X results of every subscripton a user has"
-  task :sms_user => :environment do
-    email = ENV['email'] || config[:admin][:email]
-    max = (ENV['max'] || ENV['limit'] || 2).to_i
-    only = ENV['only']
-  end
-
-  desc "Forces emails to be sent for the first X results of every subscription a user has"
+  desc "Forces emails or SMSes to be sent for the first X results of every subscription a user has"
   task :send_user => :environment do
     email = ENV['email'] || config[:admin][:email]
     max = (ENV['max'] || ENV['limit'] || 2).to_i

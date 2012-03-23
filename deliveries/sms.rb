@@ -20,13 +20,24 @@ module Deliveries
         deliveries = Delivery.where(:interest_id => interest.id, :user_id => user.id).all.to_a
         next unless deliveries.any?
         
-        content = render_interest interest, deliveries
-        content = render_final content
+        core = render_interest interest, deliveries
+        content = render_final core
 
-        # if content.size > 160
-        #   original = content.dup
-        #   content = content.
-        #   Report.warning("Delivery", "SMS more than 160 characters, truncating", :truncation => true, :original => content, :truncated => truncated)
+        if content.size > 160
+          too_big = content.size - 160
+          original = content.dup
+          # cut out the overage, plus 3 for the ellipse, one for the potential quote, 3 for an additional buffer
+          truncated_core = core[0...-(too_big + 3 + 1 + 3)] + "..." + (interest.search? ? "\"" : "")
+          content = render_final truncated_core
+
+          # I may disable the emailing of this report after a while, but I want to see the frequency of this in practice
+          Admin.report Report.warning("Delivery", "SMS more than 160 characters, truncating", :truncation => true, :original => content, :truncated => content)
+        end
+
+        if content.size > 160
+          Admin.report Report.failure("Delivery", "Failed somehow to truncate SMS to less than 160", :truncation => true, :original => original, :truncated => content)
+          next
+        end
 
         if sms_user email, phone, content
           deliveries.each &:delete
