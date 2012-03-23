@@ -93,9 +93,14 @@ namespace :deliver do
   task :email_immediate => :environment do
     Deliveries::Manager.deliver! "delivery.mechanism" => "email", "delivery.email_frequency" => "immediate"
   end
+
+  desc "Users who want SMSes whenever, per-interest"
+  task :sms_immediate => :environment do
+    Deliveries::Manager.deliver! "delivery.mechanism" => "sms"
+  end
 end
 
-# some helpful test tasks to exercise emails 
+# some helpful test tasks to exercise emails and SMS
 
 namespace :test do
 
@@ -110,11 +115,19 @@ namespace :test do
     Admin.report Report.exception("Admin.report 2", "Testing exception reports", Exception.new("WOW! OUCH!!"))
   end
 
-  desc "Forces emails to be sent for the first X results of every subscription a user has"
-  task :email_user => :environment do
+  desc "Forces SMSes to be sent for the first X results of every subscripton a user has"
+  task :sms_user => :environment do
     email = ENV['email'] || config[:admin][:email]
     max = (ENV['max'] || ENV['limit'] || 2).to_i
     only = ENV['only']
+  end
+
+  desc "Forces emails to be sent for the first X results of every subscription a user has"
+  task :send_user => :environment do
+    email = ENV['email'] || config[:admin][:email]
+    max = (ENV['max'] || ENV['limit'] || 2).to_i
+    only = (ENV['only'] || "").split(",")
+    mechanism = ENV['by'] || 'email'
 
     unless user = User.where(:email => email).first
       puts "Can't find user by that email."
@@ -126,8 +139,8 @@ namespace :test do
 
     user.interests.each do |interest|
       interest.subscriptions.each do |subscription|
-        if only.present?
-          next unless subscription.subscription_type == "federal_bills"
+        if only.any?
+          next unless only.include?(subscription.subscription_type)
         end
 
         puts "Searching for #{subscription.subscription_type} results for #{interest.in}..."
@@ -144,7 +157,14 @@ namespace :test do
 
     end
 
-    Deliveries::Manager.deliver! :email => email
+    # once mechanism/frequency info is on Delivery, this can be switched back to
+    # Deliveries::Manager.deliver!
+
+    if mechanism == 'email'
+      Deliveries::Email.deliver_for_user! user
+    elsif mechanism == 'sms'
+      Deliveries::SMS.deliver_for_user! user
+    end
   end
 
 end

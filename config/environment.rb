@@ -1,6 +1,7 @@
 require 'sinatra'
 require 'mongoid'
 require 'tzinfo'
+require 'twilio-rb'
 
 def config
   @config ||= YAML.load_file File.join(File.dirname(__FILE__), "config.yml")
@@ -9,6 +10,11 @@ end
 configure do
   config[:mongoid][:logger] = Logger.new config[:log_file] if config[:log_file]
   Mongoid.configure {|c| c.from_hash config[:mongoid]}
+  
+  if config[:twilio]
+    Twilio::Config.setup :account_sid => config[:twilio][:account_sid],
+      :auth_token => config[:twilio][:auth_token]
+  end
 end
 
 # app-wide models and helpers

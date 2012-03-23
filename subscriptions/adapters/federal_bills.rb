@@ -55,6 +55,10 @@ module Subscriptions
         "#{number} #{number > 1 ? "bills" : "bill"} in Congress"
       end
 
+      def self.short_name(number, subscription, interest)
+        "#{number > 1 ? "bills" : "bill"}"
+      end
+
       def self.item_path(item)
         "/bill/#{item.item_id}"
       end

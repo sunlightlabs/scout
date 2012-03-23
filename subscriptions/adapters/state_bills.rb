@@ -79,6 +79,12 @@ module Subscriptions
       def self.description(number, subscription, interest)
         "#{number} #{number > 1 ? "bills" : "bill"} in the states"
       end
+
+      # should be brief, not use the number
+      # used in SMS messages
+      def self.short_name(number, subscription, interest)
+        "#{subscription.data['state'] || "state"} #{number > 1 ? "bills" : "bill"}"
+      end
       
       def self.item_detail_for(bill)
         item_for bill.to_hash

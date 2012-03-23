@@ -86,12 +86,6 @@ module Deliveries
       content = ""
 
       grouped.each do |subscription, group|
-        # if interest.search?
-        #   description = search_data[subscription.subscription_type][:description]
-        # else
-        #   description = interest_data[interest.interest_type][:subscriptions][subscription.subscription_type][:description]
-        # end
-
         description = subscription.adapter.description group.size, subscription, interest
 
         content << "- #{Deliveries::Manager.interest_name interest} - #{description}\n\n\n"

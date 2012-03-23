@@ -35,6 +35,10 @@ module Subscriptions
         "#{number} #{number > 1 ? "reports" : "report"} from GAO"
       end
 
+      def self.short_name(number, subscription, interest)
+        "#{number > 1 ? "GAO reports" : "GAO report"}"
+      end
+
       # takes parsed response and returns an array where each item is 
       # a hash containing the id, title, and post date of each item found
       def self.items_for(response, function, options = {})

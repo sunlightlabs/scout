@@ -11,6 +11,8 @@ module Deliveries
       User.where(user_options).each do |user|
         if user.delivery['mechanism'] == 'email'
           receipts += Deliveries::Email.deliver_for_user! user
+        elsif user.delivery['mechanism'] == 'sms'
+          receipts += Deliveries::SMS.deliver_for_user! user
         else
           Admin.message "Unsure how to deliver to user #{user.email}, no known delivery mechanism"
         end

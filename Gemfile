@@ -14,6 +14,7 @@ gem 'SystemTimer', '1.2.3' # mongo gem asks for this
 gem 'ruby-hmac', '0.4.0'
 
 gem 'pony', '1.3'
+gem 'twilio-rb', '2.1.3'
 
 # gem 'sinatra-authentication', '0.4.1'
 

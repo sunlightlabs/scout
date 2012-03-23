@@ -3,11 +3,12 @@ class User
   include Mongoid::Timestamps
   
   field :email
+  field :phone
 
   # metadata on user delivery preferences
   field :delivery, :type => Hash
-  #   mechanism: ['email']
-  #   email_frequency: ['daily']
+  #   mechanism: ['email', 'sms']
+  #   email_frequency: ['daily', 'immediate']
 
   has_many :subscriptions
   has_many :interests
@@ -21,11 +22,18 @@ class User
     "[#{email}][#{mechanism}][#{frequency}]"
   end
 
+  # shorthand for delivery information
   def mechanism
     delivery['mechanism']
   end
 
   def frequency
-    mechanism == 'email' ? delivery['email_frequency'] : ""
+    if mechanism == 'email'
+      delivery['email_frequency']
+    elsif mechanism == 'sms'
+      'immediate'
+    else
+      ""
+    end
   end
 end

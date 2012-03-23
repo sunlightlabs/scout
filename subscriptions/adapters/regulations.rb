@@ -36,6 +36,10 @@ module Subscriptions
       def self.description(number, subscription, interest)
         "#{number} proposed or final #{number > 1 ? "regulations" : "regulation"}"
       end
+
+      def self.short_name(number, subscription, interest)
+        "#{number > 1 ? "regulations" : "regulation"}"
+      end
       
       
       # takes parsed response and returns an array where each item is 

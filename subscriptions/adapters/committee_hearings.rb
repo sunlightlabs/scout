@@ -33,6 +33,10 @@ module Subscriptions
       def self.description(number, subscription, interest)
         "#{number} committee #{number > 1 ? "hearings" : "hearing"}"
       end
+
+      def self.short_name(number, subscription, interest)
+        "#{number > 1 ? "hearings" : "hearing"}"
+      end
       
       
       # takes parsed response and returns an array where each item is 

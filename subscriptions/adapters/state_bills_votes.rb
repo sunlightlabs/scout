@@ -22,6 +22,10 @@ module Subscriptions
         "#{number} #{number > 1 ? "votes" : "votes"}"
       end
 
+      def self.short_name(number, subscription, interest)
+        "#{number > 1 ? "votes" : "vote"}"
+      end
+
       def self.item_path(item)
         "/state_bill/#{URI.encode item.subscription_interest_in}#votes-#{item['data']['date'].to_i}"
       end

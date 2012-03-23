@@ -22,6 +22,10 @@
     :domain:
     :enable_starttls_auto: false
 
+:sms:
+  :account_sid: # account SID
+  :auth_token: # auth token
+
 # subscription-specific stuff
 :subscriptions:
   :sunlight_api_key: 

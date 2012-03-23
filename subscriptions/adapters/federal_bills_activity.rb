@@ -29,6 +29,10 @@ module Subscriptions
         "#{number} #{number > 1 ? "actions" : "action"}"
       end
 
+      def self.short_name(number, subscription, interest)
+        "#{number > 1 ? "actions" : "action"}"
+      end
+
       def self.item_path(item)
         "/bill/#{item.subscription_interest_in}#action-#{item['data']['acted_at'].to_i}"
       end

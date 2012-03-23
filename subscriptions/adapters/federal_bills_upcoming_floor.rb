@@ -29,6 +29,10 @@ module Subscriptions
         "#{number} #{number > 1 ? "notices" : "notice"} of upcoming floor activity"
       end
 
+      def self.short_name(number, subscription, interest)
+        "#{number > 1 ? "floor notices" : "floor notice"}"
+      end
+
       def self.item_path(item)
         "/bill/#{item.subscription_interest_in}#upcoming-#{item['data']['legislative_day'].strftime("%Y%m%d")}-#{item['data']['chamber']}"
       end
