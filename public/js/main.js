@@ -1,13 +1,17 @@
 $(function() {
 
-  $("form#user_prefs :radio").change(function() {
+  $("#user_prefs").submit(function() {
     var values = $.param({_method: "put"}) + "&" + $("form#user_prefs").serialize();
     $.post("/user", values, function(data) {
-      // do nothing
-      console.log("Updated user.");
-    }).error(function() {
+      $("p.user_results").html("Updated successfully.");
+    }).error(function(xhr) {
+      console.log(xhr.responseText);
+      var data = $.parseJSON(xhr.responseText);
+      $("p.user_results").html(data.error);
       showError("Error updating user.");
     });
+
+    return false;
   })
   
   $("ul.subscriptions").on("click", "li.keyword button.remove", function() {

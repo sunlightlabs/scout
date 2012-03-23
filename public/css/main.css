@@ -113,8 +113,15 @@ section.sidebar {top: 0;}
 section.sidebar div.login {
   font-size: 90%;
   padding-bottom: 10px;
-  margin-bottom: 10px;
   color: #444;
+}
+
+section.sidebar a.logout {
+  margin-left: 10px;
+}
+
+section.sidebar p.user_results {
+  padding-top: 10px;
 }
 
 section.sidebar div.login span {

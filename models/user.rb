@@ -16,6 +16,8 @@ class User
   validates_presence_of :email
   validates_uniqueness_of :email
 
+  validate :phone_for_sms
+
 
   # used for rendering admin emails
   def to_admin
@@ -34,6 +36,12 @@ class User
       'immediate'
     else
       ""
+    end
+  end
+
+  def phone_for_sms
+    if mechanism == 'sms' and phone.blank?
+      errors.add(:phone, "is required for SMS.") and return false
     end
   end
 end

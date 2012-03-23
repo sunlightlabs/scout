@@ -62,11 +62,20 @@ put '/user' do
   requires_login
   
   current_user.attributes = {
-    "delivery.email_frequency" => params[:email_frequency]
+    "delivery.email_frequency" => params[:email_frequency],
+    "delivery.mechanism" => params[:mechanism],
+    "phone" => params[:phone]
   }
 
-  current_user.save!
-  halt 200
+  if current_user.save
+    halt 200
+  else
+    status 500
+    headers["Content-Type"] = "application/json"
+    {
+      :error => current_user.errors.full_messages.first
+    }.to_json
+  end
 end
 
 get '/logout' do
