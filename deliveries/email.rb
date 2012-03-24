@@ -1,52 +1,47 @@
 module Deliveries
   module Email
 
-    def self.deliver_for_user!(user)
+    def self.deliver_for_user!(user, frequency)
       failures = 0
       successes = []
 
       email = user.email
-      frequency = user.delivery['email_frequency']
-      interests = user.interests.all
+
+      matching_deliveries = user.deliveries.where(:mechanism => "email", :email_frequency => frequency).all
+      interest_deliveries = matching_deliveries.group_by &:interest
 
       # if sending whenever, then send one email per-interest
       if frequency == 'immediate'
 
-        interests.each do |interest|
-          deliveries = Delivery.where(:interest_id => interest.id, :user_id => user.id).all.to_a
-          next unless deliveries.any?
-          
+        interest_deliveries.each do |interest, deliveries|          
           content = render_interest interest, deliveries
           content = render_final content
           subject = "#{Deliveries::Manager.interest_name interest} - #{deliveries.size} new things"
 
           if email_user email, subject, content
-            deliveries.each &:delete
             successes << save_receipt!(frequency, user, deliveries, subject, content)
+            deliveries.each &:delete
           else
             failures += 1
           end
         end
       
       elsif frequency == 'daily' # digest all deliveries into one single email
-        content = ""
+        
+        if matching_deliveries.any? # not sure why this would be the case, but, just in case
 
-        deliveries = Delivery.where(:user_id => user.id).all.to_a
-        if deliveries.any?
+          content = ""
 
-          interests.each do |interest|
-            interest_deliveries = deliveries.select {|d| d.interest_id == interest.id}
-            next unless interest_deliveries.any?
-
-            content << render_interest(interest, interest_deliveries)
+          interest_deliveries.each do |interest, deliveries|
+            content << render_interest(interest, deliveries)
           end
           
           content = render_final content
-          subject = "Daily digest - #{deliveries.size} new things"
+          subject = "Daily digest - #{matching_deliveries.size} new things"
 
           if email_user email, subject, content
-            deliveries.each &:delete
-            successes << save_receipt!(frequency, user, deliveries, subject, content)
+            successes << save_receipt!(frequency, user, matching_deliveries, subject, content)
+            matching_deliveries.each &:delete
           else
             failures += 1
           end
@@ -66,7 +61,7 @@ module Deliveries
 
     def self.save_receipt!(frequency, user, deliveries, subject, content)
       Receipt.create!(
-        :frequency => frequency,
+        :email_frequency => frequency,
         :mechanism => "email",
 
         :deliveries => deliveries.map {|delivery| delivery.attributes.dup},

@@ -4,7 +4,7 @@ class User
   
   field :email
   field :phone
-  
+
   # metadata on user delivery preferences
   field :delivery, :type => Hash
   #   mechanism: ['email', 'sms']
@@ -12,17 +12,12 @@ class User
 
   has_many :subscriptions
   has_many :interests
+  has_many :deliveries
   
   validates_presence_of :email
   validates_uniqueness_of :email
 
   validate :phone_for_sms
-
-
-  # used for rendering admin emails
-  def to_admin
-    "[#{email}][#{mechanism}][#{frequency}]"
-  end
 
   # shorthand for delivery information
   def mechanism

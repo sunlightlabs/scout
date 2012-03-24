@@ -86,17 +86,17 @@ end
 namespace :deliver do
   desc "Users who want a single daily email digest"
   task :email_daily => :environment do
-    Deliveries::Manager.deliver! "delivery.mechanism" => "email", "delivery.email_frequency" => "daily"
+    Deliveries::Manager.deliver! "mechanism" => "email", "email_frequency" => "daily"
   end
 
   desc "Users who want emails whenever, per-interest"
   task :email_immediate => :environment do
-    Deliveries::Manager.deliver! "delivery.mechanism" => "email", "delivery.email_frequency" => "immediate"
+    Deliveries::Manager.deliver! "mechanism" => "email", "email_frequency" => "immediate"
   end
 
   desc "Users who want SMSes whenever, per-interest"
   task :sms_immediate => :environment do
-    Deliveries::Manager.deliver! "delivery.mechanism" => "sms"
+    Deliveries::Manager.deliver! "mechanism" => "sms"
   end
 end
 
@@ -120,14 +120,21 @@ namespace :test do
     email = ENV['email'] || config[:admin][:email]
     max = (ENV['max'] || ENV['limit'] || 2).to_i
     only = (ENV['only'] || "").split(",")
+
     mechanism = ENV['by'] || 'email'
+    email_frequency = ENV['frequency'] || 'immediate'
+
+    unless ['immediate', 'daily'].include?(email_frequency)
+      puts "Use 'immediate' or 'daily' for a frequency."
+      return
+    end
 
     unless user = User.where(:email => email).first
       puts "Can't find user by that email."
       return
     end
 
-    puts "Clearing deliveries for #{email}"
+    puts "Clearing all deliveries for #{email}"
     Delivery.where(:user_email => email).delete_all
 
     user.interests.each do |interest|
@@ -144,20 +151,13 @@ namespace :test do
         end
 
         items.first(max).each do |item|
-          delivery = Deliveries::Manager.schedule_delivery! item, subscription
+          delivery = Deliveries::Manager.schedule_delivery! item, subscription, mechanism, email_frequency
         end
       end
 
     end
 
-    # once mechanism/frequency info is on Delivery, this can be switched back to
-    # Deliveries::Manager.deliver!
-
-    if mechanism == 'email'
-      Deliveries::Email.deliver_for_user! user
-    elsif mechanism == 'sms'
-      Deliveries::SMS.deliver_for_user! user
-    end
+    Deliveries::Manager.deliver! "mechanism" => mechanism, "email_frequency" => email_frequency
   end
 
 end

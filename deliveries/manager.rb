@@ -5,22 +5,26 @@ require 'tilt'
 module Deliveries
   module Manager
 
-    def self.deliver!(user_options)
+    def self.deliver!(delivery_options)
       receipts = []
 
-      User.where(user_options).each do |user|
-        if user.delivery['mechanism'] == 'email'
-          receipts += Deliveries::Email.deliver_for_user! user
-        elsif user.delivery['mechanism'] == 'sms'
+      # all users with deliveries of the requested mechanism and email frequency
+      user_ids = Delivery.where(delivery_options).distinct :user_id
+      users = User.where(:_id => {"$in" => user_ids}).all
+
+      users.each do |user|
+        if delivery_options['mechanism'] == 'email'
+          receipts += Deliveries::Email.deliver_for_user! user, delivery_options['email_frequency']
+        elsif delivery_options['mechanism'] == 'sms'
           receipts += Deliveries::SMS.deliver_for_user! user
         else
-          Admin.message "Unsure how to deliver to user #{user.email}, no known delivery mechanism"
+          Admin.message "Unsure how to deliver to user #{user.email}, no known delivery mechanism for #{delivery_options['mechanism']}"
         end
       end
       
       # Let admin know when emails go out
       if receipts.any?
-        Admin.message "Sent #{receipts.size} notifications", report_for(receipts)
+        Admin.message "Sent #{receipts.size} notifications", report_for(receipts, delivery_options)
       else
         puts "No notifications sent."
       end
@@ -37,34 +41,55 @@ module Deliveries
       end
     end
 
-    def self.schedule_delivery!(item, subscription = nil)
-      # Allow subscription to be passed in to prevent a database lookup, but not necessary
-      subscription||= item.subscription
+    def self.schedule_delivery!(item, 
+      # Allow subscription to optionally be passed in to prevent a database lookup
+      subscription = nil, 
+
+      # Allow manual override of delivery options (useful for debugging)
+      mechanism = nil, 
+      email_frequency = nil
+      )
+
+      # subscription and user can be looked up using only the item if need be
+      subscription ||= item.subscription
+      user = subscription.user
+
+      # delivery options come from the subscription
+      mechanism ||= subscription.mechanism
+      email_frequency ||= subscription.email_frequency
+
       puts "[#{subscription.user.email}][#{subscription.subscription_type}][#{subscription.interest_in}](#{item.item_id}) Scheduling delivery"
 
       Delivery.create!(
-        :user_id => subscription.user.id,
-        :user_email => subscription.user.email,
-        # todo - include user_phone
-        # :user_phone => subscription.user.phone,
+        :user_id => user.id,
+        :user_email => user.email,
+        :user_phone => user.phone,
         
         :subscription_id => subscription.id,
         :subscription_type => subscription.subscription_type,
         :subscription_interest_in => subscription.interest_in,
 
         :interest_id => subscription.interest_id,
+
+        :mechanism => mechanism,
+        :email_frequency => email_frequency,
         
         # drop the item into the delivery wholesale
         :item => item.attributes.dup
       )
     end
 
-    def self.report_for(receipts)
+    def self.report_for(receipts, delivery_options)
       report = ""
+
+      delivery_type = "[#{delivery_options['mechanism']}]"
+      if delivery_options['mechanism'] == 'email'
+        delivery_type << "[#{delivery_options['email_frequency']}]"
+      end
       
       receipts.group_by(&:user_email).each do |email, user_receipts|
         user = User.where(:email => email).first
-        report << "#{user.to_admin} #{user_receipts.size} notifications"
+        report << "[#{email}]#{delivery_type} #{user_receipts.size} notifications"
 
         user_receipts.each do |receipt|
           receipt.deliveries.group_by {|d| d['interest_id']}.each do |interest_id, interest_deliveries|
@@ -75,8 +100,8 @@ module Deliveries
               "#{subscription_type} (#{subscription_deliveries.size})"
             end.join(", ")
           end
-          report << "\n\n"
         end
+        report << "\n\n"
       end
 
       report

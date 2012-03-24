@@ -4,31 +4,36 @@ module Deliveries
   module SMS
 
     def self.deliver_for_user!(user)
-      failures = 0
-      successes = []
-
-      email = user.email
-      phone = user.phone
-      interests = user.interests.all
-
       unless user.phone.present?
         Admin.report Report.failure("Delivery", "User is signed up for SMS alerts but has no phone #{email}", :email => email)
         return 0
       end
 
-      interests.each do |interest|
-        deliveries = Delivery.where(:interest_id => interest.id, :user_id => user.id).all.to_a
-        next unless deliveries.any?
-        
+      failures = 0
+      successes = []
+
+      email = user.email
+      phone = user.phone
+
+      matching_deliveries = user.deliveries.where(:mechanism => "sms").all
+      interest_deliveries = matching_deliveries.group_by &:interest
+
+      interest_deliveries.each do |interest, deliveries|
+        # 1) change this to a landing page per-interest 
+        #   (show page for item interests, new page for keyword interests [HTML version of RSS feed])
+        # 2) shorten this URL in the Sunlight URL shortener
+        url = "http://#{config[:hostname]}"
+
         core = render_interest interest, deliveries
-        content = render_final core
+        content = render_final core, url
 
         if content.size > 160
           too_big = content.size - 160
           original = content.dup
+
           # cut out the overage, plus 3 for the ellipse, one for the potential quote, 3 for an additional buffer
           truncated_core = core[0...-(too_big + 3 + 1 + 3)] + "..." + (interest.search? ? "\"" : "")
-          content = render_final truncated_core
+          content = render_final truncated_core, url
 
           # I may disable the emailing of this report after a while, but I want to see the frequency of this in practice
           Admin.report Report.warning("Delivery", "SMS more than 160 characters, truncating", :truncation => true, :original => content, :truncated => content)
@@ -78,13 +83,12 @@ module Deliveries
       content
     end
 
-    def self.render_final(content)
-      "[Scout] #{content} http://scout.sunlightfoundation.com"
+    def self.render_final(content, url)
+      "[Scout] #{content} #{url}"
     end
 
     def self.save_receipt!(user, deliveries, content)
       Receipt.create!(
-        :frequency => "immediate",
         :mechanism => "sms",
 
         :deliveries => deliveries.map {|delivery| delivery.attributes.dup},

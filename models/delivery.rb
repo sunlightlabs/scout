@@ -7,6 +7,7 @@ class Delivery
   
   belongs_to :subscription
   belongs_to :interest
+  belongs_to :user
   
   field :subscription_id
   field :user_id
