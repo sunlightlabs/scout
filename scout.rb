@@ -172,7 +172,7 @@ post '/interest/track' do
   end
 end
 
-get '/interest/*.*' do |interest_id, ext|
+get /\/interest\/([\w\d]+)\.?(\w+)?/ do |interest_id, ext|
   # do not require login
   # for RSS, want readers and bots to access it freely
   # for SMS, want users on phones to see items easily without logging in
@@ -196,8 +196,14 @@ get '/interest/*.*' do |interest_id, ext|
       :interest => interest,
       :url => request.url
     }
-  else
 
+  # HTML version only works if the interest is a keyword search
+  else 
+    erb :"sms", :locals => {
+      :items => items,
+      :interest => interest,
+      :interests => user_interests,
+    }
   end
 end
 

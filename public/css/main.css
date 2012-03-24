@@ -221,12 +221,19 @@ section header button.follow.unfollow:hover, section header button.track.untrack
 }
 
 section.results header {
-  height: 50px;
+  height: 50px; padding-left: 10px;
+}
+
+section.results header h2 {
+  font-size: 150%;
+}
+
+section.results header h4 {
+  margin-top: 10px; font-size: 90%;
 }
 
 section.results header span.description {
-  font-size: 150%; line-height: 50px; 
-  position: relative; left: 30px;
+  font-size: 150%; line-height: 50px;
 }
 
 section div.logged_out {
@@ -268,10 +275,9 @@ section.results ul.tabs li.loading {
 }
 
 /* hide all but the first tab on start */
-section.results div.container {}
-section.results div.container div.tab {display: none;}
-section.results div.container div.tab:first-child {display: block;}
-section.results div.container div.tab.active {display: block;}
+section.results div.tab {display: none;}
+section.results div.tab:first-child {display: block;}
+section.results div.tab.active {display: block;}
 
 section.results div.tab div.system_error {
   padding-top: 30px; font-size: 125%; 

@@ -1,0 +1,10 @@
+<li class="result <%= item.subscription_type %>">
+  <div class="left">
+    <p class="date">
+      <%= just_date_year item.date %>
+    </p>
+  </div>
+  <div class="right">
+    <%= partial :"subscriptions/#{item.subscription.subscription_type}/result", :locals => {:item => item, :interest => interest_in} %>
+  </div>
+</li>
