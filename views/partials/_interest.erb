@@ -24,13 +24,7 @@
 
   <section class="types">
     <%= interest.subscriptions.sort_by(&:subscription_type).map do |subscription|
-      if interest.interest_type and interest_data[interest.interest_type]
-        interest_data[interest.interest_type][:subscriptions][subscription.subscription_type][:name]
-      elsif search_data[subscription.subscription_type]
-        search_data[subscription.subscription_type][:name]
-      else
-        nil
-      end
+      safe_capitalize subscription.adapter.short_name(2, subscription, interest)
     end.compact.join(", ") %>
   </section>
   

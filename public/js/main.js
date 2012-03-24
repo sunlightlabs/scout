@@ -158,12 +158,15 @@ $(function() {
       });
 
     } else {
+      // follow the subscription
       showSave(subscription_type, "unfollow");
-      $.post("/subscriptions", {
-          interest: keyword,
-          interest_id: keyword_id || "",
-          subscription_type: subscription_type
-        }, 
+
+      var subscription_data = subscriptionData(subscription_type);
+      subscription_data.interest = keyword;
+      subscription_data.interest_id = keyword_id || "";
+      subscription_data.subscription_type = subscription_type;
+
+      $.post("/subscriptions", subscription_data, 
         function(data) {
           showError("Subscription created: " + data.subscription_id + ", under interest " + data.interest_id);    
           button.data("subscription_id", data.subscription_id);

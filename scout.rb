@@ -236,7 +236,11 @@ post '/subscriptions' do
     new_interest = true
   end
   
-  subscription = current_user.subscriptions.new :interest_in => phrase, :subscription_type => subscription_type
+  subscription = current_user.subscriptions.new(
+    :interest_in => phrase, 
+    :subscription_type => subscription_type,
+    :data => params[:subscription_data]
+  )
   
   headers["Content-Type"] = "application/json"
 

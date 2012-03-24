@@ -18,6 +18,12 @@ module GeneralHelpers
     end
   end
 
+  def safe_capitalize(string)
+    words = string.split(" ")
+    words.each {|word| word[0..0] = word[0..0].upcase}
+    words.join(" ")
+  end
+
   def rss_date(time)
     time.strftime "%a, %d %b %Y %H:%M:%S %z"
   end
