@@ -5,8 +5,8 @@ module Deliveries
 
     def self.deliver_for_user!(user)
       unless user.phone.present?
-        Admin.report Report.failure("Delivery", "User is signed up for SMS alerts but has no phone #{email}", :email => email)
-        return 0
+        Admin.report Report.failure("Delivery", "#{user.email} is signed up for SMS alerts but has no phone", :email => user.email)
+        return []
       end
 
       failures = 0
@@ -23,6 +23,7 @@ module Deliveries
         #   (show page for item interests, new page for keyword interests [HTML version of RSS feed])
         # 2) shorten this URL in the Sunlight URL shortener
         url = "http://#{config[:hostname]}"
+        url << Deliveries::Manager.interest_path(interest)
 
         core = render_interest interest, deliveries
         content = render_final core, url

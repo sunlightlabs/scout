@@ -41,6 +41,15 @@ module Deliveries
       end
     end
 
+    # used in linking to interests in SMS
+    def self.interest_path(interest)
+      if interest.item?
+        Subscription.adapter_for(interest_data[interest.interest_type][:adapter]).interest_path(interest)
+      else
+        "/interest/#{interest.id}"
+      end
+    end
+
     def self.schedule_delivery!(item, 
       # Allow subscription to optionally be passed in to prevent a database lookup
       subscription = nil, 
