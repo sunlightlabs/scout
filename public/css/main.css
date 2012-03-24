@@ -157,6 +157,18 @@ section.sidebar div.login div.prefs label.radio {
   margin-left: 5px; margin-right: 15px; 
 }
 
+section.sidebar div.login div.prefs label.header {
+  display: block; margin-bottom: 10px; font-weight: bold;
+}
+
+section.sidebar div.login div.prefs fieldset {
+  margin-top: 10px; margin-bottom: 15px;
+}
+
+section.sidebar div.login div.prefs input.submit {
+  margin-top: 10px;
+}
+
 /* intro page */
 
 section.introduction p {padding: 10px 20px; line-height: 32px; font-size: 125%;}
