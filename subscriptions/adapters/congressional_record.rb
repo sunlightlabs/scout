@@ -19,11 +19,7 @@ module Subscriptions
         
         url
       end
-
-      def self.description(number, subscription, interest)
-        "#{number} #{number > 1 ? "speeches" : "speech"} on the floor of Congress"
-      end
-
+      
       def self.short_name(number, subscription, interest)
         "#{number > 1 ? "speeches" : "speech"}"
       end

@@ -25,10 +25,6 @@ module Subscriptions
         url
       end
 
-      def self.description(number, subscription, interest)
-        "#{number} #{number > 1 ? "actions" : "action"}"
-      end
-
       def self.short_name(number, subscription, interest)
         "#{number > 1 ? "actions" : "action"}"
       end

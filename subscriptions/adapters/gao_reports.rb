@@ -30,10 +30,6 @@ module Subscriptions
         
         url
       end
-      
-      def self.description(number, subscription, interest)
-        "#{number} #{number > 1 ? "reports" : "report"} from GAO"
-      end
 
       def self.short_name(number, subscription, interest)
         "#{number > 1 ? "GAO reports" : "GAO report"}"

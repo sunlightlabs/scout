@@ -82,12 +82,6 @@ module Subscriptions
         items.map {|bill| item_for bill}
       end
 
-      def self.description(number, subscription, interest)
-        "#{number} #{number > 1 ? "bills" : "bill"} in the states"
-      end
-
-      # should be brief, not use the number
-      # used in SMS messages
       def self.short_name(number, subscription, interest)
         "#{subscription.data['state'] || "state"} #{number > 1 ? "bills" : "bill"}"
       end

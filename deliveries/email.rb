@@ -16,7 +16,8 @@ module Deliveries
         interest_deliveries.each do |interest, deliveries|          
           content = render_interest interest, deliveries
           content = render_final content
-          subject = "#{Deliveries::Manager.interest_name interest} - #{deliveries.size} new things"
+
+          subject = render_subject interest, deliveries
 
           if email_user email, subject, content
             successes << save_receipt!(frequency, user, deliveries, subject, content)
@@ -81,7 +82,7 @@ module Deliveries
       content = ""
 
       grouped.each do |subscription, group|
-        description = subscription.adapter.description group.size, subscription, interest
+        description = "#{group.size} #{subscription.adapter.short_name group.size, subscription, interest}"
 
         content << "- #{Deliveries::Manager.interest_name interest} - #{description}\n\n\n"
 
@@ -94,6 +95,23 @@ module Deliveries
       end
 
       content
+    end
+
+    # subject line for per-interest emails
+    def self.render_subject(interest, deliveries)
+      subject = "#{Deliveries::Manager.interest_name interest} - "
+
+      grouped = deliveries.group_by(&:subscription)
+
+      if grouped.keys.size > 3
+        subject << "#{deliveries.size} new things"
+      else
+        subject << grouped.map do |subscription, subscription_deliveries|
+          "#{subscription_deliveries.size} #{subscription.adapter.short_name subscription_deliveries.size, subscription, interest}"
+        end.join(", ")
+      end
+
+      subject
     end
 
     def self.render_final(content)

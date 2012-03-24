@@ -25,10 +25,6 @@ module Subscriptions
         url
       end
 
-      def self.description(number, subscription, interest)
-        "#{number} #{number > 1 ? "notices" : "notice"} of upcoming floor activity"
-      end
-
       def self.short_name(number, subscription, interest)
         "#{number > 1 ? "floor notices" : "floor notice"}"
       end
