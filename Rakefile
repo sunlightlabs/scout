@@ -95,7 +95,7 @@ namespace :deliver do
   end
 
   desc "Users who want SMSes whenever, per-interest"
-  task :sms_immediate => :environment do
+  task :sms => :environment do
     Deliveries::Manager.deliver! "mechanism" => "sms"
   end
 end

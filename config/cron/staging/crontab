@@ -6,6 +6,9 @@
 # immediate emails - throughout the day, every 10 minutes
 */10 * * * *  /projects/alarms/current/config/cron/staging/deliver.sh email_immediate
 
+# SMS messages - throughout the day, every 10 minutes
+*/10 * * * * /projects/alarms/current/config/cron/staging/deliver.sh sms
+
 
 ######## Polling tasks  #########
 
