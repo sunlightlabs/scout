@@ -51,4 +51,15 @@ class Subscription
   def initialize_self
     Subscriptions::Manager.initialize! self
   end
+
+  # the mechanism this subscription prefers to be delivered as (e.g. email or SMS).
+  # for right now, reads right from the user's preferences, but could be changed
+  # to be per-interest or per-subscription.
+  def mechanism
+    user.delivery['mechanism']
+  end
+
+  def email_frequency
+    user.delivery['email_frequency']
+  end
 end

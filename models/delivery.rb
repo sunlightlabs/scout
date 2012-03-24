@@ -16,6 +16,12 @@ class Delivery
   field :user_email
   field :subscription_type
   field :subscription_interest_in
+
+  # store where this delivery should go out over email or sms
+  # will probably be populated by user's settings, but the
+  # delivery task should look at *this* field, so that we can
+  # add the ability to override per-interest, per-subscription, whatever
+  field :mechanism
   
   # item details
   field :item_id

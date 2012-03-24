@@ -4,7 +4,7 @@ class User
   
   field :email
   field :phone
-
+  
   # metadata on user delivery preferences
   field :delivery, :type => Hash
   #   mechanism: ['email', 'sms']
