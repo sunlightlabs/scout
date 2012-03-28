@@ -6,7 +6,7 @@ require 'sinatra/flash'
 
 set :logging, false
 set :views, 'views'
-set :public, 'public'
+set :public_folder, 'public'
 set :sessions, true
 set :session_secret, config[:session_secret]
 
