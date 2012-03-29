@@ -66,7 +66,7 @@ module Subscriptions
               # Was 5 days, bumped it to 8 because of federal_bills. 
               # The LOC takes 6 days or so to assign keywords, and sometimes GPO can apparently 
               # take a week to publish bills.
-              if item.date < 8.days.ago
+              if item.date < 30.days.ago
                 backfills << item.attributes
                 next
               end
