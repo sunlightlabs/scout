@@ -37,7 +37,7 @@ class User
 
   def phone_for_sms
     if mechanism == 'sms' and phone.blank?
-      errors.add(:phone, "is required for SMS.") and return false
+      errors.add(:phone, "A phone number is required for SMS.") and return false
     end
   end
 
@@ -48,9 +48,9 @@ class User
   
   field :password_hash, :type => String # type needs to be specified, otherwise it'd be a BCrypt::Password
   
-  validates_presence_of :email
+  validates_presence_of :email, :message => "We need an email address."
   validates_uniqueness_of :email, :message => "That email address is already signed up."
-  validates_format_of :email, :with => /^[-a-z0-9_+\.]+\@([-a-z0-9]+\.)+[a-z0-9]{2,4}$/i
+  validates_format_of :email, :with => /^[-a-z0-9_+\.]+\@([-a-z0-9]+\.)+[a-z0-9]{2,4}$/i, :message => "Not a valid email address."
   validates_confirmation_of :password, :message => "Your passwords did not match."
   
   before_save :encrypt_password

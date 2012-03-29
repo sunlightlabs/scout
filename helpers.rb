@@ -1,5 +1,6 @@
 # general display helpers
 module GeneralHelpers
+  helpers ::Padrino::Helpers
   
   # index of subscription adapters and associated copy
   def search_subscriptions

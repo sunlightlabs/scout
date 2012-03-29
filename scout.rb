@@ -24,38 +24,48 @@ end
 
 # routes
 
-get '/dashboard' do
-  redirect '/'
+before do
+  @new_user = logged_in? ? nil : User.new
+  @interests = user_interests
 end
 
-post '/users/new' do
-  redirect '/login' if params[:email].blank?
-  params[:email] = params[:email].strip
+get '/' do
+  erb :index
+end
+
+post '/users' do
+  @new_user = User.new params[:user]
   
-  destination = params[:redirect] || '/'
+  @new_user.attributes = {
+    :delivery => {
+      :mechanism => 'email',
+      :email_frequency => 'daily'
+    }
+  }
 
-  if user = User.where(:email => params[:email]).first
-    log_in user
-    redirect destination
+  if @new_user.save
+    log_in @new_user
+    flash[:success] = "Your account has been created. Scout at will."
+    redirect_home
   else
-    user = User.new(
-      :email => params[:email],
-      # todo : read these from a form
-      :delivery => {
-        :mechanism => 'email',
-        :email_frequency => 'daily'
-      }
-    )
-
-    if user.save
-      log_in user
-      flash[:success] = "Your account has been created."
-      redirect destination
-    else
-      flash.now[:failure] = "There was a problem with your email address."
-      erb :index, :locals => {:email => params[:email]}
-    end
+    erb :index
   end
+end
+
+post '/login' do
+  unless params[:email] and user = User.where(:email => params[:email]).first
+    flash[:user] = "No account found by that email."
+    redirect_home and return
+  end
+
+  if User.authenticate(user, params[:password])
+    log_in user
+    redirect_home
+  else
+    flash[:user] = "Invalid password."
+    redirect_home
+  end
+
 end
 
 put '/user' do
@@ -81,19 +91,13 @@ get '/logout' do
   redirect '/'
 end
 
-
-get '/' do
-  erb :index, :locals => {:interests => user_interests}
-end
-
 get '/search/:interest' do
   interest_in = params[:interest].gsub("\"", "")
   sorted_types = search_data.sort_by {|k, v| v[:order]}
 
   erb :search, :layout => !pjax?, :locals => {
     :types => sorted_types,
-    :interest_in => interest_in,
-    :interests => user_interests
+    :interest_in => interest_in
   }
 end
 
@@ -111,7 +115,6 @@ get(/^\/(#{interest_data.keys.join '|'})\/([^\/]+)\/?/) do
   erb :show, :layout => !pjax?, :locals => {
     :interest_type => interest_type, 
     :item_id => item_id, 
-    :interests => user_interests,
     :interest => interest
   }
 end
@@ -201,8 +204,7 @@ get /\/interest\/([\w\d]+)\.?(\w+)?/ do |interest_id, ext|
   else 
     erb :"sms", :locals => {
       :items => items,
-      :interest => interest,
-      :interests => user_interests,
+      :interest => interest
     }
   end
 end
@@ -373,6 +375,10 @@ helpers do
   
   def current_user
     @current_user ||= User.where(:email => session[:user_email]).first
+  end
+
+  def redirect_home
+    redirect(params[:redirect] || '/')
   end
   
   def log_in(user)

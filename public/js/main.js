@@ -49,7 +49,7 @@ $(function() {
     return false;
   });  
   
-  $("form#signup_form").submit(function() {
+  $("form.signup_form").submit(function() {
     $(this).find("input.redirect").val(window.location.pathname + window.location.hash);
     return true;
   })

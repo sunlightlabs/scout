@@ -25,7 +25,7 @@
     // complete with delicious database IDs (will swap this with a slug or something later)
     var user_subscriptions = {};
     var keyword;
-    <% interests.each do |interest, subscriptions| %>
+    <% @interests.each do |interest, subscriptions| %>
       keyword = encodeURIComponent("<%= js_escape interest.in %>");
       user_subscriptions[keyword] = {
         keyword_id: "<%= interest.id.to_s %>",
@@ -103,7 +103,7 @@
     </div>
     
     <ul class="subscriptions">
-      <% interests.each do |interest, subscriptions| %>
+      <% @interests.each do |interest, subscriptions| %>
         <%= partial :"partials/interest", :locals => {:interest => interest, :subscriptions => subscriptions} %>
       <% end %>
     </ul>

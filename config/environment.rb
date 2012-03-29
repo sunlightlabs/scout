@@ -2,6 +2,7 @@ require 'sinatra'
 require 'mongoid'
 require 'tzinfo'
 require 'twilio-rb'
+require 'padrino-helpers'
 
 def config
   @config ||= YAML.load_file File.join(File.dirname(__FILE__), "config.yml")

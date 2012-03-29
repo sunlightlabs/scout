@@ -61,8 +61,11 @@ div.loading_container span {
   color: #348145;
 }
 
-#flash div.flash.failure {
+#flash div.flash.failure,
+#flash div.flash.user {
   color: #C13445;
+  padding: 0;
+
 }
 
 
@@ -124,17 +127,27 @@ section.sidebar p.user_results {
   padding-top: 10px;
 }
 
+section.sidebar div.login h2 {
+  margin: 20px 0 10px 0; font-weight: bold;
+}
+
 section.sidebar div.login span {
   padding-right: 5px;
   line-height: 22px;
   display: block;
 }
 
+section.sidebar div.login div.user.error {
+  color: red; padding: 5px 0;
+}
+
 section.sidebar div.login span.logged_out {
   margin-bottom: 10px; 
 }
 
-section.sidebar div.login input.email {
+section.sidebar div.login input[type=text],
+section.sidebar div.login input[type=email],
+section.sidebar div.login input[type=password] {
   font-size: 100%;
   width: 200px;
   padding: 5px 5px;

@@ -63,9 +63,8 @@ module Subscriptions
               # buffer of 8 days, to allow for information to make its way through whatever 
               # pipelines it has to go through (could eventually configure this per-adapter)
               
-              # Was 5 days, bumped it to 8 because of federal_bills. 
-              # The LOC takes 6 days or so to assign keywords, and sometimes GPO can apparently 
-              # take a week to publish bills.
+              # Was 5 days, bumped it to 30 because of federal_bills. The LOC, CRS, and GPO all 
+              # move in waves, apparently, of unpredictable frequency.
               if item.date < 30.days.ago
                 backfills << item.attributes
                 next
