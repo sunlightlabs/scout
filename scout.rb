@@ -168,7 +168,7 @@ post '/interest/track' do
     headers["Content-Type"] = "application/json"
     {
       :interest_id => interest.id.to_s,
-      :pane => partial(:"partials/interest", :locals => {:interest => interest})
+      :pane => partial("partials/interest", :engine => "erb", :locals => {:interest => interest})
     }.to_json
   else
     halt 500
@@ -262,7 +262,7 @@ post '/subscriptions' do
       :interest_id => interest.id.to_s,
       :subscription_id => subscription.id.to_s,
       :new_interest => new_interest,
-      :pane => partial(:"partials/interest", :locals => {:interest => interest})
+      :pane => partial("partials/interest", :engine => "erb", :locals => {:interest => interest})
     }.to_json
   else
     halt 500
@@ -326,7 +326,7 @@ delete '/subscription/:id' do
 
     subscription.destroy
 
-    pane = deleted_interest ? nil : partial(:"partials/interest", :locals => {:interest => interest})
+    pane = deleted_interest ? nil : partial("partials/interest", :engine => "erb", :locals => {:interest => interest})
 
     headers["Content-Type"] = "application/json"
     {
