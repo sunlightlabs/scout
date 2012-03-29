@@ -1,6 +1,6 @@
 <% if items and items.any? %>  
   <% items.each do |item| %>
-    <%= partial :"partials/item", :locals => {:item => item, :interest_in => interest_in} %>
+    <%= partial "partials/item", :engine => "erb", :locals => {:item => item, :interest_in => interest_in} %>
   <% end %>
 
   <div class="next_page">

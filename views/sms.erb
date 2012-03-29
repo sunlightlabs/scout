@@ -11,7 +11,7 @@
     <ul class="items">
         <% if items and items.any? %>  
           <% items.each do |item| %>
-            <%= partial :"partials/item", :locals => {:item => item, :interest_in => interest.in} %>
+            <%= partial "partials/item", :engine => "erb", :locals => {:item => item, :interest_in => interest.in} %>
           <% end %>
         <% else %>
             <p>No results found yet for your search.</p>

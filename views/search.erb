@@ -46,7 +46,7 @@
             class="filter"
             data-subscription_type="<%= type %>"
             >
-            <%= partial :"subscriptions/#{type}/filter", :locals => {:interest_in => interest_in} %>
+            <%= partial "subscriptions/#{type}/filter", :engine => "erb", :locals => {:interest_in => interest_in} %>
           </div>
         <% end %>
 

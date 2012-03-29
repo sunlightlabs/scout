@@ -98,13 +98,13 @@
           <p class="user_results">&nbsp;</p>
         </div>
       <% else %>
-        <%= partial :"partials/login_signup" %>
+        <%= partial "partials/login_signup", :engine => "erb" %>
       <% end %>
     </div>
     
     <ul class="subscriptions">
       <% @interests.each do |interest, subscriptions| %>
-        <%= partial :"partials/interest", :locals => {:interest => interest, :subscriptions => subscriptions} %>
+        <%= partial "partials/interest", :engine => "erb", :locals => {:interest => interest, :subscriptions => subscriptions} %>
       <% end %>
     </ul>
 

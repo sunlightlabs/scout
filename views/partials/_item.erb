@@ -5,6 +5,6 @@
     </p>
   </div>
   <div class="right">
-    <%= partial :"subscriptions/#{item.subscription.subscription_type}/result", :locals => {:item => item, :interest => interest_in} %>
+    <%= partial "subscriptions/#{item.subscription.subscription_type}/result", :engine => "erb", :locals => {:item => item, :interest => interest_in} %>
   </div>
 </li>

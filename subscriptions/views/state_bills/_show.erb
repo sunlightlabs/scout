@@ -9,7 +9,7 @@
             <h3><%= bill['title'] %></h3>
         <% end %>
     </div>
-    <%= partial :"partials/track", :locals => {
+    <%= partial "partials/track", :engine => "erb", :locals => {
         :item => item,
         :interest_type => interest_type
     } %>

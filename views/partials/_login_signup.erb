@@ -13,7 +13,7 @@
 <% end %>
 
 <% form_for @new_user, "/users", :class => "signup_form" do |f| %>
-    <input class="redirect" name="redirect" type="hidden" />
+    <input class="redirect" name="redirect" type="hidden" value="<%= params[:redirect] %>" />
 
     <%= f.text_field :email, :type => "email", :placeholder => "your email" %>
     <%= f.password_field :password, :placeholder => "password" %>
@@ -34,10 +34,19 @@
 
 <h2>Login</h2>
 <form action="/login" method="post" class="signup_form">
-    <input class="redirect" name="redirect" type="hidden" />
+    <input class="redirect" name="redirect" type="hidden" value="<%= params[:redirect] %>" />
 
     <input class="email" type="email" placeholder="your email" name="email" />
     <input class="password" type="password" placeholder="password" name="password" />
     <br/>
     <button class="text login">Yeah</button>
 </form>
+
+<!-- <h2>Forgot Password</h2>
+<form action="/login/forgot" method="post" class="signup_form">
+    <input class="redirect" name="redirect" type="hidden" />
+
+    <input class="email" type="email" placeholder="your email" name="email" />
+    <br/>
+    <button class="text login">Fine</button>
+</form> -->

@@ -19,8 +19,6 @@ gem 'bcrypt-ruby', '3.0.1'
 gem 'pony', '1.3'
 gem 'twilio-rb', '2.1.3'
 
-# gem 'sinatra-authentication', '0.4.1'
-
 gem 'rack', '1.4.1'
 
 group :development do
