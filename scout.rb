@@ -69,18 +69,36 @@ post '/login' do
 
 end
 
-# post '/login/forgot' do
-#   unless params[:email] and user = User.where(:email => params[:email]).first
-#     flash[:forgot] = "No account found by that email."
-#     redirect_home and return
-#   end
+post '/login/forgot' do
+  unless params[:email] and user = User.where(:email => params[:email].strip).first
+    flash[:forgot] = "No account found by that email."
+    redirect_home and return
+  end
 
+  # issue a new reset token
+  user.new_reset_token
 
-# end
+  # email the user with a link including the token
+  subject = "[Scout] Password reset"
+  body = erb :"account/mail/reset_password", :layout => false, :locals => {:user => user}
 
-# get '/forgot' do
+  unless user.save and Email.deliver!("Password Reset", user.email, subject, body)
+    flash[:forgot] = "Your account was found, but there was an error actually sending the reset password email. Try again later, or write us and we can try to figure out what happened."
+    redirect_home and return
+  end
 
-# end
+  flash[:forgot] = "We've sent an email to reset your password."
+  redirect_home
+end
+
+get '/account/reset' do
+  unless params[:reset_token] and user = User.where(:reset_token => params[:reset_token]).first
+    flash[:forgot] = "This password reset request is no longer valid."
+    redirect_home and return
+  end
+
+  erb :"account/reset_password", :locals => {:user => user}
+end
 
 put '/user' do
   requires_login

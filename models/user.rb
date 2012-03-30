@@ -41,6 +41,7 @@ class User
     end
   end
 
+
   # user authentication stuff
 
   attr_accessor         :password, :password_confirmation
@@ -61,6 +62,23 @@ class User
   
   def encrypt_password
     self.password_hash = BCrypt::Password.create password
+  end
+
+  # password resetting fields and logic
+
+  field :reset_token
+  validates_uniqueness_of :reset_token
+  before_create :new_reset_token
+
+  # taken from authlogic
+  # https://github.com/binarylogic/authlogic/blob/master/lib/authlogic/random.rb
+  def friendly_token
+    # use base64url as defined by RFC4648
+    SecureRandom.base64(15).tr('+/=', '').strip.delete("\n")
+  end
+
+  def new_reset_token
+    self.reset_token = friendly_token
   end
 
 end

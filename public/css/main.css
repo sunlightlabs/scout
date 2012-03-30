@@ -62,7 +62,8 @@ div.loading_container span {
 }
 
 #flash div.flash.failure,
-#flash div.flash.user {
+#flash div.flash.user,
+#flash div.flash.forgot {
   color: #C13445;
   padding: 0;
 
