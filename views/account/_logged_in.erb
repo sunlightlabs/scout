@@ -31,10 +31,14 @@
 
   <%= flash_for [:password] %>
 
-  <% if current_user and current_user.errors %>
+  <% if current_user.errors %>
     <% current_user.errors.each do |field, msg| %>
         <div class="user error"><%= msg %></div>
     <% end %>
+  <% end %>
+
+  <% if current_user.should_change_password %>
+    <div class="user error">You should change your password.</div>
   <% end %>
 
   <h2>Change Password</h2>
