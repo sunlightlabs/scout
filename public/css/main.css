@@ -114,6 +114,10 @@ button.text.image {
 /* login/signup */
 
 section.sidebar {top: 0;}
+section.sidebar div.login p {
+  line-height: 22px;
+  margin: 10px 0;
+}
 section.sidebar div.login {
   font-size: 90%;
   padding-bottom: 10px;
