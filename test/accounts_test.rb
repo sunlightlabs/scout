@@ -50,7 +50,7 @@ class AccountsTest < Test::Unit::TestCase
     assert_match /Invalid password/, last_response.body
   end
 
-  def test_login_resets_should_change_password
+  def test_login_does_not_reset_should_change_password
     email = "test@example.com"
     password = "test"
     user = new_user! :email => email, :password => password, :password_confirmation => password, :should_change_password => true
@@ -60,7 +60,7 @@ class AccountsTest < Test::Unit::TestCase
     post '/login', :email => email, :password => password
     user.reload
 
-    assert !user.should_change_password
+    assert user.should_change_password
 
     assert_equal 302, last_response.status
     assert_equal '/', redirect_path
@@ -206,11 +206,12 @@ class AccountsTest < Test::Unit::TestCase
   end
 
   def test_change_password
-    user = new_user! :password => "test", :password_confirmation => "test"
+    user = new_user! :password => "test", :password_confirmation => "test", :should_change_password => true
 
     old_password_hash = user.password_hash
     assert User.authenticate(user, "test")
     assert !User.authenticate(user, "not-test")
+    assert user.should_change_password
 
     put '/user/password', {:old_password => "test", :password => "not-test", :password_confirmation => "not-test"}, login(user)
 
@@ -218,6 +219,7 @@ class AccountsTest < Test::Unit::TestCase
     assert_not_equal old_password_hash, user.password_hash
     assert !User.authenticate(user, "test")
     assert User.authenticate(user, "not-test")
+    assert !user.should_change_password
 
     assert_equal 302, last_response.status
     assert_equal '/', redirect_path

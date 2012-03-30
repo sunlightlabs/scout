@@ -69,6 +69,7 @@ put '/user/password' do
 
   current_user.password = params[:password]
   current_user.password_confirmation = params[:password_confirmation]
+  current_user.should_change_password = false
 
   if current_user.save
     flash[:password] = "Your password has been changed."
@@ -86,11 +87,6 @@ post '/login' do
   end
 
   if User.authenticate(user, params[:password])
-    if user.should_change_password
-      user.should_change_password = false
-      user.save!
-    end
-
     log_in user
     redirect_home
   else
