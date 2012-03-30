@@ -25,7 +25,7 @@ module Admin
   end
 
   def self.message(subject, body = nil)
-    deliver! "Admin", "[ADMIN] #{subject}", (subject || body)
+    deliver! "Admin", "[ADMIN] #{subject}", (body || subject)
   end
 
   def self.deliver!(tag, subject, body)
