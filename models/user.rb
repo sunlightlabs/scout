@@ -52,6 +52,7 @@ class User
   validates_presence_of :email, :message => "We need an email address."
   validates_uniqueness_of :email, :message => "That email address is already signed up."
   validates_format_of :email, :with => /^[-a-z0-9_+\.]+\@([-a-z0-9]+\.)+[a-z0-9]{2,4}$/i, :message => "Not a valid email address."
+
   validates_confirmation_of :password, :message => "Your passwords did not match."
   
   before_save :encrypt_password
@@ -68,7 +69,10 @@ class User
 
   field :reset_token
   validates_uniqueness_of :reset_token
-  before_create :new_reset_token
+  before_validation :new_reset_token, :on => :create
+
+  # set after a password is reset
+  field :should_change_password, :type => Boolean, :default => false
 
   # taken from authlogic
   # https://github.com/binarylogic/authlogic/blob/master/lib/authlogic/random.rb
@@ -79,6 +83,16 @@ class User
 
   def new_reset_token
     self.reset_token = friendly_token
+  end
+
+  def reset_password
+    new_password = friendly_token
+    self.password = new_password
+    self.password_confirmation = new_password
+    self.should_change_password = true
+
+    # need to return the actual password, so it can be emailed
+    new_password 
   end
 
 end

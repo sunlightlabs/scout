@@ -79,10 +79,10 @@ post '/login/forgot' do
   user.new_reset_token
 
   # email the user with a link including the token
-  subject = "[Scout] Password reset"
+  subject = "Request to reset your password"
   body = erb :"account/mail/reset_password", :layout => false, :locals => {:user => user}
 
-  unless user.save and Email.deliver!("Password Reset", user.email, subject, body)
+  unless user.save and Email.deliver!("Password Reset Request", user.email, subject, body)
     flash[:forgot] = "Your account was found, but there was an error actually sending the reset password email. Try again later, or write us and we can try to figure out what happened."
     redirect_home and return
   end
@@ -93,11 +93,29 @@ end
 
 get '/account/reset' do
   unless params[:reset_token] and user = User.where(:reset_token => params[:reset_token]).first
-    flash[:forgot] = "This password reset request is no longer valid."
+    halt 404 and return
+  end
+
+  # reset the password itself, and the token
+  new_password = user.reset_password
+  user.new_reset_token
+  unless user.save
+    flash[:forgot] = "There was an error issuing you a new password. Please contact us for support."
     redirect_home and return
   end
 
-  erb :"account/reset_password", :locals => {:user => user}
+  # send the next email with the new password
+
+  subject = "Your password has been reset"
+  body = erb :"account/mail/new_password", :layout => false, :locals => {:new_password => new_password}
+
+  unless Email.deliver!("Password Reset", user.email, subject, body)
+    flash[:forgot] = "There was an error emailing you a new password. Please contact us for support."
+    redirect_home and return
+  end
+
+  flash[:forgot] = "Your password has been reset, and a new one has been emailed to you."
+  redirect_home
 end
 
 put '/user' do

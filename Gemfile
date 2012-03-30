@@ -32,6 +32,7 @@ end
 
 group :test do
   gem 'rack-test', '0.6.1'
+  gem 'rspec-mocks', '2.9.0'
 end
 
 gem 'httparty', '0.7.8'

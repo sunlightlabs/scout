@@ -77,11 +77,15 @@ module Email
     end
   end
 
+  # always disable email in test mode
+  # allow development mode to disable email by withholding the from email
   def self.email?
-    config[:email][:from].present?
+    !Sinatra::Application.test? and config[:email][:from].present?
   end
 
   def self.sent_message(method, tag, to, subject, body)
+    return if Sinatra::Application.test?
+    
     puts
     puts "--------------------------------"
     puts "[#{tag}][#{method}] Delivered to #{to}:"
