@@ -10,7 +10,10 @@ class User
   field :phone
 
   # metadata on user delivery preferences
-  field :delivery, :type => Hash, :default => {}
+  field :delivery, :type => Hash, :default => {
+    :mechanism => 'email',
+    :email_frequency => 'daily'
+  }
   #   mechanism: ['email', 'sms']
   #   email_frequency: ['daily', 'immediate']
 

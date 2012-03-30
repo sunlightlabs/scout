@@ -38,13 +38,6 @@ end
 
 post '/users' do
   @new_user = User.new params[:user]
-  
-  @new_user.attributes = {
-    :delivery => {
-      :mechanism => 'email',
-      :email_frequency => 'daily'
-    }
-  }
 
   if @new_user.save
     log_in @new_user
