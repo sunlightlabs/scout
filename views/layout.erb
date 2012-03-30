@@ -69,36 +69,9 @@
   <section class="sidebar">
     <div class="login">
       <% if logged_in? %>
-        <span>
-          <%= current_user.email %>
-        </span>
-        <div class="prefs">
-          <form action="/user" id="user_prefs" method="put">
-            <fieldset>
-              <label class="header">Alerts Via</label>
-              <input type="radio" class="radio" name="mechanism" value="email" <%= current_user.mechanism == "email" ? "checked" : "" %> />
-              <label class="radio">Email</label>
-              <input type="radio" class="radio" name="mechanism" value="sms" <%= current_user.mechanism == "sms" ? "checked" : "" %> />
-              <label class="radio">SMS</label>
-              <br/><br/>
-              <label class="text">Phone</label>
-              <input type="text" name="phone" value="<%= current_user.phone %>"/>
-            </fieldset>
-            <fieldset>
-              <label class="header">Email Frequency</label>
-              <input type="radio" class="radio" name="email_frequency" value="immediate" <%= current_user.delivery['email_frequency'] == "immediate" ? "checked" : "" %> />
-              <label class="radio">Immediate</label>
-              <input type="radio" class="radio" name="email_frequency" value="daily" <%= current_user.delivery['email_frequency'] == "daily" ? "checked" : "" %> />
-              <label class="Radio">Daily Digest</label>
-            </fieldset>
-            
-            <input class="submit" type="submit" value="Update Settings" />
-            <a class="logout" href="/logout">logout</a>
-          </form>
-          <p class="user_results">&nbsp;</p>
-        </div>
+        <%= partial "account/logged_in", :engine => "erb", :locals => {:user => current_user} %>
       <% else %>
-        <%= partial "partials/login_signup", :engine => "erb" %>
+        <%= partial "account/signin", :engine => "erb" %>
       <% end %>
     </div>
     
