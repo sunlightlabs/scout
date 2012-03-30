@@ -136,9 +136,11 @@ end
 put '/user' do
   requires_login
   
-  current_user["phone"] = params[:phone]
-  current_user["delivery"]["mechanism"] = params[:mechanism]
-  current_user["delivery"]["email_frequency"] = params[:email_frequency]
+  current_user.attributes = params[:user]
+
+  # current_user["phone"] = params[:phone]
+  # current_user["delivery"]["mechanism"] = params[:mechanism]
+  # current_user["delivery"]["email_frequency"] = params[:email_frequency]
   
   if current_user.save
     halt 200

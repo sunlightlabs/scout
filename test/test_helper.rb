@@ -2,7 +2,7 @@ module TestHelper
 
   module Methods
 
-      # Test::Unit hooks
+    # Test::Unit hooks
 
     def setup
       RSpec::Mocks.setup(self)
@@ -14,7 +14,7 @@ module TestHelper
 
     def teardown
       # delete fake user if it was created
-      User.where(:email => "fake@example.com").delete_all
+      User.where(:test_account => true).delete_all
 
       # remove rspec mocks
       RSpec::Mocks.space.reset_all
@@ -33,7 +33,7 @@ module TestHelper
 
 
     def new_user!(options = {})
-      User.create!({:email => "fake@example.com", :password => "test", :password_confirmation => "test"}.merge(options))
+      User.create!({:test_account => true, :email => "fake@example.com", :password => "test", :password_confirmation => "test"}.merge(options))
     end
 
     def redirect_path

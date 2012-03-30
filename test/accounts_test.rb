@@ -17,6 +17,45 @@ class AccountsTest < Test::Unit::TestCase
   include Rack::Test::Methods
   include TestHelper::Methods
 
+
+  def test_update_delivery_settings
+    user = new_user!
+
+    assert_equal 'email', user.delivery['mechanism']
+    assert_equal 'daily', user.delivery['email_frequency']
+    assert_equal nil, user.phone
+
+    put '/user', {:user => {:phone => "555-1212", :delivery => {:email_frequency => "immediate", :mechanism => "sms"}}}, login(user)
+
+    user.reload
+
+    assert_equal 'sms', user['delivery']['mechanism']
+    assert_equal 'immediate', user['delivery']['email_frequency']
+    assert_equal "555-1212", user.phone
+
+    assert_equal 200, last_response.status
+  end
+
+  def test_update_delivery_settings_invalid
+    user = new_user!
+
+    assert_equal 'email', user.delivery['mechanism']
+    assert_equal 'daily', user.delivery['email_frequency']
+    assert_equal nil, user.phone
+
+    put '/user', {:user => {:phone => "", :delivery => {:email_frequency => "immediate", :mechanism => "sms"}}}, login(user)
+
+    user.reload
+
+    assert_equal 'email', user.delivery['mechanism']
+    assert_equal 'daily', user.delivery['email_frequency']
+    assert_equal nil, user.phone
+
+    assert_equal 500, last_response.status
+  end
+
+  # password management
+
   def test_start_reset_password_process
     # post '/subscriptions', :interest => "testing", :subscription_type => "federal_bills"
     # assert_equal 302, last_response.status

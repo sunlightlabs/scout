@@ -2,30 +2,32 @@
   <%= user.email %>
 </span>
 <div class="prefs">
+  <% form_for current_user, "/user" do |f| %>
   <form action="/user" id="user_prefs" method="post">
     <input type="hidden" name="_method" value="put" />
 
     <fieldset>
       <label class="header">Alerts Via</label>
-      <input type="radio" class="radio" name="mechanism" value="email" <%= user.mechanism == "email" ? "checked" : "" %> />
+      <input type="radio" class="radio" name="user[delivery][mechanism]" value="email" <%= user.mechanism == "email" ? "checked" : "" %> />
       <label class="radio">Email</label>
-      <input type="radio" class="radio" name="mechanism" value="sms" <%= user.mechanism == "sms" ? "checked" : "" %> />
+      <input type="radio" class="radio" name="user[delivery][mechanism]" value="sms" <%= user.mechanism == "sms" ? "checked" : "" %> />
       <label class="radio">SMS</label>
       <br/><br/>
       <label class="text">Phone</label>
-      <input type="text" name="phone" value="<%= user.phone %>"/>
+      <input type="text" name="user[phone]" value="<%= user.phone %>"/>
     </fieldset>
     <fieldset>
       <label class="header">Email Frequency</label>
-      <input type="radio" class="radio" name="email_frequency" value="immediate" <%= user.delivery['email_frequency'] == "immediate" ? "checked" : "" %> />
+      <input type="radio" class="radio" name="user[delivery][email_frequency]" value="immediate" <%= user.delivery['email_frequency'] == "immediate" ? "checked" : "" %> />
       <label class="radio">Immediate</label>
-      <input type="radio" class="radio" name="email_frequency" value="daily" <%= user.delivery['email_frequency'] == "daily" ? "checked" : "" %> />
+      <input type="radio" class="radio" name="user[delivery][email_frequency]" value="daily" <%= user.delivery['email_frequency'] == "daily" ? "checked" : "" %> />
       <label class="Radio">Daily Digest</label>
     </fieldset>
     
     <input class="submit" type="submit" value="Update Settings" />
     <a class="logout" href="/logout">logout</a>
   </form>
+  <% end %>
 
   <%= flash_for [:password] %>
 
