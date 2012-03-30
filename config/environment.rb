@@ -9,12 +9,13 @@ def config
 end
 
 configure do
-  config[:mongoid][:logger] = Logger.new config[:log_file] if config[:log_file]
-  Mongoid.configure {|c| c.from_hash config[:mongoid]}
+  Mongoid.load! "config/mongoid.yml"
   
   if config[:twilio]
-    Twilio::Config.setup :account_sid => config[:twilio][:account_sid],
+    Twilio::Config.setup(
+      :account_sid => config[:twilio][:account_sid],
       :auth_token => config[:twilio][:auth_token]
+    )
   end
 end
 

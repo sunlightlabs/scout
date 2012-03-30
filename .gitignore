@@ -2,6 +2,7 @@
 /unicorn.rb
 /unicorn.pid
 /config/config.yml
+/config/mongoid.yml
 /vendor/gems
 /.bundle
 

@@ -18,6 +18,47 @@ class AccountsTest < Test::Unit::TestCase
   include TestHelper::Methods
 
 
+  def test_create_user
+    email = "fake@example.com"
+    assert_nil User.where(:email => email).first
+
+    post '/users', {:user => {:email => email, :password => "test", :password_confirmation => "test"}}
+
+    user = User.where(:email => email).first
+    assert_not_nil user
+
+    assert User.authenticate(user, "test")
+    user.delete
+
+    assert_equal 302, last_response.status
+    assert_equal '/', redirect_path
+  end
+
+  def test_create_user_invalid
+    email = "invalid email"
+    assert_nil User.where(:email => email).first
+
+    post '/users', {:user => {:email => email, :password => "test", :password_confirmation => "test"}}
+
+    assert_nil User.where(:email => email).first
+
+    # should render errors
+    assert_equal 200, last_response.status
+  end
+
+  # this has to be done in the controller
+  def test_create_user_disallow_blank_passwords
+    email = "fake@example.com"
+    assert_nil User.where(:email => email).first
+
+    post '/users', {:user => {:email => email, :password => "", :password_confirmation => ""}}
+
+    assert_nil User.where(:email => email).first
+
+    assert_equal 302, last_response.status
+    assert_equal '/', redirect_path
+  end
+
   def test_update_delivery_settings
     user = new_user!
 
@@ -171,6 +212,22 @@ class AccountsTest < Test::Unit::TestCase
 
     # will render directly with user errors
     assert_equal 200, last_response.status
+  end
+
+  def test_change_password_disallow_blank_password
+    user = new_user! :password => "test", :password_confirmation => "test"
+
+    assert User.authenticate(user, "test")
+    assert !User.authenticate(user, "")
+
+    put '/user/password', {:old_password => "test", :password => "", :password_confirmation => ""}, login(user)
+
+    user.reload
+    assert User.authenticate(user, "test")
+    assert !User.authenticate(user, "")
+
+    assert_equal 302, last_response.status
+    assert_equal '/', redirect_path
   end
 
 end

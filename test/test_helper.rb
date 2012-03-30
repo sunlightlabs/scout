@@ -14,7 +14,7 @@ module TestHelper
 
     def teardown
       # delete fake user if it was created
-      User.where(:test_account => true).delete_all
+      User.delete_all
 
       # remove rspec mocks
       RSpec::Mocks.space.reset_all

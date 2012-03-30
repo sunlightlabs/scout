@@ -39,6 +39,11 @@ end
 post '/users' do
   @new_user = User.new params[:user]
 
+  unless @new_user.password.present? and @new_user.password_confirmation.present?
+    flash[:password] = "Can't use a blank password."
+    redirect_home and return
+  end
+
   if @new_user.save
     log_in @new_user
     flash[:success] = "Your account has been created. Scout at will."
@@ -53,7 +58,12 @@ put '/user/password' do
 
   unless User.authenticate(current_user, params[:old_password])
     flash[:password] = "Incorrect current password."
-    redirect_home
+    redirect_home and return
+  end
+
+  unless params[:password].present? and params[:password_confirmation].present?
+    flash[:password] = "Can't use a blank password."
+    redirect_home and return
   end
 
   current_user.password = params[:password]
