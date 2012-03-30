@@ -106,7 +106,8 @@ namespace :test do
 
   desc "Send a test email to the admin"
   task :email_admin => :environment do
-    Admin.message "Test message. May you receive this in good health."
+    message = ENV['msg'] || "Test message. May you receive this in good health."
+    Admin.message message
   end
 
   desc "Send two test reports"
@@ -117,7 +118,7 @@ namespace :test do
 
   desc "Forces emails or SMSes to be sent for the first X results of every subscription a user has"
   task :send_user => :environment do
-    email = ENV['email'] || config[:admin][:email]
+    email = ENV['email'] || config[:admin].first
     max = (ENV['max'] || ENV['limit'] || 2).to_i
     only = (ENV['only'] || "").split(",")
 

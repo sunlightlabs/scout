@@ -25,6 +25,9 @@ require 'helpers'
 # admin messages and reports
 require 'config/admin'
 
+# email sending wrapper (pony or postmark)
+require 'config/email'
+
 # delivery management and mechanisms
 Dir.glob('deliveries/*.rb').each {|filename| load filename}
 

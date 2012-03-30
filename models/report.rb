@@ -13,7 +13,8 @@ class Report
   
   def self.file(status, source, message, attached = {})
     report = Report.create!(:source => source.to_s, :status => status, :message => message, :attached => attached)
-    puts "\n#{report}"
+    # stdout, but don't bother stdout-ing reports that will be emailed
+    puts "\n#{report}" unless ['FAILURE', 'WARNING'].include?(status)
     report
   end
   
@@ -39,14 +40,7 @@ class Report
   end
   
   def to_s
-    msg = "[#{status}] #{source}\n#{message}"
-    if self[:exception]
-      msg += "\n\t#{self[:exception]['type']}: #{self[:exception]['message']}"
-      if self[:exception]['backtrace'] and self[:exception]['backtrace'].respond_to?(:each)
-        self[:exception]['backtrace'].first(5).each {|line| msg += "\n\t\t#{line}"}
-      end
-    end
-    msg
+    "[#{status}] #{source} | #{message}"
   end
   
   def to_minutes(seconds)

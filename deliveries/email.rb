@@ -130,25 +130,7 @@ module Deliveries
 
     # the actual mechanics of sending the email
     def self.email_user(email, subject, content)
-      if config[:email][:from].present?
-        begin
-          
-          Pony.mail config[:email].merge(
-            :to => email, 
-            :subject => subject, 
-            :body => content
-          )
-          
-          true
-        rescue Errno::ECONNREFUSED
-          false
-        end
-      else
-        puts "\n[USER] Would have delivered this to #{email}:"
-        puts "\nSubject: #{subject}"
-        puts "\n#{content}"
-        true # if no 'from' email is specified, we'll assume it's a dev environment or something
-      end
+      ::Email.deliver! "User", email, subject, content
     end
 
   end

@@ -16,6 +16,8 @@ gem 'SystemTimer', '1.2.3' # mongo gem asks for this
 gem 'ruby-hmac', '0.4.0'
 gem 'bcrypt-ruby', '3.0.1'
 
+gem 'postmark', '0.9.10'
+gem 'mail', '2.4.4'
 gem 'pony', '1.3'
 gem 'twilio-rb', '2.1.3'
 

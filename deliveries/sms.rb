@@ -112,9 +112,10 @@ module Deliveries
           false
         end
       else
+        # if no 'from' number is specified, we'll assume it's a dev environment or something
         puts "\n[SMS USER] Would have delivered this to #{phone} (#{email}):"
         puts "\n#{content}"
-        true # if no 'from' number is specified, we'll assume it's a dev environment or something
+        true
       end
     end
 
