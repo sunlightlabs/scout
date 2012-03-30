@@ -1,5 +1,5 @@
-# hostname that will be used in emails (include port if needed)
 :hostname: localhost:8080
+
 :session_secret: # fill in with something unique per-deployment
 
 :mongoid:
@@ -13,30 +13,39 @@
   :via: :smtp
   :from:
   :reply_to:
-  :via_options:
-    :address:
-    :port:
-    :user_name:
-    :password:
-    :authentication: plain
-    :domain:
-    :enable_starttls_auto: false
 
-:sms:
+  :pony:
+    # Can be passed directly into Pony
+    :via: :smtp
+    :via_options:
+      :address:
+      :port:
+      :user_name:
+      :password:
+      :authentication: plain
+      :domain:
+      :enable_starttls_auto: false
+
+  :postmark:
+    :api_key: 
+
+:twilio:
   :account_sid: # account SID
   :auth_token: # auth token
+  :from: # phone number
 
 # subscription-specific stuff
 :subscriptions:
   :sunlight_api_key: 
+  :rtc_endpoint: # only override if you know what you're doing and have a fake RTC endpoint
 
-# where error emails should go
+# set of emails to receive admin notices
 :admin:
-  :email: # 
+  - 
 
 :debug:
-  # outputs polled URLs to STDOUT
-  :output_urls: false
+  :output_urls: false # outputs polled URLs to STDOUT
+  :link_to_json: false # turn on to enable JSON links
 
 # list of subscription types to hide (default to showing everything)
 :hide_subscription_types:

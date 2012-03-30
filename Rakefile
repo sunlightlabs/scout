@@ -84,17 +84,17 @@ namespace :subscriptions do
 end
   
 namespace :deliver do
-  desc "Users who want a single daily email digest"
+  desc "Deliveries for a single daily email digest"
   task :email_daily => :environment do
     Deliveries::Manager.deliver! "mechanism" => "email", "email_frequency" => "daily"
   end
 
-  desc "Users who want emails whenever, per-interest"
+  desc "Deliveries of emails for whenever, per-interest"
   task :email_immediate => :environment do
     Deliveries::Manager.deliver! "mechanism" => "email", "email_frequency" => "immediate"
   end
 
-  desc "Users who want SMSes whenever, per-interest"
+  desc "Deliveries of SMSes for whenever, per-interest"
   task :sms => :environment do
     Deliveries::Manager.deliver! "mechanism" => "sms"
   end
