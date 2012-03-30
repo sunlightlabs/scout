@@ -12,7 +12,8 @@
     <% end %>
 <% end %>
 
-<% form_for @new_user, "/users", :class => "signup_form" do |f| %>
+<% form_for @new_user, "/users", :method => "post", :class => "signup_form" do |f| %>
+<form action="/users" method="post" class="signup_form">
     <input class="redirect" name="redirect" type="hidden" value="<%= params[:redirect] %>" />
 
     <%= f.text_field :email, :type => "email", :placeholder => "your email" %>
@@ -20,6 +21,7 @@
     <%= f.password_field :password_confirmation, :placeholder => "password again" %>
     <br/>
     <button class="text login">Cool</button>
+</form>
 <% end %>
 
 <%= partial "partials/flash", :engine => "erb", :locals => {:types => [:user]} %>
