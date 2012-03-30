@@ -43,6 +43,7 @@ class AccountsTest < Test::Unit::TestCase
     {"rack.session" => {'user_email' => user.email}}
   end
 
+
   def new_user!(options = {})
     User.create!({:email => "fake@example.com", :password => "test", :password_confirmation => "test"}.merge(options))
   end
@@ -114,16 +115,61 @@ class AccountsTest < Test::Unit::TestCase
     assert_equal 404, last_response.status
   end
 
-  # def test_change_password
-  # end
+  def test_change_password
+    user = new_user! :password => "test", :password_confirmation => "test"
 
-  # def test_change_password_not_logged_in
-  # end
+    old_password_hash = user.password_hash
+    assert User.authenticate(user, "test")
+    assert !User.authenticate(user, "not-test")
 
-  # def test_change_password_wrong_original_password
-  # end
+    put '/user/password', {:old_password => "test", :password => "not-test", :password_confirmation => "not-test"}, login(user)
 
-  # def test_change_password_mismatched_new_passwords
-  # end
+    user.reload
+    assert_not_equal old_password_hash, user.password_hash
+    assert !User.authenticate(user, "test")
+    assert User.authenticate(user, "not-test")
+
+    assert_equal 302, last_response.status
+    assert_equal '/', redirect_path
+  end
+
+  def test_change_password_not_logged_in
+    put '/user/password', {:old_password => "test", :password => "not-test", :password_confirmation => "not-test"}
+
+    assert_equal 302, last_response.status
+    assert_equal '/', redirect_path
+  end
+
+  def test_change_password_wrong_original_password
+    user = new_user! :password => "test", :password_confirmation => "test"
+
+    assert User.authenticate(user, "test")
+    assert !User.authenticate(user, "not-test")
+
+    put '/user/password', {:old_password => "uh oh", :password => "not-test", :password_confirmation => "not-test"}, login(user)
+
+    user.reload
+    assert User.authenticate(user, "test")
+    assert !User.authenticate(user, "not-test")
+
+    assert_equal 302, last_response.status
+    assert_equal '/', redirect_path
+  end
+
+  def test_change_password_mismatched_new_passwords
+    user = new_user! :password => "test", :password_confirmation => "test"
+
+    assert User.authenticate(user, "test")
+    assert !User.authenticate(user, "not-test")
+
+    put '/user/password', {:old_password => "test", :password => "not-test", :password_confirmation => "not-not-test"}, login(user)
+
+    user.reload
+    assert User.authenticate(user, "test")
+    assert !User.authenticate(user, "not-test")
+
+    # will render directly with user errors
+    assert_equal 200, last_response.status
+  end
 
 end

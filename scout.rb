@@ -7,7 +7,9 @@ require 'sinatra/flash'
 set :logging, false
 set :views, 'views'
 set :public_folder, 'public'
-set :sessions, true
+
+# disable sessions in test environment so it can be manually set
+set :sessions, !test?
 set :session_secret, config[:session_secret]
 
 configure(:development) do |config|
@@ -51,6 +53,26 @@ post '/users' do
   else
     erb :index
   end
+end
+
+put '/user/password' do
+  requires_login
+
+  unless User.authenticate(current_user, params[:old_password])
+    flash[:password] = "Incorrect current password."
+    redirect_home
+  end
+
+  current_user.password = params[:password]
+  current_user.password_confirmation = params[:password_confirmation]
+
+  if current_user.save
+    flash[:password] = "Your password has been changed."
+    redirect_home
+  else
+    erb :index
+  end
+
 end
 
 post '/login' do
@@ -424,7 +446,7 @@ helpers do
   end
   
   def current_user
-    @current_user ||= User.where(:email => session[:user_email]).first
+    @current_user ||= User.where(:email => session['user_email']).first
   end
 
   def redirect_home
@@ -432,11 +454,11 @@ helpers do
   end
   
   def log_in(user)
-    session[:user_email] = user.email
+    session['user_email'] = user.email
   end
   
   def log_out
-    session[:user_email] = nil
+    session['user_email'] = nil
   end
   
   def requires_login

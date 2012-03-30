@@ -2,7 +2,9 @@
   <%= user.email %>
 </span>
 <div class="prefs">
-  <form action="/user" id="user_prefs" method="put">
+  <form action="/user" id="user_prefs" method="post">
+    <input type="hidden" name="_method" value="put" />
+
     <fieldset>
       <label class="header">Alerts Via</label>
       <input type="radio" class="radio" name="mechanism" value="email" <%= user.mechanism == "email" ? "checked" : "" %> />
@@ -24,5 +26,26 @@
     <input class="submit" type="submit" value="Update Settings" />
     <a class="logout" href="/logout">logout</a>
   </form>
+
+  <%= flash_for [:password] %>
+
+  <% if current_user and current_user.errors %>
+    <% current_user.errors.each do |field, msg| %>
+        <div class="user error"><%= msg %></div>
+    <% end %>
+  <% end %>
+
+  <h2>Change Password</h2>
+  <form action="/user/password" method="post" class="signup_form">
+    <input type="hidden" name="_method" value="put" />
+      <input class="redirect" name="redirect" type="hidden" value="<%= params[:redirect] %>" />
+      
+      <input class="password" type="password" placeholder="old password" name="old_password" />
+      <input class="password" type="password" placeholder="new password" name="password" />
+      <input class="password" type="password" placeholder="new password again" name="password_confirmation" />
+      <br/>
+      <button class="text login">Change</button>
+  </form>
+
   <p class="user_results">&nbsp;</p>
 </div>

@@ -1,6 +1,10 @@
 # general display helpers
 module GeneralHelpers
   helpers ::Padrino::Helpers
+
+  def flash_for(types)
+    partial "partials/flash", :engine => "erb", :locals => {:types => types}
+  end
   
   # index of subscription adapters and associated copy
   def search_subscriptions
