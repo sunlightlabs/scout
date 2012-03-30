@@ -2,9 +2,9 @@ ENV['RACK_ENV'] = 'test'
 
 require 'rubygems'
 require 'test/unit'
-require 'rack/test'
 
 require 'bundler/setup'
+require 'rack/test'
 require 'scout'
 
 
