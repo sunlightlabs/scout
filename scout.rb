@@ -14,6 +14,7 @@ configure(:development) do |config|
   require 'sinatra/reloader'
   config.also_reload "config/environment.rb"
   config.also_reload "config/admin.rb"
+  config.also_reload "config/email.rb"
   config.also_reload "helpers.rb"
   config.also_reload "models/*.rb"
   config.also_reload "subscriptions/adapters/*.rb"
@@ -78,7 +79,7 @@ end
 # end
 
 # get '/forgot' do
-  
+
 # end
 
 put '/user' do
