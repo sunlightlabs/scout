@@ -68,6 +68,19 @@ post '/login' do
 
 end
 
+# post '/login/forgot' do
+#   unless params[:email] and user = User.where(:email => params[:email]).first
+#     flash[:forgot] = "No account found by that email."
+#     redirect_home and return
+#   end
+
+
+# end
+
+# get '/forgot' do
+  
+# end
+
 put '/user' do
   requires_login
   
