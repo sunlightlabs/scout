@@ -17,6 +17,54 @@ class AccountsTest < Test::Unit::TestCase
   include Rack::Test::Methods
   include TestHelper::Methods
 
+  def test_login
+    email = "test@example.com"
+    password = "test"
+    user = new_user! :email => email, :password => password, :password_confirmation => password
+
+    assert !user.should_change_password
+
+    post '/login', :email => email, :password => password
+    user.reload
+
+    assert !user.should_change_password
+
+    assert_equal 302, last_response.status
+    assert_equal '/', redirect_path
+    
+  end
+
+  def test_login_invalid
+    email = "test@example.com"
+    password = "test"
+    user = new_user! :email => email, :password => password, :password_confirmation => password
+
+    assert !user.should_change_password
+
+    post '/login', :email => email, :password => password.succ
+    user.reload
+
+    assert !user.should_change_password
+
+    assert_equal 200, last_response.status
+    assert_match /Invalid password/, last_response.body
+  end
+
+  def test_login_resets_should_change_password
+    email = "test@example.com"
+    password = "test"
+    user = new_user! :email => email, :password => password, :password_confirmation => password, :should_change_password => true
+
+    assert user.should_change_password
+
+    post '/login', :email => email, :password => password
+    user.reload
+
+    assert !user.should_change_password
+
+    assert_equal 302, last_response.status
+    assert_equal '/', redirect_path
+  end
 
   def test_create_user
     email = "fake@example.com"

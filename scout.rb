@@ -46,6 +46,7 @@ post '/users' do
 
   if @new_user.save
     log_in @new_user
+
     flash[:success] = "Your account has been created. Scout at will."
     redirect_home
   else
@@ -85,11 +86,16 @@ post '/login' do
   end
 
   if User.authenticate(user, params[:password])
+    if user.should_change_password
+      user.should_change_password = false
+      user.save!
+    end
+
     log_in user
     redirect_home
   else
-    flash[:user] = "Invalid password."
-    redirect_home
+    flash.now[:user] = "Invalid password."
+    erb :index
   end
 
 end
