@@ -11,21 +11,23 @@ module Subscriptions
     
     def self.initialize!(subscription)
 
-      # allow overrides by individual adapters
-      if subscription.adapter.respond_to?(:initialize!)
-        subscription.adapter.initialize! subscription
-      
-      else
-        # default strategy:
-        # 1) does the initial poll
-        # 2) stores every item ID as seen 
+      # default strategy:
+      # 1) does the initial poll
+      # 2) stores every item ID as seen 
 
-        # make initialization idempotent, remove any existing seen items first
-        subscription.seen_items.delete_all
+      # make initialization idempotent, remove any existing seen items first
+      subscription.seen_items.delete_all
 
-        Subscriptions::Manager.poll(subscription, :initialize).each do |item|
-          mark_as_seen! subscription, item
-        end
+      unless results = Subscriptions::Manager.poll(subscription, :initialize)
+        Admin.report Report.failure("Initialization", 
+          "Error while initializing a subscription, subscription is remaining uninitialized.", 
+          :subscription => subscription.attributes
+          )
+        return nil
+      end
+
+      results.each do |item|
+        mark_as_seen! subscription, item
       end
       
       subscription.initialized = true
@@ -39,40 +41,37 @@ module Subscriptions
       # that weren't caught during initialization or prior polls
       backfills = []
 
-      # allow overrides by individual adapters
-      if subscription.adapter.respond_to?(:check!)
-        subscription.adapter.check! subscription
+      # default strategy:
+      # 1) does a poll
+      # 2) stores any items as yet unseen by this subscription in seen_ids
+      # 3) stores any items as yet unseen by this subscription in the delivery queue
+      unless results = Subscriptions::Manager.poll(subscription, :check)
+        Admin.report Report.warning("Check", "Error while checking a subscription, will check again next time.", :subscription_id => subscription.id)
+        return nil
+      end
 
-      else
-        # default strategy:
-        # 1) does a poll
-        # 2) stores any items as yet unseen by this subscription in seen_ids
-        # 3) stores any items as yet unseen by this subscription in the delivery queue
-        if results = Subscriptions::Manager.poll(subscription, :check)
-          results.each do |item|
+      results.each do |item|
 
-            unless SeenItem.where(:subscription_id => subscription.id, :item_id => item.item_id).first
-              unless item.item_id
-                Admin.report Report.warning("Check", "[#{subscription.subscription_type}][#{subscription.interest_in}] item with an empty ID")
-                next
-              end
-
-              mark_as_seen! subscription, item
-
-              # accumulate backfilled items to report per-subscription.
-              # buffer of 8 days, to allow for information to make its way through whatever 
-              # pipelines it has to go through (could eventually configure this per-adapter)
-              
-              # Was 5 days, bumped it to 30 because of federal_bills. The LOC, CRS, and GPO all 
-              # move in waves, apparently, of unpredictable frequency.
-              if item.date < 30.days.ago
-                backfills << item.attributes
-                next
-              end
-
-              Deliveries::Manager.schedule_delivery! item, subscription
-            end
+        unless SeenItem.where(:subscription_id => subscription.id, :item_id => item.item_id).first
+          unless item.item_id
+            Admin.report Report.warning("Check", "[#{subscription.id}][#{subscription.subscription_type}][#{subscription.interest_in}] item with an empty ID")
+            next
           end
+
+          mark_as_seen! subscription, item
+
+          # accumulate backfilled items to report per-subscription.
+          # buffer of 8 days, to allow for information to make its way through whatever 
+          # pipelines it has to go through (could eventually configure this per-adapter)
+          
+          # Was 5 days, bumped it to 30 because of federal_bills. The LOC, CRS, and GPO all 
+          # move in waves, apparently, of unpredictable frequency.
+          if item.date < 30.days.ago
+            backfills << item.attributes
+            next
+          end
+
+          Deliveries::Manager.schedule_delivery! item, subscription
         end
       end
 
@@ -99,8 +98,9 @@ module Subscriptions
       begin
         response = HTTParty.get url
       rescue Timeout::Error, Errno::ETIMEDOUT => ex
-        Admin.report Report.warning("Poll", "[#{subscription.subscription_type}][#{function}][#{subscription.interest_in}] poll timeout, returned an empty list")
-        return [] # should be return nil, when we refactor this to properly accomodate failures in initialization, checking, and searching
+        # will do function-specific reports in places that call poll
+        # Admin.report Report.warning("Poll", "[#{subscription.subscription_type}][#{function}][#{subscription.interest_in}] poll timeout, returned an empty list")
+        return nil
       end
       
       items = adapter.items_for response, function, options
