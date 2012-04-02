@@ -245,7 +245,9 @@ function subscriptionData(subscription_type) {
   var container = $("#results div.tab." + subscription_type);
   var subscription_data = {};
   container.find("div.filter .subscription_data").each(function(i, elem) {
-    subscription_data["subscription_data[" + $(elem).prop("name") + "]"] = $(elem).val();
+    var value = $(elem).val();
+    if (value !== "" && value !== null)
+      subscription_data["subscription_data[" + $(elem).prop("name") + "]"] = $(elem).val();
   });
   return subscription_data;
 }
