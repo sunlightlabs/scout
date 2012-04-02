@@ -45,7 +45,35 @@ class SeenItem
   # the subset of fields appropriate for public syndication (omit database IDs, for instance)
   def self.public_json_fields
     [
-      :created_at, :item_id, :data, :date, :subscription_type
+      'created_at', 'item_id', 'data', 'date', 'subscription_type'
     ]
+  end
+
+  # renders a *hash* suitable for turning into json, 
+  # that includes attributes for its parent subscription and interest
+  def json_view
+    self.subscription # needed to get this to load??
+    self.interest
+
+    SeenItem.clean_document(self, SeenItem.public_json_fields).merge(
+      :subscription => SeenItem.clean_document(self.subscription, Subscription.public_json_fields),
+      :interest => SeenItem.clean_document(self.interest, Interest.public_json_fields)
+    )
+  end
+
+
+  # internal
+
+  def self.clean_document(document, only = nil)
+    attrs = document.attributes
+    attrs.delete "_id"
+
+    if only
+      attrs.keys.each do |key|
+        attrs.delete(key) unless only.include?(key)
+      end
+    end
+
+    attrs
   end
 end

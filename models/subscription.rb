@@ -65,7 +65,7 @@ class Subscription
 
   def self.public_json_fields
     [
-      :created_at, :data, :last_checked_at, :updated_at, :subscription_type
+      'created_at', 'data', 'last_checked_at', 'updated_at', 'subscription_type'
     ]
   end
 end

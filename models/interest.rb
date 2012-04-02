@@ -34,7 +34,7 @@ class Interest
 
   def self.public_json_fields
     [
-      :created_at, :updated_at, :data, :interest_type, :in
+      'created_at', 'updated_at', 'data', 'interest_type', 'in'
     ]
   end
 end

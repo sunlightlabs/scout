@@ -254,23 +254,27 @@ post '/interest/track' do
   end
 end
 
-get "/account/:id.rss" do
+get "/account/:id.:format" do
   unless user = User.where(:_id => BSON::ObjectId(params[:id])).first
     halt 404 and return
   end
 
-  page = (params[:page] || 1).to_i
-  page = 1 if page <= 0 or page > 200000000
-  per_page = 100
-
   items = SeenItem.where(:user_id => user.id).desc(:date)
-  items = items.skip(per_page * (page - 1)).limit(per_page)
 
-  headers["Content-Type"] = "application/rss+xml"
-  erb :"rss/user", :layout => false, :locals => {
-    :items => items,
-    :url => request.url
-  }
+  if params[:format] == 'rss'
+    page = (params[:page] || 1).to_i
+    page = 1 if page <= 0 or page > 200000000
+    per_page = 100
+    items = items.skip(per_page * (page - 1)).limit(per_page)
+
+    headers["Content-Type"] = "application/rss+xml"
+    erb :"rss/user", :layout => false, :locals => {
+      :items => items,
+      :url => request.url
+    }
+  else
+    json_for items, params
+  end
 end
 
 get /\/interest\/([\w\d]+)\.?(\w+)?$/ do |interest_id, ext|
@@ -287,16 +291,18 @@ get /\/interest\/([\w\d]+)\.?(\w+)?$/ do |interest_id, ext|
     halt 404 and return
   end
 
+  items = SeenItem.where(:interest_id => interest.id).desc(:date)
+
   # handle JSON completely separately
   if ext == 'json'
-    return json_for interest, params
+    return json_for items, params
   end
   
   page = (params[:page] || 1).to_i
   page = 1 if page <= 0 or page > 200000000
   per_page = (ext == 'rss') ? 100 : 20
 
-  items = SeenItem.where(:interest_id => interest.id).desc(:date)
+  
   items = items.skip(per_page * (page - 1)).limit(per_page)
 
   if ext == 'rss'
@@ -513,46 +519,28 @@ helpers do
     params[:callback].present? ? "#{params[:callback]}(#{json});" : json
   end
 
-  def json_for(interest, params) 
-    # hide some fields for JSON feeds
-    # items = items.only SeenItem.public_json_fields
-    subscriptions = Subscription.where(:interest_id => interest.id)
-    subscriptions = subscriptions.only(Subscription.public_json_fields)
 
-    interest = Interest.where(:_id => interest.id).only(Interest.public_json_fields).first
-    
-    items = SeenItem.where(:interest_id => interest.id).desc(:date)
-    items = items.only(SeenItem.public_json_fields)
+  def json_for(items, params)
     count = items.count
-
+    
     pagination = pagination_for params
     skip = pagination[:per_page] * (pagination[:page]-1)
     limit = pagination[:per_page]
     items = items.skip(skip).limit(limit)
 
-    items = items.to_a
-
     results = {
-      :results => items.map {|item| clean_document item},
+      :results => items.map {|item| item.json_view},
       :count => count,
       :page => {
         :count => items.size,
         :per_page => pagination[:per_page],
         :page => pagination[:page]
-      },
-      :interest => clean_document(interest).merge(
-        :subscriptions => subscriptions.map {|sub| clean_document sub}
-      )
+      }
     }
 
     json results, params
   end
 
-  def clean_document(item)
-    attrs = item.attributes
-    attrs.delete "_id"
-    attrs
-  end
 
   def pagination_for(params)
     default_per_page = 50
