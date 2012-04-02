@@ -6,14 +6,19 @@ class SeenItem
   include Mongoid::Timestamps
 
   belongs_to :subscription
+  belongs_to :interest
+  belongs_to :user
 
   # origin subscription
   field :subscription_id
   field :subscription_type
   field :subscription_interest_in
 
-  # for convenience, interest object this came from
+  # reference by interest for interest-level feeds and landing page
   field :interest_id
+
+  # reference by user for user-level feeds
+  field :user_id
 
   # result fields from remote source
   field :item_id

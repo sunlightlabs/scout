@@ -254,6 +254,25 @@ post '/interest/track' do
   end
 end
 
+get "/account/:id.rss" do
+  unless user = User.where(:_id => BSON::ObjectId(params[:id])).first
+    halt 404 and return
+  end
+
+  page = (params[:page] || 1).to_i
+  page = 1 if page <= 0 or page > 200000000
+  per_page = 100
+
+  items = SeenItem.where(:user_id => user.id).desc(:date)
+  items = items.skip(per_page * (page - 1)).limit(per_page)
+
+  headers["Content-Type"] = "application/rss+xml"
+  erb :"rss/user", :layout => false, :locals => {
+    :items => items,
+    :url => request.url
+  }
+end
+
 get /\/interest\/([\w\d]+)\.?(\w+)?/ do |interest_id, ext|
   # do not require login
   # for RSS, want readers and bots to access it freely
@@ -266,14 +285,14 @@ get /\/interest\/([\w\d]+)\.?(\w+)?/ do |interest_id, ext|
   
   page = (params[:page] || 1).to_i
   page = 1 if page <= 0 or page > 200000000
-  per_page = 20
+  per_page = (ext == 'rss') ? 100 : 20
 
   items = SeenItem.where(:interest_id => interest.id).desc(:date)
-  items.skip(per_page * (page - 1)).limit(per_page)
+  items = items.skip(per_page * (page - 1)).limit(per_page)
 
   if ext == 'rss'
     headers["Content-Type"] = "application/rss+xml"
-    erb :"rss", :layout => false, :locals => {
+    erb :"rss/interest", :layout => false, :locals => {
       :items => items, 
       :interest => interest,
       :url => request.url

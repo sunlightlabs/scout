@@ -441,11 +441,11 @@ ul.subscriptions li.keyword.current h2 {
   font-weight: bold; display: inline;
 }
 
-ul.subscriptions li.keyword a.rss {
+a.rss {
   text-decoration: none; 
 }
 
-ul.subscriptions li.keyword a.rss img {
+a.rss img {
   display: inline;
   width: 16px; height: 16px;
   margin-right: 5px;

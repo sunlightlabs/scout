@@ -114,6 +114,7 @@ module Subscriptions
             :subscription_type => subscription.subscription_type,
             :subscription_interest_in => subscription.interest_in,
             :interest_id => subscription.interest_id,
+            :user_id => subscription.user_id,
 
             # insert a reference to the URL this result was found in  
             :search_url => url
