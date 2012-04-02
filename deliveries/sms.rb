@@ -67,10 +67,10 @@ module Deliveries
     def self.render_interest(interest, deliveries)
       grouped = deliveries.group_by &:subscription
 
-      content = "new "
-
+      content = ""
+      
       content << grouped.keys.map do |subscription|
-        subscription.adapter.short_name grouped[subscription].size, subscription, interest
+        "#{grouped[subscription].size} #{subscription.adapter.short_name grouped[subscription].size, subscription, interest}"
       end.join(", ")
 
       content << " on "
