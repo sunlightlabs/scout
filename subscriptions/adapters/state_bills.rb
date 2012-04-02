@@ -15,7 +15,7 @@ module Subscriptions
         url << "&fields=#{fields.join ','}"
         url << "&q=#{query}"
         
-        if subscription.data['state']
+        if subscription.data['state'].present?
           url << "&state=#{subscription.data['state']}"
         end
 
