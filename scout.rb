@@ -273,15 +273,24 @@ get "/account/:id.rss" do
   }
 end
 
-get /\/interest\/([\w\d]+)\.?(\w+)?/ do |interest_id, ext|
+get /\/interest\/([\w\d]+)\.?(\w+)?$/ do |interest_id, ext|
   # do not require login
   # for RSS, want readers and bots to access it freely
   # for SMS, want users on phones to see items easily without logging in
+  # for JSON, no need to require an API key for now
+
+  unless ['rss', 'json', nil, ''].include?(ext)
+    halt 404 and return
+  end
 
   unless interest = Interest.find(interest_id.strip)
     halt 404 and return
   end
 
+  # handle JSON completely separately
+  if ext == 'json'
+    return json_for interest, params
+  end
   
   page = (params[:page] || 1).to_i
   page = 1 if page <= 0 or page > 200000000
@@ -329,6 +338,7 @@ post '/subscriptions' do
 
   phrase = params[:interest].strip
   subscription_type = params[:subscription_type]
+
   new_interest = false
 
   # if this is editing an existing one, find it
@@ -344,9 +354,12 @@ post '/subscriptions' do
   
   subscription = current_user.subscriptions.new(
     :interest_in => phrase, 
-    :subscription_type => subscription_type,
-    :data => params[:subscription_data]
+    :subscription_type => subscription_type
   )
+
+  if params[:subscription_data]
+    subscription.data = params[:subscription_data]
+  end
   
   headers["Content-Type"] = "application/json"
 
@@ -490,4 +503,72 @@ helpers do
   def requires_login
     redirect '/' unless logged_in?
   end
+end
+
+helpers do
+  
+  def json(results, params)
+    response['Content-Type'] = 'application/json'
+    json = results.to_json
+    params[:callback].present? ? "#{params[:callback]}(#{json});" : json
+  end
+
+  def json_for(interest, params) 
+    # hide some fields for JSON feeds
+    # items = items.only SeenItem.public_json_fields
+    subscriptions = Subscription.where(:interest_id => interest.id)
+    subscriptions = subscriptions.only(Subscription.public_json_fields)
+
+    interest = Interest.where(:_id => interest.id).only(Interest.public_json_fields).first
+    
+    items = SeenItem.where(:interest_id => interest.id).desc(:date)
+    items = items.only(SeenItem.public_json_fields)
+    count = items.count
+
+    pagination = pagination_for params
+    skip = pagination[:per_page] * (pagination[:page]-1)
+    limit = pagination[:per_page]
+    items = items.skip(skip).limit(limit)
+
+    items = items.to_a
+
+    results = {
+      :results => items.map {|item| clean_document item},
+      :count => count,
+      :page => {
+        :count => items.size,
+        :per_page => pagination[:per_page],
+        :page => pagination[:page]
+      },
+      :interest => clean_document(interest).merge(
+        :subscriptions => subscriptions.map {|sub| clean_document sub}
+      )
+    }
+
+    json results, params
+  end
+
+  def clean_document(item)
+    attrs = item.attributes
+    attrs.delete "_id"
+    attrs
+  end
+
+  def pagination_for(params)
+    default_per_page = 50
+    max_per_page = 50
+    max_page = 200000000 # let's keep it realistic
+    
+    # rein in per_page to somewhere between 1 and the max
+    per_page = (params[:per_page] || default_per_page).to_i
+    per_page = default_per_page if per_page <= 0
+    per_page = max_per_page if per_page > max_per_page
+    
+    # valid page number, please
+    page = (params[:page] || 1).to_i
+    page = 1 if page <= 0 or page > max_page
+    
+    {:per_page => per_page, :page => page}
+  end
+
 end

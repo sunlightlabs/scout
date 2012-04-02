@@ -41,4 +41,11 @@ class SeenItem
       subscription.adapter.find_url item_id, data
     end
   end
+
+  # the subset of fields appropriate for public syndication (omit database IDs, for instance)
+  def self.public_json_fields
+    [
+      :created_at, :item_id, :data, :date, :subscription_type
+    ]
+  end
 end

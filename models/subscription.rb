@@ -62,4 +62,10 @@ class Subscription
   def email_frequency
     user.delivery['email_frequency']
   end
+
+  def self.public_json_fields
+    [
+      :created_at, :data, :last_checked_at, :updated_at, :subscription_type
+    ]
+  end
 end

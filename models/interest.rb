@@ -31,4 +31,10 @@ class Interest
   def search?
     interest_type == "search"
   end
+
+  def self.public_json_fields
+    [
+      :created_at, :updated_at, :data, :interest_type, :in
+    ]
+  end
 end

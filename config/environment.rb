@@ -1,8 +1,29 @@
+# intricate include order because of JSON serialization
+
+require 'json/ext'
+
+# hack to stop ActiveSupport from taking away my JSON C extension
+[Object, Array, FalseClass, Float, Hash, Integer, NilClass, String, TrueClass].each do |klass|
+  klass.class_eval do
+    alias_method :to_json_from_gem, :to_json
+  end
+end
+
 require 'sinatra'
 require 'mongoid'
 require 'tzinfo'
 require 'twilio-rb'
 require 'padrino-helpers'
+
+# restore the original to_json on core objects (damn you ActiveSupport)
+[Object, Array, FalseClass, Float, Hash, Integer, NilClass, String, TrueClass].each do |klass|
+  klass.class_eval do
+    alias_method :to_json, :to_json_from_gem
+  end
+end
+
+
+
 
 def config
   @config ||= YAML.load_file File.join(File.dirname(__FILE__), "config.yml")
