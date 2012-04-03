@@ -1,0 +1,33 @@
+<% regulation = item.data %>
+
+<header>
+    <div class="titles">
+        <h4><%= regulation_stage regulation['stage'] %> <%= regulation['document_number'] %></h4>
+        <h4>
+            <% if regulation['agency_names'].any? %>
+                <%= regulation['agency_names'].join ', ' %>
+            <% end %>
+        </h4>
+        <h2><%= regulation['title'] %></h>
+    </div>
+</header>
+
+<section class="detail">
+
+    <h2>Resources</h2>
+    <div class="resources">
+        <a target="_blank" href="<%= regulation['federal_register_url'] %>">Federal Register</a>
+    </div>
+    <h2>Abstract</h2>
+    <div class="summary">
+        <% if regulation['abstract'] %>
+            <%= regulation['abstract'] %>
+        <% else %>
+            (No abstract available from the Federal Register.)
+        <% end %>
+    </div>
+
+</section>
+
+<section class="track">
+</section>

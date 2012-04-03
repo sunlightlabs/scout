@@ -491,7 +491,7 @@ section.show header h4, section.show header h3, section.show header h2 {
   
 }
 
-section.show header h4 {font-size: 100%; color: #434343;}
+section.show header h4 {font-size: 100%; color: #434343; line-height: 25px;}
 section.show header h2 {font-size: 125%; margin-top: 10px; line-height: 23px;}
 section.show header h3 {font-size: 100%; margin-top: 10px; line-height: 25px;}
 

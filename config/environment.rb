@@ -83,6 +83,14 @@ def interest_data
           :name => "Votes"
         }
       }
+    },
+    'regulation' => {
+      :name => "Regulation",
+      :adapter => "regulations"
+    },
+    'speech' => {
+      :name => "Speech in Congress",
+      :adapter => "congressional_record"
     }
   }
 end

@@ -22,7 +22,8 @@ module Subscriptions
         url << "&query=#{query}"
         url << "&order=last_version_on"
         url << "&sections=#{sections.join ','}"
-        url << "&highlight=true&highlight_size=500"
+        url << "&highlight=true"
+        url << "&highlight_size=500"
         url << "&highlight_tags=,"
 
         if options[:page]
