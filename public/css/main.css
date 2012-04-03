@@ -511,6 +511,7 @@ section.show .detail .latest_version {
 
 section.show .detail .latest_version p {margin: 10px 0;}
 section.show .detail .upcoming_floor {margin-bottom: 20px;}
+section.show .detail .speech p {margin: 15px 0; line-height: 22px; font-size: 90%;}
 section.show .detail .upcoming_floor li {margin: 10px 0;}
 
 section.show .detail .activity {margin-bottom: 20px;}

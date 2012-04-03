@@ -54,19 +54,11 @@ module Subscriptions
         "#{number > 1 ? "regulations" : "regulation"}"
       end
 
-      def self.item_path(item)
-        "/regulation/#{item.item_id}"
-      end
-
-      def self.interest_path(interest)
-        "/regulation/#{interest.in}"
-      end
-      
-      def self.interest_name(interest)
-        stage = interest.data['stage']
-        number = interest.data['document_number']
-        "#{stage.capitalize} Rule #{number}"
-      end
+      # def self.interest_name(interest)
+      #   stage = interest.data['stage']
+      #   number = interest.data['document_number']
+      #   "#{stage.capitalize} Rule #{number}"
+      # end
       
       # takes parsed response and returns an array where each item is 
       # a hash containing the id, title, and post date of each item found
@@ -78,7 +70,6 @@ module Subscriptions
         end
       end
 
-      # parse response when asking for a single bill - RTC still returns an array of one
       def self.item_detail_for(response)
         item_for response['regulations'][0]
       end

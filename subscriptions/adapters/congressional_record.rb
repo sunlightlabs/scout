@@ -19,6 +19,25 @@ module Subscriptions
         
         url
       end
+
+      def self.url_for_detail(item_id, data = {})
+        api_key = config[:subscriptions][:sunlight_api_key]
+        
+        endpoint = "http://capitolwords.org/api"
+        
+        url = "#{endpoint}/text.json?apikey=#{api_key}"
+        url << "&id=#{item_id}"
+        
+        url
+      end
+
+      def self.item_path(item)
+        "/speech/#{item.item_id}"
+      end
+
+      def self.interest_path(interest)
+        "/speech/#{interest.in}"
+      end
       
       def self.short_name(number, subscription, interest)
         "#{number > 1 ? "speeches" : "speech"}"
@@ -35,6 +54,9 @@ module Subscriptions
         end
       end
       
+      def self.item_detail_for(response)
+        item_for response['results'][0]
+      end
       
       
       # internal
@@ -52,7 +74,7 @@ module Subscriptions
         end
         
         SeenItem.new(
-          :item_id => "#{result["origin_url"]}-#{result['order']}",
+          :item_id => result['id'],
           :date => result['date'],
           :data => result
         )

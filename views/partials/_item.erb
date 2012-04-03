@@ -6,5 +6,11 @@
   </div>
   <div class="right">
     <%= partial "subscriptions/#{item.subscription.subscription_type}/result", :engine => "erb", :locals => {:item => item, :interest => interest_in} %>
+
+    <section class="more">
+      <a class="landing" href="<%= item_path item %>">
+        More information &raquo;
+      </a>
+    </section>
   </div>
 </li>

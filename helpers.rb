@@ -50,7 +50,7 @@ module GeneralHelpers
   end
   
   def id_escape(id)
-    id.gsub(" ", "_").gsub("|", "__")
+    id.gsub(" ", "_").gsub("|", "__").gsub(".", "__")
   end
   
   def long_date(time)

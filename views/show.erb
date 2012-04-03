@@ -15,8 +15,9 @@
   // put in a delay block in case this is being rendered before the layout
   $(function() {
     var item_type = "<%= interest_type %>";
-    var item_id = "<%= id_escape item_id %>";
-    var container = $("#item-" + item_id);
+    var escaped_item_id = "<%= id_escape item_id %>";
+    var item_id = "<%= item_id %>";
+    var container = $("#item-" + escaped_item_id);
     container.find(".loading_container").show();
 
     $("input.query").val('');
