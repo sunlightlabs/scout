@@ -2,9 +2,11 @@ set :environment, (ENV['target'] || 'staging')
 
 if environment == 'production'
   set :user, 'scout'
+  set :branch, 'master'
   set :domain, 'scout.sunlightfoundation.com'
 else
   set :user, 'alarms'
+  set :branch, 'redesign'
   set :domain, 'ec2-50-16-84-118.compute-1.amazonaws.com'
 end
 
@@ -18,7 +20,6 @@ set :local_bin, "/projects/#{user}/.gem/ruby/1.8/bin"
 
 set :scm, :git
 set :repository, "git@github.com:sunlightlabs/scout.git"
-set :branch, 'master'
 
 set :deploy_via, :remote_cache
 set :runner, user
