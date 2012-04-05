@@ -41,7 +41,7 @@ module Subscriptions
       end
 
       def self.interest_name(interest)
-        interest.data['bill_id']
+        "#{interest.data['bill_id']} (#{interest.data['state'].upcase})"
       end
 
       # item_id in this case is not actually the remote bill_id, since that's not specific enough
