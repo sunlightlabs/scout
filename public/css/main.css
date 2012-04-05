@@ -1,548 +1,710 @@
-body {
-  background-color: #f9f9f9;
-  font-family: "Droid Serif";
+html, body{
+    background-color: #fafbf8;
+    font-family: arial, 'helvetica Neue', sans-serif;
+    color: #5c5b60;
+    height: 100%;
 }
-
-h1, h2, h3, h4, h5, h6 {font-weight: normal;}
-em, strong {font-weight: normal; font-style: normal;}
-ul, ol {list-style-type: none;}
-a {color: #335577;}
-
-section.main {
-  width: 880px; 
-  position: relative;
-}
-
-section.entry, section.main section.results, section.main section.show {
-  padding: 0 20px;
-}
-
-/* general layout */
-
-section.sidebar {
-  position: absolute; right: 0; 
-  width: 280px; min-height: 500px;
-  
-  border-left: 1px solid #d5d5d5;
-  padding-left: 20px; padding-right: 20px; padding-top: 10px;
-}
-
-section.entry {
-  width: 100%; height: 100px;
-  position: relative;
-  padding-top: 10px;
-}
-
-section.main section.results, section.main section.show {
-  width: 880px;
-}
-
-div.loading_container {
-  display: none; margin: 0px auto; width: 80%; padding-top: 30px;
-}
-
-div.loading_container span {
-  color: #444; font-size: 150%;
-  display: block;
-  padding-top: 20px; padding: 20px; padding-left: 50px;
-  background-position: left;
-  background-image: url(/images/loader-32.gif);
-  background-repeat: no-repeat;
-}
-
-
-#flash div.flash {
-  padding: 10px 20px;
-  margin-top: 15px;
-  margin-bottom: 15px;
-}
-
-#flash div.flash.success {
-  color: #348145;
-}
-
-#flash div.flash.failure,
-#flash div.flash.user,
-#flash div.flash.password,
-#flash div.flash.forgot {
-  color: #C13445;
-  padding: 0;
-
-}
-
-
-/* buttons */
-
 button {
-  background-color: transparent;
-  overflow: hidden;
-  cursor: pointer;
+    text-indent: -9999em;
+    border: 0;
 }
-
-button.action {
-  display: inline-block; margin: 5px 10px 5px 0; padding: 10px 30px; 
-  border-radius: 3px; border: 1px solid #336699; color: #336699;
-} button.action:hover {background-color: #336699; color: #fff;}
-
-button:hover {
-  background-color: #e5e5e5;
+a {
+    color: #1c8398;
 }
-
-button.image {
-  color: transparent; /* Fix for Firefox */
-  text-align: left;
-  line-height: 1 !important;
-  background-position: center;
-  background-repeat: no-repeat;
-  border: none;
+a:hover {
+    color: #1c6979;
 }
+.contentWrapper{
+    width: 960px;
+    margin: 0 auto;
+}
 
-button.text {
-  padding: 10px 15px;
-  font-size: 100%;
-  color: #4c4c4c;
-  border-color: #8F8F8F;
-  border-width: 1px;
-  border-radius: 5px;
+h2{
+    font-family: "alternate-gothic-no-3-d", arial, 'helvetica Neue', sans-serif;
+    text-transform: uppercase;
+    font-size: 200%;
+    color: #dcc51f;
 }
+h3, .entry h2{
+    font-family: "alternate-gothic-no-3-d", arial, 'helvetica Neue', sans-serif;
+    text-transform: uppercase;
+    font-size: 175%;
+    color: #dcc51f;
+}
 
-button.text.image {
-  color: #4c4c4c;
-  background-position: left;
+.trackSubscribe h2 {
+    text-transform: none;
 }
 
+h5{
+    font-weight: bold;
+}
+p{
+    font-size: 81%;
+    margin-top: 10px;
+}
+dt {
+    font-weight: bold;
+    display: block;
+    float: left;
+}
+dd{
+    display: block;
+}
 
-/* login/signup */
 
-section.sidebar {top: 0;}
-section.sidebar div.login p {
-  line-height: 22px;
-  margin: 10px 0;
+nav{
+    font-size: 81.25%; /* 13pt /16pt */
+    font-weight: bold;
 }
-section.sidebar div.login {
-  font-size: 90%;
-  padding-bottom: 10px;
-  color: #444;
+nav a{
+    -webkit-text-stroke: 0;
+    color: transparent;
+    background-color: rgba(2, 116, 139, 1);
+    background-clip: text;
+    -moz-background-clip: text;
+    -webkit-background-clip: text;
+    text-shadow: rgba(255, 255, 255, 0.3) 2px 2px 3px;
+    text-decoration: none;
 }
-
-section.sidebar a.logout {
-  margin-left: 10px;
+nav a:hover{
+    background-color: rgba(2, 71, 85, 1);
 }
-
-section.sidebar p.user_results {
-  padding-top: 10px;
+nav li{
+    padding: 0 30px 0 0;
+    display: block;
 }
-
-section.sidebar div.login h2 {
-  margin: 20px 0 10px 0; font-weight: bold;
+form{
+    font-size: 81%;
+    font-weight: bold;
 }
-
-section.sidebar div.login span {
-  padding-right: 5px;
-  line-height: 22px;
-  display: block;
+label{
 }
+input[type="text"]{
+    display: block;
+    background-color: #ffffff;
+    border: 0;
+    border-top: 1px solid #d5d5d2;
+    border-bottom: 1px solid #f2f2f1;
+    height: 30px;
+    padding: 0 5px;
+    color: #ffffff;
+}
+
+
 
-section.sidebar div.login div.user.error {
-  color: red; padding: 5px 0;
+/*-- Header Styling --*/
+
+.headerWrapper{
+    background: url('../images/bg_header.png') center bottom repeat-x;
+    display: block;
+    min-height: 247px;
 }
 
-section.sidebar div.login span.logged_out {
-  margin-bottom: 10px; 
+nav ul{
+    float: right;
 }
 
-section.sidebar div.login input[type=text],
-section.sidebar div.login input[type=email],
-section.sidebar div.login input[type=password] {
-  font-size: 100%;
-  width: 200px;
-  padding: 5px 5px;
+nav li{
+    float: left;
 }
 
-button.text.login {
-  padding: 5px 10px;
-  font-weight: bold;
+header h1{
+    background: url('../images/logo_scout.png') top left no-repeat;
+    display: block;
+    width: 207px;
+    height: 58px;
+    margin-top: 70px;
+    float: left;
 }
+#userNav{
+    margin-top: 5px;
+}
 
-section.sidebar div.login div.prefs {
-  margin: 10px 0;
+#userNav li#subscriptions{
+    background: url('../images/icon_subscriptions.png') 0 1px  no-repeat;
+    padding-left: 23px;
+}
+#userNav li#settings{
+    background: url('../images/icon_settings.png') top left no-repeat;
+    padding-left: 22px;
+}
+#newsearchform .filters{
+    display: none;
+}
+#newsearchform{
+    float: right;
+    margin-top: 72px;
+}
+#newsearchform div{
+    float: left;
+}
+#newsearchform label{
+    display: none;
+}
+#newsearchform input{
+    width: 380px;
+    padding: 0 5px 0 5px;
+    height: 51px;
+    background: url('../images/newSearch.png') top left no-repeat;
+    display: block;
+    -webkit-appearance: textfield;
+    -moz-appearance: textfield;
+    -webkit-appearance: textfield;
+    border: 0;
+    float: left;
+}
+#newsearchform .field{
+    float: left;
+}
+#newsearchform button{
+    float: left;
+    background: url('../images/btn_newSearch.png') top left no-repeat;
+    width: 54px;
+    height: 51px;
+    margin-left: 14px;
 }
+#newsearchform button:hover{
+    background: url('../images/btn_newSearch.png') bottom left no-repeat;
+}
 
-section.sidebar div.login div.prefs input.radio {
-  margin: 0 0;
+.count{
+    font-weight: normal;
 }
 
-section.sidebar div.login div.prefs label.radio {
-  margin-left: 5px; margin-right: 15px; 
+
+/*-- Basic Content Structure --*/
+div.contentWrapper{
+    overflow: hidden;
 }
 
-section.sidebar div.login div.prefs label.header {
-  display: block; margin-bottom: 10px; font-weight: bold;
+.left{
+    float:left;
+    margin-bottom: -99999px;
+    padding-bottom: 99999px;
+}
+.right{
+    float: right;
+    margin-bottom: -99999px;
+    padding-bottom: 99999px;
 }
 
-section.sidebar div.login div.prefs fieldset {
-  margin-top: 10px; margin-bottom: 15px;
+.sidebar{
+    width: 250px;
+    background-color: #f5f6f3;
+    z-index: 10;
 }
 
-section.sidebar div.login div.prefs input.submit {
-  margin-top: 10px;
+.contentArea{
+    width: 710px;
 }
 
-/* intro page */
+.sidebar.left{
+    border-right: 1px solid #ffffff;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.contentArea.right{
+    -webkit-box-shadow: inset 14px 0px 14px -7px #e2e3e0;
+    -moz-box-shadow: inset 14px 0px 14px -7px #e2e3e0;
+    box-shadow: inset 14px 0px 14px -7px #e2e3e0;
+}
+.sidebar.right{
+    border-left: 1px solid #ffffff;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.contentArea.left{
+    -webkit-box-shadow: inset -14px 1px 14px -7px #e2e3e0;
+    -moz-box-shadow: inset -14px 0px 14px -7px #e2e3e0;
+    box-shadow: inset -14px 0px 14px -7px #e2e3e0;
+}
 
-section.introduction p {padding: 10px 20px; line-height: 32px; font-size: 125%;}
 
 
-/* adding new subscriptions */
 
-section.entry div.errors {
-  color: #c42323;
-  font-size: 90%;
-  padding-bottom: 10px;
-}
 
-section.entry input[type=text] {
-  font-size: 250%;
-  position: absolute; left: 20px;
-  padding: 10px 10px; 
-  width: 760px;
-}
+/*-- Sidebar Styling --*/
 
-/* adapted from http://stackoverflow.com/questions/600438/css-to-hide-input-button-value-text */
-section.entry button.search {
-  position: absolute; left: 800px;
-  
-  width: 75px;
-  height: 75px;
-  border: none;
-  background-image: url(/images/search-64.png);
+.sidebar{
 }
 
-section header {
-  background-color: #c5c5c5;
-  padding: 10px; position: relative;
+.sidebar h4{
+    font-family: "alternate-gothic-no-3-d", arial, 'helvetica Neue', sans-serif;
+    text-transform: uppercase;
+    font-size: 143%;
+    color: #3d3c41;
+    margin-bottom: 17px;
 }
-
-section header button {
-  position: absolute; right: 30px;
-  background-color: #f9f9f9;
-  font-weight: bold;
-  font-size: 125%;
+.sidebar .module{
+    padding: 33px 0;
+    margin-left: 10px;
+    background: url('../images/sidebar_divider.png') bottom center no-repeat;
 }
-
-section header button.follow.unfollow, section header button.track.untrack {
-  background-color: #4c4c4c;
-  color: #f9f9f9;
+.sidebar form{
+    color: #5c5b60;
 }
-
-section header button.follow.unfollow:hover, section header button.track.untrack:hover {
-  background-color: #8c8c8c; 
+.sidebar label{
+    display: block;
+    margin-bottom: 10px;
+    font-size: ; /* 11 px / 13 px*/
 }
-
-section.results header {
-  height: 50px; padding-left: 10px;
+.sidebar input{
+    margin-right: 5px;
 }
-
-section.results header h2 {
-  font-size: 150%;
+.sidebar legend{
+    font-weight: bold;
+    padding-bottom: 10px;
+    display: block;
 }
-
-section.results header h4 {
-  margin-top: 10px; font-size: 90%;
+.sidebar li{
+    margin-bottom: 10px;
 }
-
-section.results header span.description {
-  font-size: 150%; line-height: 50px;
+.filters form button{
+    background: url('../images/btn_updateResults.png') left top no-repeat;
+    width: 231px;
+    height: 51px;
 }
 
-section div.logged_out {
-  padding: 10px; position: relative;
-  height: 17px; margin-top: 10px;
-  background-color: #646464; color: #f5f5f5;
+.filters form button:hover{
+    background: url('../images/btn_updateResults.png') left bottom no-repeat;
 }
-section.results div.logged_out span {
-  position: relative; left: 30px; padding: 5px; line-height: 17px;
+.filters label{
+    font-weight: normal;
 }
 
-section.results div.filter {
-  background-color: #c5c5c5;
-  padding: 10px 20px;
-}
 
-/* tabs */
 
-section.results ul.tabs li {
-  display: inline-block;
-  
-  margin: 0; padding: 15px;
-  min-width: 170px;
-  font-size: 80%;
+/*-- Footer Styling --*/
+.footerWrapper{
+    background: url('../images/bg_footer.png') center top repeat-x;
+    display: block;
+}
 
-  border: 0px solid #9f9f9f;
-  background-color: #e5e5e5;
-  
-  cursor: pointer;
+.sunlightFoundation{
+    background: url('../images/logo_sunlightFoundation.png') top left no-repeat;
+    display: block;
+    width: 159px;
+    height: 48px;
+    margin-bottom: 25px;
 }
-section.results ul.tabs li:hover {background-color: #d5d5d5;}
-section.results ul.tabs li.active {background-color: #c5c5c5;}
-section.results ul.tabs li.first {border-left-width: 1px;}
-section.results ul.tabs li.loading {
-  background-position: 95% 50%;
-  background-image: url(/images/loader-16.gif);
-  background-repeat: no-repeat;
-  color: #8f8f8f; 
+footer{
+    padding: 33px 0;
 }
-
-/* hide all but the first tab on start */
-section.results div.tab {display: none;}
-section.results div.tab:first-child {display: block;}
-section.results div.tab.active {display: block;}
-
-section.results div.tab div.system_error {
-  padding-top: 30px; font-size: 125%; 
-  width: 100%; text-align: center;
-  display: none;
+.aboutSF{
+    float: left;
+    width: 282px;
+    padding-left: 10px;
 }
-
-section.results div.tab div.none {
-  padding-top: 50px;
-  text-align: center;
+.aboutSF p{
+    margin-left: 52px;
+    color: #ffffff;
+    font-size: 68%;
 }
-
-section.results div.tab div.none p {
-  font-size: 125%; 
-  width: 100%;
+footer nav{
+    float: right;
 }
-
-section.results div.tab div.none button.refresh {
-  margin: 0 auto; width: 100px;
-  margin-top: 30px;
-  background-color: #f9f9f9;
+.signupForm{
+    float: left;
+    width: 610px;
+    margin-top: 40px;
+    margin-left: 46px;
+    color: #ffffff;
+    padding-right: 10px;
 }
-
-section.results ul.items {
-  list-style-type: none;
-  margin-top: 0px;
-  padding-bottom: 30px; margin-bottom: 30px;
+.signupForm em{
+    font-weight: bold;
+    display: block;
 }
-
-div.next_page {margin-top: 30px;}
-
-div.next_page button.action.page {
-  width: 100%; 
-  font-size: 150%;
+.signupForm ul{
+    margin: 0;
 }
-
-div.next_page p {
-  color: #444; font-size: 150%;
-  display: none;
-  padding-top: 20px; padding: 20px; padding-left: 50px;
-  background-position: left;
-  background-image: url(/images/loader-32.gif);
-  background-repeat: no-repeat;
+.signupForm li{
+    float: left;
 }
-
-section.results li.result {
-  padding: 30px 0 20px 0;
+.signupForm input{
+    background-color: #93c0ca;
+    border: 0;
+    border-top: 1px solid #63888f;
+    border-bottom: 1px solid #bbd8de;
+    height: 30px;
+    padding: 0 5px;
+    color: #ffffff;
 }
-
-section.results li.result div.left {
-  width: 130px;
-  display: inline-block; vertical-align: top;
-  padding: 0 30px 0 0px;
+.signupForm #id_email{
+    width: 308px;
 }
+.signupForm #id_zip{
+    width: 160px;
+}
+#mailinglistform input{
+    margin-right: 20px;
+}
 
-section.results li.result div.right {
-  width: 650px;
-  display: inline-block; vertical-align: top;
+#mailinglistform{
+    margin-top: 15px;
+}
+#mailinglistform button{
+    background: url('../images/btn_signupForm.png') left top no-repeat;
+    width: 104px;
+    height: 29px;
 }
-section.results li.result div.left p.date {
-  font-size: 125%; color: #6f6f6f; text-align: right;
+#mailinglistform button:hover{
+    background: url('../images/btn_signupForm.png') left bottom no-repeat;
 }
 
 
-/* common to results */
 
-section.results li.result h2 {
-  margin-bottom: 10px; font-size: 125%;
+/*-- Search Results Styling --*/
+.results .contentArea{
+    background: url('../images/tinyshadow.png') top left repeat-x;
 }
-
-section.results li.result h3 {
-  margin-bottom: 10px; font-size: 100%; line-height: 24px;
+.pageTitle{
+    background: url('../images/tinyborder.png') bottom left repeat-x;
+    padding: 16px 0 16px 10px;
 }
 
-section.results li.result dl.highlight dt {
-  margin-top: 10px;
-  margin-bottom: 5px;
+.searchParameters{
+    float: left;
+    
 }
 
-section.results strong.highlight, section.results .highlight strong {
-  font-weight: bold; 
-  font-style: normal;
-  color: #aa0000;
-  padding: 2px 0px;
-  background-color: #dddddd;
+.pageTitle button{
+    float: right;
+    background: url('../images/btn_subscribe.png') left top no-repeat;
+    width: 150px;
+    height: 51px;
 }
-
-section.results li.result section.more {
-  font-size: 100%; margin-top: 5px;
+.pageTitle button:hover{
+    background: url('../images/btn_subscribe.png') left bottom no-repeat;
 }
-
-section.results li.result section.more a {
-  margin-right: 10px;
+.results .contentArea{
+    padding-top: 53px;
 }
+.contentArea.right section{
+    background: url('../images/tinyborder_andshadow.png') right top repeat-x;
+    margin-bottom: 155px;
+    /*background: url('../images/tinyborder_andshadow.png') right top repeat-x,-moz-linear-gradient(-45deg,  rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%); /* FF3.6+ */
+    /*background: url('../images/tinyborder_andshadow.png') right top repeat-x, -webkit-gradient(linear, left top, right bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(100%,rgba(255,255,255,0))); /* Chrome,Safari4+ */
+    /*background: url('../images/tinyborder_andshadow.png') right top repeat-x, -webkit-linear-gradient(-45deg,  rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* Chrome10+,Safari5.1+ */
+    /*background: -o-linear-gradient(-45deg,  rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* Opera 11.10+ */
+    /*background: -ms-linear-gradient(-45deg,  rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* IE10+ */
+    /*background: linear-gradient(-45deg,  rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* W3C */
+    /*filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#00ffffff',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+    /*-webkit-box-shadow: inset 14px 0px 14px -7px #e2e3e0;*/
+    /*-moz-box-shadow: inset 14px 0px 14px -7px #e2e3e0;*/
+    /*box-shadow: inset 14px 0px 14px -7px #e2e3e0; */
+    
+}
+.contentArea ul{
+    padding-top: 20px;
+    background: url('../images/tinyborder.png') center bottom repeat-x;
+}
+.results .contentArea li{
+    padding: 33px 10px 33px 33px;
+    background: url('../images/tinyborder_entry.png') center top no-repeat;
+}
 
-section.results .content {
-  padding: 10px 0; color: #444; line-height: 20px; font-size: 90%;
+.results .contentArea.right li:hover{
+    background-color: #f5f6f5;
+    -webkit-box-shadow: inset 14px 0px 14px -7px #e2e3e0;
+    -moz-box-shadow: inset 14px 0px 14px -7px #e2e3e0;
+    box-shadow: inset 14px 0px 14px -7px #e2e3e0;
 }
 
-section.results .subtitle {
-  font-size: 90%; color: #333;
-  margin-bottom: 10px;
+.contentArea h4{
+    font-weight: bold;
+    font-size: 106%;
+    float: left;
+    margin-bottom: 10px;
+}
+.contentArea h4 a{
+    text-decoration: none;
+    color: #1c6979;
 }
+.contentArea h4 a:hover{
+    color: #1c8398;
+}
+.contentArea time {
+    float: right;
+    font-style: italic;
+    font-weight: 200;
+    font-size: 93%;
+}
+.contentArea p{
+    clear: both;
+}
+.contentArea em{
+    color: #cdb81f;
+}
+.contentArea.right h3{
+    background: url('../images/bg_sectionHeader.png') top right no-repeat;
+    display: inline-block;
+    height: 38px;
+    padding: 7px 70px 0 33px;
+    margin-top: -20px;
+    -webkit-box-shadow: inset 14px 0px 14px -7px #e2e3e0;
+    -moz-box-shadow: inset 14px 0px 14px -7px #e2e3e0;
+    box-shadow: inset 14px 0px 14px -7px #e2e3e0;
+}
+.trackable small{
+    border: 1px solid #dcddda;
+    background-color: #f5f6f3;
+    padding: 7px;
+    clear: both;
+    display: block;
+    font-size: 81%;
+    font-style: italic;
+    margin-top: 10px;
+}
+.viewMore{
+    float: right;
+    font-size: 81%;
+    background: url('../images/more.png') right 3px no-repeat;
+    padding-right: 45px;
+    margin-top: 10px;
+}
+.viewMore a .dataSet{
+    color: #1C6979;
+}
 
 
-/* federal bill results */
 
-section.results li.federal_bills span.code {font-weight: bold;}
 
 
-section.results li.federal_bills a.file {
-  margin-left: 5px;
+/*-- Entry Styling --*/
+.entry .pageTitle, .entry .entrySummary, .entry .entryExtras {
+    padding: 0 33px 0 10px;
 }
 
-section.results li.federal_bills span.dates {
-  margin-top: 10px; display: block;
-  font-size: 90%;
+.entry .trackSubscribe{
+    float: left;
 }
-
-section.results li.federal_bills span.dates strong {
-  font-style: italic;
+.moreInfoLinks{
+    font-size: 81%;
+    float: left;
 }
-
-section.results li.state_bills div.subjects {
-  margin-top: 8px; font-size: 90%;
+.moreInfoLinks li{
+    display: inline;
+}
+.moreInfoLinks h5{
+    float: left;
+    margin-right: 10px;
+}
+.moreInfoLinks ul{
+    display: block;
+    float: left;
+    padding-top: 0;
+}
+.sourceLink{
+    float: right;
 }
+.sourceLink, .moreInfoLinks{
+    padding-top: 20px;
+    font-size: 81%;
+}
+.entry h2{
+    width: 510px;
+    float: left;
+}
+.entry .entryExtras{
+    padding: 33px 33px 33px 10px;
+    font-size: 81%;
+    margin-bottom: 155px;
+}
 
-section.results li.regulations span.stage {
-  font-weight: bold;
+.entryExtras .module{
+    width: 50%;
+    float: left;
+
 }
+.entry .entrySummary{
+    padding: 33px 33px 33px 10px;
+    border-bottom: 1px dashed #9d9b9b;
+}
 
 
-/* subscription display */
 
-ul.subscriptions li.keyword {
-  width: 100%; position: relative;
-  padding: 20px 0 30px 0;
-  border-top: 1px solid #d5d5d5;
-}
 
-ul.subscriptions li.keyword.current h2 {
-  font-weight: bold; display: inline;
+/*-- Subscriptions Styling --*/
+.subscriptionsList{
 }
 
-a.rss {
-  text-decoration: none; 
+.subscriptions .searchParameters{
+    font-style: italic;
+    margin-bottom: 10px;
+    clear: both;
 }
+.subscriptionsList{
+    padding: 33px 0;
+}
+.subscriptionsList{
+    column-count: 2;
+    -moz-column-count: 2;
+    -webkit-column-count: 2;
+    column-gap: 1px;
+    -moz-column-gap: 1px;
+    -webkit-column-gap: 1px;
+    column-rule: 1px dashed #cdcdcd;
+    -moz-column-rule: 1px dashed #cdcdcd;
+    -webkit-column-rule: 1px dashed #cdcdcd;
+}
 
-a.rss img {
-  display: inline;
-  width: 16px; height: 16px;
-  margin-right: 5px;
+.subscription{
+    -mozbox-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 16px 16px;
+    background: url('../images/tinyborder_andshadow.png') top left repeat-x;
+    column-break-inside: avoid;
+    -moz-column-break-inside: avoid;
+    -webkit-column-break-inside: avoid;
+    font-weight: normal;
+}
+.subscription h3{
+    float: left;
+    width: 285px;
 }
+.rssFeed{
+    float: right;
+    background: url('../images/rss.png') left top no-repeat;
+    width: 22px;
+    height: 22px;
+    text-indent: -9999em;
+}
+.rssFeed:hover{
+    background: url('../images/rss.png') left bottom no-repeat;
+}
+.subscriptions .contentArea form{
+    margin-bottom: 155px;
+}
 
-ul.subscriptions li.keyword h2 {
-  font-weight: normal;
-  font-size: 150%;
-  width: 250px;
-  display: inline;
+.subscriptions .contentArea form button{
+    background: url('../images/btn_updateSubscriptions.png') left top no-repeat;
+    width: 231px;
+    height: 51px;
 }
 
-ul.subscriptions li.keyword button.remove {
-  width: 22px;
-  height: 22px;
-  
-  background-image: url(/images/x-18.png);
-  background-color: transparent;
-  
-  position: absolute; right: 0; top: 22px;
+.subscriptions .contentArea form button:hover{
+    background: url('../images/btn_updateSubscriptions.png') left bottom no-repeat;
+}
+.subscriptions legend{
+    font-family: "alternate-gothic-no-3-d", arial, 'helvetica Neue', sans-serif;
+    text-transform: uppercase;
+    font-size: 175%;
+    color: #dcc51f;
+    -webkit-padding-start: 0;
+    -webkit-padding-end: 0;
 }
 
-ul.subscriptions li.keyword section.types {
-  margin-top: 10px; 
-  font-size: 80%; color: #444;
+.removeSubscription{
+    border: 1px solid #dcddda;
+    background-color: #f5f6f3;
+    padding: 7px;
+    clear: both;
+    display: block;
+    font-style: italic;
+    margin-top: 10px;
 }
 
-/* show pages */
 
-section.show {}
-section.show header {
-  padding: 15px 10px;
-}
 
-section.show header div.titles {
-  position: relative; width: 700px;
-}
+
 
-section.show header button.track {
-  top: 20px;
+/*-- Settings Styling --*/
+
+.settings .contentArea form input[type="text"]{
+    width: 100%;
 }
-section.show header h4, section.show header h3, section.show header h2 {
-  
+.settings .contentArea form ul{
+    padding: 33px 33px 33px 10px;
+    column-count: 2;
+    -moz-column-count: 2;
+    -webkit-column-count: 2;
+    margin-bottom: 155px;
+    column-gap: 16px;
+    -moz-column-gap: 16px;
+    -webkit-column-gap: 16px;
 }
 
-section.show header h4 {font-size: 100%; color: #434343; line-height: 25px;}
-section.show header h2 {font-size: 125%; margin-top: 10px; line-height: 23px;}
-section.show header h3 {font-size: 100%; margin-top: 10px; line-height: 25px;}
-
-section.show .detail {
-  padding: 20px 10px; width: 800px;
+.settings .contentArea form li{
+    column-break-inside: avoid;
+    -moz-column-break-inside: avoid;
+    -webkit-column-break-inside: avoid;
+}
+li.email{
+    -moz-column-span: all;
+    -webkit-column-span: all;
+    column-span: all;
 }
+.settings .contentArea form input{
+    margin-bottom: 16px;
+}
+.settings label span{
+    font-weight: normal;
+}
+.settings .contentArea form small{
+    font-style: italic;
+    font-weight: normal;
+    display: block;
+}
 
-section.show .detail h2 {font-weight: bold; margin-bottom: 10px;}
 
-section.show .detail .summary {
-  line-height: 21px; margin-bottom: 20px; font-size: 90%;
-}
+/*-- Notification Styling --*/
 
-section.show .detail .latest_version {
-  margin-bottom: 20px;
+.overlay {
+    display: none;
 }
 
-section.show .detail .latest_version p {margin: 10px 0;}
-section.show .detail .upcoming_floor {margin-bottom: 20px;}
-section.show .detail .speech p {margin: 15px 0; line-height: 22px; font-size: 90%;}
-section.show .detail .upcoming_floor li {margin: 10px 0;}
 
-section.show .detail .activity {margin-bottom: 20px;}
-section.show .detail .activity li {margin: 10px 5px; font-size: 90%; line-height: 22px;}
-section.show .detail .activity li span.date {font-weight: bold;}
-section.show .detail .file {display: inline-block; margin: 0 5px;}
-section.show .detail .resources {margin-bottom: 20px;}
-section.show .detail .resources a {
-  display: inline-block; margin: 5px 10px 5px 0; padding: 10px 30px; 
-  border-radius: 3px; border: 1px solid #336699;
-  text-decoration: none;
-} section.show .detail .resources a:hover {background-color: #336699; color: #fff;}
+.overlay .light.white {
+    display: block;
+    position: fixed;
+    top: 33%;
+    left: 45%;
+    width: 10%;
+    padding: 10px;
+    background: #fafbf8;
+    z-index: 1002;
+    overflow: auto;
+    border: 1px solid #dcddda;
+}
 
-section.show .detail .votes {margin-bottom: 20px;}
-section.show .detail .votes li {margin: 10px 0; line-height: 25px;}
-section.show .detail .votes li div.left {
-  width: 80px;
-  display: inline-block; vertical-align: top;
-  padding: 0 30px 0 0px;
+.overlay .fade.black {
+    display: block;
+    position: fixed;
+    top: 0%;
+    left: 0%;
+    width: 100%;
+    height: 100%;
+    background-color: #000000;
+    z-index: 1001;
+    -moz-opacity: .07;
+    opacity: .07;
+    filter: alpha(opacity=07);
 }
-section.show .detail .votes li div.right {
-  display: inline-block; vertical-align: top;
+.overlay p{
+    margin-top: 0;
+    margin-bottom: 10px;
 }
-section.show .detail .votes li span.date {font-weight: bold;}
-section.show .detail .votes li p.type {font-size: 80%; line-height: 18px;}
-section.show .detail .votes li div.right p.vote_count {font-size: 80%;}
 
-div.developer {
-  display: none; padding: 20px;
+a.update.button{
+    background: url('../images/btn_update.png') left top no-repeat;
+    width: 124px;
+    height: 51px;
+    display: block;
+    float: left;
 }
-
-div.developer h2 {
-  font-weight: bold; margin: 10px 0;
+a.update.button:hover{
+    background: url('../images/btn_update.png') left bottom no-repeat;
+}
+a.ignore{
+    float: left;
+    margin-top: 17px;
+    margin-left: 10px;
+    font-size: 81%;
+    text-decoration: underline;
+    font-style: italic;
 }

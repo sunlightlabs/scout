@@ -5,7 +5,7 @@ require 'sinatra/content_for'
 require 'sinatra/flash'
 
 set :logging, false
-set :views, 'views'
+set :views, 'new_views'
 set :public_folder, 'public'
 
 # disable sessions in test environment so it can be manually set
