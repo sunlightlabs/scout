@@ -99,35 +99,20 @@ end
 def search_data
   data = {
     'federal_bills' => {
-      :name => "Congressional Bills",
-      :search => "Bills in Congress",
+      :name => "Bills in Congress",
       :order => 1
     },
     'state_bills' => {
       :name => "State Bills",
-      :search => "Bills in the states",
-      :order => 3,
-      :filter => true
+      :order => 3
     },
     'congressional_record' => {
-      :name => "Congressional Speeches",
-      :search => "Speeches from Congress",
+      :name => "Speeches in Congress",
       :order => 2
     },
     'regulations' => {
       :name => "Federal Regulations",
-      :search => "Federal regulations",
       :order => 4
-    },
-    'committee_hearings' => {
-      :name => "Senate Hearings",
-      :search => "Senate hearings",
-      :order => 5
-    },
-    'gao_reports' => {
-      :name => "GAO Reports",
-      :search => "GAO reports",
-      :order => 6
     }
   }
   

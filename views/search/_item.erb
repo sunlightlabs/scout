@@ -1,0 +1,14 @@
+<li class="item.subscription_type">
+    <time datetime="" pubdate><%= just_date_year item.date %></time>
+    
+    <!-- <h4>
+        <a href="/">
+            Excess Federal Building and Property Disposal Act of 2011
+        </a>
+    </h4>
+    <p>
+        ...be accessible by the public at no cost through the website of the General Services Administration. "(d) <em>Transparency</em> of Database.--To the extent practicable, the Administrator shall ensure that the database-- "(1)...
+    </p> -->
+
+    <%= partial "subscriptions/#{item.subscription.subscription_type}/result", :engine => "erb", :locals => {:item => item, :interest => query} %>
+</li>

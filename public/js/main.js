@@ -14,5 +14,19 @@ $(function() {
 var Utils = {
     log: function(msg) {
         console.log(msg);
+    },
+
+    pjax: function(href, container) {
+      if (!container)
+        container = "#contentWrapper";
+
+      $.pjax({
+          url: href,
+          container: container,
+          error: function() {
+            Utils.log("Error asking for: " + href);
+          }, 
+          timeout: 5000
+      });
     }
 };

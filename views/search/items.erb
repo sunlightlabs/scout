@@ -1,0 +1,18 @@
+<section class="clear">
+    <h3><%= subscription.search_name %></h3>
+    <% if items and items.any? %>  
+        <ul class="items">
+          <% items.each do |item| %>
+            <%= partial "search/item", :engine => "erb", :locals => {:item => item, :query => query} %>
+          <% end %>
+        </ul>
+
+        <a href="/search/<%= subscription.serialize %>/<%= h query %>" class="viewMore">
+            View more <span class="dataSet"><%= subscription.search_name %></span>
+        </a>
+    <% else %>
+        <div class="no_results">
+            No results.
+        </div>
+    <% end %>
+</section>

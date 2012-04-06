@@ -1,13 +1,15 @@
 <% bill = item.data %>
 <% version = item.data['last_version'] %>
 
-<% if bill['short_title'].present? %>
-  <h2><%= bill['short_title'] %></h2>
-<% else %>
-  <h3><%= bill['official_title'] %></h3>
-<% end %>
+<a href="<%= item_path item %>">
+  <% if bill['short_title'].present? %>
+    <h4><%= bill['short_title'] %></h2>
+  <% else %>
+    <h5><%= bill['official_title'] %></h3>
+  <% end %>
+</a>
 
-<div class="subtitle">
+<!-- <div class="subtitle">
   <span class="code"><%= bill_code bill['bill_type'], bill['number'] %></span>
   <span class="version">as <%= bill_version version['version_code'] %></span>
   <span class="issued_on">on <%= very_short_date version['issued_on'] %></span>
@@ -17,12 +19,10 @@
   <% if version['urls'] and version['urls']['xml'] %>
     <a class="file xml" href="<%= version['urls']['xml'] %>">HTML</a>
   <% end %>
-</div>
+</div> -->
 
 <% if item.data['search']['highlight'] %>
-  <dl class="highlight">
-    <dd class="content">
-      <%= bill_highlight item, interest %>
-    </dd>
-  </dl>
+  <p>
+    <%= bill_highlight item, interest %>
+  </p>
 <% end %>

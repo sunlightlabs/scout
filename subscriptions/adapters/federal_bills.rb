@@ -52,6 +52,10 @@ module Subscriptions
         url
       end
 
+      def self.search_name(subscription)
+        "Bills in Congress"
+      end
+
       def self.short_name(number, subscription, interest)
         "#{number > 1 ? "bills" : "bill"}"
       end

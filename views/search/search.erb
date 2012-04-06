@@ -1,0 +1,149 @@
+<% content_for :title do %>
+    <div class="trackSubscribe searchParameters">
+        <h2>'<%= h query %>'</h2>
+        in 
+        <% subscriptions.each_with_index do |subscription, i| %>
+            <%= "and" unless i == 0 %>
+            <a class="dataset" href="#"><%= subscription.search_name %></a>
+        <% end %>
+    </div>
+    <button>
+        <span>Subscribe</span>
+    </button>
+<% end %>
+
+<% content_for :sidebar_left do %>
+    <div class="module filters">
+        <h4>Filter search results</h4>
+        <form>
+            <fieldset>
+                <legend>Congress</legend>
+                <label><input type="checkbox" name="" value="" id="">Bills</label>
+                <label><input type="checkbox" name="" value="" id="">Speeches</label>
+            </fieldset>
+            <fieldset>
+                <legend>Regulations</legend>
+                <label><input type="checkbox" name="" value="" id="">Proposed/final regulations</label>
+            </fieldset>
+            <fieldset>                          
+                <legend>State Bills</legend>
+                <input type="checkbox" name="" value="" id="">
+                <select name="category">
+                    <option value="" selected="selected">--- All States ---</option>
+                    <% state_map.keys.sort.each do |code| %>
+                        <option value="<%= code %>"><%= state_map[code] %></option>
+                    <% end %>
+                </select>
+            </fieldset>
+            <button type="submit">
+                <span>Update results</span>
+            </button>
+        </form>
+    </div>
+    <%= recent_searches %>
+<% end %>
+
+<div class="contentArea right results">
+    
+    <% subscriptions.each do |subscription| %>
+        <div class="results_container"
+            data-subscription="<%= subscription.serialize %>"
+            >
+
+            Loading ...
+
+        </div>
+    <% end %>
+
+</div>
+
+<div class="clear"></div>
+
+<!-- 
+<div class="flag overlay">
+    <div class="clear"></div>
+    <div class="light white">
+        <div class="clear"></div>
+        <p>You've modified the search parameters on this subscription. Would you like to update it?</p>
+        <a class="button update textIndent" type="submit">
+            Update
+        </a>
+        <a class="ignore" type="submit">
+            No thanks
+        </a>
+    </div>
+    <div class="fade black"></div>  
+</div>
+
+ -->
+
+<script type="text/javascript">
+  // put in a delay block in case this is being rendered before the layout
+  $(function() {
+    var query = "<%= query %>";
+    // var query_encoded = encodeURIComponent(query);
+    
+    // var interest_id = user_subscriptions[query_encoded] ? user_subscriptions[query_encoded].interest_ud : null;
+
+    <% subscriptions.each do |subscription| %>
+      searchFor(query, "<%= subscription.serialize %>");
+    <% end %>
+
+    // $(".subscription_data").change(function() {
+    //     var subscription_type = $(this).parents("div.filter").data("subscription_type");
+    //     searchFor(interest, subscription_type);
+    // });
+  });
+
+  function searchFor(query, subscription) {
+      var container = $(".results div.results_container[data-subscription=" + subscription + "]");
+
+      // reset elements inside tab
+      
+      // assemble hash of any filter options
+      // var subscription_data = subscriptionData(subscription_type);
+
+      console.log("searching for " + query + " in " + subscription);
+      var query_slug = encodeURIComponent(query);
+      $.get("/fetch/search/" + subscription + "/" + query_slug, {}, function(data) {
+        console.log("done searching for " + query + " in " + subscription);
+
+        // container.find("div.loading_container").hide();
+        container.html(data.html);
+
+        // if (data.search_url) {
+        //   container.find("div.developer.json.search").show().find("a").attr("href", data.search_url);
+        // }
+
+        // error
+        if (data.count < 0)  {
+          // tab.addClass("error");
+        } else {
+          // container.find("header").show();
+          // container.find("div.logged_out").show();
+          // container.find("div.filter").show();
+          // container.find("header span.description").html(data.description);
+
+          // var button = $("div.tab." + subscription_type + " button.follow");
+
+          // var subscriptions = user_subscriptions[keyword_slug]; // global!
+          // if (subscriptions && subscriptions.subscriptions[subscription_type]) {
+          //   button.data("subscription_id", subscriptions.subscriptions[subscription_type]);
+          //   showSave(subscription_type, "unfollow");
+          // } else {
+          //   button.data("subscription_id", null);
+          //   showSave(subscription_type, "follow");
+          // }
+
+          // if (data.count == 0)
+          //   tab.addClass("empty");
+          
+        }
+
+      }).error(function() {
+        // tab.removeClass("loading");
+        // container.find("div.loading_container").hide();
+        // container.find("div.system_error").show();
+      });
+    }
+</script>

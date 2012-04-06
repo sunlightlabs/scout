@@ -30,6 +30,14 @@ module Subscriptions
         url
       end
 
+      def self.search_name(subscription)
+        "#{subscription.data['state'] || "State"} Bills"
+      end
+
+      def self.short_name(number, subscription, interest)
+        "#{subscription.data['state'] || "state"} #{number > 1 ? "bills" : "bill"}"
+      end
+
       # item_id has already been URI encoded
       def self.item_path(item)
         "/state_bill/#{item.item_id}"
@@ -76,10 +84,6 @@ module Subscriptions
         items.map {|bill| item_for bill}
       end
 
-      def self.short_name(number, subscription, interest)
-        "#{subscription.data['state'] || "state"} #{number > 1 ? "bills" : "bill"}"
-      end
-      
       def self.item_detail_for(bill)
         item_for bill.to_hash
       end
