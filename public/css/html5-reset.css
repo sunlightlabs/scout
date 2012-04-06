@@ -51,21 +51,3 @@ table {
     width: 100%;
     margin-bottom: 20px;
 }
-
-.ie7 img { -ms-interpolation-mode: bicubic; }
-
-.clearfix:before, .clearfix:after {  content: "\0020"; display: block; height: 0; visibility: hidden; }
-.clearfix:after { clear: both; }
-.clearfix { zoom: 1; }
-.clear { clear: both;}
-.textIndent{
-    text-indent: -9999em;
-}
-
-
-input, select, textarea {
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-}
