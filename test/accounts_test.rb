@@ -70,7 +70,7 @@ class AccountsTest < Test::Unit::TestCase
     email = "fake@example.com"
     assert_nil User.where(:email => email).first
 
-    post '/users', {:user => {:email => email, :password => "test", :password_confirmation => "test"}}
+    post '/account/new', {:user => {:email => email, :password => "test", :password_confirmation => "test"}}
 
     user = User.where(:email => email).first
     assert_not_nil user
@@ -86,7 +86,7 @@ class AccountsTest < Test::Unit::TestCase
     email = "invalid email"
     assert_nil User.where(:email => email).first
 
-    post '/users', {:user => {:email => email, :password => "test", :password_confirmation => "test"}}
+    post '/account/new', {:user => {:email => email, :password => "test", :password_confirmation => "test"}}
 
     assert_nil User.where(:email => email).first
 
@@ -99,7 +99,7 @@ class AccountsTest < Test::Unit::TestCase
     email = "fake@example.com"
     assert_nil User.where(:email => email).first
 
-    post '/users', {:user => {:email => email, :password => "", :password_confirmation => ""}}
+    post '/account/new', {:user => {:email => email, :password => "", :password_confirmation => ""}}
 
     assert_nil User.where(:email => email).first
 
@@ -114,7 +114,7 @@ class AccountsTest < Test::Unit::TestCase
     assert_equal 'daily', user.delivery['email_frequency']
     assert_equal nil, user.phone
 
-    put '/user', {:user => {:phone => "555-1212", :delivery => {:email_frequency => "immediate", :mechanism => "sms"}}}, login(user)
+    put '/account/user', {:user => {:phone => "555-1212", :delivery => {:email_frequency => "immediate", :mechanism => "sms"}}}, login(user)
 
     user.reload
 
@@ -132,7 +132,7 @@ class AccountsTest < Test::Unit::TestCase
     assert_equal 'daily', user.delivery['email_frequency']
     assert_equal nil, user.phone
 
-    put '/user', {:user => {:phone => "", :delivery => {:email_frequency => "immediate", :mechanism => "sms"}}}, login(user)
+    put '/account/user', {:user => {:phone => "", :delivery => {:email_frequency => "immediate", :mechanism => "sms"}}}, login(user)
 
     user.reload
 
@@ -153,7 +153,7 @@ class AccountsTest < Test::Unit::TestCase
 
     Email.should_receive(:deliver!).with("Password Reset Request", user.email, anything, anything)
 
-    post '/login/forgot', :email => user.email
+    post '/account/password/forgot', :email => user.email
 
     user.reload
     assert_not_equal old_token, user.reset_token
@@ -164,7 +164,7 @@ class AccountsTest < Test::Unit::TestCase
 
   def test_start_reset_password_process_with_bad_email
     Email.should_not_receive(:deliver!)
-    post '/login/forgot', :email => "notvalid@example.com"
+    post '/account/password/forgot', :email => "notvalid@example.com"
 
     assert_equal 302, last_response.status
     assert_equal '/login', redirect_path
@@ -178,7 +178,7 @@ class AccountsTest < Test::Unit::TestCase
 
     Email.should_receive(:deliver!).with("Password Reset", user.email, anything, anything)
 
-    get '/account/reset', :reset_token => reset_token
+    get '/account/password/reset', :reset_token => reset_token
     user.reload
 
     assert_not_equal reset_token, user.reset_token
@@ -192,7 +192,7 @@ class AccountsTest < Test::Unit::TestCase
   def test_visit_reset_password_link_with_no_token
     Email.should_not_receive(:deliver!)
 
-    get '/account/reset'
+    get '/account/password/reset'
     
     assert_equal 404, last_response.status
   end
@@ -200,7 +200,7 @@ class AccountsTest < Test::Unit::TestCase
   def test_visit_reset_password_link_with_invalid_token
     Email.should_not_receive(:deliver!)
 
-    get '/account/reset', :reset_token => "whatever"
+    get '/account/password/reset', :reset_token => "whatever"
     
     assert_equal 404, last_response.status
   end
@@ -213,7 +213,7 @@ class AccountsTest < Test::Unit::TestCase
     assert !User.authenticate(user, "not-test")
     assert user.should_change_password
 
-    put '/user/password', {:old_password => "test", :password => "not-test", :password_confirmation => "not-test"}, login(user)
+    put '/account/password/change', {:old_password => "test", :password => "not-test", :password_confirmation => "not-test"}, login(user)
 
     user.reload
     assert_not_equal old_password_hash, user.password_hash
@@ -226,7 +226,7 @@ class AccountsTest < Test::Unit::TestCase
   end
 
   def test_change_password_not_logged_in
-    put '/user/password', {:old_password => "test", :password => "not-test", :password_confirmation => "not-test"}
+    put '/account/password/change', {:old_password => "test", :password => "not-test", :password_confirmation => "not-test"}
 
     assert_equal 302, last_response.status
     assert_equal '/', redirect_path
@@ -238,7 +238,7 @@ class AccountsTest < Test::Unit::TestCase
     assert User.authenticate(user, "test")
     assert !User.authenticate(user, "not-test")
 
-    put '/user/password', {:old_password => "uh oh", :password => "not-test", :password_confirmation => "not-test"}, login(user)
+    put '/account/password/change', {:old_password => "uh oh", :password => "not-test", :password_confirmation => "not-test"}, login(user)
 
     user.reload
     assert User.authenticate(user, "test")
@@ -254,7 +254,7 @@ class AccountsTest < Test::Unit::TestCase
     assert User.authenticate(user, "test")
     assert !User.authenticate(user, "not-test")
 
-    put '/user/password', {:old_password => "test", :password => "not-test", :password_confirmation => "not-not-test"}, login(user)
+    put '/account/password/change', {:old_password => "test", :password => "not-test", :password_confirmation => "not-not-test"}, login(user)
 
     user.reload
     assert User.authenticate(user, "test")
@@ -270,7 +270,7 @@ class AccountsTest < Test::Unit::TestCase
     assert User.authenticate(user, "test")
     assert !User.authenticate(user, "")
 
-    put '/user/password', {:old_password => "test", :password => "", :password_confirmation => ""}, login(user)
+    put '/account/password/change', {:old_password => "test", :password => "", :password_confirmation => ""}, login(user)
 
     user.reload
     assert User.authenticate(user, "test")
