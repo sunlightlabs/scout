@@ -78,8 +78,7 @@ form{
     font-size: 81%;
     font-weight: bold;
 }
-label{
-}
+
 input[type="text"]{
     display: block;
     background-color: #ffffff;
@@ -96,7 +95,7 @@ input[type="text"]{
 /*-- Header Styling --*/
 
 .headerWrapper{
-    background: url('../images/bg_header.png') center bottom repeat-x;
+    background: url('/images/bg_header.png') center bottom repeat-x;
     display: block;
     min-height: 247px;
 }
@@ -110,23 +109,24 @@ nav li{
 }
 
 header h1{
-    background: url('../images/logo_scout.png') top left no-repeat;
+    background: url('/images/logo_scout.png') top left no-repeat;
     display: block;
     width: 207px;
     height: 58px;
     margin-top: 70px;
     float: left;
 }
+
 #userNav{
     margin-top: 5px;
 }
 
 #userNav li#subscriptions{
-    background: url('../images/icon_subscriptions.png') 0 1px  no-repeat;
+    background: url('/images/icon_subscriptions.png') 0 1px  no-repeat;
     padding-left: 23px;
 }
 #userNav li#settings{
-    background: url('../images/icon_settings.png') top left no-repeat;
+    background: url('/images/icon_settings.png') top left no-repeat;
     padding-left: 22px;
 }
 #newsearchform .filters{
@@ -146,7 +146,7 @@ header h1{
     width: 380px;
     padding: 0 5px 0 5px;
     height: 51px;
-    background: url('../images/newSearch.png') top left no-repeat;
+    background: url('/images/newSearch.png') top left no-repeat;
     display: block;
     -webkit-appearance: textfield;
     -moz-appearance: textfield;
@@ -159,13 +159,13 @@ header h1{
 }
 #newsearchform button{
     float: left;
-    background: url('../images/btn_newSearch.png') top left no-repeat;
+    background: url('/images/btn_newSearch.png') top left no-repeat;
     width: 54px;
     height: 51px;
     margin-left: 14px;
 }
 #newsearchform button:hover{
-    background: url('../images/btn_newSearch.png') bottom left no-repeat;
+    background: url('/images/btn_newSearch.png') bottom left no-repeat;
 }
 
 .count{
@@ -241,7 +241,7 @@ div.contentWrapper{
 .sidebar .module{
     padding: 33px 0;
     margin-left: 10px;
-    background: url('../images/sidebar_divider.png') bottom center no-repeat;
+    background: url('/images/sidebar_divider.png') bottom center no-repeat;
 }
 .sidebar form{
     color: #5c5b60;
@@ -263,13 +263,13 @@ div.contentWrapper{
     margin-bottom: 10px;
 }
 .filters form button{
-    background: url('../images/btn_updateResults.png') left top no-repeat;
+    background: url('/images/btn_updateResults.png') left top no-repeat;
     width: 231px;
     height: 51px;
 }
 
 .filters form button:hover{
-    background: url('../images/btn_updateResults.png') left bottom no-repeat;
+    background: url('/images/btn_updateResults.png') left bottom no-repeat;
 }
 .filters label{
     font-weight: normal;
@@ -279,12 +279,12 @@ div.contentWrapper{
 
 /*-- Footer Styling --*/
 .footerWrapper{
-    background: url('../images/bg_footer.png') center top repeat-x;
+    background: url('/images/bg_footer.png') center top repeat-x;
     display: block;
 }
 
 .sunlightFoundation{
-    background: url('../images/logo_sunlightFoundation.png') top left no-repeat;
+    background: url('/images/logo_sunlightFoundation.png') top left no-repeat;
     display: block;
     width: 159px;
     height: 48px;
@@ -347,22 +347,22 @@ footer nav{
     margin-top: 15px;
 }
 #mailinglistform button{
-    background: url('../images/btn_signupForm.png') left top no-repeat;
+    background: url('/images/btn_signupForm.png') left top no-repeat;
     width: 104px;
     height: 29px;
 }
 #mailinglistform button:hover{
-    background: url('../images/btn_signupForm.png') left bottom no-repeat;
+    background: url('/images/btn_signupForm.png') left bottom no-repeat;
 }
 
 
 
 /*-- Search Results Styling --*/
 .results .contentArea{
-    background: url('../images/tinyshadow.png') top left repeat-x;
+    background: url('/images/tinyshadow.png') top left repeat-x;
 }
 .pageTitle{
-    background: url('../images/tinyborder.png') bottom left repeat-x;
+    background: url('/images/tinyborder.png') bottom left repeat-x;
     padding: 16px 0 16px 10px;
 }
 
@@ -373,22 +373,22 @@ footer nav{
 
 .pageTitle button{
     float: right;
-    background: url('../images/btn_subscribe.png') left top no-repeat;
+    background: url('/images/btn_subscribe.png') left top no-repeat;
     width: 150px;
     height: 51px;
 }
 .pageTitle button:hover{
-    background: url('../images/btn_subscribe.png') left bottom no-repeat;
+    background: url('/images/btn_subscribe.png') left bottom no-repeat;
 }
 .results .contentArea{
     padding-top: 53px;
 }
 .contentArea.right section{
-    background: url('../images/tinyborder_andshadow.png') right top repeat-x;
+    background: url('/images/tinyborder_andshadow.png') right top repeat-x;
     margin-bottom: 155px;
-    /*background: url('../images/tinyborder_andshadow.png') right top repeat-x,-moz-linear-gradient(-45deg,  rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%); /* FF3.6+ */
-    /*background: url('../images/tinyborder_andshadow.png') right top repeat-x, -webkit-gradient(linear, left top, right bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(100%,rgba(255,255,255,0))); /* Chrome,Safari4+ */
-    /*background: url('../images/tinyborder_andshadow.png') right top repeat-x, -webkit-linear-gradient(-45deg,  rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* Chrome10+,Safari5.1+ */
+    /*background: url('/images/tinyborder_andshadow.png') right top repeat-x,-moz-linear-gradient(-45deg,  rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%); /* FF3.6+ */
+    /*background: url('/images/tinyborder_andshadow.png') right top repeat-x, -webkit-gradient(linear, left top, right bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(100%,rgba(255,255,255,0))); /* Chrome,Safari4+ */
+    /*background: url('/images/tinyborder_andshadow.png') right top repeat-x, -webkit-linear-gradient(-45deg,  rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* Chrome10+,Safari5.1+ */
     /*background: -o-linear-gradient(-45deg,  rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* Opera 11.10+ */
     /*background: -ms-linear-gradient(-45deg,  rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* IE10+ */
     /*background: linear-gradient(-45deg,  rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* W3C */
@@ -400,11 +400,11 @@ footer nav{
 }
 .contentArea ul{
     padding-top: 20px;
-    background: url('../images/tinyborder.png') center bottom repeat-x;
+    background: url('/images/tinyborder.png') center bottom repeat-x;
 }
 .results .contentArea li{
     padding: 33px 10px 33px 33px;
-    background: url('../images/tinyborder_entry.png') center top no-repeat;
+    background: url('/images/tinyborder_entry.png') center top no-repeat;
 }
 
 .results .contentArea.right li:hover{
@@ -440,7 +440,7 @@ footer nav{
     color: #cdb81f;
 }
 .contentArea.right h3{
-    background: url('../images/bg_sectionHeader.png') top right no-repeat;
+    background: url('/images/bg_sectionHeader.png') top right no-repeat;
     display: inline-block;
     height: 38px;
     padding: 7px 70px 0 33px;
@@ -462,7 +462,7 @@ footer nav{
 .viewMore{
     float: right;
     font-size: 81%;
-    background: url('../images/more.png') right 3px no-repeat;
+    background: url('/images/more.png') right 3px no-repeat;
     padding-right: 45px;
     margin-top: 10px;
 }
@@ -557,7 +557,7 @@ footer nav{
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     padding: 16px 16px;
-    background: url('../images/tinyborder_andshadow.png') top left repeat-x;
+    background: url('/images/tinyborder_andshadow.png') top left repeat-x;
     column-break-inside: avoid;
     -moz-column-break-inside: avoid;
     -webkit-column-break-inside: avoid;
@@ -569,26 +569,26 @@ footer nav{
 }
 .rssFeed{
     float: right;
-    background: url('../images/rss.png') left top no-repeat;
+    background: url('/images/rss.png') left top no-repeat;
     width: 22px;
     height: 22px;
     text-indent: -9999em;
 }
 .rssFeed:hover{
-    background: url('../images/rss.png') left bottom no-repeat;
+    background: url('/images/rss.png') left bottom no-repeat;
 }
 .subscriptions .contentArea form{
     margin-bottom: 155px;
 }
 
 .subscriptions .contentArea form button{
-    background: url('../images/btn_updateSubscriptions.png') left top no-repeat;
+    background: url('/images/btn_updateSubscriptions.png') left top no-repeat;
     width: 231px;
     height: 51px;
 }
 
 .subscriptions .contentArea form button:hover{
-    background: url('../images/btn_updateSubscriptions.png') left bottom no-repeat;
+    background: url('/images/btn_updateSubscriptions.png') left bottom no-repeat;
 }
 .subscriptions legend{
     font-family: "alternate-gothic-no-3-d", arial, 'helvetica Neue', sans-serif;
@@ -691,14 +691,14 @@ li.email{
 }
 
 a.update.button{
-    background: url('../images/btn_update.png') left top no-repeat;
+    background: url('/images/btn_update.png') left top no-repeat;
     width: 124px;
     height: 51px;
     display: block;
     float: left;
 }
 a.update.button:hover{
-    background: url('../images/btn_update.png') left bottom no-repeat;
+    background: url('/images/btn_update.png') left bottom no-repeat;
 }
 a.ignore{
     float: left;
