@@ -29,11 +29,11 @@ end
 require 'controllers/users'
 require 'controllers/subscriptions'
 require 'controllers/feeds'
+require 'controllers/search'
 
-
-# interest count is displayed in layout header for logged in users
 
 before do
+  # interest count is displayed in layout header for logged in users
   @interests = logged_in? ? current_user.interests.desc(:created_at).all.map {|k| [k, k.subscriptions]} : []
 end
 
@@ -42,102 +42,6 @@ get '/' do
   erb :index
 end
 
-
-# search routes
-
-get '/search/:interest' do
-  interest_in = params[:interest].gsub("\"", "")
-  sorted_types = search_data.sort_by {|k, v| v[:order]}
-
-  erb :search, :layout => !pjax?, :locals => {
-    :types => sorted_types,
-    :interest_in => interest_in
-  }
-end
-
-# landing page for item
-# get '/:interest_type/:item_id'
-get(/^\/(#{interest_data.keys.join '|'})\/([^\/]+)\/?/) do
-  interest_type = params[:captures][0]
-  item_id = params[:captures][1]
-
-  interest = nil
-  if logged_in?
-    interest = current_user.interests.where(:in => item_id, :interest_type => interest_type).first
-  end
-
-  erb :show, :layout => !pjax?, :locals => {
-    :interest_type => interest_type, 
-    :item_id => item_id, 
-    :interest => interest
-  }
-end
-
-# actual JSON data for item
-# get '/:find/:interest_type/:item_id' 
-get(/^\/find\/(#{interest_data.keys.join '|'})\/([^\/]+)$/) do
-  interest_type = params[:captures][0]
-  item_id = params[:captures][1]
-  subscription_type = interest_data[interest_type][:adapter]
-
-  unless item = Subscriptions::Manager.find(subscription_type, item_id)
-    halt 404 and return
-  end
-
-  html = erb :"subscriptions/#{subscription_type}/_show", :layout => false, :locals => {
-    :interest_type => interest_type, 
-    :item => item
-  }
-
-  headers["Content-Type"] = "application/json"
-  {
-    :html => html,
-    :item_url => item.find_url
-  }.to_json
-end
-
-get '/items/:interest/:subscription_type' do
-  interest_in = params[:interest].strip
-  subscription_type = params[:subscription_type]
-
-  params[:subscription_data] ||= {} # must default to empty hash
-
-  # make new, temporary subscription items
-  results = Subscription.new(
-    :interest_in => interest_in,
-    :subscription_type => params[:subscription_type],
-    :data => params[:subscription_data]
-  ).search(:page => (params[:page] ? params[:page].to_i : 1))
-    
-  # if results is nil, it usually indicates an error in one of the remote services -
-  # this would be where to catch it and display something
-  if results.nil?
-    puts "[#{subscription_type}][#{interest_in}][search] ERROR while loading this"
-  end
-  
-  if results
-    results = results.sort {|a, b| b.date <=> a.date}
-  end
-  
-  html = erb :items, :layout => false, :locals => {
-    :items => results, 
-    :subscription_type => subscription_type,
-    :interest_in => interest_in
-  }
-
-  headers["Content-Type"] = "application/json"
-  
-  count = results ? results.size : -1
-  {
-    :count => count,
-    :description => "#{search_data[params[:subscription_type]][:search]} matching \"#{interest_in}\"",
-    :html => html,
-    :search_url => (count > 0 ? results.first.search_url : nil)
-  }.to_json
-end
-
-
-# controller-wide helpers
 
 helpers do
 

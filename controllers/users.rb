@@ -27,7 +27,7 @@ post '/login' do
 
 end
 
-post '/users' do
+post '/account/new' do
   @new_user = User.new params[:user]
 
   unless @new_user.password.present? and @new_user.password_confirmation.present?
@@ -45,7 +45,7 @@ post '/users' do
   end
 end
 
-post '/login/forgot' do
+post '/account/password/forgot' do
   unless params[:email] and user = User.where(:email => params[:email].strip).first
     flash[:forgot] = "No account found by that email."
     redirect_home and return
@@ -70,7 +70,7 @@ end
 
 ## Account management
 
-put '/user/password' do
+put '/account/password/change' do
   requires_login
 
   unless User.authenticate(current_user, params[:old_password])
@@ -96,7 +96,7 @@ put '/user/password' do
 
 end
 
-get '/account/reset' do
+get '/account/password/reset' do
   unless params[:reset_token] and user = User.where(:reset_token => params[:reset_token]).first
     halt 404 and return
   end
@@ -123,7 +123,7 @@ get '/account/reset' do
   redirect_home
 end
 
-put '/user' do
+put '/account/user' do
   requires_login
   
   current_user.attributes = params[:user]
