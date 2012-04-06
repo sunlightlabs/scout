@@ -1,3 +1,32 @@
+## Login/signup/forgot
+
+get '/logout' do
+  log_out if logged_in?
+  redirect '/'
+end
+
+get '/login' do
+  @new_user = User.new
+  erb :"account/login"
+end
+
+post '/login' do
+  unless params[:email] and user = User.where(:email => params[:email]).first
+    flash[:user] = "No account found by that email."
+    redirect_home and return
+  end
+
+  if User.authenticate(user, params[:password])
+    log_in user
+    redirect_home
+  else
+    flash.now[:user] = "Invalid password."
+    @new_user = User.new
+    erb :"account/login"
+  end
+
+end
+
 post '/users' do
   @new_user = User.new params[:user]
 
@@ -12,9 +41,34 @@ post '/users' do
     flash[:success] = "Your account has been created. Scout at will."
     redirect_home
   else
-    erb :index
+    erb :"account/login"
   end
 end
+
+post '/login/forgot' do
+  unless params[:email] and user = User.where(:email => params[:email].strip).first
+    flash[:forgot] = "No account found by that email."
+    redirect_home and return
+  end
+
+  # issue a new reset token
+  user.new_reset_token
+
+  # email the user with a link including the token
+  subject = "Request to reset your password"
+  body = erb :"account/mail/reset_password", :layout => false, :locals => {:user => user}
+
+  unless user.save and Email.deliver!("Password Reset Request", user.email, subject, body)
+    flash[:forgot] = "Your account was found, but there was an error actually sending the reset password email. Try again later, or write us and we can try to figure out what happened."
+    redirect_home and return
+  end
+
+  flash[:forgot] = "We've sent an email to reset your password."
+  redirect_home
+end
+
+
+## Account management
 
 put '/user/password' do
   requires_login
@@ -40,44 +94,6 @@ put '/user/password' do
     erb :index
   end
 
-end
-
-post '/login' do
-  unless params[:email] and user = User.where(:email => params[:email]).first
-    flash[:user] = "No account found by that email."
-    redirect_home and return
-  end
-
-  if User.authenticate(user, params[:password])
-    log_in user
-    redirect_home
-  else
-    flash.now[:user] = "Invalid password."
-    erb :index
-  end
-
-end
-
-post '/login/forgot' do
-  unless params[:email] and user = User.where(:email => params[:email].strip).first
-    flash[:forgot] = "No account found by that email."
-    redirect_home and return
-  end
-
-  # issue a new reset token
-  user.new_reset_token
-
-  # email the user with a link including the token
-  subject = "Request to reset your password"
-  body = erb :"account/mail/reset_password", :layout => false, :locals => {:user => user}
-
-  unless user.save and Email.deliver!("Password Reset Request", user.email, subject, body)
-    flash[:forgot] = "Your account was found, but there was an error actually sending the reset password email. Try again later, or write us and we can try to figure out what happened."
-    redirect_home and return
-  end
-
-  flash[:forgot] = "We've sent an email to reset your password."
-  redirect_home
 end
 
 get '/account/reset' do
@@ -127,15 +143,27 @@ put '/user' do
   end
 end
 
-get '/logout' do
-  log_out if logged_in?
-  redirect '/'
-end
-
 get '/account/subscriptions' do
-  erb :subscriptions
+  erb :"account/subscriptions"
 end
 
 get '/account/settings' do
-  erb :settings
+  erb :"account/settings"
+end
+
+
+# login helpers
+
+helpers do
+  def redirect_home
+    redirect(params[:redirect] || '/login')
+  end
+  
+  def log_in(user)
+    session['user_email'] = user.email
+  end
+  
+  def log_out
+    session['user_email'] = nil
+  end
 end

@@ -29,16 +29,20 @@ require 'controllers/users'
 require 'controllers/subscriptions'
 require 'controllers/feeds'
 
-# routes
+
+# interest count is displayed in layout header for logged in users
 
 before do
-  @new_user = logged_in? ? nil : User.new
   @interests = logged_in? ? current_user.interests.desc(:created_at).all.map {|k| [k, k.subscriptions]} : []
 end
+
 
 get '/' do
   erb :index
 end
+
+
+# search routes
 
 get '/search/:interest' do
   interest_in = params[:interest].gsub("\"", "")
@@ -132,7 +136,7 @@ get '/items/:interest/:subscription_type' do
 end
 
 
-# general/auth helpers
+# controller-wide helpers
 
 helpers do
 
@@ -148,19 +152,8 @@ helpers do
     @current_user ||= User.where(:email => session['user_email']).first
   end
 
-  def redirect_home
-    redirect(params[:redirect] || '/')
-  end
-  
-  def log_in(user)
-    session['user_email'] = user.email
-  end
-  
-  def log_out
-    session['user_email'] = nil
-  end
-  
   def requires_login
     redirect '/' unless logged_in?
   end
+
 end

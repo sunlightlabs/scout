@@ -109,6 +109,27 @@ input[type="text"]{
 }
 
 
+/*-- Flash Messages --*/
+
+#flash div.flash {
+  padding: 10px 20px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+#flash div.flash.success {
+  color: #348145;
+}
+
+#flash div.flash.failure,
+#flash div.flash.user,
+#flash div.flash.password,
+#flash div.flash.forgot {
+  color: #C13445;
+  padding: 0;
+
+}
+
 
 /*-- Header Styling --*/
 
@@ -139,14 +160,15 @@ header h1{
     margin-top: 5px;
 }
 
-#userNav li#subscriptions{
+#userNav li.subscriptions{
     background: url('/images/icon_subscriptions.png') 0 1px  no-repeat;
     padding-left: 23px;
 }
-#userNav li#settings{
+#userNav li.settings{
     background: url('/images/icon_settings.png') top left no-repeat;
     padding-left: 22px;
 }
+
 #newsearchform .filters{
     display: none;
 }

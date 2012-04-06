@@ -30,7 +30,7 @@ class AccountsTest < Test::Unit::TestCase
     assert !user.should_change_password
 
     assert_equal 302, last_response.status
-    assert_equal '/', redirect_path
+    assert_equal '/login', redirect_path
     
   end
 
@@ -63,7 +63,7 @@ class AccountsTest < Test::Unit::TestCase
     assert user.should_change_password
 
     assert_equal 302, last_response.status
-    assert_equal '/', redirect_path
+    assert_equal '/login', redirect_path
   end
 
   def test_create_user
@@ -79,7 +79,7 @@ class AccountsTest < Test::Unit::TestCase
     user.delete
 
     assert_equal 302, last_response.status
-    assert_equal '/', redirect_path
+    assert_equal '/login', redirect_path
   end
 
   def test_create_user_invalid
@@ -104,7 +104,7 @@ class AccountsTest < Test::Unit::TestCase
     assert_nil User.where(:email => email).first
 
     assert_equal 302, last_response.status
-    assert_equal '/', redirect_path
+    assert_equal '/login', redirect_path
   end
 
   def test_update_delivery_settings
@@ -159,7 +159,7 @@ class AccountsTest < Test::Unit::TestCase
     assert_not_equal old_token, user.reset_token
 
     assert_equal 302, last_response.status
-    assert_equal '/', redirect_path
+    assert_equal '/login', redirect_path
   end
 
   def test_start_reset_password_process_with_bad_email
@@ -167,7 +167,7 @@ class AccountsTest < Test::Unit::TestCase
     post '/login/forgot', :email => "notvalid@example.com"
 
     assert_equal 302, last_response.status
-    assert_equal '/', redirect_path
+    assert_equal '/login', redirect_path
   end
 
   def test_visit_reset_password_link
@@ -186,7 +186,7 @@ class AccountsTest < Test::Unit::TestCase
     assert user.should_change_password
 
     assert_equal 302, last_response.status
-    assert_equal '/', redirect_path
+    assert_equal '/login', redirect_path
   end
 
   def test_visit_reset_password_link_with_no_token
@@ -222,7 +222,7 @@ class AccountsTest < Test::Unit::TestCase
     assert !user.should_change_password
 
     assert_equal 302, last_response.status
-    assert_equal '/', redirect_path
+    assert_equal '/login', redirect_path
   end
 
   def test_change_password_not_logged_in
@@ -245,7 +245,7 @@ class AccountsTest < Test::Unit::TestCase
     assert !User.authenticate(user, "not-test")
 
     assert_equal 302, last_response.status
-    assert_equal '/', redirect_path
+    assert_equal '/login', redirect_path
   end
 
   def test_change_password_mismatched_new_passwords
@@ -277,7 +277,7 @@ class AccountsTest < Test::Unit::TestCase
     assert !User.authenticate(user, "")
 
     assert_equal 302, last_response.status
-    assert_equal '/', redirect_path
+    assert_equal '/login', redirect_path
   end
 
 end

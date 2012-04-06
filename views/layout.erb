@@ -37,6 +37,9 @@
             <nav>
                 <ul id="userNav">
                     <% if logged_in? %>
+                        <li>
+                            <%= current_user.email %>
+                        </li>
                         <li class="subscriptions">
                             <a href="/account/subscriptions">
                                 Subscriptions
@@ -51,10 +54,7 @@
                         </li>
                     <% else %>
                         <li>
-                            <a href="/login">Login</a>
-                        </li>
-                        <li>
-                            <a href="/login">Sign up</a>
+                            <a href="/login">Login or Sign up</a>
                         </li>
                     <% end %>
                 </ul>
@@ -109,7 +109,7 @@
                     Sunlight Foundation
                 </div>
                 <p>
-                    Founded in 2006, the Sunlight Foundation is a non-partisan non-profit that uses cutting-edge technology and ideas to make government transparent and accountable. 
+                    Founded in 2006, the Sunlight Foundation is a non-partisan non-profit that uses cutting-edge technology and ideas to make government transparent and accountable.
                 </p>
                 <p>
                     Visit <a href="http://sunlightfoundation.com">SunlightFoundation.com</a> to learn more.

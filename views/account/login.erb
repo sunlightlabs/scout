@@ -1,0 +1,44 @@
+<div class="contentArea left">
+
+    <%= flash_for [:user, :forgot] %>
+
+    <h2>Sign Up</h2>
+
+    <% if @new_user and @new_user.errors %>
+        <% @new_user.errors.each do |field, msg| %>
+            <div class="user error"><%= msg %></div>
+        <% end %>
+    <% end %>
+
+    <% form_for @new_user, "/users", :method => "post", :class => "signup_form" do |f| %>
+    <form action="/users" method="post" class="signup_form">
+        <input class="redirect" name="redirect" type="hidden" value="<%= params[:redirect] %>" />
+
+        <%= f.text_field :email, :type => "email", :placeholder => "your email" %>
+        <%= f.password_field :password, :placeholder => "password" %>
+        <%= f.password_field :password_confirmation, :placeholder => "password again" %>
+        <br/>
+        <button class="text login">OK</button>
+    </form>
+    <% end %>
+
+    <h2>Login</h2>
+    <form action="/login" method="post" class="signup_form">
+        <input class="redirect" name="redirect" type="hidden" value="<%= params[:redirect] %>" />
+
+        <input class="email" type="email" placeholder="your email" name="email" />
+        <input class="password" type="password" placeholder="password" name="password" />
+        <br/>
+        <button class="text login">OK</button>
+    </form>
+
+    <h2>Forgot Password</h2>
+    <form action="/login/forgot" method="post" class="signup_form">
+        <input class="redirect" name="redirect" type="hidden" value="<%= params[:redirect] %>" />
+
+        <input class="email" type="email" placeholder="your email" name="email" />
+        <br/>
+        <button class="text login">OK</button>
+    </form>
+
+</div>
