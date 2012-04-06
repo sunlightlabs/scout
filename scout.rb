@@ -3,6 +3,7 @@
 require 'config/environment'
 require 'sinatra/content_for'
 require 'sinatra/flash'
+require 'rack/file'
 
 set :logging, false
 set :views, 'views'
