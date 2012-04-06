@@ -3,7 +3,7 @@ source 'http://rubygems.org'
 gem 'json', '1.6.5'
 
 gem 'sinatra', '1.3.2'
-gem 'sinatra-content-for', '0.2'
+gem 'sinatra-contrib', '1.3.1'
 gem 'sinatra-flash', '0.3.0'
 
 gem 'padrino-helpers', '0.10.6'

@@ -2,8 +2,16 @@
 module GeneralHelpers
   helpers ::Padrino::Helpers
 
+  def hide_search
+    content_for(:hide_search) { true }
+  end
+
   def flash_for(types)
-    partial "partials/flash", :engine => "erb", :locals => {:types => types}
+    partial "layout/flash", :engine => "erb", :locals => {:types => types}
+  end
+
+  def recent_searches
+    partial "layout/recent_searches", :engine => "erb", :locals => {}
   end
   
   # index of subscription adapters and associated copy

@@ -131,3 +131,11 @@ get '/logout' do
   log_out if logged_in?
   redirect '/'
 end
+
+get '/account/subscriptions' do
+  erb :subscriptions
+end
+
+get '/account/settings' do
+  erb :settings
+end

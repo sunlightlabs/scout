@@ -1,112 +1,136 @@
-<!doctype html>
-<html lang="en">
-
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html lang="en" class="ie6"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="en" class="ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="en" class="ie8"> <![endif]-->
+<!--[if IE 9 ]>    <html lang="en" class="ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html lang="en"> <!--<![endif]-->
 <head>
-  <meta charset="utf-8" />
+    <script type="text/javascript" src="http://use.typekit.com/bsl1eko.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
 
-  <title></title>  
-  
-  <link href='http://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
-  <link href='http://fonts.googleapis.com/css?family=Droid+Serif' rel='stylesheet' type='text/css'>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-  <link rel="stylesheet" href="/css/html5-reset.css" />
-  <link rel="stylesheet" href="/css/old.css" />
-  
-  <!--[if lt IE 9]><script src="/js/html5.js"></script><![endif]-->
-  
-  <script src="/js/jquery-1.7.1.min.js"></script>
-  <script src="/js/jquery.pjax.js"></script>
-  <script src="/js/jquery.placehold-0.3.min.js"></script>
-  <script src="/js/h5f.min.js"></script>
-  <script src="/js/old.js"></script>
+    <title>Scout</title>
 
-  <script type="text/javascript">
-    // client-side map of a user's keywords and subscriptions, 
-    // complete with delicious database IDs (will swap this with a slug or something later)
-    var user_subscriptions = {};
-    var keyword;
-    <% @interests.each do |interest, subscriptions| %>
-      keyword = encodeURIComponent("<%= js_escape interest.in %>");
-      user_subscriptions[keyword] = {
-        keyword_id: "<%= interest.id.to_s %>",
-        subscriptions: {}
-      };
-      <% subscriptions.each do |subscription| %>
-        user_subscriptions[keyword].subscriptions.<%= subscription.subscription_type %> = '<%= subscription.id.to_s %>';
-      <% end %>
-    <% end %>
-  </script>
+    <link rel="stylesheet" href="/css/html5-reset.css" />
+    <link rel="stylesheet" href="/css/main.css" />
+  
+    <!--[if lt IE 9]>
+    <script src="/js/html5.js"></script>
+    <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
+    <![endif]-->
+
+    <link rel="shortcut icon" href="/favicon.ico">
+
+    <script src="/js/jquery-1.7.1.min.js"></script>
+    <script src="/js/jquery.placehold-0.3.min.js"></script>
+    <script src="/js/h5f.min.js"></script>
+    <script src="/js/main.js"></script>
+
 </head>
+<body class="search results">
 
-<body>
+    <div class="headerWrapper">
+        <header class="contentWrapper">
+            <nav>
+                <ul id="userNav">
+                    <% if logged_in? %>
+                        <li id="subscriptions">
+                            <a href="/subscriptions.html">
+                                Subscriptions
+                                <span class="count">(7)</span>
+                            </a>
+                        </li>
+                        <li id="settings">
+                            <a href="/settings.html">Settings</a>
+                        </li>
+                        <li id="logout">
+                            <a href="/logout.html">Log Out</a>
+                        </li>
+                    <% else %>
+                        <li id="login">
+                            <a href="/login.html">Login</a>
+                        </li>
+                        <li id="signup">
+                            <a href="/signup.html">Sign up</a>
+                        </li>
+                    <% end %>
+                </ul>
+            </nav>
+            
+            <div class="clear"></div>
+            
+            <a href="/">
+                <h1 class="textIndent">Scout</h1>
+            </a>
 
-  <section class="main">
-
-    <section class="entry">
-      <% if defined?(interest) and interest and interest.errors.any? %>
-        <div class="errors">
-          <% interest.errors.full_messages.each do |msg| %>
-            <span><%= msg %></span>
-          <% end %>
-        </div>
-      <% end %>
-      
-      <form class="search" action="/search" method="get" onsubmit="return false">
-        <input type="text" class="query" name="keyword" placeholder="keyword or phrase" />
-        
-        <div class="buttons">
-          <button class="image search">Search</button>
-        </div>
-      </form>
-    </section>
-    
-    <section id="content">
-      <%= yield %>
-    </section>
-
-  </section>
-
-  <section class="sidebar">
-    <div class="login">
-      <% if logged_in? %>
-        <%= partial "account/logged_in", :engine => "erb", :locals => {:user => current_user} %>
-      <% else %>
-        <%= partial "account/signin", :engine => "erb" %>
-      <% end %>
+            <% unless yield_content(:hide_search) %>
+                <%= partial "layout/search", :engine => "erb", :locals => {} %>
+            <% end %>
+        </header>
     </div>
-    
-    <ul class="subscriptions">
-      <% @interests.each do |interest, subscriptions| %>
-        <%= partial "partials/interest", :engine => "erb", :locals => {:interest => interest, :subscriptions => subscriptions} %>
-      <% end %>
-    </ul>
+
+    <div class="contentWrapper">
+
+        <% if title_area = yield_content(:title) %>
+            <div class="pageTitle">
+                <%= title_area %>
+            </div>
+        <% end %>
+
+        <% if left_bar = yield_content(:sidebar_left) %>
+            <div class="sidebar left">
+                <%= left_bar %>
+            </div>
+        <% end %>
+
+        <%= yield %>
+
+        <% if right_bar = yield_content(:sidebar_right) %>
+            <div class="sidebar right">
+                <%= right_bar %>
+            </div>
+        <% end %>
+    </div>
+
+    <div class="footerWrapper">
+        <footer class="contentWrapper">
+            <nav>
+                <ul>
+                    <li><a href="/about">About</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="aboutSF">
+                <div class="sunlightFoundation textIndent">
+                    Sunlight Foundation
+                </div>
+                <p>
+                    Founded in 2006, the Sunlight Foundation is a non-partisan non-profit that uses cutting-edge technology and ideas to make government transparent and accountable. 
+                </p>
+                <p>
+                    Visit <a href="http://sunlightfoundation.com">SunlightFoundation.com</a> to learn more.
+                </p>
+            </div>
+            <div class="clear"></div>
+        </footer>
+    </div>
 
     <script type="text/javascript">
-      // if we're coming in from a permalink, set up anything that would have otherwise been set up along the way
-      <% if params[:interest] %>
-        var initial_interest = encodeURIComponent("<%= js_escape params[:interest] %>");
-        var keyword_id = user_subscriptions[initial_interest] ? user_subscriptions[initial_interest].keyword_id : null;
 
-        $("input.query").val(initial_interest);
-      <% end %>
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-22821126-16']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
     </script>
 
-  </section>
-
-  <script type="text/javascript">
-
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-22821126-16']);
-    _gaq.push(['_trackPageview']);
-
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-
-  </script>
-  
 </body>
-
 </html>

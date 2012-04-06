@@ -1,0 +1,9 @@
+<% types.each do |msg| %>
+    <div id="flash">
+      <% if flash[msg] %>
+        <div class="flash <%= msg %>">
+          <%= flash[msg] %>
+        </div>
+      <% end %>
+    </div>
+<% end %>

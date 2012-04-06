@@ -1,47 +1,82 @@
-<section class="show <%= interest_type %>" id="item-<%= id_escape item_id %>">
-  
-  <div class="loading_container">
-    <span>loading...</span>
-  </div>
+<% content_for :title do %>
+    <div class="trackSubscribe">
+        Follow this bill wherever it goes
+    </div>
+    <button type="submit">
+        <span>Track this bill</span>
+    </button>
+    <div class="clear"></div>
+<% end %>
 
-  <div class="developer json show">
-    <h2>Developer</h2>
-    <a href="#">Original JSON</a>
-  </div>
+<% content_for :sidebar_right do %>
+    <%= recent_searches %>
+<% end %>
 
-</section>
+<div class="contentArea left">
 
-<script type="text/javascript">
-  // put in a delay block in case this is being rendered before the layout
-  $(function() {
-    var item_type = "<%= interest_type %>";
-    var escaped_item_id = "<%= id_escape item_id %>";
-    var item_id = "<%= item_id %>";
-    var container = $("#item-" + escaped_item_id);
-    container.find(".loading_container").show();
+    <div class="entrySummary">
+        <h2>Excess Federal Building and Property Disposal Act of 2011</h2>
+        <span class="dataset"></span>
+        <time datetime="" pubdate>September 20, 2011</time>
+        <p>...be accessible by the public at no cost through the website of the General Services Administration. Be accessible by the public at no cost through the website of the General Services Administration. "(d) <em>Transparency</em> of Database.--To the extent practicable, the Administrator shall ensure that the database-- "(1). Be accessible by the public at no cost through the website of the General Services Administration. Be accessible by the public at no cost through the website of the General Services Administration....</p>
+        <div class="moreInfoLinks">
+            <h5>Learn More:</h5>
+            <ul>
+                <li><a href="">link one</a></li>
+                <li><a href="">link two</a></li>
+                <li><a href="">link three</a></li>
+            </ul>
+        </div>
+        <a class="sourceLink" href="">Source</a>
+        <div class="clear"></div>
+    </div>
+    <div class="entryExtras">
+        <dl class="module">
+            <dt>Sponsor:</dt>
+            <dd>Senator Lorem Ipsum</dd>
+            <dt>Number of co-sponsors</dt>
+            <dd>4</dd>
+            <dt>Last action taken:</dt>
+            <dd>Nulla ac pulvinar leo</dd>
+        </dl>
+        <div class="module">
+            <h5>Recent Appearances</h5>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>Dec. 17 2011</td>
+                        <td>House</td>
+                        <td>more info</td>
+                    </tr>
+                    <tr>
+                        <td>Dec. 17 2011</td>
+                        <td>House</td>
+                        <td>more info</td>
+                    </tr>
+                    <tr>
+                        <td>Dec. 17 2011</td>
+                        <td>House</td>
+                        <td>more info</td>
+                    </tr>
+                </tbody>
+            </table>
 
-    $("input.query").val('');
-
-    var subscription = $("li.keyword h2 a[data-keyword='" + item_id + "'][data-keyword_type='" + item_type + "']");
-    if (subscription) {
-      $("li.keyword").removeClass("current");
-      subscription.parents("li.keyword").addClass("current");
-    }
-
-    $.get("/find/" + item_type + "/" + item_id, {}, function(data) {
-      container.find(".loading_container").hide();
-      container.prepend(data.html);
-      
-      <% if config[:debug][:link_to_json] %>
-        container.find(".developer.json.show").show().find("a").attr("href", data.item_url);
-      <% end %>
-
-      <% if interest %>
-        $("section.show button.track").html("Following").addClass("untrack");
-        $("section.show button.track").data("keyword_id", "<%= interest.id %>");
-      <% end %>
-    }).error(function() {
-      showError("Couldn't load " + item_type + " with id " + item_id);
-    })
-  });
-</script>
+            <h5>Upcoming Appearances</h5>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>Dec. 17 2011</td>
+                        <td>House</td>
+                        <td>more info</td>
+                    </tr>
+                    <tr>
+                        <td>Dec. 17 2011</td>
+                        <td>House</td>
+                        <td>more info</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>

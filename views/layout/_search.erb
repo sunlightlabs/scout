@@ -1,0 +1,41 @@
+<form action="/search" method="get" id="newsearchform">
+    <fieldset>
+        <label for="id_q">Search</label>
+        <input class="transparent" type="search" placeholder="Start new search...">
+    </fieldset>
+    
+    <fieldset>
+        <legend>Select a category</legend>
+
+        <label for="id_category">Category</label>
+        <select name="category" id="id_category">
+            <option value="" selected="selected">------</option>
+            <option value="congress">Congress</option>
+            <option value="regulations">Regulations</option>
+            <option value="states">State Legislation</option>
+        </select>
+        
+        <ul class="filter congress">
+            <li><label><input type="checkbox" name="" value="">Bills</label></li>
+            <li><label><input type="checkbox" name="" value="">Speeches</label></li>
+        </ul>
+
+        <ul class="filter states">
+            <li>
+                <label><input type="radio" name="" value="" checked>All States</label>
+            </li>
+            <li>
+                <select name="category">
+                    <option value="" selected="selected">--- Pick a state ---</option>
+                    <% state_map.keys.sort.each do |code| %>
+                        <option value="<%= code %>"><%= state_map[code] %></option>
+                    <% end %>
+                </select>
+            </li>
+        </ul>
+    </fieldset>
+
+    <button type="submit">
+        <span>Search</span>
+    </button>
+</form>

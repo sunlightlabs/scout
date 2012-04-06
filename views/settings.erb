@@ -1,0 +1,68 @@
+<% content_for :title do %>
+    <h2>Settings</h2>
+<% end %>
+
+<% content_for :sidebar_right do %>
+    <%= recent_searches %>
+<% end %>
+
+<div class="contentArea left">
+    <form action="/contact/" method="post" id="contactform" class="normalForm">
+        <ul>
+            <li class="email">
+                <label for="id_email">Email</label> 
+                <input type="text" name="email" id="id_email">
+            </li>
+            <li>
+                <label for="id_name">Name</label> 
+                <input type="text" name="name" id="id_name">
+            </li>
+            <li>
+                <label for="id_password">Password</label> 
+                <input type="text" name="password" id="id_password">
+            </li>
+            <li>
+                <label for="id_conPassword">Confirm Password</label> 
+                <input type="text" name="password" id="id_conPassword">
+            </li>
+            <li>
+                <div class="radioLabel">Default Delivery Method</div>
+                <small>You can change this on a per subscription basis on the subscriptions page.</small>
+                <label for="id_emailNotifications">
+                    <input type="radio" name="emailNotifications" id="id_emailNotifications">
+                    <span>Email</span>
+                </label>
+                <label for="id_smsNotifications">
+                    <input type="radio" name="smsNotifications" id="id_smsNotifications">
+                    <span>SMS</span>
+                </label>
+            </li>
+            <li>
+                <div class="radioLabel">Email Frequency</div>
+                <label for="id_notifyImmediately">
+                    <input type="radio" name="" id="id_notifyImmediately">
+                    <span>immediately</span>
+                </label>
+                <label for="id_notifyDaily">
+                    <input type="radio" name="" id="id_notifyDaily">
+                    <span>once a day</span>
+                </label>
+                <label for="id_notifyWeekly">
+                    <input type="radio" name="" id="id_notifyWeekly">
+                    <span>once a week</span>
+                </label>
+            </li>
+            <li>
+                <li>
+                    <label for="id_phone">Phone Number</label> 
+                    <input type="text" name="phone" id="id_phone">
+                </li>
+            </li>
+            <li>
+                <button class="submitButton" type="submit">
+                <span>Update</span>
+                </button>
+            </li>
+        </ul>
+    </form>
+</div>
