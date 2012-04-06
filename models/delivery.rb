@@ -25,9 +25,7 @@ class Delivery
   field :mechanism
   
   # item details
-  field :item_id
-  field :item_date, :type => Time
-  field :item_data, :type => Hash, :default => {}
+  field :item, :type => Hash, :default => {}
   
   index :subscription_type
   index :user_email
