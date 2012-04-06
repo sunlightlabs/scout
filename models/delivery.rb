@@ -29,6 +29,7 @@ class Delivery
   
   index :subscription_type
   index :user_email
+  index "item.date"
   
   validates_presence_of :subscription_id
   validates_presence_of :subscription_type
