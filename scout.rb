@@ -33,6 +33,7 @@ require 'controllers/feeds'
 
 before do
   @new_user = logged_in? ? nil : User.new
+  @interests = logged_in? ? current_user.interests.desc(:created_at).all.map {|k| [k, k.subscriptions]} : []
 end
 
 get '/' do

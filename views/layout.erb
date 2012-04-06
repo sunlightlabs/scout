@@ -37,24 +37,24 @@
             <nav>
                 <ul id="userNav">
                     <% if logged_in? %>
-                        <li id="subscriptions">
-                            <a href="/subscriptions.html">
+                        <li class="subscriptions">
+                            <a href="/account/subscriptions">
                                 Subscriptions
-                                <span class="count">(7)</span>
+                                <span class="count">(<%= @interests.size %>)</span>
                             </a>
                         </li>
-                        <li id="settings">
-                            <a href="/settings.html">Settings</a>
+                        <li class="settings">
+                            <a href="/account/settings">Settings</a>
                         </li>
-                        <li id="logout">
-                            <a href="/logout.html">Log Out</a>
+                        <li>
+                            <a href="/logout">Log Out</a>
                         </li>
                     <% else %>
-                        <li id="login">
-                            <a href="/login.html">Login</a>
+                        <li>
+                            <a href="/login">Login</a>
                         </li>
-                        <li id="signup">
-                            <a href="/signup.html">Sign up</a>
+                        <li>
+                            <a href="/login">Sign up</a>
                         </li>
                     <% end %>
                 </ul>
@@ -77,6 +77,7 @@
         <% if title_area = yield_content(:title) %>
             <div class="pageTitle">
                 <%= title_area %>
+                <div class="clear"></div>
             </div>
         <% end %>
 
