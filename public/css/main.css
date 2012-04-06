@@ -109,6 +109,7 @@ input[type="text"]{
 }
 
 
+
 /*-- Flash Messages --*/
 
 #flash div.flash {
@@ -138,7 +139,6 @@ input[type="text"]{
     display: block;
     min-height: 247px;
 }
-
 nav ul{
     float: right;
 }
@@ -394,6 +394,70 @@ footer nav{
 #mailinglistform button:hover{
     background: url('/images/btn_signupForm.png') left bottom no-repeat;
 }
+
+/*-- Homepage Styling --*/
+
+.splash{
+    margin-top: -80px;
+}
+.homeWrapper{
+    background: url('../images/bg_homeWrapper.png') center 216px repeat-x;
+    padding-bottom: 85px;
+}
+
+
+.homeWrapper #newsearchform input{
+    background: url('../images/homeSearch.png') left top no-repeat;
+    width: 676px;
+}
+
+.homeWrapper #newsearchform{
+    margin-top: 40px;
+}
+
+.homeWrapper #newsearchform button{
+    float: right;
+}
+
+.homeWrapper .initialFilters{
+    width: 500px;
+    float: left;
+}
+
+.home.modules{
+    margin-left: 235px;
+    font-size: 81%;
+}
+
+.home.modules .module{
+    float: left;
+    width: 280px;
+    padding: 33px 33px 33px 49px;
+    background: url('../images/tinyborder_andshadow_vertical.png') left top repeat-y;
+}
+.home.modules li{
+    margin-bottom: 10px;
+}
+.home.modules .samples ul{
+    margin-left: 16px;
+}
+.home.modules .samples li{
+    list-style-type: disc;
+}
+.home.modules time{
+    font-weight: bold;
+    text-transform: uppercase;
+}
+.home.modules h3{
+    color: #000000;
+    font-size: 143%;
+    color: #3d3c41;
+    margin-bottom: 16px;
+}
+
+
+
+
 
 
 
