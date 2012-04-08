@@ -9,7 +9,7 @@ gem 'sinatra-flash', '0.3.0'
 gem 'padrino-helpers', '0.10.6'
 
 gem "mongo", "1.6.1"
-gem "mongoid", '2.4.5'
+gem "mongoid", '2.4.7'
 gem 'bson_ext', '1.6.1' # mongo gem asks for this
 gem 'SystemTimer', '1.2.3' # mongo gem asks for this
 
