@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+environment_id="ruby-1.8.7-p358@scout"
+
+# First we attempt to load the desired environment directly from the environment
+# file. This is very fast and efficient compared to running through the entire
+# CLI and selector. If you want feedback on which environment was used then
+# insert the word 'use' after --create as this triggers verbose mode.
+if [[ -d "${rvm_path:-$HOME/.rvm}/environments"
+  && -s "${rvm_path:-$HOME/.rvm}/environments/$environment_id" ]]
+then
+  \. "${rvm_path:-$HOME/.rvm}/environments/$environment_id"
+  [[ -s "${rvm_path:-$HOME/.rvm}/hooks/after_use" ]] &&
+    \. "${rvm_path:-$HOME/.rvm}/hooks/after_use" || true
+else
+  # If the environment file has not yet been created, use the RVM CLI to select.
+  rvm --create  "$environment_id" || {
+    echo "Failed to create RVM environment '${environment_id}'."
+    return 1
+  }
+fi
