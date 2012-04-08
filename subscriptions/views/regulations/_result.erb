@@ -1,19 +1,19 @@
 <% regulation = item.data %>
 
-<h3><%= regulation['title'] %></h3>
+<a href="<%= item_path item %>">
+  <h4><%= regulation['title'] %></h4>
+</a>
 
-<div class="subtitle">
+<!-- <div class="subtitle">
   <span class="stage"><%= regulation_stage regulation['stage'] %></span>
   <% if regulation['agency_names'].any? %>
     by the
     <%= regulation['agency_names'].join ', ' %>
   <% end %>
-</div>
+</div> -->
 
 <% if regulation['search']['highlight'] %>
-  <dl class="highlight">
-    <dd class="content">
-      <%= regulation_highlight item, interest %>
-    </dd>
-  </dl>
+  <p>
+    <%= regulation_highlight item, interest %>
+  </p>
 <% end %>

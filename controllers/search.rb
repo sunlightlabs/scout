@@ -30,7 +30,11 @@ get '/fetch/search/:subscription/:query' do
     :data => subscription_data
   }
 
-  results = subscription.search(:page => (params[:page] ? params[:page].to_i : 1))
+  page = params[:page].present? ? params[:page].to_i : 1
+  per_page = params[:per_page].present? ? params[:per_page] : nil
+
+  # perform the remote search, pass along pagination preferences
+  results = subscription.search :page => page, :per_page => per_page
     
   # if results is nil, it usually indicates an error in one of the remote services
   if results.nil?
@@ -44,7 +48,8 @@ get '/fetch/search/:subscription/:query' do
   html = erb :"search/items", :layout => false, :locals => {
     :items => results, 
     :subscription => subscription,
-    :query => query
+    :query => query,
+    :sole => (params[:sole] == "true")
   }
 
   headers["Content-Type"] = "application/json"

@@ -46,11 +46,20 @@
 <div class="contentArea right results">
     
     <% subscriptions.each do |subscription| %>
-        <div class="results_container"
+        <div class="search"
             data-subscription="<%= subscription.serialize %>"
             >
 
-            Loading ...
+            <section class="container clear">
+              <h3><%= subscription.search_name %></h3>
+
+              <div class="loading">
+                <span>Searching ...</span>
+              </div>
+
+              <div class="populate">
+              </div>
+            </section>
 
         </div>
     <% end %>
@@ -83,10 +92,12 @@
     var query = "<%= query %>";
     // var query_encoded = encodeURIComponent(query);
     
-    // var interest_id = user_subscriptions[query_encoded] ? user_subscriptions[query_encoded].interest_ud : null;
+    // var interest_id = user_subscriptions[query_encoded] ? user_subscriptions[query_encoded].interest_id : null;
 
+    var sole = <%= subscriptions.size == 1 ? "true" : "false" %>;
     <% subscriptions.each do |subscription| %>
-      searchFor(query, "<%= subscription.serialize %>");
+      var per_page = sole ? 20 : 2;
+      searchFor(query, "<%= subscription.serialize %>", {sole: sole, per_page: per_page});
     <% end %>
 
     // $(".subscription_data").change(function() {
@@ -95,21 +106,22 @@
     // });
   });
 
-  function searchFor(query, subscription) {
-      var container = $(".results div.results_container[data-subscription=" + subscription + "]");
+  function searchFor(query, subscription, options) {
+      var query_slug = encodeURIComponent(query);
+      var container = $(".results div.search[data-subscription=" + subscription + "]");
 
       // reset elements inside tab
+      container.find(".loading").show();
+      container.find(".populate").html("").hide();
       
       // assemble hash of any filter options
-      // var subscription_data = subscriptionData(subscription_type);
+      var data = {}; // subscriptionData(subscription_type);
+      $.extend(data, options);
 
-      console.log("searching for " + query + " in " + subscription);
-      var query_slug = encodeURIComponent(query);
-      $.get("/fetch/search/" + subscription + "/" + query_slug, {}, function(data) {
-        console.log("done searching for " + query + " in " + subscription);
-
-        // container.find("div.loading_container").hide();
-        container.html(data.html);
+      $.get("/fetch/search/" + subscription + "/" + query_slug, data, function(data) {
+        
+        container.find(".loading").hide();
+        container.find(".populate").html(data.html).show();
 
         // if (data.search_url) {
         //   container.find("div.developer.json.search").show().find("a").attr("href", data.search_url);

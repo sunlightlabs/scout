@@ -15,7 +15,7 @@ module Subscriptions
         
         sections = %w{ stage title abstract document_number rins docket_ids published_at effective_at federal_register_url agency_names agency_ids }
         
-        per_page = (function == :search) ? 20 : 40
+        per_page = (function == :search) ? (options[:per_page] || 20) : 40
 
         url = "#{endpoint}/search/regulations.json?apikey=#{api_key}"
         url << "&per_page=#{per_page}"
@@ -48,6 +48,10 @@ module Subscriptions
         url << "&sections=#{sections.join ','}"
 
         url
+      end
+
+      def self.search_name(subscription)
+        "Regulations"
       end
 
       def self.item_path(item)

@@ -3,9 +3,9 @@
 
 <a href="<%= item_path item %>">
   <% if bill['short_title'].present? %>
-    <h4><%= bill['short_title'] %></h2>
+    <h4><%= bill['short_title'] %></h4>
   <% else %>
-    <h5><%= bill['official_title'] %></h3>
+    <h4><%= bill['official_title'] %></h4>
   <% end %>
 </a>
 

@@ -1,4 +1,4 @@
-html, body{
+ohtml, body{
     background-color: #fafbf8;
     font-family: arial, 'helvetica Neue', sans-serif;
     color: #5c5b60;
@@ -516,6 +516,19 @@ footer nav{
     -webkit-box-shadow: inset 14px 0px 14px -7px #e2e3e0;
     -moz-box-shadow: inset 14px 0px 14px -7px #e2e3e0;
     box-shadow: inset 14px 0px 14px -7px #e2e3e0;
+}
+
+.results .loading {
+  display: none; margin: 0px auto; width: 80%; padding-top: 30px;
+}
+
+.results .loading span {
+  color: #444; font-size: 150%;
+  display: block;
+  padding-top: 20px; padding: 20px; padding-left: 50px;
+  background-position: left;
+  background-image: url(/images/loader-32.gif);
+  background-repeat: no-repeat;
 }
 
 .contentArea h4{
