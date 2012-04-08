@@ -31,7 +31,7 @@ get '/fetch/search/:subscription/:query' do
   }
 
   page = params[:page].present? ? params[:page].to_i : 1
-  per_page = params[:per_page].present? ? params[:per_page] : nil
+  per_page = params[:per_page].present? ? params[:per_page].to_i : nil
 
   # perform the remote search, pass along pagination preferences
   results = subscription.search :page => page, :per_page => per_page

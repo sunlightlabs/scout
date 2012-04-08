@@ -1,7 +1,7 @@
 module Subscriptions
   module Adapters
 
-    class CongressionalRecord
+    class Speeches
       
       def self.url_for(subscription, function, options = {})
         api_key = config[:subscriptions][:sunlight_api_key]
@@ -31,6 +31,10 @@ module Subscriptions
         url
       end
 
+      def self.search_name(subscription)
+        "Speeches in Congress"
+      end
+
       def self.item_path(item)
         "/speech/#{item.item_id}"
       end
@@ -49,9 +53,13 @@ module Subscriptions
         return nil unless response['results']
         
         #TODO: hopefully get the API changed to allow filtering on only spoken results
-        response['results'].select {|r| r['bioguide_id']}.map do |result|
+        results = response['results'].select {|r| r['bioguide_id']}.map do |result|
           item_for result
         end
+
+        per_page = options[:per_page] || 20
+        
+        results[0...per_page]
       end
       
       def self.item_detail_for(response)

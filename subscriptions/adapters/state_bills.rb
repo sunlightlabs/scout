@@ -71,9 +71,8 @@ module Subscriptions
       def self.items_for(response, function, options = {})
         return if response.is_a?(String)
         
-        per_page = 20
-
         # OpenStates API does not have server-side pagination - so we do it here
+        per_page = options[:per_page] || 20
         page = options[:page] || 1
         beginning = per_page * (page - 1) # index of first item
         ending = (beginning + per_page) - 1  # index of last item

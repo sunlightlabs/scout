@@ -1,0 +1,15 @@
+<% speech = item.data %>
+
+<a href="<%= item_path item %>">
+  <h4>
+    <% if speech['bioguide_id'] %>
+      <%= speaker_name speech %> said:
+    <% else %>
+      <%= long_date speech['date'] %>
+    <% end %>
+  </h4>
+</a>
+
+<p>
+  "<%= speech_excerpt speech, interest %>"
+</p>

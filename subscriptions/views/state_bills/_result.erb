@@ -1,8 +1,10 @@
 <% bill = item.data %>
-<h2>
-  <%= bill['bill_id'] %> from <span class="state"><%= state_name bill['state'] %></span>
-</h2>
+<a href="<%= item_path item %>">
+  <h4>
+    <%= bill['bill_id'] %> from <span class="state"><%= state_name bill['state'] %></span>
+  </h4>
+</a>
 
-<p class="content">
+<p>
   <%= excerpt bill['title'], interest %>
 </p>

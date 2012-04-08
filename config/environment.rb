@@ -90,7 +90,7 @@ def interest_data
     },
     'speech' => {
       :name => "Speech in Congress",
-      :adapter => "congressional_record"
+      :adapter => "speeches"
     }
   }
 end
@@ -106,7 +106,7 @@ def search_data
       :name => "State Bills",
       :order => 3
     },
-    'congressional_record' => {
+    'speeches' => {
       :name => "Speeches in Congress",
       :order => 2
     },
