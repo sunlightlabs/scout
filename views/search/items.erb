@@ -8,7 +8,10 @@
     <% if sole %>
         <!-- next page...?! -->
     <% else %>
-        <a href="/search/<%= subscription.serialize %>/<%= h query %>" class="viewMore">
+        <a href="/search/<%= subscription.serialize %>/<%= h query %>" 
+            class="viewMore"
+            data-pjax="#center"
+            >
             View more <span class="dataSet"><%= subscription.search_name %></span>
         </a>
     <% end %>

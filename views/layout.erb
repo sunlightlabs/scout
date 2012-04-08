@@ -90,7 +90,7 @@
         </header>
     </div>
 
-    <div class="contentWrapper">
+    <div class="contentWrapper" id="content">
 
         <% if title_area = yield_content(:title) %>
             <div class="pageTitle">
@@ -105,7 +105,9 @@
             </div>
         <% end %>
 
-        <%= yield %>
+        <div id="center">
+            <%= yield %>
+        </div>
 
         <% if right_bar = yield_content(:sidebar_right) %>
             <div class="sidebar right">

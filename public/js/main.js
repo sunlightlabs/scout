@@ -7,6 +7,13 @@ $(function() {
     return true;
   });
 
+  // anything being bound on something that can be pjax'ed 
+  // needs to use the #contentWrapper as the parent
+  $("#content").on("click", "a[data-pjax]", function() {
+    Utils.pjax($(this).attr("href"), $(this).data("pjax"));
+    return false;
+  });
+
 });
 
 
@@ -18,7 +25,7 @@ var Utils = {
 
     pjax: function(href, container) {
       if (!container)
-        container = "#contentWrapper";
+        container = "#content";
 
       $.pjax({
           url: href,
