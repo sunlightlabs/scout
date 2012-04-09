@@ -36,11 +36,11 @@ module Subscriptions
       end
 
       def self.item_path(item)
-        "/speech/#{item.item_id}"
+        "/item/speech/#{item.item_id}"
       end
 
       def self.interest_path(interest)
-        "/speech/#{interest.in}"
+        "/item/speech/#{interest.in}"
       end
       
       def self.short_name(number, subscription, interest)

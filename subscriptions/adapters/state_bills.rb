@@ -44,12 +44,12 @@ module Subscriptions
 
       # item_id has already been URI encoded
       def self.item_path(item)
-        "/state_bill/#{item.item_id}"
+        "/item/state_bill/#{item.item_id}"
       end
 
       # another way of getting the same URL, but from within an interest
       def self.interest_path(interest)
-        "/state_bill/#{URI.encode interest.in}"
+        "/item/state_bill/#{URI.encode interest.in}"
       end
 
       def self.interest_name(interest)
