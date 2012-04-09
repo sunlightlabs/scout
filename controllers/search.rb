@@ -77,9 +77,9 @@ end
 
 # landing page for item
 # get '/:interest_type/:item_id'
-get(/^\/(#{interest_data.keys.join '|'})\/([^\/]+)\/?/) do
-  interest_type = params[:captures][0]
-  item_id = params[:captures][1]
+get "/item/:interest_type/:item_id" do
+  interest_type = params[:interest_type].strip
+  item_id = params[:item_id].strip
 
   interest = nil
   if logged_in?
@@ -95,9 +95,9 @@ end
 
 # actual JSON data for item
 # get '/:find/:interest_type/:item_id' 
-get(/^\/find\/(#{interest_data.keys.join '|'})\/([^\/]+)$/) do
-  interest_type = params[:captures][0]
-  item_id = params[:captures][1]
+get "/fetch/item/:interest_type/:item_id" do
+  interest_type = params[:interest_type].strip
+  item_id = params[:item_id].strip
   subscription_type = interest_data[interest_type][:adapter]
 
   unless item = Subscriptions::Manager.find(subscription_type, item_id)
