@@ -30,7 +30,6 @@ get '/fetch/search/:subscription_type/:query' do
   subscription_type = params[:subscription_type]
 
   data = params[subscription_type] || {} # must default to empty hash
-  data['query'] = query
 
   subscription = Subscription.new(
     :subscription_type => subscription_type,

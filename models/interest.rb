@@ -12,7 +12,8 @@ class Interest
   field :interest_type
 
   # arbitrary metadata
-  #   keyword search - TBD
+  #   search query - metadata about the search query
+  #     (e.g. "query" => "copyright")
   #   item - metadata about the related item 
   #     (e.g. "chamber" => "house", "state" => "NY", "bill_id" => "hr2134-112")
   field :data, :type => Hash, :default => {}

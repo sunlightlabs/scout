@@ -99,7 +99,7 @@ end
 post '/subscriptions' do
   requires_login
 
-  phrase = params[:interest].strip
+  query = params[:interest].strip
   subscription_type = params[:subscription_type]
 
   new_interest = false
@@ -111,12 +111,18 @@ post '/subscriptions' do
 
   # default to a new one
   if interest.nil?
-    interest = current_user.interests.new :in => phrase, :interest_type => "search"
+    interest = current_user.interests.new(
+      :in => query, 
+      :interest_type => "search",
+      :data => {
+        'query' => query
+      }
+    )
     new_interest = true
   end
   
   subscription = current_user.subscriptions.new(
-    :interest_in => phrase, 
+    :interest_in => query, 
     :subscription_type => subscription_type
   )
 
