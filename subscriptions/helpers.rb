@@ -2,7 +2,8 @@ module Subscriptions
   module Helpers
 
     def item_path(item)
-      item.subscription.adapter.item_path item
+      item_type = search_adapters[item.subscription_type]
+      "/item/#{item_type}/#{item.item_id}"
     end
 
     def item_url(item)

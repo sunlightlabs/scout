@@ -54,10 +54,6 @@ module Subscriptions
         "Regulations"
       end
 
-      def self.item_path(item)
-        "/item/regulation/#{item.item_id}"
-      end
-
       # another way of getting the same URL, but from within an interest
       def self.interest_path(interest)
         "/item/regulation/#{interest.in}"

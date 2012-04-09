@@ -35,10 +35,6 @@ module Subscriptions
         "Speeches in Congress"
       end
 
-      def self.item_path(item)
-        "/item/speech/#{item.item_id}"
-      end
-
       def self.interest_path(interest)
         "/item/speech/#{interest.in}"
       end

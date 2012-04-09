@@ -7,7 +7,7 @@ get '/search/:subscriptions/:query' do
 
   subscriptions = params[:subscriptions].split(",").map do |slug|
     subscription_type, index = slug.split "-"
-    next unless search_data.keys.include?(subscription_type)
+    next unless search_adapters.keys.include?(subscription_type)
 
     Subscription.new(
       :interest_in => query,

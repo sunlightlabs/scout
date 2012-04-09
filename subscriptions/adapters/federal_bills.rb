@@ -61,10 +61,6 @@ module Subscriptions
         "#{number > 1 ? "bills" : "bill"}"
       end
 
-      def self.item_path(item)
-        "/item/bill/#{item.item_id}"
-      end
-
       # another way of getting the same URL, but from within an interest
       def self.interest_path(interest)
         "/item/bill/#{interest.in}"

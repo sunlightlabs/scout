@@ -61,7 +61,6 @@ require 'subscriptions/manager'
 def interest_data
   {
     'bill' => {
-      :name => "Bill",
       :adapter => "federal_bills",
       :subscriptions => {
         'federal_bills_activity' => {
@@ -73,7 +72,6 @@ def interest_data
       }
     },
     'state_bill' => {
-      :name => "State Bill",
       :adapter => "state_bills",
       :subscriptions => {
         'state_bills_activity' => {
@@ -85,35 +83,22 @@ def interest_data
       }
     },
     'regulation' => {
-      :name => "Regulation",
       :adapter => "regulations"
     },
     'speech' => {
-      :name => "Speech in Congress",
       :adapter => "speeches"
     }
   }
 end
 
-# maps each type of subscription adapter to their display information
-def search_data
+# adapters used to process keyword searches,
+# and the item type they search over
+def search_adapters
   {
-    'federal_bills' => {
-      :name => "Bills in Congress",
-      :order => 1
-    },
-    'state_bills' => {
-      :name => "State Bills",
-      :order => 3
-    },
-    'speeches' => {
-      :name => "Speeches in Congress",
-      :order => 2
-    },
-    'regulations' => {
-      :name => "Federal Regulations",
-      :order => 4
-    }
+    'federal_bills' => 'bill',
+    'state_bills' => 'state_bill',
+    'speeches' => 'speech',
+    'regulations' => 'regulation'
   }
 end
 
