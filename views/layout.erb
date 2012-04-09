@@ -82,7 +82,7 @@
             </a>
 
             <% unless yield_content(:hide_search).any? %>
-                <%= partial "layout/search", :engine => "erb", :locals => {} %>
+                <%= partial "search/search", :engine => "erb", :locals => {} %>
             <% end %>
         </header>
     </div>
