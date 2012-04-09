@@ -98,7 +98,7 @@
   // change without auto-committing the changes
 
   // initialize with any subscription-wide filters (none yet)
-  var filters = {
+  var current_filters = {
     "all": <%= (params[:all] || {}).to_json %>
   };
 
@@ -109,53 +109,55 @@
     <% subscriptions.each do |subscription| %>
 
       <% # "I think this is safe..." %>
-      filters["<%= subscription.subscription_type %>"] = <%= subscription.data.to_json %>;
+      current_filters["<%= subscription.subscription_type %>"] = <%= subscription.data.to_json %>;
 
       searchFor(
         query, "<%= subscription.subscription_type %>", 
-        {per_page: <%= subscriptions.size == 1 ? 20 : 2 %>}
+        {"per_page": <%= subscriptions.size == 1 ? 20 : 2 %>}
       );
     <% end %>
   });
 
   function searchFor(query, subscription, searchOptions) {
-      var query_slug = encodeURIComponent(query);
-      var container = $(".results div.search[data-subscription=" + subscription + "]");
+    if (!searchOptions) searchOptions = {};
 
-      // reset elements inside tab
-      container.find(".loading").show();
-      container.find(".populate").html("").hide();
+    var query_slug = encodeURIComponent(query);
+    var container = $(".results div.search[data-subscription=" + subscription + "]");
+
+    // reset elements inside tab
+    container.find(".loading").show();
+    container.find(".populate").html("").hide();
+    
+    // all search options
+    var search = {};
+
+    // carry along the universal and subscription-specific filters
+    var filters = {}
+    filters.all = current_filters.all;
+    filters[subscription] = current_filters[subscription];
+
+    $.extend(search, filters);
+
+    // any one-time search options (pagination)
+    $.extend(search, searchOptions);
+
+    $.get("/fetch/search/" + subscription + "/" + query_slug, search, function(data) {
       
-      // all search options
-      var search = {};
+      container.find(".loading").hide();
+      container.find(".populate").html(data.html).show();
 
-      // carry along the universal and subscription-specific filters
-      var these_filters = {}
-      these_filters.all = filters.all;
-      these_filters[subscription] = filters[subscription];
+      // set the 'more' link to carry on the filters (and only the filters)
+      container.find(".populate a.viewMore").attr("href", 
+        "/search/" + subscription + "/" + query_slug + "?" + $.param(filters)
+      );
 
-      $.extend(search, these_filters);
+      // if (data.search_url) {
+      //   container.find("div.developer.json.search").show().find("a").attr("href", data.search_url);
+      // }
 
-      // any one-time search options (pagination)
-      $.extend(search, searchOptions);
-
-      $.get("/fetch/search/" + subscription + "/" + query_slug, search, function(data) {
-        
-        container.find(".loading").hide();
-        container.find(".populate").html(data.html).show();
-
-        // set the 'more' link to carry on the filters (and only the filters)
-        container.find(".populate a.viewMore").attr("href", 
-          "/search/" + subscription + "/" + query_slug + "?" + $.param(these_filters)
-        );
-
-        // if (data.search_url) {
-        //   container.find("div.developer.json.search").show().find("a").attr("href", data.search_url);
-        // }
-
-      }).error(function() {
-        container.find(".loading").hide();
-        container.find(".error").show();
-      });
-    }
+    }).error(function() {
+      container.find(".loading").hide();
+      container.find(".error").show();
+    });
+  }
 </script>
