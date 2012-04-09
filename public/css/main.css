@@ -169,20 +169,20 @@ header h1{
     padding-left: 22px;
 }
 
-#newsearchform .filters{
+#search_form .filters{
     display: none;
 }
-#newsearchform{
+#search_form{
     float: right;
     margin-top: 72px;
 }
-#newsearchform div{
+#search_form div{
     float: left;
 }
-#newsearchform label{
+#search_form label{
     display: none;
 }
-#newsearchform input{
+#search_form input{
     width: 380px;
     padding: 0 5px 0 5px;
     height: 51px;
@@ -194,17 +194,17 @@ header h1{
     border: 0;
     float: left;
 }
-#newsearchform .field{
+#search_form .field{
     float: left;
 }
-#newsearchform button{
+#search_form button{
     float: left;
     background: url('/images/btn_newSearch.png') top left no-repeat;
     width: 54px;
     height: 51px;
     margin-left: 14px;
 }
-#newsearchform button:hover{
+#search_form button:hover{
     background: url('/images/btn_newSearch.png') bottom left no-repeat;
 }
 
@@ -406,16 +406,16 @@ footer nav{
 }
 
 
-.homeWrapper #newsearchform input{
+.homeWrapper #search_form input{
     background: url('../images/homeSearch.png') left top no-repeat;
     width: 676px;
 }
 
-.homeWrapper #newsearchform{
+.homeWrapper #search_form{
     margin-top: 40px;
 }
 
-.homeWrapper #newsearchform button{
+.homeWrapper #search_form button{
     float: right;
 }
 
