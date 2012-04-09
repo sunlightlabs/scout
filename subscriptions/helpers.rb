@@ -308,7 +308,7 @@ module Subscriptions
 
       if highlight
         truncated.gsub(excerpt_pattern(keyword)) do |word|
-          "<strong class=\"highlight\">#{word}</strong>"
+          "<em>#{word}</em>"
         end
       else
         truncated

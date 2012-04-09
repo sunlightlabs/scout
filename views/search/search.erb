@@ -3,8 +3,7 @@
         <h2>'<%= h query %>'</h2>
         in 
         <% subscriptions.each_with_index do |subscription, i| %>
-            <%= "and" unless i == 0 %>
-            <a class="dataset" href="#"><%= subscription.search_name %></a>
+          <a class="dataset" href="#<%= subscription.subscription_type %>"><%= subscription.search_name %></a><%= ", " unless i == (subscriptions.size - 1) %>
         <% end %>
     </div>
     <button>
@@ -12,6 +11,7 @@
     </button>
 <% end %>
 
+<% if false %>
 <% content_for :sidebar_left do %>
     <div class="module filters">
         <h4>Filter search results</h4>
@@ -42,24 +42,26 @@
     </div>
     <%= recent_searches %>
 <% end %>
+<% end %>
 
 <div class="contentArea right results">
     
     <% subscriptions.each do |subscription| %>
         <div class="search"
-            data-subscription="<%= subscription.serialize %>"
-            >
+          id="<%= subscription.subscription_type %>"
+          data-subscription="<%= subscription.serialize %>"
+          >
 
-            <section class="container clear">
-              <h3><%= subscription.search_name %></h3>
+          <section class="container clear">
+            <h3><%= subscription.search_name %></h3>
 
-              <div class="loading">
-                <span>Searching ...</span>
-              </div>
+            <div class="loading">
+              <span>Searching ...</span>
+            </div>
 
-              <div class="populate">
-              </div>
-            </section>
+            <div class="populate">
+            </div>
+          </section>
 
         </div>
     <% end %>

@@ -21,8 +21,12 @@
   <% end %>
 </div> -->
 
-<% if item.data['search']['highlight'] %>
-  <p>
+<p>
+  <% if item.data['search']['highlight'] %>
     <%= bill_highlight item, interest %>
-  </p>
-<% end %>
+  <% elsif bill['summary'] %>
+    <%= truncate bill['summary'], 500 %>
+  <% else %>
+    No excerpt available.
+  <% end %>
+</p>

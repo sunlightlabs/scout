@@ -13,7 +13,7 @@ module Subscriptions
           endpoint = "http://api.realtimecongress.org/api/v1"
         end
         
-        sections = %w{ bill_id bill_type number short_title latest_upcoming official_title introduced_at last_action_at last_action session last_version }
+        sections = %w{ bill_id bill_type number short_title summary latest_upcoming official_title introduced_at last_action_at last_action session last_version }
 
         per_page = (function == :search) ? (options[:per_page] || 20) : 40
 
