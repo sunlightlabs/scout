@@ -33,6 +33,8 @@ class SeenItem
     [:item_id, Mongo::ASCENDING]
   ]
 
+  index :subscription_type
+
   validates_presence_of :subscription_id
   validates_presence_of :item_id
 

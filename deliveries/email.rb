@@ -7,7 +7,7 @@ module Deliveries
 
       email = user.email
 
-      matching_deliveries = user.deliveries.where(:mechanism => "email", :email_frequency => frequency).all
+      matching_deliveries = user.deliveries.where(:mechanism => "email", :email_frequency => frequency).desc("item.date").all
       interest_deliveries = matching_deliveries.group_by &:interest
 
       # if sending whenever, then send one email per-interest

@@ -179,10 +179,21 @@ header h1{
 #search_form div{
     float: left;
 }
-#search_form label{
+
+#search_form .filter{
     display: none;
 }
-#search_form input{
+.initialFilters{
+    margin-top: 8px;
+}
+#search_form .filter.states{
+    display: block;
+}
+.searchField label, .categoryMenu label{
+    display: none;
+}
+
+#search_form input[type="search"]{
     width: 380px;
     padding: 0 5px 0 5px;
     height: 51px;
@@ -197,6 +208,7 @@ header h1{
 #search_form .field{
     float: left;
 }
+
 #search_form button{
     float: left;
     background: url('/images/btn_newSearch.png') top left no-repeat;
@@ -211,6 +223,28 @@ header h1{
 .count{
     font-weight: normal;
 }
+
+#search_form .filter{
+    float: left;
+}
+#search_form .filter li{
+    margin-bottom: 4px;
+}
+#id_category{
+    width: 200px;
+}
+.categoryMenu{
+    padding-right: 33px;
+    margin-right: 33px;
+    background: url('../images/tinyborder_andshadow_vertical_dark.png') right top repeat-y;
+}
+#search_form .categoryMenu legend{
+    margin-bottom: 7px;
+}
+
+
+
+
 
 
 /*-- Basic Content Structure --*/
@@ -346,67 +380,29 @@ footer{
 footer nav{
     float: right;
 }
-.signupForm{
-    float: left;
-    width: 610px;
-    margin-top: 40px;
-    margin-left: 46px;
-    color: #ffffff;
-    padding-right: 10px;
-}
-.signupForm em{
-    font-weight: bold;
-    display: block;
-}
-.signupForm ul{
-    margin: 0;
-}
-.signupForm li{
-    float: left;
-}
-.signupForm input{
-    background-color: #93c0ca;
-    border: 0;
-    border-top: 1px solid #63888f;
-    border-bottom: 1px solid #bbd8de;
-    height: 30px;
-    padding: 0 5px;
-    color: #ffffff;
-}
-.signupForm #id_email{
-    width: 308px;
-}
-.signupForm #id_zip{
-    width: 160px;
-}
-#mailinglistform input{
-    margin-right: 20px;
-}
 
-#mailinglistform{
-    margin-top: 15px;
-}
-#mailinglistform button{
-    background: url('/images/btn_signupForm.png') left top no-repeat;
-    width: 104px;
-    height: 29px;
-}
-#mailinglistform button:hover{
-    background: url('/images/btn_signupForm.png') left bottom no-repeat;
-}
+
+
+
+
 
 /*-- Homepage Styling --*/
 
 .splash{
-    margin-top: -80px;
+    margin-top: -79px;
 }
 .homeWrapper{
     background: url('../images/bg_homeWrapper.png') center 216px repeat-x;
     padding-bottom: 85px;
 }
+.homeWrapper .contentWrapper{
+    background: url('../images/bg_header.png') center 216px repeat-x;
+}
+
+<<<<<<< HEAD
 
 
-.homeWrapper #search_form input{
+.homeWrapper #search_form input[type="search"]{
     background: url('../images/homeSearch.png') left top no-repeat;
     width: 676px;
 }
@@ -417,8 +413,15 @@ footer nav{
 
 .homeWrapper #search_form button{
     float: right;
+    background: url('/images/btn_homeSearch.png') left top no-repeat;
+    width: 151px;
+}    
+.homeWrapper #search_form button:hover{
+        background: url('/images/btn_homeSearch.png') left bottom no-repeat;    
+    }
+.homeWrapper [type="search"]{
+    margin-bottom: 16px;
 }
-
 .homeWrapper .initialFilters{
     width: 500px;
     float: left;
