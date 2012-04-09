@@ -3,7 +3,7 @@
         <h2>'<%= h query %>'</h2>
         in 
         <% subscriptions.each_with_index do |subscription, i| %>
-          <a class="dataset" href="#<%= subscription.subscription_type %>"><%= subscription.search_name %></a><%= ", " unless i == (subscriptions.size - 1) %>
+          <a class="dataset" href="#<%= subscription.slug %>"><%= subscription.search_name %></a><%= ", " unless i == (subscriptions.size - 1) %>
         <% end %>
     </div>
     <button>
@@ -48,8 +48,8 @@
     
     <% subscriptions.each do |subscription| %>
         <div class="search"
-          id="<%= subscription.subscription_type %>"
-          data-subscription="<%= subscription.subscription_type %>"
+          id="<%= subscription.slug %>"
+          data-subscription="<%= subscription.slug %>"
           >
 
           <section class="container clear">
@@ -109,10 +109,10 @@
     <% subscriptions.each do |subscription| %>
 
       <% # "I think this is safe..." %>
-      current_filters["<%= subscription.subscription_type %>"] = <%= subscription.data.to_json %>;
+      current_filters["<%= subscription.slug %>"] = <%= subscription.data.to_json %>;
 
       searchFor(
-        query, "<%= subscription.subscription_type %>", 
+        query, "<%= subscription.slug %>", 
         {"per_page": <%= subscriptions.size == 1 ? 20 : 2 %>}
       );
     <% end %>
@@ -120,6 +120,9 @@
 
   function searchFor(query, subscription, searchOptions) {
     if (!searchOptions) searchOptions = {};
+
+    // subscription is a slug
+    var subscription_type = subscription.split("-")[0];
 
     var query_slug = encodeURIComponent(query);
     var container = $(".results div.search[data-subscription=" + subscription + "]");
@@ -131,24 +134,28 @@
     // all search options
     var search = {};
 
+    
     // carry along the universal and subscription-specific filters
-    var filters = {}
+    var filters = {};
     filters.all = current_filters.all;
-    filters[subscription] = current_filters[subscription];
+
+    // strip off the index for subscription-specific searches
+    filters[subscription_type] = current_filters[subscription];
 
     $.extend(search, filters);
 
+    
     // any one-time search options (pagination)
     $.extend(search, searchOptions);
 
-    $.get("/fetch/search/" + subscription + "/" + query_slug, search, function(data) {
+    $.get("/fetch/search/" + subscription_type + "/" + query_slug, search, function(data) {
       
       container.find(".loading").hide();
       container.find(".populate").html(data.html).show();
 
-      // set the 'more' link to carry on the filters (and only the filters)
+      // set the 'more' link to carry on our filters (and only our filters)
       container.find(".populate a.viewMore").attr("href", 
-        "/search/" + subscription + "/" + query_slug + "?" + $.param(filters)
+        "/search/" + subscription_type + "/" + query_slug + "?" + $.param(filters)
       );
 
       // if (data.search_url) {

@@ -10,6 +10,9 @@ class Subscription
 
   # arbitrary set of parameters that may refine or alter the subscription (e.g. "state" => "NY")
   field :data, :type => Hash, :default => {}
+
+  # used as a display helper on the search page
+  field :slug
   
   index :subscription_type
   index :initialized

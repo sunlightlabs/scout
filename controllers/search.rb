@@ -5,13 +5,15 @@ get '/search/:subscriptions/:query' do
 
   # subscriptions_map = {}
 
-  subscriptions = params[:subscriptions].split(",").map do |subscription_type|
+  subscriptions = params[:subscriptions].split(",").map do |slug|
+    subscription_type, index = slug.split "-"
     next unless search_data.keys.include?(subscription_type)
 
     Subscription.new(
       :interest_in => query,
       :subscription_type => subscription_type,
-      :data => (params[subscription_type] || {})
+      :data => (params[slug] || {}),
+      :slug => slug
     )
   end.compact
 
@@ -23,9 +25,9 @@ get '/search/:subscriptions/:query' do
   }
 end
 
-get '/fetch/search/:subscription/:query' do
+get '/fetch/search/:subscription_type/:query' do
   query = params[:query].strip
-  subscription_type = params[:subscription]
+  subscription_type = params[:subscription_type]
 
   data = params[subscription_type] || {} # must default to empty hash
   data['query'] = query

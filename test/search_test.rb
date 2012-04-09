@@ -15,4 +15,5 @@ class SearchTest < Test::Unit::TestCase
     get "/search/invalid_type,federal_bills/copyright"
     # don't test the response code, it won't work - the stub means the call to new returns nil
   end
+  
 end
