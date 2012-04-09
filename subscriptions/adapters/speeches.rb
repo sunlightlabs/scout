@@ -34,10 +34,6 @@ module Subscriptions
       def self.search_name(subscription)
         "Speeches in Congress"
       end
-
-      def self.interest_path(interest)
-        "/item/speech/#{interest.in}"
-      end
       
       def self.short_name(number, subscription, interest)
         "#{number > 1 ? "speeches" : "speech"}"

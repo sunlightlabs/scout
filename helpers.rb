@@ -13,15 +13,21 @@ module GeneralHelpers
   def recent_searches
     partial "layout/recent_searches", :engine => "erb", :locals => {}
   end
-  
-  # index of subscription adapters and associated copy
-  def search_subscriptions
-    @search_subscriptions ||= search_subscription_data
-  end
 
-  def interest_path(interest)
-    "/#{interest.interest_type}/#{form_escape interest.in}"
-  end
+  def item_path(item)
+      # an item with its own landing page
+      if item_type = search_adapters[item.subscription_type]
+        "/item/#{item_type}/#{item.item_id}"
+
+      # an item that does not have its own landing page
+      else
+        "/item/#{item.interest_type}/#{item.interest_in}##{item.item_id}"
+      end
+    end
+
+    def item_url(item)
+      "http://#{config[:hostname]}#{item_path item}"
+    end
 
   def interest_name(interest)
     if interest.item?

@@ -44,7 +44,7 @@ module Deliveries
     # used in linking to interests in SMS
     def self.interest_path(interest)
       if interest.item?
-        Subscription.adapter_for(interest_data[interest.interest_type][:adapter]).interest_path(interest)
+        "/item/#{interest.interest_type}/#{interest.in}"
       else
         "/interest/#{interest.id}"
       end

@@ -42,11 +42,6 @@ module Subscriptions
         "#{subscription.data['state'] || "state"} #{number > 1 ? "bills" : "bill"}"
       end
 
-      # another way of getting the same URL, but from within an interest
-      def self.interest_path(interest)
-        "/item/state_bill/#{URI.encode interest.in}"
-      end
-
       def self.interest_name(interest)
         "#{interest.data['bill_id']} (#{interest.data['state'].upcase})"
       end
