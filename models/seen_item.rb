@@ -12,10 +12,10 @@ class SeenItem
   # origin subscription
   field :subscription_id
   field :subscription_type
-  field :subscription_interest_in
-
+  
   # reference by interest for interest-level feeds and landing page
   field :interest_id
+  field :interest_in
 
   # reference by user for user-level feeds
   field :user_id

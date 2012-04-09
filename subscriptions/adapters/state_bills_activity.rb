@@ -21,10 +21,6 @@ module Subscriptions
       def self.short_name(number, subscription, interest)
         "#{number > 1 ? "actions" : "action"}"
       end
-
-      def self.item_path(item)
-        "/state_bill/#{URI.encode item.subscription_interest_in}#action-#{item['data']['acted_at'].to_i}"
-      end
       
       def self.items_for(response, function, options = {})
         return nil unless response['actions']
@@ -32,8 +28,8 @@ module Subscriptions
         item_id = StateBills.id_for response.to_hash
 
         actions = []
-        response['actions'].each_with_index do |action, i|
-          actions << item_for(item_id, i, action)
+        response['actions'].each do |action|
+          actions << item_for(item_id, action)
         end
         actions
       end
@@ -41,13 +37,13 @@ module Subscriptions
 
       # private
       
-      def self.item_for(item_id, i, action)
+      def self.item_for(item_id, action)
         return nil unless action
 
         action['date'] = action['date'].to_time
 
         SeenItem.new(
-          :item_id => "#{item_id}-action-#{i}",
+          :item_id => "#{item_id}-action-#{action['date'].to_i}",
           :date => action['date'],
           :data => action
         )

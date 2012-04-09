@@ -90,10 +90,12 @@ module Subscriptions
     # function is one of [:search, :initialize, :check]
     # options hash can contain epheremal modifiers for search (right now just a 'page' parameter)
     def self.poll(subscription, function = :search, options = {})
+      interest = subscription.interest
+
       adapter = subscription.adapter
       url = adapter.url_for subscription, function, options
       
-      puts "\n[#{subscription.subscription_type}][#{function}][#{subscription.interest_in}][#{subscription.id}] #{url}\n\n" if config[:debug][:output_urls]
+      puts "\n[#{subscription.subscription_type}][#{function}][#{interest.in}][#{subscription.id}] #{url}\n\n" if config[:debug][:output_urls]
       
       begin
         response = HTTParty.get url
@@ -106,14 +108,19 @@ module Subscriptions
       items = adapter.items_for response, function, options
       
       if items
+        
         items.map do |item| 
 
           item.attributes = {
-            # insert a reference to the subscription that generated result
+            # store the subscription, duplicate the type
             :subscription => subscription,
             :subscription_type => subscription.subscription_type,
-            :subscription_interest_in => subscription.interest_in,
-            :interest_id => subscription.interest_id,
+            
+            # store the interest, and duplicate some core fields
+            :interest => interest,
+            :interest_in => interest.in,
+            :interest_type => interest.interest_type,
+
             :user_id => subscription.user_id,
 
             # insert a reference to the URL this result was found in  

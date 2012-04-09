@@ -28,10 +28,6 @@ module Subscriptions
       def self.short_name(number, subscription, interest)
         "#{number > 1 ? "actions" : "action"}"
       end
-
-      def self.item_path(item)
-        "/bill/#{item.subscription_interest_in}#action-#{item['data']['acted_at'].to_i}"
-      end
       
       # takes parsed response and returns an array where each item is 
       # a hash containing the id, title, and post date of each item found
@@ -41,8 +37,8 @@ module Subscriptions
         bill_id = response['bills'].first['bill_id']
 
         actions = []
-        response['bills'].first['actions'].each_with_index do |action, i|
-          actions << item_for(bill_id, i, action)
+        response['bills'].first['actions'].each do |action|
+          actions << item_for(bill_id, action)
         end
         actions
       end
@@ -50,11 +46,11 @@ module Subscriptions
 
       # private
       
-      def self.item_for(bill_id, i, action)
+      def self.item_for(bill_id, action)
         return nil unless action
 
         SeenItem.new(
-          :item_id => "#{bill_id}-action-#{i}",
+          :item_id => "#{bill_id}-action-#{action['acted_at'].to_i}",
           :date => action['acted_at'],
           :data => action
         )

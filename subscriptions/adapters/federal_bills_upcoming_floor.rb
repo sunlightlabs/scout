@@ -28,10 +28,6 @@ module Subscriptions
       def self.short_name(number, subscription, interest)
         "#{number > 1 ? "floor notices" : "floor notice"}"
       end
-
-      def self.item_path(item)
-        "/bill/#{item.subscription_interest_in}#upcoming-#{item['data']['legislative_day'].strftime("%Y%m%d")}-#{item['data']['chamber']}"
-      end
       
       # takes parsed response and returns an array where each item is 
       # a hash containing the id, title, and post date of each item found
@@ -50,7 +46,7 @@ module Subscriptions
         upcoming['legislative_day'] = noon_utc_for upcoming['legislative_day']
 
         SeenItem.new(
-          :item_id => upcoming['permalink'] || "#{upcoming['legislative_day'].strftime "%Y%m%d"}-#{upcoming['chamber']}",
+          :item_id => "#{upcoming['legislative_day'].strftime "%Y%m%d"}-#{upcoming['chamber']}",
           :date => upcoming['legislative_day'],
           :data => upcoming
         )

@@ -76,8 +76,8 @@ module Deliveries
         
         :subscription_id => subscription.id,
         :subscription_type => subscription.subscription_type,
-        :subscription_interest_in => subscription.interest_in,
-
+        
+        :interest_in => subscription.interest_in,
         :interest_id => subscription.interest_id,
 
         :mechanism => mechanism,

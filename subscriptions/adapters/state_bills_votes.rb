@@ -21,10 +21,6 @@ module Subscriptions
       def self.short_name(number, subscription, interest)
         "#{number > 1 ? "votes" : "vote"}"
       end
-
-      def self.item_path(item)
-        "/state_bill/#{URI.encode item.subscription_interest_in}#votes-#{item['data']['date'].to_i}"
-      end
       
       def self.items_for(response, function, options = {})
         return nil unless response['votes']
@@ -32,8 +28,8 @@ module Subscriptions
         item_id = StateBills.id_for response.to_hash
 
         votes = []
-        response['votes'].each_with_index do |vote, i|
-          votes << item_for(item_id, i, vote)
+        response['votes'].each do |vote|
+          votes << item_for(item_id, vote)
         end
         votes
       end
@@ -41,13 +37,13 @@ module Subscriptions
 
       # private
       
-      def self.item_for(item_id, i, vote)
+      def self.item_for(item_id, vote)
         return nil unless vote
 
         vote['date'] = vote['date'].to_time
 
         SeenItem.new(
-          :item_id => "#{item_id}-vote-#{i}",
+          :item_id => "#{item_id}-vote-#{vote['date'].to_i}",
           :date => vote['date'],
           :data => vote
         )

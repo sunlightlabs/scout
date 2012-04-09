@@ -16,7 +16,7 @@ class Delivery
   # core fields needed to deliver the goods
   field :user_email
   field :subscription_type
-  field :subscription_interest_in
+  field :interest_in
 
   # store where this delivery should go out over email or sms
   # will probably be populated by user's settings, but the
@@ -32,7 +32,7 @@ class Delivery
   
   validates_presence_of :subscription_id
   validates_presence_of :subscription_type
-  validates_presence_of :subscription_interest_in
+  validates_presence_of :interest_in
   validates_presence_of :user_id
   validates_presence_of :user_email
   validates_presence_of :item
