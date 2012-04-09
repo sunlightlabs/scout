@@ -24,12 +24,10 @@ module Subscriptions
       
       def self.items_for(response, function, options = {})
         return nil unless response['votes']
-        
-        item_id = StateBills.id_for response.to_hash
 
         votes = []
         response['votes'].each do |vote|
-          votes << item_for(item_id, vote)
+          votes << item_for(response['id'], vote)
         end
         votes
       end
@@ -37,13 +35,13 @@ module Subscriptions
 
       # private
       
-      def self.item_for(item_id, vote)
+      def self.item_for(bill_id, vote)
         return nil unless vote
 
         vote['date'] = vote['date'].to_time
 
         SeenItem.new(
-          :item_id => "#{item_id}-vote-#{vote['date'].to_i}",
+          :item_id => "#{bill_id}-vote-#{vote['date'].to_i}",
           :date => vote['date'],
           :data => vote
         )

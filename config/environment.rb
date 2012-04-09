@@ -102,6 +102,15 @@ def search_adapters
   }
 end
 
+def interest_adapters
+  {
+    'federal_bills_activity' => 'bill',
+    'federal_bills_upcoming_floor' => 'bill',
+    'state_bills_votes' => 'state_bill',
+    'state_bills_activity' => 'state_bill'
+  }
+end
+
 
 # needed all over the app - might as well just make a global module
 

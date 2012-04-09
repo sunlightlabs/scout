@@ -8,7 +8,7 @@ module Subscriptions
         api_key = config[:subscriptions][:sunlight_api_key]
         query = URI.escape subscription.interest_in
         
-        fields = %w{ bill_id subjects state chamber created_at updated_at title sources versions session %2Bshort_title }
+        fields = %w{ id bill_id subjects state chamber created_at updated_at title sources versions session %2Bshort_title }
         
         url = "#{endpoint}/bills/?apikey=#{api_key}"
         
@@ -56,7 +56,7 @@ module Subscriptions
         endpoint = "http://openstates.org/api/v1"
         api_key = config[:subscriptions][:sunlight_api_key]
         
-        fields = %w{ bill_id state chamber created_at updated_at title sources actions votes session versions %2Bshort_title }
+        fields = %w{ id bill_id state chamber created_at updated_at title sources actions votes session versions %2Bshort_title }
         
         # item_id is of the form ":state/:session/:chamber/:bill_id" (URI encoded already)
         url = "#{endpoint}/bills/#{URI.encode item_id.gsub('__', '/').gsub('_', ' ')}/?apikey=#{api_key}"
@@ -108,18 +108,10 @@ module Subscriptions
 
         # save the item ID as a piece of the URL we can plug back into the OS API later
         SeenItem.new(
-          :item_id => id_for(bill),
+          :item_id => bill['id'],
           :date => bill["created_at"],
           :data => bill
         )
-      end
-
-      def self.id_for(bill)
-        bill_id = URI.encode bill['bill_id']
-        session = URI.encode bill['session']
-        chamber = URI.encode bill['chamber']
-        state = URI.encode bill['state']
-        [state, session, chamber, bill_id].join("__")
       end
 
       # cast dates with an unknown time zone to noon UTC, to make sure at least the day is always correct
