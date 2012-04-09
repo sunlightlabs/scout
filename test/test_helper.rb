@@ -1,3 +1,16 @@
+ENV['RACK_ENV'] = 'test'
+
+require 'rubygems'
+require 'test/unit'
+
+require 'bundler/setup'
+require 'rack/test'
+require 'scout'
+
+require 'rspec/mocks'
+
+set :environment, :test
+
 module TestHelper
 
   module Methods

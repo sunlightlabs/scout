@@ -49,7 +49,7 @@
     <% subscriptions.each do |subscription| %>
         <div class="search"
           id="<%= subscription.subscription_type %>"
-          data-subscription="<%= subscription.serialize %>"
+          data-subscription="<%= subscription.subscription_type %>"
           >
 
           <section class="container clear">
@@ -57,6 +57,10 @@
 
             <div class="loading">
               <span>Searching ...</span>
+            </div>
+
+            <div class="error">
+              <span>There was an error while searching.</span>
             </div>
 
             <div class="populate">
@@ -89,26 +93,32 @@
  -->
 
 <script type="text/javascript">
+  // hold the current state of the filters
+  // needs to stay a separate hash, since the form can 
+  // change without auto-committing the changes
+
+  // initialize with any subscription-wide filters (none yet)
+  var filters = {
+    "all": <%= (params[:all] || {}).to_json %>
+  };
+
   // put in a delay block in case this is being rendered before the layout
   $(function() {
     var query = "<%= query %>";
-    // var query_encoded = encodeURIComponent(query);
     
-    // var interest_id = user_subscriptions[query_encoded] ? user_subscriptions[query_encoded].interest_id : null;
-
-    var sole = <%= subscriptions.size == 1 ? "true" : "false" %>;
     <% subscriptions.each do |subscription| %>
-      var per_page = sole ? 20 : 2;
-      searchFor(query, "<%= subscription.serialize %>", {sole: sole, per_page: per_page});
-    <% end %>
 
-    // $(".subscription_data").change(function() {
-    //     var subscription_type = $(this).parents("div.filter").data("subscription_type");
-    //     searchFor(interest, subscription_type);
-    // });
+      <% # "I think this is safe..." %>
+      filters["<%= subscription.subscription_type %>"] = <%= subscription.data.to_json %>;
+
+      searchFor(
+        query, "<%= subscription.subscription_type %>", 
+        {per_page: <%= subscriptions.size == 1 ? 20 : 2 %>}
+      );
+    <% end %>
   });
 
-  function searchFor(query, subscription, options) {
+  function searchFor(query, subscription, searchOptions) {
       var query_slug = encodeURIComponent(query);
       var container = $(".results div.search[data-subscription=" + subscription + "]");
 
@@ -116,48 +126,36 @@
       container.find(".loading").show();
       container.find(".populate").html("").hide();
       
-      // assemble hash of any filter options
-      var data = {}; // subscriptionData(subscription_type);
-      $.extend(data, options);
+      // all search options
+      var search = {};
 
-      $.get("/fetch/search/" + subscription + "/" + query_slug, data, function(data) {
+      // carry along the universal and subscription-specific filters
+      var these_filters = {}
+      these_filters.all = filters.all;
+      these_filters[subscription] = filters[subscription];
+
+      $.extend(search, these_filters);
+
+      // any one-time search options (pagination)
+      $.extend(search, searchOptions);
+
+      $.get("/fetch/search/" + subscription + "/" + query_slug, search, function(data) {
         
         container.find(".loading").hide();
         container.find(".populate").html(data.html).show();
+
+        // set the 'more' link to carry on the filters (and only the filters)
+        container.find(".populate a.viewMore").attr("href", 
+          "/search/" + subscription + "/" + query_slug + "?" + $.param(these_filters)
+        );
 
         // if (data.search_url) {
         //   container.find("div.developer.json.search").show().find("a").attr("href", data.search_url);
         // }
 
-        // error
-        if (data.count < 0)  {
-          // tab.addClass("error");
-        } else {
-          // container.find("header").show();
-          // container.find("div.logged_out").show();
-          // container.find("div.filter").show();
-          // container.find("header span.description").html(data.description);
-
-          // var button = $("div.tab." + subscription_type + " button.follow");
-
-          // var subscriptions = user_subscriptions[keyword_slug]; // global!
-          // if (subscriptions && subscriptions.subscriptions[subscription_type]) {
-          //   button.data("subscription_id", subscriptions.subscriptions[subscription_type]);
-          //   showSave(subscription_type, "unfollow");
-          // } else {
-          //   button.data("subscription_id", null);
-          //   showSave(subscription_type, "follow");
-          // }
-
-          // if (data.count == 0)
-          //   tab.addClass("empty");
-          
-        }
-
       }).error(function() {
-        // tab.removeClass("loading");
-        // container.find("div.loading_container").hide();
-        // container.find("div.system_error").show();
+        container.find(".loading").hide();
+        container.find(".error").show();
       });
     }
 </script>

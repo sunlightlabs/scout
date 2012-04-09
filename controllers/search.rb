@@ -3,14 +3,19 @@
 get '/search/:subscriptions/:query' do
   query = params[:query].gsub("\"", "")
 
-  subscriptions = params[:subscriptions].split(",").map do |string|
-    subscription = Subscription.deserialize string
-    subscription.attributes = {
-      :interest_in => query
-      # insert data here too?
-    }
-    subscription
-  end
+  # subscriptions_map = {}
+
+  subscriptions = params[:subscriptions].split(",").map do |subscription_type|
+    next unless search_data.keys.include?(subscription_type)
+
+    Subscription.new(
+      :interest_in => query,
+      :subscription_type => subscription_type,
+      :data => (params[subscription_type] || {})
+    )
+  end.compact
+
+  halt 404 and return unless subscriptions.any?
 
   erb :"search/search", :layout => !pjax?, :locals => {
     :subscriptions => subscriptions,
@@ -20,15 +25,16 @@ end
 
 get '/fetch/search/:subscription/:query' do
   query = params[:query].strip
-  subscription = Subscription.deserialize params[:subscription]
+  subscription_type = params[:subscription]
 
-  subscription_data = params[:subscription_data] || {} # must default to empty hash
-  subscription_data[:query] = query
+  data = params[subscription_type] || {} # must default to empty hash
+  data['query'] = query
 
-  subscription.attributes = {
+  subscription = Subscription.new(
+    :subscription_type => subscription_type,
     :interest_in => query,
-    :data => subscription_data
-  }
+    :data => data
+  )
 
   page = params[:page].present? ? params[:page].to_i : 1
   per_page = params[:per_page].present? ? params[:per_page].to_i : nil
@@ -49,7 +55,7 @@ get '/fetch/search/:subscription/:query' do
     :items => results, 
     :subscription => subscription,
     :query => query,
-    :sole => (params[:sole] == "true")
+    :sole => (per_page > 5)
   }
 
   headers["Content-Type"] = "application/json"

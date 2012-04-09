@@ -1,17 +1,4 @@
-ENV['RACK_ENV'] = 'test'
-
-require 'rubygems'
-require 'test/unit'
-
-require 'bundler/setup'
-require 'rack/test'
-require 'scout'
-
-require 'rspec/mocks'
-
 require 'test/test_helper'
-
-set :environment, :test
 
 class AccountsTest < Test::Unit::TestCase
   include Rack::Test::Methods

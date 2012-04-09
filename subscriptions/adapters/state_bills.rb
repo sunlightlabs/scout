@@ -31,7 +31,11 @@ module Subscriptions
       end
 
       def self.search_name(subscription)
-        "#{subscription.data['state'] || "State"} Bills"
+        if subscription.data['state']
+          "#{ScoutUtils.state_map[subscription.data['state']]} Bills"
+        else
+          "State Bills"
+        end
       end
 
       def self.short_name(number, subscription, interest)

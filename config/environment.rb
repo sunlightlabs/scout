@@ -97,7 +97,7 @@ end
 
 # maps each type of subscription adapter to their display information
 def search_data
-  data = {
+  {
     'federal_bills' => {
       :name => "Bills in Congress",
       :order => 1
@@ -115,12 +115,67 @@ def search_data
       :order => 4
     }
   }
-  
-  if config[:hide_subscription_types]
-    config[:hide_subscription_types].each do |type|
-      data.delete type.to_s
-    end
-  end
+end
 
-  data
+
+# needed all over the app - might as well just make a global module
+
+module ScoutUtils
+
+  def self.state_map
+    @state_map ||= {
+      "AL" => "Alabama",
+      "AK" => "Alaska",
+      "AZ" => "Arizona",
+      "AR" => "Arkansas",
+      "CA" => "California",
+      "CO" => "Colorado",
+      "CT" => "Connecticut",
+      "DE" => "Delaware",
+      "DC" => "District of Columbia",
+      "FL" => "Florida",
+      "GA" => "Georgia",
+      "HI" => "Hawaii",
+      "ID" => "Idaho",
+      "IL" => "Illinois",
+      "IN" => "Indiana",
+      "IA" => "Iowa",
+      "KS" => "Kansas",
+      "KY" => "Kentucky",
+      "LA" => "Louisiana",
+      "ME" => "Maine",
+      "MD" => "Maryland",
+      "MA" => "Massachusetts",
+      "MI" => "Michigan",
+      "MN" => "Minnesota",
+      "MS" => "Mississippi",
+      "MO" => "Missouri",
+      "MT" => "Montana",
+      "NE" => "Nebraska",
+      "NV" => "Nevada",
+      "NH" => "New Hampshire",
+      "NJ" => "New Jersey",
+      "NM" => "New Mexico",
+      "NY" => "New York",
+      "NC" => "North Carolina",
+      "ND" => "North Dakota",
+      "OH" => "Ohio",
+      "OK" => "Oklahoma",
+      "OR" => "Oregon",
+      "PA" => "Pennsylvania",
+      "PR" => "Puerto Rico",
+      "RI" => "Rhode Island",
+      "SC" => "South Carolina",
+      "SD" => "South Dakota",
+      "TN" => "Tennessee",
+      "TX" => "Texas",
+      "UT" => "Utah",
+      "VT" => "Vermont",
+      "VA" => "Virginia",
+      "WA" => "Washington",
+      "WV" => "West Virginia",
+      "WI" => "Wisconsin",
+      "WY" => "Wyoming"
+    }
+  end
 end
