@@ -6,6 +6,18 @@ module GeneralHelpers
     content_for(:hide_search) { true }
   end
 
+  def set_home
+    content_for(:home) { true }
+  end
+
+  def search?
+    yield_content(:hide_search).blank?
+  end
+
+  def home?
+    yield_content(:home).present?
+  end
+
   def flash_for(types)
     partial "layout/flash", :engine => "erb", :locals => {:types => types}
   end

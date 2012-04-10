@@ -39,7 +39,7 @@ end
 
 
 get '/' do
-  erb :index, :layout => :home
+  erb :index
 end
 
 

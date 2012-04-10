@@ -45,9 +45,13 @@
     </script>
 
 </head>
-<body class="search results">
+<body>
 
     <div class="headerWrapper">
+        <% if home? %>
+        <div class="homeWrapper">
+        <% end %>
+
         <header class="contentWrapper">
             <nav>
                 <ul id="userNav">
@@ -81,10 +85,20 @@
                 <h1 class="textIndent">Scout</h1>
             </a>
 
-            <% unless yield_content(:hide_search).any? %>
+            <% if home? %>
+                <img class="splash" src="/images/splash.png" width="960" height="237" alt="Splash">
+            <% end %>
+
+            <% if search? %>
                 <%= partial "search/search", :engine => "erb", :locals => {} %>
             <% end %>
+            
+            <div class="clear"></div>
         </header>
+
+        <% if home? %>
+        </div>
+        <% end %>
     </div>
 
     <div class="contentWrapper" id="content">
