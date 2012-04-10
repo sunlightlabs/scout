@@ -467,7 +467,7 @@ footer a{
 
 
 /*-- Search Results Styling --*/
-.results .contentArea{
+.results.contentArea{
     background: url('/images/tinyshadow.png') top left repeat-x;
 }
 .pageTitle{
@@ -489,7 +489,7 @@ footer a{
 .pageTitle button:hover{
     background: url('/images/btn_subscribe.png') left bottom no-repeat;
 }
-.results .contentArea{
+.results.contentArea{
     padding-top: 53px;
 }
 .contentArea.right section{
@@ -511,12 +511,12 @@ footer a{
     padding-top: 20px;
     background: url('/images/tinyborder.png') center bottom repeat-x;
 }
-.results .contentArea li{
+.results.contentArea li{
     padding: 33px 10px 33px 33px;
     background: url('/images/tinyborder_entry.png') center top no-repeat;
 }
 
-.results .contentArea.right li:hover{
+.results.contentArea.right li:hover{
     background-color: #f5f6f5;
     -webkit-box-shadow: inset 14px 0px 14px -7px #e2e3e0;
     -moz-box-shadow: inset 14px 0px 14px -7px #e2e3e0;
@@ -539,11 +539,12 @@ footer a{
   background-repeat: no-repeat;
 }
 
-.contentArea h4{
+.results.contentArea h4{
     font-weight: bold;
     font-size: 106%;
     float: left;
     margin-bottom: 10px;
+    width: 550px;
 }
 .contentArea h4 a{
     text-decoration: none;
