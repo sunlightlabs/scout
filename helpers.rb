@@ -29,8 +29,7 @@ module GeneralHelpers
   end
 
   def recent_searches
-    nil
-    # partial "layout/recent_searches", :engine => "erb", :locals => {}
+    partial "layout/recent_searches", :engine => "erb", :locals => {}
   end
 
   def item_path(item)
