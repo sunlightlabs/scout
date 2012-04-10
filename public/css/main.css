@@ -366,26 +366,32 @@ div.contentWrapper{
     display: block;
     width: 159px;
     height: 48px;
-    margin-bottom: 25px;
+    float: left;
+    margin-left: 10px;
 }
 footer{
-    padding: 33px 0;
+    padding: 33px 0 23px 0;
 }
 .aboutSF{
     float: left;
-    width: 282px;
-    padding-left: 10px;
-}
-.aboutSF p{
+    width: 500px;
     margin-left: 52px;
     color: #ffffff;
-    font-size: 68%;
+    font-size: 85%;
 }
+.aboutSF p{
+    margin-top: 0;
+    margin-bottom: 6px;
+}
+
 footer nav{
     float: right;
 }
 
-
+footer a{
+    color: #ffffff;
+    font-weight: bold;
+}
 
 
 
