@@ -76,18 +76,9 @@ nav{
     font-weight: bold;
 }
 nav a{
-    -webkit-text-stroke: 0;
-    color: transparent;
-    background-color: rgba(2, 116, 139, 1);
-    background-clip: text;
-    -moz-background-clip: text;
-    -webkit-background-clip: text;
-    text-shadow: rgba(255, 255, 255, 0.3) 2px 2px 3px;
     text-decoration: none;
 }
-nav a:hover{
-    background-color: rgba(2, 71, 85, 1);
-}
+
 nav li{
     padding: 0 30px 0 0;
     display: block;
@@ -749,10 +740,10 @@ footer a{
 
 /*-- Settings Styling --*/
 
-.settings .contentArea form input[type="text"]{
+.settings.contentArea form input[type="text"]{
     width: 100%;
 }
-.settings .contentArea form ul{
+.settings.contentArea form ul{
     padding: 33px 33px 33px 10px;
     column-count: 2;
     -moz-column-count: 2;
@@ -763,7 +754,7 @@ footer a{
     -webkit-column-gap: 16px;
 }
 
-.settings .contentArea form li{
+.settings.contentArea form li{
     column-break-inside: avoid;
     -moz-column-break-inside: avoid;
     -webkit-column-break-inside: avoid;
@@ -773,13 +764,13 @@ li.email{
     -webkit-column-span: all;
     column-span: all;
 }
-.settings .contentArea form input{
+.settings.contentArea form input{
     margin-bottom: 16px;
 }
-.settings label span{
+.settings.contentArea label span{
     font-weight: normal;
 }
-.settings .contentArea form small{
+.settings.contentArea form small{
     font-style: italic;
     font-weight: normal;
     display: block;
