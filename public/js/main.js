@@ -43,7 +43,7 @@ var NewSearch = {
   // return a hash of subscription-specific filters
   // e.g. {"state_bills": {"state": "DC"}, "regulations": {"agency": "271"}}
   subscriptionOptions: function(types) {
-    return {"state_bills": {"state": "DC"}};
+    return {};
   }
 };
 
