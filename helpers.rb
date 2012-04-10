@@ -11,11 +11,17 @@ module GeneralHelpers
   end
 
   def search?
-    yield_content(:hide_search).blank?
+    !content_from(:hide_search)
   end
 
   def home?
-    yield_content(:home).present?
+    content_from :home
+  end
+
+  # don't give me empty strings
+  def content_from(symbol)
+    content = yield_content symbol
+    content.present? ? content : nil
   end
 
   def flash_for(types)
@@ -23,7 +29,8 @@ module GeneralHelpers
   end
 
   def recent_searches
-    partial "layout/recent_searches", :engine => "erb", :locals => {}
+    nil
+    # partial "layout/recent_searches", :engine => "erb", :locals => {}
   end
 
   def item_path(item)

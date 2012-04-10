@@ -92,7 +92,7 @@
             <% if search? %>
                 <%= partial "search/search", :engine => "erb", :locals => {} %>
             <% end %>
-            
+
             <div class="clear"></div>
         </header>
 
@@ -103,14 +103,14 @@
 
     <div class="contentWrapper" id="content">
 
-        <% if title_area = yield_content(:title) %>
+        <% if title_area = content_from(:title) %>
             <div class="pageTitle">
                 <%= title_area %>
                 <div class="clear"></div>
             </div>
         <% end %>
 
-        <% if left_bar = yield_content(:sidebar_left) %>
+        <% if left_bar = content_from(:sidebar_left) %>
             <div class="sidebar left">
                 <%= left_bar %>
             </div>
@@ -120,7 +120,7 @@
             <%= yield %>
         </div>
 
-        <% if right_bar = yield_content(:sidebar_right) %>
+        <% if right_bar = content_from(:sidebar_right) %>
             <div class="sidebar right">
                 <%= right_bar %>
             </div>
