@@ -655,8 +655,19 @@ footer a{
 
 
 /*-- Entry Styling --*/
+.followChanges{
+    background: url('/images/tinyborder.png') bottom left repeat-x;
+    padding: 16px 0 16px 10px;
+}
 
-.entry .pageTitle, .entry .summary, .entry .details {
+.searchParameters{
+    float: left;
+}
+
+.followChanges button{
+    float: right;
+}
+.followChanges, .entry .summary, .entry .details {
     padding: 0 33px 0 10px;
 }
 
