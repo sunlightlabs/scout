@@ -1,55 +1,34 @@
 <% content_for :sidebar_right do %>
-    
-    
-    <h2>Change Password</h2>
-    <% form_for user, "/account/password/change", :method => "put" do |f| %>
-        <ul>
-            <li>
-                <label for="old_password">Old Password</label>
-                <input type="password" name="old_password" />
-            </li>
-            <li>
-                <label for="password">New Password</label>
-                <input type="password" name="password" />
-            </li>
-            <li>
-                <label for="password_confirmation">New Password (again)</label>
-                <input type="password" name="password_confirmation" />
-            </li>
-        </ul>
-        <button type="submit">
-            <span>Change Password</span>
-        </button>
-    <% end %>    
+	<div class="donate">
+	    <p>
+	        You're on the <strong>free</strong> plan. Everyone is!
+	        <br/>
+	        <small>But if you like this service, and feel like giving us money anyway, by all means:</small>
+	    </p>
 
-    <p>
-        You're on the <strong>free</strong> plan. Everyone is!
-        <br/>
-        <small>But if you like this service, and feel like giving us money anyway, by all means:</small>
-    </p>
-
-    <form action="https://checkout.google.com/cws/v2/Donations/548702786961191/checkoutForm" id="BB_BuyButtonForm" method="post" name="BB_BuyButtonForm" target="_top">
+	    <form action="https://checkout.google.com/cws/v2/Donations/548702786961191/checkoutForm" id="BB_BuyButtonForm" method="post" name="BB_BuyButtonForm" target="_top">
             
-        <input name="item_name_1" type="hidden" value="Scout - Donation to support the service"/>
-        <input name="item_description_1" type="hidden" value="The Sunlight Foundation is a non-profit, nonpartisan organization that uses the power of the Internet to catalyze greater government openness and transparency and to provide new tools and resources for media and individuals alike."/>
-        <input name="item_quantity_1" type="hidden" value="1"/>
-        <input name="item_currency_1" type="hidden" value="USD"/>
-        <input name="item_is_modifiable_1" type="hidden" value="true"/>
-        <input name="item_min_price_1" type="hidden" value="0.01"/>
-        <input name="item_max_price_1" type="hidden" value="25000.0"/>
-        <input name="_charset_" type="hidden" value="utf-8"/>
+	        <input name="item_name_1" type="hidden" value="Scout - Donation to support the service"/>
+	        <input name="item_description_1" type="hidden" value="The Sunlight Foundation is a non-profit, nonpartisan organization that uses the power of the Internet to catalyze greater government openness and transparency and to provide new tools and resources for media and individuals alike."/>
+	        <input name="item_quantity_1" type="hidden" value="1"/>
+	        <input name="item_currency_1" type="hidden" value="USD"/>
+	        <input name="item_is_modifiable_1" type="hidden" value="true"/>
+	        <input name="item_min_price_1" type="hidden" value="0.01"/>
+	        <input name="item_max_price_1" type="hidden" value="25000.0"/>
+	        <input name="_charset_" type="hidden" value="utf-8"/>
         
-        <input id="item_price_1" name="item_price_1" type="text" value="10.00" placeholder="donation amount"/>
+	        <input id="item_price_1" name="item_price_1" type="text" value="10.00" placeholder="donation amount"/>
         
-        <button class="donatebutton" type="submit">
-            <span>Donate</span>
-        </button>
+	        <button class="donatebutton" type="submit">
+	            <span>Donate</span>
+	        </button>
         
-    </form>
+	    </form>
 
-    <small>
-        The Sunlight Foundation is a 501 (c)(3) nonprofit, nonpartisan organization. All contributions are tax-deductible.
-    </small>
+	    <small>
+	        The Sunlight Foundation is a 501 (c)(3) nonprofit, nonpartisan organization. All contributions are tax-deductible.
+	    </small>
+	</div>
 
 <% end %>
 
@@ -130,7 +109,28 @@
             </button>
         <% end %>
     </div>
-
+	<div class="passwordChange">
+		<h2>Change Password</h2>
+	    <% form_for user, "/account/password/change", :method => "put" do |f| %>
+	        <ul>
+	            <li>
+	                <label for="old_password">Old Password</label>
+	                <input type="password" name="old_password" />
+	            </li>
+	            <li>
+	                <label for="password">New Password</label>
+	                <input type="password" name="password" />
+	            </li>
+	            <li>
+	                <label for="password_confirmation">New Password (again)</label>
+	                <input type="password" name="password_confirmation" />
+	            </li>
+	        </ul>
+	        <button type="submit">
+	            <span>Change Password</span>
+	        </button>
+	    <% end %>
+	</div>
     <div class="developer_mode">
         <h2>Developer Mode</h2>
         <% if developer_mode? %>
