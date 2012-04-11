@@ -2,6 +2,10 @@
 
 :session_secret: # fill in with something unique per-deployment
 
+:services:
+  :shared_secret:
+  :api_name: scout
+
 :mongoid:
   host: localhost
   database: scout

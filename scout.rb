@@ -26,6 +26,7 @@ configure(:development) do |config|
   config.also_reload "deliveries/*.rb"
 end
 
+require 'controllers/api_keys'
 require 'controllers/users'
 require 'controllers/subscriptions'
 require 'controllers/feeds'
