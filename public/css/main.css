@@ -22,10 +22,54 @@ input, select, textarea {
     box-sizing: border-box;
 }
 
-button {
-    text-indent: -9999em;
+button, a.update.button {
+    display: block;
     border: 0;
+    height: 50px;
+    min-width: 50px;
+    background: rgb(28,131,152); /* Old browsers */
+    background: -moz-linear-gradient(top,  rgba(28,131,152,1) 0%, rgba(28,131,152,1) 50%, rgba(28,105,122,1) 51%, rgba(28,105,122,1) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(28,131,152,1)), color-stop(50%,rgba(28,131,152,1)), color-stop(51%,rgba(28,105,122,1)), color-stop(100%,rgba(28,105,122,1))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  rgba(28,131,152,1) 0%,rgba(28,131,152,1) 50%,rgba(28,105,122,1) 51%,rgba(28,105,122,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  rgba(28,131,152,1) 0%,rgba(28,131,152,1) 50%,rgba(28,105,122,1) 51%,rgba(28,105,122,1) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  rgba(28,131,152,1) 0%,rgba(28,131,152,1) 50%,rgba(28,105,122,1) 51%,rgba(28,105,122,1) 100%); /* IE10+ */
+    background: linear-gradient(top,  rgba(28,131,152,1) 0%,rgba(28,131,152,1) 50%,rgba(28,105,122,1) 51%,rgba(28,105,122,1) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1c8398', endColorstr='#1c697a',GradientType=0 ); /* IE6-9 */
+    border: 6px solid #c5c7c7;
+    color: #a5d7e2;
+    text-transform: uppercase;
+    font-size: 15px;
+    padding-left: 5px;
+    padding-right: 5px;   
+
+
 }
+button:hover, a.update.button:hover {
+
+    background: rgb(28,131,152); /* Old browsers */
+    background: -moz-linear-gradient(top,  rgba(29,113,131) 0%, rgba(29,113,131) 50%, rgba(18,87,101,1) 51%, rgba(18,87,101,1) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(29,113,131,1))), color-stop(50%,rgba(29,113,131,1))), color-stop(51%,rgba(18,87,101,1)), color-stop(100%,rgba(18,87,101,1))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  rgba(29,113,131,1) 0%,rgba(29,113,131,1) 50%,rgba(18,87,101,1) 51%,rgba(18,87,101,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  rgba(29,113,131,1) 0%,rgba(29,113,131,1) 50%,rgba(18,87,101,1) 51%,rgba(18,87,101,1) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  rgba(29,113,131,1) 0%,rgba(29,113,131,1) 50%,rgba(18,87,101,1) 51%,rgba(18,87,101,1) 100%); /* IE10+ */
+    background: linear-gradient(top,  rgba(29,113,131,1) 0%,rgba(29,113,131,1) 50%,rgba(18,87,101,1) 51%,rgba(18,87,101,1) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1c8398', endColorstr='#1c697a',GradientType=0 ); /* IE6-9 */
+    border: 6px solid #c5c7c7;
+    color: #a5d7e2;
+}
+button span, a.update.button span{
+    border: 1px solid #396973;
+    border-bottom: 0;
+    padding: 4px 14px;
+    text-shadow: 0px 0px 9px #082d33;
+    filter: dropshadow(color=#082d33, offx=0, offy=0);
+}
+
+button:hover span, a.update.button span{
+    border: 1px solid #0d5261;
+    border-bottom: 0;
+}
+
 
 a {
     color: #1c8398;
@@ -206,14 +250,9 @@ header h1{
 
 #search_form button{
     float: left;
-    background: url('/images/btn_newSearch.png') top left no-repeat;
-    width: 54px;
-    height: 51px;
     margin-left: 14px;
 }
-#search_form button:hover{
-    background: url('/images/btn_newSearch.png') bottom left no-repeat;
-}
+
 
 .count{
     font-weight: normal;
@@ -332,13 +371,10 @@ div.contentWrapper{
     margin-bottom: 10px;
 }
 .filters form button{
-    background: url('/images/btn_updateResults.png') left top no-repeat;
-    width: 231px;
-    height: 51px;
+
 }
 
 .filters form button:hover{
-    background: url('/images/btn_updateResults.png') left bottom no-repeat;
 }
 .filters label{
     font-weight: normal;
@@ -415,11 +451,8 @@ footer a{
 
 .homeWrapper #search_form button{
     float: right;
-    background: url('/images/btn_homeSearch.png') left top no-repeat;
-    width: 151px;
 }    
 .homeWrapper #search_form button:hover{
-        background: url('/images/btn_homeSearch.png') left bottom no-repeat;    
     }
 .homeWrapper [type="search"]{
     margin-bottom: 16px;
@@ -479,12 +512,8 @@ footer a{
 
 .pageTitle button{
     float: right;
-    background: url('/images/btn_subscribe.png') left top no-repeat;
-    width: 150px;
-    height: 51px;
 }
 .pageTitle button:hover{
-    background: url('/images/btn_subscribe.png') left bottom no-repeat;
 }
 .results.contentArea{
     padding-top: 53px;
@@ -734,13 +763,10 @@ a.source, .resources{
 }
 
 .subscriptions .contentArea form button{
-    background: url('/images/btn_updateSubscriptions.png') left top no-repeat;
-    width: 231px;
-    height: 51px;
+
 }
 
 .subscriptions .contentArea form button:hover{
-    background: url('/images/btn_updateSubscriptions.png') left bottom no-repeat;
 }
 .subscriptions legend{
     font-family: "alternate-gothic-no-3-d", arial, 'helvetica Neue', sans-serif;
@@ -808,7 +834,6 @@ li.email{
 }
 
 .user_settings button {
-    text-indent: 0;
 }
 
 
@@ -852,15 +877,10 @@ li.email{
 }
 
 a.update.button{
-    background: url('/images/btn_update.png') left top no-repeat;
-    width: 124px;
-    height: 51px;
     display: block;
     float: left;
 }
-a.update.button:hover{
-    background: url('/images/btn_update.png') left bottom no-repeat;
-}
+
 a.ignore{
     float: left;
     margin-top: 17px;
