@@ -598,6 +598,7 @@ footer a{
     font-size: 81%;
     margin-bottom: 10px;
     display: block;
+    clear: both;
 }
 
 
