@@ -60,7 +60,7 @@ h5{
 }
 p{
     font-size: 81%;
-    margin-top: 10px;
+    margin-bottom: 10px;
 }
 dt {
     font-weight: bold;
@@ -540,7 +540,7 @@ footer a{
     font-weight: bold;
     font-size: 106%;
     float: left;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     width: 550px;
 }
 .contentArea h4 a{
@@ -550,7 +550,7 @@ footer a{
 .contentArea h4 a:hover{
     color: #1c8398;
 }
-time.item, .entry time {
+.item time, .entry time {
     float: right;
     font-style: italic;
     font-weight: 200;
@@ -592,7 +592,13 @@ time.item, .entry time {
 .viewMore a .dataSet{
     color: #1C6979;
 }
-
+.subtitle{
+    color: #83858b;
+    font-style: italic;
+    font-size: 81%;
+    margin-bottom: 10px;
+    display: block;
+}
 
 
 /*-- Entry Styling --*/
