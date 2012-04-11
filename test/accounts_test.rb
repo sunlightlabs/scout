@@ -94,38 +94,34 @@ class AccountsTest < Test::Unit::TestCase
     assert_equal '/login', redirect_path
   end
 
-  def test_update_delivery_settings
+  def test_update_account_settings
     user = new_user!
 
-    assert_equal 'email', user.delivery['mechanism']
-    assert_equal 'daily', user.delivery['email_frequency']
-    assert_equal nil, user.phone
+    assert_equal 'email_daily', user.notifications
+    assert_equal true, user.announcements
 
-    put '/account/user', {:user => {:phone => "555-1212", :delivery => {:email_frequency => "immediate", :mechanism => "sms"}}}, login(user)
+    put '/account/settings', {:user => {:notifications => "email_immediate", :announcements => "false"}}, login(user)
 
     user.reload
 
-    assert_equal 'sms', user['delivery']['mechanism']
-    assert_equal 'immediate', user['delivery']['email_frequency']
-    assert_equal "555-1212", user.phone
+    assert_equal 'email_immediate', user.notifications
+    assert_equal false, user.announcements
 
     assert_equal 200, last_response.status
   end
 
-  def test_update_delivery_settings_invalid
+  def test_update_account_settings_invalid
     user = new_user!
 
-    assert_equal 'email', user.delivery['mechanism']
-    assert_equal 'daily', user.delivery['email_frequency']
-    assert_equal nil, user.phone
+    assert_equal 'email_daily', user.notifications
+    assert_equal true, user.announcements
 
-    put '/account/user', {:user => {:phone => "", :delivery => {:email_frequency => "immediate", :mechanism => "sms"}}}, login(user)
+    put '/account/settings', {:user => {:notifications => "not_valid", :announcements => "false"}}, login(user)
 
     user.reload
 
-    assert_equal 'email', user.delivery['mechanism']
-    assert_equal 'daily', user.delivery['email_frequency']
-    assert_equal nil, user.phone
+    assert_equal 'email_daily', user.notifications
+    assert_equal true, user.announcements
 
     assert_equal 500, last_response.status
   end

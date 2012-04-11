@@ -19,7 +19,7 @@ class User
 
   # boolean as to whether users wish to receive announcements about Scout features
   # defaults to true (opt-out)
-  field :announcements, :default => false
+  field :announcements, :type => Boolean, :default => true
   
   has_many :subscriptions, :dependent => :destroy
   has_many :interests, :dependent => :destroy

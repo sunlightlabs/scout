@@ -68,7 +68,7 @@ module Deliveries
         :deliveries => deliveries.map {|delivery| delivery.attributes.dup},
 
         :user_email => user.email,
-        :user_delivery => user.delivery,
+        :user_notifications => user.notifications,
 
         :subject => subject,
         :content => content,
