@@ -6,6 +6,10 @@
 
 before /^\/services\// do
   unless SunlightServices.verify params, config[:services][:shared_secret], config[:services][:api_name]
+    Admin.report Report.failure(
+      "API Key Signature Check", "Bad signature", 
+      :key => params[:key], :email => params[:email], :status => params[:status]
+    )
     halt 403, 'Bad signature' 
   end
 end
