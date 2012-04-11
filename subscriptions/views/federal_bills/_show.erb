@@ -2,29 +2,30 @@
 <% version = item.data['last_version'] %>
 
 <div class="summary">
-    <h4>
-        <%= bill_code bill['bill_type'], bill['number'] %>
-    </h4>
-
+	
+	<div class="entryHeader">
     <% if bill['short_title'].present? %>
         <h2><%= bill['short_title'] %></h2>
     <% else %>
         <h2 class="official bill title"><%= bill['official_title'] %></h2>
     <% end %>
-    
-    <%= follow_button item %>
+		<div class="subtitle">
+			<h4>
+		        <%= bill_code bill['bill_type'], bill['number'] %>
+		    </h4>
+		    <span>
+	            <%= bill_version version['version_code'] %>
+	        </span>
+		</div>
+	</div>
+	<time class="item" datetime="<%= html_date item.date %>">
+		<%= just_date_year item.date %>
+	</time>
 
-    <div class="time">
-        <time class="item" datetime="<%= html_date item.date %>">
-            <%= just_date_year item.date %>
-        </time>
-        <span>
-            <%= bill_version version['version_code'] %>
-        </span>
-    </div>
 
 
     <div class="clear"></div>
+
 
     <div class="resources">
         <h5>Resources</h5>
@@ -43,7 +44,13 @@
 
     <div class="clear"></div>
 </div>
-
+<div class="pageTitle">
+	<div class="trackSubscribe">
+		Follow this bill wherever it goes
+	</div>
+<%= follow_button item %>
+	<div class="clear"></div>
+</div>
 <div class="details">
 
     <div class="module of2">

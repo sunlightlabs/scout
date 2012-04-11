@@ -7,21 +7,27 @@
 </header>
 
 <div class="summary">
-    <h4>
-        <span class="name">
-            <%= speaker_name speech %>
-        </span>
-    </h4>
-    
-    <h2><%= speech['title'] %></h2>
-
-    <div class="time">
-        <time class="item" datetime="<%= html_date item.date %>">
+	<div class="entryHeader">
+		<h2><%= speech['title'] %></h2>
+		<div class="subtitle">
+		    <h4>
+		        <span class="name">
+		            <%= speaker_name speech %>
+		        </span>
+		    </h4>
+		</div>
+	</div>
+    <time class="item" datetime="<%= html_date item.date %>">
             <%= just_date_year item.date %>
-        </time>
-    </div>
+    </time>
+
 
     <div class="clear"></div>
+	<% speech['speaking'].each do |speaking| %>
+        <p>
+            <%= h speaking %>
+        </p>
+    <% end %>
 
     <div class="resources">
         <h5>Resources</h5>
@@ -34,9 +40,5 @@
 
     <div class="clear"></div>
     
-    <% speech['speaking'].each do |speaking| %>
-        <p>
-            <%= h speaking %>
-        </p>
-    <% end %>
+
 </div>

@@ -2,22 +2,32 @@
 
 <div class="summary">
 
-    <h4><%= regulation_stage regulation['stage'] %></h4>
-    <h2><%= regulation['title'] %></h2>
-    <h3>
-        <% if regulation['agency_names'].any? %>
-            <%= regulation['agency_names'].join ', ' %>
-        <% end %>
-    </h3>
-
-    <div class="time">
+    <div class="entryHeader">
+		<h2><%= regulation['title'] %></h2>
+		<div class="subtitle">
+			<h4><%= regulation_stage regulation['stage'] %></h4>
+			<h3>
+		        <% if regulation['agency_names'].any? %>
+		            <%= regulation['agency_names'].join ', ' %>
+		        <% end %>
+		    </h3>
+		</div>
+	</div>
+	<div class="time">
         <time class="item" datetime="<%= html_date item.date %>">
             <%= just_date_year item.date %>
         </time>
         <span>
-            Issued
+          Issued
         </span>
     </div>
+	<p>
+        <% if regulation['abstract'] %>
+            <%= regulation['abstract'] %>
+        <% else %>
+            (No abstract available from the Federal Register.)
+        <% end %>
+    </p>
 
 
     <div class="clear"></div>
@@ -28,15 +38,13 @@
             <li><a href="<%= regulation['federal_register_url'] %>">Federal Register</a></li>
         </ul>
     </div>
+    <div class="clear"></div>
 
-    <div class="clear">
-        
-    <p>
-        <% if regulation['abstract'] %>
-            <%= regulation['abstract'] %>
-        <% else %>
-            (No abstract available from the Federal Register.)
-        <% end %>
-    </p>
-
+</div>
+<div class="pageTitle">
+	<div class="trackSubscribe">
+		Follow this bill wherever it goes
+	</div>
+<%= follow_button item %>
+	<div class="clear"></div>
 </div>
