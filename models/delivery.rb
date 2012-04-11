@@ -19,8 +19,7 @@ class Delivery
   field :interest_in
 
   # store where this delivery should go out over email or sms
-  # will probably be populated by user's settings, but the
-  # delivery task should look at *this* field, so that we can
+  # the delivery task should look at *this* field, so that we can
   # add the ability to override per-interest, per-subscription, whatever
   field :mechanism
   

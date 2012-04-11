@@ -13,40 +13,17 @@ class User
   # if a user has one, we turn on various features in the site
   field :api_key
 
-  # metadata on user delivery preferences
-  field :delivery, :type => Hash, :default => {
-    'mechanism' => 'email',
-    'email_frequency' => 'daily'
-  }
-  #   mechanism: ['email', 'sms']
-  #   email_frequency: ['daily', 'immediate']
+  # whether and how the user will receive notifications
+  field :notifications, :default => "email_daily"
+  validates_inclusion_of :notifications, :in => ["none", "email_daily", "email_immediate"]
 
+  # boolean as to whether users wish to receive announcements about Scout features
+  # defaults to true (opt-out)
+  field :announcements, :default => false
+  
   has_many :subscriptions, :dependent => :destroy
   has_many :interests, :dependent => :destroy
   has_many :deliveries, :dependent => :destroy
-  
-  validate :phone_for_sms
-
-  # shorthand for delivery information
-  def mechanism
-    delivery['mechanism']
-  end
-
-  def frequency
-    if mechanism == 'email'
-      delivery['email_frequency']
-    elsif mechanism == 'sms'
-      'immediate'
-    else
-      ""
-    end
-  end
-
-  def phone_for_sms
-    if mechanism == 'sms' and phone.blank?
-      errors.add(:phone, "A phone number is required for SMS.") and return false
-    end
-  end
 
   def confirmed_phone?
     false

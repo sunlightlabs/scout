@@ -63,11 +63,18 @@ class Subscription
   # for right now, reads right from the user's preferences, but could be changed
   # to be per-interest or per-subscription.
   def mechanism
-    user.delivery['mechanism']
+    return nil unless user.notifications
+    user.notifications =~ /email/ ? "email" : "sms"
   end
 
   def email_frequency
-    user.delivery['email_frequency']
+    return nil unless user.notifications
+
+    if user.notifications =~ /immediate/ 
+      "immediate"
+    elsif user.notifications =~ /daily/
+      "daily"
+    end
   end
 
 
