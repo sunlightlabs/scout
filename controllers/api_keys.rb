@@ -20,6 +20,10 @@ post '/services/create_key/' do
         :email => params[:email],
         :status => params[:status]
   rescue
+    Admin.report Report.failure(
+      "Create Key", "Could not create key, duplicate key or email", 
+      :key => params[:key], :email => params[:email], :status => params[:status]
+    )
     halt 403, "Could not create key, duplicate key or email"
   end
 end
@@ -30,9 +34,17 @@ post '/services/update_key/' do
       key.attributes = {:email => params[:email], :status => params[:status]}
       key.save!
     rescue
+      Admin.report Report.failure(
+        "Update Key", "Could not update key, errors: #{key.errors.full_messages.join ', '}",
+        :key => params[:key], :email => params[:email], :status => params[:status]
+      )
       halt 403, "Could not update key, errors: #{key.errors.full_messages.join ', '}"
     end
   else
+    Admin.report Report.failure(
+      "Update Key", 'Could not locate API key by the given key',
+      :key => params[:key], :email => params[:email], :status => params[:status]
+    )
     halt 404, 'Could not locate API key by the given key'
   end
 end
@@ -43,9 +55,17 @@ post '/services/update_key_by_email/' do
       key.attributes = {:key => params[:key], :status => params[:status]}
       key.save!
     rescue
+      Admin.report Report.failure(
+        "Update Key by Email", "Could not update key, errors: #{key.errors.full_messages.join ', '}",
+        :key => params[:key], :email => params[:email], :status => params[:status]
+      )
       halt 403, "Could not update key, errors: #{key.errors.full_messages.join ', '}"
     end
   else
+    Admin.report Report.failure(
+      "Update Key by Email", 'Could not locate API key by the given key',
+      :key => params[:key], :email => params[:email], :status => params[:status]
+    )
     halt 404, 'Could not locate API key by the given email'
   end
 end
