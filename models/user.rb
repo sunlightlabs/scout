@@ -9,6 +9,10 @@ class User
   field :email
   field :phone
 
+  # will get assigned automatically by the API key syncing service
+  # if a user has one, we turn on various features in the site
+  field :api_key
+
   # metadata on user delivery preferences
   field :delivery, :type => Hash, :default => {
     'mechanism' => 'email',
@@ -46,6 +50,10 @@ class User
 
   def confirmed_phone?
     false
+  end
+
+  def developer?
+    api_key.present?
   end
 
 
