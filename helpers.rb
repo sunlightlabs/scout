@@ -18,6 +18,10 @@ module GeneralHelpers
     content_from :home
   end
 
+  def developer_mode?
+    params[:hood] == "up"
+  end
+
   # don't give me empty strings
   def content_from(symbol)
     content = yield_content symbol
@@ -25,11 +29,11 @@ module GeneralHelpers
   end
 
   def flash_for(types)
-    partial "layout/flash", :engine => "erb", :locals => {:types => types}
+    partial "partials/flash", :engine => "erb", :locals => {:types => types}
   end
 
   def recent_searches
-    partial "layout/recent_searches", :engine => "erb", :locals => {}
+    partial "partials/recent_searches", :engine => "erb"
   end
 
   def follow_button(item)

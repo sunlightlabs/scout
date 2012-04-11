@@ -44,6 +44,10 @@ class User
     end
   end
 
+  def confirmed_phone?
+    false
+  end
+
 
   # user authentication stuff
 

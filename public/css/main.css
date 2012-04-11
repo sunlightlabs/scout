@@ -26,6 +26,7 @@ button {
     text-indent: -9999em;
     border: 0;
 }
+
 a {
     color: #1c8398;
 }
@@ -96,7 +97,6 @@ input[type="text"]{
     border-bottom: 1px solid #f2f2f1;
     height: 30px;
     padding: 0 5px;
-    color: #ffffff;
 }
 
 
@@ -772,6 +772,15 @@ li.email{
     font-weight: normal;
     display: block;
 }
+
+.user_settings .phone {
+    display: none;
+}
+
+.user_settings button {
+    text-indent: 0;
+}
+
 
 
 /*-- Notification Styling --*/

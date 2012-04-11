@@ -18,7 +18,7 @@ post '/login' do
 
   if User.authenticate(user, params[:password])
     log_in user
-    redirect_home
+    redirect_home '/'
   else
     flash.now[:user] = "Invalid password."
     @new_user = User.new
@@ -39,7 +39,7 @@ post '/account/new' do
     log_in @new_user
 
     flash[:success] = "Your account has been created. Scout at will."
-    redirect_home
+    redirect_home "/account/settings"
   else
     erb :"account/login"
   end
@@ -75,12 +75,12 @@ put '/account/password/change' do
 
   unless User.authenticate(current_user, params[:old_password])
     flash[:password] = "Incorrect current password."
-    redirect_home and return
+    redirect "/account/settings" and return
   end
 
   unless params[:password].present? and params[:password_confirmation].present?
     flash[:password] = "Can't use a blank password."
-    redirect_home and return
+    redirect "/account/settings" and return
   end
 
   current_user.password = params[:password]
@@ -89,9 +89,9 @@ put '/account/password/change' do
 
   if current_user.save
     flash[:password] = "Your password has been changed."
-    redirect_home
+    redirect "/account/settings" and return
   else
-    erb :index
+    erb :"account/settings", :locals => {:user => current_user}
   end
 
 end
@@ -144,19 +144,22 @@ put '/account/user' do
 end
 
 get '/account/subscriptions' do
+  requires_login
+
   erb :"account/subscriptions"
 end
 
 get '/account/settings' do
-  erb :"account/settings"
-end
+  requires_login
 
+  erb :"account/settings", :locals => {:user => current_user}
+end
 
 # login helpers
 
 helpers do
-  def redirect_home
-    redirect(params[:redirect] || '/login')
+  def redirect_home(default = '/login')
+    redirect(params[:redirect] || default)
   end
   
   def log_in(user)

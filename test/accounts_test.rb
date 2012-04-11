@@ -17,7 +17,7 @@ class AccountsTest < Test::Unit::TestCase
     assert !user.should_change_password
 
     assert_equal 302, last_response.status
-    assert_equal '/login', redirect_path
+    assert_equal '/', redirect_path
     
   end
 
@@ -50,7 +50,7 @@ class AccountsTest < Test::Unit::TestCase
     assert user.should_change_password
 
     assert_equal 302, last_response.status
-    assert_equal '/login', redirect_path
+    assert_equal '/', redirect_path
   end
 
   def test_create_user
@@ -66,7 +66,7 @@ class AccountsTest < Test::Unit::TestCase
     user.delete
 
     assert_equal 302, last_response.status
-    assert_equal '/login', redirect_path
+    assert_equal '/account/settings', redirect_path
   end
 
   def test_create_user_invalid
@@ -209,7 +209,7 @@ class AccountsTest < Test::Unit::TestCase
     assert !user.should_change_password
 
     assert_equal 302, last_response.status
-    assert_equal '/login', redirect_path
+    assert_equal '/account/settings', redirect_path
   end
 
   def test_change_password_not_logged_in
@@ -232,7 +232,7 @@ class AccountsTest < Test::Unit::TestCase
     assert !User.authenticate(user, "not-test")
 
     assert_equal 302, last_response.status
-    assert_equal '/login', redirect_path
+    assert_equal '/account/settings', redirect_path
   end
 
   def test_change_password_mismatched_new_passwords
@@ -264,7 +264,9 @@ class AccountsTest < Test::Unit::TestCase
     assert !User.authenticate(user, "")
 
     assert_equal 302, last_response.status
-    assert_equal '/login', redirect_path
+    assert_equal '/account/settings', redirect_path
   end
+
+  # updating settings
 
 end
