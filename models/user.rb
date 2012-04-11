@@ -52,8 +52,17 @@ class User
     false
   end
 
+
+  after_save :find_api_key
+
   def developer?
     api_key.present?
+  end
+
+  def find_api_key
+    if key = ApiKey.where(:email => email).first
+      ApiKey.sync_with_user! key, self
+    end
   end
 
 

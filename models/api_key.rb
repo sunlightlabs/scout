@@ -18,25 +18,29 @@ class ApiKey
 
   after_save :mark_user
 
-  # update any user account with the same email
-  def mark_user
-    new_user = User.where(:email => email).first
-    old_user = User.where(:api_key => key).first
+  def self.sync_with_user!(key, user)
+    old_user = User.where(:api_key => key.key).first
 
     # if the key changed hands for some reason, strip the old user of their key
-    if old_user and (new_user != old_user)
-      old_user.api_key = nil
-      old_user.save!
+    if old_user and (user != old_user)
+      old_user.set :api_key, nil
     end
 
     # only set active keys
-    if new_user
-      if status == "A"
-        new_user.api_key = key
+    if user
+      if key.status == "A"
+        user.set :api_key, key.key
       else
-        new_user.api_key = nil
+        user.set :api_key, nil
       end
-      new_user.save!
     end
   end
+
+  # update any user account with the same email
+  def mark_user
+    if user = User.where(:email => email).first
+      ApiKey.sync_with_user! self, user
+    end
+  end
+
 end
