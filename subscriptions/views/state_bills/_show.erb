@@ -1,53 +1,50 @@
 <% bill = item.data %>
 
-<header>
-    <div class="titles">
-        <h4><%= bill['bill_id'] %>, <%= long_date item.date %></h4>
-        <% if bill['+short_title'] %>
-            <h2><%= bill['+short_title'] %></h2>
-        <% else %>
-            <h3><%= bill['title'] %></h3>
-        <% end %>
-    </div>
-    <%= partial "partials/track", :engine => "erb", :locals => {
-        :item => item,
-        :interest_type => interest_type
-    } %>
-</header>
+<div class="summary">
+    <h4>
+        <%= bill['bill_id'] %> in <%= state_name bill['state'] %>
+    </h4>
 
-<section class="detail">
-    <% if state_in_og?(bill['state']) %>
-        <h2>Resources</h2>
-        <div class="resources">
-            <a target="_blank" href="<%= opengovernment_url bill %>">OpenGovernment.org</a>
-        </div>
+    <% if bill['+short_title'] %>
+        <h2><%= bill['+short_title'] %></h2>
+    <% else %>
+        <h2 class="official bill title"><%= bill['title'] %></h3>
     <% end %>
 
-    <h2>Latest Version</h2>
-    <div class="latest_version">
-        <p>
-            <% if bill['versions'] and bill['versions'].any? %>
-                <% version = bill['versions'].last %>
-                <a href="<%= version['url'] %>">
-                    <%= version['title'] || "Official Document" %>
-                </a>
-            <% else %>
-                No version information available right now.
-            <% end %>
-        </p>
-        <% if bill['sources'] and bill['sources'].any? %>
-            <% bill['sources'].each_with_index do |source, i| %>
-                <p>
-                    <a href="<%= source['url'] %>">Source <%= i + 1 %></a>
-                </p>
-            <% end %>
-        <% end %>
+    <%= follow_button item %>
+
+    <div class="time">
+        <time class="item" datetime="<%= html_date item.date %>">
+            <%= just_date_year item.date %>
+        </time>
+        <span>
+            First found
+        </span>
     </div>
 
-    <% if bill['votes'] %>
-        <h2>Related Votes</h2>
+
+    <div class="clear"></div>
+
+
+    <% if bill['versions'] and bill['versions'].any? %>
+        <a class="source" href="<%= bill['versions'].last['url'] %>">
+            Original Text
+        </a>
+
+    <% elsif bill['sources'] and bill['sources'].any? %>
+        <% bill['sources'].each_with_index do |source, i| %>
+            <a class="source" href="<%= source['url'] %>">Source <%= i + 1 %></a>
+        <% end %>
+    <% end %>
+
+</div>
+
+<div class="details">
+
+    <div class="module of2">
+        <h5>Votes</h5>
         <ul class="votes">
-            <% if bill['votes'].any? %>
+            <% if bill['votes'] and bill['votes'].any? %>
                 <% bill['votes'].reverse.each do |vote| %>
                     <li>
                         <div class="left">
@@ -61,22 +58,26 @@
                     </li>
                 <% end %>
             <% else %>
-                <p>No votes taken yet on this bill.</p>
+                No votes taken yet.
             <% end %>
         </ul>
-    <% end %>
+    </div>
     
-    <% if bill['actions'] %>
-        <h2>Activity</h2>
+    <div class="module of2">
+        <h5>Recent Activity</h5>
         <ul class="activity">
-            <% bill['actions'].reverse.each do |action| %>
-                <li>
-                    <span class="date"><%= just_date_year action['date'] %></span>
-                    -
-                    <%= action['action'] %>
-                </li>
+            <% if bill['actions'] and bill['actions'].any? %>
+                <% bill['actions'].reverse[0...5].each do |action| %>
+                    <li>
+                        <span class="date"><%= just_date_year action['date'] %></span>
+                        -
+                        <%= action['action'] %>
+                    </li>
+                <% end %>
+            <% else %>
+                No official activity on this bill yet.
             <% end %>
         </ul>
-    <% end %>
+    </div>
 
-</section>
+</div>

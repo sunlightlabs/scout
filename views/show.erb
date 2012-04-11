@@ -1,82 +1,41 @@
-<% content_for :title do %>
-    <div class="trackSubscribe">
-        Follow this bill wherever it goes
-    </div>
-    <button type="submit">
-        <span>Track this bill</span>
-    </button>
-    <div class="clear"></div>
-<% end %>
-
 <% content_for :sidebar_right do %>
     <%= recent_searches %>
 <% end %>
 
-<div class="entry contentArea left">
+<div class="entry contentArea left <%= interest_type %>">
 
-    <div class="entrySummary">
-        <h2>Excess Federal Building and Property Disposal Act of 2011</h2>
-        <span class="dataset"></span>
-        <time datetime="" pubdate>September 20, 2011</time>
-        <p>...be accessible by the public at no cost through the website of the General Services Administration. Be accessible by the public at no cost through the website of the General Services Administration. "(d) <em>Transparency</em> of Database.--To the extent practicable, the Administrator shall ensure that the database-- "(1). Be accessible by the public at no cost through the website of the General Services Administration. Be accessible by the public at no cost through the website of the General Services Administration....</p>
-        <div class="moreInfoLinks">
-            <h5>Learn More:</h5>
-            <ul>
-                <li><a href="">link one</a></li>
-                <li><a href="">link two</a></li>
-                <li><a href="">link three</a></li>
-            </ul>
-        </div>
-        <a class="sourceLink" href="">Source</a>
-        <div class="clear"></div>
+    <div class="loading">
+        <span>Loading ...</span>
     </div>
-    <div class="entryExtras">
-        <dl class="module">
-            <dt>Sponsor:</dt>
-            <dd>Senator Lorem Ipsum</dd>
-            <dt>Number of co-sponsors</dt>
-            <dd>4</dd>
-            <dt>Last action taken:</dt>
-            <dd>Nulla ac pulvinar leo</dd>
-        </dl>
-        <div class="module">
-            <h5>Recent Appearances</h5>
-            <table>
-                <tbody>
-                    <tr>
-                        <td>Dec. 17 2011</td>
-                        <td>House</td>
-                        <td>more info</td>
-                    </tr>
-                    <tr>
-                        <td>Dec. 17 2011</td>
-                        <td>House</td>
-                        <td>more info</td>
-                    </tr>
-                    <tr>
-                        <td>Dec. 17 2011</td>
-                        <td>House</td>
-                        <td>more info</td>
-                    </tr>
-                </tbody>
-            </table>
 
-            <h5>Upcoming Appearances</h5>
-            <table>
-                <tbody>
-                    <tr>
-                        <td>Dec. 17 2011</td>
-                        <td>House</td>
-                        <td>more info</td>
-                    </tr>
-                    <tr>
-                        <td>Dec. 17 2011</td>
-                        <td>House</td>
-                        <td>more info</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="clear"></div>
+    <div class="error">
+        Error loading information.
     </div>
+
+    <div class="content">
+        <!-- load in content -->
+    </div>
+
 </div>
+
+
+<script type="text/javascript">
+
+  $(function() {
+    var container = $(".entry.contentArea");
+
+    container.find(".loading").show();
+    container.find(".error").hide();
+    container.find(".content").hide();
+
+    $.get("/fetch" + window.location.pathname, {}, function(data) {
+        
+        container.find(".loading").hide();
+        container.find(".content").show().html(data.html);
+        container.find("hood").show().find("a").attr("href", data.item_url);
+
+    }).error(function() {
+        container.find(".error").show();
+    })
+  });
+</script>

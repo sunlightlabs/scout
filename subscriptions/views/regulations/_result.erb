@@ -4,13 +4,14 @@
   <h4><%= regulation['title'] %></h4>
 </a>
 
-<!-- <div class="subtitle">
+<div class="subtitle">
   <span class="stage"><%= regulation_stage regulation['stage'] %></span>
   <% if regulation['agency_names'].any? %>
-    by the
-    <%= regulation['agency_names'].join ', ' %>
+    <span class="agencies">
+      <%= regulation['agency_names'].join ', ' %>
+    </span>
   <% end %>
-</div> -->
+</div>
 
 <% if regulation['search']['highlight'] %>
   <p>

@@ -263,10 +263,22 @@ module Subscriptions
     end
     
     def speaker_name(speech)
-      title = (speech['chamber'] == 'Senate') ? 'Sen' : 'Rep'
       party = speech['speaker_party']
       state = speech['speaker_state']
-      "#{title}. #{speech['speaker_first']} #{speech['speaker_last']} (#{party}-#{state})"
+      "#{speaker_name_only speech} (#{party}-#{state})"
+    end
+
+    def speaker_party(party)
+      {
+        "R" => "Republican",
+        "D" => "Democrat",
+        "I" => "Independent"
+      }[party]
+    end
+
+    def speaker_name_only(speech)
+      title = (speech['chamber'] == 'Senate') ? 'Sen' : 'Rep'
+      "#{title}. #{speech['speaker_first']} #{speech['speaker_last']}"
     end
 
     def legislator_name(legislator)

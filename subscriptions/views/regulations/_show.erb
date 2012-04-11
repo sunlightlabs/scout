@@ -1,33 +1,42 @@
 <% regulation = item.data %>
 
-<header>
-    <div class="titles">
-        <h4><%= regulation_stage regulation['stage'] %> <%= regulation['document_number'] %></h4>
-        <h4>
-            <% if regulation['agency_names'].any? %>
-                <%= regulation['agency_names'].join ', ' %>
-            <% end %>
-        </h4>
-        <h2><%= regulation['title'] %></h2>
+<div class="summary">
+
+    <h4><%= regulation_stage regulation['stage'] %></h4>
+    <h2><%= regulation['title'] %></h2>
+    <h3>
+        <% if regulation['agency_names'].any? %>
+            <%= regulation['agency_names'].join ', ' %>
+        <% end %>
+    </h3>
+
+    <div class="time">
+        <time class="item" datetime="<%= html_date item.date %>">
+            <%= just_date_year item.date %>
+        </time>
+        <span>
+            Issued
+        </span>
     </div>
-</header>
 
-<section class="detail">
 
-    <h2>Resources</h2>
+    <div class="clear"></div>
+
     <div class="resources">
-        <a target="_blank" href="<%= regulation['federal_register_url'] %>">Federal Register</a>
+        <h5>Resources</h5>
+        <ul>
+            <li><a href="<%= regulation['federal_register_url'] %>">Federal Register</a></li>
+        </ul>
     </div>
-    <h2>Abstract</h2>
-    <div class="summary">
+
+    <div class="clear">
+        
+    <p>
         <% if regulation['abstract'] %>
             <%= regulation['abstract'] %>
         <% else %>
             (No abstract available from the Federal Register.)
         <% end %>
-    </div>
+    </p>
 
-</section>
-
-<section class="track">
-</section>
+</div>

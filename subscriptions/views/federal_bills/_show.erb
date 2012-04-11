@@ -1,83 +1,80 @@
 <% bill = item.data %>
 <% version = item.data['last_version'] %>
 
-<header>
-    <div class="titles">
-        <h4><%= bill_code bill['bill_type'], bill['number'] %></h4>
-        <% if bill['short_title'].present? %>
-            <h2><%= bill['short_title'] %></h2>
-        <% else %>
-            <h3><%= bill['official_title'] %></h3>
-        <% end %>
-    </div>
-    <%= partial "partials/track", :engine => "erb", :locals => {
-        :item => item,
-        :interest_type => interest_type
-    } %>
-</header>
+<div class="summary">
+    <h4>
+        <%= bill_code bill['bill_type'], bill['number'] %>
+    </h4>
 
-<section class="detail">
-    <h2>Resources</h2>
+    <% if bill['short_title'].present? %>
+        <h2><%= bill['short_title'] %></h2>
+    <% else %>
+        <h2 class="official bill title"><%= bill['official_title'] %></h2>
+    <% end %>
+    
+    <%= follow_button item %>
+
+    <div class="time">
+        <time class="item" datetime="<%= html_date item.date %>">
+            <%= just_date_year item.date %>
+        </time>
+        <span>
+            <%= bill_version version['version_code'] %>
+        </span>
+    </div>
+
+
+    <div class="clear"></div>
+
     <div class="resources">
-        <a target="_blank" href="<%= govtrack_url item %>">GovTrack.us</a>
-        <a target="_blank" href="<%= opencongress_url item %>">OpenCongress.org</a>
-        <a target="_blank" href="<%= thomas_url item %>">THOMAS.gov</a>
+        <h5>Resources</h5>
+        <ul>
+            <li><a href="<%= govtrack_url item %>">GovTrack.us</a></li>
+            <li><a href="<%= opencongress_url item %>">OpenCongress.org</a></li>
+            <li><a href="<%= thomas_url item %>">THOMAS.gov</a></li>
+        </ul>
     </div>
-    <h2>Official Summary</h2>
-    <div class="summary">
-        <% if bill['summary'] %>
-            <%= truncate bill_summary(bill), 700 %>
-        <% else %>
-            (No summary available from the Congressional Research Service.)
-        <% end %>
-    </div>
-    <h2>Latest Version</h2>
-    <div class="latest_version">
-        <% if version %>
-            <p>
-                Full text:
-                <% if version['urls'] and version['urls']['pdf'] %>
-                    <a class="file pdf" href="<%= version['urls']['pdf'] %>">PDF</a>
+
+    <% if version['urls'] and version['urls']['xml'] %>
+        <a class="source" href="<%= version['urls']['xml'] %>">Original Text</a>
+    <% elsif version['urls'] and version['urls']['pdf'] %>
+        <a class="source" href="<%= version['urls']['pdf'] %>">Original Text</a>
+    <% end %>
+
+    <div class="clear"></div>
+</div>
+
+<div class="details">
+
+    <div class="module of2">
+        <h5>Coming Up on the Floor</h5>
+        <ul class="upcoming_floor">
+            <% if bill['latest_upcoming'] and bill['latest_upcoming'].any? %>
+                <% bill['latest_upcoming'].each do |upcoming| %>
+                    <li>
+                        <time datetime="<%= html_date upcoming['legislative_day'] %>"><%= just_date upcoming['legislative_day'] %></time>
+                        - 
+                        <a href="<%= upcoming['permalink'] %>">
+                            <%= upcoming['chamber'].capitalize %> Floor
+                        </a>
+                    </li>
                 <% end %>
-                <% if version['urls'] and version['urls']['xml'] %>
-                    <a class="file xml" href="<%= version['urls']['xml'] %>">HTML</a>
-                <% end %>
-            </p>
-            <p>
-                <%= bill_version version['version_code'] %>, issued on <%= very_short_date version['issued_on'] %>
-            </p>
-        <% else %>
-            No version information available from GPO right now.
-        <% end %>
+            <% else %>
+                Not yet scheduled for debate.
+            <% end %>
+        </ul>
     </div>
     
-    <% if item.data['latest_upcoming'] and item.data['latest_upcoming'].any? %>
-        <h2>Coming Up on the Floor</h2>
-        <ul class="upcoming_floor">
-            <% item.data['latest_upcoming'].each do |upcoming| %>
+    <div class="module of2">
+        <h5>Recent Activity</h5>
+        <ul class="activity">
+            <% bill['actions'].reverse[0...5].each do |action| %>
                 <li>
-                    <span class="date"><%= just_date upcoming['legislative_day'] %></span>
-                    - 
-                    <a href="<%= upcoming['permalink'] %>">
-                        <%= upcoming['chamber'].capitalize %> Floor
-                    </a>
+                    <time datetime="<%= html_date action['acted_at'] %>"><%= just_date action['acted_at'] %></time>
+                    -
+                    <%= action['text'] %>
                 </li>
             <% end %>
         </ul>
-    <% end %>
-
-    <h2>Recent Activity</h2>
-    <ul class="activity">
-        <% item.data['actions'].reverse[0...5].each do |action| %>
-            <li>
-                <span class="date"><%= just_date action['acted_at'] %></span>
-                -
-                <%= action['text'] %>
-            </li>
-        <% end %>
-    </ul>
-
-</section>
-
-<section class="track">
-</section>
+    </div>
+</div>

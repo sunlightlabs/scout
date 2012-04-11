@@ -2,28 +2,41 @@
 
 <header>
     <div class="titles">
-        <h4><%= long_date item.date %></h4>
-        <h2><%= speaker_name speech %></h2>
+        
     </div>
 </header>
 
-<section class="detail">
+<div class="summary">
+    <h4>
+        <span class="name">
+            <%= speaker_name speech %>
+        </span>
+    </h4>
+    
+    <h2><%= speech['title'] %></h2>
 
-    <h2>Resources</h2>
+    <div class="time">
+        <time class="item" datetime="<%= html_date item.date %>">
+            <%= just_date_year item.date %>
+        </time>
+    </div>
+
+    <div class="clear"></div>
+
     <div class="resources">
-        <a target="_blank" href="<%= speech['capitolwords_url'] %>">CapitolWords</a>
-        <a target="_blank" href="<%= speech['origin_url'] %>">GPO (Original)</a>
-    </div>
-    <h2>Speech</h2>
-    <div class="speech">
-        <% speech['speaking'].each do |speaking| %>
-            <p>
-                <%= h speaking %>
-            </p>
-        <% end %>
+        <h5>Resources</h5>
+        <ul>
+            <li><a href="<%= speech['capitolwords_url'] %>">CapitolWords</a></li>
+        </ul>
     </div>
 
-</section>
+    <a class="source" href="<%= speech['origin_url'] %>">Original</a>
 
-<section class="track">
-</section>
+    <div class="clear"></div>
+    
+    <% speech['speaking'].each do |speaking| %>
+        <p>
+            <%= h speaking %>
+        </p>
+    <% end %>
+</div>

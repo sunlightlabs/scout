@@ -13,7 +13,7 @@ module Subscriptions
           endpoint = "http://api.realtimecongress.org/api/v1"
         end
         
-        sections = %w{ bill_id bill_type number short_title summary latest_upcoming official_title introduced_at last_action_at last_action session last_version }
+        sections = %w{ bill_id bill_type number short_title summary last_version_on latest_upcoming official_title introduced_at last_action_at last_action session last_version }
 
         per_page = (function == :search) ? (options[:per_page] || 20) : 40
 
@@ -43,7 +43,7 @@ module Subscriptions
         end
         
         sections = %w{ bill_id bill_type number session short_title official_title introduced_at last_action_at last_action last_version 
-          summary sponsor cosponsors_count latest_upcoming actions
+          summary sponsor cosponsors_count latest_upcoming actions last_version_on
           }
 
         url = "#{endpoint}/bills.json?apikey=#{api_key}"
@@ -95,14 +95,8 @@ module Subscriptions
       def self.item_for(bill)
         return nil unless bill
 
-        date = nil
-        if bill['last_version']
-          bill['last_version']['issued_on'] = noon_utc_for bill['last_version']['issued_on']
-          date = bill['last_version']['issued_on']
-        else
-          date = bill['last_action_at']
-        end
-
+        date = noon_utc_for bill['last_version_on']
+          
         if bill['latest_upcoming']
           bill['latest_upcoming'].each do |upcoming|
             upcoming['legislative_day'] = noon_utc_for upcoming['legislative_day']

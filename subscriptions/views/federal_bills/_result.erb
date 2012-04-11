@@ -9,17 +9,10 @@
   <% end %>
 </a>
 
-<!-- <div class="subtitle">
+<div class="subtitle">
   <span class="code"><%= bill_code bill['bill_type'], bill['number'] %></span>
   <span class="version">as <%= bill_version version['version_code'] %></span>
-  <span class="issued_on">on <%= very_short_date version['issued_on'] %></span>
-  <% if version['urls'] and version['urls']['pdf'] %>
-    <a class="file pdf" href="<%= version['urls']['pdf'] %>">PDF</a>
-  <% end %>
-  <% if version['urls'] and version['urls']['xml'] %>
-    <a class="file xml" href="<%= version['urls']['xml'] %>">HTML</a>
-  <% end %>
-</div> -->
+</div>
 
 <p>
   <% if item.data['search']['highlight'] %>

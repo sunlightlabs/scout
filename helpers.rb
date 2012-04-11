@@ -32,6 +32,11 @@ module GeneralHelpers
     partial "layout/recent_searches", :engine => "erb", :locals => {}
   end
 
+  def follow_button(item)
+    interest_type = interest_adapters[item.subscription_type]
+    partial "follow_item", :engine => "erb", :locals => {:item => item, :interest_type => interest_type}
+  end
+
   def item_path(item)
       # an item with its own landing page
       if item_type = search_adapters[item.subscription_type]
@@ -98,15 +103,11 @@ module GeneralHelpers
   end
   
   def just_date(date)
-    date.strftime "%b #{date.day}"
+    date.strftime "%b #{date.day}, %Y"
   end
 
   def just_date_year(date)
-    # if date.year == Time.now.year
-    #   just_date date
-    # else
-      date.strftime "%b #{date.day}, %Y"
-    # end
+    just_date date
   end
   
   def very_short_date(time)

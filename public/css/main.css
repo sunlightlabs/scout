@@ -449,20 +449,17 @@ footer a{
 .home.modules .samples li{
     list-style-type: disc;
 }
-.home.modules time{
+.updates time {
     font-weight: bold;
     text-transform: uppercase;
 }
+
 .home.modules h3{
     color: #000000;
     font-size: 143%;
     color: #3d3c41;
     margin-bottom: 16px;
 }
-
-
-
-
 
 
 
@@ -553,7 +550,7 @@ footer a{
 .contentArea h4 a:hover{
     color: #1c8398;
 }
-.contentArea time {
+time.item, .entry time {
     float: right;
     font-style: italic;
     font-weight: 200;
@@ -598,36 +595,35 @@ footer a{
 
 
 
-
-
 /*-- Entry Styling --*/
-.entry .pageTitle, .entry .entrySummary, .entry .entryExtras {
+
+.entry .pageTitle, .entry .summary, .entry .details {
     padding: 0 33px 0 10px;
 }
 
 .entry .trackSubscribe{
     float: left;
 }
-.moreInfoLinks{
+.resources{
     font-size: 81%;
     float: left;
 }
-.moreInfoLinks li{
+.resources li{
     display: inline;
 }
-.moreInfoLinks h5{
+.resources h5{
     float: left;
     margin-right: 10px;
 }
-.moreInfoLinks ul{
+.resources ul{
     display: block;
     float: left;
     padding-top: 0;
 }
-.sourceLink{
+a.source {
     float: right;
 }
-.sourceLink, .moreInfoLinks{
+a.source, .resources{
     padding-top: 20px;
     font-size: 81%;
 }
@@ -635,18 +631,18 @@ footer a{
     width: 510px;
     float: left;
 }
-.entry .entryExtras{
+.entry .details{
     padding: 33px 33px 33px 10px;
     font-size: 81%;
     margin-bottom: 155px;
 }
 
-.entryExtras .module{
+.details .module{
     width: 50%;
     float: left;
 
 }
-.entry .entrySummary{
+.entry .summary{
     padding: 33px 33px 33px 10px;
     border-bottom: 1px dashed #9d9b9b;
 }
