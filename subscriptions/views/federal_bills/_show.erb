@@ -54,35 +54,49 @@
 <div class="details clear">
 
     <div class="module of2">
-        <h5>Coming Up on the Floor</h5>
-        <ul class="upcoming_floor">
-            <% if bill['latest_upcoming'] and bill['latest_upcoming'].any? %>
-                <% bill['latest_upcoming'].each do |upcoming| %>
-                    <li>
-                        <time datetime="<%= html_date upcoming['legislative_day'] %>"><%= just_date upcoming['legislative_day'] %></time>
-                        - 
-                        <a href="<%= upcoming['permalink'] %>">
-                            <%= upcoming['chamber'].capitalize %> Floor
-                        </a>
-                    </li>
-                <% end %>
-            <% else %>
-                Not yet scheduled for debate.
-            <% end %>
-        </ul>
+        <h4>Coming Up on the Floor</h4>
+        <table class="upcoming_floor">
+			<tbody>
+	            <% if bill['latest_upcoming'] and bill['latest_upcoming'].any? %>
+	                <% bill['latest_upcoming'].each do |upcoming| %>
+	                    <tr>
+	                        <td class="time">
+								<time datetime="<%= html_date upcoming['legislative_day'] %>"><%= just_date upcoming['legislative_day'] %></time>
+							</td>
+	                        <td>
+	                        	<a href="<%= upcoming['permalink'] %>"><%= upcoming['chamber'].capitalize %> Floor</a>
+							</td>
+	                    </tr>
+	            <% end %>
+	            <tr>
+                    <td colspan="2">
+				<% else %>
+	                Not yet scheduled for debate.
+	            <% end %>
+					</td>
+				</tr>
+			</tbody>
+        </table>
     </div>
     
     <div class="module of2">
-        <h5>Recent Activity</h5>
-        <ul class="activity">
-            <% bill['actions'].reverse[0...5].each do |action| %>
-                <li>
-                    <time datetime="<%= html_date action['acted_at'] %>"><%= just_date action['acted_at'] %></time>
-                    -
-                    <%= action['text'] %>
-                </li>
-            <% end %>
-        </ul>
+        <h4>Recent Activity</h4>
+        <table class="activity">
+			<tbody>
+	            <% if bill['actions'].reverse[0...5].each do |action| %>
+	                <tr>
+	                    <td class="time"><time datetime="<%= html_date action['acted_at'] %>"><%= just_date action['acted_at'] %></time></td>
+                    
+	                    <td><%= action['text'] %></td>
+	                </tr>
+	            <% end %>
+				<% else %>
+				<tr>
+	                <td colspan="2">No recent activity.</td>
+				</tr>
+	            <% end %>
+			</tbody>
+        </table>
     </div>
 	<div class="clear"></div>
 </div>
