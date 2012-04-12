@@ -13,12 +13,12 @@ end
 post '/login' do
   unless params[:email] and user = User.where(:email => params[:email]).first
     flash[:user] = "No account found by that email."
-    redirect_home and return
+    redirect '/login'
   end
 
   if User.authenticate(user, params[:password])
     log_in user
-    redirect_home '/'
+    redirect '/'
   else
     flash.now[:user] = "Invalid password."
     @new_user = User.new
@@ -32,14 +32,14 @@ post '/account/new' do
 
   unless @new_user.password.present? and @new_user.password_confirmation.present?
     flash[:password] = "Can't use a blank password."
-    redirect_home and return
+    redirect "/login"
   end
 
   if @new_user.save
     log_in @new_user
 
-    flash[:success] = "Your account has been created. Scout at will."
-    redirect_home "/account/settings"
+    flash[:success] = "Your account has been created."
+    redirect "/account/settings"
   else
     erb :"account/login"
   end
