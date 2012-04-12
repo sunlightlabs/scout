@@ -95,17 +95,23 @@ module Subscriptions
       def self.item_for(bill)
         return nil unless bill
 
-        date = noon_utc_for bill['last_version_on']
-          
+        # ugly: cleaning up dates into times, cause of Mongo
+        bill['last_version_on'] = noon_utc_for bill['last_version_on']
+
+        if bill['last_version']
+          bill['last_version']['issued_on'] = noon_utc_for bill['last_version']['issued_on']
+        end
+
         if bill['latest_upcoming']
           bill['latest_upcoming'].each do |upcoming|
             upcoming['legislative_day'] = noon_utc_for upcoming['legislative_day']
           end
         end
+
         
         SeenItem.new(
           :item_id => bill["bill_id"],
-          :date => date,
+          :date => bill['last_version_on'], # order by the last version published
           :data => bill
         )
       end
