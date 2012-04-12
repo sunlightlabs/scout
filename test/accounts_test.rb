@@ -263,6 +263,119 @@ class AccountsTest < Test::Unit::TestCase
     assert_equal '/account/settings', redirect_path
   end
 
-  # updating settings
+  # phone settings
+
+  def test_add_phone_number_when_user_has_none
+    user = new_user!
+    phone = "1234567890"
+
+    assert_nil user.phone
+    assert !user.phone_confirmed?
+    assert_nil user.phone_verify_code
+    SMS.should_receive(:deliver).with("Verification Code", phone, anything)
+
+    put '/account/phone', {:user => {:phone => phone}}, login(user)
+
+    user.reload
+    assert_equal phone, user.phone
+    assert !user.phone_confirmed?
+    assert_not_nil user.phone_verify_code
+
+    assert_equal 302, last_response.status
+    assert_equal '/account/settings', redirect_path
+  end
+
+  def test_add_phone_number_unconfirms_existing_number
+    phone1 = "1234567890"
+    phone2 = phone1.succ
+    original_verify_code = "1234"
+    user = new_user! :phone => phone1, :phone_confirmed => true, :phone_verify_code => original_verify_code
+
+    assert user.phone_confirmed?
+    SMS.should_receive(:deliver).with("Verification Code", phone2, anything)
+
+    put '/account/phone', {:user => {:phone => phone2}}, login(user)
+
+    user.reload
+    assert_equal phone2, user.phone
+    assert !user.phone_confirmed?
+    assert_not_equal original_verify_code, user.phone_verify_code
+
+    assert_equal 302, last_response.status
+    assert_equal '/account/settings', redirect_path
+  end
+
+  def test_add_invalid_phone_number
+    user = new_user!
+    invalid_phone = "abcdefghij"
+
+    assert_nil user.phone
+    assert !user.phone_confirmed?
+    assert_nil user.phone_verify_code
+
+    put '/account/phone', {:user => {:phone => invalid_phone}}, login(user)
+
+    user.reload
+    assert_nil user.phone
+    assert !user.phone_confirmed?
+    assert_nil user.phone_verify_code
+
+    assert_equal 302, last_response.status
+    assert_equal '/account/settings', redirect_path
+  end
+
+  def test_resend_phone_verification_code
+    phone = "1234567890"
+    verify_code = "1234"
+    user = new_user! :phone => phone, :phone_verify_code => verify_code
+
+    assert !user.phone_confirmed?
+    SMS.should_receive(:deliver).with("Resend Verification Code", phone, anything)
+
+    post '/account/phone/resend', {}, login(user)
+
+    user.reload
+    assert !user.phone_confirmed?
+    # 1 in 10,000 chance this fails even when the code works!
+    assert_not_equal verify_code, user.phone_verify_code
+
+    assert_equal 302, last_response.status
+    assert_equal '/account/settings', redirect_path
+  end
+
+  def test_confirm_phone_verification_code_valid
+    phone = "1234567890"
+    verify_code = "1234"
+    user = new_user! :phone => phone, :phone_verify_code => verify_code
+
+    assert !user.phone_confirmed?
+
+    post '/account/phone/confirm', {:phone_verify_code => verify_code}, login(user)
+
+    user.reload
+    assert_equal phone, user.phone
+    assert user.phone_confirmed?
+    assert_nil user.phone_verify_code
+
+    assert_equal 302, last_response.status
+    assert_equal '/account/settings', redirect_path
+  end
+
+  def test_confirm_phone_verification_code_invalid
+    phone = "1234567890"
+    verify_code = "1234"
+    user = new_user! :phone => phone, :phone_verify_code => verify_code
+
+    assert !user.phone_confirmed?
+
+    post '/account/phone/confirm', {:phone_verify_code => verify_code.succ}, login(user)
+
+    user.reload
+    assert !user.phone_confirmed?
+    assert_equal verify_code, user.phone_verify_code
+
+    assert_equal 302, last_response.status
+    assert_equal '/account/settings', redirect_path
+  end
 
 end

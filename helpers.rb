@@ -22,6 +22,14 @@ module GeneralHelpers
     params[:hood] == "up"
   end
 
+  def errors_for(object)
+    if object and object.errors
+      object.errors.map do |field, msg|
+        "<div class=\"error\">#{msg}</div>"
+      end.join
+    end
+  end
+
   # don't give me empty strings
   def content_from(symbol)
     content = yield_content symbol

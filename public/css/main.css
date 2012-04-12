@@ -840,11 +840,8 @@ li.email{
     display: block;
 }
 
-.user_settings .phone {
+.user_settings .phone_settings {
     display: none;
-}
-
-.user_settings button {
 }
 
 

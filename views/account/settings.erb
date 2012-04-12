@@ -78,16 +78,21 @@
 
 
     <h2>SMS</h2>
-    <div class="confirmed phone">
+
+    <%= flash_for [:phone] %>
+
+    <%= errors_for user %>
+
+    <div class="confirmed phone_settings">
         <span>
-            <%= user.phone %>
+            <%= user.phone %> <strong>(Verified)</strong>
         </span>
         <a href="#" class="dismiss phone">
             Change
         </a>
     </div>
 
-    <div class="unconfirmed phone">
+    <div class="unconfirmed phone_settings">
         <span>
             <%= user.phone %> (Unverified)
         </span>
@@ -95,7 +100,7 @@
             To confirm your phone number, Enter the verification code we sent you.
         </p>
 
-        <form action="/account/phone/verify" method="post">
+        <form action="/account/phone/confirm" method="post">
             <%= text_field_tag "phone_verify_code" %>
              <button type="submit">
                 <span>Verify</span>
@@ -109,7 +114,7 @@
         </form>
     </div>
 
-    <div class="none phone">
+    <div class="none phone_settings">
         <p>
             If you provide a phone number, you can turn on SMS notifications for your subscriptions. We'll send you a text message to confirm.
         </p>
@@ -182,13 +187,20 @@
 <script type="text/javascript">
     $(function() {
 
-        <% if user.confirmed_phone? %>
-            $(".phone.confirmed").show();
+        <% if user.phone_confirmed? %>
+            $(".phone_settings.confirmed").show();
         <% elsif user.phone.present? %>
-            $(".phone.unconfirmed").show();
+            $(".phone_settings.unconfirmed").show();
         <% else %>
-            $(".phone.none").show();
+            $(".phone_settings.none").show();
         <% end %>
+
+        $("a.dismiss.phone").click(function() {
+            $(".phone_settings.confirmed").hide();
+            $(".phone_settings.none").show();
+
+            return false;
+        });
 
     });
 </script>

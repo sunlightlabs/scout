@@ -151,6 +151,54 @@ get '/account/settings' do
   erb :"account/settings", :locals => {:user => current_user}
 end
 
+put '/account/phone' do
+  requires_login
+
+  current_user.phone = params[:user]['phone']
+  if current_user.valid?
+    
+    # manually set to false, in case the phone number was set and is changing
+    current_user.phone_confirmed = false
+
+    current_user.new_phone_verify_code
+    current_user.save!
+
+    SMS.deliver! "Verification Code", current_user.phone, User.phone_verify_message(current_user.phone_verify_code)
+
+    flash[:phone] = "We've sent you a text with a verification code."
+    redirect "/account/settings"
+  else
+    flash[:phone] = "Invalid phone number."
+    redirect "/account/settings"
+  end
+end
+
+post '/account/phone/confirm' do
+  requires_login
+
+  if params[:phone_verify_code] == current_user.phone_verify_code
+    current_user.phone_verify_code = nil
+    current_user.phone_confirmed = true
+    current_user.save!
+    flash[:phone] = "Your phone number has been verified."
+  else
+    flash[:phone] = "Your verification code did not match. You can resend the code, if you've lost it."
+  end
+
+  redirect "/account/settings"
+end
+
+post '/account/phone/resend' do
+  requires_login
+
+  current_user.new_phone_verify_code
+  current_user.save!
+  SMS.deliver! "Resend Verification Code", current_user.phone, User.phone_verify_message(current_user.phone_verify_code)
+
+  flash[:phone] = "We've sent you another verification code."
+  redirect "/account/settings"
+end
+
 # login helpers
 
 helpers do

@@ -4,9 +4,11 @@ class User
   include Mongoid::Document
   include Mongoid::Timestamps
 
+
   field :admin, :type => Boolean, :default => false
 
   field :email
+
   field :phone
 
   # will get assigned automatically by the API key syncing service
@@ -24,10 +26,6 @@ class User
   has_many :subscriptions, :dependent => :destroy
   has_many :interests, :dependent => :destroy
   has_many :deliveries, :dependent => :destroy
-
-  def confirmed_phone?
-    false
-  end
 
 
   after_save :find_api_key
@@ -52,7 +50,7 @@ class User
   
   validates_presence_of :email, :message => "We need an email address."
   validates_uniqueness_of :email, :message => "That email address is already signed up."
-  validates_format_of :email, :with => /^[-a-z0-9_+\.]+\@([-a-z0-9]+\.)+[a-z0-9]{2,4}$/i, :message => "Not a valid email address."
+  validates_format_of :email, :with => /^[-a-z0-9_+\.]+\@([-a-z0-9]+\.)+[a-z0-9]{2,4}$/i, :message => "Not a valid email address.", :allow_blank => true
 
   validates_confirmation_of :password, :message => "Your passwords did not match."
   
@@ -94,6 +92,36 @@ class User
 
     # need to return the actual password, so it can be emailed
     new_password 
+  end
+
+
+  # phone number confirming and verification logic
+
+  field :phone_verify_code
+  field :phone_confirmed, :type => Boolean, :default => false
+
+  # only +, -, ., and digits allowed
+  validates_format_of :phone, :with => /^[\+\.\d\-]+$/, :allow_blank => true, :message => "Not a valid phone number."
+
+  def new_phone_verify_code
+    self.phone_verify_code = zero_prefix rand(10000)
+  end
+
+  # zero prefixes a number below 10,000 out to 4 digits
+  def zero_prefix(number)
+    if number < 10
+      "000#{number}"
+    elsif number < 100
+      "00#{number}"
+    elsif number < 1000
+      "0#{number}"
+    else
+      number.to_s
+    end
+  end
+
+  def self.phone_verify_message(code)
+    "[Scout] Your verification code is #{code}."
   end
 
 end
