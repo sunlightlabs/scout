@@ -47,8 +47,9 @@ require 'helpers'
 # admin messages and reports
 require 'config/admin'
 
-# email sending wrapper (pony or postmark)
+# delivery mechanisms (Twilio, pony, postmark, "fake")
 require 'config/email'
+require 'config/sms'
 
 # delivery management and mechanisms
 Dir.glob('deliveries/*.rb').each {|filename| load filename}

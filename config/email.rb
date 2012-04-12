@@ -20,6 +20,7 @@ module Email
       sent_message "FAKE", tag, to, subject, body
       true
     end
+    
   # Important that this method *not* raise any Exceptions, 
   # because our top-level generic exception handlers will 
   # cause an error report to get sent, leading to an infinite loop.

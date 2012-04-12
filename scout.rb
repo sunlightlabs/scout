@@ -18,6 +18,7 @@ configure(:development) do |config|
   config.also_reload "config/environment.rb"
   config.also_reload "config/admin.rb"
   config.also_reload "config/email.rb"
+  config.also_reload "config/sms.rb"
   config.also_reload "helpers.rb"
   config.also_reload "models/*.rb"
   config.also_reload "controllers/*.rb"

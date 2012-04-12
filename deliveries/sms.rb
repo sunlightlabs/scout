@@ -45,7 +45,7 @@ module Deliveries
           next
         end
 
-        if sms_user email, phone, content
+        if sms_user(phone, content)
           deliveries.each &:delete
           successes << save_receipt!(user, deliveries, content)
         else
@@ -103,20 +103,8 @@ module Deliveries
     end
 
     # the actual mechanics of sending the email
-    def self.sms_user(email, phone, content)
-      if config[:twilio][:from].present?
-        begin
-          Twilio::SMS.create :to => phone, :from => config[:twilio][:from], :body => content
-          true
-        rescue Twilio::ConfigurationError, Twilio::InvalidStateError, Twilio::APIError
-          false
-        end
-      else
-        # if no 'from' number is specified, we'll assume it's a dev environment or something
-        puts "\n[SMS USER] Would have delivered this to #{phone} (#{email}):"
-        puts "\n#{content}"
-        true
-      end
+    def self.sms_user(phone, content)
+      ::SMS.deliver! "User", phone, content
     end
 
   end
