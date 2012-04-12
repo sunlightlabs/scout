@@ -579,12 +579,15 @@ footer a{
 .contentArea h4 a:hover{
     color: #1c8398;
 }
-.item time, .entry time, .time {
+.item time, .summary time, .summary .time, .item .time {
     float: right;
     font-style: italic;
     font-weight: 200;
     font-size: 93%;
     margin-top: 10px;
+}
+.item time{
+    margin-top: 2px;
 }
 .time time{
     float: none;
@@ -656,8 +659,13 @@ footer a{
 
 /*-- Entry Styling --*/
 .followChanges{
-    background: url('/images/tinyborder.png') bottom left repeat-x;
+    background: #f5f6f3 url('/images/tinyborder.png') bottom left repeat-x;
     padding: 16px 0 16px 10px;
+    -webkit-box-shadow: inset -14px 0px 14px -7px #e2e3e0;
+    -moz-box-shadow: inset -14px 0px 14px -7px #e2e3e0;
+    box-shadow: inset -14px 0px 14px -7px #e2e3e0;
+    padding: 16px 33px 16px 10px;
+
 }
 
 .searchParameters{
@@ -667,12 +675,13 @@ footer a{
 .followChanges button{
     float: right;
 }
-.followChanges, .entry .summary, .entry .details {
+.entry .summary, .entry .details {
     padding: 0 33px 0 10px;
 }
 
 .entry .trackSubscribe{
     float: left;
+    margin-top: 16px;
 }
 .resources{
     font-size: 81%;
@@ -706,6 +715,12 @@ a.source, .resources{
     font-size: 81%;
     margin-bottom: 155px;
 }
+.entry .details table .time{
+    width: 100px;
+}
+.entry .details td{
+    padding: 5px 0;
+}
 
 .details .module{
     width: 50%;
@@ -715,6 +730,13 @@ a.source, .resources{
 .entry .summary{
     padding: 33px 33px 33px 10px;
     border-bottom: 1px dashed #9d9b9b;
+}
+.entry .details h4{
+    font-weight: bold;
+    font-size: 130%;
+    float: left;
+    margin-bottom: 5px;
+    width: 550px;
 }
 
 
