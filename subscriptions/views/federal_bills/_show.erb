@@ -1,38 +1,36 @@
 <% bill = item.data %>
 <% version = item.data['last_version'] %>
 
-<div class="summary">
+<div class="summary followable">
 	
 	<div class="entryHeader">
-    <% if bill['short_title'].present? %>
-        <h2><%= bill['short_title'] %></h2>
-    <% else %>
-        <h2 class="official bill title"><%= bill['official_title'] %></h2>
-    <% end %>
+        <% if bill['short_title'].present? %>
+            <h2><%= bill['short_title'] %></h2>
+        <% else %>
+            <h2 class="official bill title"><%= bill['official_title'] %></h2>
+        <% end %>
+
 		<div class="subtitle">
-			<h4>
-		        <%= bill_code bill['bill_type'], bill['number'] %>
-		    </h4>
-		    <span>
-	            <%= bill_version version['version_code'] %>
-	        </span>
+			<%= bill_code bill['bill_type'], bill['number'] %>
+		    &mdash;
+	        <%= bill_version version['version_code'] %>
+            on
+            <time class="item" datetime="<%= html_date item.date %>">
+                <%= just_date_year item.date %>
+            </time>
 		</div>
 	</div>
-	<time class="item" datetime="<%= html_date item.date %>">
-		<%= just_date_year item.date %>
-	</time>
 
+    <%= follow_button item %>
 
-
-    <div class="clear"></div>
-
+	<div class="clear"></div>
 
     <div class="resources">
         <h5>Resources</h5>
         <ul>
-            <li><a href="<%= govtrack_url item %>">GovTrack.us</a></li>
-            <li><a href="<%= opencongress_url item %>">OpenCongress.org</a></li>
-            <li><a href="<%= thomas_url item %>">THOMAS.gov</a></li>
+            <li><a href="<%= govtrack_url item %>">GovTrack</a></li>
+            <li><a href="<%= opencongress_url item %>">OpenCongress</a></li>
+            <li><a href="<%= thomas_url item %>">THOMAS</a></li>
         </ul>
     </div>
 
@@ -42,16 +40,18 @@
         <a class="source" href="<%= version['urls']['pdf'] %>">Original Text</a>
     <% end %>
 
+    <p>
+        <% if bill['summary'] %>
+            <%= truncate_more "bill_summary", bill['summary'], 700 %>
+        <% else %>
+            No summary available.
+        <% end %>
+    </p>
+
     <div class="clear"></div>
 </div>
-<div class="pageTitle">
-	<div class="trackSubscribe">
-		Follow this bill wherever it goes
-	</div>
-<%= follow_button item %>
-	<div class="clear"></div>
-</div>
-<div class="details">
+
+<div class="details clear">
 
     <div class="module of2">
         <h5>Coming Up on the Floor</h5>

@@ -46,7 +46,26 @@ module GeneralHelpers
 
   def follow_button(item)
     interest_type = interest_adapters[item.subscription_type]
-    partial "follow_item", :engine => "erb", :locals => {:item => item, :interest_type => interest_type}
+    partial "partials/follow_item", :engine => "erb", :locals => {:item => item, :interest_type => interest_type}
+  end
+
+  def truncate_more(tag, text, max)
+    truncated = truncate text, max
+    if truncated == text
+      text
+    else
+      "<span class=\"truncated\" data-tag=\"#{tag}\">
+        #{truncated}
+        <a href=\"#\" class=\"untruncate\">More</a>
+      </span>
+      <span class=\"untruncated\" data-tag=\"#{tag}\">#{text}</span>"
+    end
+  end
+
+  def button(text)
+    "<button>
+      <span>#{text}</span>
+    </button>"
   end
 
   def item_path(item)

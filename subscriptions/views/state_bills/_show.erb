@@ -1,6 +1,6 @@
 <% bill = item.data %>
 
-<div class="summary">
+<div class="summary followable">
 
 	<div class="entryHeader">
     <% if bill['+short_title'] %>
@@ -9,25 +9,18 @@
         <h2 class="official bill title"><%= bill['title'] %></h3>
     <% end %>
 		<div class="subtitle">
-			<h4>
-		        <%= bill['bill_id'] %> in <%= state_name bill['state'] %>
-		    </h4>
+		    <%= bill['bill_id'] %> in <%= state_name bill['state'] %>
+            &mdash;
+            Information first discovered on
+            <time class="item" datetime="<%= html_date item.date %>">
+                <%= just_date_year item.date %>
+            </time>
 		</div>
 	</div>
-   	<div class="time">
 
-        <time class="item" datetime="<%= html_date item.date %>">
-            <%= just_date_year item.date %>
-        </time>
-	    <span>
-            First found
-        </span>
-	</div>
-
-
-
+    <%= follow_button item %>
+        
     <div class="clear"></div>
-
 
     <% if bill['versions'] and bill['versions'].any? %>
         <a class="source" href="<%= bill['versions'].last['url'] %>">
@@ -40,13 +33,6 @@
         <% end %>
     <% end %>
 
-</div>
-<div class="pageTitle">
-	<div class="trackSubscribe">
-		Follow this bill wherever it goes
-	</div>
-<%= follow_button item %>
-	<div class="clear"></div>
 </div>
 
 <div class="details">

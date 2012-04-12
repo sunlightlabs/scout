@@ -11,23 +11,15 @@
 		<h2><%= speech['title'] %></h2>
 		<div class="subtitle">
 		    <h4>
-		        <span class="name">
-		            <%= speaker_name speech %>
-		        </span>
+		        <%= speaker_name speech %>, on
+                <time class="item" datetime="<%= html_date item.date %>">
+                    <%= just_date_year item.date %>
+                </time>
 		    </h4>
 		</div>
 	</div>
-    <time class="item" datetime="<%= html_date item.date %>">
-            <%= just_date_year item.date %>
-    </time>
-
 
     <div class="clear"></div>
-	<% speech['speaking'].each do |speaking| %>
-        <p>
-            <%= h speaking %>
-        </p>
-    <% end %>
 
     <div class="resources">
         <h5>Resources</h5>
@@ -39,6 +31,12 @@
     <a class="source" href="<%= speech['origin_url'] %>">Original</a>
 
     <div class="clear"></div>
+
+	<% speech['speaking'].each do |speaking| %>
+        <p>
+            <%= h speaking %>
+        </p>
+    <% end %>
     
 
 </div>

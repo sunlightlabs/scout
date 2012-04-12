@@ -43,6 +43,10 @@ module Subscriptions
     def regulation_highlight(item, keyword, highlight = true)
       fulltext_highlight item, keyword, regulation_priorities, highlight
     end
+
+    def agency_names(regulation)
+      regulation['agency_names'].uniq.join ", "
+    end
     
     def govtrack_type(bill_type)
       {

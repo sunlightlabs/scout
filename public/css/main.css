@@ -95,7 +95,7 @@ h3, .entry h2{
     color: #dcc51f;
 }
 
-.trackSubscribe h2 {
+.follow h2 {
     text-transform: none;
 }
 
@@ -579,8 +579,12 @@ footer a{
 .contentArea h4 a:hover{
     color: #1c8398;
 }
-.item time, .entry time, .time {
+
+.time {
     float: right;
+}
+
+time.item, .entry time, .time {   
     font-style: italic;
     font-weight: 200;
     font-size: 93%;
@@ -589,6 +593,7 @@ footer a{
 .time time{
     float: none;
 }
+
 .time span{
     display: block;
     text-align: right;
@@ -671,7 +676,7 @@ footer a{
     padding: 0 33px 0 10px;
 }
 
-.entry .trackSubscribe{
+.entry .follow {
     float: left;
 }
 .resources{
@@ -714,6 +719,9 @@ a.source, .resources{
 }
 .entry .summary{
     padding: 33px 33px 33px 10px;
+}
+
+.entry .summary.followable {
     border-bottom: 1px dashed #9d9b9b;
 }
 
