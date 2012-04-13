@@ -19,6 +19,8 @@ module TestHelper
 
     def setup
       RSpec::Mocks.setup(self)
+
+      Subscriptions::Manager.stub(:poll).and_return([])
     end
 
     def verify
@@ -56,6 +58,10 @@ module TestHelper
 
     def redirect_path
       last_response.headers['Location'].sub(/http:\/\/example.org/, '')
+    end
+
+    def assert_response(status)
+      assert_equal status, last_response.status
     end
   end
 end

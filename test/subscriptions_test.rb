@@ -9,15 +9,55 @@ class SubscriptionsTest < Test::Unit::TestCase
   # identical parameters to search, it should be easy to get a one to one mapping
   # between the two, and to lookup whether a search has already been subscribed to
   def test_subscribe_to_searches_by_plain_keyword
-    # subscribe to search 1 with keyword A, verify new interest created
-    # subscribe to search 2 with keyword A, verify same interest was updated
-    # subscribe to search 3 with keyword B, verify new interest created
-  end
+    user = new_user!
+    query = "environment"
+    query2 = "copyright"
+    
+    assert_equal 0, user.subscriptions.count
+    assert_equal 0, user.interests.count
 
-  def test_subscribe_to_searches_with_accompanying_data
-    # subscribe to search 1 with keyword A, data I, verify new interest created
-    # subscribe to search 2 with keyword A, data II, verify same interest updated
-    # subscribe to search 3 with keyword B, data I, verify new interest created
+    post "/subscriptions", {:subscription_type => "federal_bills", :query => query}, login(user)
+    assert_response 200
+
+    assert_equal 1, user.subscriptions.count
+    assert_equal 1, user.interests.count
+
+    assert_equal query, user.interests.first.in
+    assert_equal query, user.subscriptions.first.interest_in
+    assert_equal "federal_bills", user.subscriptions.first.subscription_type
+
+    post "/subscriptions", {:subscription_type => "state_bills", :query => query}, login(user)
+    assert_response 200
+
+    assert_equal 2, user.subscriptions.count
+    assert_equal 1, user.interests.count
+
+    post "/subscriptions", {:subscription_type => "state_bills", :query => query2}, login(user)
+    assert_response 200
+
+    assert_equal 3, user.subscriptions.count
+    assert_equal 2, user.interests.count
+
+    # posting the same subscription should return 200, but be idempotent - nothing changed
+    post "/subscriptions", {:subscription_type => "state_bills", :query => query2}, login(user)
+    assert_response 200
+
+    assert_equal 3, user.subscriptions.count
+    assert_equal 2, user.interests.count
+
+    # but if we include filter data, it's different!
+    post "/subscriptions", {:subscription_type => "state_bills", :query => query2, :state_bills => {:state => "DE"}}, login(user)
+    assert_response 200
+
+    assert_equal 4, user.subscriptions.count
+    assert_equal 2, user.interests.count
+
+    # but, that data is also taken into account when finding duplicates
+    post "/subscriptions", {:subscription_type => "state_bills", :query => query2, :state_bills => {:state => "DE"}}, login(user)
+    assert_response 200
+
+    assert_equal 4, user.subscriptions.count
+    assert_equal 2, user.interests.count
   end
 
   def test_unsubscribe_from_individual_searches
@@ -41,8 +81,6 @@ class SubscriptionsTest < Test::Unit::TestCase
 
   # tragic
   def test_destroy_search_interest
-    Subscriptions::Manager.stub(:initialize!)
-
     user = new_user!
     query = "environment"
     interest = user.interests.create! :in => query, :interest_type => "search"
@@ -58,12 +96,41 @@ class SubscriptionsTest < Test::Unit::TestCase
   end
 
   def test_destroy_search_interest_not_users_own
+    user = new_user!
+    query = "environment"
+    interest = user.interests.create! :in => query, :interest_type => "search"
+    s1 = interest.subscriptions.create! :subscription_type => "federal_bills", :user_id => user.id, :interest_in => query
+    s2 = interest.subscriptions.create! :subscription_type => "state_bills", :user_id => user.id, :interest_in => query
+
+    user2 = new_user! :email => user.email.succ
+
+    delete "/interest/#{interest.id}", {}, login(user2)
+    assert_equal 404, last_response.status
+
+    assert_not_nil Interest.find(interest.id)
+    assert_not_nil Subscription.find(s1.id)
+    assert_not_nil Subscription.find(s2.id)
   end
 
   def test_destroy_search_interest_not_logged_in
+    user = new_user!
+    query = "environment"
+    interest = user.interests.create! :in => query, :interest_type => "search"
+    s1 = interest.subscriptions.create! :subscription_type => "federal_bills", :user_id => user.id, :interest_in => query
+    s2 = interest.subscriptions.create! :subscription_type => "state_bills", :user_id => user.id, :interest_in => query
+
+    user2 = new_user! :email => user.email.succ
+
+    delete "/interest/#{interest.id}"
+    assert_equal 302, last_response.status
+
+    assert_not_nil Interest.find(interest.id)
+    assert_not_nil Subscription.find(s1.id)
+    assert_not_nil Subscription.find(s2.id)
   end
 
   def test_update_interest_delivery_type
+
   end
 
   def test_update_interest_not_users_own
