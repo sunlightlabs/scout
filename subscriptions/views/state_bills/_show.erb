@@ -1,5 +1,11 @@
 <% bill = item.data %>
-
+<div class="followChanges">
+	<div class="trackSubscribe">
+		Follow activity on this bill.
+	</div>
+    <%= follow_button item %>
+	<div class="clear"></div>
+</div>
 <div class="summary followable">
 
 	<div class="entryHeader">
@@ -17,8 +23,6 @@
             </time>
 		</div>
 	</div>
-
-    <%= follow_button item %>
         
     <div class="clear"></div>
 
@@ -38,42 +42,51 @@
 <div class="details">
 
     <div class="module of2">
-        <h5>Votes</h5>
-        <ul class="votes">
+        <h4>Votes</h4>
+        <table class="votes">
+			<tbody>
             <% if bill['votes'] and bill['votes'].any? %>
                 <% bill['votes'].reverse.each do |vote| %>
-                    <li>
-                        <div class="left">
-                            <span class="date"><%= just_date_year vote['date'] %></span>
+                    <tr>
+                        <td>
+                            <span class="date time"><%= just_date_year vote['date'] %></span>
                             <p class="type"><%= state_vote_type vote %></p>
-                        </div>
-                        <div class="right">
+                        </td>
+                        <td>
                             <p class="motion"><%= vote['motion'] %></p>
                             <p class="vote_count"><%= state_vote_count vote %></p>
-                        </div>
-                    </li>
+                        <td>
+                    </tr>
                 <% end %>
             <% else %>
+				<tr>
                 No votes taken yet.
+				</tr>
             <% end %>
-        </ul>
+        	</tbody>
+		</table>
     </div>
     
     <div class="module of2">
-        <h5>Recent Activity</h5>
-        <ul class="activity">
-            <% if bill['actions'] and bill['actions'].any? %>
+        <h4>Recent Activity</h4>
+        <table class="activity">
+			<tbody>            
+			<% if bill['actions'] and bill['actions'].any? %>
                 <% bill['actions'].reverse[0...5].each do |action| %>
-                    <li>
-                        <span class="date"><%= just_date_year action['date'] %></span>
-                        -
-                        <%= action['action'] %>
-                    </li>
+                    <tr>
+                        <td class="date time"><%= just_date_year action['date'] %></td>
+						<td><%= action['action'] %></td>
+                    </tr>
                 <% end %>
             <% else %>
-                No official activity on this bill yet.
+                <tr>
+					<td colspan="2">
+					No official activity on this bill yet.
+					</td>
+				</tr>
             <% end %>
-        </ul>
+        	</tbody>
+		</table>
     </div>
 	<div class="clear"></div>
 

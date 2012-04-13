@@ -538,7 +538,7 @@ footer a{
     /*box-shadow: inset 14px 0px 14px -7px #e2e3e0; */
     
 }
-.contentArea ul{
+.results.contentArea ul{
     padding-top: 20px;
     background: url('/images/tinyborder.png') center bottom repeat-x;
 }
@@ -681,6 +681,11 @@ time.item, .entry time, .time {
 .followChanges button{
     float: right;
 }
+.followChanges .trackSubscribe{
+    float: left;
+    margin-top: 16px;
+    font-style: italic;
+}
 .entry .summary, .entry .details {
     padding: 0 33px 0 10px;
 }
@@ -694,7 +699,9 @@ time.item, .entry time, .time {
     float: left;
 }
 .resources li{
-    display: inline;
+    display: block;
+    float: left;
+    margin-right: 16px;
 }
 .resources h5{
     float: left;
@@ -705,11 +712,42 @@ time.item, .entry time, .time {
     float: left;
     padding-top: 0;
 }
+.resources span{
+    background-image: url('../images/icons_resources.png');
+    background-repeat: none;
+    text-indent: -9999em;
+    display: block;
+    width: 27px;
+    height: 27px;
+    float: left;
+    margin-top: -6px;
+    margin-right: 3px;
+}
+
+.resources .thomas span{
+    background-position: left top;
+}
+.resources .thomas a:hover span{
+    background-position: left bottom;
+}
+.resources .govTrack span{
+    background-position: center top;
+}
+.resources .govTrack a:hover span{
+    background-position: center bottom;
+}
+.resources .openCongress span{
+    background-position: right top;
+}
+.resources .openCongress a:hover span{
+    background-position: right bottom;
+}
 a.source {
     float: right;
 }
 a.source, .resources{
-    padding-top: 20px;
+    padding-top: 5px;
+    margin-bottom: 20px;
     font-size: 81%;
 }
 .entryHeader{
@@ -835,21 +873,13 @@ a.source, .resources{
 
 /*-- Settings Styling --*/
 
-.settings.contentArea form input[type="text"]{
+.user_settings.contentArea form input[type="text"]{
     width: 100%;
 }
-.settings.contentArea form ul{
-    padding: 33px 33px 33px 10px;
-    column-count: 2;
-    -moz-column-count: 2;
-    -webkit-column-count: 2;
-    margin-bottom: 155px;
-    column-gap: 16px;
-    -moz-column-gap: 16px;
-    -webkit-column-gap: 16px;
+.user_settings.contentArea form ul{
 }
 
-.settings.contentArea form li{
+.user_settings.contentArea form li{
     column-break-inside: avoid;
     -moz-column-break-inside: avoid;
     -webkit-column-break-inside: avoid;
@@ -859,13 +889,13 @@ li.email{
     -webkit-column-span: all;
     column-span: all;
 }
-.settings.contentArea form input{
+.user_settings.contentArea form input{
     margin-bottom: 16px;
 }
-.settings.contentArea label span{
+.user_settings.contentArea label span{
     font-weight: normal;
 }
-.settings.contentArea form small{
+.user_settings.contentArea form small{
     font-style: italic;
     font-weight: normal;
     display: block;
@@ -873,6 +903,19 @@ li.email{
 
 .user_settings .phone_settings {
     display: none;
+}
+.user_settings.contentArea .module{
+    background: url('/images/tinyborder.png') center bottom repeat-x;
+    padding: 33px 33px 33px 10px;
+}
+.user_settings form{
+    margin-right: 33px;
+}
+.user_settings h2{
+    margin-bottom: 16px;
+}
+.user_settings .module ul{
+    width: 100%;
 }
 
 

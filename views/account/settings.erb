@@ -1,5 +1,5 @@
 <% content_for :sidebar_right do %>
-	<div class="donate">
+	<div class="module donate">
 	    <p>
 	        You're on the <strong>free</strong> plan. Everyone is!
 	        <br/>
@@ -33,102 +33,108 @@
 <% end %>
 
 <div class="contentArea left user_settings">
-    
-    <h2>Notifications</h2>
-    <% form_for user, "/account/settings", :method => "put" do |f| %>
-        <p>
-            We can email you about all the new things that you're following, if you want.
-        </p>
-        <ul>
+    <div class="module notifications">
+	    <h2>Notifications</h2>
+	    <% form_for user, "/account/settings", :method => "put" do |f| %>
+		<ul>
+			<li>
+				<p>
+		            We can email you about all the new things that you're following, if you want.
+		        </p>
+				<ul>
+		            <li>
+		                <label for="user_delivery_none">
+		                    <%= f.radio_button :notifications, :value => "none" %>
+		                    <span>No, thanks</span>
+		                </label>
+
+		                <label for="user_delivery_email">
+		                    <%= f.radio_button :notifications, :value => "email_immediate" %>
+		                    <span>Yes, immediately</span>
+		                </label>
+
+		                <label for="user_delivery_email">
+		                    <%= f.radio_button :notifications, :value => "email_daily" %>
+		                    <span>Yes, once a day</span>
+		                </label>
+		            </li>
+		        </ul>
+			</li>
             <li>
-                <label for="user_delivery_none">
-                    <%= f.radio_button :notifications, :value => "none" %>
-                    <span>No, thanks</span>
-                </label>
-
-                <label for="user_delivery_email">
-                    <%= f.radio_button :notifications, :value => "email_immediate" %>
-                    <span>Yes, immediately</span>
-                </label>
-
-                <label for="user_delivery_email">
-                    <%= f.radio_button :notifications, :value => "email_daily" %>
-                    <span>Yes, once a day</span>
-                </label>
-            </li>
-        </ul>
-        <small>
-            You can also control this <a href="/account/subscriptions">per-subscription</a>.
-        </small>
-
-        <ul>
-            <li>
+		        <small>
+		            You can also control this <a href="/account/subscriptions">per-subscription</a>.
+		        </small>
                 <label for="user_announcements">
                     <%= f.check_box :announcements, :uncheck_value => 'false' %>
                     <span>Get (infrequent) announcements of new features</span>
                 </label>
             </li>
-        </ul>
+			<li>
+		        <button type="submit">
+		            <span>OK</span>
+		        </button>
+			</li>
+		</ul>
 
-        <button type="submit">
-            <span>OK</span>
-        </button>
+	    <% end %>
+	</div>
+	
+    <div class="module phoneSettings">
 
-    <% end %>
+	    <h2>SMS</h2>
 
+	    <%= flash_for [:phone] %>
 
-    <h2>SMS</h2>
+	    <%= errors_for user %>
 
-    <%= flash_for [:phone] %>
+	    <div class="confirmed phone_settings">
+	        <span>
+	            <%= user.phone %> <strong>(Verified)</strong>
+	        </span>
+	        <a href="#" class="dismiss phone">
+	            Change
+	        </a>
+	    </div>
 
-    <%= errors_for user %>
+	    <div class="unconfirmed phone_settings">
+	        <span>
+	            <%= user.phone %> (Unverified)
+	        </span>
+	        <p>
+	            To confirm your phone number, Enter the verification code we sent you.
+	        </p>
 
-    <div class="confirmed phone_settings">
-        <span>
-            <%= user.phone %> <strong>(Verified)</strong>
-        </span>
-        <a href="#" class="dismiss phone">
-            Change
-        </a>
-    </div>
+	        <form action="/account/phone/confirm" method="post">
+	            <%= text_field_tag "phone_verify_code" %>
+	             <button type="submit">
+	                <span>Verify</span>
+	            </button>
+	        </form>
 
-    <div class="unconfirmed phone_settings">
-        <span>
-            <%= user.phone %> (Unverified)
-        </span>
-        <p>
-            To confirm your phone number, Enter the verification code we sent you.
-        </p>
+	        <form action="/account/phone/resend" method="post">
+	            <button type="submit">
+	                <span>Resend Code</span>
+	            </button>
+	        </form>
+	    </div>
 
-        <form action="/account/phone/confirm" method="post">
-            <%= text_field_tag "phone_verify_code" %>
-             <button type="submit">
-                <span>Verify</span>
-            </button>
-        </form>
+	    <div class="none phone_settings">
+	        <p>
+	            If you provide a phone number, you can turn on SMS notifications for your subscriptions. We'll send you a text message to confirm.
+	        </p>
 
-        <form action="/account/phone/resend" method="post">
-            <button type="submit">
-                <span>Resend Code</span>
-            </button>
-        </form>
-    </div>
+	        <% form_for user, "/account/phone", :method => "put" do |f| %>
+	            <%= f.label :phone %>
+	            <%= f.text_field :phone %>
 
-    <div class="none phone_settings">
-        <p>
-            If you provide a phone number, you can turn on SMS notifications for your subscriptions. We'll send you a text message to confirm.
-        </p>
-
-        <% form_for user, "/account/phone", :method => "put" do |f| %>
-            <%= f.label :phone %>
-            <%= f.text_field :phone %>
-
-            <button type="submit">
-                <span>Add Phone Number</span>
-            </button>
-        <% end %>
-    </div>
-	<div class="passwordChange">
+	            <button type="submit">
+	                <span>Add Phone Number</span>
+	            </button>
+	        <% end %>
+	    </div>
+	</div>
+	
+	<div class="module passwordChange">
 		<h2>Change Password</h2>
 	    <% form_for user, "/account/password/change", :method => "put" do |f| %>
 	        <ul>
@@ -150,7 +156,7 @@
 	        </button>
 	    <% end %>
 	</div>
-    <div class="developer_mode">
+    <div class="module developer_mode">
         <h2>Developer Mode</h2>
         <% if developer_mode? %>
             <p>
