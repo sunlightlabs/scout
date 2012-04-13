@@ -22,6 +22,11 @@ input, select, textarea {
     box-sizing: border-box;
 }
 
+
+a.truncate {}
+.truncated {}
+.untruncated {display: none;}
+
 button, a.update.button {
     display: block;
     border: 0;

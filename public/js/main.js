@@ -14,6 +14,14 @@ $(function() {
     return false;
   });
 
+  $("#content").on("click", "a.untruncate", function() {
+    var to_hide = $(this).parent(".truncated");
+    var tag = to_hide.data("tag");
+    $(".untruncated[data-tag=" + tag + "]").show();
+    to_hide.hide();
+    return false;
+  });
+
   $("form#search_form").submit(function() {
     var query = $(this).find("input.query").val();
     if (query) query = query.trim();
