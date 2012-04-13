@@ -27,7 +27,8 @@ class Subscription
   
   validates_presence_of :user_id
   validates_presence_of :subscription_type
-  
+
+  # this validation will fall
   validate do
     if interest_in.blank?
       errors.add(:base, "Enter a keyword or phrase to subscribe to.")

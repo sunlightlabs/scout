@@ -45,19 +45,19 @@ end
 
 # search results
 
-get '/search/:subscriptions/:query' do
-  query = params[:query].gsub("\"", "")
-
-  # subscriptions_map = {}
+get '/search/:subscriptions/?:query?' do
+  query = params[:query] ? params[:query].gsub("\"", "") : nil
 
   subscriptions = params[:subscriptions].split(",").map do |slug|
     subscription_type, index = slug.split "-"
     next unless search_adapters.keys.include?(subscription_type)
 
+    data = (params[slug] || {}).merge(:query => query)
+
     Subscription.new(
       :interest_in => query,
       :subscription_type => subscription_type,
-      :data => (params[slug] || {}),
+      :data => data,
       :slug => slug
     )
   end.compact
@@ -70,11 +70,11 @@ get '/search/:subscriptions/:query' do
   }
 end
 
-get '/fetch/search/:subscription_type/:query' do
-  query = params[:query].strip
+get '/fetch/search/:subscription_type/?:query?' do
+  query = params[:query] ? params[:query].strip : nil
   subscription_type = params[:subscription_type]
 
-  data = params[subscription_type] || {} # must default to empty hash
+  data = (params[subscription_type] || {}).merge(:query => query)
 
   subscription = Subscription.new(
     :subscription_type => subscription_type,

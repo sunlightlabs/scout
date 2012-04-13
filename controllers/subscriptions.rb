@@ -30,13 +30,8 @@ end
 delete '/interest/:id' do
   requires_login
   
-  if interest = current_user.interests.where(:_id => BSON::ObjectId(params[:id].strip)).first
-    subscriptions = interest.subscriptions.to_a
-    
+  if interest = current_user.interests.find(params[:id])
     interest.destroy
-    subscriptions.each do |subscription|
-      subscription.destroy
-    end
     
     halt 200
   else

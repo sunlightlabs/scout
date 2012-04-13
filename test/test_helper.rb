@@ -28,6 +28,11 @@ module TestHelper
     def teardown
       User.destroy_all
       ApiKey.destroy_all
+      
+      Interest.destroy_all
+      Subscription.destroy_all
+      Delivery.destroy_all
+      Receipt.destroy_all
 
       # remove rspec mocks
       RSpec::Mocks.space.reset_all
