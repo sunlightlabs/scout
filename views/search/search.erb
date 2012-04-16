@@ -1,18 +1,16 @@
 <% content_for :title do %>
     <div class="follow searchParameters">
-        <h2>'<%= h query %>'</h2>
+        <h2><%= h query %></h2>
         in 
-        <% subscriptions.each_with_index do |subscription, i| %>
-          <a class="dataset" href="#<%= subscription.subscription_type %>"><%= subscription.search_name %></a><%= ", " unless i == (subscriptions.size - 1) %>
-        <% end %>
+        <span><%= subscription.search_name %></span>
     </div>
 
     <button class="follow search">
-        <span>Subscribe</span>
+      <span>Follow</span>
     </button>
 
     <button class="following search">
-      <span>Subscribed</span>
+      <span>Following</span>
     </button>
 <% end %>
 
@@ -20,11 +18,12 @@
 <% content_for :sidebar_left do %>
   
   <form class="filters">
-  
+
     <%= hidden_field_tag :query, :class => "query" %>
     <%= hidden_field_tag :subscription_type, :class => "subscription_type" %>
-
+  
     <!-- subscription-specific filter partial -->
+    <%= partial "subscriptions/#{subscription.subscription_type}/filter", :engine => "erb", :locals => {:subscription => subscription} %>
 
   </form>
 
@@ -40,8 +39,6 @@
           >
 
           <section class="container clear">
-            <h3><%= subscription.search_name %></h3>
-
             <div class="loading">
               <span>Searching ...</span>
             </div>
@@ -64,18 +61,35 @@
 <script type="text/javascript">
   
   $(function() {
+    initializeTitle();
     initializeFilters();
-    initializeButton();
-    search({per_page: 20, page: 1});
+    initializeControls();
+    search();
   });
+
+  function initializeTitle() {
+    $("div.searchParameters h2").html("<%= h query %>");
+    $("div.searchParameters span").html("<%= h subscription.search_name %>");
+  }
 
   // initializes both the sidebar form filters, and the top search form
   function initializeFilters() {
     $("input.query").val("<%= h query %>");
     $("input.subscription_type, select.subscription_type").val("<%= subscription.subscription_type %>");
+    
+    // first, reset all filters
+    $("form.filters .filter_control").val("");
+
+    // then, initialize according to the query string
+    <% (params[subscription.subscription_type] || {}).each do |key, value| %>
+      $("form.filters input[name=<%= key %>], form.filters select[name=<%=key %>]").val("<%= value %>");
+    <% end %>
   }
 
-  function initializeButton() {
+  function initializeControls() {
+    $("button.follow").hide();
+    $("button.following").hide();
+
     <% if subscription.new_record? %>
       $("button.follow").show();
     <% else %>
@@ -88,12 +102,30 @@
     <% else %>
       $("button.search").click(function() {window.location = "/login";});
     <% end %>
+
+    $("form.filters .filter_control").change(function() {
+      var subscription_type = currentSubscriptionType();
+      var query = encodeURIComponent(currentQuery());
+      var filters = currentFilters();
+      
+      var filterString = $.param(filters).replace("%5B", "[").replace("%5D", "]");
+      var url = "/search/" + subscription_type + "/" + query + "?" + filterString;
+      Utils.pjax(url, ".contentArea");
+    });
   }
 
   function currentFilters() {
+    var type = currentSubscriptionType();
     var filters = {};
-    // import subscription data into form
-    return {};
+    filters[type] = {};
+
+    $("form.filters .filter_control").each(function(i, element) {
+      var value = $(element).val();
+      if (value) // don't pass along empty strings
+        filters[type][$(element).attr("name")] = value;
+    });
+
+    return filters;
   }
 
   function currentQuery() {
@@ -153,7 +185,7 @@
   }
 
   function search(searchOptions) {
-    if (!searchOptions) searchOptions = {};
+    if (!searchOptions) searchOptions = {per_page: 20, page: 1};
 
     var subscription_type = currentSubscriptionType();
     var query = encodeURIComponent(currentQuery());
