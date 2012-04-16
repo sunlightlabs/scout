@@ -61,11 +61,33 @@ class SubscriptionsTest < Test::Unit::TestCase
   end
 
   def test_unsubscribe_from_individual_searches
-    # interest 1 has subscription 1 and subscription 2
-    # interest 2 has subscription 1
-    # unsubscribe from interest 1, subscription 1, verify interest 1 is intact
-    # unsubscribe from interest 1, subscription 2, verify interest 1 is gone
-    # unsubscribe from interest 2, subscription 1, verify interest 2 is gone
+    user = new_user!
+    query1 = "environment"
+    query2 = "guns"
+    i1 = user.interests.create! :in => query1, :interest_type => "search"
+    i2 = user.interests.create! :in => query2, :interest_type => "search"
+    s1 = user.subscriptions.create! :interest => i1, :subscription_type => "state_bills", :interest_in => query1, :data => {"query" => query1}
+    s2 = user.subscriptions.create! :interest => i1, :subscription_type => "federal_bills", :interest_in => query1, :data => {"query" => query1}
+    s3 = user.subscriptions.create! :interest => i2, :subscription_type => "state_bills", :interest_in => query2, :data => {"query" => query2, 'state' => "CA"}
+
+    delete "/subscriptions", {:subscription_type => s1.subscription_type, :query => s1.interest_in}, login(user)
+    assert_response 200
+
+    assert_not_nil Interest.find(i1.id)
+    assert_nil Subscription.find(s1.id)
+    assert_not_nil Subscription.find(s2.id)
+
+    delete "/subscriptions", {:subscription_type => s2.subscription_type, :query => s2.interest_in}, login(user)
+    assert_response 200
+
+    assert_nil Interest.find(i1.id)    
+    assert_nil Subscription.find(s2.id)
+
+    delete "/subscriptions", {:subscription_type => s3.subscription_type, :query => s3.interest_in, s3.subscription_type => {'state' => 'CA'}}, login(user)
+    assert_response 200
+
+    assert_nil Interest.find(i2.id)
+    assert_nil Subscription.find(s3.id)
   end
 
   # Eventually: tests on subscriptions with no keyword at all

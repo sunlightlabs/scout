@@ -4,17 +4,7 @@ get '/search/:subscription_types/?:query?' do
   query = params[:query] ? params[:query].gsub("\"", "") : nil
 
   types = params[:subscription_types].split(",").select {|type| search_adapters.keys.include?(type)}
-  subscriptions = types.map do |subscription_type|
-    next unless search_adapters.keys.include?(subscription_type)
-
-    data = (params[subscription_type] || {}).merge(:query => query)
-
-    Subscription.find_or_initialize_by(
-      :interest_in => query,
-      :subscription_type => subscription_type,
-      :data => data
-    )
-  end
+  subscriptions = types.map {|type| subscription_for type}
 
   halt 404 and return unless subscriptions.any?
 
@@ -28,13 +18,7 @@ get '/fetch/search/:subscription_type/?:query?' do
   query = params[:query] ? params[:query].strip : nil
   subscription_type = params[:subscription_type]
 
-  data = (params[subscription_type] || {}).merge(:query => query)
-
-  subscription = Subscription.new(
-    :subscription_type => subscription_type,
-    :interest_in => query,
-    :data => data
-  )
+  subscription = subscription_for subscription_type
 
   page = params[:page].present? ? params[:page].to_i : 1
   per_page = params[:per_page].present? ? params[:per_page].to_i : nil
@@ -59,10 +43,7 @@ get '/fetch/search/:subscription_type/?:query?' do
   count = results ? results.size : -1
   {
     :count => count,
-    :html => html,
-
-    # TODO: don't return this at all unless it's in developer mode (a non-system API key in use)
-    :search_url => (count > 0 ? results.first.search_url : nil)
+    :html => html
   }.to_json
 end
 
@@ -75,27 +56,15 @@ post '/subscriptions' do
   interest = current_user.interests.find_or_initialize_by(
     :in => query, 
     :interest_type => "search",
-    :data => {
-      'query' => query
-    }
+    :data => {'query' => query}
   )
   
-  data = (params[subscription_type] || {}).merge(:query => query)
-
-  subscription = current_user.subscriptions.find_or_initialize_by(
-    :interest_in => query, 
-    :subscription_type => subscription_type,
-    :data => data
-  )
-
-  if params[:subscription_data]
-    subscription.data = params[:subscription_data]
-  end
+  subscription = subscription_for subscription_type
   
   # make sure interest has the same validations as subscriptions
   if interest.valid? and subscription.valid?
-    interest.save!
-    subscription[:interest_id] = interest.id
+    interest.save! if interest.new_record?
+    subscription.interest = interest
     subscription.save!
     
     halt 200
@@ -105,33 +74,22 @@ post '/subscriptions' do
 end
 
 # delete the subscription, and, if it's the last subscription under the interest, delete the interest
-# delete '/subscription/:id' do
-#   requires_login
+delete '/subscriptions' do
+  requires_login
 
-#   if subscription = Subscription.where(:user_id => current_user.id, :_id => BSON::ObjectId(params[:id].strip)).first
-#     halt 404 unless interest = Interest.where(:user_id => current_user.id, :_id => subscription.interest_id).first
+  query = params[:query] ? params[:query].strip : nil
+  subscription_type = params[:subscription_type]
 
-#     deleted_interest = false
+  subscription = subscription_for subscription_type
+  halt 404 and return false if subscription.new_record?
 
-#     if interest.subscriptions.count == 1
-#       interest.destroy
-#       deleted_interest = true
-#     end
+  subscription.destroy
 
-#     subscription.destroy
+  interest = Interest.find subscription.interest_id
+  interest.destroy if interest.subscriptions.empty?
 
-#     pane = deleted_interest ? nil : partial("partials/interest", :engine => "erb", :locals => {:interest => interest})
-
-#     headers["Content-Type"] = "application/json"
-#     {
-#       :deleted_interest => deleted_interest,
-#       :interest_id => interest.id.to_s,
-#       :pane => pane
-#     }.to_json
-#   else
-#     halt 404
-#   end
-# end
+  halt 200
+end
 
 delete '/interest/:id' do
   requires_login
@@ -194,3 +152,27 @@ end
   
 #   halt 200
 # end
+
+helpers do
+
+  # initializes a subscription of the given type, or, 
+  # if the user is logged in, finds any existing one
+  def subscription_for(subscription_type)
+    query = params[:query] ? params[:query].gsub("\"", "") : nil
+
+    data = (params[subscription_type] || {}).merge('query' => query)
+
+    criteria = {
+      :interest_in => query,
+      :subscription_type => subscription_type,
+      :data => data
+    }
+
+    if logged_in?
+      current_user.subscriptions.find_or_initialize_by criteria
+    else
+      Subscription.new criteria
+    end
+  end
+
+end

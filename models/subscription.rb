@@ -60,6 +60,10 @@ class Subscription
     adapter.search_name self
   end
 
+  def search_url(options = {})
+    adapter.url_for self, :search, options
+  end
+
   # the mechanism this subscription prefers to be delivered as (e.g. email or SMS).
   # for right now, reads right from the user's preferences, but could be changed
   # to be per-interest or per-subscription.
