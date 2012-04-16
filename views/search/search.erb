@@ -80,7 +80,6 @@
 
   // initialize with any subscription-wide filters (none yet)
   var current_filters = {
-    "all": <%= (params[:all] || {}).to_json %>
   };
 
   // put in a delay block in case this is being rendered before the layout
@@ -109,17 +108,12 @@
     container.find(".loading").show();
     container.find(".populate").html("").hide();
     
-    // all search options
+    // all search options (filters, pagination)
     var search = {};
-
     
     // carry along the universal and subscription-specific filters
-    var filters = {};
-    filters.all = current_filters.all;
-
-    // strip off the index for subscription-specific searches
+    var filters = {};    
     filters[subscription_type] = current_filters[subscription_type];
-
     $.extend(search, filters);
 
     
@@ -136,9 +130,9 @@
         "/search/" + subscription_type + "/" + query_slug + "?" + $.param(filters)
       );
 
-      // if (data.search_url) {
-      //   container.find("div.developer.json.search").show().find("a").attr("href", data.search_url);
-      // }
+      if (data.search_url) {
+        $("div.developer.json.search").show().find("a").attr("href", data.search_url);
+      }
 
     }).error(function() {
       container.find(".loading").hide();
