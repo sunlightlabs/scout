@@ -3,7 +3,7 @@
         <h2>'<%= h query %>'</h2>
         in 
         <% subscriptions.each_with_index do |subscription, i| %>
-          <a class="dataset" href="#<%= subscription.slug %>"><%= subscription.search_name %></a><%= ", " unless i == (subscriptions.size - 1) %>
+          <a class="dataset" href="#<%= subscription.subscription_type %>"><%= subscription.search_name %></a><%= ", " unless i == (subscriptions.size - 1) %>
         <% end %>
     </div>
     <button>
@@ -47,8 +47,8 @@
     
     <% subscriptions.each do |subscription| %>
         <div class="search"
-          id="<%= subscription.slug %>"
-          data-subscription="<%= subscription.slug %>"
+          id="<%= subscription.subscription_type %>"
+          data-subscription="<%= subscription.subscription_type %>"
           >
 
           <section class="container clear">
@@ -73,24 +73,6 @@
 
 <div class="clear"></div>
 
-<!-- 
-<div class="flag overlay">
-    <div class="clear"></div>
-    <div class="light white">
-        <div class="clear"></div>
-        <p>You've modified the search parameters on this subscription. Would you like to update it?</p>
-        <a class="button update textIndent" type="submit">
-            Update
-        </a>
-        <a class="ignore" type="submit">
-            No thanks
-        </a>
-    </div>
-    <div class="fade black"></div>  
-</div>
-
- -->
-
 <script type="text/javascript">
   // hold the current state of the filters
   // needs to stay a separate hash, since the form can 
@@ -108,23 +90,20 @@
     <% subscriptions.each do |subscription| %>
 
       <% # "I think this is safe..." %>
-      current_filters["<%= subscription.slug %>"] = <%= subscription.data.to_json %>;
+      current_filters["<%= subscription.subscription_type %>"] = <%= subscription.data.to_json %>;
 
       searchFor(
-        query, "<%= subscription.slug %>", 
+        query, "<%= subscription.subscription_type %>", 
         {"per_page": <%= subscriptions.size == 1 ? 20 : 2 %>}
       );
     <% end %>
   });
 
-  function searchFor(query, subscription, searchOptions) {
+  function searchFor(query, subscription_type, searchOptions) {
     if (!searchOptions) searchOptions = {};
 
-    // subscription is a slug
-    var subscription_type = subscription.split("-")[0];
-
     var query_slug = encodeURIComponent(query);
-    var container = $(".results div.search[data-subscription=" + subscription + "]");
+    var container = $(".results div.search[data-subscription=" + subscription_type + "]");
 
     // reset elements inside tab
     container.find(".loading").show();
@@ -139,7 +118,7 @@
     filters.all = current_filters.all;
 
     // strip off the index for subscription-specific searches
-    filters[subscription_type] = current_filters[subscription];
+    filters[subscription_type] = current_filters[subscription_type];
 
     $.extend(search, filters);
 

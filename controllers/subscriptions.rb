@@ -1,27 +1,25 @@
 # search results
 
-get '/search/:subscriptions/?:query?' do
+get '/search/:subscription_types/?:query?' do
   query = params[:query] ? params[:query].gsub("\"", "") : nil
 
-  subscriptions = params[:subscriptions].split(",").map do |slug|
-    subscription_type, index = slug.split "-"
+  types = params[:subscription_types].split(",").select {|type| search_adapters.keys.include?(type)}
+  subscriptions = types.map do |subscription_type|
     next unless search_adapters.keys.include?(subscription_type)
 
-    data = (params[slug] || {}).merge(:query => query)
+    data = (params[subscription_type] || {}).merge(:query => query)
 
-    Subscription.new(
+    Subscription.find_or_initialize_by(
       :interest_in => query,
       :subscription_type => subscription_type,
-      :data => data,
-      :slug => slug
+      :data => data
     )
-  end.compact
+  end
 
   halt 404 and return unless subscriptions.any?
 
   erb :"search/search", :layout => !pjax?, :locals => {
     :subscriptions => subscriptions,
-    :subscription_type => subscriptions,
     :query => query
   }
 end
