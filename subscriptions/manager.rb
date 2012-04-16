@@ -1,5 +1,5 @@
 require 'httparty'
-require 'subscriptions/helpers'
+require './subscriptions/helpers'
 
 module Subscriptions
 

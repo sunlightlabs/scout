@@ -9,13 +9,9 @@
 <div class="summary followable">
 
 	<div class="entryHeader">
-    <% if bill['+short_title'] %>
-        <h2><%= bill['+short_title'] %></h2>
-    <% else %>
-        <h2 class="official bill title"><%= bill['title'] %></h3>
-    <% end %>
+        <h2><%= bill['bill_id'] %></h2>
 		<div class="subtitle">
-		    <%= bill['bill_id'] %> in <%= state_name bill['state'] %>
+		    <%= state_name bill['state'] %>
             &mdash;
             Information first discovered on
             <time class="item" datetime="<%= html_date item.date %>">
@@ -36,6 +32,14 @@
             <a class="source" href="<%= source['url'] %>">Source <%= i + 1 %></a>
         <% end %>
     <% end %>
+
+    <p>
+        <% if bill['+short_title'] %>
+            <%= bill['+short_title'] %>
+        <% else %>
+            <%= truncate_more "state_bill_title", bill['title'], 500 %>
+        <% end %>
+    </p>
 
 </div>
 

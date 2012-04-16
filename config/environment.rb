@@ -42,21 +42,21 @@ end
 
 # app-wide models and helpers
 Dir.glob('models/*.rb').each {|filename| load filename}
-require 'helpers'
+require './helpers'
 
 # admin messages and reports
-require 'config/admin'
+require './config/admin'
 
 # delivery mechanisms (Twilio, pony, postmark, "fake")
-require 'config/email'
-require 'config/sms'
+require './config/email'
+require './config/sms'
 
 # delivery management and mechanisms
 Dir.glob('deliveries/*.rb').each {|filename| load filename}
 
 # subscription management and adapters
 Dir.glob('subscriptions/adapters/*.rb').each {|filename| load filename}
-require 'subscriptions/manager'
+require './subscriptions/manager'
 
 # maps types of items to the subscription adapter they can be found with
 def interest_data

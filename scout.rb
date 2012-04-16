@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require 'config/environment'
+require './config/environment'
 require 'sinatra/content_for'
 require 'sinatra/flash'
 require 'rack/file'
@@ -15,22 +15,22 @@ set :session_secret, config[:session_secret]
 
 configure(:development) do |config|
   require 'sinatra/reloader'
-  config.also_reload "config/environment.rb"
-  config.also_reload "config/admin.rb"
-  config.also_reload "config/email.rb"
-  config.also_reload "config/sms.rb"
-  config.also_reload "helpers.rb"
-  config.also_reload "models/*.rb"
-  config.also_reload "controllers/*.rb"
-  config.also_reload "subscriptions/adapters/*.rb"
-  config.also_reload "subscriptions/*.rb"
-  config.also_reload "deliveries/*.rb"
+  config.also_reload "./config/environment.rb"
+  config.also_reload "./config/admin.rb"
+  config.also_reload "./config/email.rb"
+  config.also_reload "./config/sms.rb"
+  config.also_reload "./helpers.rb"
+  config.also_reload "./models/*.rb"
+  config.also_reload "./controllers/*.rb"
+  config.also_reload "./subscriptions/adapters/*.rb"
+  config.also_reload "./subscriptions/*.rb"
+  config.also_reload "./deliveries/*.rb"
 end
 
-require 'controllers/api_keys'
-require 'controllers/users'
-require 'controllers/subscriptions'
-require 'controllers/feeds'
+require './controllers/api_keys'
+require './controllers/users'
+require './controllers/subscriptions'
+require './controllers/feeds'
 
 
 before do

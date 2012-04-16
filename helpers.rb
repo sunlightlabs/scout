@@ -168,5 +168,5 @@ helpers GeneralHelpers
 
 
 # Subscription-specific helpers
-require 'subscriptions/helpers'
+require './subscriptions/helpers'
 helpers Subscriptions::Helpers
