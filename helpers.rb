@@ -28,7 +28,12 @@ module GeneralHelpers
   end
 
   def developer_mode?
-    params[:hood] == "up"
+    current_user # && current_user.developer?
+  end
+
+  def developer_url(subscription)
+    api_key = current_user ? current_user.api_key : nil
+    subscription.search_url :api_key => api_key
   end
 
   def errors_for(object)

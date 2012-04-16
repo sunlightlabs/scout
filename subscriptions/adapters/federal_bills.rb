@@ -4,7 +4,7 @@ module Subscriptions
     class FederalBills
       
       def self.url_for(subscription, function, options = {})
-        api_key = config[:subscriptions][:sunlight_api_key]
+        api_key = options[:api_key] || config[:subscriptions][:sunlight_api_key]
         query = URI.escape subscription.interest_in
         
         if config[:subscriptions][:rtc_endpoint].present?
