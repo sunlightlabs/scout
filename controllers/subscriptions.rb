@@ -102,56 +102,63 @@ delete '/interest/:id' do
   end
 end
 
-# post '/item/:item_id/follow' do
-#   requires_login
+post '/item/:interest_type/:item_id/follow' do
+  requires_login
 
-#   interest_type = params[:interest_type]
-#   item_id = URI.decode params[:item_id] # can possibly have spaces, decode first
+  interest_type = params[:interest_type]
+  item_id = URI.decode params[:item_id] # can possibly have spaces, decode first
   
-#   unless item = Subscriptions::Manager.find(interest_data[interest_type][:adapter], item_id)
-#     halt 404 and return
-#   end
+  unless item = Subscriptions::Manager.find(interest_data[interest_type][:adapter], item_id)
+    halt 404 and return
+  end
 
-#   interest = current_user.interests.new :interest_type => interest_type, :in => item_id, :data => item.data
+  interest = current_user.interests.new(
+    :interest_type => interest_type, 
+    :in => item_id, 
+    :data => item.data
+  )
 
-#   subscriptions = interest_data[interest_type][:subscriptions].keys.map do |subscription_type|
-#     current_user.subscriptions.new :interest_in => item_id, :subscription_type => subscription_type
-#   end
+  subscriptions = interest_data[interest_type][:subscriptions].keys.map do |subscription_type|
+    current_user.subscriptions.new :interest_in => item_id, :subscription_type => subscription_type
+  end
 
-#   if interest.valid? and (subscriptions.reject {|s| s.valid?}.empty?)
-#     interest.save!
-#     subscriptions.each do |subscription|
-#       subscription[:interest_id] = interest.id
-#       subscription.save!
-#     end
+  if interest.valid? and (subscriptions.reject {|s| s.valid?}.empty?)
+    interest.save!
+    subscriptions.each do |subscription|
+      subscription.interest = interest
+      subscription.save!
+    end
 
-#     headers["Content-Type"] = "application/json"
-#     {
-#       :interest_id => interest.id.to_s,
-#       :pane => partial("partials/interest", :engine => "erb", :locals => {:interest => interest})
-#     }.to_json
-#   else
-#     halt 500
-#   end
-# end
+    halt 200
+  else
+    halt 500
+  end
+end
 
 
-# delete '/item/:item_id/unfollow' do
-#   requires_login
+delete '/item/:interest_type/:item_id/unfollow' do
+  requires_login
 
-#   unless interest = current_user.interests.where(:_id => BSON::ObjectId(params[:interest_id].strip)).first
-#     halt 404 and return
-#   end
+  unless interest = current_user.interests.where(:in => params[:item_id], :interest_type => params[:interest_type]).first
+    halt 404 and return
+  end
 
-#   subscriptions = interest.subscriptions.to_a
+  subscriptions = interest.subscriptions.to_a
     
-#   interest.destroy
-#   subscriptions.each do |subscription| 
-#     subscription.destroy
-#   end
+  interest.destroy
+  subscriptions.each do |subscription| 
+    subscription.destroy
+  end
   
-#   halt 200
-# end
+  halt 200
+end
+
+put '/interest/:id' do
+  requires_login
+
+  
+
+end
 
 helpers do
 

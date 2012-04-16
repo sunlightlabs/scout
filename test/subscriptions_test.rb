@@ -90,15 +90,41 @@ class SubscriptionsTest < Test::Unit::TestCase
     assert_nil Subscription.find(s3.id)
   end
 
+
   # Eventually: tests on subscriptions with no keyword at all
 
-  def test_follow_item
-    # subscribe to item 1, verify new interest created with all subscriptions
-  end
 
-  def test_unfollow_item
-    # subscribe to item 1
-    # unsubscribe from item 1, verify interest destroyed, along with all subscriptions
+  def test_follow_item_and_then_unfollow
+    item_id = "hr4192-112"
+    interest_type = "bill"
+
+    user = new_user!
+
+    assert_equal 0, user.interests.count
+    assert_equal 0, user.subscriptions.count
+
+    item = SeenItem.new(:item_id => item_id, :date => Time.now, :data => {
+      :bill_id => item_id,
+      :enacted => true
+    })
+    Subscriptions::Manager.stub(:find).and_return(item)
+
+    post "/item/#{interest_type}/#{item_id}/follow", {}, login(user)
+    assert_response 200
+
+    user.reload
+    assert_equal 1, user.interests.count
+    interest = user.interests.first
+    assert_equal interest_data[interest_type][:subscriptions].keys.size, interest.subscriptions.count
+    assert_equal item_id, interest.in
+    assert_equal interest_data[interest_type][:subscriptions].keys.sort, interest.subscriptions.map(&:subscription_type).sort
+  
+    delete "/item/#{interest_type}/#{item_id}/unfollow", {}, login(user)
+    assert_response 200
+
+    user.reload
+    assert_equal 0, user.interests.count
+    assert_equal 0, user.subscriptions.count
   end
 
   # tragic

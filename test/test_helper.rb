@@ -21,6 +21,7 @@ module TestHelper
       RSpec::Mocks.setup(self)
 
       Subscriptions::Manager.stub(:poll).and_return([])
+      Subscriptions::Manager.stub(:find).and_return(double())
     end
 
     def verify

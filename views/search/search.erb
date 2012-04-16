@@ -13,33 +13,9 @@
 
 
 <% content_for :sidebar_left do %>
-  <div class="module filters" style="display: none">
-      <h4>Filter search results</h4>
-      <form>
-          <fieldset>
-              <legend>Congress</legend>
-              <label><input type="checkbox" name="" value="" id="">Bills</label>
-              <label><input type="checkbox" name="" value="" id="">Speeches</label>
-          </fieldset>
-          <fieldset>
-              <legend>Regulations</legend>
-              <label><input type="checkbox" name="" value="" id="">Proposed/final regulations</label>
-          </fieldset>
-          <fieldset>                          
-              <legend>State Bills</legend>
-              <input type="checkbox" name="" value="" id="">
-              <select name="category">
-                  <option value="" selected="selected">--- All States ---</option>
-                  <% state_map.keys.sort.each do |code| %>
-                      <option value="<%= code %>"><%= state_map[code] %></option>
-                  <% end %>
-              </select>
-          </fieldset>
-          <button type="submit">
-              <span>Update results</span>
-          </button>
-      </form>
-  </div>
+  
+  <!-- subscription-specific filter partial -->
+
   <%= recent_searches %>
 <% end %>
 

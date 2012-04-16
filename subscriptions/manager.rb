@@ -149,7 +149,7 @@ module Subscriptions
       end
       
       item = adapter.item_detail_for response
-      item[:find_url] = url
+      item.find_url = url
       item
     end
     
