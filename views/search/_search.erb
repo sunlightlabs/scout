@@ -3,30 +3,30 @@
         <label for="query">Search</label>
         <input class="transparent query" name="query" type="search" placeholder="Start new search..." />
     </fieldset>
+
+    <div class="clear"></div>
     
     <fieldset class="initialFilters">
-        <!-- <legend>Select a category</legend>
+        <label for="search_subscription_type" class="subscription_type">Search through</label>
 
-        <label for="id_category">Category</label>
-        <select name="category" id="id_category">
-            <option value="" selected="selected">------</option>
-            <option value="congress">Congress</option>
-            <option value="regulations">Regulations</option>
-            <option value="states">State Legislation</option>
-        </select> -->
-        
-        <!-- <ul class="filter congress">
-            <li><label><input type="checkbox" name="" value="">Bills</label></li>
-            <li><label><input type="checkbox" name="" value="">Speeches</label></li>
-        </ul>
+        <%= select_tag :subscription_type, :class => "subscription_type", :id => "search_subscription_type", :options => search_types, :selected => (params[:subscriptions] || search_types.first[1]) %>
 
-        <ul class="filter states">
+        <!-- <ul class="filter initial state_bills">
             <li>
-                <label><input type="radio" name="" value="" checked>All States</label>
+                <label>
+                    <input type="radio" name="state_bills_type" value="all">
+                    All States
+                </label>
             </li>
             <li>
-                <select name="category">
-                    <option value="" selected="selected">--- Pick a state ---</option>
+                <label>
+                    <input type="radio" name="state_bills_state" value="single"
+                        <% params[:state_bills] and params[:state_bills][:state] ? "checked" : "" %>
+                        >
+                    State:
+                </label>
+
+                <select class="state_bills_state_single">
                     <% state_map.keys.sort.each do |code| %>
                         <option value="<%= code %>"><%= state_map[code] %></option>
                     <% end %>
@@ -38,4 +38,5 @@
     <button type="submit">
         <span>Search</span>
     </button>
+    <div class="clear"></div>
 </form>

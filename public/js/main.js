@@ -41,11 +41,16 @@ $(function() {
     return false;
   });
 
+  $("form#search_form select.subscription_type").change(function() {
+    $(".filter.initial").hide();
+    $(".filter.initial." + $(this).val()).show();
+  });
+
 });
 
 var NewSearch = {
   subscriptionTypes: function() {
-    return ["federal_bills", "speeches", "state_bills", "regulations"];
+    return [$("select.subscription_type").val()];
   },
 
   // return a hash of subscription-specific filters

@@ -21,6 +21,7 @@ get '/search/:subscriptions/?:query?' do
 
   erb :"search/search", :layout => !pjax?, :locals => {
     :subscriptions => subscriptions,
+    :subscription_type => subscriptions,
     :query => query
   }
 end

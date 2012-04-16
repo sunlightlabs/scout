@@ -269,7 +269,12 @@ header h1{
 #search_form .filter li{
     margin-bottom: 4px;
 }
-#id_category{
+
+#search_form .filter.states {
+    display: none;
+}
+
+select.subscription_type {
     width: 200px;
 }
 .categoryMenu{

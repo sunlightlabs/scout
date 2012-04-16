@@ -2,6 +2,15 @@
 module GeneralHelpers
   helpers ::Padrino::Helpers
 
+  def search_types
+    [
+      ["Bills in Congress", :federal_bills],
+      ["State Bills", :state_bills,],
+      ["Federal Regulations", :regulations],
+      ["Speeches in Congress", :speeches]
+    ]
+  end
+
   def hide_search
     content_for(:hide_search) { true }
   end
