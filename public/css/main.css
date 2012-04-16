@@ -215,10 +215,12 @@ header h1{
 #search_form{
     float: right;
     margin-top: 72px;
+    width: 484px;
 }
 #search_form div{
     float: left;
 }
+
 
 #search_form .filter{
     display: none;
@@ -248,17 +250,21 @@ header h1{
     -webkit-appearance: textfield;
     border: 0;
     float: left;
+    margin-right: 20px;
 }
 #search_form .field{
     float: left;
 }
 
-#search_form button{
-    float: left;
-    margin-left: 14px;
+
+#search_form button span, #search_form a.update.button span {
+    background:url('../images/icon_search.png') center top no-repeat ;
+    text-indent: -9999em;
+    display: block;
+    width: 32px;
+    padding-left: 0;
+    padding-right: 0; 
 }
-
-
 .count{
     font-weight: normal;
 }
@@ -446,6 +452,16 @@ footer a{
 .homeWrapper .contentWrapper{
     background: url('../images/bg_header.png') center 216px repeat-x;
 }
+.homeWrapper #search_form button span, .homeWrapper #search_form a.update.button span {
+    background:url('../images/icon_search.png') 5px -2px no-repeat ;
+    text-indent: 0;
+    display: block;
+    padding-left: 35px;
+    padding-right: 14px;
+    width: inherit;
+    
+}
+    
 
 
 
