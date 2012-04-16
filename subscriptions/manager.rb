@@ -76,7 +76,7 @@ module Subscriptions
       end
 
       if backfills.any?
-        Admin.report Report.warning("Check", "[#{subscription.subscription_type}][#{subscription.interest_in}] #{backfills.size} backfills detected, not delivered, attached", :backfills => backfills)
+        Admin.report Report.warning("Check", "[#{subscription.subscription_type}][#{subscription.interest_in}] #{backfills.size} backfills delivered, attached", :backfills => backfills)
       end
       
       subscription.last_checked_at = Time.now
