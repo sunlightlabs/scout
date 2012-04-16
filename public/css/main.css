@@ -241,7 +241,7 @@ header h1{
 
 #search_form input[type="search"]{
     width: 380px;
-    padding: 0 5px 0 5px;
+    padding: 0 5px 0 11px;
     height: 51px;
     background: url('/images/newSearch.png') top left no-repeat;
     display: block;
@@ -393,7 +393,7 @@ div.contentWrapper{
 .filters form button:hover{
 }
 .filters label{
-    font-weight: normal;
+
 }
 
 
@@ -527,8 +527,13 @@ footer a{
     background: url('/images/tinyshadow.png') top left repeat-x;
 }
 .pageTitle{
-    background: url('/images/tinyborder.png') bottom left repeat-x;
-    padding: 16px 0 16px 10px;
+    background: #f5f6f3 url('/images/tinyborder.png') bottom left repeat-x;
+    padding: 16px 10px 16px 0;
+    -webkit-box-shadow: inset 14px 0px 14px -7px #e2e3e0;
+    -moz-box-shadow: inset 14px 0px 14px -7px #e2e3e0;
+    box-shadow: inset 14px 0px 14px -7px #e2e3e0;
+    padding: 16px 33px 16px 10px;
+
 }
 
 .searchParameters{
@@ -546,24 +551,10 @@ footer a{
     padding-top: 53px;
 }
 .contentArea.right section{
-    background: url('/images/tinyborder_andshadow.png') right top repeat-x;
     margin-bottom: 155px;
-    /*background: url('/images/tinyborder_andshadow.png') right top repeat-x,-moz-linear-gradient(-45deg,  rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%); /* FF3.6+ */
-    /*background: url('/images/tinyborder_andshadow.png') right top repeat-x, -webkit-gradient(linear, left top, right bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(100%,rgba(255,255,255,0))); /* Chrome,Safari4+ */
-    /*background: url('/images/tinyborder_andshadow.png') right top repeat-x, -webkit-linear-gradient(-45deg,  rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* Chrome10+,Safari5.1+ */
-    /*background: -o-linear-gradient(-45deg,  rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* Opera 11.10+ */
-    /*background: -ms-linear-gradient(-45deg,  rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* IE10+ */
-    /*background: linear-gradient(-45deg,  rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* W3C */
-    /*filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#00ffffff',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
-    /*-webkit-box-shadow: inset 14px 0px 14px -7px #e2e3e0;*/
-    /*-moz-box-shadow: inset 14px 0px 14px -7px #e2e3e0;*/
-    /*box-shadow: inset 14px 0px 14px -7px #e2e3e0; */
-    
+
 }
-.results.contentArea ul{
-    padding-top: 20px;
-    background: url('/images/tinyborder.png') center bottom repeat-x;
-}
+
 .results.contentArea li{
     padding: 33px 10px 33px 33px;
     background: url('/images/tinyborder_entry.png') center top no-repeat;
