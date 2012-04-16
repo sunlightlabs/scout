@@ -87,6 +87,8 @@
   }
 
   function initializeControls() {
+    // make sure to clear all events so they don't stack
+
     $("button.follow").hide();
     $("button.following").hide();
 
@@ -97,19 +99,21 @@
     <% end %>
 
     <% if logged_in? %>
-      $("button.follow").click(follow);
-      $("button.following").click(unfollow);
+      $("button.follow").off("click").click(follow);
+      $("button.following").off("click").click(unfollow);
     <% else %>
-      $("button.search").click(function() {window.location = "/login";});
+      $("button.search").off("click").click(function() {window.location = "/login";});
     <% end %>
 
-    $("form.filters .filter_control").change(function() {
+    $("form.filters .filter_control").off("change").change(function() {
       var subscription_type = currentSubscriptionType();
       var query = encodeURIComponent(currentQuery());
       var filters = currentFilters();
       
       var filterString = $.param(filters).replace("%5B", "[").replace("%5D", "]");
-      var url = "/search/" + subscription_type + "/" + query + "?" + filterString;
+      var url = "/search/" + subscription_type + "/" + query;
+      if (filterString) url += "?" + filterString;
+
       Utils.pjax(url, ".contentArea");
     });
   }
@@ -174,7 +178,7 @@
     $("button.following").hide();
 
     $.post("/subscriptions", $.extend(subscription, {_method: "delete"}), function(data) {
-      Utils.log("Remoed subscription.");
+      Utils.log("Removed subscription.");
     }).error(function() {
       Utils.log("ERROR removing subscription.");
       $("button.follow").hide();
