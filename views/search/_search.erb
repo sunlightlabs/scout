@@ -9,7 +9,7 @@
     <fieldset class="initialFilters">
         <label for="search_subscription_type" class="subscription_type">Search through</label>
 
-        <%= select_tag :subscription_type, :class => "subscription_type", :id => "search_subscription_type", :options => search_types, :selected => (params[:subscriptions] || search_types.first[1]) %>
+        <%= select_tag :subscription_type, :class => "subscription_type", :id => "search_subscription_type", :options => search_types %>
 
         <!-- <ul class="filter initial state_bills">
             <li>

@@ -686,6 +686,11 @@ time.item, .entry time, .time {
 .followChanges button{
     float: right;
 }
+
+button.search.follow, button.search.following {
+    display: none;
+}
+
 .followChanges .trackSubscribe{
     float: left;
     margin-top: 16px;

@@ -9,7 +9,8 @@ get '/search/:subscription_types/?:query?' do
   halt 404 and return unless subscriptions.any?
 
   erb :"search/search", :layout => !pjax?, :locals => {
-    :subscriptions => subscriptions,
+    :subscriptions => subscriptions, # deprecated
+    :subscription => subscriptions.first,
     :query => query
   }
 end
@@ -156,7 +157,7 @@ end
 put '/interest/:id' do
   requires_login
 
-  
+
 
 end
 

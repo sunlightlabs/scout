@@ -6,15 +6,27 @@
           <a class="dataset" href="#<%= subscription.subscription_type %>"><%= subscription.search_name %></a><%= ", " unless i == (subscriptions.size - 1) %>
         <% end %>
     </div>
-    <button>
-        <span>Follow</span>
+
+    <button class="follow search">
+        <span>Subscribe</span>
+    </button>
+
+    <button class="following search">
+      <span>Subscribed</span>
     </button>
 <% end %>
 
 
 <% content_for :sidebar_left do %>
   
-  <!-- subscription-specific filter partial -->
+  <form class="filters">
+  
+    <%= hidden_field_tag :query, :class => "query" %>
+    <%= hidden_field_tag :subscription_type, :class => "subscription_type" %>
+
+    <!-- subscription-specific filter partial -->
+
+  </form>
 
   <%= recent_searches %>
 <% end %>
@@ -50,34 +62,101 @@
 <div class="clear"></div>
 
 <script type="text/javascript">
-  // hold the current state of the filters
-  // needs to stay a separate hash, since the form can 
-  // change without auto-committing the changes
-
-  // initialize with any subscription-wide filters (none yet)
-  var current_filters = {
-  };
-
-  // put in a delay block in case this is being rendered before the layout
+  
   $(function() {
-    var query = "<%= query %>";
-    
-    <% subscriptions.each do |subscription| %>
-
-      <% # "I think this is safe..." %>
-      current_filters["<%= subscription.subscription_type %>"] = <%= subscription.data.to_json %>;
-
-      searchFor(
-        query, "<%= subscription.subscription_type %>", 
-        {"per_page": <%= subscriptions.size == 1 ? 20 : 2 %>}
-      );
-    <% end %>
+    initializeFilters();
+    initializeButton();
+    search({per_page: 20, page: 1});
   });
 
-  function searchFor(query, subscription_type, searchOptions) {
+  // initializes both the sidebar form filters, and the top search form
+  function initializeFilters() {
+    $("input.query").val("<%= h query %>");
+    $("input.subscription_type, select.subscription_type").val("<%= subscription.subscription_type %>");
+  }
+
+  function initializeButton() {
+    <% if subscription.new_record? %>
+      $("button.follow").show();
+    <% else %>
+      $("button.following").show();
+    <% end %>
+
+    <% if logged_in? %>
+      $("button.follow").click(follow);
+      $("button.following").click(unfollow);
+    <% else %>
+      $("button.search").click(function() {window.location = "/login";});
+    <% end %>
+  }
+
+  function currentFilters() {
+    var filters = {};
+    // import subscription data into form
+    return {};
+  }
+
+  function currentQuery() {
+    return $("form.filters input.query").val();
+  }
+
+  function currentSubscriptionType() {
+    return $("form.filters input.subscription_type").val();
+  }
+
+  function follow() {
+    var subscription_type = currentSubscriptionType();
+    var query = encodeURIComponent(currentQuery());
+    var filters = currentFilters();
+
+    var subscription = $.extend(filters, {
+      subscription_type: subscription_type,
+      query: query
+    });
+
+    $("button.follow").hide();
+    $("button.following").show();
+
+    $.post("/subscriptions", subscription, function(data) {
+      Utils.log("Created new subscription.");
+    }).error(function() {
+      Utils.log("ERROR creating new subscription.");
+      $("button.follow").show();
+      $("button.following").hide();
+    });
+
+    return false;
+  }
+
+  function unfollow() {
+    var subscription_type = currentSubscriptionType();
+    var query = encodeURIComponent(currentQuery());
+    var filters = currentFilters();
+
+    var subscription = $.extend(filters, {
+      subscription_type: subscription_type,
+      query: query
+    });
+
+    $("button.follow").show();
+    $("button.following").hide();
+
+    $.post("/subscriptions", $.extend(subscription, {_method: "delete"}), function(data) {
+      Utils.log("Remoed subscription.");
+    }).error(function() {
+      Utils.log("ERROR removing subscription.");
+      $("button.follow").hide();
+      $("button.following").show();
+    });
+
+    return false;
+  }
+
+  function search(searchOptions) {
     if (!searchOptions) searchOptions = {};
 
-    var query_slug = encodeURIComponent(query);
+    var subscription_type = currentSubscriptionType();
+    var query = encodeURIComponent(currentQuery());
     var container = $(".results div.search[data-subscription=" + subscription_type + "]");
 
     // reset elements inside tab
@@ -88,23 +167,15 @@
     var search = {};
     
     // carry along the universal and subscription-specific filters
-    var filters = {};    
-    filters[subscription_type] = current_filters[subscription_type];
-    $.extend(search, filters);
+    $.extend(search, currentFilters());
 
-    
     // any one-time search options (pagination)
     $.extend(search, searchOptions);
 
-    $.get("/fetch/search/" + subscription_type + "/" + query_slug, search, function(data) {
+    $.get("/fetch/search/" + subscription_type + "/" + query, search, function(data) {
       
       container.find(".loading").hide();
       container.find(".populate").html(data.html).show();
-
-      // set the 'more' link to carry on our filters (and only our filters)
-      container.find(".populate a.viewMore").attr("href", 
-        "/search/" + subscription_type + "/" + query_slug + "?" + $.param(filters)
-      );
 
       if (data.search_url) {
         $("div.developer.json.search").show().find("a").attr("href", data.search_url);
