@@ -18,7 +18,7 @@
 <% content_for :sidebar_left do %>
   	<div class="module filters">
 		<h4>Filter search results</h4>
-	  <form class="filters">
+		<form class="filters">
 
 	    <%= hidden_field_tag :query, :class => "query" %>
 	    <%= hidden_field_tag :subscription_type, :class => "subscription_type" %>
@@ -26,8 +26,14 @@
 	    <!-- subscription-specific filter partial -->
 	    <%= partial "subscriptions/#{subscription.subscription_type}/filter", :engine => "erb", :locals => {:subscription => subscription} %>
 
-	  </form>
+		</form>
 	</div>
+	<% if developer_mode? %>
+    <div class="module developer json">
+      <h5>Developer Mode</h5>
+      See the underlying <a href="<%= developer_url subscription %>">API call</a>.
+    </div>
+  <% end %>
 
   <%= recent_searches %>
 <% end %>
@@ -69,6 +75,9 @@
   function initializeTitle() {
     $("div.searchParameters h2").html("<%= h query %>");
     $("div.searchParameters span").html("<%= h subscription.search_name %>");
+    <% if developer_mode? %>
+      $("div.json.developer a").attr("href","<%= developer_url subscription %>");
+    <% end %>
   }
 
   // initializes both the sidebar form filters, and the top search form
@@ -211,10 +220,6 @@
       
       container.find(".loading").hide();
       container.find(".populate").html(data.html).show();
-
-      if (data.search_url) {
-        $("div.developer.json.search").show().find("a").attr("href", data.search_url);
-      }
 
     }).error(function() {
       container.find(".loading").hide();
