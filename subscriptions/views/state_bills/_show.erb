@@ -48,8 +48,8 @@
             <% if bill['votes'] and bill['votes'].any? %>
                 <% bill['votes'].reverse.each do |vote| %>
                     <tr>
-                        <td>
-                            <span class="date time"><%= just_date_year vote['date'] %></span>
+                        <td class="time">
+                            <%= just_date_year vote['date'] %>
                             <p class="type"><%= state_vote_type vote %></p>
                         </td>
                         <td>

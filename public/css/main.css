@@ -138,7 +138,7 @@ form{
     font-weight: bold;
 }
 
-input[type="text"]{
+input[type="text"], input[type="password"]{
     display: block;
     background-color: #ffffff;
     border: 0;
@@ -538,6 +538,7 @@ footer a{
 
 .pageTitle button{
     float: right;
+    margin-top: 7px;
 }
 .pageTitle button:hover{
 }
@@ -614,6 +615,10 @@ time.item, .entry time, .time {
 }
 .item time{
     margin-top: 2px;
+    font-style: italic;
+    font-size: 90%;
+    display: block;
+    float: right;
 }
 .time time{
     float: none;
@@ -788,6 +793,9 @@ a.source, .resources{
 .entry .details table .time{
     width: 100px;
 }
+.entry .details table p{
+    font-size: 100%;
+}
 .entry .details td{
     padding: 5px 0;
 }
@@ -899,8 +907,8 @@ a.source, .resources{
 
 /*-- Settings Styling --*/
 
-.user_settings.contentArea form input[type="text"]{
-    width: 100%;
+.user_settings.contentArea form input[type="text"], .user_settings.contentArea form input[type="password"]{
+    width: 50%;
 }
 .user_settings.contentArea form ul{
 }
