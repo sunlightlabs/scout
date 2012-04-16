@@ -762,16 +762,16 @@ button.search.follow, button.search.following {
     background-position: left bottom;
 }
 .resources .govTrack span{
-    background-position: center top;
-}
-.resources .govTrack a:hover span{
-    background-position: center bottom;
-}
-.resources .openCongress span{
     background-position: right top;
 }
-.resources .openCongress a:hover span{
+.resources .govTrack a:hover span{
     background-position: right bottom;
+}
+.resources .openCongress span{
+    background-position: center top;
+}
+.resources .openCongress a:hover span{
+    background-position: center bottom;
 }
 a.source {
     float: right;
