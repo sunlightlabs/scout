@@ -54,7 +54,6 @@
                     <tr>
                         <td class="time">
                             <%= just_date_year vote['date'] %>
-                            <p class="type"><%= state_vote_type vote %></p>
                         </td>
                         <td>
                             <p class="motion"><%= vote['motion'] %></p>
@@ -64,7 +63,7 @@
                 <% end %>
             <% else %>
 				<tr>
-                No votes taken yet.
+                    No votes taken yet.
 				</tr>
             <% end %>
         	</tbody>
