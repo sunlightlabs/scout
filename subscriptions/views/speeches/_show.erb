@@ -1,11 +1,5 @@
 <% speech = item.data %>
 
-<header>
-    <div class="titles">
-        
-    </div>
-</header>
-
 <div class="summary">
 	<div class="entryHeader">
 		<h2><%= speech['title'] %></h2>
@@ -24,11 +18,13 @@
     <div class="resources">
         <h5>Resources</h5>
         <ul>
-            <li class="capWords"><a href="<%= speech['capitolwords_url'] %>">CapitolWords</a><span>icon</span></li>
+            <li class="capWords">
+                <a href="<%= speech['capitolwords_url'] %>">CapitolWords</a><span>icon</span>
+            </li>
         </ul>
     </div>
 
-    <a class="source" href="<%= speech['origin_url'] %>">Original</a>
+    <a class="source" href="<%= speech['origin_url'] %>">Original (GPO)</a>
 
     <div class="clear"></div>
 

@@ -63,11 +63,10 @@ module Subscriptions
       # internal
       
       def self.item_for(result)
-        date = result['date']
         result['date'] = noon_utc_for result['date']
-        result['date_year'] = date.year
-        result['date_month']= date.month
-        result['date_day'] = date.day
+        result['date_year'] = result['date'].year
+        result['date_month']= result['date'].month
+        result['date_day'] = result['date'].day
         
         matches = result['origin_url'].scan(/Pg([\w\d-]+)\.htm$/)
         if matches.any?
