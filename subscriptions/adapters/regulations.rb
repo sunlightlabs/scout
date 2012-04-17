@@ -34,8 +34,9 @@ module Subscriptions
         url
       end
 
-      def self.url_for_detail(item_id, data = {})
-        api_key = config[:subscriptions][:sunlight_api_key]
+      def self.url_for_detail(item_id, options = {})
+        api_key = options[:api_key] || config[:subscriptions][:sunlight_api_key]
+
         if config[:subscriptions][:rtc_endpoint].present?
           endpoint = config[:subscriptions][:rtc_endpoint]
         else

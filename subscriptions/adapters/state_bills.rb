@@ -48,9 +48,10 @@ module Subscriptions
       end
 
       # item_id in this case is not actually the remote bill_id, since that's not specific enough
-      def self.url_for_detail(item_id, data = {})
+      def self.url_for_detail(item_id, options = {})
+        api_key = options[:api_key] || config[:subscriptions][:sunlight_api_key]
+        
         endpoint = "http://openstates.org/api/v1"
-        api_key = config[:subscriptions][:sunlight_api_key]
         
         fields = %w{ id bill_id state chamber created_at updated_at title sources actions votes session versions %2Bshort_title }
         

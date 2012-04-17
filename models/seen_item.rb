@@ -38,12 +38,6 @@ class SeenItem
   validates_presence_of :subscription_id
   validates_presence_of :item_id
 
-  def url
-    if subscription.adapter.respond_to? :find_url
-      subscription.adapter.find_url item_id, data
-    end
-  end
-
   # the subset of fields appropriate for public syndication (omit database IDs, for instance)
   def self.public_json_fields
     [

@@ -55,7 +55,15 @@ get "/item/:interest_type/:item_id" do
 
   interest = nil
   if logged_in?
-    interest = current_user.interests.where(:in => item_id, :interest_type => interest_type).first
+    interest = current_user.interests.find_or_initialize_by(
+      :in => item_id, 
+      :interest_type => interest_type
+    )
+  else
+    interest = Interest.new(
+      :in => item_id, 
+      :interest_type => interest_type
+    )
   end
 
   erb :show, :layout => !pjax?, :locals => {

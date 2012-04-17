@@ -21,8 +21,8 @@ module Subscriptions
         url
       end
 
-      def self.url_for_detail(item_id, data = {})
-        api_key = config[:subscriptions][:sunlight_api_key]
+      def self.url_for_detail(item_id, options = {})
+        api_key = options[:api_key] || config[:subscriptions][:sunlight_api_key]
         
         endpoint = "http://capitolwords.org/api"
         

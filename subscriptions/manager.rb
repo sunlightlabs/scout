@@ -135,9 +135,9 @@ module Subscriptions
     end
 
     # given a type of adapter, and an item ID, fetch the item and return a seen item
-    def self.find(adapter_type, item_id, data = {})
+    def self.find(adapter_type, item_id, options = {})
       adapter = Subscription.adapter_for adapter_type
-      url = adapter.url_for_detail item_id, data
+      url = adapter.url_for_detail item_id, options
       
       puts "\n[#{adapter}][find][#{item_id}] #{url}\n\n" if config[:debug][:output_urls]
       

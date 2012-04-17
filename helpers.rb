@@ -36,6 +36,12 @@ module GeneralHelpers
     subscription.search_url :api_key => api_key
   end
 
+  def developer_item_url(interest_type, item_id)
+    api_key = current_user ? current_user.api_key : nil
+    adapter = Subscription.adapter_for interest_data[interest_type][:adapter]
+    adapter.url_for_detail item_id, :api_key => api_key
+  end
+
   def errors_for(object)
     if object and object.errors
       object.errors.map do |field, msg|

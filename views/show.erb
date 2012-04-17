@@ -1,4 +1,12 @@
 <% content_for :sidebar_right do %>
+    
+    <% if developer_mode? %>
+        <div class="module developer json">
+          <h5>Developer Mode</h5>
+          See the underlying <a href="<%= developer_item_url interest_type, item_id %>">data</a>.
+        </div>
+    <% end %>
+
     <%= recent_searches %>
 <% end %>
 
