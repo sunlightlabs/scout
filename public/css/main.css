@@ -110,6 +110,7 @@ h5{
 p{
     font-size: 81%;
     margin-bottom: 10px;
+    line-height: 1.5;
 }
 dt {
     font-weight: bold;
@@ -198,6 +199,7 @@ header h1{
 
 #userNav{
     margin-top: 5px;
+    margin-right: -18px;
 }
 
 #userNav li.subscriptions{
@@ -215,7 +217,7 @@ header h1{
 #search_form{
     float: right;
     margin-top: 72px;
-    width: 484px;
+    width: 468px;
 }
 #search_form div{
     float: left;
@@ -410,32 +412,49 @@ div.contentWrapper{
     width: 159px;
     height: 48px;
     float: left;
-    margin-left: 10px;
+    margin-left: 45px;
+    margin-top: 40px;
+    float: left;
 }
 footer{
-    padding: 33px 0 23px 0;
+    padding: 16px 0 40px 0;
 }
 .aboutSF{
     float: left;
-    width: 500px;
-    margin-left: 52px;
-    color: #ffffff;
-    font-size: 85%;
+    width: 371px;
+    margin-left: 45px;
+    color: white;
+    font-size: 88%;
+    margin-bottom: 6px;
+    margin-top: 40px;
+    background: url('../images/tinyborder_footer.png') left top repeat-y;
+    padding: 0 45px;
 }
 .aboutSF p{
-    margin-top: 0;
-    margin-bottom: 6px;
+    margin: 0;
 }
-
 footer nav{
-    float: right;
+    float: left;
+    margin-top: 40px;
+    padding-left: 45px;
+    background: url('../images/tinyborder_footer.png') left top repeat-y;
 }
 
 footer a{
     color: #ffffff;
     font-weight: bold;
 }
-
+footer a:hover;{
+    color: #1c8398;
+    font-weight: bold;
+}
+footer nav ul{
+    float: none;
+}
+footer nav li{
+    float: none;
+    margin-bottom: 8px;
+}
 
 
 
@@ -525,6 +544,7 @@ footer a{
 /*-- Search Results Styling --*/
 .results.contentArea{
     background: url('/images/tinyshadow.png') top left repeat-x;
+    
 }
 .pageTitle{
     background: #f5f6f3 url('/images/tinyborder.png') bottom left repeat-x;
@@ -532,57 +552,44 @@ footer a{
     -webkit-box-shadow: inset 14px 0px 14px -7px #e2e3e0;
     -moz-box-shadow: inset 14px 0px 14px -7px #e2e3e0;
     box-shadow: inset 14px 0px 14px -7px #e2e3e0;
-    padding: 16px 33px 16px 10px;
+    padding: 16px 10px 16px 33px;
 
 }
-
 .searchParameters{
-    float: left;
-    
+    float: left;   
 }
-
 .pageTitle button{
     float: right;
     margin-top: 7px;
 }
 .pageTitle button:hover{
 }
-.results.contentArea{
-    padding-top: 53px;
-}
 .contentArea.right section{
     margin-bottom: 155px;
-
 }
-
 .results.contentArea li{
     padding: 33px 10px 33px 33px;
-    background: url('/images/tinyborder_entry.png') center top no-repeat;
+    background: url('/images/tinyborder_entry.png') center bottom no-repeat;
 }
-
 .results.contentArea.right li:hover{
     background-color: #f5f6f5;
     -webkit-box-shadow: inset 14px 0px 14px -7px #e2e3e0;
     -moz-box-shadow: inset 14px 0px 14px -7px #e2e3e0;
     box-shadow: inset 14px 0px 14px -7px #e2e3e0;
 }
-
 .results .loading, .results .error {
   display: none; margin: 0px auto; width: 80%; padding-top: 30px;
 }
-
 .results .loading span, .results .error span {
   color: #444; font-size: 150%;
   display: block;
   padding-top: 20px; padding: 20px; padding-left: 50px;
 }
-
 .results .loading span {
   background-position: left;
   background-image: url(/images/loader-32.gif);
   background-repeat: no-repeat;
 }
-
 .results.contentArea h4{
     font-weight: bold;
     font-size: 106%;
@@ -597,7 +604,7 @@ footer a{
 .contentArea h4 a:hover{
     color: #1c8398;
 }
-
+\
 time.item, .entry time, .time {   
     font-style: italic;
     font-weight: 200;
