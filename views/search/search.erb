@@ -1,20 +1,3 @@
-<% content_for :title do %>
-    <div class="follow searchParameters">
-        <h2><%= h query %></h2>
-        in 
-        <span><%= subscription.search_name %></span>
-    </div>
-
-    <button class="follow search">
-      <span>Follow</span>
-    </button>
-
-    <button class="following search">
-      <span>Following</span>
-    </button>
-<% end %>
-
-
 <% content_for :sidebar_left do %>
   	<div class="module filters">
 		<h4>Filter search results</h4>
@@ -38,6 +21,26 @@
 <% end %>
 
 <div class="results contentArea right">
+	
+	<!--<% content_for :title do %>-->
+	<!--<% end %>-->
+		<div class="pageTitle">
+		    <div class="follow searchParameters">
+		        <h2><%= h query %></h2>
+		        in 
+		        <span><%= subscription.search_name %></span>
+		    </div>
+
+		    <button class="follow search">
+		      <span>Follow</span>
+		    </button>
+
+		    <button class="following search">
+		      <span>Following</span>
+		    </button>
+			<div class="clear"></div>
+		</div>
+
     
     <% subscriptions.each do |subscription| %>
         <div class="search" id="<%= subscription.subscription_type %>" data-subscription="<%= subscription.subscription_type %>">

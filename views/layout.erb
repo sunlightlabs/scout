@@ -106,18 +106,18 @@
 
         <%= flash_for [:success, :notice, :failure] %>
         
-        <% if title_area = content_from(:title) %>
+        <!--<% if title_area = content_from(:title) %>
             <div class="pageTitle">
                 <%= title_area %>
                 <div class="clear"></div>
             </div>
-        <% end %>
+        <% end %>-->
 
         <% if left_bar = content_from(:sidebar_left) %>
             <div class="sidebar left">
                 <%= left_bar %>
             </div>
-        <% end %>
+        <% end %> 
 
         <div id="center">
             <%= yield %>
