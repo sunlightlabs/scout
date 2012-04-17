@@ -22,12 +22,12 @@
 
 		<div class="subtitle">
 			<%= bill_code bill['bill_type'], bill['number'] %>
-		    &mdash;
-	        <%= bill_version version['version_code'] %>
-            on
-            <time class="item" datetime="<%= html_date item.date %>">
-                <%= just_date_year item.date %>
-            </time>
+	    &mdash;
+      <%= bill_version version['version_code'] %>
+      on
+      <time class="item" datetime="<%= html_date item.date %>">
+          <%= just_date_year item.date %>
+      </time>
 		</div>
 	</div>
 
