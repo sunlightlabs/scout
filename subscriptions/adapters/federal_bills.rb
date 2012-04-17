@@ -109,6 +109,12 @@ module Subscriptions
           end
         end
 
+        if bill['actions']
+          bill['actions'].each do |action|
+            action['acted_at'] = noon_utc_for action['acted_at']
+          end
+        end
+
         
         SeenItem.new(
           :item_id => bill["bill_id"],
