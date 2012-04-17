@@ -1,7 +1,7 @@
 task :environment do
   require 'rubygems'
   require 'bundler/setup'
-  require 'config/environment'
+  require './config/environment'
 end
 
 desc "Set the crontab in place for this environment"

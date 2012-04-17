@@ -28,6 +28,9 @@ set :admin_runner, runner
 role :app, domain
 role :web, domain
 
+set :rvm_ruby_string, '1.9.3-p125@scout' # you probably have this already
+set :rvm_type, :user # this is the money config, it defaults to :system
+
 set :use_sudo, false
 after "deploy:update_code", "deploy:shared_links"
 after "deploy:update_code", "deploy:bundle_install"
