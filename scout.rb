@@ -53,23 +53,12 @@ get "/item/:interest_type/:item_id" do
   interest_type = params[:interest_type].strip
   item_id = params[:item_id].strip
 
-  interest = nil
-  if logged_in?
-    interest = current_user.interests.find_or_initialize_by(
-      :in => item_id, 
-      :interest_type => interest_type
-    )
-  else
-    interest = Interest.new(
-      :in => item_id, 
-      :interest_type => interest_type
-    )
-  end
+  interest = interest_for item_id, interest_type
 
   erb :show, :layout => !pjax?, :locals => {
-    :interest_type => interest_type, 
-    :item_id => item_id, 
-    :interest => interest
+    :interest => interest,
+    :interest_type => interest_type,
+    :item_id => item_id
   }
 end
 
@@ -82,16 +71,29 @@ get "/fetch/item/:interest_type/:item_id" do
     halt 404 and return
   end
 
-  html = erb :"subscriptions/#{subscription_type}/_show", :layout => false, :locals => {
-    :interest_type => interest_type, 
-    :item => item
-  }
+  interest = interest_for item_id, interest_type
 
-  headers["Content-Type"] = "application/json"
-  {
-    :html => html,
-    :item_url => item.find_url
-  }.to_json
+  erb :"subscriptions/#{subscription_type}/_show", :layout => false, :locals => {
+    :item => item,
+    :interest => interest,
+    :interest_type => interest_type
+  }
+end
+
+helpers do
+  def interest_for(item_id, interest_type)
+    if logged_in?
+      current_user.interests.find_or_initialize_by(
+        :in => item_id, 
+        :interest_type => interest_type
+      )
+    else
+      Interest.new(
+        :in => item_id, 
+        :interest_type => interest_type
+      )
+    end
+  end
 end
 
 

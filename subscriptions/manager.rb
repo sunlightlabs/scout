@@ -97,7 +97,7 @@ module Subscriptions
       
       begin
         response = HTTParty.get url
-      rescue Timeout::Error, Errno::ETIMEDOUT => ex
+      rescue Timeout::Error, Errno::ECONNREFUSED, Errno::ETIMEDOUT => ex
         # will do function-specific reports in places that call poll
         # Admin.report Report.warning("Poll", "[#{subscription.subscription_type}][#{function}][#{subscription.interest_in}] poll timeout, returned an empty list")
         return nil
@@ -143,14 +143,17 @@ module Subscriptions
       
       begin
         response = HTTParty.get url
-      rescue Timeout::Error, Errno::ETIMEDOUT => ex
+      rescue Timeout::Error, Errno::ECONNREFUSED, Errno::ETIMEDOUT => ex
         Admin.report Report.warning("Find", "[#{adapter_type}][find][#{item_id}] find timeout, returned nil")
         return nil
       end
       
       item = adapter.item_detail_for response
-      item.find_url = url
-      item
+      
+      if item
+        item.find_url = url
+        item
+      end
     end
     
   end

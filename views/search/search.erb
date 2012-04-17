@@ -110,7 +110,8 @@
       $("button.follow").off("click").click(follow);
       $("button.following").off("click").click(unfollow);
     <% else %>
-      $("button.search").off("click").click(function() {window.location = "/login";});
+      $("button.follow").off("click").click(function() {window.location = "/login";});
+      $("button.following").off("click");
     <% end %>
 
     $("form.filters .filter_control").off("change").change(function() {

@@ -22,11 +22,16 @@
             <li><a href="<%= regulation['federal_register_url'] %>">Federal Register</a></li>
         </ul>
     </div>
+    
+    <% if regulation['federal_register'] and regulation['federal_register']['pdf_url'] %>
+        <a class="source" href="<%= regulation['federal_register']['pdf_url'] %>">Original Text</a>
+    <% end %>
+
     <div class="clear"></div>
 
 	<p>
         <% if regulation['abstract'] %>
-            <%= truncate_more regulation['abstract'], 400 %>
+            <%= truncate_more "regulation_abstract", regulation['abstract'], 400 %>
         <% else %>
             No abstract available.
         <% end %>

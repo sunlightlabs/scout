@@ -703,6 +703,10 @@ button.search.follow, button.search.following {
     display: none;
 }
 
+button.item.follow, button.item.following {
+    display: none;
+}
+
 .followChanges .trackSubscribe{
     float: left;
     margin-top: 16px;
@@ -712,10 +716,6 @@ button.search.follow, button.search.following {
     padding: 0 33px 0 10px;
 }
 
-.entry .follow {
-    float: left;
-    margin-top: 16px;
-}
 .resources{
     font-size: 81%;
     float: left;

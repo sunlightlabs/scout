@@ -1,20 +1,24 @@
 <% bill = item.data %>
 <% version = item.data['last_version'] %>
+
 <div class="followChanges">
 	<div class="trackSubscribe">
 		Follow activity on this bill.
 	</div>
-    <%= follow_button item %>
-	<div class="clear"></div>
+
+  <%= follow_button item %>
+	
+  <div class="clear"></div>
 </div>
+
 <div class="summary followable">
 	
 	<div class="entryHeader">
-        <% if bill['short_title'].present? %>
-            <h2><%= bill['short_title'] %></h2>
-        <% else %>
-            <h2 class="official bill title"><%= bill['official_title'] %></h2>
-        <% end %>
+    <% if bill['short_title'].present? %>
+        <h2><%= bill['short_title'] %></h2>
+    <% else %>
+        <h2 class="official bill title"><%= bill['official_title'] %></h2>
+    <% end %>
 
 		<div class="subtitle">
 			<%= bill_code bill['bill_type'], bill['number'] %>

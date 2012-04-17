@@ -43,7 +43,7 @@ module Subscriptions
           endpoint = "http://api.realtimecongress.org/api/v1"
         end
         
-        sections = %w{ stage title abstract document_number rins docket_ids published_at effective_at federal_register_url agency_names agency_ids }
+        sections = %w{ stage title abstract document_number rins docket_ids published_at effective_at federal_register_url agency_names agency_ids federal_register.pdf_url }
 
         url = "#{endpoint}/regulations.json?apikey=#{api_key}"
         url << "&document_number=#{item_id}"
