@@ -92,7 +92,7 @@ a:hover {
 h2{
     font-family: "alternate-gothic-no-3-d", arial, 'helvetica Neue', sans-serif;
     text-transform: uppercase;
-    font-size: 200%;
+    font-size: 280%;
     color: #dcc51f;
 }
 h3, .entry h2{
@@ -402,8 +402,8 @@ div.contentWrapper{
 .sidebar h4{
     font-family: "alternate-gothic-no-3-d", arial, 'helvetica Neue', sans-serif;
     text-transform: uppercase;
-    font-size: 143%;
-    color: #3d3c41;
+    font-size: 153%;
+    color: #59585e;
     margin-bottom: 17px;
 }
 .sidebar .module{
@@ -581,8 +581,8 @@ footer nav li{
 
 .home.modules h3{
     color: #000000;
-    font-size: 143%;
-    color: #3d3c41;
+    font-size: 153%;
+    color: #59585e;
     margin-bottom: 16px;
 }
 
@@ -641,7 +641,7 @@ footer nav li{
 }
 .results.contentArea h4{
     font-weight: bold;
-    font-size: 106%;
+    font-size: 127%;
     float: left;
     margin-bottom: 5px;
     width: 550px;
