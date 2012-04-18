@@ -718,7 +718,13 @@ button.item.follow, button.item.following {
     float: left;
     margin-top: 16px;
     font-style: italic;
+    font-size: 91%;
 }
+
+.followChanges .trackSubscribe strong {
+    font-weight: bold;
+}
+
 .entry .summary, .entry .details {
     padding: 0 33px 0 10px;
 }
