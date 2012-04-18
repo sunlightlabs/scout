@@ -378,6 +378,7 @@ div.contentWrapper{
 
 .contentArea{
     width: 710px;
+    padding-top: 10px;
 }
 
 .sidebar.left{
@@ -745,6 +746,9 @@ time.item, .entry time, .time {
     font-family: arial, 'helvetica Neue', sans-serif;
     text-transform: capitalize;
     float: left;
+}
+.no_results {
+    margin-left: 33px;
 }
 
 
