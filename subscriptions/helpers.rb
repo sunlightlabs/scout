@@ -259,6 +259,7 @@ module Subscriptions
     end
 
     def truncate(string, length)
+      string ||= ""
       if string.size > (length + 3)
         string[0...length] + "..."
       else
