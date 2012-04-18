@@ -556,8 +556,9 @@ footer nav li{
 
 }
 .searchParameters{
-    float: left;   
+    
 }
+
 .pageTitle button{
     float: right;
     margin-top: 7px;
@@ -911,7 +912,9 @@ a.source, .resources{
     margin-top: 10px;
 }
 
-
+.removeSubscription button {
+    display: none;
+}
 
 
 

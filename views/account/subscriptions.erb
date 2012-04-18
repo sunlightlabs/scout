@@ -4,7 +4,7 @@
 
 <% content_for :sidebar_right do %>
     <div class="rss cluster">
-        <h4>Master Feed <a class="rssFeed">RSS</a></h4>
+        <h4>Master Feed <a class="rssFeed" href="/account/<%= current_user.id %>.rss">RSS</a></h4>
         <small>A combined RSS feed of updates on everything you follow.</small>
     </div>
 
@@ -13,31 +13,53 @@
 
 <div class="contentArea left">
 
+    <p>
+        <% if current_user.notifications == "none" %>
+            Your notification preference is <strong>off, feeds only</strong>.
+        <% elsif current_user.notifications == "email_immediate" %>
+            Your notification preference is <strong>email immediately</strong>.
+        <% elsif current_user.notifications == "email_daily" %>
+            Your notification preference is <strong>a single daily email</strong>.
+        <% else %>
+            Your notification preference is unknown(?).
+        <% end %>
+        <a href="/account/settings">Change</a>
+    </p>
+
+    <p>
+
+
     <div class="subscriptionsList">
 
         <% if interests.any? %>
 
             <% interests.each do |interest| %>
-                <fieldset class="subscription">
+                <fieldset class="subscription"
+                    data-id="<%= interest.id %>"
+                    >
                     
                     <h3><%= interest_name interest %></h3>
 
                     <a class="rssFeed" href="/interest/<%= interest.id %>.rss">RSS</a>
 
-                    <div class="searchParameters">
-                        <span class="dataSet">'Congressional Bills'</span>, 
-                        <span class="dataSet">'Comments on Regulations'</span>
-                    </div>
+                    <% if interest.search? %>
+                        <div class="searchParameters">
+                            <% interest.subscriptions.each do |subscription| %>
+                                <span class="dataSet"><%= subscription.search_name %></span><%= "," unless subscription == interest.subscriptions.last %>
+                            <% end %>
+                        </div>
+                    <% end %>
                     
                     <h5 class="radioLabel">Notification Type</h5>
                     
-                    <input type="radio" name="transparency" id="id_emailNotifications" /><span>Email</span>
-                    <input type="radio" name="transparency" id="id_smsNotifications" /><span>SMS</span>
-                    <input type="radio" name="transparency" id="id_smsNotifications" /><span>RSS Only</span>
+                    <input type="radio" name="transparency" /><span>Email</span>
+                    <input type="radio" name="transparency" /><span>SMS</span>
+                    <input type="radio" name="transparency" /><span>RSS Only</span>
 
                     <div class="removeSubscription">
-                        <input type="checkbox" name="transparency" id="id_smsNotifications" />
+                        <input type="checkbox" name="remove" class="remove" />
                         <span>Remove</span>
+                        <button class="remove">Yes, remove</button>
                     </div>
                 </fieldset>
             <% end %>
@@ -49,3 +71,25 @@
     </div>
 
 </div>
+
+<script type="text/javascript">
+
+    $("input[type=checkbox].remove").change(function() {
+        $(this).siblings("button.remove").toggle();
+    });
+
+    $("button.remove").click(function() {
+        var container = $(this).parents("fieldset.subscription");
+        var interest_id = container.data("id");
+
+        container.hide();
+        $.post("/interest/" + interest_id, {_method: "delete"}, function(data) {
+            Utils.log("Deleted interest " + interest_id);
+            container.remove();
+        }).error(function() {
+            Utils.log("Error deleting interest " + interest_id);
+            container.show();
+        })
+    });
+
+</script>
