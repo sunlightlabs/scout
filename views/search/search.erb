@@ -1,6 +1,9 @@
 <% content_for :sidebar_left do %>
   	<div class="module filters">
 		<h4>Filter search results</h4>
+		<p class="noFilters">
+			This category cannot be filtered any further.
+		</p>
 		<form class="filters">
 
 	    <%= hidden_field_tag :query, :class => "query" %>
@@ -13,8 +16,11 @@
 	</div>
 	<% if developer_mode? %>
     <div class="module developer json">
-      <h4>Data Mode</h4>
-      See the <a href="<%= developer_url subscription %>">underlying data</a>.
+
+		<h4>The Data</h4>
+		<p>
+			See the <a href="<%= developer_url subscription %>">underlying data</a>.
+		</p>
     </div>
   <% end %>
 
