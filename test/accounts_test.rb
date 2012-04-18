@@ -100,7 +100,7 @@ class AccountsTest < Test::Unit::TestCase
     assert_equal true, user.announcements
 
     put '/account/settings', {:user => {:notifications => "email_immediate", :announcements => "false"}}, login(user)
-    assert_response 200
+    assert_redirect "/account/settings"
 
     user.reload
 
@@ -115,7 +115,7 @@ class AccountsTest < Test::Unit::TestCase
     assert_equal true, user.announcements
 
     put '/account/settings', {:user => {:notifications => "not_valid", :announcements => "false"}}, login(user)
-    assert_response 500
+    assert_response 200
 
     user.reload
 
@@ -129,7 +129,7 @@ class AccountsTest < Test::Unit::TestCase
     password_hash = user.password_hash
 
     put '/account/settings', {:user => {:notifications => "email_immediate", :announcements => "false"}}, login(user)
-    assert_response 200
+    assert_redirect "/account/settings"
 
     user.reload
 

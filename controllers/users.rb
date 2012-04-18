@@ -129,13 +129,10 @@ put '/account/settings' do
   current_user.attributes = params[:user]
   
   if current_user.save
-    halt 200
+    flash[:user] = "Your settings have been updated."
+    redirect "/account/settings"
   else
-    status 500
-    headers["Content-Type"] = "application/json"
-    {
-      :error => current_user.errors.full_messages.first
-    }.to_json
+    erb :"account/settings", :locals => {:user => current_user}
   end
 end
 

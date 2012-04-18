@@ -58,7 +58,6 @@ module Subscriptions
           end
         end
 
-
         if options[:page]
           url << "&page=#{options[:page]}"
         end

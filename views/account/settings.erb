@@ -35,6 +35,9 @@
 <% end %>
 
 <div class="contentArea left user_settings">
+  <%= flash_for [:user] %>
+  <%= errors_for user %>
+
     <div class="module notifications">
 	    <h2>Notifications</h2>
 	    <% form_for user, "/account/settings", :method => "put" do |f| %>
@@ -86,8 +89,6 @@
 
 	    <%= flash_for [:phone] %>
 
-	    <%= errors_for user %>
-
 	    <div class="confirmed phone_settings">
 	        <span>
 	            <%= user.phone %> <strong>(Verified)</strong>
@@ -137,25 +138,27 @@
 	
 	<div class="module passwordChange">
 		<h2>Change Password</h2>
-	    <% form_for user, "/account/password/change", :method => "put" do |f| %>
-	        <ul>
-	            <li>
-	                <label for="old_password">Old Password</label>
-	                <input type="password" name="old_password" />
-	            </li>
-	            <li>
-	                <label for="password">New Password</label>
-	                <input type="password" name="password" />
-	            </li>
-	            <li>
-	                <label for="password_confirmation">New Password (again)</label>
-	                <input type="password" name="password_confirmation" />
-	            </li>
-	        </ul>
-	        <button type="submit">
-	            <span>Change Password</span>
-	        </button>
-	    <% end %>
+    <%= flash_for [:phone] %>
+
+    <% form_for user, "/account/password/change", :method => "put" do |f| %>
+        <ul>
+            <li>
+                <label for="old_password">Old Password</label>
+                <input type="password" name="old_password" />
+            </li>
+            <li>
+                <label for="password">New Password</label>
+                <input type="password" name="password" />
+            </li>
+            <li>
+                <label for="password_confirmation">New Password (again)</label>
+                <input type="password" name="password_confirmation" />
+            </li>
+        </ul>
+        <button type="submit">
+            <span>Change Password</span>
+        </button>
+    <% end %>
 	</div>
     <div class="module developer_mode">
         <h2>Data Mode</h2>
