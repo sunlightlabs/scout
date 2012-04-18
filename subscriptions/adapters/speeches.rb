@@ -11,8 +11,17 @@ module Subscriptions
         endpoint = "http://capitolwords.org/api"
         
         url = "#{endpoint}/text.json?apikey=#{api_key}"
-        url << "&phrase=#{query}"
         url << "&sort=date%20desc"
+
+        # filters
+        
+        url << "&phrase=#{query}"
+
+        ["state", "party"].each do |field|
+          if subscription.data[field].present?
+            url << "&#{field}=#{URI.encode subscription.data[field]}"
+          end
+        end
 
         if options[:page]
           url << "&page=#{options[:page].to_i - 1}"

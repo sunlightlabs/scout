@@ -30,7 +30,7 @@ module Subscriptions
         url << "&query=#{query}"
 
         if subscription.data["session"].present?
-          url << "&session=#{subscription.data["session"]}"
+          url << "&session=#{URI.encode subscription.data["session"]}"
         end
 
 
