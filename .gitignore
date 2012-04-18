@@ -12,3 +12,4 @@
 /log
 
 *.kate-swp
+.DS_Store
