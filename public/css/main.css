@@ -146,6 +146,7 @@ input[type="text"], input[type="password"]{
     border-bottom: 1px solid #f2f2f1;
     height: 30px;
     padding: 0 5px;
+    color: #5C5B60;
 }
 
 small{
@@ -329,9 +330,18 @@ select.subscription_type {
     margin-top: 33px;
     margin-bottom: 33px;
 }
-.donate input{
-    width: 100%;
+.donate label{
+    float: left;
+    font-size: 180%;
+    padding-right: 5px;
+    color: #C5C7C7;
+    font-weight: normal;
+}
+.sidebar .donate input{
+    width: 210px;
     margin-bottom: 20px;
+    float: left;
+    margin-right: 0;
 }
 .donate button {
     width: 100%;
