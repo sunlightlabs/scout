@@ -20,7 +20,7 @@ class Interest
 
   # per-interest override of notification mechanism
   field :notifications
-  validates_inclusion_of :notifications, :in => ["none", "email_daily", "email_immediate", "sms"]
+  validates_inclusion_of :notifications, :in => ["none", "email_daily", "email_immediate", "sms"], :allow_blank => true
   
   index :in
   index :user_id
@@ -49,7 +49,7 @@ class Interest
   # to be per-interest or per-subscription.
   def mechanism
     preference = self.notifications || user.notifications
-    
+
     if preference =~ /email/
       "email"
     elsif preference == "sms"
