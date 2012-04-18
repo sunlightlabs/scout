@@ -3,6 +3,7 @@ html, body{
     font-family: arial, 'helvetica Neue', sans-serif;
     color: #5c5b60;
     height: 100%;
+    font-size: 91.25%;
 }
 
 .clearfix:before, .clearfix:after {  content: "\0020"; display: block; height: 0; visibility: hidden; }
@@ -109,7 +110,6 @@ h5{
     font-weight: bold;
 }
 p{
-    font-size: 81%;
     margin-bottom: 10px;
     line-height: 1.5;
 }
@@ -124,7 +124,6 @@ dd{
 
 
 nav{
-    font-size: 81.25%; /* 13pt /16pt */
     font-weight: bold;
 }
 nav a{
@@ -136,7 +135,6 @@ nav li{
     display: block;
 }
 form{
-    font-size: 81%;
     font-weight: bold;
 }
 
@@ -168,10 +166,10 @@ fieldset {
 }
 
 ul{
-    font-size: 81%;
+}
+li {
     list-style-type: disc;
 }
-
 
 
 
@@ -198,6 +196,10 @@ ul{
 }
 
 
+
+
+
+
 /*-- Header Styling --*/
 
 .headerWrapper{
@@ -214,7 +216,7 @@ nav li{
 }
 
 header h1{
-    background: url('/images/logo_scout.png') top left no-repeat;
+    background: url('/images/logo_scout_beta.png') top left no-repeat;
     display: block;
     width: 207px;
     height: 58px;
@@ -255,23 +257,29 @@ header h1{
 }
 .searchField{
     float: left;
+    background: url('../images/newSearch.png') top left repeat-x;
+    margin-right: 20px;
+    padding: 7px;
 }
 .searchField label, .categoryMenu label{
     display: none;
 }
 
 #search_form input[type="search"]{
-    width: 380px;
-    padding: 0 5px 0 11px;
-    height: 51px;
-    background: url('/images/newSearch.png') top left no-repeat;
+    width: 372px;
+    height: 36px;
+    background: #f2f3f0;
+    border-top: 1px solid #bab8c0;
+    border-bottom: 1px solid #efeff2;
+    border-left: 0;
+    border-right: 0;
     display: block;
     -webkit-appearance: textfield;
     -moz-appearance: textfield;
     -webkit-appearance: textfield;
-    border: 0;
     float: left;
-    margin-right: 20px;
+    font-size: 110%;
+    color: #5C5B60;
 }
 #search_form .field{
     float: left;
@@ -279,7 +287,7 @@ header h1{
 
 
 #search_form button span, #search_form a.update.button span {
-    background:url('../images/icon_search.png') center top no-repeat ;
+    background:url('../images/icon_search.png') center -4px no-repeat ;
     text-indent: -9999em;
     display: block;
     width: 32px;
@@ -512,7 +520,7 @@ footer nav li{
     background: url('../images/bg_header.png') center 216px repeat-x;
 }
 .homeWrapper #search_form button span, .homeWrapper #search_form a.update.button span {
-    background:url('../images/icon_search.png') 5px -2px no-repeat ;
+    background: url('../images/icon_search.png') 5px -2px no-repeat ;
     text-indent: 0;
     display: block;
     padding-left: 35px;
@@ -521,8 +529,7 @@ footer nav li{
     
 }
 .homeWrapper #search_form input[type="search"]{
-    background: url('../images/homeSearch.png') left top no-repeat;
-    width: 676px;
+    width: 661px;
 }
 
 .homeWrapper #search_form{
@@ -545,7 +552,6 @@ footer nav li{
 
 .home.modules{
     margin-left: 235px;
-    font-size: 81%;
 }
 
 .home.modules .module{
@@ -607,6 +613,7 @@ footer nav li{
 .results.contentArea li{
     padding: 33px 10px 33px 33px;
     background: url('/images/tinyborder_entry.png') center bottom no-repeat;
+    font-size: 100%;
 }
 .results.contentArea.right li:hover{
     background-color: #f5f6f5;
@@ -686,13 +693,11 @@ time.item, .entry time, .time {
     padding: 7px;
     clear: both;
     display: block;
-    font-size: 81%;
     font-style: italic;
     margin-top: 10px;
 }
 .viewMore{
     float: right;
-    font-size: 81%;
     background: url('/images/more.png') right 3px no-repeat;
     padding-right: 45px;
     margin-top: 10px;
@@ -703,7 +708,6 @@ time.item, .entry time, .time {
 .subtitle{
     color: #83858b;
     font-style: italic;
-    font-size: 81%;
     margin-bottom: 10px;
     display: block;
     clear: both;
@@ -767,7 +771,6 @@ button.item.follow, button.item.following {
 }
 
 .resources{
-    font-size: 81%;
     float: left;
 }
 .resources li{
@@ -826,7 +829,6 @@ a.source {
 a.source, .resources{
     padding-top: 5px;
     margin-bottom: 20px;
-    font-size: 81%;
 }
 .entryHeader{
     width: 510px;
@@ -834,7 +836,6 @@ a.source, .resources{
 }
 .entry .details{
     padding: 33px 33px 33px 10px;
-    font-size: 81%;
     margin-bottom: 155px;
 }
 .entry .details table .time{
@@ -1050,7 +1051,6 @@ a.ignore{
     float: left;
     margin-top: 17px;
     margin-left: 10px;
-    font-size: 81%;
     text-decoration: underline;
     font-style: italic;
 }
