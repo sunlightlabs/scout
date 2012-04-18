@@ -142,7 +142,7 @@ end
 get '/account/subscriptions' do
   requires_login
 
-  erb :"account/subscriptions"
+  erb :"account/subscriptions", :locals => {:interests => current_user.interests}
 end
 
 get '/account/settings' do

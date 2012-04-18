@@ -154,9 +154,9 @@ delete '/item/:interest_type/:item_id/unfollow' do
   halt 200
 end
 
+
 put '/interest/:id' do
   requires_login
-
 
 
 end

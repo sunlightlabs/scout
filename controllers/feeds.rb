@@ -21,8 +21,11 @@ get "/account/:id.:format" do
   end
 end
 
-get /\/interest\/([\w\d]+)\.?(\w+)?$/ do |interest_id, ext|
+get "/interest/:interest_id" do
   # do not require login
+
+  interest_id, ext = params[:interest_id].split "."
+
   # for RSS, want readers and bots to access it freely
   # for SMS, want users on phones to see items easily without logging in
   # for JSON, no need to require an API key for now
@@ -31,11 +34,11 @@ get /\/interest\/([\w\d]+)\.?(\w+)?$/ do |interest_id, ext|
     halt 404 and return
   end
 
-  unless interest = Interest.find(interest_id.strip)
+  unless interest = Interest.find(interest_id)
     halt 404 and return
   end
 
-  items = SeenItem.where(:interest_id => interest.id).desc(:date)
+  items = SeenItem.where(:interest_id => interest.id).desc :date
 
   # handle JSON completely separately
   if ext == 'json'
@@ -46,7 +49,6 @@ get /\/interest\/([\w\d]+)\.?(\w+)?$/ do |interest_id, ext|
   page = 1 if page <= 0 or page > 200000000
   per_page = (ext == 'rss') ? 100 : 20
 
-  
   items = items.skip(per_page * (page - 1)).limit(per_page)
 
   if ext == 'rss'
