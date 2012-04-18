@@ -87,11 +87,10 @@ class AccountsTest < Test::Unit::TestCase
     assert_nil User.where(:email => email).first
 
     post '/account/new', {:user => {:email => email, :password => "", :password_confirmation => ""}}
+    assert_response 302
+    assert_equal '/login', redirect_path
 
     assert_nil User.where(:email => email).first
-
-    assert_equal 302, last_response.status
-    assert_equal '/login', redirect_path
   end
 
   def test_update_account_settings
@@ -101,13 +100,12 @@ class AccountsTest < Test::Unit::TestCase
     assert_equal true, user.announcements
 
     put '/account/settings', {:user => {:notifications => "email_immediate", :announcements => "false"}}, login(user)
+    assert_response 200
 
     user.reload
 
     assert_equal 'email_immediate', user.notifications
     assert_equal false, user.announcements
-
-    assert_equal 200, last_response.status
   end
 
   def test_update_account_settings_invalid
@@ -117,13 +115,28 @@ class AccountsTest < Test::Unit::TestCase
     assert_equal true, user.announcements
 
     put '/account/settings', {:user => {:notifications => "not_valid", :announcements => "false"}}, login(user)
+    assert_response 500
 
     user.reload
 
     assert_equal 'email_daily', user.notifications
     assert_equal true, user.announcements
+  end
 
-    assert_equal 500, last_response.status
+  # ensures callbacks on generating a new password don't occur on any old update of the model
+  def test_update_account_settings_does_not_reset_password
+    user = new_user!
+    password_hash = user.password_hash
+
+    put '/account/settings', {:user => {:notifications => "email_immediate", :announcements => "false"}}, login(user)
+    assert_response 200
+
+    user.reload
+
+    assert_equal 'email_immediate', user.notifications
+    assert_equal false, user.announcements
+
+    assert_equal password_hash, user.password_hash
   end
 
   # password management
@@ -137,20 +150,16 @@ class AccountsTest < Test::Unit::TestCase
     Email.should_receive(:deliver!).with("Password Reset Request", user.email, anything, anything)
 
     post '/account/password/forgot', :email => user.email
+    assert_redirect '/login'
 
     user.reload
     assert_not_equal old_token, user.reset_token
-
-    assert_equal 302, last_response.status
-    assert_equal '/login', redirect_path
   end
 
   def test_start_reset_password_process_with_bad_email
     Email.should_not_receive(:deliver!)
     post '/account/password/forgot', :email => "notvalid@example.com"
-
-    assert_equal 302, last_response.status
-    assert_equal '/login', redirect_path
+    assert_redirect '/login'
   end
 
   def test_visit_reset_password_link
@@ -162,30 +171,27 @@ class AccountsTest < Test::Unit::TestCase
     Email.should_receive(:deliver!).with("Password Reset", user.email, anything, anything)
 
     get '/account/password/reset', :reset_token => reset_token
+    assert_redirect '/login'
+
     user.reload
 
     assert_not_equal reset_token, user.reset_token
     assert_not_equal old_password_hash, user.password_hash
     assert user.should_change_password
-
-    assert_equal 302, last_response.status
-    assert_equal '/login', redirect_path
   end
 
   def test_visit_reset_password_link_with_no_token
     Email.should_not_receive(:deliver!)
 
     get '/account/password/reset'
-    
-    assert_equal 404, last_response.status
+    assert_response 404
   end
 
   def test_visit_reset_password_link_with_invalid_token
     Email.should_not_receive(:deliver!)
 
     get '/account/password/reset', :reset_token => "whatever"
-    
-    assert_equal 404, last_response.status
+    assert_response 404
   end
 
   def test_change_password
@@ -197,15 +203,13 @@ class AccountsTest < Test::Unit::TestCase
     assert user.should_change_password
 
     put '/account/password/change', {:old_password => "test", :password => "not-test", :password_confirmation => "not-test"}, login(user)
+    assert_redirect '/account/settings'
 
     user.reload
     assert_not_equal old_password_hash, user.password_hash
     assert !User.authenticate(user, "test")
     assert User.authenticate(user, "not-test")
     assert !user.should_change_password
-
-    assert_equal 302, last_response.status
-    assert_equal '/account/settings', redirect_path
   end
 
   def test_change_password_not_logged_in

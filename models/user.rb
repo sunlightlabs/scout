@@ -61,7 +61,9 @@ class User
   end
   
   def encrypt_password
-    self.password_hash = BCrypt::Password.create password
+    if password # should only occur if a new password has been set on this user
+      self.password_hash = BCrypt::Password.create password
+    end
   end
 
   # password resetting fields and logic

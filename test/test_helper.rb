@@ -64,5 +64,10 @@ module TestHelper
     def assert_response(status)
       assert_equal status, last_response.status
     end
+
+    def assert_redirect(path)
+      assert_response 302
+      assert_equal path, redirect_path
+    end
   end
 end
