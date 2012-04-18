@@ -2,7 +2,14 @@ module Subscriptions
   module Adapters
 
     class FederalBills
-      
+
+      def self.filters
+        {
+          "session" => {:search_only => true},
+          "stage" => {}
+        }
+      end
+
       def self.url_for(subscription, function, options = {})
         api_key = options[:api_key] || config[:subscriptions][:sunlight_api_key]
         query = URI.escape subscription.interest_in
@@ -29,8 +36,26 @@ module Subscriptions
 
         url << "&query=#{query}"
 
-        if subscription.data["session"].present?
-          url << "&session=#{URI.encode subscription.data["session"]}"
+        # search-only filters
+        if function == :search
+          if subscription.data["session"].present?
+            url << "&session=#{URI.encode subscription.data["session"]}"
+          end
+        end
+
+        if subscription.data["stage"].present?
+          stage = subscription.data["stage"]
+          if stage == "enacted"
+            url << "&enacted=true"
+          elsif stage == "passed_house"
+            url << "&house_passage_result=pass"
+          elsif stage == "passed_senate"
+            url << "&senate_passage_result=pass"
+          elsif stage == "vetoed"
+            url << "&vetoed=true"
+          elsif stage == "awaiting_signature"
+            url << "&awaiting_signature=true"
+          end
         end
 
 
