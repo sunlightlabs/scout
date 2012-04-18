@@ -55,17 +55,18 @@ class Interest
     elsif preference == "sms"
       "sms"
     else
-      "none"
+      nil
     end
   end
 
   def email_frequency
     preference = self.notifications || user.notifications
-
     if preference == "email_immediate"
       "immediate"
-    elsif preference =~ "email_daily"
+    elsif preference == "email_daily"
       "daily"
+    else
+      nil
     end
   end
 

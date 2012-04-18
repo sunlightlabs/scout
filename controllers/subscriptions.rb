@@ -160,7 +160,17 @@ end
 put '/interest/:id' do
   requires_login
 
+  unless interest = current_user.interests.find(params[:id])
+    halt 404 and return false
+  end
 
+  interest.notifications = params[:interest]['notifications']
+
+  if interest.save
+    halt 200
+  else
+    halt 500
+  end
 end
 
 helpers do

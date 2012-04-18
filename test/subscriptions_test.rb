@@ -67,33 +67,25 @@ class SubscriptionsTest < Test::Unit::TestCase
     i1 = user.interests.create! :in => query1, :interest_type => "search"
     i2 = user.interests.create! :in => query2, :interest_type => "search"
     s1 = user.subscriptions.create! :interest => i1, :subscription_type => "state_bills", :interest_in => query1, :data => {"query" => query1}
-    s2 = user.subscriptions.create! :interest => i1, :subscription_type => "federal_bills", :interest_in => query1, :data => {"query" => query1}
-    s3 = user.subscriptions.create! :interest => i2, :subscription_type => "state_bills", :interest_in => query2, :data => {"query" => query2, 'state' => "CA"}
+    s2 = user.subscriptions.create! :interest => i2, :subscription_type => "state_bills", :interest_in => query2, :data => {"query" => query2, 'state' => "CA"}
 
     delete "/subscriptions", {:subscription_type => s1.subscription_type, :query => s1.interest_in}, login(user)
     assert_response 200
 
     assert_not_nil Interest.find(i1.id)
     assert_nil Subscription.find(s1.id)
-    assert_not_nil Subscription.find(s2.id)
 
-    delete "/subscriptions", {:subscription_type => s2.subscription_type, :query => s2.interest_in}, login(user)
-    assert_response 200
-
-    assert_nil Interest.find(i1.id)    
-    assert_nil Subscription.find(s2.id)
-
-    delete "/subscriptions", {:subscription_type => s3.subscription_type, :query => s3.interest_in, s3.subscription_type => {'state' => 'DE'}}, login(user)
+    delete "/subscriptions", {:subscription_type => s2.subscription_type, :query => s2.interest_in, s2.subscription_type => {'state' => 'DE'}}, login(user)
     assert_response 404
 
     assert_not_nil Interest.find(i2.id)
-    assert_not_nil Subscription.find(s3.id)
+    assert_not_nil Subscription.find(s2.id)
 
-    delete "/subscriptions", {:subscription_type => s3.subscription_type, :query => s3.interest_in, s3.subscription_type => {'state' => 'CA'}}, login(user)
+    delete "/subscriptions", {:subscription_type => s2.subscription_type, :query => s2.interest_in, s2.subscription_type => {'state' => 'CA'}}, login(user)
     assert_response 200
 
     assert_nil Interest.find(i2.id)
-    assert_nil Subscription.find(s3.id)
+    assert_nil Subscription.find(s2.id)
   end
 
 
@@ -139,14 +131,12 @@ class SubscriptionsTest < Test::Unit::TestCase
     query = "environment"
     interest = user.interests.create! :in => query, :interest_type => "search"
     s1 = interest.subscriptions.create! :subscription_type => "federal_bills", :user_id => user.id, :interest_in => query
-    s2 = interest.subscriptions.create! :subscription_type => "state_bills", :user_id => user.id, :interest_in => query
 
     delete "/interest/#{interest.id}", {}, login(user)
     assert_equal 200, last_response.status
 
     assert_nil Interest.find(interest.id)
     assert_nil Subscription.find(s1.id)
-    assert_nil Subscription.find(s2.id)
   end
 
   def test_destroy_search_interest_not_users_own
@@ -154,7 +144,6 @@ class SubscriptionsTest < Test::Unit::TestCase
     query = "environment"
     interest = user.interests.create! :in => query, :interest_type => "search"
     s1 = interest.subscriptions.create! :subscription_type => "federal_bills", :user_id => user.id, :interest_in => query
-    s2 = interest.subscriptions.create! :subscription_type => "state_bills", :user_id => user.id, :interest_in => query
 
     user2 = new_user! :email => user.email.succ
 
@@ -163,7 +152,6 @@ class SubscriptionsTest < Test::Unit::TestCase
 
     assert_not_nil Interest.find(interest.id)
     assert_not_nil Subscription.find(s1.id)
-    assert_not_nil Subscription.find(s2.id)
   end
 
   def test_destroy_search_interest_not_logged_in
@@ -171,7 +159,6 @@ class SubscriptionsTest < Test::Unit::TestCase
     query = "environment"
     interest = user.interests.create! :in => query, :interest_type => "search"
     s1 = interest.subscriptions.create! :subscription_type => "federal_bills", :user_id => user.id, :interest_in => query
-    s2 = interest.subscriptions.create! :subscription_type => "state_bills", :user_id => user.id, :interest_in => query
 
     user2 = new_user! :email => user.email.succ
 
@@ -180,17 +167,137 @@ class SubscriptionsTest < Test::Unit::TestCase
 
     assert_not_nil Interest.find(interest.id)
     assert_not_nil Subscription.find(s1.id)
-    assert_not_nil Subscription.find(s2.id)
   end
 
-  def test_update_interest_delivery_type
+  def test_update_interest_delivery_type_from_nothing_to_email
+    user = new_user!
+    query = "environment"
+    interest = user.interests.create! :in => query, :interest_type => "search"
+    s1 = interest.subscriptions.create! :subscription_type => "federal_bills", :user_id => user.id, :interest_in => query
 
+    # no easy way to do this without hardcoding the user notifications field default
+    assert_equal "email_daily", user.notifications
+    assert_nil interest.notifications
+
+    assert_equal "email", interest.mechanism
+    assert_equal "daily", interest.email_frequency
+
+    put "/interest/#{interest.id}", {:interest => {:notifications => "email_immediate"}}, login(user)
+    assert_response 200
+
+    user.reload
+    interest.reload
+
+    assert_equal "email_daily", user.notifications
+    assert_equal "email_immediate", interest.notifications
+
+    assert_equal "email", interest.mechanism
+    assert_equal "immediate", interest.email_frequency
+  end
+
+  def test_update_interest_delivery_type_from_email_to_nothing
+    user = new_user!
+    query = "environment"
+    interest = user.interests.create! :in => query, :interest_type => "search", :notifications => "email_immediate"
+    s1 = interest.subscriptions.create! :subscription_type => "federal_bills", :user_id => user.id, :interest_in => query
+
+    # no easy way to do this without hardcoding the user notifications field default
+    assert_equal "email_daily", user.notifications
+    assert_equal "email_immediate", interest.notifications
+
+    assert_equal "email", interest.mechanism
+    assert_equal "immediate", interest.email_frequency
+
+    put "/interest/#{interest.id}", {:interest => {:notifications => "none"}}, login(user)
+    assert_response 200
+
+    user.reload
+    interest.reload
+
+    assert_equal "email_daily", user.notifications
+    assert_equal "none", interest.notifications
+
+    assert_nil interest.mechanism
+    assert_nil interest.email_frequency
+  end
+
+  def test_update_interest_invalid_delivery_type
+    user = new_user!
+    query = "environment"
+    interest = user.interests.create! :in => query, :interest_type => "search", :notifications => "email_immediate"
+    s1 = interest.subscriptions.create! :subscription_type => "federal_bills", :user_id => user.id, :interest_in => query
+
+    # no easy way to do this without hardcoding the user notifications field default
+    assert_equal "email_daily", user.notifications
+    assert_equal "email_immediate", interest.notifications
+
+    assert_equal "email", interest.mechanism
+    assert_equal "immediate", interest.email_frequency
+
+    put "/interest/#{interest.id}", {:interest => {:notifications => "invalid"}}, login(user)
+    assert_response 500
+
+    user.reload
+    interest.reload
+
+    assert_equal "email_daily", user.notifications
+    assert_equal "email_immediate", interest.notifications
+
+    assert_equal "email", interest.mechanism
+    assert_equal "immediate", interest.email_frequency
   end
 
   def test_update_interest_not_users_own
+    user = new_user!
+    user2 = new_user! :email => user.email.succ
+    query = "environment"
+    interest = user.interests.create! :in => query, :interest_type => "search", :notifications => "email_immediate"
+    s1 = interest.subscriptions.create! :subscription_type => "federal_bills", :user_id => user.id, :interest_in => query
+
+    # no easy way to do this without hardcoding the user notifications field default
+    assert_equal "email_daily", user.notifications
+    assert_equal "email_immediate", interest.notifications
+
+    assert_equal "email", interest.mechanism
+    assert_equal "immediate", interest.email_frequency
+
+    put "/interest/#{interest.id}", {:interest => {:notifications => "none"}}, login(user2)
+    assert_response 404
+
+    user.reload
+    interest.reload
+
+    assert_equal "email_daily", user.notifications
+    assert_equal "email_immediate", interest.notifications
+
+    assert_equal "email", interest.mechanism
+    assert_equal "immediate", interest.email_frequency
   end
 
   def test_update_interest_not_logged_in
+    user = new_user!
+    query = "environment"
+    interest = user.interests.create! :in => query, :interest_type => "search", :notifications => "email_immediate"
+    s1 = interest.subscriptions.create! :subscription_type => "federal_bills", :user_id => user.id, :interest_in => query
+
+    # no easy way to do this without hardcoding the user notifications field default
+    assert_equal "email_daily", user.notifications
+    assert_equal "email_immediate", interest.notifications
+
+    assert_equal "email", interest.mechanism
+    assert_equal "immediate", interest.email_frequency
+
+    put "/interest/#{interest.id}", {:interest => {:notifications => "none"}}
+    assert_redirect "/"
+
+    user.reload
+    interest.reload
+
+    assert_equal "email_daily", user.notifications
+    assert_equal "email_immediate", interest.notifications
+
+    assert_equal "email", interest.mechanism
+    assert_equal "immediate", interest.email_frequency
   end
 
 end
