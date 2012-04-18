@@ -2,7 +2,7 @@
 module GeneralHelpers
   helpers ::Padrino::Helpers
 
-  def notification_radio_for(type, default = false)
+  def notification_radio_for(type, checked, default = false)
     name = {
       "email_immediate" => "Email immediately",
       "email_daily" => "Email once a day",
@@ -14,7 +14,8 @@ module GeneralHelpers
 
     name << " (Default)" if default
     
-    "<input type=\"radio\" name=\"notifications\" value=\"#{type}\"/><span>#{name}</span>"
+    "<input type=\"radio\" name=\"notifications\" class=\"notifications\" value=\"#{type}\" #{"checked" if checked}/>
+    <span>#{name}</span>"
   end
 
   def search_types

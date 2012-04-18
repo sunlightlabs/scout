@@ -929,6 +929,11 @@ a.source, .resources{
     float: left;
     width: 285px;
 }
+
+fieldset.subscription div.indicators span {
+    display: none;
+}
+
 .rssFeed{
     float: right;
     background: url('/images/rss.png') left top no-repeat;

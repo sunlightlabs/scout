@@ -50,14 +50,15 @@
                     <% end %>
                     
                     <div class="notifications">
-                        <% types = current_user.allowable_notifications %>
-
-                        <% if current_user.notifications %>
-                            <%= notification_radio_for types.delete(current_user.notifications), true %>
-                        <% end %>
-                        <% types.each do |type| %>
-                            <%= notification_radio_for type %>
-                        <% end %>
+                        <form>
+                            <% types = current_user.allowable_notifications %>
+                            <% preference = interest.notifications || current_user.notifications %>
+                            <% default = types.delete current_user.notifications %>
+                            <%= notification_radio_for default, preference == default, true %>
+                            <% types.each do |type| %>
+                                <%= notification_radio_for type, preference == type %>
+                            <% end %>
+                        </form>
                     </div>
 
                     <div class="indicators">
@@ -99,6 +100,26 @@
         }).error(function() {
             Utils.log("Error deleting interest " + interest_id);
             container.show();
+        })
+    });
+
+    $("input.notifications").change(function() {
+        var container = $(this).parents("fieldset.subscription");
+        var interest_id = container.data("id");
+
+        var notifications = container.find("input[name=notifications]:checked").val();
+        var attrs = {interest: {notifications: notifications}};
+
+        container.find(".indicators span").hide();
+        container.find(".indicators .spinning").show();
+        $.post("/interest/" + interest_id, $.extend(attrs, {_method: "put"}), function(data) {
+            container.find(".indicators span").hide();
+            container.find(".indicators .okay").show();
+            Utils.log("Updated interest " + interest_id);
+        }).error(function() {
+            container.find(".indicators span").hide();
+            container.find(".indicators .failed").show();
+            Utils.log("Error updating interest " + interest_id);
         })
     });
 
