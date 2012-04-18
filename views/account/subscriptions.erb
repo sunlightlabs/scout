@@ -94,13 +94,15 @@
         var container = $(this).parents("fieldset.subscription");
         var interest_id = container.data("id");
 
-        container.hide();
+        container.find(".indicators span").hide();
+        container.find(".indicators .spinning").show();
         $.post("/interest/" + interest_id, {_method: "delete"}, function(data) {
             Utils.log("Deleted interest " + interest_id);
             container.remove();
         }).error(function() {
             Utils.log("Error deleting interest " + interest_id);
-            container.show();
+            container.find(".indicators span").hide();
+            container.find(".indicators .failed").show();
         })
     });
 
