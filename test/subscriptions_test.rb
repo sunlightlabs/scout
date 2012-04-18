@@ -1,4 +1,4 @@
-require 'test/test_helper'
+require './test/test_helper'
 
 class SubscriptionsTest < Test::Unit::TestCase
   include Rack::Test::Methods
@@ -82,6 +82,12 @@ class SubscriptionsTest < Test::Unit::TestCase
 
     assert_nil Interest.find(i1.id)    
     assert_nil Subscription.find(s2.id)
+
+    delete "/subscriptions", {:subscription_type => s3.subscription_type, :query => s3.interest_in, s3.subscription_type => {'state' => 'DE'}}, login(user)
+    assert_response 404
+
+    assert_not_nil Interest.find(i2.id)
+    assert_not_nil Subscription.find(s3.id)
 
     delete "/subscriptions", {:subscription_type => s3.subscription_type, :query => s3.interest_in, s3.subscription_type => {'state' => 'CA'}}, login(user)
     assert_response 200

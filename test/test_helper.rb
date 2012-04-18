@@ -5,7 +5,7 @@ require 'test/unit'
 
 require 'bundler/setup'
 require 'rack/test'
-require 'scout'
+require './scout'
 
 require 'rspec/mocks'
 

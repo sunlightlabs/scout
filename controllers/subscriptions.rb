@@ -172,9 +172,13 @@ helpers do
 
     criteria = {
       :interest_in => query,
-      :subscription_type => subscription_type,
-      :data => data
+      :subscription_type => subscription_type
     }
+
+    # we need to use dot notation, not pass in the data hash directly
+    data.each do |key, value|
+      criteria["data.#{key}"] = value
+    end
 
     if logged_in?
       current_user.subscriptions.find_or_initialize_by criteria
