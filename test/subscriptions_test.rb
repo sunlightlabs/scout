@@ -72,7 +72,7 @@ class SubscriptionsTest < Test::Unit::TestCase
     delete "/subscriptions", {:subscription_type => s1.subscription_type, :query => s1.interest_in}, login(user)
     assert_response 200
 
-    assert_not_nil Interest.find(i1.id)
+    assert_nil Interest.find(i1.id)
     assert_nil Subscription.find(s1.id)
 
     delete "/subscriptions", {:subscription_type => s2.subscription_type, :query => s2.interest_in, s2.subscription_type => {'state' => 'DE'}}, login(user)
