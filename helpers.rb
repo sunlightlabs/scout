@@ -2,6 +2,21 @@
 module GeneralHelpers
   helpers ::Padrino::Helpers
 
+  def notification_radio_for(type, default = false)
+    name = {
+      "email_immediate" => "Email immediately",
+      "email_daily" => "Email once a day",
+      "sms" => "SMS",
+      "none" => "None",
+      nil => "None",
+      "" => "None"
+    }[type]
+
+    name << " (Default)" if default
+    
+    "<input type=\"radio\" name=\"notifications\" value=\"#{type}\"/><span>#{name}</span>"
+  end
+
   def search_types
     [
       ["Bills in Congress", :federal_bills],

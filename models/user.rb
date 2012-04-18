@@ -17,11 +17,13 @@ class User
 
   # whether and how the user will receive notifications
   field :notifications, :default => "email_daily"
-  validates_inclusion_of :notifications, :in => ["none", "email_daily", "email_immediate"]
+  validates_inclusion_of :notifications, :in => ["none", "email_daily", "email_immediate"] # sms not valid at the user level
+  validates_presence_of :notifications
 
   # boolean as to whether users wish to receive announcements about Scout features
   # defaults to true (opt-out)
   field :announcements, :type => Boolean, :default => true
+  field :sunlight_announcements, :type => Boolean, :default => false
   
   has_many :subscriptions, :dependent => :destroy
   has_many :interests, :dependent => :destroy
@@ -40,6 +42,14 @@ class User
     end
   end
 
+
+  # delivery notification stuff
+  def allowable_notifications
+    types = ["email_daily", "email_immediate"]
+    types << "sms" if phone and phone_confirmed
+    types << "none"
+    types
+  end
 
   # user authentication stuff
 

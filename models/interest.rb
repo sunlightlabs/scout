@@ -17,6 +17,10 @@ class Interest
   #   item - metadata about the related item 
   #     (e.g. "chamber" => "house", "state" => "NY", "bill_id" => "hr2134-112")
   field :data, :type => Hash, :default => {}
+
+  # per-interest override of notification mechanism
+  field :notifications
+  validates_inclusion_of :notifications, :in => ["none", "email_daily", "email_immediate", "sms"]
   
   index :in
   index :user_id
@@ -38,4 +42,31 @@ class Interest
       'created_at', 'updated_at', 'data', 'interest_type', 'in'
     ]
   end
+
+  
+  # the mechanism this subscription prefers to be delivered as (e.g. email or SMS).
+  # for right now, reads right from the user's preferences, but could be changed
+  # to be per-interest or per-subscription.
+  def mechanism
+    preference = self.notifications || user.notifications
+    
+    if preference =~ /email/
+      "email"
+    elsif preference == "sms"
+      "sms"
+    else
+      "none"
+    end
+  end
+
+  def email_frequency
+    preference = self.notifications || user.notifications
+
+    if preference == "email_immediate"
+      "immediate"
+    elsif preference =~ "email_daily"
+      "daily"
+    end
+  end
+
 end

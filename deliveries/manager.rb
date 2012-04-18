@@ -61,11 +61,12 @@ module Deliveries
 
       # subscription and user can be looked up using only the item if need be
       subscription ||= item.subscription
+      interest = subscription.interest
       user = subscription.user
 
-      # delivery options come from the subscription
-      mechanism ||= subscription.mechanism
-      email_frequency ||= subscription.email_frequency
+      # delivery options come from the interest, if none specified it inherits from the user
+      mechanism ||= interest.mechanism
+      email_frequency ||= interest.email_frequency
 
       puts "[#{subscription.user.email}][#{subscription.subscription_type}][#{subscription.interest_in}](#{item.item_id}) Scheduling delivery"
 

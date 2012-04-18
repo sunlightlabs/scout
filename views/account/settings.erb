@@ -2,10 +2,10 @@
 	<div class="module donate">
 		<h4>Support Our Work</h4>
 	    <p>
-	        <em>You're on the free plan. Everyone is!</em>
+	        You're on the <em>free plan</em>. Everyone is!
 		</p>
 		<p>
-			But if you like this service, and feel like giving us money anyway, by all means:
+			But if you like this service and feel like giving us money anyway, by all means:
 	    </p>
 
 	    <form action="https://checkout.google.com/cws/v2/Donations/548702786961191/checkoutForm" id="BB_BuyButtonForm" method="post" name="BB_BuyButtonForm" target="_top">
@@ -40,7 +40,7 @@
 	    <% form_for user, "/account/settings", :method => "put" do |f| %>
 		<fieldset>
 			<legend>
-				We can email you about all the new things that you're following, if you want.
+				We can email you about all the new things that you're following.
 				<small>You can also control this <a href="/account/subscriptions">per-subscription</a>.</small>
 			</legend>
 				<ul>
@@ -65,15 +65,20 @@
 		<fieldset>
 			<label for="user_announcements">
 				<%= f.check_box :announcements, :uncheck_value => 'false' %>
-				<span>Get (infrequent) announcements of new features</span>
+				<span>Get updates about new Scout features</span>
 			</label>
+      <label for="sunlight_announcements">
+        <%= f.check_box :sunlight_announcements, :uncheck_value => 'false' %>
+        <span>Get updates about the Sunlight Foundation</span>
+      </label>
 		</fieldset>
-       <button type="submit">
-           <span>OK</span>
-       </button>
 
-	    <% end %>
-	</div>
+    <button type="submit">
+        <span>OK</span>
+    </button>
+
+    <% end %>
+    </div>
 	
     <div class="module phoneSettings">
 

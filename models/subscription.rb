@@ -64,25 +64,7 @@ class Subscription
     adapter.url_for self, :search, options
   end
 
-  # the mechanism this subscription prefers to be delivered as (e.g. email or SMS).
-  # for right now, reads right from the user's preferences, but could be changed
-  # to be per-interest or per-subscription.
-  def mechanism
-    return nil unless user.notifications
-    user.notifications =~ /email/ ? "email" : "sms"
-  end
-
-  def email_frequency
-    return nil unless user.notifications
-
-    if user.notifications =~ /immediate/ 
-      "immediate"
-    elsif user.notifications =~ /daily/
-      "daily"
-    end
-  end
-
-
+  
   # what fields are acceptable to syndicated through JSON
   def self.public_json_fields
     [
