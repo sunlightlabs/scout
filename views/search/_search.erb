@@ -1,7 +1,7 @@
 <form action="#" method="get" id="search_form">
     <fieldset class="searchField">
         <label for="query">Search</label>
-        <input class="transparent query" name="query" type="search" placeholder="Start new search..." />
+        <input class="transparent query" name="query" type="search" placeholder="Search for a keyword or phrase..." />
     </fieldset>
 
     <div class="clear"></div>
@@ -11,28 +11,6 @@
 
         <%= select_tag :subscription_type, :class => "subscription_type", :id => "search_subscription_type", :options => search_types %>
 
-        <!-- <ul class="filter initial state_bills">
-            <li>
-                <label>
-                    <input type="radio" name="state_bills_type" value="all">
-                    All States
-                </label>
-            </li>
-            <li>
-                <label>
-                    <input type="radio" name="state_bills_state" value="single"
-                       
-                        >
-                    State:
-                </label>
-
-                <select class="state_bills_state_single">
-                    <% state_map.keys.sort.each do |code| %>
-                        <option value="<%= code %>"><%= state_map[code] %></option>
-                    <% end %>
-                </select>
-            </li>
-        </ul> -->
     </fieldset>
 
     <button type="submit">
