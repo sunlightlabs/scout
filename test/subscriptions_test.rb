@@ -30,34 +30,34 @@ class SubscriptionsTest < Test::Unit::TestCase
     assert_response 200
 
     assert_equal 2, user.subscriptions.count
-    assert_equal 1, user.interests.count
+    assert_equal 2, user.interests.count
 
     post "/subscriptions", {:subscription_type => "state_bills", :query => query2}, login(user)
     assert_response 200
 
     assert_equal 3, user.subscriptions.count
-    assert_equal 2, user.interests.count
+    assert_equal 3, user.interests.count
 
     # posting the same subscription should return 200, but be idempotent - nothing changed
     post "/subscriptions", {:subscription_type => "state_bills", :query => query2}, login(user)
     assert_response 200
 
     assert_equal 3, user.subscriptions.count
-    assert_equal 2, user.interests.count
+    assert_equal 3, user.interests.count
 
     # but if we include filter data, it's different!
     post "/subscriptions", {:subscription_type => "state_bills", :query => query2, :state_bills => {:state => "DE"}}, login(user)
     assert_response 200
 
     assert_equal 4, user.subscriptions.count
-    assert_equal 2, user.interests.count
+    assert_equal 4, user.interests.count
 
     # but, that data is also taken into account when finding duplicates
     post "/subscriptions", {:subscription_type => "state_bills", :query => query2, :state_bills => {:state => "DE"}}, login(user)
     assert_response 200
 
     assert_equal 4, user.subscriptions.count
-    assert_equal 2, user.interests.count
+    assert_equal 4, user.interests.count
   end
 
   def test_unsubscribe_from_individual_searches

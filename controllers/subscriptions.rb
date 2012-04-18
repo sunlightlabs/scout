@@ -54,17 +54,19 @@ post '/subscriptions' do
   query = params[:query] ? params[:query].strip : nil
   subscription_type = params[:subscription_type]
 
-  interest = current_user.interests.find_or_initialize_by(
+  subscription = subscription_for subscription_type
+
+  halt 200 and return unless subscription.new_record?
+
+  interest = current_user.interests.new(
     :in => query, 
     :interest_type => "search",
     :data => {'query' => query}
   )
   
-  subscription = subscription_for subscription_type
-  
   # make sure interest has the same validations as subscriptions
   if interest.valid? and subscription.valid?
-    interest.save! if interest.new_record?
+    interest.save!
     subscription.interest = interest
     subscription.save!
     
