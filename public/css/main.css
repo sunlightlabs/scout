@@ -214,6 +214,11 @@ nav ul{
 nav li{
     float: left;
 }
+li.user{
+    font-weight: normal;
+    font-style: italic;
+    color: #78777d;
+}
 
 header h1{
     background: url('/images/logo_scout_beta.png') top left no-repeat;
@@ -759,7 +764,6 @@ button.item.follow, button.item.following {
     float: left;
     margin-top: 16px;
     font-style: italic;
-    font-size: 91%;
 }
 
 .followChanges .trackSubscribe strong {
