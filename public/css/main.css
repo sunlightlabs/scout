@@ -23,6 +23,7 @@ input, select, textarea {
 }
 
 
+
 a.truncate {}
 .truncated {}
 .untruncated {display: none;}
@@ -224,15 +225,9 @@ header h1{
 }
 
 
-#search_form .filter{
-    display: none;
-}
 .initialFilters{
     margin-top: 8px;
     float: left;
-}
-#search_form .filter.states{
-    display: block;
 }
 .searchField{
     float: left;
@@ -293,9 +288,6 @@ select.subscription_type {
 #search_form .categoryMenu legend{
     margin-bottom: 7px;
 }
-
-
-
 
 
 
@@ -388,6 +380,11 @@ div.contentWrapper{
 .sidebar li{
     margin-bottom: 10px;
 }
+
+.filters select {
+    width: 200px;
+}
+
 .filters form button{
 
 }

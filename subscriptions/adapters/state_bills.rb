@@ -14,12 +14,19 @@ module Subscriptions
         url = "#{endpoint}/bills/?apikey=#{api_key}"
         
         url << "&fields=#{fields.join ','}"
-        url << "&q=#{query}"
         url << "&search_window=all"
         
+        
+        # filters
+
+        url << "&q=#{query}"
+
         if subscription.data['state'].present?
           url << "&state=#{subscription.data['state']}"
         end
+
+        
+        # order
 
         if function == :search or function == :initialize
           url << "&sort=created_at"

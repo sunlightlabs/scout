@@ -1,5 +1,15 @@
-<!-- <label for="agency">Agency</label>
-<select name="agency" class="filter_control">
-  <option value="">All Agencies</option>
-  
-</select> -->
+<label for="agency_ids">Agency</label>
+<select name="agency_ids" class="filter_control">
+  <option value="">-- All Agencies --</option>
+  <% reverse_map = executive_agency_map.invert %>
+  <% reverse_map.keys.sort.each do |name| %>
+      <option value="<%= reverse_map[name] %>"><%= name %></option>
+  <% end %>
+</select>
+
+<label for="stage">Stage</label>
+<select name="stage" class="filter_control">
+  <option value="">-- Any Stage --</option>
+  <option value="proposed">Proposed</option>
+  <option value="final">Final</option>
+</select>

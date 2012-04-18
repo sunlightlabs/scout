@@ -1,7 +1,7 @@
 <label for="state">State</label>
 <select name="state" class="filter_control">
-    <option value="">-- All States --</option>
-    <% state_map.keys.sort.each do |code| %>
-        <option value="<%= code %>"><%= state_map[code] %></option>
-    <% end %>
+  <option value="">-- All States --</option>
+  <% state_map.keys.sort.each do |code| %>
+      <option value="<%= code %>"><%= state_map[code] %></option>
+  <% end %>
 </select>

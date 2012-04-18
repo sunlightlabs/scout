@@ -20,12 +20,21 @@ module Subscriptions
 
         url = "#{endpoint}/search/regulations.json?apikey=#{api_key}"
         url << "&per_page=#{per_page}"
-        url << "&query=#{query}"
         url << "&order=published_at"
         url << "&sections=#{sections.join ','}"
         url << "&highlight=true"
         url << "&highlight_size=500"
         url << "&highlight_tags=,"
+
+        # filters
+        url << "&query=#{query}"
+
+        ["agency_ids", "stage"].each do |field|
+          if subscription.data[field].present?
+            url << "&#{field}=#{URI.encode subscription.data[field]}"
+          end
+        end
+
 
         if options[:page]
           url << "&page=#{options[:page]}"

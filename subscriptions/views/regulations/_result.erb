@@ -6,6 +6,7 @@
 
 <div class="subtitle">
   <span class="stage"><%= regulation_stage regulation['stage'] %></span>
+  &mdash;
   <% if regulation['agency_names'].any? %>
     <span class="agencies">
       <%= regulation['agency_names'].join ', ' %>
@@ -13,8 +14,10 @@
   <% end %>
 </div>
 
-<% if regulation['search']['highlight'] %>
-  <p>
+<p>
+  <% if regulation['search']['highlight'] %>
     <%= regulation_highlight item, interest %>
-  </p>
-<% end %>
+  <% else %>
+    <%= truncate regulation['abstract'], 500 %>
+  <% end %>
+</p>
