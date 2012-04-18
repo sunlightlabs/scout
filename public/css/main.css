@@ -150,6 +150,30 @@ input[type="text"], input[type="password"]{
     padding: 0 5px;
 }
 
+small{
+    font-size: 11px;
+    font-style: italic;
+    line-height: 1.5;
+}
+em{
+    font-weight: bold;
+    font-style: italic;
+}
+legend{
+    padding-bottom: 7px;
+    display: block;
+}
+fieldset {
+    margin-bottom: 16px;
+}
+
+ul{
+    font-size: 81%;
+    list-style-type: disc;
+}
+
+
+
 
 
 /*-- Flash Messages --*/
@@ -288,8 +312,21 @@ select.subscription_type {
 #search_form .categoryMenu legend{
     margin-bottom: 7px;
 }
-
-
+.donate form{
+    margin-top: 33px;
+    margin-bottom: 33px;
+}
+.donate input{
+    width: 100%;
+    margin-bottom: 20px;
+}
+.donate button {
+    width: 100%;
+}
+.donate button span{
+    width: 177px;
+    display: block;
+}
 
 /*-- Basic Content Structure --*/
 div.contentWrapper{
@@ -360,6 +397,7 @@ div.contentWrapper{
     padding: 33px 0;
     margin-left: 10px;
     background: url('/images/sidebar_divider.png') bottom center no-repeat;
+    margin-right: 10px;
 }
 .sidebar form{
     color: #5c5b60;
@@ -394,7 +432,12 @@ div.contentWrapper{
 .filters label{
 
 }
-
+.noFilters{
+    font-style: italic;
+}
+.sidebar small{
+    display: block;
+}
 
 
 /*-- Footer Styling --*/
@@ -477,10 +520,6 @@ footer nav li{
     width: inherit;
     
 }
-    
-
-
-
 .homeWrapper #search_form input[type="search"]{
     background: url('../images/homeSearch.png') left top no-repeat;
     width: 676px;

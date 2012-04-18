@@ -1,9 +1,11 @@
 <% content_for :sidebar_right do %>
 	<div class="module donate">
+		<h4>Support Our Work</h4>
 	    <p>
-	        You're on the <strong>free</strong> plan. Everyone is!
-	        <br/>
-	        <small>But if you like this service, and feel like giving us money anyway, by all means:</small>
+	        <em>You're on the free plan. Everyone is!</em>
+		</p>
+		<p>
+			But if you like this service, and feel like giving us money anyway, by all means:
 	    </p>
 
 	    <form action="https://checkout.google.com/cws/v2/Donations/548702786961191/checkoutForm" id="BB_BuyButtonForm" method="post" name="BB_BuyButtonForm" target="_top">
@@ -36,11 +38,11 @@
     <div class="module notifications">
 	    <h2>Notifications</h2>
 	    <% form_for user, "/account/settings", :method => "put" do |f| %>
-		<ul>
-			<li>
-				<p>
-		            We can email you about all the new things that you're following, if you want.
-		        </p>
+		<fieldset>
+			<legend>
+				We can email you about all the new things that you're following, if you want.
+				<small>You can also control this <a href="/account/subscriptions">per-subscription</a>.</small>
+			</legend>
 				<ul>
 		            <li>
 		                <label for="user_delivery_none">
@@ -59,22 +61,16 @@
 		                </label>
 		            </li>
 		        </ul>
-			</li>
-            <li>
-		        <small>
-		            You can also control this <a href="/account/subscriptions">per-subscription</a>.
-		        </small>
-                <label for="user_announcements">
-                    <%= f.check_box :announcements, :uncheck_value => 'false' %>
-                    <span>Get (infrequent) announcements of new features</span>
-                </label>
-            </li>
-			<li>
-		        <button type="submit">
-		            <span>OK</span>
-		        </button>
-			</li>
-		</ul>
+		</fieldset>
+		<fieldset>
+			<label for="user_announcements">
+				<%= f.check_box :announcements, :uncheck_value => 'false' %>
+				<span>Get (infrequent) announcements of new features</span>
+			</label>
+		</fieldset>
+       <button type="submit">
+           <span>OK</span>
+       </button>
 
 	    <% end %>
 	</div>
