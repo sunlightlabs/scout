@@ -207,6 +207,7 @@ li {
     background: url('/images/bg_header.png') center bottom repeat-x;
     display: block;
     min-height: 247px;
+    position: relative;
 }
 nav ul{
     float: right;
@@ -266,6 +267,7 @@ header h1{
     background: url('../images/newSearch.png') top left repeat-x;
     margin-right: 20px;
     padding: 7px;
+    margin-bottom: 7px;
 }
 .searchField label, .categoryMenu label{
     display: none;
@@ -354,6 +356,7 @@ select.subscription_type {
 /*-- Basic Content Structure --*/
 div.contentWrapper{
     overflow: hidden;
+    margin-top: -10px;
 }
 
 .left{
@@ -627,7 +630,7 @@ footer nav li{
 }
 .results.contentArea li{
     padding: 33px 10px 33px 33px;
-    background: url('/images/tinyborder_entry.png') center bottom no-repeat;
+    background: url('/images/tinyborder_entry.png') center top no-repeat;
     font-size: 100%;
 }
 .results.contentArea.right li:hover{
@@ -663,7 +666,9 @@ footer nav li{
 .contentArea h4 a:hover{
     color: #1c8398;
 }
-\
+.items{
+    margin-top: -2px;
+}
 time.item, .entry time, .time {   
     font-style: italic;
     font-weight: 200;
@@ -671,9 +676,9 @@ time.item, .entry time, .time {
     margin-top: 10px;
 }
 .item time{
-    margin-top: 2px;
+    margin-top: 4px;
     font-style: italic;
-    font-size: 90%;
+    font-size: 100%;
     display: block;
     float: right;
 }
