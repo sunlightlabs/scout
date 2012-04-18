@@ -895,8 +895,6 @@ a.source, .resources{
 
 
 /*-- Subscriptions Styling --*/
-.subscriptionsList{
-}
 
 .subscriptions .searchParameters{
     font-style: italic;
@@ -906,17 +904,7 @@ a.source, .resources{
 .subscriptionsList{
     padding: 33px 0;
 }
-.subscriptionsList{
-    column-count: 2;
-    -moz-column-count: 2;
-    -webkit-column-count: 2;
-    column-gap: 1px;
-    -moz-column-gap: 1px;
-    -webkit-column-gap: 1px;
-    column-rule: 1px dashed #cdcdcd;
-    -moz-column-rule: 1px dashed #cdcdcd;
-    -webkit-column-rule: 1px dashed #cdcdcd;
-}
+
 
 .subscription{
     -mozbox-sizing: border-box;
@@ -930,7 +918,6 @@ a.source, .resources{
     font-weight: normal;
 }
 .subscription h3{
-    float: left;
     width: 285px;
 }
 
