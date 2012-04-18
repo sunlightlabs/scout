@@ -175,15 +175,19 @@ helpers do
       :subscription_type => subscription_type
     }
 
-    # we need to use dot notation, not pass in the data hash directly
+    # for lookups, we need to use dot notation, not pass in the data hash directly
+    find_criteria = criteria.dup
     data.each do |key, value|
-      criteria["data.#{key}"] = value
+      find_criteria["data.#{key}"] = value
     end
 
+    new_criteria = criteria.merge :data => data
+
     if logged_in?
-      current_user.subscriptions.find_or_initialize_by criteria
+      # can't use #find_or_initialize_by because of the dot notation
+      current_user.subscriptions.where(find_criteria).first || current_user.subscriptions.new(new_criteria)
     else
-      Subscription.new criteria
+      Subscription.new new_criteria
     end
   end
 
