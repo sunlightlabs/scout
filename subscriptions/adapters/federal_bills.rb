@@ -18,12 +18,21 @@ module Subscriptions
         per_page = (function == :search) ? (options[:per_page] || 20) : 40
 
         url = "#{endpoint}/search/bills.json?apikey=#{api_key}"
-        url << "&query=#{query}"
         url << "&order=last_version_on"
         url << "&sections=#{sections.join ','}"
         url << "&highlight=true"
         url << "&highlight_size=500"
         url << "&highlight_tags=,"
+
+
+        # filters
+
+        url << "&query=#{query}"
+
+        if subscription.data["session"].present?
+          url << "&session=#{subscription.data["session"]}"
+        end
+
 
         if options[:page]
           url << "&page=#{options[:page]}"
