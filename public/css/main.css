@@ -531,7 +531,7 @@ footer nav li{
     margin-top: -79px;
 }
 .homeWrapper{
-    background: url('../images/bg_homeWrapper.png') center 216px repeat-x;
+    /*background: url('../images/bg_homeWrapper.png') center 216px repeat-x;*/
     padding-bottom: 85px;
 }
 .homeWrapper .contentWrapper{
@@ -551,7 +551,7 @@ footer nav li{
 }
 
 .homeWrapper #search_form{
-    margin-top: 40px;
+    margin-top: 75px;
     width: 677px;
 }
 
@@ -598,6 +598,10 @@ footer nav li{
     color: #59585e;
     margin-bottom: 16px;
 }
+
+
+
+
 
 
 
@@ -878,7 +882,10 @@ a.source, .resources{
 .details .module{
     width: 50%;
     float: left;
-
+    padding-right: 16px;
+    -mozbox-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
 }
 .entry .summary{
     padding: 33px 33px 33px 10px;
@@ -894,7 +901,10 @@ a.source, .resources{
     margin-bottom: 5px;
     width: 550px;
 }
-
+.explanation{
+    color: #83858B;
+    font-style: italic;
+}
 
 
 
