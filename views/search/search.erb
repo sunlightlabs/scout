@@ -1,5 +1,5 @@
 <% content_for :sidebar_left do %>
-  	<div class="module filters">
+ 	<div class="module filters">
 		<h4>Filter search results</h4>
 		<form class="filters">
 
@@ -11,7 +11,8 @@
 
 		</form>
 	</div>
-	<% if developer_mode? %>
+
+  <% if developer_mode? %>
     <div class="module developer json">
 
 		<h4>The Data</h4>
@@ -20,6 +21,10 @@
 		</p>
     </div>
   <% end %>
+
+  <div class="module data explanation">
+    <%= partial "subscriptions/#{subscription.subscription_type}/data", :engine => "erb" %>
+  </div>
 
   <%= recent_searches %>
 <% end %>

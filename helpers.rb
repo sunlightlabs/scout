@@ -36,7 +36,7 @@ module GeneralHelpers
   end
 
   def search?
-    !content_from(:hide_search)
+    request.path =~ /^\/search\//
   end
 
   def home?
