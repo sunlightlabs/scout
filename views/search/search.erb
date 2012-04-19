@@ -125,7 +125,7 @@
       var query = encodeURIComponent(currentQuery());
       var filters = currentFilters();
       
-      var filterString = $.param(filters).replace("%5B", "[").replace("%5D", "]");
+      var filterString = $.param(filters).replace(/%5B/g, "[").replace(/%5D/g, "]");
       var url = "/search/" + subscription_type + "/" + query;
       if (filterString) url += "?" + filterString;
 
