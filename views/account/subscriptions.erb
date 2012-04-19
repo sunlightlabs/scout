@@ -59,7 +59,13 @@
                         <div class="searchParameters">
 							in
                             <span class="category"><%= subscription.search_name %></span> 
-							<div class="filters"><span>112th Congress</span>, <span>Proposed</span></div>
+                            <% if subscription.filters.any? %>
+                                <div class="filters">
+                                    <%= subscription.filters.map do |field, value|
+                                    "<span class=\"filter\">#{subscription.filter_name field, value}</span>"
+                                    end.join(", ") %>
+                                </div>
+                            <% end %>
                         </div>
                     <% end %>
 					<div class="clear"></div>
