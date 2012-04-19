@@ -2,7 +2,7 @@
 
 <div class="followChanges">
 	<div class="trackSubscribe">
-		Follow any <strong>votes</strong> or <strong>official activity</strong> on this bill.
+		Follow any <strong>official activity</strong> or <strong>votes</strong> on this bill.
 	</div>
 
     <%= follow_button item %>
@@ -50,31 +50,6 @@
 <div class="details">
 
     <div class="module of2">
-        <h4>Votes</h4>
-        <table class="votes">
-			<tbody>
-            <% if bill['votes'] and bill['votes'].any? %>
-                <% bill['votes'].reverse.each do |vote| %>
-                    <tr>
-                        <td class="time">
-                            <%= just_date_year vote['date'] %>
-                        </td>
-                        <td>
-                            <p class="motion"><%= vote['motion'] %></p>
-                            <p class="vote_count"><%= state_vote_count vote %></p>
-                        <td>
-                    </tr>
-                <% end %>
-            <% else %>
-				<tr>
-                    No votes taken yet.
-				</tr>
-            <% end %>
-        	</tbody>
-		</table>
-    </div>
-    
-    <div class="module of2">
         <h4>Activity</h4>
         <table class="activity">
 			<tbody>            
@@ -95,6 +70,32 @@
         	</tbody>
 		</table>
     </div>
+
+    <div class="module of2">
+        <h4>Votes</h4>
+        <table class="votes">
+            <tbody>
+            <% if bill['votes'] and bill['votes'].any? %>
+                <% bill['votes'].reverse.each do |vote| %>
+                    <tr>
+                        <td class="time">
+                            <%= just_date_year vote['date'] %>
+                        </td>
+                        <td>
+                            <p class="motion"><%= vote['motion'] %></p>
+                            <p class="vote_count"><%= state_vote_count vote %></p>
+                        <td>
+                    </tr>
+                <% end %>
+            <% else %>
+                <tr>
+                    No votes taken yet.
+                </tr>
+            <% end %>
+            </tbody>
+        </table>
+    </div>
+
 	<div class="clear"></div>
 
 </div>

@@ -3,7 +3,7 @@
 
 <div class="followChanges">
 	<div class="trackSubscribe">
-		Follow when this bill <strong>is coming to the floor</strong>, or when there's <strong>any official activity</strong>.
+		Follow <strong>any official activity</strong> on this bill, including when <strong>it's coming to the floor</strong>.
 	</div>
 
   <%= follow_button item %>
@@ -59,33 +59,7 @@
 
 <div class="details clear">
 
-    <div class="module of2">
-        <h4>Coming to the Floor</h4>
-        <table class="upcoming_floor">
-			<tbody>
-	            <% if bill['latest_upcoming'] and bill['latest_upcoming'].any? %>
-	                <% bill['latest_upcoming'].each do |upcoming| %>
-	                    <tr>
-	                        <td class="time">
-								<time datetime="<%= html_date upcoming['legislative_day'] %>"><%= just_date upcoming['legislative_day'] %></time>
-							</td>
-	                        <td>
-	                        	<a href="<%= upcoming['permalink'] %>"><%= upcoming['chamber'].capitalize %> Floor</a>
-							</td>
-	                    </tr>
-	            <% end %>
-	            <tr>
-                    <td colspan="2">
-				<% else %>
-	                Not yet scheduled for debate.
-	            <% end %>
-					</td>
-				</tr>
-			</tbody>
-        </table>
-    </div>
-    
-    <div class="module of2">
+   <div class="module of2">
         <h4>Recent Activity</h4>
         <table class="activity">
 			<tbody>
@@ -104,5 +78,32 @@
 			</tbody>
         </table>
     </div>
+    <div class="module of2">
+        <h4>Coming to the Floor</h4>
+        <table class="upcoming_floor">
+      <tbody>
+              <% if bill['latest_upcoming'] and bill['latest_upcoming'].any? %>
+                  <% bill['latest_upcoming'].each do |upcoming| %>
+                      <tr>
+                          <td class="time">
+                <time datetime="<%= html_date upcoming['legislative_day'] %>"><%= just_date upcoming['legislative_day'] %></time>
+              </td>
+                          <td>
+                            <a href="<%= upcoming['permalink'] %>"><%= upcoming['chamber'].capitalize %> Floor</a>
+              </td>
+                      </tr>
+              <% end %>
+              <tr>
+                    <td colspan="2">
+        <% else %>
+                  Not yet scheduled for debate.
+              <% end %>
+          </td>
+        </tr>
+      </tbody>
+        </table>
+    </div>
+    
 	<div class="clear"></div>
+
 </div>
