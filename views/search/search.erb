@@ -121,6 +121,11 @@
     <% if logged_in? %>
       $("button.follow").off("click").click(follow);
       $("button.following").off("click").click(unfollow);
+      $("button.following").off("mouseover").mouseover(function() {
+        $(this).addClass("unfollow").find("span").html("Unfollow");
+      }).mouseout(function() {
+        $(this).removeClass("unfollow").find("span").html("Following");
+      });
     <% else %>
       $("button.follow").off("click").click(function() {window.location = "/login?redirect=" + Utils.currentPath();});
       $("button.following").off("click");
