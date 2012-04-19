@@ -90,9 +90,7 @@
                 <img class="splash" src="/images/splash.png" width="960" height="237" alt="Splash">
             <% end %>
 
-            <% if search? %>
-                <%= partial "search/search", :engine => "erb", :locals => {} %>
-            <% end %>
+            <%= partial "search/search", :engine => "erb", :locals => {} %>
 
             <div class="clear"></div>
         </header>
