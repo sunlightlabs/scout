@@ -24,7 +24,6 @@ gem 'rack', '1.4.1'
 gem 'rake', '0.9.2.2'
 
 group :development do
-  gem 'sinatra-reloader', '0.5.0'
   gem 'wirble'
   gem 'brice'
   gem 'unicorn'
