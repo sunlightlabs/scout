@@ -5,10 +5,8 @@
 
 	    <%= hidden_field_tag :query, :class => "query" %>
 	    <%= hidden_field_tag :subscription_type, :class => "subscription_type" %>
-  
 	    <!-- subscription-specific filter partial -->
 	    <%= partial "subscriptions/#{subscription.subscription_type}/filter", :engine => "erb", :locals => {:subscription => subscription} %>
-
 		</form>
 	</div>
 
