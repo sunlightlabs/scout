@@ -35,10 +35,12 @@
 	<!--<% end %>-->
 		<div class="pageTitle">
 		    <div class="searchParameters">
-		        <h2><%= h query %></h2>
+		        <h2>'<%= h query %>'</h2>
 		        in 
-                <span class="category"><%= subscription.search_name %></span> 
-				<div class="filters"><span>112th Congress</span>, <span>Proposed</span></div>
+            <span class="category"><%= subscription.search_name %></span> 
+				    <div class="filters">
+              <span>112th Congress</span>, <span>Proposed</span>
+            </div>
 		    </div>
 
 		    <button class="follow search">
@@ -85,8 +87,8 @@
   });
 
   function initializeTitle() {
-    $("div.searchParameters h2").html("<%= h query %>");
-    $("div.searchParameters span").html("<%= h subscription.search_name %>");
+    $("div.searchParameters h2").html("\'<%= h query %>\'");
+    $("div.searchParameters span.category").html("<%= h subscription.search_name %>");
     <% if developer_mode? %>
       $("div.json.developer a").attr("href","<%= developer_url subscription %>");
     <% end %>
