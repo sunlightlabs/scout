@@ -45,9 +45,7 @@
         <% if interests.any? %>
 
             <% interests.each do |interest| %>
-                <fieldset class="subscription"
-                    data-id="<%= interest.id %>"
-                    >
+                <div class="subscription" data-id="<%= interest.id %>">
                     
                     <h3><%= interest_name interest %></h3>
 
@@ -59,7 +57,9 @@
                     <% if interest.search? %>
                         <% subscription = interest.subscriptions.first %>
                         <div class="searchParameters">
-                            <%= subscription.search_name %>
+							in
+                            <span class="category"><%= subscription.search_name %></span> 
+							<div class="filters"><span>112th Congress</span>, <span>Proposed</span></div>
                         </div>
                     <% end %>
 					<div class="clear"></div>
@@ -69,10 +69,18 @@
                             <% types = current_user.allowable_notifications %>
                             <% preference = interest.notifications || current_user.notifications %>
                             <% default = types.delete current_user.notifications %>
+							<ul>
+								<li>
                             <%= notification_radio_for default, preference == default, true %>
+								</li>
+
                             <% types.each do |type| %>
+								<li>
                                 <%= notification_radio_for type, preference == type %>
+								</li>
+
                             <% end %>
+							</ul>
                         </form>
                     </div>
 
@@ -81,13 +89,16 @@
                         <span class="okay">okay</span>
                         <span class="failed">not okay</span>
                     </div>
+					<div class="clear"></div>
 
                     <div class="removeSubscription">
                         <input type="checkbox" name="remove" class="remove" />
                         <span>Remove</span>
                         <button class="remove">Yes, remove</button>
+						<div class="clear"></div>
                     </div>
-                </fieldset>
+
+                </div>
             <% end %>
 
         <% else %>

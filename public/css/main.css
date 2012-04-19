@@ -378,7 +378,6 @@ div.contentWrapper{
 
 .contentArea{
     width: 710px;
-    padding-top: 10px;
 }
 
 .sidebar.left{
@@ -616,16 +615,24 @@ footer nav li{
     padding: 16px 10px 16px 33px;
 
 }
-.searchParameters{
-    
+.searchParameters {
+    float: left;
+    width: 515px;
+}
+
+.searchParameters .category{
+    font-weight: bold;
 }
 
 .pageTitle button{
     float: right;
     margin-top: 7px;
 }
-.pageTitle button:hover{
+.searchParameters .filters{
+    color: #83858B;
+    font-style: italic;
 }
+
 .contentArea.right section{
     margin-bottom: 155px;
 }
@@ -748,7 +755,7 @@ time.item, .entry time, .time {
     float: left;
 }
 .no_results {
-    margin-left: 33px;
+    margin: 33px;
 }
 
 
@@ -763,9 +770,6 @@ time.item, .entry time, .time {
 
 }
 
-.searchParameters{
-    float: left;
-}
 
 .followChanges button{
     float: right;
@@ -898,8 +902,9 @@ a.source, .resources{
 
 .subscriptions .searchParameters{
     font-style: italic;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     clear: both;
+    width: 605px;
 }
 .subscriptionsList{
     padding: 33px 0;
@@ -910,18 +915,28 @@ a.source, .resources{
     -mozbox-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
-    padding: 16px 16px;
+    padding: 33px 33px 33px 16px;
     background: url('/images/tinyborder_andshadow.png') top left repeat-x;
     column-break-inside: avoid;
     -moz-column-break-inside: avoid;
     -webkit-column-break-inside: avoid;
     font-weight: normal;
 }
+.subscription .notifications{
+    margin-top: 10px;
+}
 .subscription h3{
-    width: 285px;
+    width: 615px;
+    float: left;
 }
 
-fieldset.subscription div.indicators span {
+.subscription li{
+    list-style-type: none;
+    display: inline;
+    padding-right: 16px;
+}
+
+.subscription div.indicators span {
     display: none;
 }
 
@@ -945,12 +960,6 @@ fieldset.subscription div.indicators span {
     margin-bottom: 155px;
 }
 
-.subscriptions .contentArea form button{
-
-}
-
-.subscriptions .contentArea form button:hover{
-}
 .subscriptions legend{
     font-family: "alternate-gothic-no-3-d", arial, 'helvetica Neue', sans-serif;
     text-transform: uppercase;
@@ -969,9 +978,27 @@ fieldset.subscription div.indicators span {
     font-style: italic;
     margin-top: 10px;
 }
-
+.removeSubscription input, .removeSubscription label{
+    margin: 12px 0 10px 0;
+}
 .removeSubscription button {
     display: none;
+    float: right;
+    height: 36px;
+    font-size: 12px;
+}
+.subscription div.notifications{
+    width: 565px;
+    float: left;
+}
+.subscription div.indicators span.okay{
+    width: 25px;
+    height: 16px;
+    background: url('../images/icon_check.png') top center no-repeat;
+    text-indent: -9999em;
+    display: block;
+    float: right;
+    margin-top: 18px;
 }
 
 

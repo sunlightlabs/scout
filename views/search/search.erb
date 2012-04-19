@@ -29,10 +29,11 @@
 	<!--<% content_for :title do %>-->
 	<!--<% end %>-->
 		<div class="pageTitle">
-		    <div class="follow searchParameters">
+		    <div class="searchParameters">
 		        <h2><%= h query %></h2>
 		        in 
-		        <span><%= subscription.search_name %></span>
+                <span class="category"><%= subscription.search_name %></span> 
+				<div class="filters"><span>112th Congress</span>, <span>Proposed</span></div>
 		    </div>
 
 		    <button class="follow search">
