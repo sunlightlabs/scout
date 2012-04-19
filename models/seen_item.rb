@@ -45,6 +45,22 @@ class SeenItem
     ]
   end
 
+  # take a SeenItem right from an adapter and assign it a particular subscription
+  def assign_to_subscription(subscription)
+    interest_type = search_adapters[subscription.subscription_type] || interest_adapters[subscription.subscription_type]
+    
+    self.attributes = {
+      :subscription => subscription,
+      :subscription_type => subscription.subscription_type,
+      :interest_type => interest_type,
+      :interest_in => subscription.interest_in,
+
+      # the interest and user may not exist yet on the subscription
+      :interest_id => subscription.interest_id,
+      :user_id => subscription.user_id
+    }
+  end
+
   # renders a *hash* suitable for turning into json, 
   # that includes attributes for its parent subscription and interest
   def json_view

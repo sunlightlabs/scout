@@ -106,27 +106,9 @@ module Subscriptions
       items = adapter.items_for response, function, options
 
       if items
-        
         items.map do |item| 
-
-          interest_type = search_adapters[subscription.subscription_type] || interest_adapters[subscription.subscription_type]
-
-          item.attributes = {
-            # store the subscription, duplicate the type
-            :subscription => subscription,
-            :subscription_type => subscription.subscription_type,
-            
-            # store the interest, and duplicate some core fields
-            :interest_id => subscription.interest_id,
-            :interest_in => subscription.interest_in,
-            :interest_type => interest_type,
-
-            :user_id => subscription.user_id,
-
-            # insert a reference to the URL this result was found in  
-            :search_url => url
-          }
-
+          item.assign_to_subscription subscription
+          item.search_url = url
           item
         end
       else

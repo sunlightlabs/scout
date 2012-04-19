@@ -34,6 +34,7 @@ module TestHelper
       
       Interest.destroy_all
       Subscription.destroy_all
+      
       Delivery.destroy_all
       Receipt.destroy_all
 
