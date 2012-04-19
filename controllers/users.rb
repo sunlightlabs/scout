@@ -2,7 +2,7 @@
 
 get '/logout' do
   log_out if logged_in?
-  redirect '/'
+  redirect_back_or '/'
 end
 
 get '/login' do

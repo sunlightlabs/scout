@@ -1,5 +1,8 @@
 $(function() {
 
+  // login link should always point to redirect back
+  $("a.login, a.logout").attr("href", $("a.login, a.logout").attr("href") + "?redirect=" + window.location.pathname + window.location.hash);    
+
   // anything being bound on something that can be pjax'ed 
   // needs to use the #contentWrapper as the parent
   $("#content").on("click", "a[data-pjax]", function() {

@@ -62,6 +62,15 @@ class AccountsTest < Test::Unit::TestCase
     assert_equal '/', redirect_path
   end
 
+  def test_logout_redirects_back
+    get '/logout'
+    assert_redirect '/'
+    
+    redirect = "/search/federal_bills/anything"
+    get '/logout', :redirect => redirect
+    assert_redirect redirect
+  end
+
   def test_create_user
     email = "fake@example.com"
     assert_nil User.where(:email => email).first
