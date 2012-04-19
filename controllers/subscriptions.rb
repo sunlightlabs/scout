@@ -1,7 +1,7 @@
 # search results
 
 get '/search/:subscription_types/?:query?' do
-  query = params[:query] ? params[:query].gsub("\"", "") : nil
+  query = stripped_query
 
   types = params[:subscription_types].split(",").select {|type| search_adapters.keys.include?(type)}
   subscriptions = types.map {|type| subscription_for type}
@@ -16,7 +16,7 @@ get '/search/:subscription_types/?:query?' do
 end
 
 get '/fetch/search/:subscription_type/?:query?' do
-  query = params[:query] ? params[:query].strip : nil
+  query = stripped_query
   subscription_type = params[:subscription_type]
 
   subscription = subscription_for subscription_type
@@ -32,26 +32,18 @@ get '/fetch/search/:subscription_type/?:query?' do
     puts "[#{subscription_type}][#{interest_in}][search] ERROR while loading this"
   end
   
-  html = erb :"search/items", :layout => false, :locals => {
+  erb :"search/items", :layout => false, :locals => {
     :items => results, 
     :subscription => subscription,
     :query => query,
     :sole => (per_page > 5)
   }
-
-  headers["Content-Type"] = "application/json"
-  
-  count = results ? results.size : -1
-  {
-    :count => count,
-    :html => html
-  }.to_json
 end
 
 post '/subscriptions' do
   requires_login
 
-  query = params[:query] ? params[:query].strip : nil
+  query = stripped_query
   subscription_type = params[:subscription_type]
 
   subscription = subscription_for subscription_type
@@ -72,7 +64,14 @@ post '/subscriptions' do
     
     halt 200
   else
-    halt 500
+    headers["Content-Type"] = "application/json"
+    status 500
+    {
+      :errors => {
+        :interest => interest.errors.full_messages,
+        :subscription => subscription.errors.full_messages
+      }
+    }.to_json
   end
 end
 
@@ -80,7 +79,7 @@ end
 delete '/subscriptions' do
   requires_login
 
-  query = params[:query] ? params[:query].strip : nil
+  query = stripped_query
   subscription_type = params[:subscription_type]
 
   subscription = subscription_for subscription_type
@@ -178,7 +177,7 @@ helpers do
   # initializes a subscription of the given type, or, 
   # if the user is logged in, finds any existing one
   def subscription_for(subscription_type)
-    query = params[:query] ? params[:query].gsub("\"", "") : nil
+    query = stripped_query
 
     data = (params[subscription_type] || {}).merge('query' => query)
 
@@ -203,4 +202,7 @@ helpers do
     end
   end
 
+  def stripped_query
+    params[:query] ? URI.decode(params[:query].strip.gsub("\"", "")) : nil
+  end
 end

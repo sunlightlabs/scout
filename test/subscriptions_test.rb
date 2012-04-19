@@ -60,6 +60,31 @@ class SubscriptionsTest < Test::Unit::TestCase
     assert_equal 4, user.interests.count
   end
 
+  def test_subscribe_decodes_query
+    user = new_user!
+    query_encoded = "sunlight%20foundation"
+    query_decoded = "sunlight foundation"
+    
+    assert_equal 0, user.subscriptions.count
+    assert_equal 0, user.interests.count
+
+    post "/subscriptions", {:subscription_type => "federal_bills", :query => query_encoded}, login(user)
+    assert_response 200
+
+    assert_equal 1, user.subscriptions.count
+    assert_equal 1, user.interests.count
+
+    assert_equal query_decoded, user.subscriptions.first.interest_in
+    assert_equal query_decoded, user.interests.first.in
+
+    # should have it decoded by the dupe detection step
+    post "/subscriptions", {:subscription_type => "federal_bills", :query => query_decoded}, login(user)
+    assert_response 200
+
+    assert_equal 1, user.subscriptions.count
+    assert_equal 1, user.interests.count
+  end
+
   def test_unsubscribe_from_individual_searches
     user = new_user!
     query1 = "environment"
