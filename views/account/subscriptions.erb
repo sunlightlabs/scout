@@ -116,7 +116,7 @@
     });
 
     $("button.remove").click(function() {
-        var container = $(this).parents("fieldset.subscription");
+        var container = $(this).parents(".subscription");
         var interest_id = container.data("id");
 
         container.find(".indicators span").hide();
@@ -132,7 +132,7 @@
     });
 
     $("input.notifications").change(function() {
-        var container = $(this).parents("fieldset.subscription");
+        var container = $(this).parents(".subscription");
         var interest_id = container.data("id");
 
         var notifications = container.find("input[name=notifications]:checked").val();
