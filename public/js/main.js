@@ -1,7 +1,9 @@
 $(function() {
 
   // login link should always point to redirect back
-  $("a.login, a.logout").attr("href", $("a.login, a.logout").attr("href") + "?redirect=" + window.location.pathname + window.location.hash);    
+  var queryString = window.location.href.replace(window.location.origin + window.location.pathname, "");
+  var pathQuery = window.location.pathname + queryString;
+  $("a.login, a.logout").attr("href", $("a.login, a.logout").attr("href") + "?redirect=" + pathQuery);
 
   // anything being bound on something that can be pjax'ed 
   // needs to use the #contentWrapper as the parent
