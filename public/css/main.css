@@ -980,13 +980,15 @@ a.source, .resources{
     margin-top: 10px;
 }
 .removeSubscription input, .removeSubscription label{
-    margin: 12px 0 10px 0;
+    margin: 7px 0 7px 0;
 }
 .removeSubscription button {
     display: none;
     float: right;
     height: 36px;
     font-size: 12px;
+    height: 24px;
+    border: 0;
 }
 .subscription div.notifications{
     width: 565px;
@@ -996,22 +998,25 @@ a.source, .resources{
     width: 25px;
     height: 16px;
     background: url('../images/icon_check.png') top center no-repeat;
-    text-indent: -9999em;
-    display: block;
-    float: right;
     margin-top: 18px;
+}
+.subscription div.indicators span.spinning{
+    width: 25px;
+    height: 16px;
+    background: url('../images/loader-32.gif') top center no-repeat;
+    background-size: 16px 16px;
+    margin-top: 18px;    
 }
 .subscription div.indicators span.failed{
     width: 16px;
     height: 16px;
     background: url('../images/icon_error.png') top center no-repeat;
-    text-indent: -9999em;
-    display: block;
-    float: right;
     margin-top: 18px;
 }
 .subscription div.indicators span {
     display: none;
+    text-indent: -9999em;
+    float: right;
 }
 
 
