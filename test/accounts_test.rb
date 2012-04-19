@@ -66,12 +66,14 @@ class AccountsTest < Test::Unit::TestCase
     email = "fake@example.com"
     assert_nil User.where(:email => email).first
 
-    post '/account/new', {:user => {:email => email, :password => "test", :password_confirmation => "test"}}
+    post '/account/new', {:user => {:email => email, :password => "test", :password_confirmation => "test", :announcements => false, :sunlight_announcements => true}}
     assert_redirect '/account/settings'
 
     user = User.where(:email => email).first
     assert_not_nil user
     assert User.authenticate(user, "test")
+    assert !user.announcements
+    assert user.sunlight_announcements
   end
 
   def test_create_user_redirects_back

@@ -200,7 +200,6 @@ end
 
 helpers do
   def redirect_back_or(path)
-    p params
     redirect(params[:redirect].present? ? params[:redirect] : path)
   end
   
