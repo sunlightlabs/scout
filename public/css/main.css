@@ -637,6 +637,7 @@ footer nav li{
 .searchParameters .filters{
     color: #83858B;
     font-style: italic;
+    margin-top: 3px;
 }
 
 .contentArea.right section{
@@ -682,6 +683,7 @@ footer nav li{
 }
 .items{
     margin-top: -2px;
+    background: url('../images/tinyborder_andshadow.png') center bottom repeat-x;
 }
 time.item, .entry time, .time {   
     font-style: italic;
@@ -860,11 +862,10 @@ a.source {
     float: right;
 }
 a.source, .resources{
-    padding-top: 5px;
+    padding-top: 14px;
     margin-bottom: 20px;
 }
 .entryHeader{
-    width: 510px;
     float: left;
 }
 .entry .details{
