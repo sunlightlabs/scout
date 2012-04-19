@@ -47,7 +47,7 @@
             <% interests.each do |interest| %>
                 <div class="subscription" data-id="<%= interest.id %>">
                     
-                    <h3><%= interest_name interest %></h3>
+                    <h3><%= interest_name interest, true %></h3>
 
                     <a class="rss feed" href="/interest/<%= interest.id %>.rss">RSS</a>
                     <% if developer_mode? %>

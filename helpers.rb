@@ -119,11 +119,11 @@ module GeneralHelpers
       "http://#{config[:hostname]}#{item_path item}"
     end
 
-  def interest_name(interest)
+  def interest_name(interest, quotes = false)
     if interest.item?
       Subscription.adapter_for(interest_data[interest.interest_type][:adapter]).interest_name(interest)
     else
-      interest.in
+      quotes ? "\"#{interest.in}\"" : interest.in
     end
   end
 
