@@ -925,16 +925,22 @@ fieldset.subscription div.indicators span {
     display: none;
 }
 
-.rssFeed{
+.feed {
     float: right;
-    background: url('/images/rss.png') left top no-repeat;
     width: 22px;
     height: 22px;
+}
+
+.rss.feed{
+    background: url('/images/rss.png') left top no-repeat;
     text-indent: -9999em;
 }
-.rssFeed:hover{
+
+.rss.feed:hover{
     background: url('/images/rss.png') left bottom no-repeat;
+    text-indent: -9999em;
 }
+
 .subscriptions .contentArea form{
     margin-bottom: 155px;
 }

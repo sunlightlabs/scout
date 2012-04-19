@@ -4,8 +4,19 @@
 
 <% content_for :sidebar_right do %>
     <div class="module rss cluster">
-        <h4>Combined Feed <a class="rssFeed" href="/account/<%= current_user.id %>.rss">RSS</a></h4>
-        <small>A combined RSS feed of updates on everything you follow.</small>
+        <h4>
+            Combined Feed
+
+            <% if developer_mode? %>    
+                <a class="json feed" href="/account/<%= current_user.id %>.json">JSON</a>
+            <% end %>
+            <a class="rss feed" href="/account/<%= current_user.id %>.rss">RSS</a>
+        </h4>
+        <% if developer_mode? %>
+            <small>Combined RSS and JSON feeds of updates on everything you follow.</small>
+        <% else %>
+            <small>A combined RSS feed of updates on everything you follow.</small>
+        <% end %>
     </div>
 
     <%= recent_searches %>
@@ -40,7 +51,10 @@
                     
                     <h3><%= interest_name interest %></h3>
 
-                    <a class="rssFeed" href="/interest/<%= interest.id %>.rss">RSS</a>
+                    <a class="rss feed" href="/interest/<%= interest.id %>.rss">RSS</a>
+                    <% if developer_mode? %>
+                        <a class="json feed" href="/interest/<%= interest.id %>.json">JSON</a>
+                    <% end %>
 
                     <% if interest.search? %>
                         <% subscription = interest.subscriptions.first %>
