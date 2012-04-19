@@ -1,9 +1,7 @@
 $(function() {
 
   // login link should always point to redirect back
-  var queryString = window.location.href.replace(window.location.origin + window.location.pathname, "");
-  var pathQuery = window.location.pathname + queryString;
-  $("a.login, a.logout").attr("href", $("a.login, a.logout").attr("href") + "?redirect=" + pathQuery);
+  $("a.login, a.logout").attr("href", $("a.login, a.logout").attr("href") + "?redirect=" + Utils.currentPath());
 
   // anything being bound on something that can be pjax'ed 
   // needs to use the #contentWrapper as the parent
@@ -75,5 +73,11 @@ var Utils = {
           }, 
           timeout: 5000
       });
+    },
+
+    // returns a path string suitable for redirects back to this location
+    currentPath: function() {
+      var queryString = window.location.href.replace(window.location.origin + window.location.pathname, "");
+      return window.location.pathname + queryString;
     }
 };
