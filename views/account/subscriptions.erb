@@ -6,11 +6,10 @@
     <div class="module rss cluster">
         <h4>
             Combined Feed
-
+            <a class="rss feed" href="/account/<%= current_user.id %>.rss">RSS</a>
             <% if developer_mode? %>    
                 <a class="json feed" href="/account/<%= current_user.id %>.json">JSON</a>
             <% end %>
-            <a class="rss feed" href="/account/<%= current_user.id %>.rss">RSS</a>
         </h4>
         <% if developer_mode? %>
             <small>Combined RSS and JSON feeds of updates on everything you follow.</small>
@@ -23,21 +22,21 @@
 <% end %>
 
 <div class="contentArea left">
+	<div class="pageTitle">
+	    <p class="default">
+	        <% if current_user.notifications == "none" %>
+	            Your default notification preference is <strong>off, feeds only</strong>.
+	        <% elsif current_user.notifications == "email_immediate" %>
+	            Your default notification preference is <strong>email immediately</strong>.
+	        <% elsif current_user.notifications == "email_daily" %>
+	            Your default notification preference is <strong>a single daily email</strong>.
+	        <% else %>
+	            Your default notification preference is unknown(?).
+	        <% end %>
 
-    <p>
-        <% if current_user.notifications == "none" %>
-            Your default notification preference is <strong>off, feeds only</strong>.
-        <% elsif current_user.notifications == "email_immediate" %>
-            Your default notification preference is <strong>email immediately</strong>.
-        <% elsif current_user.notifications == "email_daily" %>
-            Your default notification preference is <strong>a single daily email</strong>.
-        <% else %>
-            Your default notification preference is unknown(?).
-        <% end %>
-
-        <a href="/account/settings">Change</a>
-    </p>
-
+	        <a href="/account/settings">Change</a>
+	    </p>
+	</div>
 
 
     <div class="subscriptionsList">

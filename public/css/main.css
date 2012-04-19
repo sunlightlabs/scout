@@ -176,7 +176,9 @@ ul{
 li {
     list-style-type: disc;
 }
-
+strong {
+    font-weight: bold;
+}
 
 
 
@@ -612,13 +614,22 @@ footer nav li{
     background: url('/images/tinyshadow.png') top left repeat-x;
     
 }
-.pageTitle{
+.right .pageTitle{
     background: #f5f6f3 url('/images/tinyborder.png') bottom left repeat-x;
     padding: 16px 10px 16px 0;
     -webkit-box-shadow: inset 14px 0px 14px -7px #e2e3e0;
     -moz-box-shadow: inset 14px 0px 14px -7px #e2e3e0;
     box-shadow: inset 14px 0px 14px -7px #e2e3e0;
     padding: 16px 10px 16px 33px;
+
+}
+.left .pageTitle{
+    background: #f5f6f3 url('/images/tinyborder.png') bottom left repeat-x;
+    padding: 16px 0 16px 10px;
+    -webkit-box-shadow: inset -14px 0px 14px -7px #e2e3e0;
+    -moz-box-shadow: inset -14px 0px 14px -7px #e2e3e0;
+    box-shadow: inset -14px 0px 14px -7px #e2e3e0;
+    padding: 16px 33px 16px 10px;
 
 }
 .searchParameters {
@@ -797,10 +808,6 @@ button.item.follow, button.item.following {
     font-style: italic;
 }
 
-.followChanges .trackSubscribe strong {
-    font-weight: bold;
-}
-
 .entry .summary, .entry .details {
     padding: 0 33px 0 10px;
 }
@@ -911,7 +918,9 @@ a.source, .resources{
 
 
 /*-- Subscriptions Styling --*/
-
+.default{
+    margin-top: 10px;
+}
 .subscriptions .searchParameters{
     font-style: italic;
     margin-bottom: 20px;
@@ -919,10 +928,8 @@ a.source, .resources{
     width: 565pxpx;
 }
 .subscriptionsList{
-    padding: 33px 0;
+    margin: -2px 0 33px 0;
 }
-
-
 .subscription{
     -mozbox-sizing: border-box;
     -webkit-box-sizing: border-box;
@@ -947,15 +954,16 @@ a.source, .resources{
     display: inline;
     padding-right: 16px;
 }
-
-
-
 .feed {
     float: right;
 }
-.json.feed{
+.subscription .json.feed{
     margin-right: 10px;
     margin-top: 3px;
+}
+.sidebar .json.feed{
+    margin-right: 10px;
+    margin-top: 0;
 }
 .rss.feed{
     background: url('/images/rss.png') left top no-repeat;
@@ -963,16 +971,13 @@ a.source, .resources{
     width: 22px;
     height: 22px;
 }
-
 .rss.feed:hover{
     background: url('/images/rss.png') left bottom no-repeat;
     text-indent: -9999em;
 }
-
 .subscriptions .contentArea form{
     margin-bottom: 155px;
 }
-
 .subscriptions legend{
     font-family: "alternate-gothic-no-3-d", arial, 'helvetica Neue', sans-serif;
     text-transform: uppercase;
@@ -981,7 +986,6 @@ a.source, .resources{
     -webkit-padding-start: 0;
     -webkit-padding-end: 0;
 }
-
 .removeSubscription{
     border: 1px solid #dcddda;
     background-color: #f5f6f3;
