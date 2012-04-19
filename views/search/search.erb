@@ -38,9 +38,13 @@
 		        <h2>'<%= h query %>'</h2>
 		        in 
             <span class="category"><%= subscription.search_name %></span> 
-				    <div class="filters">
-              <span>112th Congress</span>, <span>Proposed</span>
-            </div>
+            <% if subscription.filters.any? %>
+  				    <div class="filters">
+                <%= subscription.filters.map do |field, value|
+                  "<span>#{subscription.filter_name field, value}</span>"
+                end.join(", ") %>
+              </div>
+            <% end %>
 		    </div>
 
 		    <button class="follow search">
@@ -80,18 +84,14 @@
 <script type="text/javascript">
   
   $(function() {
-    initializeTitle();
+    initializeDeveloper();
     initializeFilters();
     initializeControls();
     search();
   });
 
-  function initializeTitle() {
-    $("div.searchParameters h2").html("\'<%= h query %>\'");
-    $("div.searchParameters span.category").html("<%= h subscription.search_name %>");
-    <% if developer_mode? %>
-      $("div.json.developer a").attr("href","<%= developer_url subscription %>");
-    <% end %>
+  function initializeDeveloper() {
+    $("div.json.developer a").attr("href","<%= developer_url subscription %>");
   }
 
   // initializes both the sidebar form filters, and the top search form
@@ -103,7 +103,7 @@
     $("form.filters .filter_control").val("");
 
     // then, initialize according to the query string
-    <% (params[subscription.subscription_type] || {}).each do |key, value| %>
+    <% subscription.filters.each do |key, value| %>
       $("form.filters input[name=<%= key %>], form.filters select[name=<%=key %>]").val("<%= value %>");
     <% end %>
   }
@@ -124,7 +124,7 @@
       $("button.follow").off("click").click(follow);
       $("button.following").off("click").click(unfollow);
     <% else %>
-      $("button.follow").off("click").click(function() {window.location = "/login?redirect=" + window.location.pathname;});
+      $("button.follow").off("click").click(function() {window.location = "/login?redirect=" + Utils.currentPath();});
       $("button.following").off("click");
     <% end %>
 

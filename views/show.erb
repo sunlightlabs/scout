@@ -68,7 +68,7 @@
       $("button.follow").off("click").click(follow);
       $("button.following").off("click").click(unfollow);
     <% else %>
-      $("button.follow").off("click").click(function() {window.location = "/login?redirect=" + window.location.pathname;});
+      $("button.follow").off("click").click(function() {window.location = "/login?redirect=" + Utils.currentPath();});
       $("button.following").off("click");
     <% end %>
   }

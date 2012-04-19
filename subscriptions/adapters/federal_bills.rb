@@ -5,8 +5,13 @@ module Subscriptions
 
       def self.filters
         {
-          "session" => {:search_only => true},
-          "stage" => {}
+          "session" => {
+            :search_only => true, 
+            :name => lambda {|v| "#{v.to_i.ordinalize} Congress"}
+          },
+          "stage" => {
+            :name => lambda {|v| v.split("_").map(&:capitalize).join " "}
+          }
         }
       end
 

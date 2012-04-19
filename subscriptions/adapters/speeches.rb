@@ -2,6 +2,17 @@ module Subscriptions
   module Adapters
 
     class Speeches
+
+      def self.filters
+        {
+          "state" => {
+            :name => lambda {|code| StateBills.state_map[code]}
+          },
+          "party" => {
+            :name => lambda {|party| party_map[party]}
+          }
+        }
+      end
       
       def self.url_for(subscription, function, options = {})
         api_key = options[:api_key] || config[:subscriptions][:sunlight_api_key]
@@ -94,6 +105,14 @@ module Subscriptions
       def self.noon_utc_for(date)
         time = date.to_time
         time.getutc + (12-time.getutc.hour).hours
+      end
+
+      def self.party_map
+        @party_map ||= {
+          "R" => "Republican",
+          "D" => "Democrat",
+          "I" => "Independent"
+        }
       end
       
     end

@@ -29,7 +29,7 @@ get '/fetch/search/:subscription_type/?:query?' do
     
   # if results is nil, it usually indicates an error in one of the remote services
   if results.nil?
-    puts "[#{subscription_type}][#{interest_in}][search] ERROR while loading this"
+    puts "[#{subscription_type}][#{query}][search] ERROR while loading this"
   end
   
   erb :"search/items", :layout => false, :locals => {

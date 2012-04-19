@@ -64,6 +64,16 @@ class Subscription
     adapter.url_for self, :search, options
   end
 
+  # convenience method - the 'data' field, but minus the 'query' field
+  def filters
+    fields = data.dup
+    fields.delete 'query'
+    fields
+  end
+
+  def filter_name(field, value)
+    adapter.filters[field.to_s][:name].call value
+  end
   
   # what fields are acceptable to syndicated through JSON
   def self.public_json_fields
