@@ -18,7 +18,7 @@ post '/login' do
 
   if User.authenticate(user, params[:password])
     log_in user
-    redirect '/'
+    redirect_back_or '/'
   else
     flash.now[:user] = "Invalid password."
     @new_user = User.new
@@ -39,7 +39,7 @@ post '/account/new' do
     log_in @new_user
 
     flash[:success] = "Your account has been created."
-    redirect "/account/settings"
+    redirect_back_or '/account/settings'
   else
     erb :"account/login"
   end
@@ -48,7 +48,7 @@ end
 post '/account/password/forgot' do
   unless params[:email] and user = User.where(:email => params[:email].strip).first
     flash[:forgot] = "No account found by that email."
-    redirect_home and return
+    redirect "/login" and return
   end
 
   # issue a new reset token
@@ -60,11 +60,11 @@ post '/account/password/forgot' do
 
   unless user.save and Email.deliver!("Password Reset Request", user.email, subject, body)
     flash[:forgot] = "Your account was found, but there was an error actually sending the reset password email. Try again later, or write us and we can try to figure out what happened."
-    redirect_home and return
+    redirect "/login" and return
   end
 
   flash[:forgot] = "We've sent an email to reset your password."
-  redirect_home
+  redirect "/login"
 end
 
 
@@ -106,7 +106,7 @@ get '/account/password/reset' do
   user.new_reset_token
   unless user.save
     flash[:forgot] = "There was an error issuing you a new password. Please contact us for support."
-    redirect_home and return
+    redirect "/login" and return
   end
 
   # send the next email with the new password
@@ -116,11 +116,11 @@ get '/account/password/reset' do
 
   unless Email.deliver!("Password Reset", user.email, subject, body)
     flash[:forgot] = "There was an error emailing you a new password. Please contact us for support."
-    redirect_home and return
+    redirect "/login" and return
   end
 
   flash[:forgot] = "Your password has been reset, and a new one has been emailed to you."
-  redirect_home
+  redirect "/login"
 end
 
 put '/account/settings' do
@@ -199,8 +199,8 @@ end
 # login helpers
 
 helpers do
-  def redirect_home(default = '/login')
-    redirect(params[:redirect] || default)
+  def redirect_back_or(path)
+    redirect(params[:redirect] || path)
   end
   
   def log_in(user)

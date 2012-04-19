@@ -12,14 +12,23 @@ class AccountsTest < Test::Unit::TestCase
     assert !user.should_change_password
 
     post '/login', :email => email, :password => password
+    assert_redirect "/"
+
     user.reload
-
     assert !user.should_change_password
-
-    assert_equal 302, last_response.status
-    assert_equal '/', redirect_path
-    
   end
+
+  def test_login_redirects_back
+    email = "test@example.com"
+    password = "test"
+    user = new_user! :email => email, :password => password, :password_confirmation => password
+
+    redirect = "/search/federal_bills/anything"
+
+    post '/login', :email => email, :password => password, :redirect => redirect
+    assert_redirect redirect
+  end
+
 
   def test_login_invalid
     email = "test@example.com"
@@ -58,15 +67,21 @@ class AccountsTest < Test::Unit::TestCase
     assert_nil User.where(:email => email).first
 
     post '/account/new', {:user => {:email => email, :password => "test", :password_confirmation => "test"}}
+    assert_redirect '/account/settings'
 
     user = User.where(:email => email).first
     assert_not_nil user
-
     assert User.authenticate(user, "test")
-    user.delete
+  end
 
-    assert_equal 302, last_response.status
-    assert_equal '/account/settings', redirect_path
+  def test_create_user_redirects_back
+    email = "fake@example.com"
+    assert_nil User.where(:email => email).first
+
+    redirect = "/search/federal_bills/anything"
+
+    post '/account/new', {:user => {:email => email, :password => "test", :password_confirmation => "test"}, :redirect => redirect}
+    assert_redirect redirect
   end
 
   def test_create_user_invalid
