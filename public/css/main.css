@@ -904,7 +904,7 @@ a.source, .resources{
     font-style: italic;
     margin-bottom: 20px;
     clear: both;
-    width: 605px;
+    width: 565pxpx;
 }
 .subscriptionsList{
     padding: 33px 0;
@@ -926,7 +926,7 @@ a.source, .resources{
     margin-top: 10px;
 }
 .subscription h3{
-    width: 615px;
+    width: 565px;
     float: left;
 }
 
@@ -936,19 +936,20 @@ a.source, .resources{
     padding-right: 16px;
 }
 
-.subscription div.indicators span {
-    display: none;
-}
+
 
 .feed {
     float: right;
-    width: 22px;
-    height: 22px;
 }
-
+.json.feed{
+    margin-right: 10px;
+    margin-top: 3px;
+}
 .rss.feed{
     background: url('/images/rss.png') left top no-repeat;
     text-indent: -9999em;
+    width: 22px;
+    height: 22px;
 }
 
 .rss.feed:hover{
@@ -999,6 +1000,18 @@ a.source, .resources{
     display: block;
     float: right;
     margin-top: 18px;
+}
+.subscription div.indicators span.failed{
+    width: 16px;
+    height: 16px;
+    background: url('../images/icon_error.png') top center no-repeat;
+    text-indent: -9999em;
+    display: block;
+    float: right;
+    margin-top: 18px;
+}
+.subscription div.indicators span {
+    display: none;
 }
 
 
