@@ -1,15 +1,20 @@
-<label for="state">State</label>
-<select name="state" class="filter_control">
-  <option value="">-- All States --</option>
-  <% state_map.keys.sort.each do |code| %>
-      <option value="<%= code %>"><%= state_map[code] %></option>
-  <% end %>
-</select>
-
-<label for="party">Party</label>
-<select name="party" class="filter_control">
-  <option value="">-- All Parties --</option>
-  <option value="R">Republican</option>
-  <option value="D">Democrat</option>
-  <option value="I">Independent</option>
-</select>
+<ul>
+	<li>
+		<label for="state">State</label>
+		<select name="state" class="filter_control">
+		  <option value="">-- All States --</option>
+		  <% state_map.keys.sort.each do |code| %>
+		      <option value="<%= code %>"><%= state_map[code] %></option>
+		  <% end %>
+		</select>
+	</li>
+	<li>
+		<label for="party">Party</label>
+		<select name="party" class="filter_control">
+		  <option value="">-- All Parties --</option>
+		  <option value="R">Republican</option>
+		  <option value="D">Democrat</option>
+		  <option value="I">Independent</option>
+		</select>
+	</li>
+</ul>
