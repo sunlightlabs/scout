@@ -60,6 +60,23 @@ class SubscriptionsTest < Test::Unit::TestCase
     assert_equal 4, user.interests.count
   end
 
+  # def test_subscribe_without_keyword
+  #   user = new_user!
+    
+  #   assert_equal 0, user.subscriptions.count
+  #   assert_equal 0, user.interests.count
+
+  #   post "/subscriptions", {:subscription_type => "federal_bills", "federal_bills" => {"stage" => "enacted"}}, login(user)
+  #   assert_response 200
+
+  #   assert_equal 1, user.subscriptions.count
+  #   assert_equal 1, user.interests.count
+
+  #   assert_nil user.interests.first.in
+  #   assert_equal query, user.subscriptions.first.interest_in
+  #   assert_equal "federal_bills", user.subscriptions.first.subscription_type
+  # end
+
   def test_subscribe_decodes_query
     user = new_user!
     query_encoded = "sunlight%20foundation"

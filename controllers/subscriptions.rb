@@ -179,7 +179,11 @@ helpers do
   def subscription_for(subscription_type)
     query = stripped_query
 
-    data = (params[subscription_type] || {}).merge('query' => query)
+    data = params[subscription_type] || {}
+    
+    if query
+      data = data.merge('query' => query)
+    end
 
     criteria = {
       :interest_in => query,
