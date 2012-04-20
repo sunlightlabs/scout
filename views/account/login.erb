@@ -1,8 +1,31 @@
 <% content_for :sidebar_right do %>
-    <div></div>
+    <div class="module notifications">
+
+    <h4>Forgot Password?</h4>
+	    <form action="/account/password/forgot" method="post" class="signup_form">
+	        <input class="redirect" name="redirect" type="hidden" value="<%= params[:redirect] %>" />
+
+	        <input class="email" type="email" placeholder="your email" name="email" />
+        
+	        <button class="text login smallButton">OK</button>
+	    </form>
+	</div>
 <% end %>
 
 <div class="settings contentArea left">
+
+    <div class="module notifications">
+
+	    <h2>Login</h2>
+	    <form action="/login" method="post" class="signup_form">
+	        <input class="redirect" name="redirect" type="hidden" value="<%= params[:redirect] %>" />
+
+	        <input class="email" type="email" placeholder="your email" name="email" />
+	        <input class="password" type="password" placeholder="password" name="password" />
+        
+	        <button class="text login">OK</button>
+	    </form>
+	</div>
 
     <%= flash_for [:user, :forgot] %>
 	<div class="module notifications">
@@ -36,28 +59,5 @@
 	        <button class="text login">OK</button>
 	    </form>
 	    <% end %>
-	</div>
-    <div class="module notifications">
-
-	    <h2>Login</h2>
-	    <form action="/login" method="post" class="signup_form">
-	        <input class="redirect" name="redirect" type="hidden" value="<%= params[:redirect] %>" />
-
-	        <input class="email" type="email" placeholder="your email" name="email" />
-	        <input class="password" type="password" placeholder="password" name="password" />
-        
-	        <button class="text login">OK</button>
-	    </form>
-	</div>
-    <div class="module notifications">
-
-    <h2>Forgot Password</h2>
-	    <form action="/account/password/forgot" method="post" class="signup_form">
-	        <input class="redirect" name="redirect" type="hidden" value="<%= params[:redirect] %>" />
-
-	        <input class="email" type="email" placeholder="your email" name="email" />
-        
-	        <button class="text login">OK</button>
-	    </form>
 	</div>
 </div>

@@ -258,7 +258,7 @@ header h1{
 #search_form{
     float: right;
     margin-top: 72px;
-    width: 468px;
+    width: 474px;
 }
 #search_form div{
     float: left;
@@ -1044,51 +1044,79 @@ a.source, .resources{
 
 /*-- Settings Styling --*/
 
-.user_settings.contentArea form input[type="text"], .user_settings.contentArea form input[type="password"]{
+.user.settings.contentArea form input[type="text"], .user.settings.contentArea form input[type="password"]{
     width: 50%;
 }
-.user_settings.contentArea form ul{
+.settings.contentArea form input[type="text"], .settings.contentArea form input[type="password"], .settings.contentArea form input[type="email"], .settings.contentArea form.phone input[type="text"] {
+    width: 100%;
+    height: 30px;
+}
+.settings.contentArea .module.phoneSettings{
+    background: none;
+    padding-left: 33px;
+    padding-right: 0;
+}
+.settings.contentArea .module.notifications{
+    background: url('../images/tinyborder_andshadow_vertical.png') right top repeat-y;
+}
+.settings li, .settings label{
+    list-style-type: none;
+    display: block;
 }
 
-.user_settings.contentArea form li{
-    column-break-inside: avoid;
-    -moz-column-break-inside: avoid;
-    -webkit-column-break-inside: avoid;
-}
-li.email{
-    -moz-column-span: all;
-    -webkit-column-span: all;
-    column-span: all;
-}
-.user_settings.contentArea form input{
+.settings.contentArea form input{
     margin-bottom: 16px;
 }
-.user_settings.contentArea label span{
+.settings.contentArea label span{
     font-weight: normal;
 }
-.user_settings.contentArea form small{
+.settings.contentArea form small{
     font-style: italic;
     font-weight: normal;
     display: block;
 }
 
-.user_settings .phone_settings {
+.settings .phone_settings {
     display: none;
 }
-.user_settings.contentArea .module, .settings.contentArea .module{
+.settings.contentArea .module{
     background: url('/images/tinyborder.png') center bottom repeat-x;
     padding: 33px 33px 33px 10px;
 }
-.user_settings form{
-    margin-right: 33px;
+.settings.contentArea .module{
+    background: url('/images/tinyborder.png') center bottom repeat-x;
+    padding: 33px 33px 33px 10px;
+    width: 50%;
+    float: left;
+    -mozbox-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
 }
-.user_settings h2{
-    margin-bottom: 16px;
-}
-.user_settings .module ul{
+.user.settings.contentArea .module.passwordChange, .user.settings.contentArea .module.allNotifications, .user.settings.contentArea .module.developer_mode{
     width: 100%;
 }
 
+.settings h2{
+    margin-bottom: 16px;
+}
+.settings .module ul{
+    width: 100%;
+}
+.developer_mode li{
+    list-style-type: disc;
+    margin-left: 30px;
+    margin-bottom: 10px;
+}
+.phone button{
+    float: left;
+}
+.phone.resend {
+    float: right;
+}
+
+.settings #flash div.flash{
+    padding: 0;
+}
 
 
 /*-- Notification Styling --*/

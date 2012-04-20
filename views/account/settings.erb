@@ -34,11 +34,12 @@
 
 <% end %>
 
-<div class="contentArea left user_settings">
+<div class="contentArea left user settings">
   <%= flash_for [:user] %>
   <%= errors_for user %>
 
-    <div class="module notifications">
+    <div class="module allNotifications">
+		<div class="module notifications">
 	    <h2>Notifications</h2>
 	    <% form_for user, "/account/settings", :method => "put" do |f| %>
 		<fieldset>
@@ -77,65 +78,67 @@
       </label>
 		</fieldset>
 
-    <button type="submit">
-        <span>OK</span>
-    </button>
+	    <button type="submit">
+	        <span>OK</span>
+	    </button>
 
-    <% end %>
+	    <% end %>
+		</div>
+		<div class="module phoneSettings">
+
+		    <h2>SMS</h2>
+
+		    <%= flash_for [:phone] %>
+
+		    <div class="confirmed phone_settings">
+		        <span>
+		            <%= user.phone %> <strong>(Verified)</strong>
+		        </span>
+		        <a href="#" class="dismiss phone">
+		            Change
+		        </a>
+		    </div>
+
+		    <div class="unconfirmed phone_settings">
+		        <span>
+		            <%= user.phone %> (Unverified)
+		        </span>
+		        <p>
+		            To confirm your phone number, Enter the verification code we sent you.
+		        </p>
+
+		        <form class="phone verify" action="/account/phone/confirm" method="post">
+		            <%= text_field_tag "phone_verify_code" %>
+		             <button type="submit">
+		                <span>Verify</span>
+		            </button>
+		        </form>
+
+		        <form class="phone resend" action="/account/phone/resend" method="post">
+		            <button type="submit">
+		                <span>Resend Code</span>
+		            </button>
+		        </form>
+		    </div>
+
+		    <div class="none phone_settings">
+		        <p>
+		            If you provide a phone number, you can turn on SMS notifications for your subscriptions. We'll send you a text message to confirm.
+		        </p>
+
+		        <% form_for user, "/account/phone", :method => "put" do |f| %>
+		            <%= f.label :phone %>
+		            <%= f.text_field :phone %>
+
+		            <button type="submit">
+		                <span>Add Phone Number</span>
+		            </button>
+		        <% end %>
+		    </div>
+		</div>
     </div>
 	
-    <div class="module phoneSettings">
 
-	    <h2>SMS</h2>
-
-	    <%= flash_for [:phone] %>
-
-	    <div class="confirmed phone_settings">
-	        <span>
-	            <%= user.phone %> <strong>(Verified)</strong>
-	        </span>
-	        <a href="#" class="dismiss phone">
-	            Change
-	        </a>
-	    </div>
-
-	    <div class="unconfirmed phone_settings">
-	        <span>
-	            <%= user.phone %> (Unverified)
-	        </span>
-	        <p>
-	            To confirm your phone number, Enter the verification code we sent you.
-	        </p>
-
-	        <form action="/account/phone/confirm" method="post">
-	            <%= text_field_tag "phone_verify_code" %>
-	             <button type="submit">
-	                <span>Verify</span>
-	            </button>
-	        </form>
-
-	        <form action="/account/phone/resend" method="post">
-	            <button type="submit">
-	                <span>Resend Code</span>
-	            </button>
-	        </form>
-	    </div>
-
-	    <div class="none phone_settings">
-	        <p>
-	            If you provide a phone number, you can turn on SMS notifications for your subscriptions. We'll send you a text message to confirm.
-	        </p>
-
-	        <% form_for user, "/account/phone", :method => "put" do |f| %>
-	            <%= f.label :phone %>
-	            <%= f.text_field :phone %>
-
-	            <button type="submit">
-	                <span>Add Phone Number</span>
-	            </button>
-	        <% end %>
-	    </div>
-	</div>
 	
 	<div class="module passwordChange">
 		<h2>Change Password</h2>
