@@ -46,24 +46,25 @@
 				We can email you about all the new things that you're following.
 				<small>You can also control this <a href="/account/subscriptions">per-subscription</a>.</small>
 			</legend>
-				<ul>
-            <li>
-                <label for="user_delivery_none">
-                    <%= f.radio_button :notifications, :value => "none" %>
-                    <span>No, thanks</span>
-                </label>
+			
+            <ul>
+                <li>
+                    <label for="user_delivery_email">
+                        <%= f.radio_button :notifications, :value => "email_daily" %>
+                        <span>Yes, once a day</span>
+                    </label>
 
-                <label for="user_delivery_email">
-                    <%= f.radio_button :notifications, :value => "email_immediate" %>
-                    <span>Yes, immediately</span>
-                </label>
+                    <label for="user_delivery_email">
+                        <%= f.radio_button :notifications, :value => "email_immediate" %>
+                        <span>Yes, immediately</span>
+                    </label>
 
-                <label for="user_delivery_email">
-                    <%= f.radio_button :notifications, :value => "email_daily" %>
-                    <span>Yes, once a day</span>
-                </label>
-            </li>
-        </ul>
+                    <label for="user_delivery_none">
+                        <%= f.radio_button :notifications, :value => "none" %>
+                        <span>No, thanks</span>
+                    </label>
+                </li>
+            </ul>
 		</fieldset>
 		<fieldset>
 			<label for="user_announcements">

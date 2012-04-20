@@ -268,6 +268,7 @@ header h1{
 .initialFilters{
     margin-top: 8px;
     float: left;
+    display: none;
 }
 .searchField{
     float: left;
@@ -634,7 +635,7 @@ footer nav li{
 }
 .searchParameters {
     float: left;
-    width: 515px;
+    width: 460px;
 }
 
 .searchParameters .category{
@@ -652,12 +653,13 @@ footer nav li{
 }
 
 .contentArea.right section{
-    margin-bottom: 155px;
+    margin-bottom: 65px;
 }
 .results.contentArea li{
     padding: 33px 10px 33px 33px;
     background: url('/images/tinyborder_entry.png') center top no-repeat;
     font-size: 100%;
+    list-style-type: none;
 }
 .results.contentArea.right li:hover{
     background-color: #f5f6f5;
@@ -702,6 +704,7 @@ time.item, .entry time, .time {
     font-size: 93%;
     margin-top: 10px;
 }
+
 .item time{
     margin-top: 4px;
     font-style: italic;
@@ -729,7 +732,7 @@ time.item, .entry time, .time {
     display: inline-block;
     height: 38px;
     padding: 7px 70px 0 33px;
-    margin-top: -20px;
+    margin-top: 20px;
     -webkit-box-shadow: inset 14px 0px 14px -7px #e2e3e0;
     -moz-box-shadow: inset 14px 0px 14px -7px #e2e3e0;
     box-shadow: inset 14px 0px 14px -7px #e2e3e0;

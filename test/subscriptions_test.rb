@@ -60,22 +60,38 @@ class SubscriptionsTest < Test::Unit::TestCase
     assert_equal 4, user.interests.count
   end
 
-  # def test_subscribe_without_keyword
-  #   user = new_user!
+  def test_subscribe_to_all_types_with_one_keyword
+    user = new_user!
+    query = "environment"
+    query2 = "copyright"
     
-  #   assert_equal 0, user.subscriptions.count
-  #   assert_equal 0, user.interests.count
+    assert_equal 0, user.subscriptions.count
+    assert_equal 0, user.interests.count
 
-  #   post "/subscriptions", {:subscription_type => "federal_bills", "federal_bills" => {"stage" => "enacted"}}, login(user)
-  #   assert_response 200
+    post "/subscriptions", {:subscription_type => "all", :query => query}, login(user)
+    assert_response 200
 
-  #   assert_equal 1, user.subscriptions.count
-  #   assert_equal 1, user.interests.count
+    assert_equal search_adapters.keys.size, user.subscriptions.count
+    assert_equal 1, user.interests.count
 
-  #   assert_nil user.interests.first.in
-  #   assert_equal query, user.subscriptions.first.interest_in
-  #   assert_equal "federal_bills", user.subscriptions.first.subscription_type
-  # end
+    assert_equal query, user.interests.first.in
+
+    user.subscriptions.each do |subscription|
+        assert_equal query, subscription.interest_in
+    end
+
+    post "/subscriptions", {:subscription_type => "all", :query => query2}, login(user)
+    assert_response 200
+
+    assert_equal search_adapters.keys.size * 2, user.subscriptions.count
+    assert_equal 2, user.interests.count
+
+    post "/subscriptions", {:subscription_type => "all", :query => query2}, login(user)
+    assert_response 200
+
+    assert_equal 8, user.subscriptions.count
+    assert_equal 2, user.interests.count
+  end
 
   def test_subscribe_decodes_query
     user = new_user!
@@ -127,6 +143,21 @@ class SubscriptionsTest < Test::Unit::TestCase
     assert_response 200
 
     assert_nil Interest.find(i2.id)
+    assert_nil Subscription.find(s2.id)
+  end
+
+  def test_unsubscribe_to_type_of_all
+    user = new_user!
+    query1 = "environment"
+    i1 = user.interests.create! :in => query1, :interest_type => "search"
+    s1 = user.subscriptions.create! :interest => i1, :subscription_type => "state_bills", :interest_in => query1, :data => {"query" => query1}
+    s2 = user.subscriptions.create! :interest => i1, :subscription_type => "federal_bills", :interest_in => query1, :data => {"query" => query1}
+
+    delete "/subscriptions", {:subscription_type => "all", :query => s1.interest_in}, login(user)
+    assert_response 200
+
+    assert_nil Interest.find(i1.id)
+    assert_nil Subscription.find(s1.id)
     assert_nil Subscription.find(s2.id)
   end
 

@@ -54,16 +54,21 @@
                     <% end %>
 
                     <% if interest.search? %>
-                        <% subscription = interest.subscriptions.first %>
                         <div class="searchParameters">
-							in
-                            <span class="category"><%= subscription.search_name %></span> 
-                            <% if subscription.filters.any? %>
-                                <div class="filters">
-                                    <%= subscription.filters.map do |field, value|
-                                    "<span class=\"filter\">#{subscription.filter_name field, value}</span>"
-                                    end.join(", ") %>
-                                </div>
+                            <% if interest.subscriptions.count == 1 %>
+                                <% subscription = interest.subscriptions.first %>
+    							<span class="category"><%= subscription.search_name %></span> 
+                                <% if subscription.filters.any? %>
+                                    <div class="filters">
+                                        <%= subscription.filters.map do |field, value|
+                                        "<span class=\"filter\">#{subscription.filter_name field, value}</span>"
+                                        end.join(", ") %>
+                                    </div>
+                                <% end %>
+                            <% else %>
+                                <!--<%= interest.subscriptions.map do |subscription|
+                                    "<span class=\"category\">#{subscription.search_name}</span>"
+                                end.join(", ") %> -->
                             <% end %>
                         </div>
                     <% end %>

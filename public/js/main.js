@@ -3,6 +3,10 @@ $(function() {
   // login link should always point to redirect back
   $("a.login, a.logout").attr("href", $("a.login, a.logout").attr("href") + "?redirect=" + Utils.currentPath());
 
+  $("#search_form input.query").focus(function() {
+    $(".initialFilters").show();
+  });
+
   // anything being bound on something that can be pjax'ed 
   // needs to use the #contentWrapper as the parent
   $("#content").on("click", "a[data-pjax]", function() {

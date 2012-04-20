@@ -1,25 +1,33 @@
-<% if items and items.any? %>  
-    <ul class="items">
-      <% items.each do |item| %>
-        <%= partial "search/item", :engine => "erb", :locals => {:item => item, :query => query} %>
-      <% end %>
-    </ul>
+<% if items %>  
+    <% if items.any? %>
+        <ul class="items">
+          <% items.each do |item| %>
+            <%= partial "search/item", :engine => "erb", :locals => {:item => item, :query => query} %>
+          <% end %>
+        </ul>
 
-    <% if sole %>
-        <!-- next page...?! -->
+        <% if sole %>
+            <!-- next page...?! -->
+        <% else %>
+            <a href="/search/<%= subscription.subscription_type %>/<%= h query %>" 
+                class="viewMore"
+                
+                >
+                View more
+            </a>
+        <% end %>
+
     <% else %>
-        <a href="/search/<%= subscription.subscription_type %>/<%= h query %>" 
-            class="viewMore"
-            
-            >
-            View more <span class="dataSet"><%= subscription.search_name %></span>
-        </a>
-    <% end %>
 
+        <div class="no_results">
+            No results.
+        </div>
+
+    <% end %>
 <% else %>
 
-    <div class="no_results">
-        No results.
+    <div class="no_results remote_error">
+        There was an error while searching. You can try again.
     </div>
 
 <% end %>

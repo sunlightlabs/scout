@@ -15,9 +15,9 @@
 	        <% end %>
 	    <% end %>
 
-	    <% form_for @new_user, "/account/new", :method => "post", :class => "signup_form" do |f| %>
-	    <form action="/users" method="post" class="signup_form">
-	        <input class="redirect" name="redirect" type="hidden" value="<%= params[:redirect] %>" />
+
+    <% form_for @new_user, "/account/new", :method => "post", :class => "signup_form" do |f| %>
+        <input class="redirect" name="redirect" type="hidden" value="<%= params[:redirect] %>" />
 
 	        <%= f.text_field :email, :type => "email", :placeholder => "your email" %>
 	        <%= f.password_field :password, :placeholder => "password" %>
