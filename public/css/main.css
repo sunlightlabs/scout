@@ -1054,6 +1054,11 @@ a.source, .resources{
     width: 100%;
     height: 30px;
 }
+.sidebar .forgotPassword form input[type="email"]{
+    height: 30px;
+    width: 150px;
+}
+
 .settings.contentArea .module.phoneSettings{
     background: none;
     padding-left: 33px;
