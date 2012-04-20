@@ -1072,7 +1072,7 @@ li.email{
 .user_settings .phone_settings {
     display: none;
 }
-.user_settings.contentArea .module{
+.user_settings.contentArea .module, .settings.contentArea .module{
     background: url('/images/tinyborder.png') center bottom repeat-x;
     padding: 33px 33px 33px 10px;
 }
