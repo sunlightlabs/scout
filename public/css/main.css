@@ -477,7 +477,7 @@ div.contentWrapper{
 /*-- Footer Styling --*/
 .footerWrapper{
     display: block;
-    background: url('../images/bg_footer.png') center top: repeat-x;
+    background: url('../images/bg_footer.png') center top repeat-x;
 }
 
 .sunlightFoundation{
