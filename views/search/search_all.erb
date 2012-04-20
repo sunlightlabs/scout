@@ -1,16 +1,24 @@
 <% content_for :sidebar_left do %>
-  <% unless logged_in? %>
-    <div class="module filters">
-      <h4>Notifications</h4>
-      <p>
-        You can be notified of new search results via email, SMS, or RSS. 
-      </p>
-    </div>
-  <% end %>
+  <div class="module filters">
+    <h4>Hone In</h4>
+    <p>
+      Pick a category to see more results, and add filters.
+    </p>
+    <ul>
+      <% subscriptions.each do |subscription| %>
+        <li>
+          <a href="/search/<%= subscription.subscription_type %>/<%= h query %>">
+            <%= subscription.search_name %>
+          </a>
+        </li>
+      <% end %>
+    </ul>
+
+  </div>
 
   <div class="module data explanation small">
     <p>
-      Data comes from a variety of sources. Select a search result for more information.
+      Data comes from a variety of sources. Select a category or search result for more information.
     </p>
   </div>
 
@@ -28,7 +36,7 @@
         </div>
 
         <button class="follow search">
-          <span>Subscribe to All</span>
+          <span>Subscribe</span>
         </button>
 
         <button class="following search">
