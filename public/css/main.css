@@ -571,6 +571,7 @@ footer nav li{
 .homeWrapper .initialFilters{
     width: 500px;
     float: left;
+    display: block;
 }
 
 .home.modules{
