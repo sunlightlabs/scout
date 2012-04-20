@@ -20,6 +20,7 @@ module GeneralHelpers
 
   def search_types
     [
+      ["Everything", :all],
       ["Bills in Congress", :federal_bills],
       ["State Bills", :state_bills,],
       ["Federal Regulations", :regulations],

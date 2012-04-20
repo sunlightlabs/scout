@@ -1,9 +1,12 @@
 <% content_for :sidebar_left do %>
-  <div class="module filters">
-    <p>
-      <!-- Subscribe to everything, or  -->
-    </p>
-  </div>
+  <% unless logged_in? %>
+    <div class="module filters">
+      <h4>Notifications</h4>
+      <p>
+        You can be notified of new search results via email, SMS, or RSS. 
+      </p>
+    </div>
+  <% end %>
 
   <div class="module data explanation small">
     <p>
@@ -16,8 +19,6 @@
 
 <div class="results contentArea right">
   
-  <!--<% content_for :title do %>-->
-  <!--<% end %>-->
     <div class="pageTitle">
         <div class="searchParameters">
             <h2>"<%= h query %>"</h2>
@@ -39,7 +40,9 @@
     
     <% subscriptions.each do |subscription| %>
         <div class="search" id="<%= subscription.subscription_type %>" data-subscription="<%= subscription.subscription_type %>">
+
           <h3><%= subscription.search_name %></h3>
+
           <section class="container clear">
             <div class="loading">
               <span>Fetching <%= subscription.search_name.downcase %>...</span>

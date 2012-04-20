@@ -268,6 +268,7 @@ header h1{
 .initialFilters{
     margin-top: 8px;
     float: left;
+    display: none;
 }
 .searchField{
     float: left;
