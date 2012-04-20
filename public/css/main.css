@@ -1,5 +1,5 @@
 html, body{
-    background-color: #fafbf8;
+    background: url('/images/bg_body.png') center top repeat;
     font-family: arial, 'helvetica Neue', sans-serif;
     color: #5c5b60;
     height: 100%;
@@ -362,9 +362,12 @@ select.subscription_type {
 }
 
 /*-- Basic Content Structure --*/
+.fauxBody{
+    background: #fafbf8;
+}
 div.contentWrapper{
     overflow: hidden;
-    margin-top: -10px;
+    margin-top: -11px;
 }
 
 .left{
@@ -473,8 +476,8 @@ div.contentWrapper{
 
 /*-- Footer Styling --*/
 .footerWrapper{
-    background: url('/images/bg_footer.png') center top repeat-x;
     display: block;
+    background: url('../images/bg_footer.png') center top: repeat-x;
 }
 
 .sunlightFoundation{

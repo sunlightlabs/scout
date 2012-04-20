@@ -102,34 +102,35 @@
         </div>
         <% end %>
     </div>
+	<div class="fauxBody">
+	    <div class="contentWrapper" id="content">
 
-    <div class="contentWrapper" id="content">
-
-        <%= flash_for [:success, :notice, :failure] %>
+	        <%= flash_for [:success, :notice, :failure] %>
         
-        <!--<% if title_area = content_from(:title) %>
-            <div class="pageTitle">
-                <%= title_area %>
-                <div class="clear"></div>
-            </div>
-        <% end %>-->
+	        <!--<% if title_area = content_from(:title) %>
+	            <div class="pageTitle">
+	                <%= title_area %>
+	                <div class="clear"></div>
+	            </div>
+	        <% end %>-->
 
-        <% if left_bar = content_from(:sidebar_left) %>
-            <div class="sidebar left">
-                <%= left_bar %>
-            </div>
-        <% end %> 
+	        <% if left_bar = content_from(:sidebar_left) %>
+	            <div class="sidebar left">
+	                <%= left_bar %>
+	            </div>
+	        <% end %> 
 
-        <div id="center">
-            <%= yield %>
-        </div>
+	        <div id="center">
+	            <%= yield %>
+	        </div>
 
-        <% if right_bar = content_from(:sidebar_right) %>
-            <div class="sidebar right">
-                <%= right_bar %>
-            </div>
-        <% end %>
-    </div>
+	        <% if right_bar = content_from(:sidebar_right) %>
+	            <div class="sidebar right">
+	                <%= right_bar %>
+	            </div>
+	        <% end %>
+	    </div>
+	</div>
 
     <div class="footerWrapper">
         <footer class="contentWrapper">
