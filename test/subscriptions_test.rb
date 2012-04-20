@@ -146,6 +146,21 @@ class SubscriptionsTest < Test::Unit::TestCase
     assert_nil Subscription.find(s2.id)
   end
 
+  def test_unsubscribe_to_type_of_all
+    user = new_user!
+    query1 = "environment"
+    i1 = user.interests.create! :in => query1, :interest_type => "search"
+    s1 = user.subscriptions.create! :interest => i1, :subscription_type => "state_bills", :interest_in => query1, :data => {"query" => query1}
+    s2 = user.subscriptions.create! :interest => i1, :subscription_type => "federal_bills", :interest_in => query1, :data => {"query" => query1}
+
+    delete "/subscriptions", {:subscription_type => "all", :query => s1.interest_in}, login(user)
+    assert_response 200
+
+    assert_nil Interest.find(i1.id)
+    assert_nil Subscription.find(s1.id)
+    assert_nil Subscription.find(s2.id)
+  end
+
 
   # Eventually: tests on subscriptions with no keyword at all
 

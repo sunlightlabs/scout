@@ -68,7 +68,7 @@
                             <% else %>
                                 <%= interest.subscriptions.map do |subscription|
                                     "<span class=\"category\">#{subscription.search_name}</span>"
-                                end %> 
+                                end.join(", ") %> 
                             <% end %>
                         </div>
                     <% end %>

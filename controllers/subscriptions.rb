@@ -1,18 +1,33 @@
 # search results
 
-get '/search/:subscription_types/?:query?' do
+get '/search/:subscription_type/?:query?' do
   query = stripped_query
 
-  types = params[:subscription_types].split(",").select {|type| search_adapters.keys.include?(type)}
-  subscriptions = types.map {|type| subscription_for type}
+  if params[:subscription_type] == "all"
+    types = ["federal_bills", "speeches", "state_bills", "regulations"]
+  else
+    types = [params[:subscription_type]]
+  end
 
+  types = types.select {|type| search_adapters.keys.include?(type)}
+  halt 404 and return unless types.any?
+
+  subscriptions = types.map {|type| subscription_for type}
   halt 404 and return unless subscriptions.any?
 
-  erb :"search/search", :layout => !pjax?, :locals => {
-    :subscriptions => subscriptions, # deprecated
-    :subscription => subscriptions.first,
-    :query => query
-  }
+  if subscriptions.size > 1
+    erb :"search/search_all", :layout => !pjax?, :locals => {
+      :subscriptions => subscriptions,
+      :following => !subscriptions.first.new_record?,
+      :query => query
+    }
+  else
+    erb :"search/search", :layout => !pjax?, :locals => {
+      :subscriptions => subscriptions, # deprecated
+      :subscription => subscriptions.first,
+      :query => query
+    }
+  end
 end
 
 get '/fetch/search/:subscription_type/?:query?' do
@@ -89,12 +104,19 @@ delete '/subscriptions' do
   query = stripped_query
   subscription_type = params[:subscription_type]
 
-  subscription = subscription_for subscription_type
-  halt 404 and return false if subscription.new_record?
+  if subscription_type == "all"
+    types = ["federal_bills", "speeches", "state_bills", "regulations"]
+    subscriptions = types.map {|type| subscription_for type}
+  else
+    subscription = subscription_for subscription_type
+    halt 404 and return false if subscription.new_record?
+    subscriptions = [subscription]
+  end
 
-  subscription.destroy
+  subscriptions = subscriptions.reject &:new_record?
+  subscriptions.each &:destroy
 
-  interest = Interest.find subscription.interest_id
+  interest = Interest.find subscriptions.first.interest_id
   interest.destroy if interest.subscriptions.empty?
 
   halt 200
@@ -194,20 +216,13 @@ helpers do
 
     criteria = {
       :interest_in => query,
-      :subscription_type => subscription_type
+      :subscription_type => subscription_type,
+      :data => data
     }
-
-    # for lookups, we need to use dot notation, not pass in the data hash directly
-    find_criteria = criteria.dup
-    data.each do |key, value|
-      find_criteria["data.#{key}"] = value
-    end
-
-    new_criteria = criteria.merge :data => data
 
     if logged_in?
       # can't use #find_or_initialize_by because of the dot notation
-      current_user.subscriptions.where(find_criteria).first || current_user.subscriptions.new(new_criteria)
+      current_user.subscriptions.where(new_criteria).first || current_user.subscriptions.new(new_criteria)
     else
       Subscription.new new_criteria
     end

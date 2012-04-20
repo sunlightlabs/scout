@@ -61,7 +61,7 @@
 
           <section class="container clear">
             <div class="loading">
-              <span>Fetching ...</span>
+              <span>Fetching <%= subscription.search_name.downcase %>...</span>
             </div>
 
             <div class="error">
@@ -94,8 +94,8 @@
 
   // initializes both the sidebar form filters, and the top search form
   function initializeFilters() {
-    $("input.query").val("<%= h query %>");
-    $("input.subscription_type, select.subscription_type").val("<%= subscription.subscription_type %>");
+    $("form.filters input.query").val("<%= h query %>");
+    $("input.subscription_type").val("<%= subscription.subscription_type %>");
     
     // first, reset all filters
     $("form.filters .filter_control").val("");
