@@ -222,9 +222,9 @@ helpers do
 
     if logged_in?
       # can't use #find_or_initialize_by because of the dot notation
-      current_user.subscriptions.where(new_criteria).first || current_user.subscriptions.new(new_criteria)
+      current_user.subscriptions.where(criteria).first || current_user.subscriptions.new(criteria)
     else
-      Subscription.new new_criteria
+      Subscription.new criteria
     end
   end
 
