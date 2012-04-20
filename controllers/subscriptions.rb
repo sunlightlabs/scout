@@ -44,23 +44,30 @@ post '/subscriptions' do
   requires_login
 
   query = stripped_query
-  subscription_type = params[:subscription_type]
 
-  subscription = subscription_for subscription_type
-
-  halt 200 and return unless subscription.new_record?
+  if params[:subscription_type] == "all"
+    subscriptions = search_adapters.keys.map do |subscription_type|
+      subscription_for subscription_type
+    end
+  else
+    subscriptions = [subscription_for(params[:subscription_type])]
+  end
 
   interest = current_user.interests.new(
     :in => query, 
     :interest_type => "search",
     :data => {'query' => query}
   )
+
+  halt 200 and return unless subscriptions.select {|s| s.new_record?}.any?
   
   # make sure interest has the same validations as subscriptions
-  if interest.valid? and subscription.valid?
-    interest.save!
-    subscription.interest = interest
-    subscription.save!
+  if interest.valid? and subscriptions.reject {|s| s.valid?}.empty?
+    interest.save! if interest.new_record?
+    subscriptions.each do |subscription|
+      subscription.interest = interest
+      subscription.save!
+    end
     
     halt 200
   else
