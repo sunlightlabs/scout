@@ -6,13 +6,13 @@ module Subscriptions
       def self.filters
         {
           "state" => {
-            name: ->(code) {StateBills.state_map[code]}
+            :name => lambda {|code| StateBills.state_map[code]}
           },
           "party" => {
-            name: ->(party) {party_map[party]}
+            :name => lambda {|party| party_map[party]}
           },
           "chamber" => {
-            name: ->(chamber) {chamber.capitalize}
+            :name => lambda {|chamber| chamber.capitalize}
           }
         }
       end

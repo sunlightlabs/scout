@@ -6,7 +6,7 @@ module Subscriptions
       def self.filters
         {
           "state" => {
-            name: ->(code) {state_map[code]}
+            :name => lambda {|code| state_map[code]}
           }
         }
       end
