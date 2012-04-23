@@ -89,10 +89,6 @@
                 <h1 class="textIndent">Scout</h1>
             </a>
 
-            <!--<% if home? %>
-                <img class="splash" src="/images/splash.png" width="960" height="237" alt="Splash">
-            <% end %>-->
-
             <%= partial "search/search", :engine => "erb", :locals => {} %>
 
             <div class="clear"></div>
@@ -107,13 +103,6 @@
 
 	        <%= flash_for [:success, :notice, :failure] %>
         
-	        <!--<% if title_area = content_from(:title) %>
-	            <div class="pageTitle">
-	                <%= title_area %>
-	                <div class="clear"></div>
-	            </div>
-	        <% end %>-->
-
 	        <% if left_bar = content_from(:sidebar_left) %>
 	            <div class="sidebar left">
 	                <%= left_bar %>
