@@ -32,8 +32,9 @@ module Subscriptions
     
     def fulltext_highlight(item, keyword, priorities, highlight = true)
       highlighting = item.data['search']['highlight']
-      return nil unless (priorities.keys & highlighting.keys).any?
-      field = highlighting.keys.sort_by {|k| priorities[k]}.first
+      valid_keys = priorities.keys & highlighting.keys
+      return nil unless valid_keys.any?
+      field = valid_keys.sort_by {|k| priorities[k]}.first
       excerpt highlighting[field].first, keyword, highlight
     end
 
