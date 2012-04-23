@@ -5,12 +5,8 @@ module Subscriptions
 
       def self.filters
         {
-          "session" => {
-            :search_only => true, 
-            :name => lambda {|v| "#{v.to_i.ordinalize} Congress"}
-          },
           "stage" => {
-            :name => lambda {|v| v.split("_").map(&:capitalize).join " "}
+            name: ->(v) {v.split("_").map(&:capitalize).join " "}
           }
         }
       end
@@ -40,13 +36,6 @@ module Subscriptions
         # filters
 
         url << "&query=#{query}"
-
-        # search-only filters
-        if function == :search
-          if subscription.data["session"].present?
-            url << "&session=#{URI.encode subscription.data["session"]}"
-          end
-        end
 
         if subscription.data["stage"].present?
           stage = subscription.data["stage"]
