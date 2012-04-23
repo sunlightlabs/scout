@@ -43,8 +43,8 @@ get '/' do
   erb :index
 end
 
-get '/faq' do
-  erb :faq
+get '/about' do
+  erb :about
 end
 
 # landing pages

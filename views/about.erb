@@ -1,0 +1,46 @@
+<div class="about">
+
+  <h2>About</h2>
+
+  <p>
+    Scout is a free service that provides daily insight to how our laws and regulations are shaped in Washington, DC and our state capitols.
+  </p>
+  <p>
+    These days, you can receive electronic alerts to know when a company is in the news, when a TV show is scheduled to air or when a sports team wins. Now, you can also be alerted when our elected officials take action on an issue you care about.
+  </p>
+  <p>
+    Scout allows anyone to subscribe to customized email or text alerts on what Congress is doing around an issue or a specific bill, as well as bills in the state legislature and federal regulations.
+  </p>
+  <p>
+    Researchers can use Scout to see when Congress talks about an issue over time. Members of the media can use Scout to track when legislation important to their beat moves ahead in Congress or in state houses. Non-profits can use Scout as a tool to keep tabs on how federal and state lawmakers are making policy around a specific issue.
+  </p>
+
+  <h2>Data</h2>
+
+  <p>
+    Scout was developed by Sunlight Labs and data comes from a variety of sources.
+  </p>
+
+  <h3>Bills in Congress</h3>
+
+  <%= partial "subscriptions/federal_bills/data", :engine => :erb %>
+
+  <h3>Speeches in Congress</h3>
+
+  <%= partial "subscriptions/speeches/data", :engine => :erb %>
+
+  <h3>State Bills</h3>
+
+  <%= partial "subscriptions/state_bills/data", :engine => :erb %>
+
+  <h3>Regulations</h3>
+
+  <%= partial "subscriptions/regulations/data", :engine => :erb %>
+
+  <h2>Contact Us</h2>
+
+  <p>
+    For questions or comments, please click the Feedback link at the top of the page. We promise to respond promptly.
+  </p>
+
+</div>
