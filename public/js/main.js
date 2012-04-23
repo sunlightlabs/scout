@@ -29,13 +29,8 @@ $(function() {
 
     // gather what the initial types and filters should be
     var types = NewSearch.subscriptionTypes();
-    var options = NewSearch.subscriptionOptions(types);
 
     var path = "/search/" + types.join(",") + "/" + encodeURIComponent(query);
-    var queryString = $.param(options);
-    if (queryString)
-      path += "?" + queryString;
-
     window.location = path;
     
     return false;
@@ -51,12 +46,6 @@ $(function() {
 var NewSearch = {
   subscriptionTypes: function() {
     return [$("select.subscription_type").val()];
-  },
-
-  // return a hash of subscription-specific filters
-  // e.g. {"state_bills": {"state": "DC"}, "regulations": {"agency": "271"}}
-  subscriptionOptions: function(types) {
-    return {};
   }
 };
 
