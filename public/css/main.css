@@ -572,7 +572,7 @@ footer nav li{
     margin-bottom: 16px;
 }
 .homeWrapper .initialFilters{
-    width: 500px;
+    width: 470px;
     float: left;
     display: block;
 }
@@ -902,7 +902,7 @@ a.source, .resources{
     width: 45%;
     float: left;
     padding-right: 33px;
-    -mozbox-sizing: border-box;
+    -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
 }
@@ -940,7 +940,7 @@ a.source, .resources{
     margin: -2px 0 33px 0;
 }
 .subscription{
-    -mozbox-sizing: border-box;
+    -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     padding: 33px 33px 33px 16px;
@@ -1103,7 +1103,7 @@ a.source, .resources{
     padding: 33px 33px 33px 10px;
     width: 50%;
     float: left;
-    -mozbox-sizing: border-box;
+    -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
 }
