@@ -22,10 +22,8 @@ module Deliveries
         # 1) change this to a landing page per-interest 
         #   (show page for item interests, new page for keyword interests [HTML version of RSS feed])
         # 2) shorten this URL in the Sunlight URL shortener
-        url = "http://#{config[:hostname]}"
-        url << Deliveries::Manager.interest_path(interest)
-
-        core = render_interest interest, deliveries
+        
+        core, url = render_interest interest, deliveries
         content = render_final core, url
 
         if content.size > 160
@@ -67,6 +65,14 @@ module Deliveries
     def self.render_interest(interest, deliveries)
       grouped = deliveries.group_by &:subscription
 
+      url = "http://#{config[:hostname]}"
+      puts "SIZE:#{grouped.keys.size}"
+      if grouped.keys.size == 1
+        url << Deliveries::Manager.interest_path(interest, grouped.keys.first.subscription_type)
+      else
+        url << Deliveries::Manager.interest_path(interest)
+      end      
+
       content = ""
       
       content << grouped.keys.map do |subscription|
@@ -81,7 +87,7 @@ module Deliveries
         content << Subscription.adapter_for(interest_data[interest.interest_type][:adapter]).interest_name(interest)
       end
 
-      content
+      [content, url]
     end
 
     def self.render_final(content, url)

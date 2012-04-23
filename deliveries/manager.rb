@@ -42,11 +42,18 @@ module Deliveries
     end
 
     # used in linking to interests in SMS
-    def self.interest_path(interest)
+    def self.interest_path(interest, preferred_type = nil)
       if interest.item?
         "/item/#{interest.interest_type}/#{interest.in}"
-      else
-        "/interest/#{interest.id}"
+      elsif interest.search?
+        # this sucks, and needs to change
+        if preferred_type
+          interest.subscriptions.first.scout_search_url(:subscription_type => preferred_type)
+        elsif interest.subscriptions.count > 1 
+          interest.subscriptions.first.scout_search_url(:subscription_type => "all")
+        else
+          interest.subscriptions.first.scout_search_url
+        end
       end
     end
 

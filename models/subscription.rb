@@ -64,6 +64,20 @@ class Subscription
     adapter.url_for self, :search, options
   end
 
+  # the path within Scout for this subscription
+  # assumes this is a search-type subscription
+  def scout_search_url(options = {})
+    subscription_type = options[:subscription_type] || self.subscription_type
+    base = "/search/#{subscription_type}"
+    
+    base << "/#{URI.encode data['query']}" if data['query']
+
+    query_string = filters.map {|key, value| "#{subscription_type}[#{key}]=#{URI.encode value}"}.join("&")
+    base << "?#{query_string}" if query_string.present?
+
+    base
+  end
+
   # convenience method - the 'data' field, but minus the 'query' field
   def filters
     fields = data.dup
