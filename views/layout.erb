@@ -73,9 +73,15 @@
                             <a href="/account/settings">Settings</a>
                         </li>
                         <li>
+                            <a href="#" class="feedback">Feedback</a>
+                        </li>
+                        <li>
                             <a href="/logout" class="logout">Log Out</a>
                         </li>
                     <% else %>
+                        <li>
+                            <a href="#" class="feedback">Feedback</a>
+                        </li>
                         <li>
                             <a href="/login" class="login">Login or Sign up</a>
                         </li>
@@ -135,6 +141,7 @@
 			</div>
             <nav>
                 <ul>
+                    <li><a class="feedback" href="#">Contact</a></li>
                     <li><a href="http://sunlightfoundation.com/legal/privacy/">Privacy Policy</a></li>
                     <li><a href="http://sunlightfoundation.com/legal/terms/">Terms of Service</a></li>
                 </ul>
@@ -159,6 +166,22 @@
         })();
 
     </script>
+
+    <script type="text/javascript" charset="utf-8">
+      Tender = {
+        widgetToggles: $(".feedback"),
+        hideToggle: true,
+        hide_kb: true /* hide the knowledge base tab */
+      }
+
+      // make sure Tender toggle also jumps the screen up
+      Tender.widgetToggles.click(function() {
+        scrollTo(0,0);
+        return false;
+      });
+    </script>
+
+    <script src="https://scout.tenderapp.com/tender_widget.js" type="text/javascript"></script>
 
 </body>
 </html>
