@@ -15,8 +15,8 @@
 </div>
 
 <p>
-  <% if regulation['search']['highlight'] %>
-    <%= regulation_highlight item, interest %>
+  <% if regulation['search']['highlight'] and (highlight = regulation_highlight item, interest) %>
+    <%= highlight %>
   <% else %>
     <%= truncate regulation['abstract'], 500 %>
   <% end %>

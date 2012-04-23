@@ -32,6 +32,7 @@ module Subscriptions
     
     def fulltext_highlight(item, keyword, priorities, highlight = true)
       highlighting = item.data['search']['highlight']
+      return nil unless (priorities.keys & highlighting.keys).any?
       field = highlighting.keys.sort_by {|k| priorities[k]}.first
       excerpt highlighting[field].first, keyword, highlight
     end
@@ -102,19 +103,14 @@ module Subscriptions
     def bill_priorities
       {
         "summary" => 1,
-        "versions" => 2,
-        "keywords" => 3,
-        "official_title" => 4,
-        "short_title" => 5,
-        "popular_title" => 6
+        "versions" => 2
       }
     end
 
     def regulation_priorities
       {
         'abstract' => 1,
-        'full_text' => 2,
-        'title' => 3
+        'full_text' => 2
       }
     end
     
