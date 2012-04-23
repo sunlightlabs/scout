@@ -7,13 +7,6 @@ $(function() {
     $(".initialFilters").show();
   });
 
-  // anything being bound on something that can be pjax'ed 
-  // needs to use the #contentWrapper as the parent
-  $("#content").on("click", "a[data-pjax]", function() {
-    Utils.pjax($(this).attr("href"), $(this).data("pjax"));
-    return false;
-  });
-
   $("#content").on("click", "a.untruncate", function() {
     var to_hide = $(this).parent(".truncated");
     var tag = to_hide.data("tag");
@@ -27,10 +20,9 @@ $(function() {
     if (query) query = query.trim();
     if (!query) return;
 
-    // gather what the initial types and filters should be
-    var types = NewSearch.subscriptionTypes();
+    var type = $("select.subscription_type").val();
 
-    var path = "/search/" + types.join(",") + "/" + encodeURIComponent(query);
+    var path = "/search/" + type + "/" + encodeURIComponent(query);
     window.location = path;
     
     return false;
@@ -42,12 +34,6 @@ $(function() {
   });
 
 });
-
-var NewSearch = {
-  subscriptionTypes: function() {
-    return [$("select.subscription_type").val()];
-  }
-};
 
 var Utils = {
     log: function(msg) {
