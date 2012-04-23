@@ -24,6 +24,9 @@ module Subscriptions
         url = "#{endpoint}/text.json?apikey=#{api_key}"
         url << "&sort=date%20desc"
 
+        # keep it only to fields with a speaker (bioguide_id)
+        url << "&bioguide_id=[''%20TO%20*]"
+
         # filters
         
         url << "&phrase=#{query}"
@@ -34,9 +37,10 @@ module Subscriptions
           end
         end
 
-        if options[:page]
-          url << "&page=#{options[:page].to_i - 1}"
-        end
+        # pagination
+
+        url << "&page=#{options[:page].to_i - 1}" if options[:page]
+        url << "&per_page=#{options[:per_page]}" if options[:per_page]
         
         url
       end
@@ -66,13 +70,9 @@ module Subscriptions
         return nil unless response['results']
         
         #TODO: hopefully get the API changed to allow filtering on only spoken results
-        results = response['results'].select {|r| r['bioguide_id']}.map do |result|
+        response['results'].map do |result|
           item_for result
         end
-
-        per_page = options[:per_page] || 20
-        
-        results[0...per_page]
       end
       
       def self.item_detail_for(response)
