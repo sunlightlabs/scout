@@ -15,6 +15,9 @@ html, body{
 }
 
 .ie7 img { -ms-interpolation-mode: bicubic; }
+.ie7 .sidebar.left {
+    width: 249px;
+}
 
 input, select, textarea {
     box-sizing: border-box;
@@ -33,7 +36,6 @@ button, a.update.button {
     display: block;
     border: 0;
     height: 50px;
-    min-width: 50px;
     background: rgb(28,131,152); /* Old browsers */
     background: -moz-linear-gradient(top,  rgba(28,131,152,1) 0%, rgba(28,131,152,1) 50%, rgba(28,105,122,1) 51%, rgba(28,105,122,1) 100%); /* FF3.6+ */
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(28,131,152,1)), color-stop(50%,rgba(28,131,152,1)), color-stop(51%,rgba(28,105,122,1)), color-stop(100%,rgba(28,105,122,1))); /* Chrome,Safari4+ */
@@ -251,6 +253,10 @@ header h1{
     background: url('/images/icon_settings.png') top left no-repeat;
     padding-left: 22px;
 }
+#userNav li.feedback{
+    background: url('/images/icon_feedback.png') top left no-repeat;
+    padding-left: 22px;
+}
 
 #search_form .filters{
     display: none;
@@ -296,6 +302,7 @@ header h1{
     float: left;
     font-size: 110%;
     color: #5C5B60;
+    line-height: 36px;
 }
 #search_form .field{
     float: left;
@@ -309,6 +316,9 @@ header h1{
     width: 32px;
     padding-left: 0;
     padding-right: 0; 
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF,endColorstr=#00FFFFFF)"; /* IE8 */   
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF,endColorstr=#00FFFFFF);   /* IE6 & 7 */      
+    zoom: 1;
 }
 .count{
     font-weight: normal;
@@ -368,6 +378,7 @@ select.subscription_type {
 div.contentWrapper{
     overflow: hidden;
     margin-top: -11px;
+    position: relative;
 }
 
 .left{
@@ -1085,6 +1096,9 @@ a.source, .resources{
 }
 .settings.contentArea .module.notifications{
     background: url('../images/tinyborder_andshadow_vertical.png') right top repeat-y;
+}
+.settings.contentArea .module.notifications legend{
+    width: 100%;
 }
 .settings li, .settings label{
     list-style-type: none;
