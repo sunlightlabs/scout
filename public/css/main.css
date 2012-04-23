@@ -552,6 +552,9 @@ footer nav li{
     padding-left: 35px;
     padding-right: 14px;
     width: inherit;
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF,endColorstr=#00FFFFFF)"; /* IE8 */   
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF,endColorstr=#00FFFFFF);   /* IE6 & 7 */      
+    zoom: 1;
     
 }
 .homeWrapper #search_form input[type="search"]{
@@ -1199,27 +1202,10 @@ a.ignore{
 }
 
 
-
-
-
-#tender_window {
-position: absolute;
-top: 20px;
-left: 50%;
-margin-left: -50%;
-width: 100%;
-height: 100%;
-padding: 3px;
-background: url(https://scout.tenderapp.com/images/widget/overlay_back.png);
-z-index: 9999;
-top: 0;
+.about .module{
+    padding: 33px 33px 33px 10px;
 }
-
-#tender_window #tender_frame {
-width: 680px;
-height: 615px;
-background: url(https://scout.tenderapp.com/images/widget/loader.gif) 50% 50% no-repeat white;
-margin: 0 auto;
+.about h3{
+    margin-top: 25px;
 }
-
 
