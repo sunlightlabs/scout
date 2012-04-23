@@ -165,7 +165,7 @@
 	</div>
     <div class="module developer_mode">
         <h2>Data Mode</h2>
-        <% if developer_mode? %>
+        <% if current_user.developer? %>
             <p>
                 You have a Sunlight API key, so we're turning on Data Mode. Now you can:
             </p>

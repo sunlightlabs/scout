@@ -10,12 +10,12 @@
 		</form>
 	</div>
 
-  <% if developer_mode? %>
+  <% if show_data? %>
     <div class="module developer json">
 
 		<h4>The Data</h4>
 		<p>
-			See the <a href="<%= developer_url subscription %>">underlying data</a>.
+			See the <a href="<%= developer_search_url subscription %>">underlying data</a>.
 		</p>
     </div>
   <% end %>

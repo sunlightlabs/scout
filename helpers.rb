@@ -44,17 +44,23 @@ module GeneralHelpers
     content_from :home
   end
 
-  def developer_mode?
-    current_user # && current_user.developer?
+  def show_data?
+    !api_key.nil?
   end
 
-  def developer_url(subscription)
-    api_key = current_user ? current_user.api_key : nil
+  def api_key
+    if current_user and current_user.api_key
+      current_user.api_key
+    elsif params[:hood] == "up"
+      config[:demo_key]
+    end
+  end
+
+  def developer_search_url(subscription)
     subscription.search_url :api_key => api_key
   end
 
-  def developer_item_url(interest_type, item_id)
-    api_key = current_user ? current_user.api_key : nil
+  def developer_find_url(interest_type, item_id)
     adapter = Subscription.adapter_for interest_data[interest_type][:adapter]
     adapter.url_for_detail item_id, :api_key => api_key
   end

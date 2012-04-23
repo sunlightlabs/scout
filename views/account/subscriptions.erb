@@ -7,11 +7,11 @@
         <h4>
             Combined Feed
             <a class="rss feed" href="/account/<%= current_user.id %>.rss">RSS</a>
-            <% if developer_mode? %>    
-                <a class="json feed" href="/account/<%= current_user.id %>.json">JSON</a>
+            <% if current_user.developer? %>    
+                <a class="json feed" href="/account/<%= current_user.id %>.json?apikey=<%= current_user.api_key %>">JSON</a>
             <% end %>
         </h4>
-        <% if developer_mode? %>
+        <% if current_user.developer? %>
             <small>Combined RSS and JSON feeds of updates on everything you follow.</small>
         <% else %>
             <small>A combined RSS feed of updates on everything you follow.</small>
@@ -49,8 +49,8 @@
                     <h3><%= interest_name interest, true %></h3>
 
                     <a class="rss feed" href="/interest/<%= interest.id %>.rss">RSS</a>
-                    <% if developer_mode? %>
-                        <a class="json feed" href="/interest/<%= interest.id %>.json">JSON</a>
+                    <% if current_user.developer? %>
+                        <a class="json feed" href="/interest/<%= interest.id %>.json?apikey=<%= current_user.api_key %>">JSON</a>
                     <% end %>
 
                     <% if interest.search? %>
