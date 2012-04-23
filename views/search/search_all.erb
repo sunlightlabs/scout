@@ -26,9 +26,13 @@
 <% end %>
 
 <div class="results contentArea right">
-  
+	<span class="resultsIntro">
+		These results are a sample of what you might receive in your notifications.
+	</span>  
     <div class="pageTitle">
+
         <div class="searchParameters">
+
             <h2>"<%= h query %>"</h2>
             <% subscriptions.each do |subscription| %>
               <span class="category"><%= subscription.search_name %></span><%= ", " unless subscription == subscriptions.last %>
