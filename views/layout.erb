@@ -31,28 +31,11 @@
     <script src="/js/jquery.placehold-0.3.min.js"></script>
     <script src="/js/h5f.min.js"></script>
     <script src="/js/main.js"></script>
-    
-    <script type="text/javascript">
-        // client-side map of a user's interests and subscriptions, 
-        // complete with delicious database IDs (will swap this with a slug or something later)
-        var user_subscriptions = {};
-        var interest;
-        <% @interests.each do |interest, subscriptions| %>
-          interest = encodeURIComponent("<%= js_escape interest.in %>");
-          user_subscriptions[interest] = {
-            interest_id: "<%= interest.id.to_s %>",
-            subscriptions: {}
-          };
-          <% subscriptions.each do |subscription| %>
-            user_subscriptions[interest].subscriptions.<%= subscription.subscription_type %> = '<%= subscription.id.to_s %>';
-          <% end %>
-        <% end %>
-    </script>
-
 </head>
 <body>
 
     <div class="headerWrapper">
+
         <% if home? %>
         <div class="homeWrapper">
         <% end %>
