@@ -88,6 +88,7 @@ module Subscriptions
         url
       end
 
+      #TODO: get rid of subscription parameter, move this back into environment hash
       def self.search_name(subscription)
         "Bills in Congress"
       end

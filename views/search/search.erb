@@ -20,6 +20,20 @@
     </div>
   <% end %>
 
+  <div class="module filters">
+    <h4>Switch Category</h4>
+    <ul>
+      <% search_adapters.keys.reject {|type| type == subscription.subscription_type}.each do |subscription_type| %>
+        <li>
+          <a href="/search/<%= subscription_type %>/<%= h query %>">
+            <%= Subscription.adapter_for(subscription_type).search_name nil %>
+          </a>
+        </li>
+      <% end %>
+    </ul>
+
+  </div>
+
   <div class="module data explanation small">
     <%= partial "subscriptions/#{subscription.subscription_type}/data", :engine => "erb" %>
   </div>
