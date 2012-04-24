@@ -2,7 +2,7 @@ set :environment, (ENV['target'] || 'staging')
 
 if environment == 'production'
   set :user, 'scout'
-  set :branch, 'master'
+  set :branch, 'redesign'
   set :domain, 'scout.sunlightfoundation.com'
 else
   set :user, 'alarms'
@@ -10,6 +10,9 @@ else
   set :domain, 'ec2-50-16-84-118.compute-1.amazonaws.com'
 end
 
+# RVM stuff - not sure how/why this works, awesome
+set :rvm_ruby_string, '1.9.3-p125@scout' 
+set :rvm_type, :user
 
 set :application, user
 set :sock, "#{user}.sock"
@@ -27,9 +30,6 @@ set :admin_runner, runner
 
 role :app, domain
 role :web, domain
-
-set :rvm_ruby_string, '1.9.3-p125@scout' # you probably have this already
-set :rvm_type, :user # this is the money config, it defaults to :system
 
 set :use_sudo, false
 after "deploy:update_code", "deploy:shared_links"
@@ -67,7 +67,9 @@ namespace :deploy do
   # current_path is correct here because this happens after deploy, not after deploy:update_code
   desc "Load the crontasks"
   task :set_cron, :roles => :app, :except => {:no_release => true} do
-    run "cd #{current_path} && rake set_crontab environment=#{environment} current_path=#{current_path}"
+    if environment != "production"
+      run "cd #{current_path} && rake set_crontab environment=#{environment} current_path=#{current_path}"
+    end
   end
   
   desc "Get shared files into position"

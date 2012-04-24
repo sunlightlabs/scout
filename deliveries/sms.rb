@@ -66,7 +66,6 @@ module Deliveries
       grouped = deliveries.group_by &:subscription
 
       url = "http://#{config[:hostname]}"
-      puts "SIZE:#{grouped.keys.size}"
       if grouped.keys.size == 1
         url << Deliveries::Manager.interest_path(interest, grouped.keys.first.subscription_type)
       else

@@ -46,7 +46,11 @@
             <% interests.each do |interest| %>
                 <div class="subscription" data-id="<%= interest.id %>">
                     
-                    <h3><%= interest_name interest, true %></h3>
+                    <h3>
+                        <a href="<%= interest_path interest %>">
+                            <%= interest_name interest, true %>
+                        </a>
+                    </h3>
 
                     <a class="rss feed" href="/interest/<%= interest.id %>.rss">RSS</a>
                     <% if current_user.developer? %>

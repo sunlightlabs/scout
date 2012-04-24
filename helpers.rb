@@ -28,6 +28,10 @@ module GeneralHelpers
     ]
   end
 
+  def interest_path(interest)
+    Deliveries::Manager.interest_path interest
+  end
+
   def hide_search
     content_for(:hide_search) { true }
   end

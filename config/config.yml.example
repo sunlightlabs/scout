@@ -10,11 +10,6 @@
   :shared_secret:
   :api_name: scout
 
-:mongoid:
-  host: localhost
-  database: scout
-  raise_not_found_error: false
-
 :email:
   :via: :smtp
   :from:
