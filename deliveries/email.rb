@@ -84,6 +84,13 @@ module Deliveries
       grouped.each do |subscription, group|
         description = "#{group.size} #{subscription.adapter.short_name group.size, subscription, interest}"
 
+        if subscription.filters.any? 
+          filters = subscription.filters.map do |field, value|
+            subscription.filter_name field, value
+          end.join(", ")
+          description << " (#{filters})"
+        end
+
         content << "- #{Deliveries::Manager.interest_name interest} - #{description}\n\n\n"
 
         group.each do |delivery|
@@ -107,7 +114,16 @@ module Deliveries
         subject << "#{deliveries.size} new things" # deliveries.size is guaranteed to be > 1 if the grouped is > 3
       else
         subject << grouped.map do |subscription, subscription_deliveries|
-          "#{subscription_deliveries.size} #{subscription.adapter.short_name subscription_deliveries.size, subscription, interest}"
+          type = "#{subscription_deliveries.size} #{subscription.adapter.short_name subscription_deliveries.size, subscription, interest}"
+          
+          if grouped.keys.size == 1 and subscription.filters.any? 
+            filters = subscription.filters.map do |field, value|
+              subscription.filter_name field, value
+            end.join(", ")
+            type << " (#{filters})"
+          end
+          
+          type
         end.join(", ")
       end
 
