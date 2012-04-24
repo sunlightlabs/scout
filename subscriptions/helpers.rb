@@ -150,8 +150,8 @@ module Subscriptions
         'lts' => "Laid on Table in Senate",
         'oph' => "Ordered to be Printed House",
         'ops' => "Ordered to be Printed Senate",
-        'pch' => "Placed on Calendar House",
-        'pcs' => "Placed on Calendar Senate",
+        'pch' => "Placed on House Calendar", # original: "Placed on Calendar House"
+        'pcs' => "Placed on Senate Calendar", # original: "Placed on SenateHouse"
         'pp' => "Public Print",
         'rah' => "Referred w/Amendments House",
         'ras' => "Referred w/Amendments Senate",
