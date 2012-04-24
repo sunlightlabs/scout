@@ -67,9 +67,7 @@ namespace :deploy do
   # current_path is correct here because this happens after deploy, not after deploy:update_code
   desc "Load the crontasks"
   task :set_cron, :roles => :app, :except => {:no_release => true} do
-    if environment != "production"
-      run "cd #{current_path} && rake set_crontab environment=#{environment} current_path=#{current_path}"
-    end
+    run "cd #{current_path} && rake set_crontab environment=#{environment} current_path=#{current_path}"
   end
   
   desc "Get shared files into position"
