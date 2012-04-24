@@ -18,7 +18,7 @@ $(function() {
   $("form#search_form").submit(function() {
     var query = $(this).find("input.query").val();
     if (query) query = query.trim();
-    if (!query) return;
+    if (!query) return false;
 
     var type = $("select.subscription_type").val();
 
