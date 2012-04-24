@@ -208,16 +208,45 @@ strong {
 
 
 
+/*-- Hat Styling --*/
+.hatWrap div.contentWrapper{
+    overflow: visible;
+    margin-top: 0;
+}
+.hatWrap{
+    background: url('../images/bg_hat.png') center top repeat-x;
+    height: 45px;
+}
+.productOf{
+    background: url('../images/productOf.png') center top no-repeat;
+    width: 198px;
+    height: 26px;
+    text-indent: -99999em;
+    display: block;
+    float: right;
+    margin-top: 6px;
+    margin-right: 10px;
+}
+
+
+
 
 
 /*-- Header Styling --*/
 
 .headerWrapper{
+    background: #ffffff;
     background: url('/images/bg_header.png') center bottom repeat-x;
     display: block;
     min-height: 247px;
     position: relative;
+    z-index: 10;
 }
+header.contentWrapper{
+    margin-top: -4px;
+    padding-bottom: 85px;
+}
+
 nav ul{
     float: right;
 }
@@ -550,11 +579,11 @@ footer nav li{
     margin-top: -79px;
 }
 .homeWrapper{
-    /*background: url('../images/bg_homeWrapper.png') center 216px repeat-x;*/
+    background: url('../images/bg_homeWrapper.png') center 170px repeat-x;
     padding-bottom: 85px;
 }
-.homeWrapper .contentWrapper{
-    background: url('../images/bg_header.png') center 216px repeat-x;
+.homeWrapper header.contentWrapper{
+    background: url('../images/splash.png') center -13px repeat-x;
 }
 .homeWrapper #search_form button span, .homeWrapper #search_form a.update.button span {
     background: url('../images/icon_search.png') 5px -2px no-repeat ;
@@ -573,7 +602,7 @@ footer nav li{
 }
 
 .homeWrapper #search_form{
-    margin-top: 75px;
+    margin-top: 278px;
     width: 677px;
 }
 
@@ -604,7 +633,7 @@ footer nav li{
 .home.modules li{
     margin-bottom: 10px;
 }
-.home.modules .samples ul{
+.home.modules .samples ul, .home.modules .whatUp ul{
     margin-left: 16px;
 }
 .home.modules .samples li{
