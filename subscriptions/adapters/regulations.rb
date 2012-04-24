@@ -10,7 +10,7 @@ module Subscriptions
             :name => lambda {|id| executive_agency_abbreviations[executive_agency_map[id]] || executive_agency_map[id]}
           },
           "stage" => {
-            :name => lambda {|s| s.capitalize}
+            :name => lambda {|s| "#{s.capitalize} Rule"}
           }
         }
       end
