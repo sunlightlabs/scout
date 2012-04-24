@@ -57,13 +57,13 @@
                             <a href="/account/settings">Settings</a>
                         </li>
                         <li class="feedback">
-                            <a href="#">Feedback</a>
+                            <a href="#" class="feedback">Feedback</a>
                         </li>
                         <li>
                             <a href="/logout" class="logout">Log Out</a>
                         </li>
                     <% else %>
-                        <li>
+                        <li class="feedback">
                             <a href="#" class="feedback">Feedback</a>
                         </li>
                         <li>
@@ -153,7 +153,7 @@
 
     <script type="text/javascript" charset="utf-8">
       Tender = {
-        widgetToggles: $(".feedback"),
+        widgetToggles: $("a.feedback"),
         hideToggle: true,
         hide_kb: true /* hide the knowledge base tab */
       }
