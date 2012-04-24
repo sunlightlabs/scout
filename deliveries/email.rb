@@ -116,7 +116,7 @@ module Deliveries
 
     def self.render_final(content)
       content << "----------------\nManage your subscriptions on the web at http://#{config[:hostname]}."
-      content << "\n\nThese notifications are powered by the Sunlight Foundation (sunlightfoundation.com), a non-profit, non-partisan institution that uses cutting-edge technology and ideas to make government transparent and accountable."
+      content << "\n\nThese notifications are powered by the non-partisan Sunlight Foundation (sunlightfoundation.com), a non-profit that uses cutting-edge technology and ideas to make government transparent and accountable."
       content << "\n\nReply to this email to send feedback, bug reports, or effusive praise our way."
       content
     end
