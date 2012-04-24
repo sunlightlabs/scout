@@ -580,7 +580,6 @@ footer nav li{
 }
 .homeWrapper{
     background: url('../images/bg_homeWrapper.png') center 170px repeat-x;
-    padding-bottom: 85px;
 }
 .homeWrapper header.contentWrapper{
     background: url('../images/splash.png') center -13px repeat-x;
