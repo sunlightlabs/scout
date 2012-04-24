@@ -74,7 +74,7 @@ module Subscriptions
       end
 
       def self.search_name(subscription)
-        "Regulations"
+        "Federal Regulations"
       end
 
       def self.short_name(number, subscription, interest)
