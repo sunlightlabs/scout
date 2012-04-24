@@ -13,6 +13,8 @@ set :public_folder, 'public'
 set :sessions, !test?
 set :session_secret, config[:session_secret]
 
+disable :protection
+
 configure(:development) do |config|
   require 'sinatra/reloader'
   config.also_reload "./config/environment.rb"
