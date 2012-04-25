@@ -1,4 +1,4 @@
 <li class="item <%= item.subscription.subscription_type %>">
     <time class="result" datetime="<%= html_date item.date %>"><%= just_date_year item.date %></time>
     <%= partial "subscriptions/#{item.subscription.subscription_type}/result", :engine => "erb", :locals => {:item => item, :interest => query} %>
-</li class="result">
+</li>

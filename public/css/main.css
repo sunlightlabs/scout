@@ -738,6 +738,7 @@ footer nav li{
 .contentArea.right section{
     margin-bottom: 105px;
     background: url('../images/tinyborder_andshadow.png') center bottom repeat-x;
+    clear: both;
 }
 
 .results.contentArea li{

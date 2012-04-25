@@ -59,7 +59,11 @@
             <ul class="items">
               <!-- data appended into here -->
             </ul>
-	        
+
+			<a href="/search/<%= subscription.subscription_type %>/<%= h query %>" class="viewMore">
+				View more <span><%= subscription.search_name %></span>
+            </a>
+	        <div class="clear"></div>
             <div class="loading">
               <span>Fetching <%= subscription.search_name.downcase %>...</span>
             </div>
