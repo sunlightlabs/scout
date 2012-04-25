@@ -52,7 +52,7 @@
     
     <% subscriptions.each do |subscription| %>
         <div class="search" id="<%= subscription.subscription_type %>" data-subscription="<%= subscription.subscription_type %>">
-          <section class="container clear">
+          <div class="section container clear">
 			<h3><%= subscription.search_name %></h3>
 			<div class="clear"></div>
 
@@ -75,7 +75,7 @@
             <div class="error">
               <span>There was an error while searching.</span>
             </div>
-          </section>
+          </div>
 
         </div>
     <% end %>

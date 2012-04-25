@@ -73,7 +73,7 @@
     <% subscriptions.each do |subscription| %>
         <div class="search" id="<%= subscription.subscription_type %>" data-subscription="<%= subscription.subscription_type %>">
 
-          <section class="container clear">
+          <div class="section container clear">
             <!-- page parameter gets stored as data on ul.items -->
             <ul class="items">
               <!-- data appended into here -->
@@ -90,7 +90,7 @@
             <div class="error">
               <span>There was an error while searching.</span>
             </div>
-          </section>
+          </div>
 
         </div>
     <% end %>
