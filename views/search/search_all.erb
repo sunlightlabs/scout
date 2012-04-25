@@ -55,16 +55,21 @@
           <section class="container clear">
 			<h3><%= subscription.search_name %></h3>
 			<div class="clear"></div>
+
+            <ul class="items">
+              <!-- data appended into here -->
+            </ul>
 	        
             <div class="loading">
               <span>Fetching <%= subscription.search_name.downcase %>...</span>
             </div>
 
-            <div class="error">
-              <span>There was an error while searching.</span>
+            <div class="empty">
+              <span>No results for this search.</span>
             </div>
 
-            <div class="populate">
+            <div class="error">
+              <span>There was an error while searching.</span>
             </div>
           </section>
 
@@ -174,7 +179,6 @@
 
     // reset elements inside tab
     container.find(".loading").show();
-    container.find(".populate").html("").hide();
     
     // all search options (filters, pagination)
     var search = {};
@@ -187,7 +191,12 @@
     $.get("/fetch/search/" + subscription_type + "/" + query, search, function(data) {
       
       container.find(".loading").hide();
-      container.find(".populate").html(data).show();
+      container.find("ul.items").append(data.html).show();
+
+      $("ul.items").data("page", data.page);
+
+      if (data.count == 0)
+        container.find(".empty").show();
 
     }).error(function() {
       container.find(".loading").hide();

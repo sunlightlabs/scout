@@ -28,8 +28,9 @@ class ApiKey
 
     # only set active keys
     if user
+      # using #set because it does not trigger callbacks, which could send this into an infinite loop
       if key.status == "A"
-        user.set :api_key, key.key
+        user.set :api_key, key.key 
       else
         user.set :api_key, nil
       end

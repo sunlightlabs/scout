@@ -129,6 +129,7 @@ module Deliveries
   # dummy proxy class to provide a context with helper modules included so that ERB can render properly
   class SeenItemProxy
     include GeneralHelpers
+    include Routing
     include ::Subscriptions::Helpers
 
     attr_accessor :item

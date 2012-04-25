@@ -47,12 +47,21 @@ get '/fetch/search/:subscription_type/?:query?' do
     puts "[#{subscription_type}][#{query}][search] ERROR while loading this"
   end
   
-  erb :"search/items", :layout => false, :locals => {
+  items = erb :"search/items", :layout => false, :locals => {
     :items => results, 
     :subscription => subscription,
     :query => query,
-    :sole => (per_page > 5)
+    :sole => (per_page > 5),
+    :page => page
   }
+
+  headers["Content-Type"] = "application/json"
+  {
+    :html => items,
+    :count => (results ? results.size : -1),
+    :sole => (per_page > 5),
+    :page => page
+  }.to_json
 end
 
 post '/subscriptions' do

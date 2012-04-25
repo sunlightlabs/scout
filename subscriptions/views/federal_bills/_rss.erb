@@ -1,15 +1,16 @@
 <% bill = item.data %>
 <item>
   <title><%= bill['short_title'].present? ? bill['short_title'] : bill['official_title'] %></title>
-  <% if bill['search']['highlight'] %>
+  <% if item.data['search']['highlight'] and (highlight = bill_highlight item, interest.in) %>
       <description><![CDATA[
-        <%= bill_highlight item, interest.in %>
+        <%= highlight %>
       ]]></description>
   <% elsif bill['summary'].present? %>
-    <description><%= bill['summary'] %></description>
+    <description><%= truncate bill['summary'], 500 %></description>
   <% else %>
-    <description>No excerpt or summary available.</description>
+    <description>No excerpt available.</description>
   <% end %>
+
   <link>http://<%= config[:hostname] %><%= item_path item %></link>
   <guid>http://<%= config[:hostname] %><%= item_path item %></guid>
   <pubDate><%= rss_date item.date %></pubDate>

@@ -1,6 +1,9 @@
 module Deliveries
   module Email
 
+    # give these methods at the class level, since all the methods in here are class methods
+    extend Routing 
+
     def self.deliver_for_user!(user, frequency)
       failures = 0
       successes = []
@@ -141,7 +144,8 @@ module Deliveries
     def self.render_delivery(subscription, interest, delivery)
       item = Deliveries::SeenItemProxy.new(SeenItem.new(delivery.item))
       template = Tilt::ERBTemplate.new "views/subscriptions/#{subscription.subscription_type}/_email.erb"
-      template.render item, :item => item, :subscription => subscription, :interest => interest, :trim => false
+      rendered = template.render item, :item => item, :subscription => subscription, :interest => interest, :trim => false
+      rendered << "\n\n#{item_url item}"
     end
 
     # the actual mechanics of sending the email
