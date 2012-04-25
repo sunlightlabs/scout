@@ -52,10 +52,10 @@
     
     <% subscriptions.each do |subscription| %>
         <div class="search" id="<%= subscription.subscription_type %>" data-subscription="<%= subscription.subscription_type %>">
-
-          <h3><%= subscription.search_name %></h3>
-
           <section class="container clear">
+			<h3><%= subscription.search_name %></h3>
+			<div class="clear"></div>
+	        
             <div class="loading">
               <span>Fetching <%= subscription.search_name.downcase %>...</span>
             </div>
