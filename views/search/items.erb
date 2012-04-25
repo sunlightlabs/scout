@@ -3,11 +3,11 @@
     <%= partial "search/item", :engine => "erb", :locals => {:item => item, :query => query} %>
   <% end %>
 
-    <% unless sole %>
-        <a href="/search/<%= subscription.subscription_type %>/<%= h query %>" class="viewMore">
-            View more <span><%= subscription.search_name %></span>
-        </a>
-    <% end %>
+  <% unless sole %>
+      <a href="/search/<%= subscription.subscription_type %>/<%= h query %>" class="viewMore">
+          View more <span><%= subscription.search_name %></span>
+      </a>
+  <% end %>
 
 <% else %>
 <!--     <div class="no_results">

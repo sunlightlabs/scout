@@ -781,16 +781,13 @@ footer nav li{
 }
 .items{
     margin-top: -2px;
-<<<<<<< HEAD
     background: url('../images/tinyborder_andshadow.png') center bottom repeat-x;
     display: none;
-=======
 }
 .contentArea.right .populate{
     background: url('../images/tinyborder_andshadow.png') center top repeat-x;
     padding-bottom: 17px;
     margin-top: -33px;
->>>>>>> button and input fixes for main header in IE7 + removed bullets in footer + fixed h3 styles on search page
 }
 
 
