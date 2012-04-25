@@ -6,7 +6,8 @@
           <% end %>
         </ul>
 
-
+        <% if sole %>
+            <!-- next page...?! -->
         <% else %>
             <a href="/search/<%= subscription.subscription_type %>/<%= h query %>" class="viewMore">
 				View more <span><%= subscription.search_name %></span>
