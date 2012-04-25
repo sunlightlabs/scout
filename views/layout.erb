@@ -35,6 +35,13 @@
 <body>
 
     <div class="headerWrapper">
+		<div class="hatWrap">
+			<div class="contentWrapper">
+				<a class="productOf" href="http://www.sunlightfoundation.com">
+						a product of Sunlight Foundation
+				</a>
+			</div>
+		</div>
 
         <% if home? %>
         <div class="homeWrapper">
@@ -78,7 +85,6 @@
             <a href="/">
                 <h1 class="textIndent">Scout</h1>
             </a>
-
             <%= partial "search/search", :engine => "erb", :locals => {} %>
 
             <div class="clear"></div>
