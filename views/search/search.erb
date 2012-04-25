@@ -74,15 +74,21 @@
         <div class="search" id="<%= subscription.subscription_type %>" data-subscription="<%= subscription.subscription_type %>">
 
           <section class="container clear">
+            <!-- page parameter gets stored as data on ul.items -->
+            <ul class="items">
+              <!-- data appended into here -->
+            </ul>
+
             <div class="loading">
               <span>Fetching <%= subscription.search_name.downcase %>...</span>
             </div>
 
-            <div class="error">
-              <span>There was an error while searching.</span>
+            <div class="empty">
+              <span>No results for this search.</span>
             </div>
 
-            <div class="populate">
+            <div class="error">
+              <span>There was an error while searching.</span>
             </div>
           </section>
 
@@ -100,7 +106,19 @@
     initializeFilters();
     initializeControls();
     search();
+
+    
   });
+
+  // set/re-set after a page of results come back
+  function onScroll() {
+    console.log("document.height: " + $(document).height() + "\ndocument.scrollTop: " + $(document).scrollTop());
+    var ratio = $(document).scrollTop() / $(document).height();
+    if (ratio > 0.80) {
+      $(document).off("scroll");
+      search({page: $("ul.items").data("page") + 1});
+    }
+  }
 
   function initializeDeveloper() {
     $("div.json.developer a").attr("href","<%= developer_search_url subscription %>");
@@ -224,7 +242,9 @@
   }
 
   function search(searchOptions) {
-    if (!searchOptions) searchOptions = {per_page: 20, page: 1};
+    if (!searchOptions) searchOptions = {};
+    if (!searchOptions.per_page) searchOptions.per_page = 20;
+    if (!searchOptions.page) searchOptions.page = 1;
 
     var subscription_type = currentSubscriptionType();
     var query = encodeURIComponent(currentQuery());
@@ -232,7 +252,7 @@
 
     // reset elements inside tab
     container.find(".loading").show();
-    container.find(".populate").html("").hide();
+    //container.find(".populate").html("").hide();
     
     // all search options (filters, pagination)
     var search = {};
@@ -246,7 +266,13 @@
     $.get("/fetch/search/" + subscription_type + "/" + query, search, function(data) {
       
       container.find(".loading").hide();
-      container.find(".populate").html(data).show();
+      container.find("ul.items").append(data.html).show();
+      
+      $(document).off("scroll").scroll(onScroll);
+      $("ul.items").data("page", data.page);
+
+      if (data.count == 0)
+        container.find(".empty").show();
 
     }).error(function() {
       container.find(".loading").hide();

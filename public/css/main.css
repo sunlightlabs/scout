@@ -724,10 +724,10 @@ footer nav li{
     -moz-box-shadow: inset 14px 0px 14px -7px #e2e3e0;
     box-shadow: inset 14px 0px 14px -7px #e2e3e0;
 }
-.entry .loading, .results .loading, .results .error {
+.entry .loading, .results .loading, .results .error, .results .empty {
   display: none; margin: 0px auto; width: 80%; padding-top: 30px;
 }
-.entry .loading, .results .loading span, .results .error span {
+.entry .loading, .results .loading span, .results .error span, .results .empty span {
   color: #444; font-size: 150%;
   display: block;
   padding-top: 20px; padding: 20px; padding-left: 50px;
@@ -754,7 +754,11 @@ footer nav li{
 .items{
     margin-top: -2px;
     background: url('../images/tinyborder_andshadow.png') center bottom repeat-x;
+    display: none;
 }
+
+
+
 time.item, .entry time, .time {   
     font-style: italic;
     font-weight: 200;
