@@ -34,6 +34,8 @@
 
   </div>
 
+  <%= partial "partials/share", :engine => :erb %>
+
   <div class="module data explanation small">
     <%= partial "subscriptions/#{subscription.subscription_type}/data", :engine => "erb" %>
   </div>
