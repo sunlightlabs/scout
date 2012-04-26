@@ -688,6 +688,7 @@ footer nav li{
 .results.right .pageTitle{
     margin-bottom: 54px;
 }
+
 .right .pageTitle{
     background: #f5f6f3 url('/images/tinyborder.png') bottom left repeat-x;
     padding: 16px 10px 16px 0;
@@ -742,9 +743,10 @@ footer nav li{
 .contentArea.right ul{
     background: url('../images/tinyborder_andshadow.png') center bottom repeat-x;    
 }
+.contentArea.right .search{
+    padding-bottom: 105px;
+}
 .contentArea.right .section{
-    margin-bottom: 105px;
-    clear: both;
     background: url('../images/tinyborder_andshadow.png') center top repeat-x;
     padding-bottom: 17px;
 }
