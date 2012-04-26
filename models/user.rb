@@ -16,7 +16,7 @@ class User
   field :api_key
 
   # whether and how the user will receive notifications
-  field :notifications, :default => "email_daily"
+  field :notifications, :default => "email_immediate"
   validates_inclusion_of :notifications, :in => ["none", "email_daily", "email_immediate"] # sms not valid at the user level
   validates_presence_of :notifications
 
