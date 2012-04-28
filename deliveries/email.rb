@@ -41,7 +41,7 @@ module Deliveries
           end
           
           content = render_final content
-          subject = "Daily digest - #{matching_deliveries.size} new #{matching_deliveries.size > 1 ? "things" : "thing"}"
+          subject = "Daily digest - #{matching_deliveries.size} new #{matching_deliveries.size > 1 ? "results" : "result"}"
 
           if email_user email, subject, content
             successes << save_receipt!(frequency, user, matching_deliveries, subject, content)
@@ -114,7 +114,7 @@ module Deliveries
       grouped = deliveries.group_by(&:subscription)
 
       if grouped.keys.size > 3
-        subject << "#{deliveries.size} new things" # deliveries.size is guaranteed to be > 1 if the grouped is > 3
+        subject << "#{deliveries.size} new results" # deliveries.size is guaranteed to be > 1 if the grouped is > 3
       else
         subject << grouped.map do |subscription, subscription_deliveries|
           type = "#{subscription_deliveries.size} #{subscription.adapter.short_name subscription_deliveries.size, subscription, interest}"
