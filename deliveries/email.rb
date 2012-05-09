@@ -8,7 +8,7 @@ module Deliveries
     # give these methods at the class level, since all the methods in here are class methods
     extend Routing 
 
-    def self.deliver_for_user!(user, frequency)
+    def self.deliver_for_user!(user, frequency, dry_run = false)
       failures = []
       successes = []
 
@@ -26,13 +26,17 @@ module Deliveries
 
           subject = render_subject interest, deliveries
 
-          if email_user email, subject, content
-            # delete first, save receipt after, in case an error in
-            # saving the receipt leaves the delivery around to be re-delivered
-            deliveries.each &:delete 
-            successes << save_receipt!(frequency, user, deliveries, subject, content)
+          if dry_run
+            ::Email.sent_message("DRY RUN", "User", email, subject, content)
           else
-            failures << {:frequency => frequency, :email => email, :subject => subject, :content => content, :interest_id => interest.id.to_s}
+            if email_user email, subject, content
+              # delete first, save receipt after, in case an error in
+              # saving the receipt leaves the delivery around to be re-delivered
+              deliveries.each &:delete 
+              successes << save_receipt!(frequency, user, deliveries, subject, content)
+            else
+              failures << {:frequency => frequency, :email => email, :subject => subject, :content => content, :interest_id => interest.id.to_s}
+            end
           end
         end
       
@@ -49,13 +53,17 @@ module Deliveries
           content = render_final content
           subject = "Daily digest - #{matching_deliveries.size} new #{matching_deliveries.size > 1 ? "results" : "result"}"
 
-          if email_user(email, subject, content)
-            # delete first, save receipt after, in case an error in
-            # saving the receipt leaves the delivery around to be re-delivered
-            matching_deliveries.each &:delete
-            successes << save_receipt!(frequency, user, matching_deliveries, subject, content)
+          if dry_run
+            ::Email.sent_message("DRY RUN", "User", email, subject, content)
           else
-            failures << {:frequency => frequency, :email => email, :subject => subject, :content => content, :interest_id => interest.id.to_s}
+            if email_user(email, subject, content)
+              # delete first, save receipt after, in case an error in
+              # saving the receipt leaves the delivery around to be re-delivered
+              matching_deliveries.each &:delete
+              successes << save_receipt!(frequency, user, matching_deliveries, subject, content)
+            else
+              failures << {:frequency => frequency, :email => email, :subject => subject, :content => content, :interest_id => interest.id.to_s}
+            end
           end
         end
       end

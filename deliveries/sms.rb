@@ -3,7 +3,7 @@ require 'twilio-rb'
 module Deliveries
   module SMS
 
-    def self.deliver_for_user!(user)
+    def self.deliver_for_user!(user, dry_run = false)
       unless user.phone.present?
         Admin.report Report.failure("Delivery", "#{user.email} is signed up for SMS alerts but has no phone", :email => user.email)
         return []
@@ -43,11 +43,15 @@ module Deliveries
           next
         end
 
-        if sms_user(phone, content)
-          deliveries.each &:delete
-          successes << save_receipt!(user, deliveries, content)
+        if dry_run
+          ::SMS.sent_message("DRY RUN", "User", phone, content)
         else
-          failures += 1
+          if sms_user(phone, content)
+            deliveries.each &:delete
+            successes << save_receipt!(user, deliveries, content)
+          else
+            failures += 1
+          end
         end
       end
 

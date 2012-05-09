@@ -5,15 +5,17 @@ module Deliveries
     def self.deliver!(delivery_options)
       receipts = []
 
+      dry_run = ENV["dry_run"] || false
+
       # all users with deliveries of the requested mechanism and email frequency
       user_ids = Delivery.where(delivery_options).distinct :user_id
       users = User.where(:_id => {"$in" => user_ids}).all
 
       users.each do |user|
         if delivery_options['mechanism'] == 'email'
-          receipts += Deliveries::Email.deliver_for_user! user, delivery_options['email_frequency']
+          receipts += Deliveries::Email.deliver_for_user! user, delivery_options['email_frequency'], dry_run
         elsif delivery_options['mechanism'] == 'sms'
-          receipts += Deliveries::SMS.deliver_for_user! user
+          receipts += Deliveries::SMS.deliver_for_user! user, dry_run
         else
           Admin.message "Unsure how to deliver to user #{user.email}, no known delivery mechanism for #{delivery_options['mechanism']}"
         end
