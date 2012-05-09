@@ -161,4 +161,14 @@ namespace :test do
     Deliveries::Manager.deliver! "mechanism" => mechanism, "email_frequency" => email_frequency
   end
 
+  desc "Deliver an individual delivery (use 'id' parameter)"
+  task :delivery => :environment do
+    id = ENV['id']
+    if delivery = Delivery.find(id)
+      Deliveries::Manager.deliver! '_id' => BSON::ObjectId(id), 'mechanism' => delivery.mechanism, 'email_frequency' => delivery.email_frequency
+    else
+      puts "Couldn't locate delivery by provided ID"
+    end
+  end
+
 end

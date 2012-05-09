@@ -1,6 +1,3 @@
-# should already be loaded as dependencies of sinatra
-require 'erb'
-require 'tilt'
 
 module Deliveries
   module Manager

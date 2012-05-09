@@ -1,3 +1,7 @@
+# should already be loaded as dependencies of sinatra
+require 'erb'
+require 'tilt'
+
 module Deliveries
   module Email
 
@@ -23,8 +27,10 @@ module Deliveries
           subject = render_subject interest, deliveries
 
           if email_user email, subject, content
+            # delete first, save receipt after, in case an error in
+            # saving the receipt leaves the delivery around to be re-delivered
+            deliveries.each &:delete 
             successes << save_receipt!(frequency, user, deliveries, subject, content)
-            deliveries.each &:delete
           else
             failures += 1
           end
@@ -44,8 +50,10 @@ module Deliveries
           subject = "Daily digest - #{matching_deliveries.size} new #{matching_deliveries.size > 1 ? "results" : "result"}"
 
           if email_user email, subject, content
-            successes << save_receipt!(frequency, user, matching_deliveries, subject, content)
+            # delete first, save receipt after, in case an error in
+            # saving the receipt leaves the delivery around to be re-delivered
             matching_deliveries.each &:delete
+            successes << save_receipt!(frequency, user, matching_deliveries, subject, content)
           else
             failures += 1
           end
@@ -145,6 +153,7 @@ module Deliveries
       item = Deliveries::SeenItemProxy.new(SeenItem.new(delivery.item))
       template = Tilt::ERBTemplate.new "views/subscriptions/#{subscription.subscription_type}/_email.erb"
       rendered = template.render item, :item => item, :subscription => subscription, :interest => interest, :trim => false
+      rendered.force_encoding "utf-8"
       rendered << "\n\n#{item_url item}"
     end
 
