@@ -72,25 +72,29 @@ module Deliveries
       mechanism ||= interest.mechanism
       email_frequency ||= interest.email_frequency
 
-      puts "[#{subscription.user.email}][#{subscription.subscription_type}][#{subscription.interest_in}](#{item.item_id}) Scheduling delivery"
+      if !["email", "sms"].include?(mechanism)
+        puts "[#{subscription.user.email}][#{subscription.subscription_type}][#{subscription.interest_in}](#{item.item_id}) Not scheduling delivery, user wants no notifications for this interest"
+      else
+        puts "[#{subscription.user.email}][#{subscription.subscription_type}][#{subscription.interest_in}](#{item.item_id}) Scheduling delivery"
 
-      Delivery.create!(
-        :user_id => user.id,
-        :user_email => user.email,
-        :user_phone => user.phone,
-        
-        :subscription_id => subscription.id,
-        :subscription_type => subscription.subscription_type,
-        
-        :interest_in => subscription.interest_in,
-        :interest_id => subscription.interest_id,
+        Delivery.create!(
+          :user_id => user.id,
+          :user_email => user.email,
+          :user_phone => user.phone,
+          
+          :subscription_id => subscription.id,
+          :subscription_type => subscription.subscription_type,
+          
+          :interest_in => subscription.interest_in,
+          :interest_id => subscription.interest_id,
 
-        :mechanism => mechanism,
-        :email_frequency => email_frequency,
-        
-        # drop the item into the delivery wholesale
-        :item => item.attributes.dup
-      )
+          :mechanism => mechanism,
+          :email_frequency => email_frequency,
+          
+          # drop the item into the delivery wholesale
+          :item => item.attributes.dup
+        )
+      end
     end
 
     def self.report_for(receipts, delivery_options)
