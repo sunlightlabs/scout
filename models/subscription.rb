@@ -21,7 +21,7 @@ class Subscription
   index :last_checked_at
   
   has_many :seen_items, :dependent => :delete
-  has_many :deliveries
+  has_many :deliveries, :dependent => :destroy
   belongs_to :user
   belongs_to :interest
   
