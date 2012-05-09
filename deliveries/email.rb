@@ -9,7 +9,7 @@ module Deliveries
     extend Routing 
 
     def self.deliver_for_user!(user, frequency)
-      failures = 0
+      failures = []
       successes = []
 
       email = user.email
@@ -32,7 +32,7 @@ module Deliveries
             deliveries.each &:delete 
             successes << save_receipt!(frequency, user, deliveries, subject, content)
           else
-            failures += 1
+            failures << {:frequency => frequency, :email => email, :subject => subject, :content => content, :interest_id => interest.id.to_s}
           end
         end
       
@@ -49,19 +49,19 @@ module Deliveries
           content = render_final content
           subject = "Daily digest - #{matching_deliveries.size} new #{matching_deliveries.size > 1 ? "results" : "result"}"
 
-          if email_user email, subject, content
+          if email_user(email, subject, content)
             # delete first, save receipt after, in case an error in
             # saving the receipt leaves the delivery around to be re-delivered
             matching_deliveries.each &:delete
             successes << save_receipt!(frequency, user, matching_deliveries, subject, content)
           else
-            failures += 1
+            failures << {:frequency => frequency, :email => email, :subject => subject, :content => content, :interest_id => interest.id.to_s}
           end
         end
       end
 
-      if failures > 0
-        Admin.report Report.failure("Delivery", "Failed to deliver #{failures} emails to #{email}")
+      if failures.size > 0
+        Admin.report Report.failure("Delivery", "Failed to deliver #{failures.size} emails to #{email}", :failures => failures)
       end
 
       if successes.any?
