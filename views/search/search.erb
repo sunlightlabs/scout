@@ -1,6 +1,17 @@
 <% content_for :sidebar_left do %>
  	<div class="module filters">
 		<h4>Filter search results</h4>
+		
+	    <ul class="categories">
+	      <% search_adapters.keys.reject {|type| type == subscription.subscription_type}.each do |subscription_type| %>
+	        <li>
+	          <a href="/search/<%= subscription_type %>/<%= h query %>">
+	            <%= Subscription.adapter_for(subscription_type).search_name nil %>
+	          </a>
+	        </li>
+	      <% end %>
+	    </ul>
+		
 		<form class="filters">
 
 	    <%= hidden_field_tag :query, :class => "query" %>
@@ -8,6 +19,33 @@
 	    
 	    <%= partial "subscriptions/#{subscription.subscription_type}/filter", :engine => "erb", :locals => {:subscription => subscription} %>
 		</form>
+		<div class="subscriptions related">
+			<h5>
+				Your related subscriptions
+			</h5>
+			<ul>
+				<li>
+					<a href="">State Bills - All</a>
+				</li>
+				<li>
+					<a href="">State Bills - OR</a>
+				</li>
+				<li>
+					<a href="">State Bills - WA</a>
+				</li>
+				<li>
+					<a href="">State Bills - CA</a>
+				</li>
+			</ul>
+			<ul>
+				<li>
+					<a href="">Bills in Congress - All</a>
+				</li>
+				<li>
+					<a href="">Bills in Congress - Awaiting signature</a>
+				</li>
+			</ul>
+		</div>
 	</div>
 
   <% if show_data? %>
@@ -20,33 +58,15 @@
     </div>
   <% end %>
 
-  <div class="module filters">
-    <h4>Switch Category</h4>
-    <ul>
-      <% search_adapters.keys.reject {|type| type == subscription.subscription_type}.each do |subscription_type| %>
-        <li>
-          <a href="/search/<%= subscription_type %>/<%= h query %>">
-            <%= Subscription.adapter_for(subscription_type).search_name nil %>
-          </a>
-        </li>
-      <% end %>
-    </ul>
-
-  </div>
-
-  <%= partial "partials/share", :engine => :erb %>
-
-  <div class="module data explanation small">
+  <div class="module data explanation">
+	<h4>Sources</h4>
     <%= partial "subscriptions/#{subscription.subscription_type}/data", :engine => "erb" %>
   </div>
 
   <%= recent_searches %>
 <% end %>
 
-<div class="results contentArea right">
-		<span class="resultsIntro">
-			Create an alert to receive notifications of more results like these.
-		</span>
+<div class="results contentArea right single">
 		<div class="pageTitle">
 		    <div class="searchParameters">
 		        <h2>"<%= h query %>"</h2>
@@ -70,6 +90,10 @@
 		    </button>
 			<div class="clear"></div>
 		</div>
+		<span class="resultsIntro">
+			Create an alert to receive notifications of more results like these.
+			<span class="share">Share results<%= partial "partials/share", :engine => :erb %></span>
+		</span>
 
     
     <% subscriptions.each do |subscription| %>
