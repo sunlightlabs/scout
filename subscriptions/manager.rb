@@ -101,7 +101,7 @@ module Subscriptions
         begin
           response = adapter.url_to_response url
         rescue Exception => ex
-          Report.exception self, "Exception parsing feed #{url}", ex
+          Report.exception self, "Exception processing URL #{url}", ex, :subscription_type => subscription.subscription_type, :function => function, :interest_in => subscription.interest_in, :subscription_id => subscription.id
           return nil
         end
       else

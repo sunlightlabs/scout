@@ -5,7 +5,7 @@ require 'loofah'
 module Subscriptions  
   module Adapters
 
-    class ExternalRss
+    class ExternalFeed
 
       # data structure of an external RSS feed subscription/interest
       # data:
@@ -13,15 +13,18 @@ module Subscriptions
       #   title: [title set by user (defaults to rss title)]
       #   original_title: [rss title]
       #   original_description: [rss description]
+      
 
       def self.url_for(subscription, function, options = {})
         subscription.data['url']
       end
 
-      # the item_id is the url
       def self.url_for_detail(item_id, options = {})
         item_id
       end
+
+      
+      # name methods
 
       def self.search_name(subscription)
         subscription.data['title']
@@ -34,6 +37,9 @@ module Subscriptions
       def self.interest_name(interest)
         interest.data['title']
       end
+
+
+      # go through each RSS item, exclude any invalid things
 
       def self.items_for(doc, function, options = {})
         return nil unless doc
@@ -65,25 +71,14 @@ module Subscriptions
 
         return nil unless date and link
 
+        # turn any HTML in the description into plain text
+        data['description'] = strip_tags data['description']
+
         SeenItem.new(
           :item_id => link,
           :date => date,
           :data => data
         )
-      end
-
-      def self.feed_details(doc)
-        details = {}
-
-        if title = (doc / :title).first
-          details['title'] = sanitize title.text
-        end
-
-        if description = (doc / :description).first
-          details['description'] = sanitize description.text
-        end
-
-        details
       end
 
 
@@ -107,8 +102,33 @@ module Subscriptions
         doc
       end
 
+      # extract feed-level details from the doc
+
+      def self.feed_details(doc)
+        details = {}
+
+        if title = (doc / :title).first
+          details['title'] = sanitize title.text
+        end
+
+        if description = (doc / :description).first
+          details['description'] = sanitize description.text
+        end
+
+        details
+      end
+
+      # strip out unsafe HTML
+
       def self.sanitize(string)
         Loofah.scrub_fragment(string, :prune).to_s.strip
+      end
+
+      def self.strip_tags(string)
+        doc = Nokogiri::HTML string
+        (doc/"//*/text()").map do |text| 
+          text.inner_text.strip
+        end.select {|text| text.present?}.join " "
       end
 
     end

@@ -34,6 +34,7 @@ require './controllers/api_keys'
 require './controllers/users'
 require './controllers/subscriptions'
 require './controllers/feeds'
+require './controllers/import'
 
 
 before do

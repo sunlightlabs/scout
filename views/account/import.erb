@@ -1,0 +1,71 @@
+<h3>Import a Feed</h3>
+
+<strong>
+  Paste in the URL of the feed you'd like to get alerts for:
+</strong>
+<br/>
+<input type="text" placeholder="Feed URL" class="feed_url" />
+<button class="preview">
+  <span>Preview</span>
+</button>
+
+<ul class="feed_rules">
+  <li>Must be a valid RSS feed, not bigger than 1MB in size.</li>
+  <li>Feeds don't have to be about government, but they must not be obscene or otherwise inappropriate.</li>
+</ul>
+
+
+<div class="feed_preview">
+
+  <div class="header">
+    <strong>
+      Does this look right?
+    </strong>
+
+    <button id="create">
+      <span>Create Alert</span>
+    </button>
+  </div>
+
+  <div class="contents">
+    <fieldset class="title">
+      <span>Title</span>
+      <input type="text" placeholder="Enter a title" name="title" class="title" />
+    </fieldset>
+    <p class="description">
+      No description found.
+    </p>
+
+    <ul class="items">
+      <!-- fill in with items! -->
+    </div>
+  </div>
+
+</div>
+
+
+<script type="text/javascript">
+  $(function() {
+
+    $("button.preview").click(function() {
+
+      var url = $.trim($("input.feed_url").val());
+      if (!url) return false;
+
+      var preview = $("div.feed_preview");
+
+      $.get("/import/feed/preview", {url: url}, function(data) {
+      
+        // preview.find(".loading").hide();
+
+        preview.find("input.title").val(data.title);
+        preview.find("p.description").html(data.description);
+        preview.find("ul.items").show().html(data.html);
+
+      }).error(function() {
+        preview.find("ul.items").show().html("Invalid feed.");
+      });
+    });
+
+  });
+</script>
