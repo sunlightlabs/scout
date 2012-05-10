@@ -7,7 +7,7 @@ module Subscriptions
         endpoint = "http://openstates.org/api/v1"
         api_key = config[:subscriptions][:sunlight_api_key]
         
-        fields = %w{ bill_id state chamber session actions }
+        fields = %w{ id bill_id state chamber session actions }
         
         item_id = subscription.interest_in
 
