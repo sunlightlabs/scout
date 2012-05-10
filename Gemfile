@@ -35,3 +35,5 @@ group :test do
 end
 
 gem 'httparty', '0.8.2'
+gem 'nokogiri', '1.5.2'
+gem 'loofah', '1.2.1'

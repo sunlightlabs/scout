@@ -95,12 +95,21 @@ module Subscriptions
       
       puts "\n[#{subscription.subscription_type}][#{function}][#{subscription.interest_in}][#{subscription.id}] #{url}\n\n" if config[:debug][:output_urls]
       
-      begin
-        response = HTTParty.get url
-      rescue Timeout::Error, Errno::ECONNREFUSED, Errno::ETIMEDOUT => ex
-        # will do function-specific reports in places that call poll
-        # Admin.report Report.warning("Poll", "[#{subscription.subscription_type}][#{function}][#{subscription.interest_in}] poll timeout, returned an empty list")
-        return nil
+
+      response = nil
+      if adapter.respond_to?(:url_to_response)
+        begin
+          response = adapter.url_to_response url
+        rescue Exception => ex
+          Report.exception self, "Exception parsing feed #{url}", ex
+          return nil
+        end
+      else
+        begin
+          response = HTTParty.get url
+        rescue Timeout::Error, Errno::ECONNREFUSED, Errno::ETIMEDOUT => ex
+          return nil
+        end
       end
       
       items = adapter.items_for response, function, options
