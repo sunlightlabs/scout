@@ -119,4 +119,11 @@ helpers do
     redirect '/' unless logged_in?
   end
 
+  # done as the end of an endpoint
+  def json(code, object)
+    headers["Content-Type"] = "application/json"
+    status code
+    object.to_json
+  end
+
 end

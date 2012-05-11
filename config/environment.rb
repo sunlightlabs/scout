@@ -103,6 +103,7 @@ def search_adapters
   }
 end
 
+# adapters used to follow activity around specific items
 def interest_adapters
   {
     'federal_bills_activity' => 'bill',

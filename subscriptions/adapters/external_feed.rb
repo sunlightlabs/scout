@@ -87,6 +87,17 @@ module Subscriptions
       # The RSS adapter overrides the normal JSON parser, and includes extra security checks
       # since it can be given URLs from arbitrary external sources.
 
+      # general-purpose feed validator, uses the other methods to find the details
+      # returns error message if it's not valid for some reason
+      def self.validate_feed(url)
+        doc = begin
+          url_to_response url
+        rescue Exception => ex
+          nil
+        end
+        doc ? feed_details(doc) : nil
+      end
+
       def self.url_to_response(url)
         # ask for it in plaintext (turn off HTTParty's smart parsing), with a timeout of 5 seconds
         response = HTTParty.get url, :timeout => 5, :format => "text"

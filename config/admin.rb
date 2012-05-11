@@ -2,21 +2,21 @@
 
 module Admin
 
-  def self.new_feed(subscription)
-    title = subscription.data['title']
-    url = subscription.data['url']
+  def self.new_feed(interest)
+    title = interest.data['title']
+    url = interest.data['url']
 
-    original_title = subscription.data['original_title']
-    original_description = subscription.data['original_description']
+    original_title = interest.data['original_title']
+    original_description = interest.data['original_description']
 
     subject = "[Review] New feed: #{title}"
     
     body = "Title: #{title}\nURL: #{url}\n\n"
     body += "Original Title: #{original_title}\n\nOriginal Description: #{original_description}"
 
-    body += "\n\n#{JSON.pretty_generate subscription.attributes}"
+    body += "\n\n#{JSON.pretty_generate interest.attributes}"
 
-    body += "\n\n#{subscription.id}"
+    body += "\n\n#{interest.id}"
 
     deliver! "Feed", subject, body.strip
   end

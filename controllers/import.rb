@@ -8,29 +8,19 @@ end
 
 # fetch a preview of the given RSS feed
 get "/import/feed/preview" do
-  #TODO: detect if the user has one already on preview
-
   url = params[:url] ? params[:url].strip : ""
 
-  subscription = feed_subscription_from url
-
-  begin
-    doc = Subscriptions::Adapters::ExternalFeed.url_to_response url
-  rescue Exception => ex
-    # return error
+  unless feed_details = Subscriptions::Adapters::ExternalFeed.validate_feed(url)
     halt 500 and return
   end
 
-  halt 500 and return unless doc
-
-  feed_details = Subscriptions::Adapters::ExternalFeed.feed_details doc
-
+  subscription = feed_subscription_from url
   unless results = subscription.search
-    halt 500 and return # invalid feed or other problem
+    halt 500 and return
   end
 
   items = erb :"search/items", :layout => false, :locals => {
-    :items => results, 
+    :items => results.first(2), 
     :subscription => subscription,
 
     # could be removed if the partials were refactored not to necessarily expect these
@@ -48,11 +38,36 @@ get "/import/feed/preview" do
 end
 
 
-get "/import/feed/create" do
-  # create the actual subscription for the RSS feed, and initialize it
-  # create the interest as well, throw the data into it
-  # email the admin about the new RSS feed in the system, for (reactive) review
+post "/import/feed/create" do
+  requires_login
 
+  url = params[:url].present? ? params[:url].strip : nil
+  title = params[:title].present? ? params[:title].strip : nil
+
+  unless url.present? and title.present? and feed_details = Subscriptions::Adapters::ExternalFeed.validate_feed(url)
+    halt 500 and return
+  end
+
+  subscription = feed_subscription_from url
+  subscription.data['title'] = title
+  subscription.data['original_title'] = feed_details['title']
+  subscription.data['original_description'] = feed_details['description']
+
+  interest = current_user.interests.new(
+    :in => url,
+    :interest_type => "external_feed",
+    :data => subscription.data.dup
+  )
+
+  # should be non-controversial at this step
+  interest.save!
+  subscription.interest_id = interest.id
+  subscription.save!
+
+  # send admin an email about new feed, for reactive review
+  Admin.new_feed interest
+
+  json 200, {:interest_id => interest.id}
 end
 
 helpers do

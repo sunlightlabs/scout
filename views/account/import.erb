@@ -1,71 +1,144 @@
-<h3>Import a Feed</h3>
+<div class="contentArea left import">
 
-<strong>
-  Paste in the URL of the feed you'd like to get alerts for:
-</strong>
-<br/>
-<input type="text" placeholder="Feed URL" class="feed_url" />
-<button class="preview">
-  <span>Preview</span>
-</button>
+  <h3>Import a Feed</h3>
 
-<ul class="feed_rules">
-  <li>Must be a valid RSS feed, not bigger than 1MB in size.</li>
-  <li>Nothing obscene or otherwise inappropriate (for that, maybe you want <a href="http://ifttt.com/wtf">ifttt</a>).</li>
-</ul>
+  <strong>
+    Paste in the URL of the feed you'd like to get alerts for:
+  </strong>
 
+  <form action="#" method="get" class="preview">
+    <fieldset class="preview">
+      <input type="text" placeholder="Feed URL" class="feed_url" />
 
-<div class="feed_preview">
-
-  <div class="header">
-    <strong>
-      Does this look right?
-    </strong>
-
-    <button id="create">
-      <span>Create Alert</span>
-    </button>
-  </div>
-
-  <div class="contents">
-    <fieldset class="title">
-      <span>Title</span>
-      <input type="text" placeholder="Enter a title" name="title" class="title" />
+      <button type="submit" class="preview">
+        <span>Preview</span>
+      </button>
     </fieldset>
-    <p class="description">
-      No description found.
-    </p>
+  </form>
 
-    <ul class="items">
-      <!-- fill in with items! -->
+  <ul class="feed_rules">
+    <li>Must be a valid RSS feed, not bigger than 1MB in size.</li>
+    <li>Nothing obscene or otherwise inappropriate (for that, maybe you want <a href="http://ifttt.com/wtf">ifttt</a>).</li>
+  </ul>
+
+  <div class="feed_preview hide_start">
+
+    <div class="header hide_start">
+      <strong>
+        Does this look right?
+      </strong>
     </div>
+
+    <div class="details hide_start">
+      <fieldset class="title">
+        <label>Title</label>
+        <input type="text" placeholder="Enter a title" name="title" class="title" />
+      </fieldset>
+
+      <button class="create">
+        <span>Create Alert</span>
+      </button>
+
+      <fieldset class="description">
+        <label>Description</label>
+        <p>
+          No description found.
+        </p>
+      </fieldset>
+    </div>
+
+    <div class="contents">
+      
+      <ul class="items hide_start">
+        <!-- fill in with items! -->
+      </ul>
+
+      <div class="previewing loading hide_start">
+        <span>Fetching feed for preview...</span>
+      </div>
+
+      <div class="creating loading hide_start">
+        <span>Creating alert...</span>
+      </div>
+
+      <div class="empty hide_start">
+        <span>This feed is currently empty.</span>
+      </div>
+
+      <div class="error hide_start">
+        <span>Not a valid feed.</span>
+      </div>
+
+      <div class="created hide_start">
+        <span>Subscription created. <a href="/account/subscriptions">Return to your subscriptions.</a></span>
+      </div>
+    </div>
+
   </div>
 
 </div>
 
-
 <script type="text/javascript">
   $(function() {
 
-    $("button.preview").click(function() {
+    $("form.preview").submit(function() {
 
       var url = $.trim($("input.feed_url").val());
       if (!url) return false;
 
-      var preview = $("div.feed_preview");
+      // reset
+      $(".hide_start").hide();
+
+      var preview = $("div.feed_preview").show();
+      preview.find(".previewing").show();
 
       $.get("/import/feed/preview", {url: url}, function(data) {
-      
-        // preview.find(".loading").hide();
+        preview.find(".previewing").hide();
 
         preview.find("input.title").val(data.title);
-        preview.find("p.description").html(data.description);
-        preview.find("ul.items").show().html(data.html);
+        preview.find("fieldset.description p").html(data.description || "No description found.");
+        preview.find("ul.items").html(data.html);
+        preview.find(".header, .details, ul.items").show();
+      }).error(function() {
+        preview.find(".previewing").hide();
+
+        preview.find(".error").show();
+      });
+
+      return false;
+    });
+
+    $("button.create").click(function() {
+
+      var url = $.trim($("input.feed_url").val());
+      if (!url) return false;
+
+      var title = $.trim($("input.title").val());
+
+      var preview = $("div.feed_preview");
+      preview.find("ul.items").hide();
+      preview.find(".creating").show();
+
+      $.post("/import/feed/create", {url: url, title: title}, function(data) {
+        preview.find(".creating").hide();
+
+        console.log("Created feed with ID " + data.interest_id);
+
+        preview.find(".created").show();
 
       }).error(function() {
-        preview.find("ul.items").show().html("Invalid feed.");
+        preview.find(".creating").hide();
+
+        preview.find(".error").show();
       });
+
     });
+
+    <% if logged_in? %>
+      $("button.create").click(follow);
+    <% else %>
+      $("button.create").click(function() {window.location = "/login?redirect=" + Utils.currentPath();});
+    <% end %>
 
   });
 </script>

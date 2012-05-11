@@ -895,15 +895,19 @@ footer nav li{
     -moz-box-shadow: inset 14px 0px 14px -7px #e2e3e0;
     box-shadow: inset 14px 0px 14px -7px #e2e3e0;
 }
+.feed_preview .loading, .feed_preview .error, .feed_preview.empty,
 .entry .loading, .results .loading, .results .error, .results .empty {
   display: none; margin: 0px auto; width: 80%; padding-top: 30px;
 }
+
+.feed_preview .loading span, .feed_preview .error span, .feed_preview.empty span,
 .entry .loading, .results .loading span, .results .error span, .results .empty span {
   color: #444; font-size: 150%;
   display: block;
   padding-top: 20px; padding: 20px; padding-left: 50px;
 }
-.results .loading span, .entry .loading .span {
+
+.feed_preview .loading span, .results .loading span, .entry .loading span {
   background-position: left;
   background-image: url(/images/loader-32.gif);
   background-repeat: no-repeat;
@@ -1374,6 +1378,34 @@ a.source, .resources{
 .settings #flash div.flash{
     padding: 0;
 }
+
+
+/*-- Import Feed Styling --*/
+
+fieldset.preview input {float: left;}
+fieldset.preview button {float: left;}
+ul.feed_rules {
+    clear: none;
+    font-size: 70%;
+}
+
+.import .hide_start {
+    display: none;
+}
+
+.import .feed_preview .details fieldset,
+.import .feed_preview .details button {
+    float: left;
+} .import .feed_preview .details fieldset.description {clear: both;}
+
+.import .feed_preview .details {
+    clear: both;
+}
+
+.import .feed_preview .contents {
+    clear: both;
+}
+
 
 
 /*-- Notification Styling --*/
