@@ -1,39 +1,6 @@
-<% content_for :sidebar_right do %>
-	<div class="module donate">
-		<p>
-	        You're on the <em>free plan</em>. Everyone is!
-		</p>
-		<p>
-			But if you like this service and want to give us money anyway, by all means:
-	    </p>
 
-	    <form action="https://checkout.google.com/cws/v2/Donations/548702786961191/checkoutForm" id="BB_BuyButtonForm" method="post" name="BB_BuyButtonForm" target="_top">
-            
-	        <input name="item_name_1" type="hidden" value="Scout - Donation to support the service"/>
-	        <input name="item_description_1" type="hidden" value="The Sunlight Foundation is a non-profit, nonpartisan organization that uses the power of the Internet to catalyze greater government openness and transparency and to provide new tools and resources for media and individuals alike."/>
-	        <input name="item_quantity_1" type="hidden" value="1"/>
-	        <input name="item_currency_1" type="hidden" value="USD"/>
-	        <input name="item_is_modifiable_1" type="hidden" value="true"/>
-	        <input name="item_min_price_1" type="hidden" value="0.01"/>
-	        <input name="item_max_price_1" type="hidden" value="25000.0"/>
-	        <input name="_charset_" type="hidden" value="utf-8"/>
-        	<label>$</label>
-	        <input id="item_price_1" name="item_price_1" type="text" value="10.00" placeholder="10.00"/>
-        
-	        <button class="donatebutton smallButton" type="submit">
-	            <span>Donate</span>
-	        </button>
-        	<div class="clear"></div>
-	    </form>
-		
-	    <small>
-	        The Sunlight Foundation is a 501 (c)(3) nonprofit, nonpartisan organization. All contributions are tax-deductible.
-	    </small>
-	</div>
 
-<% end %>
-
-<div class="contentArea left user settings">
+<div class="contentArea full user settings">
   <%= flash_for [:user] %>
   <%= errors_for user %>
 
@@ -194,6 +161,37 @@
             </a>
         <% end %>
     </div>
+	<div class="module donate">
+		<p>
+	        You're on the <em>free plan</em>. Everyone is!
+		</p>
+		<p>
+			But if you like this service and want to give us money anyway, by all means:
+	    </p>
+
+	    <form action="https://checkout.google.com/cws/v2/Donations/548702786961191/checkoutForm" id="BB_BuyButtonForm" method="post" name="BB_BuyButtonForm" target="_top">
+            
+	        <input name="item_name_1" type="hidden" value="Scout - Donation to support the service"/>
+	        <input name="item_description_1" type="hidden" value="The Sunlight Foundation is a non-profit, nonpartisan organization that uses the power of the Internet to catalyze greater government openness and transparency and to provide new tools and resources for media and individuals alike."/>
+	        <input name="item_quantity_1" type="hidden" value="1"/>
+	        <input name="item_currency_1" type="hidden" value="USD"/>
+	        <input name="item_is_modifiable_1" type="hidden" value="true"/>
+	        <input name="item_min_price_1" type="hidden" value="0.01"/>
+	        <input name="item_max_price_1" type="hidden" value="25000.0"/>
+	        <input name="_charset_" type="hidden" value="utf-8"/>
+        	<label>$</label>
+	        <input id="item_price_1" name="item_price_1" type="text" value="10.00" placeholder="10.00"/>
+        
+	        <button class="donatebutton smallButton" type="submit">
+	            <span>Donate</span>
+	        </button>
+        	<div class="clear"></div>
+	    </form>
+		
+	    <small>
+	        The Sunlight Foundation is a 501 (c)(3) nonprofit, nonpartisan organization. All contributions are tax-deductible.
+	    </small>
+	</div>
 
 </div>
 

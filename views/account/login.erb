@@ -1,18 +1,4 @@
-<% content_for :sidebar_right do %>
-    <div class="module forgotPassword">
-
-    <h4>Forgot Password?</h4>
-	    <form action="/account/password/forgot" method="post" class="signup_form">
-	        <input class="redirect" name="redirect" type="hidden" value="<%= h params[:redirect] %>" />
-
-	        <input class="email" type="email" placeholder="your email" name="email" />
-        
-	        <button class="text login smallButton">OK</button>
-	    </form>
-	</div>
-<% end %>
-
-<div class="settings contentArea left">
+<div class="settings contentArea full">
 
     <div class="module notifications">
 
@@ -22,8 +8,9 @@
 
 	        <input class="email" type="email" placeholder="your email" name="email" />
 	        <input class="password" type="password" placeholder="password" name="password" />
+			<a href="/forgotpassword">Forgot your password?</a>
         
-	        <button class="text login"><span>OK</span></button>
+	        <button class="text login"><span>Login</span></button>
 	    </form>
 	</div>
 
@@ -56,7 +43,7 @@
 	            <span>Get updates about the Sunlight Foundation</span>
 	        </label>
         
-	        <button class="text login"><span>OK</span></button>
+	        <button class="text login"><span>Sign Up</span></button>
 	    </form>
 	    <% end %>
 	</div>

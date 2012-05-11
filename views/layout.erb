@@ -88,6 +88,12 @@
             <a href="/">
                 <h1 class="textIndent">Scout</h1>
             </a>
+			<% if home? %>
+			<p class="splashtext">
+				Get alerts when congress or your state capitol talks about issues you care about
+			</p>
+			<% end %>
+			
             <%= partial "search/search", :engine => "erb", :locals => {} %>
 
             <div class="clear"></div>

@@ -208,7 +208,7 @@ form{
     font-weight: bold;
 }
 
-input[type="text"], input[type="password"]{
+input[type="text"], input[type="password"], input[type="email"]{
     display: block;
     background-color: #ffffff;
     border: 0;
@@ -497,6 +497,9 @@ div.contentWrapper{
 .contentArea{
     width: 710px;
 }
+.contentArea.full{
+    width: 100%;
+}
 
 .sidebar.left{
     border-right: 1px solid #ffffff;
@@ -670,7 +673,7 @@ footer nav li{
 }
 
 .homeWrapper #search_form{
-    margin-top: 278px;
+    margin-top: 30px;
     width: 677px;
 }
 
@@ -718,7 +721,15 @@ footer nav li{
     color: #59585e;
     margin-bottom: 16px;
 }
-
+.splashtext{
+    background: url('../images/splash_text.png') center top no-repeat;
+    width: 440px;
+    height: 140px;
+    text-indent: -9999em;
+    float: right;
+    margin-right: 131px;
+    margin-top: 98px;
+}
 
 
 
@@ -771,9 +782,10 @@ footer nav li{
 }
 .results.single .resultsIntro {
     margin-bottom: 0;
+    text-align: right;
 }
 .share{
-    float: right;
+    float: left;
     width: 155px;
     font-weight: bold;
     font-style: normal;
