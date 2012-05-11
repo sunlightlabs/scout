@@ -1052,7 +1052,17 @@ button.item.follow, button.item.following {
 
 .resources{
     float: left;
+    background-color: #f5f6f5;
+/*    
+    -webkit-box-shadow: inset -14px 0px 14px -7px #e2e3e0;
+    -moz-box-shadow: inset -14px 0px 14px -7px #e2e3e0;
+    box-shadow: inset -14px 0px 14px -7px #e2e3e0;
+*/
+    padding: 8px;
+    margin-bottom: 20px;
+    width: 100%;
 }
+
 .resources li{
     display: block;
     float: left;
@@ -1066,6 +1076,7 @@ button.item.follow, button.item.following {
     display: block;
     float: left;
     padding-top: 0;
+    width: 592px;
 }
 .resources span{
     background-image: url('../images/icons_resources.png');
@@ -1103,13 +1114,11 @@ button.item.follow, button.item.following {
 .resources .capWords a:hover span{
     background-position: 26px bottom;
 }
-a.source {
+.resources .source {
     float: right;
+    margin-right: 0;
 }
-a.source, .resources{
-    padding-top: 14px;
-    margin-bottom: 20px;
-}
+
 .entryHeader{
     float: left;
 }
