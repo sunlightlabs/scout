@@ -393,13 +393,13 @@ header h1{
     border-left: 0;
     border-right: 0;
     display: block;
-    -webkit-appearance: textfield;
     -moz-appearance: textfield;
     -webkit-appearance: textfield;
     float: left;
     font-size: 110%;
     color: #5C5B60;
     line-height: 36px;
+    padding: 8px 0 8px 4px;
 }
 #search_form .field{
     float: left;
@@ -475,7 +475,6 @@ select.subscription_type {
 div.contentWrapper{
     overflow: hidden;
     margin-top: -11px;
-    position: relative;
 }
 
 .left{
