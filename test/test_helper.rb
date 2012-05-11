@@ -70,5 +70,10 @@ module TestHelper
       assert_response 302
       assert_equal path, redirect_path
     end
+
+    def json_response
+      JSON.parse last_response.body
+    end
+
   end
 end

@@ -94,7 +94,6 @@ module Subscriptions
       url = adapter.url_for subscription, function, options
       
       puts "\n[#{subscription.subscription_type}][#{function}][#{subscription.interest_in}][#{subscription.id}] #{url}\n\n" if config[:debug][:output_urls]
-      
 
       response = nil
       if adapter.respond_to?(:url_to_response)

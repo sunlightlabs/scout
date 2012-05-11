@@ -12,13 +12,7 @@ get "/import/feed/preview" do
 
   url = params[:url] ? params[:url].strip : ""
 
-  subscription = Subscription.new(
-    :subscription_type => "external_feed",
-    :interest_in => url,
-    :data => {
-      'url' => url
-    }
-  )
+  subscription = feed_subscription_from url
 
   begin
     doc = Subscriptions::Adapters::ExternalFeed.url_to_response url
@@ -38,6 +32,8 @@ get "/import/feed/preview" do
   items = erb :"search/items", :layout => false, :locals => {
     :items => results, 
     :subscription => subscription,
+
+    # could be removed if the partials were refactored not to necessarily expect these
     :query => nil,
     :sole => true
   }
@@ -56,5 +52,19 @@ get "/import/feed/create" do
   # create the actual subscription for the RSS feed, and initialize it
   # create the interest as well, throw the data into it
   # email the admin about the new RSS feed in the system, for (reactive) review
+
+end
+
+helpers do
+  
+  def feed_subscription_from(url)
+    (current_user ? current_user.subscriptions : Subscription).new(
+      :subscription_type => "external_feed",
+      :interest_in => url,
+      :data => {
+        'url' => url
+      }
+    )
+  end
 
 end
