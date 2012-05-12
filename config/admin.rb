@@ -16,6 +16,12 @@ module Admin
 
     body += "\n\n#{JSON.pretty_generate interest.attributes}"
 
+    if interest.seen_items.any?
+      example = interest.seen_items.first
+      body += "\n\nExample item:"
+      body += "\n\n#{JSON.pretty_generate example.attributes}"
+    end
+
     body += "\n\n#{interest.id}"
 
     deliver! "Feed", subject, body.strip
