@@ -1,8 +1,11 @@
 # router helpers, can also be mixed in elsewhere if need be
 module Routing
   def item_path(item)
+    if item.subscription_type == "external_feed"
+      item.data['link']
+
     # an item with its own landing page
-    if item_type = search_adapters[item.subscription_type]
+    elsif item_type = search_adapters[item.subscription_type]
       "/item/#{item_type}/#{item.item_id}"
 
     # an item that does not have its own landing page
@@ -12,6 +15,10 @@ module Routing
   end
 
   def item_url(item)
-    "http://#{config[:hostname]}#{item_path item}"
+    if item.subscription_type == "external_feed"
+      item.data['link']
+    else
+      "http://#{config[:hostname]}#{item_path item}"
+    end
   end
 end
