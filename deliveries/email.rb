@@ -32,8 +32,9 @@ module Deliveries
             if email_user email, subject, content
               # delete first, save receipt after, in case an error in
               # saving the receipt leaves the delivery around to be re-delivered
+              serialized = serialize_deliveries deliveries
               deliveries.each &:delete 
-              successes << save_receipt!(frequency, user, deliveries, subject, content)
+              successes << save_receipt!(frequency, user, serialized, subject, content)
             else
               failures << {:frequency => frequency, :email => email, :subject => subject, :content => content, :interest_id => interest.id.to_s}
             end
@@ -59,8 +60,9 @@ module Deliveries
             if email_user(email, subject, content)
               # delete first, save receipt after, in case an error in
               # saving the receipt leaves the delivery around to be re-delivered
+              serialized = serialize_deliveries matching_deliveries
               matching_deliveries.each &:delete
-              successes << save_receipt!(frequency, user, matching_deliveries, subject, content)
+              successes << save_receipt!(frequency, user, serialized, subject, content)
             else
               failures << {:frequency => frequency, :email => email, :subject => subject, :content => content, :interest_id => interest.id.to_s}
             end
@@ -84,7 +86,7 @@ module Deliveries
         :email_frequency => frequency,
         :mechanism => "email",
 
-        :deliveries => deliveries.map {|delivery| delivery.attributes.dup},
+        :deliveries => deliveries,
 
         :user_email => user.email,
         :user_notifications => user.notifications,
@@ -93,6 +95,10 @@ module Deliveries
         :content => content,
         :delivered_at => Time.now
       )
+    end
+
+    def self.serialize_deliveries(deliveries)
+      deliveries.map {|delivery| delivery.attributes.dup}
     end
 
     def self.render_interest(interest, deliveries)
