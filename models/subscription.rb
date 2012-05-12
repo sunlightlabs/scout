@@ -80,13 +80,22 @@ class Subscription
 
   # convenience method - the 'data' field, but minus the 'query' field
   def filters
-    fields = data.dup
-    fields.delete 'query'
-    fields
+    if @filters
+      @filters
+    else
+      filter_fields = adapter.respond_to?(:filters) ? adapter.filters.keys : []
+      fields = data.dup
+      fields.keys.each {|key| fields.delete(key) unless filter_fields.include?(key)}
+      @filters = fields
+    end
   end
 
   def filter_name(field, value)
-    adapter.filters[field.to_s][:name].call value
+    if adapter.respond_to?(:filters)
+      adapter.filters[field.to_s][:name].call value
+    else
+
+    end
   end
   
   # what fields are acceptable to syndicated through JSON

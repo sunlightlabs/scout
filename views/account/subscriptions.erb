@@ -4,6 +4,10 @@
 
 <% content_for :sidebar_right do %>
     <div class="module rss cluster">
+        <a href="/import/feed">Import an RSS feed</a> from anywhere on the Internet.
+    </div>
+
+    <div class="module rss cluster">
         <h4>
             Combined Feed
             <a class="rss feed" href="/account/<%= current_user.id %>.rss">RSS</a>
@@ -52,9 +56,12 @@
                         </a>
                     </h3>
 
-                    <a class="rss feed" href="/interest/<%= interest.id %>.rss">RSS</a>
-                    <% if current_user.developer? %>
-                        <a class="json feed" href="/interest/<%= interest.id %>.json?apikey=<%= current_user.api_key %>">JSON</a>
+                    <% unless interest.feed? %>
+                        <a class="rss feed" href="/interest/<%= interest.id %>.rss">RSS</a>
+                        
+                        <% if current_user.developer? %>
+                            <a class="json feed" href="/interest/<%= interest.id %>.json?apikey=<%= current_user.api_key %>">JSON</a>
+                        <% end %>
                     <% end %>
 
                     <% if interest.search? %>

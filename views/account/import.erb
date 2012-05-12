@@ -108,7 +108,7 @@
       return false;
     });
 
-    $("button.create").click(function() {
+    var createSubscription = function() {
 
       var url = $.trim($("input.feed_url").val());
       if (!url) return false;
@@ -124,7 +124,7 @@
 
         console.log("Created feed with ID " + data.interest_id);
 
-        preview.find(".created").show();
+        window.location = "/account/subscriptions";
 
       }).error(function() {
         preview.find(".creating").hide();
@@ -132,10 +132,10 @@
         preview.find(".error").show();
       });
 
-    });
+    };
 
     <% if logged_in? %>
-      $("button.create").click(follow);
+      $("button.create").click(createSubscription);
     <% else %>
       $("button.create").click(function() {window.location = "/login?redirect=" + Utils.currentPath();});
     <% end %>

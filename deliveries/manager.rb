@@ -32,11 +32,13 @@ module Deliveries
       puts "Error during delivery, emailed report."
     end
 
-    def self.interest_name(interest)
+    def self.interest_name(interest, quotes = false)
       if interest.item?
         Subscription.adapter_for(interest_data[interest.interest_type][:adapter]).interest_name(interest)
-      else
-        interest.in
+      elsif interest.feed?
+        Subscriptions::Adapters::ExternalFeed.interest_name interest
+      else # if interest.search?
+        quotes ? "\"#{interest.in}\"" : interest.in
       end
     end
 
@@ -44,6 +46,8 @@ module Deliveries
     def self.interest_path(interest, preferred_type = nil)
       if interest.item?
         "/item/#{interest.interest_type}/#{interest.in}"
+      elsif interest.feed?
+        interest.in # URL
       elsif interest.search?
         # this sucks, and needs to change
         if preferred_type

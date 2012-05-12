@@ -28,6 +28,10 @@ module GeneralHelpers
     ]
   end
 
+  def interest_name(interest, quotes = false)
+    Deliveries::Manager.interest_name interest, quotes
+  end
+
   def interest_path(interest)
     Deliveries::Manager.interest_path interest
   end
@@ -113,14 +117,6 @@ module GeneralHelpers
     "<button>
       <span>#{text}</span>
     </button>"
-  end
-
-  def interest_name(interest, quotes = false)
-    if interest.item?
-      Subscription.adapter_for(interest_data[interest.interest_type][:adapter]).interest_name(interest)
-    else
-      quotes ? "\"#{interest.in}\"" : interest.in
-    end
   end
 
   def safe_capitalize(string)

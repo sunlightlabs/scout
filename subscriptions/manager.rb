@@ -46,7 +46,7 @@ module Subscriptions
       # 2) stores any items as yet unseen by this subscription in seen_ids
       # 3) stores any items as yet unseen by this subscription in the delivery queue
       unless results = Subscriptions::Manager.poll(subscription, :check)
-        Admin.report Report.warning("Check", "Error while checking a subscription, will check again next time.", :subscription_id => subscription.id)
+        Admin.report Report.warning("Check", "Error while checking a subscription, will check again next time.", :subscription => subscription.attributes.dup)
         return nil
       end
 
@@ -61,7 +61,7 @@ module Subscriptions
           mark_as_seen! subscription, item
 
           # accumulate backfilled items to report per-subscription.
-          # buffer of 8 days, to allow for information to make its way through whatever 
+          # buffer of 30 days, to allow for information to make its way through whatever 
           # pipelines it has to go through (could eventually configure this per-adapter)
           
           # Was 5 days, bumped it to 30 because of federal_bills. The LOC, CRS, and GPO all 

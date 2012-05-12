@@ -4,6 +4,7 @@ class Interest
   
   belongs_to :user
   has_many :subscriptions, :dependent => :destroy
+  has_many :seen_items # convenience, subscriptions will do the destroy on them
 
   # a search string or item ID
   field :in
@@ -30,7 +31,11 @@ class Interest
   validates_presence_of :in
   
   def item?
-    interest_type != "search"
+    (interest_type != "search") and (interest_type != "external_feed")
+  end
+
+  def feed?
+    interest_type == "external_feed"
   end
 
   def search?
