@@ -71,7 +71,7 @@ end
 
 helpers do
   
-  def json(results, params)
+  def jsonp(results, params)
     response['Content-Type'] = 'application/json'
     json = results.to_json
     params[:callback].present? ? "#{params[:callback]}(#{json});" : json
@@ -96,7 +96,7 @@ helpers do
       }
     }
 
-    json results, params
+    jsonp results, params
   end
 
 
