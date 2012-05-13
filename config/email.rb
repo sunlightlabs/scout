@@ -73,8 +73,16 @@ module Email
       sent_message "Postmark", tag, to, subject, body
       true
     rescue Exception => e
-      puts "\n[#{tag}][Postmark] Couldn't send message to Postmark. Check email settings."
-      false
+      puts "\n[#{tag}][Postmark] Couldn't send message to Postmark. Trying Pony as a backup."
+
+      # backup, try to use Pony to send the message
+      if with_pony!(tag, to, subject, body)
+        Admin.postmark_down tag, to, subject, body
+        true
+      else
+        puts "\n[#{tag}][Pony] Nope, failed to send via Pony too. Oh well!"
+        false
+      end
     end
   end
 
