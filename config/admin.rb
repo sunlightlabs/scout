@@ -4,7 +4,10 @@ module Admin
 
   def self.new_user(user)
     user_attributes = user.attributes.dup
+    
+    # it's just a salted hash, but still
     user_attributes.delete "password_hash"
+
     deliver! "User", "New user: #{user.email}", JSON.pretty_generate(user_attributes)
   end
 
