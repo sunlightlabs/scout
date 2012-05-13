@@ -9,7 +9,7 @@ module Admin
     original_title = interest.data['original_title']
     original_description = interest.data['original_description']
 
-    subject = "[Review] New feed: #{title}"
+    subject = "New feed: #{title}"
     
     body = "Title: #{title}\nURL: #{url}\n\n"
     body += "Original Title: #{original_title}\n\nOriginal Description: #{original_description}"
@@ -50,12 +50,12 @@ module Admin
   end
 
   def self.message(subject, body = nil)
-    deliver! "Admin", "[ADMIN] #{subject}", (body || subject)
+    deliver! "Admin", subject, (body || subject)
   end
 
   def self.deliver!(tag, subject, body)
     if admin?
-      Email.deliver!(tag, config[:admin], subject, body)
+      Email.deliver!(tag, config[:admin], "[ADMIN] #{subject}", body)
     else
       puts "\n[#{tag}] #{subject}\n\n#{body}"
     end
