@@ -2,6 +2,12 @@
 
 module Admin
 
+  def self.new_user(user)
+    user_attributes = user.attributes.dup
+    user_attributes.delete "password_hash"
+    deliver! "User", "New user: #{user.email}", JSON.pretty_generate(user_attributes)
+  end
+
   def self.new_feed(interest)
     title = interest.data['title']
     url = interest.data['url']

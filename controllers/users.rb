@@ -36,6 +36,7 @@ post '/account/new' do
   end
 
   if @new_user.save
+    Admin.new_user @new_user
     log_in @new_user
 
     flash[:success] = "Your account has been created."
