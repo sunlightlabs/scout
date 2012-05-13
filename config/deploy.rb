@@ -9,7 +9,7 @@ else
 end
 
 # RVM stuff - not sure how/why this works, awesome
-set :rvm_ruby_string, '1.9.3-p125@scout' 
+set :rvm_ruby_string, '1.9.3-p194@scout' 
 set :rvm_type, :user
 
 set :application, user
