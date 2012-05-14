@@ -39,24 +39,23 @@ configure do
   end
 end
 
-Dir.glob('models/*.rb').each {|filename| load filename}
+Dir.glob('app/models/*.rb').each {|filename| load filename}
 
 # helpers
 require 'padrino-helpers'
-require './helpers/general'
-require './helpers/routing'
-require './helpers/subscriptions'
+Dir.glob('app/helpers/*.rb').each {|filename| load filename}
 helpers Padrino::Helpers
 helpers Helpers::General
 helpers Helpers::Subscriptions
 helpers Helpers::Routing
 
-# admin messages and reports
-require './config/admin'
 
-# delivery mechanisms (Twilio, pony, postmark, "fake")
+# transmission mechanisms (Twilio, pony, postmark, "fake")
 require './config/email'
 require './config/sms'
+
+# admin messages and reports
+require './config/admin'
 
 # delivery management and mechanisms
 Dir.glob('deliveries/*.rb').each {|filename| load filename}

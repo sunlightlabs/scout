@@ -6,7 +6,7 @@ require 'sinatra/flash'
 require 'rack/file'
 
 set :logging, false
-set :views, 'views'
+set :views, 'app/views'
 set :public_folder, 'public'
 
 # disable sessions in test environment so it can be manually set
@@ -21,19 +21,15 @@ configure(:development) do |config|
   config.also_reload "./config/admin.rb"
   config.also_reload "./config/email.rb"
   config.also_reload "./config/sms.rb"
-  config.also_reload "./helpers/*.rb"
-  config.also_reload "./models/*.rb"
-  config.also_reload "./controllers/*.rb"
+  config.also_reload "./app/helpers/*.rb"
+  config.also_reload "./app/models/*.rb"
+  config.also_reload "./app/controllers/*.rb"
   config.also_reload "./subscriptions/adapters/*.rb"
   config.also_reload "./subscriptions/*.rb"
   config.also_reload "./deliveries/*.rb"
 end
 
-require './controllers/api_keys'
-require './controllers/users'
-require './controllers/subscriptions'
-require './controllers/feeds'
-require './controllers/import'
+Dir.glob('app/controllers/*.rb').each {|filename| load filename}
 
 
 before do
