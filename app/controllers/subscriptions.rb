@@ -52,7 +52,7 @@ get '/fetch/search/:subscription_type/?:query?' do
     :items => results, 
     :subscription => subscription,
     :query => query,
-    :sole => (per_page > 5),
+    :sole => (per_page.to_i > 5),
     :page => page
   }
 
@@ -60,7 +60,7 @@ get '/fetch/search/:subscription_type/?:query?' do
   {
     :html => items,
     :count => (results ? results.size : -1),
-    :sole => (per_page > 5),
+    :sole => (per_page.to_i > 5),
     :page => page
   }.to_json
 end
