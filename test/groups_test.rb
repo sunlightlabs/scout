@@ -5,6 +5,9 @@ class RoutingTest < Test::Unit::TestCase
   include TestHelper::Methods
   include FactoryGirl::Syntax::Methods
 
+  
+  # making groups
+
   def test_create_group
     user = create :user
     name = "Groupness"
@@ -62,6 +65,117 @@ class RoutingTest < Test::Unit::TestCase
 
     assert_equal 1, user.groups.count
     assert_not_nil json_response['errors']
+  end
+
+
+  # removing a group
+
+  # def test_delete_group
+  # end
+
+  # def test_delete_someone_elses_group
+  # end
+
+  # def test_delete_nonexistent_group
+  # end
+
+  # def test_delete_group_not_logged_in
+  # end
+
+  
+  # assigning an interest to a group
+
+  def test_assign_interest_to_group
+    user = create :user
+    interest = create :interest, :user => user
+    group = create :group, :user => user
+
+    assert_equal 0, group.interests.count
+    assert_equal nil, interest.group
+
+    put "/groups/assign/#{group.slug}", {:interest_ids => [interest.id.to_s]}, login(user)
+    assert_response 200
+
+    assert_equal 1, group.reload.interests.count
+    assert_equal group, interest.reload.group
+  end
+
+  def test_assign_multiple_interests_to_group
+    user = create :user
+    i1 = create :interest, :user => user
+    i2 = create :interest, :user => user
+    i3 = create :interest, :user => user
+    group = create :group, :user => user
+
+    assert_equal 0, group.interests.count
+    [i1, i2, i3].each do |i|
+      assert_equal nil, i.group
+    end
+
+    put "/groups/assign/#{group.slug}", {:interest_ids => [i1.id.to_s, i2.id.to_s]}, login(user)
+    assert_response 200
+
+    assert_equal 2, group.reload.interests.count
+    [i1, i2].each do |i|
+      assert_equal group, i.reload.group
+    end
+    assert_equal nil, i3.reload.group
+  end
+
+  def test_assign_interest_to_someone_elses_group
+  end
+
+  def test_assign_interest_not_logged_in
+  end
+
+
+  # removing an interest from any group
+
+  def test_unassign_interest_from_any_group
+    user = create :user
+    group = create :group, :user => user
+    interest = create :interest, :group => group, :user => user
+
+    assert_equal 1, group.interests.count
+    assert_equal group, interest.group
+
+    put "/groups/assign", {:interest_ids => [interest.id.to_s]}, login(user)
+    assert_response 200
+
+    assert_equal 0, group.reload.interests.count
+    assert_equal nil, interest.reload.group
+  end
+
+  def test_unassign_multiple_interests_from_any_group
+    user = create :user
+    group = create :group, :user => user
+    i1 = create :interest, :group => group, :user => user
+    i2 = create :interest, :group => group, :user => user
+    i3 = create :interest, :group => group, :user => user
+
+    assert_equal 3, group.interests.count
+    [i1, i2, i3].each do |i|
+      assert_equal group, i.group
+    end
+
+    put "/groups/assign", {:interest_ids => [i1.id.to_s, i2.id.to_s]}, login(user)
+    assert_response 200
+
+    assert_equal 1, group.reload.interests.count
+    [i1, i2].each {|i| assert_equal nil, i.reload.group}
+    assert_equal group, i3.reload.group
+  end
+
+  def test_unassign_interest_not_logged_in
+  end
+
+
+  # group RSS and JSON feeds
+
+  def test_group_rss_feed
+  end
+
+  def test_group_json_feed
   end
 
 end

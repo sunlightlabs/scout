@@ -7,7 +7,7 @@
         <a href="/import/feed">Import an RSS feed</a> from anywhere on the Internet.
     </div>
 
-    <div class="module rss cluster">
+<!--     <div class="module rss cluster">
         <h4>
             Combined Feed
             <a class="rss feed" href="/account/<%= current_user.id %>.rss">RSS</a>
@@ -20,14 +20,14 @@
         <% else %>
             <small>A combined RSS feed of updates on everything you follow.</small>
         <% end %>
-    </div>
+    </div> -->
 
     <div class="module groups">
         <h4>Groups</h4>
 
-        <div class="group_list">
+        <ul class="group_list">
             <%= partial "account/groups", :engine => :erb, :locals => {:groups => groups} %>
-        </div>
+        </ul>
 
         <div class="group errors"></div>
 

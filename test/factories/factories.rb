@@ -16,7 +16,7 @@ FactoryGirl.define do
 
   factory :interest do
     user
-    group
+    group nil # default to be group-less
     self.in "foia"
     interest_type "search"
     data {

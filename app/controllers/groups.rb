@@ -22,3 +22,20 @@ post "/groups" do
     }
   end
 end
+
+put "/groups/assign/?:slug?" do
+  requires_login
+
+  group = nil
+  if params[:slug]
+    unless group = current_user.groups.where(:slug => params[:slug]).first
+      halt 404 and return
+    end
+  end
+
+  interest_ids = params[:interest_ids].map {|id| BSON::ObjectId id}
+  interests = current_user.interests.where(:_id => {"$in" => interest_ids})
+  interests.update_all :group_id => (group ? group.id : nil)
+
+  halt 200
+end

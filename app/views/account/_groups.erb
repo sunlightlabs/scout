@@ -1,18 +1,27 @@
 <% if groups.any? %>
     <% groups.each do |group| %>
-        <h5 class="name">
-            <%= group.name %>
-        </h5>
-        <% if group.interests.any? %>
-            <ul class="interests">
-                <% group.interests.each do |interest| %>
-                    <li class="<%= interest.interest_type %>">
-                        <%= interest_name interest %>
-                    </li>
-                <% end %>
-            </ul>
-        <% end %>
+        <li>
+            <span class="name">
+                <%= group.name %>
+            </span>
+            <a class="rss feed" href="/group/<%= group.slug %>.rss">RSS</a>
+            <% if current_user.developer? %>    
+                <a class="json feed" href="/group/<%= current_user.id %>.json?apikey=<%= current_user.api_key %>">JSON</a>
+            <% end %>
+
+            <% if group.interests.any? %>
+                <ul class="interests">
+                    <% group.interests.each do |interest| %>
+                        <li class="<%= interest.interest_type %>">
+                            <%= interest_name interest %>
+                        </li>
+                    <% end %>
+                </ul>
+            <% end %>
+        </li>
     <% end %>
 <% else %>
-    <p>You do not have any groups.</p>
+    <p>
+        Create a group to organize your alerts.
+    </p>
 <% end %>
