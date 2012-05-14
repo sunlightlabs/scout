@@ -193,7 +193,7 @@ class SubscriptionsTest < Test::Unit::TestCase
   def test_unsubscribe_to_type_of_all
     user = create :user
     query1 = "environment"
-    i1 = user.interests.create! :in => query1, :interest_type => "search"
+    i1 = user.interests.create! :in => query1, :interest_type => "search", :data => {"query" => query1}
     s1 = user.subscriptions.create! :interest => i1, :subscription_type => "state_bills", :interest_in => query1, :data => {"query" => query1}
     s2 = user.subscriptions.create! :interest => i1, :subscription_type => "federal_bills", :interest_in => query1, :data => {"query" => query1}
 
