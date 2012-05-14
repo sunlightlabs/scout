@@ -83,7 +83,7 @@
 <script type="text/javascript">
   $(function() {
 
-    $("form.preview").submit(function() {
+    var preview = function() {
 
       var url = $.trim($("input.feed_url").val());
       if (!url) return false;
@@ -108,7 +108,7 @@
       });
 
       return false;
-    });
+    };
 
     var createSubscription = function() {
 
@@ -141,6 +141,11 @@
     <% else %>
       $("button.create").click(function() {window.location = "/login?redirect=" + Utils.currentPath();});
     <% end %>
+
+    $("form.preview").submit(preview);
+
+    if ($("input.feed_url").val())
+      preview();
 
   });
 </script>
