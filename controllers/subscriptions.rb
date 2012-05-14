@@ -4,7 +4,10 @@ get '/search/:subscription_type/?:query?' do
   query = stripped_query
 
   if params[:subscription_type] == "all"
-    types = ["federal_bills", "speeches", "state_bills", "regulations"]
+
+    # hardcoded to preserve order...need a better solution
+    types = search_subscription_types
+
   else
     types = [params[:subscription_type]]
   end
@@ -15,19 +18,14 @@ get '/search/:subscription_type/?:query?' do
   subscriptions = types.map {|type| subscription_for type}
   halt 404 and return unless subscriptions.any?
 
-  if subscriptions.size > 1
-    erb :"search/search_all", :layout => !pjax?, :locals => {
-      :subscriptions => subscriptions,
-      :following => !subscriptions.first.new_record?,
-      :query => query
-    }
-  else
-    erb :"search/search", :layout => !pjax?, :locals => {
-      :subscriptions => subscriptions, # deprecated
-      :subscription => subscriptions.first,
-      :query => query
-    }
-  end
+
+  erb :"search/search", :layout => !pjax?, :locals => {
+    :subscriptions => subscriptions,
+    :subscription => (subscriptions.size == 1 ? subscriptions.first : nil),
+    :subscription_type => params[:subscription_type],
+    :search_types => search_subscription_types,
+    :query => query
+  }
 end
 
 get '/fetch/search/:subscription_type/?:query?' do
@@ -77,7 +75,7 @@ post '/subscriptions' do
     subscriptions = [subscription_for(params[:subscription_type])]
   end
 
-  interest = current_user.interests.new(
+  interest = current_user.interests.find_or_initialize_by(
     :in => query, 
     :interest_type => "search",
     :data => {'query' => query}
@@ -230,8 +228,7 @@ helpers do
     }
 
     if logged_in?
-      # can't use #find_or_initialize_by because of the dot notation
-      current_user.subscriptions.where(criteria).first || current_user.subscriptions.new(criteria)
+      current_user.subscriptions.find_or_initialize_by criteria
     else
       Subscription.new criteria
     end
@@ -239,5 +236,10 @@ helpers do
 
   def stripped_query
     params[:query] ? URI.decode(params[:query].strip.gsub("\"", "")) : nil
+  end
+
+  # search_adapter.keys, but in order
+  def search_subscription_types
+    ["federal_bills", "speeches", "state_bills", "regulations"]
   end
 end

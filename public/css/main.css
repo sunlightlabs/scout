@@ -355,9 +355,6 @@ header h1{
     padding-left: 22px;
 }
 
-#search_form .filters{
-    display: none;
-}
 #search_form{
     float: right;
     margin-top: 72px;
@@ -563,24 +560,26 @@ div.contentWrapper{
     list-style-type: none;
 }
 
-.filters select {
+
+/*-- Filter sidebar module --*/
+
+.module.controls .filters select {
     width: 100%;
 }
 
-.filters form button{
-
+.module.controls .filters ul {
+    display: none;
 }
 
-.filters form button:hover{
-}
+/*-- Data sources --*/
 
-.noFilters{
-    font-style: italic;
-}
 .sidebar small{
     display: block;
 }
 
+.sidebar .developer.search {
+    display: none;
+}
 
 /*-- Footer Styling --*/
 .footerWrapper{
@@ -808,41 +807,43 @@ footer nav li{
     float: right;
     margin-top: 7px;
 }
-.module.filters{
+.module.controls{
     padding-left: 0;
     padding-right: 0;
 }
-.filters form{
+.module.controls form{
     padding-left: 16px;
     padding-right: 16px;
     background: url('../images/tinyborder.png') center bottom repeat-x;
     padding-bottom: 10px;
     margin-bottom: 25px;
 }
-.filters h4{
+.module.controls h4{
     padding-left: 16px;
 }
-.filters .categories{
+.module.controls .categories{
     background: url('../images/tinyborder.png') center bottom repeat-x;
     padding-bottom: 20px;
     margin-bottom: 25px;
 }
-.filters .categories li{
+.module.controls .categories li{
     padding: 8px 16px;
     margin-bottom: 0;
 }
-.filters .categories a{
+.module.controls .categories a{
     text-decoration: none;
 }
-.filters .categories .current{
+.module.controls .categories .current{
     background: #e5e6e3 url('../images/bg_currentCat.png') 5px 12px no-repeat;
     font-weight: bold;
 }
+
 .searchParameters .filters{
     color: #83858B;
     font-style: italic;
     margin-top: 3px;
 }
+
 .subscriptions.related{
     padding-left: 16px;
     padding-right: 16px;

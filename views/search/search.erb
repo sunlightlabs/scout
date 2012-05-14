@@ -1,125 +1,184 @@
-<% content_for :sidebar_left do %>
- 	<div class="module filters">
-		<h4>Filter search results</h4>
-		
-	    <ul class="categories">
-	      <% search_adapters.keys.reject {|type| type == subscription.subscription_type}.each do |subscription_type| %>
-	        <li>
-	          <a href="/search/<%= subscription_type %>/<%= h query %>">
-	            <%= Subscription.adapter_for(subscription_type).search_name nil %>
-	          </a>
-	        </li>
-	      <% end %>
-	    </ul>
-		
-		<form class="filters">
+<% unless pjax? %>
+  <% content_for :sidebar_left do %>
+   	<div class="module controls">
+  		<h4>Filter search results</h4>
+  		
+  	    <ul class="categories">
+          <li 
+            class="all <%= subscription ? "" : "current" %>"
+            >
+            <a data-pjax="#center" href="/search/all/<%= h query %>">
+              Everything
+            </a>
+          </li>
+          <% current_type = (subscription ? subscription.subscription_type : "all") %>
+  	      <% search_types.each do |subscription_type| %>
+  	        <li 
+              class="<%= subscription_type %> <%= subscription_type == current_type ? "current" : "" %>"
+              >
+  	          <a data-pjax="#center" href="/search/<%= subscription_type %>/<%= h query %>">
+  	            <%= Subscription.adapter_for(subscription_type).search_name nil %>
+  	          </a>
+  	        </li>
+  	      <% end %>
+  	    </ul>
+  		
+  		<div class="filters">
+        <form>
 
-	    <%= hidden_field_tag :query, :class => "query" %>
-	    <%= hidden_field_tag :subscription_type, :class => "subscription_type" %>
-	    
-	    <%= partial "subscriptions/#{subscription.subscription_type}/filter", :engine => "erb", :locals => {:subscription => subscription} %>
-		</form>
-		<div class="subscriptions related">
-			<h5>
-				Your related subscriptions
-			</h5>
-			<ul>
-				<li>
-					<a href="">State Bills - All</a>
-				</li>
-				<li>
-					<a href="">State Bills - OR</a>
-				</li>
-				<li>
-					<a href="">State Bills - WA</a>
-				</li>
-				<li>
-					<a href="">State Bills - CA</a>
-				</li>
-			</ul>
-			<ul>
-				<li>
-					<a href="">Bills in Congress - All</a>
-				</li>
-				<li>
-					<a href="">Bills in Congress - Awaiting signature</a>
-				</li>
-			</ul>
-		</div>
-	</div>
+    	    <%= hidden_field_tag :query, :class => "query" %>
+    	    <%= hidden_field_tag :subscription_type, :class => "subscription_type" %>
+    	    
+          <% search_types.each do |subscription_type| %>
+            <ul 
+              class="filter_controls <%= subscription_type %>"
+              data-subscription_type="<%= subscription_type %>"
+              >
+              <%= partial "subscriptions/#{subscription_type}/filter", :engine => "erb" %>
+            </ul>
+          <% end %>
 
-  <% if show_data? %>
-    <div class="module developer json">
+        </form>
+  		</div>
 
-		<h4>The Data</h4>
-		<p>
-			See the <a href="<%= developer_search_url subscription %>">underlying data</a>.
-		</p>
+      <!--
+  		<div class="subscriptions related">
+  			<h5>
+  				Your related subscriptions
+  			</h5>
+  			<ul>
+  				<li>
+  					<a href="">State Bills - All</a>
+  				</li>
+  				<li>
+  					<a href="">State Bills - OR</a>
+  				</li>
+  				<li>
+  					<a href="">State Bills - WA</a>
+  				</li>
+  				<li>
+  					<a href="">State Bills - CA</a>
+  				</li>
+  			</ul>
+  			<ul>
+  				<li>
+  					<a href="">Bills in Congress - All</a>
+  				</li>
+  				<li>
+  					<a href="">Bills in Congress - Awaiting signature</a>
+  				</li>
+  			</ul>
+  		</div>
+      -->
+
+  	</div>
+
+    <% if show_data? %>
+      <div class="module developer search json">
+    		<h4>The Data</h4>
+    		<p>
+    			See the <a href="#">underlying data</a>.
+    		</p>
+      </div>
+    <% end %>
+
+    <div class="module data explanation">
+      <h4>Sources</h4>
+
+      <div class="all">
+        <p>
+          Data comes from a variety of sources. Select a category or search result for more information.
+        </p>
+      </div>
+
+      <% search_types.each do |subscription_type| %>
+        <div class="<%= subscription_type %>">
+          <%= partial "subscriptions/#{subscription_type}/data", :engine => "erb" %>
+        </div>
+      <% end %>
     </div>
   <% end %>
-
-  <div class="module data explanation">
-	<h4>Sources</h4>
-    <%= partial "subscriptions/#{subscription.subscription_type}/data", :engine => "erb" %>
-  </div>
-
-  <%= recent_searches %>
 <% end %>
 
 <div class="results contentArea right single">
-		<div class="pageTitle">
-		    <div class="searchParameters">
-		        <h2>"<%= h query %>"</h2>
-		        in 
-            <span class="category"><%= subscription.search_name %></span> 
-            <% if subscription.filters.any? %>
-  				    <div class="filters">
-                <%= subscription.filters.map do |field, value|
-                  "<span>#{subscription.filter_name field, value}</span>"
-                end.join(", ") %>
-              </div>
-            <% end %>
-		    </div>
-
-		    <button class="follow search">
-		      <span>Create Alert</span>
-		    </button>
-
-		    <button class="following search">
-		      <span>Remove Alert</span>
-		    </button>
-			<div class="clear"></div>
-		</div>
-		<span class="resultsIntro">
-			Create an alert to receive notifications of more results like these.
-			<span class="share">Share results<%= partial "partials/share", :engine => :erb %></span>
-		</span>
-
-    
-    <% subscriptions.each do |subscription| %>
-        <div class="search" id="<%= subscription.subscription_type %>" data-subscription="<%= subscription.subscription_type %>">
-
-          <div class="section container clear">
-            <!-- page parameter gets stored as data on ul.items -->
-            <ul class="items">
-              <!-- data appended into here -->
-            </ul>
-
-            <div class="loading">
-              <span>Fetching <%= subscription.search_name.downcase %>...</span>
-            </div>
-
-            <div class="empty">
-              <span>No results for this search.</span>
-            </div>
-
-            <div class="error">
-              <span>There was an error while searching.</span>
-            </div>
+	<div class="pageTitle">
+    <div class="searchParameters">
+      <h2>"<%= h query %>"</h2>
+      in 
+      <% if subscription %>
+        <span class="category">
+          <%= subscription.search_name %>
+        </span> 
+      
+        <% if subscription.filters.any? %>
+			    <div class="filters">
+            <%= subscription.filters.map do |field, value|
+              "<span>#{subscription.filter_name field, value}</span>"
+            end.join(", ") %>
           </div>
+        <% end %>
+      <% else %>
+        <span class="category">
+          Everything
+        </span>
+      <% end %>
+    </div>
 
+    <button class="follow search">
+      <span>Create Alert</span>
+    </button>
+
+    <button class="following search">
+      <span>Remove Alert</span>
+    </button>
+
+    <div class="clear"></div>
+	</div>
+
+	<span class="resultsIntro">
+		Create an alert to receive notifications of more results like these.
+		<span class="share">
+      Share results<%= partial "partials/share", :engine => :erb %>
+    </span>
+	</span>
+
+  
+  <% subscriptions.each do |s| %>
+    <div class="search" id="<%= s.subscription_type %>" data-subscription="<%= s.subscription_type %>">
+
+      <div class="section container clear">
+
+        <% unless subscription %>
+          <h3><%= s.search_name %></h3>
+        <% end %>
+
+        <!-- page parameter gets stored as data on ul.items -->
+        <ul class="items <%= s.subscription_type %>">
+          <!-- pages of data appended into here -->
+        </ul>
+
+        <% unless subscription %>
+          <a href="/search/<%= s.subscription_type %>/<%= h query %>" class="viewMore">
+            View more <span><%= s.search_name %></span>
+          </a>
+          <div class="clear"></div>
+        <% end %>
+
+        <div class="loading">
+          <span>Fetching <%= s.search_name.downcase %>...</span>
         </div>
-    <% end %>
+
+        <div class="empty">
+          <span>No results for this search.</span>
+        </div>
+
+        <div class="error">
+          <span>There was an error while searching.</span>
+        </div>
+      </div>
+
+    </div>
+  <% end %>
 
 </div>
 
@@ -128,54 +187,50 @@
 <script type="text/javascript">
   
   $(function() {
-    initializeDeveloper();
-    initializeFilters();
-    initializeControls();
-    search();
+    <% if !pjax? %> // run only once
+      initializeControls();
+    <% end %>
 
+    initializeSubscriptions();
     
+    <% subscriptions.each do |subscription| %>
+      search("<%= h subscription.subscription_type %>");
+    <% end %>
   });
 
-  // set/re-set after a page of results come back
-  function onScroll() {
-    console.log("document.height: " + $(document).height() + "\ndocument.scrollTop: " + $(document).scrollTop());
-    var ratio = $(document).scrollTop() / $(document).height();
-    if (ratio > 0.80) {
-      $(document).off("scroll");
-      search({page: $("ul.items").data("page") + 1});
-    }
-  }
-
-  function initializeDeveloper() {
-    $("div.json.developer a").attr("href","<%= developer_search_url subscription %>");
-  }
-
-  // initializes both the sidebar form filters, and the top search form
-  function initializeFilters() {
-    $("form.filters input.query").val("<%= h query %>");
-    $("input.subscription_type").val("<%= subscription.subscription_type %>");
-    
-    // first, reset all filters
-    $("form.filters .filter_control").val("");
-
-    // then, initialize according to the query string
-    <% subscription.filters.each do |key, value| %>
-      $("form.filters input[name=<%= key %>], form.filters select[name=<%=key %>]").val("<%= value %>");
-    <% end %>
-  }
 
   function initializeControls() {
-    // make sure to clear all events so they don't stack
+    // set up the filter events
+    $(".filters .filter_control").off("change").change(function() {
+      var type = $(this).parents("ul.filter_controls").data("subscription_type");
+      window.elem = $(this);
 
-    $("button.follow").hide();
-    $("button.following").hide();
+      var query = encodeURIComponent(currentQuery());
+      var filters = currentFilters();
+      
+      // serialize the filters and preserve the brackets
+      var filterString = $.param(filters).replace(/%5B/g, "[").replace(/%5D/g, "]");
 
-    <% if subscription.new_record? %>
-      $("button.follow").show();
-    <% else %>
-      $("button.following").show();
-    <% end %>
+      var url = "/search/" + type + "/" + query;
+      if (filterString) url += "?" + filterString;
 
+      Utils.pjax(url, "#center");
+    });
+  }
+
+  function initializeSubscriptions() {
+    // set the given query and subscription type as current
+    // the subscription type can be "all"
+    $(".filters input.query").val("<%= h query %>");
+    $(".filters input.subscription_type").val("<%= h subscription_type %>");
+
+    var subscriptionType = currentSubscriptionType();
+
+    
+    // follow button
+    $("button.follow, button.following").hide();
+
+    // handle non-logged-in users
     <% if logged_in? %>
       $("button.follow").off("click").click(follow);
       $("button.following").off("click").click(unfollow);
@@ -184,17 +239,43 @@
       $("button.following").off("click");
     <% end %>
 
-    $("form.filters .filter_control").off("change").change(function() {
-      var subscription_type = currentSubscriptionType();
-      var query = encodeURIComponent(currentQuery());
-      var filters = currentFilters();
-      
-      var filterString = $.param(filters).replace(/%5B/g, "[").replace(/%5D/g, "]");
-      var url = "/search/" + subscription_type + "/" + query;
-      if (filterString) url += "?" + filterString;
+    <% if subscriptions.any? {|s| s.new_record?} %>
+      $("button.follow").show();
+    <% else %>
+      $("button.following").show();
+    <% end %>
 
-      Utils.pjax(url, ".contentArea");
-    });
+
+    // category filters
+    $("ul.categories li").removeClass("current");
+    $("ul.categories li." + subscriptionType).addClass("current");
+
+
+    // reset all field filters, set to selected subscription's values
+    $(".filters .filter_control").val("");
+
+    <% if subscription %>
+      <% subscription.filters.each do |key, value| %>
+        $(".filters input[name=<%= key %>], .filters select[name=<%=key %>]").val("<%= value %>");
+      <% end %>
+    <% end %>
+
+
+    // show the field filter pane for the selected subscription
+    $(".filters ul").hide();
+    $(".filters ul." + subscriptionType).show();
+
+    // show the data description pane for the selected subscription
+    $(".data div").hide();
+    $(".data div." + subscriptionType).show();
+
+    <% if show_data? %>
+      $(".developer").hide();
+      <% if subscription %>
+        $(".developer").show();
+        $(".developer a").attr("href", "<%= developer_search_url subscription %>");
+      <% end %>
+    <% end %>
   }
 
   function currentFilters() {
@@ -202,7 +283,7 @@
     var filters = {};
     filters[type] = {};
 
-    $("form.filters .filter_control").each(function(i, element) {
+    $(".filters ul." + type + " .filter_control").each(function(i, element) {
       var value = $(element).val();
       if (value) // don't pass along empty strings
         filters[type][$(element).attr("name")] = value;
@@ -212,11 +293,11 @@
   }
 
   function currentQuery() {
-    return $("form.filters input.query").val();
+    return $(".filters input.query").val();
   }
 
   function currentSubscriptionType() {
-    return $("form.filters input.subscription_type").val();
+    return $(".filters input.subscription_type").val();
   }
 
   function follow() {
@@ -267,14 +348,13 @@
     return false;
   }
 
-  function search(searchOptions) {
+  function search(subscriptionType, searchOptions) {
     if (!searchOptions) searchOptions = {};
-    if (!searchOptions.per_page) searchOptions.per_page = 20;
+    if (!searchOptions.per_page) searchOptions.per_page = <%= subscription ? 20 : 2 %>;
     if (!searchOptions.page) searchOptions.page = 1;
 
-    var subscription_type = currentSubscriptionType();
     var query = encodeURIComponent(currentQuery());
-    var container = $(".results div.search[data-subscription=" + subscription_type + "]");
+    var container = $(".results div.search[data-subscription=" + subscriptionType + "]");
 
     // reset elements inside tab
     container.find(".loading").show();
@@ -288,12 +368,15 @@
     // any one-time search options (pagination)
     $.extend(search, searchOptions);
 
-    $.get("/fetch/search/" + subscription_type + "/" + query, search, function(data) {
+    $.get("/fetch/search/" + subscriptionType + "/" + query, search, function(data) {
       
       container.find(".loading").hide();
       container.find("ul.items").append(data.html).show();
       
-      $(document).off("scroll").scroll(onScroll);
+      <% if subscription %>
+        $(document).off("scroll").scroll(onScroll);
+      <% end %>
+
       $("ul.items").data("page", data.page);
 
       if (data.count == 0)
@@ -303,5 +386,15 @@
       container.find(".loading").hide();
       container.find(".error").show();
     });
+  }
+
+  // set/re-set after a page of results come back
+  function onScroll() {
+    var ratio = $(document).scrollTop() / $(document).height();
+    if (ratio > 0.80) {
+      $(document).off("scroll"); // search function will re-assign the callback after it's done
+      var nextPage = $("ul.items").data("page") + 1;
+      search(currentSubscriptionType(), {page: nextPage});
+    }
   }
 </script>

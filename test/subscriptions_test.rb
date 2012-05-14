@@ -3,18 +3,19 @@ require './test/test_helper'
 class SubscriptionsTest < Test::Unit::TestCase
   include Rack::Test::Methods
   include TestHelper::Methods
+  include FactoryGirl::Syntax::Methods
 
 
-  # subscribing to new things -
-  # identical parameters to search, it should be easy to get a one to one mapping
-  # between the two, and to lookup whether a search has already been subscribed to
+  # subscribing to new things
+
   def test_subscribe_to_searches_by_plain_keyword
-    user = new_user!
+    user = create :user
     query = "environment"
     query2 = "copyright"
     
     assert_equal 0, user.subscriptions.count
     assert_equal 0, user.interests.count
+
 
     post "/subscriptions", {:subscription_type => "federal_bills", :query => query}, login(user)
     assert_response 200
@@ -22,46 +23,78 @@ class SubscriptionsTest < Test::Unit::TestCase
     assert_equal 1, user.subscriptions.count
     assert_equal 1, user.interests.count
 
-    assert_equal query, user.interests.first.in
-    assert_equal query, user.subscriptions.first.interest_in
-    assert_equal "federal_bills", user.subscriptions.first.subscription_type
+    interest1 = user.interests.where(:in => query).first
+    assert_not_nil interest1
+
+    subscription1 = interest1.subscriptions.first
+    assert_equal "federal_bills", subscription1.subscription_type
+
 
     post "/subscriptions", {:subscription_type => "state_bills", :query => query}, login(user)
     assert_response 200
 
     assert_equal 2, user.subscriptions.count
-    assert_equal 2, user.interests.count
+    assert_equal 1, user.interests.count
+    assert_equal 2, interest1.subscriptions.count
+
+    subscription2 = interest1.reload.subscriptions.last
+    assert_equal "state_bills", subscription2.subscription_type
+
 
     post "/subscriptions", {:subscription_type => "state_bills", :query => query2}, login(user)
     assert_response 200
 
     assert_equal 3, user.subscriptions.count
-    assert_equal 3, user.interests.count
+    assert_equal 2, user.interests.count
+
+    interest2 = user.interests.where(:in => query2).first
+    assert_not_nil interest2
+    assert_equal 1, interest2.subscriptions.count
+    subscription3 = interest2.subscriptions.first
+    assert_equal "state_bills", subscription3.subscription_type
+
 
     # posting the same subscription should return 200, but be idempotent - nothing changed
     post "/subscriptions", {:subscription_type => "state_bills", :query => query2}, login(user)
     assert_response 200
 
     assert_equal 3, user.subscriptions.count
-    assert_equal 3, user.interests.count
+    assert_equal 2, user.interests.count
+
+    assert_equal 1, user.interests.where(:in => query2).count
+    assert_equal 1, user.subscriptions.where(:interest_in => query2).count
+    assert_equal 1, interest2.subscriptions.count
+
 
     # but if we include filter data, it's different!
     post "/subscriptions", {:subscription_type => "state_bills", :query => query2, :state_bills => {:state => "DE"}}, login(user)
     assert_response 200
 
     assert_equal 4, user.subscriptions.count
-    assert_equal 4, user.interests.count
+    assert_equal 2, user.interests.count
+
+    assert_equal 1, user.interests.where(:in => query2).count
+    assert_equal 2, user.subscriptions.where(:interest_in => query2).count
+    assert_equal 2, interest2.subscriptions.count
+
+    subscription4 = interest2.reload.subscriptions.last
+    assert_equal "DE", subscription4.data['state']
+
 
     # but, that data is also taken into account when finding duplicates
     post "/subscriptions", {:subscription_type => "state_bills", :query => query2, :state_bills => {:state => "DE"}}, login(user)
     assert_response 200
 
     assert_equal 4, user.subscriptions.count
-    assert_equal 4, user.interests.count
+    assert_equal 2, user.interests.count
+
+    assert_equal 1, user.interests.where(:in => query2).count
+    assert_equal 2, user.subscriptions.where(:interest_in => query2).count
+    assert_equal 2, interest2.subscriptions.count
   end
 
   def test_subscribe_to_all_types_with_one_keyword
-    user = new_user!
+    user = create :user
     query = "environment"
     query2 = "copyright"
     
@@ -74,11 +107,14 @@ class SubscriptionsTest < Test::Unit::TestCase
     assert_equal search_adapters.keys.size, user.subscriptions.count
     assert_equal 1, user.interests.count
 
-    assert_equal query, user.interests.first.in
+    interest1 = user.interests.where(:in => query).first
+    assert_not_nil interest1
+    assert_equal search_adapters.keys.size, interest1.subscriptions.count
 
-    user.subscriptions.each do |subscription|
+    interest1.subscriptions.each do |subscription|
         assert_equal query, subscription.interest_in
     end
+
 
     post "/subscriptions", {:subscription_type => "all", :query => query2}, login(user)
     assert_response 200
@@ -86,15 +122,20 @@ class SubscriptionsTest < Test::Unit::TestCase
     assert_equal search_adapters.keys.size * 2, user.subscriptions.count
     assert_equal 2, user.interests.count
 
+    interest2 = user.interests.where(:in => query2).first
+    assert_not_nil interest2
+    assert_equal search_adapters.keys.size, interest2.subscriptions.count
+    
+
     post "/subscriptions", {:subscription_type => "all", :query => query2}, login(user)
     assert_response 200
 
-    assert_equal 8, user.subscriptions.count
+    assert_equal search_adapters.keys.size * 2, user.subscriptions.count
     assert_equal 2, user.interests.count
   end
 
   def test_subscribe_decodes_query
-    user = new_user!
+    user = create :user
     query_encoded = "sunlight%20foundation"
     query_decoded = "sunlight foundation"
     
@@ -118,8 +159,11 @@ class SubscriptionsTest < Test::Unit::TestCase
     assert_equal 1, user.interests.count
   end
 
+
+  # unsubscribing
+
   def test_unsubscribe_from_individual_searches
-    user = new_user!
+    user = create :user
     query1 = "environment"
     query2 = "guns"
     i1 = user.interests.create! :in => query1, :interest_type => "search"
@@ -147,7 +191,7 @@ class SubscriptionsTest < Test::Unit::TestCase
   end
 
   def test_unsubscribe_to_type_of_all
-    user = new_user!
+    user = create :user
     query1 = "environment"
     i1 = user.interests.create! :in => query1, :interest_type => "search"
     s1 = user.subscriptions.create! :interest => i1, :subscription_type => "state_bills", :interest_in => query1, :data => {"query" => query1}
@@ -169,7 +213,7 @@ class SubscriptionsTest < Test::Unit::TestCase
     item_id = "hr4192-112"
     interest_type = "bill"
 
-    user = new_user!
+    user = create :user
 
     assert_equal 0, user.interests.count
     assert_equal 0, user.subscriptions.count
@@ -200,7 +244,7 @@ class SubscriptionsTest < Test::Unit::TestCase
 
   # tragic
   def test_destroy_search_interest
-    user = new_user!
+    user = create :user
     query = "environment"
     interest = user.interests.create! :in => query, :interest_type => "search"
     s1 = interest.subscriptions.create! :subscription_type => "federal_bills", :user_id => user.id, :interest_in => query
@@ -213,12 +257,12 @@ class SubscriptionsTest < Test::Unit::TestCase
   end
 
   def test_destroy_search_interest_not_users_own
-    user = new_user!
+    user = create :user
     query = "environment"
     interest = user.interests.create! :in => query, :interest_type => "search"
     s1 = interest.subscriptions.create! :subscription_type => "federal_bills", :user_id => user.id, :interest_in => query
 
-    user2 = new_user! :email => user.email.succ
+    user2 = create :user, :email => user.email.succ
 
     delete "/interest/#{interest.id}", {}, login(user2)
     assert_equal 404, last_response.status
@@ -228,12 +272,12 @@ class SubscriptionsTest < Test::Unit::TestCase
   end
 
   def test_destroy_search_interest_not_logged_in
-    user = new_user!
+    user = create :user
     query = "environment"
     interest = user.interests.create! :in => query, :interest_type => "search"
     s1 = interest.subscriptions.create! :subscription_type => "federal_bills", :user_id => user.id, :interest_in => query
 
-    user2 = new_user! :email => user.email.succ
+    user2 = create :user, :email => user.email.succ
 
     delete "/interest/#{interest.id}"
     assert_equal 302, last_response.status
@@ -243,43 +287,43 @@ class SubscriptionsTest < Test::Unit::TestCase
   end
 
   def test_update_interest_delivery_type_from_nothing_to_email
-    user = new_user!
+    user = create :user
     query = "environment"
     interest = user.interests.create! :in => query, :interest_type => "search"
     s1 = interest.subscriptions.create! :subscription_type => "federal_bills", :user_id => user.id, :interest_in => query
 
     # no easy way to do this without hardcoding the user notifications field default
-    assert_equal "email_daily", user.notifications
+    assert_equal "email_immediate", user.notifications
     assert_nil interest.notifications
 
     assert_equal "email", interest.mechanism
-    assert_equal "daily", interest.email_frequency
+    assert_equal "immediate", interest.email_frequency
 
-    put "/interest/#{interest.id}", {:interest => {:notifications => "email_immediate"}}, login(user)
+    put "/interest/#{interest.id}", {:interest => {:notifications => "email_daily"}}, login(user)
     assert_response 200
 
     user.reload
     interest.reload
 
-    assert_equal "email_daily", user.notifications
-    assert_equal "email_immediate", interest.notifications
+    assert_equal "email_immediate", user.notifications
+    assert_equal "email_daily", interest.notifications
 
     assert_equal "email", interest.mechanism
-    assert_equal "immediate", interest.email_frequency
+    assert_equal "daily", interest.email_frequency
   end
 
   def test_update_interest_delivery_type_from_email_to_nothing
-    user = new_user!
+    user = create :user
     query = "environment"
-    interest = user.interests.create! :in => query, :interest_type => "search", :notifications => "email_immediate"
+    interest = user.interests.create! :in => query, :interest_type => "search", :notifications => "email_daily"
     s1 = interest.subscriptions.create! :subscription_type => "federal_bills", :user_id => user.id, :interest_in => query
 
     # no easy way to do this without hardcoding the user notifications field default
-    assert_equal "email_daily", user.notifications
-    assert_equal "email_immediate", interest.notifications
+    assert_equal "email_immediate", user.notifications
+    assert_equal "email_daily", interest.notifications
 
     assert_equal "email", interest.mechanism
-    assert_equal "immediate", interest.email_frequency
+    assert_equal "daily", interest.email_frequency
 
     put "/interest/#{interest.id}", {:interest => {:notifications => "none"}}, login(user)
     assert_response 200
@@ -287,7 +331,7 @@ class SubscriptionsTest < Test::Unit::TestCase
     user.reload
     interest.reload
 
-    assert_equal "email_daily", user.notifications
+    assert_equal "email_immediate", user.notifications
     assert_equal "none", interest.notifications
 
     assert_nil interest.mechanism
@@ -295,17 +339,17 @@ class SubscriptionsTest < Test::Unit::TestCase
   end
 
   def test_update_interest_invalid_delivery_type
-    user = new_user!
+    user = create :user
     query = "environment"
-    interest = user.interests.create! :in => query, :interest_type => "search", :notifications => "email_immediate"
+    interest = user.interests.create! :in => query, :interest_type => "search", :notifications => "email_daily"
     s1 = interest.subscriptions.create! :subscription_type => "federal_bills", :user_id => user.id, :interest_in => query
 
     # no easy way to do this without hardcoding the user notifications field default
-    assert_equal "email_daily", user.notifications
-    assert_equal "email_immediate", interest.notifications
+    assert_equal "email_immediate", user.notifications
+    assert_equal "email_daily", interest.notifications
 
     assert_equal "email", interest.mechanism
-    assert_equal "immediate", interest.email_frequency
+    assert_equal "daily", interest.email_frequency
 
     put "/interest/#{interest.id}", {:interest => {:notifications => "invalid"}}, login(user)
     assert_response 500
@@ -313,26 +357,26 @@ class SubscriptionsTest < Test::Unit::TestCase
     user.reload
     interest.reload
 
-    assert_equal "email_daily", user.notifications
-    assert_equal "email_immediate", interest.notifications
+    assert_equal "email_immediate", user.notifications
+    assert_equal "email_daily", interest.notifications
 
     assert_equal "email", interest.mechanism
-    assert_equal "immediate", interest.email_frequency
+    assert_equal "daily", interest.email_frequency
   end
 
   def test_update_interest_not_users_own
-    user = new_user!
-    user2 = new_user! :email => user.email.succ
+    user = create :user
+    user2 = create :user, :email => user.email.succ
     query = "environment"
-    interest = user.interests.create! :in => query, :interest_type => "search", :notifications => "email_immediate"
+    interest = user.interests.create! :in => query, :interest_type => "search", :notifications => "email_daily"
     s1 = interest.subscriptions.create! :subscription_type => "federal_bills", :user_id => user.id, :interest_in => query
 
     # no easy way to do this without hardcoding the user notifications field default
-    assert_equal "email_daily", user.notifications
-    assert_equal "email_immediate", interest.notifications
+    assert_equal "email_immediate", user.notifications
+    assert_equal "email_daily", interest.notifications
 
     assert_equal "email", interest.mechanism
-    assert_equal "immediate", interest.email_frequency
+    assert_equal "daily", interest.email_frequency
 
     put "/interest/#{interest.id}", {:interest => {:notifications => "none"}}, login(user2)
     assert_response 404
@@ -340,25 +384,25 @@ class SubscriptionsTest < Test::Unit::TestCase
     user.reload
     interest.reload
 
-    assert_equal "email_daily", user.notifications
-    assert_equal "email_immediate", interest.notifications
+    assert_equal "email_immediate", user.notifications
+    assert_equal "email_daily", interest.notifications
 
     assert_equal "email", interest.mechanism
-    assert_equal "immediate", interest.email_frequency
+    assert_equal "daily", interest.email_frequency
   end
 
   def test_update_interest_not_logged_in
-    user = new_user!
+    user = create :user
     query = "environment"
-    interest = user.interests.create! :in => query, :interest_type => "search", :notifications => "email_immediate"
+    interest = user.interests.create! :in => query, :interest_type => "search", :notifications => "email_daily"
     s1 = interest.subscriptions.create! :subscription_type => "federal_bills", :user_id => user.id, :interest_in => query
 
     # no easy way to do this without hardcoding the user notifications field default
-    assert_equal "email_daily", user.notifications
-    assert_equal "email_immediate", interest.notifications
+    assert_equal "email_immediate", user.notifications
+    assert_equal "email_daily", interest.notifications
 
     assert_equal "email", interest.mechanism
-    assert_equal "immediate", interest.email_frequency
+    assert_equal "daily", interest.email_frequency
 
     put "/interest/#{interest.id}", {:interest => {:notifications => "none"}}
     assert_redirect "/"
@@ -366,19 +410,19 @@ class SubscriptionsTest < Test::Unit::TestCase
     user.reload
     interest.reload
 
-    assert_equal "email_daily", user.notifications
-    assert_equal "email_immediate", interest.notifications
+    assert_equal "email_immediate", user.notifications
+    assert_equal "email_daily", interest.notifications
 
     assert_equal "email", interest.mechanism
-    assert_equal "immediate", interest.email_frequency
+    assert_equal "daily", interest.email_frequency
   end
 
   # unit tests on subscriptions
 
   def test_scout_search_urls_generate_properly
-    user = new_user!
+    user = create :user
 
-    query_and_data = user.subscriptions.create! :subscription_type => "federal_bills", :interest_in => "yes", :data => {'query' => "yes", :stage => "enacted"}
+    query_and_data = user.subscriptions.create! :subscription_type => "federal_bills", :interest_in => "yes", :data => {'query' => "yes", 'stage' => "enacted"}
     assert_equal "/search/federal_bills/yes?federal_bills[stage]=enacted", query_and_data.scout_search_url
 
     query = "yes and no"
