@@ -1,6 +1,7 @@
 language: ruby
 rvm:
   - 1.9.3
+
 bundler_args: --local
 
 before_script:
@@ -8,3 +9,10 @@ before_script:
   - cp config/mongoid.yml.example config/mongoid.yml
 
 script: rake test
+
+notifications:
+  email:
+    recipients: 
+      - eric@sunlightfoundation.com
+    on_success: change
+    on_failure: change
