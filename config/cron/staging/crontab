@@ -1,3 +1,9 @@
+######## Administrative tasks ########
+
+# Check CI for build status changes, once an hour
+0 * * * * /projects/alarms/current/config/cron/staging/rake.sh travis
+
+
 ######## Delivery tasks ########
 
 # email digests - once a day, in the morning

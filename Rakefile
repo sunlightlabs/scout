@@ -12,6 +12,34 @@ task :test do
   exit (responses.any? {|code| code == false} ? -1 : 0)
 end
 
+task :travis => :environment do
+  begin
+    require 'httparty'
+    response = HTTParty.get "http://travis-ci.org/sunlightlabs/scout.json"
+
+    new_build_status = response["last_build_status"]
+    exit if new_build_status.nil? # mid-build, ignore this
+
+    unless build_status = Flag.where(:key => "last_build_status").first
+      puts "No flag set yet for last build status, marking this as the current state."
+      Flag.create! :key => "last_build_status", :value => new_build_status
+      exit
+    end
+
+    if build_status.value != new_build_status
+      puts "Build status has changed, notifying admin"
+      build_status.set :value, :new_build_status
+      Admin.travis_change new_build_status
+    else
+      puts "Build status unchanged, nothing to say"
+    end
+
+  rescue Exception => ex
+    report = Report.exception 'Travis', "Exception checking Travis", ex
+    Admin.report report
+    puts "Error checking Travis, emailed report."
+  end
+end
 
 desc "Set the crontab in place for this environment"
 task :set_crontab => :environment do
