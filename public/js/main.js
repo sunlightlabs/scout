@@ -21,9 +21,7 @@ $(function() {
     if (query) query = $.trim(query);
     if (!query) return false;
 
-    var type = $("select.subscription_type").val();
-
-    var path = "/search/" + type + "/" + encodeURIComponent(query);
+    var path = "/search/all/" + encodeURIComponent(query);
     window.location = path;
     
     return false;
