@@ -20,9 +20,6 @@ class RoutingTest < Test::Unit::TestCase
     query_no_data = user.subscriptions.create! :subscription_type => "federal_bills", :interest_in => query, :data => {'query' => query}
     assert_equal "/search/federal_bills/#{URI.encode query}", routing.subscription_path(query_no_data)
 
-    # BREAK BUILD
-    assert_equal 1, 2
-
     #TODO: when we support query-less searches
     # data_no_query = user.subscriptions.create! :subscription_type => "state_bills", :data => {:state => "CA"}
     # assert_equal "/search/state_bills?state_bills[state]=CA", routing.subscription_path(data_no_query)
