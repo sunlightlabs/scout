@@ -229,13 +229,23 @@ helpers do
     end
 
     criteria = {
-      :interest_in => query,
-      :subscription_type => subscription_type,
-      :data => data
+      'interest_in' => query,
+      'subscription_type' => subscription_type,
+      'data' => data
     }
 
+    find_criteria = {
+      'interest_in' => query,
+      'subscription_type' => subscription_type,
+    }
+    data.each {|key, value| find_criteria["data.#{key}"] = value}
+
     if logged_in?
-      current_user.subscriptions.find_or_initialize_by criteria
+      if subscription = current_user.subscriptions.where(find_criteria).first
+        subscription
+      else
+        current_user.subscriptions.new criteria
+      end
     else
       Subscription.new criteria
     end

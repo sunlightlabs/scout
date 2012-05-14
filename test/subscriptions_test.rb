@@ -183,7 +183,7 @@ class SubscriptionsTest < Test::Unit::TestCase
     assert_not_nil Interest.find(i2.id)
     assert_not_nil Subscription.find(s2.id)
 
-    delete "/subscriptions", {:subscription_type => s2.subscription_type, :query => s2.interest_in, s2.subscription_type => {'state' => 'CA'}}, login(user)
+    delete "/subscriptions", {:subscription_type => s2.subscription_type, :query => s2.interest_in, s2.subscription_type => {'state' => "CA"}}, login(user)
     assert_response 200
 
     assert_nil Interest.find(i2.id)
