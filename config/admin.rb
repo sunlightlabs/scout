@@ -80,7 +80,7 @@ module Admin
     if admin?
       Email.deliver!(tag, admin_emails, "[ADMIN] #{subject}", body)
     else
-      puts "\n[#{tag}] #{subject}\n\n#{body}"
+      puts "\n[#{tag}] #{subject}\n\n#{body}" unless Sinatra::Application.test?
     end
   end
 
