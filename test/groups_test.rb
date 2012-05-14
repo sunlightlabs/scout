@@ -123,9 +123,34 @@ class RoutingTest < Test::Unit::TestCase
   end
 
   def test_assign_interest_to_someone_elses_group
+    user = create :user
+    user2 = create :user
+    interest = create :interest, :user => user
+    group = create :group, :user => user2
+
+    assert_equal 0, group.interests.count
+    assert_equal nil, interest.group
+
+    put "/groups/assign/#{group.slug}", {:interest_ids => [interest.id.to_s]}, login(user)
+    assert_response 404
+
+    assert_equal 0, group.reload.interests.count
+    assert_equal nil, interest.reload.group    
   end
 
   def test_assign_interest_not_logged_in
+    user = create :user
+    interest = create :interest, :user => user
+    group = create :group, :user => user
+
+    assert_equal 0, group.interests.count
+    assert_equal nil, interest.group
+
+    put "/groups/assign/#{group.slug}", {:interest_ids => [interest.id.to_s]}
+    assert_redirect "/"
+
+    assert_equal 0, group.reload.interests.count
+    assert_equal nil, interest.reload.group
   end
 
 
@@ -167,6 +192,18 @@ class RoutingTest < Test::Unit::TestCase
   end
 
   def test_unassign_interest_not_logged_in
+    user = create :user
+    group = create :group, :user => user
+    interest = create :interest, :group => group, :user => user
+
+    assert_equal 1, group.interests.count
+    assert_equal group, interest.group
+
+    put "/groups/assign", {:interest_ids => [interest.id.to_s]}
+    assert_redirect "/"
+
+    assert_equal 1, group.reload.interests.count
+    assert_equal group, interest.reload.group
   end
 
 
