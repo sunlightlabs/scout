@@ -18,12 +18,12 @@ task :travis => :environment do
     response = HTTParty.get "http://travis-ci.org/sunlightlabs/scout.json"
 
     new_build_status = response["last_build_status"]
-    exit if new_build_status.nil? # mid-build, ignore this
+    next if new_build_status.nil? # mid-build, ignore this
 
     unless build_status = Flag.where(:key => "last_build_status").first
       puts "No flag set yet for last build status, marking this as the current state."
       Flag.create! :key => "last_build_status", :value => new_build_status
-      exit
+      next
     end
 
     if build_status.value != new_build_status
@@ -48,7 +48,7 @@ task :set_crontab => :environment do
   
   if environment.blank? or current_path.blank?
     Admin.message "No environment or current path given, emailing and exiting."
-    exit
+    next
   end
   
   if system("cat #{current_path}/config/cron/#{environment}/crontab | crontab")
