@@ -3,7 +3,7 @@
 
 # landing page to begin, preview, and finalize the import of an RSS feed
 get "/import/feed" do
-  erb :"account/import"
+  erb :"account/import", :locals => {:url => (params[:url] || "").strip}
 end
 
 # fetch a preview of the given RSS feed
