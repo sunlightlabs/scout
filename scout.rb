@@ -10,9 +10,16 @@ set :views, 'app/views'
 set :public_folder, 'public'
 
 # disable sessions in test environment so it can be manually set
-set :sessions, !test?
-set :session_secret, config[:session_secret]
+unless test?
+  # set :sessions, !test?
+  # set :session_secret, config[:session_secret]
+  use Rack::Session::Cookie, :key => 'rack.session',
+    :path => '/',
+    :expire_after => (60 * 60 * 24 * 30), # 30 days
+    :secret => config[:session_secret]
+end
 
+# TODO: seriously?
 disable :protection
 
 configure(:development) do |config|
