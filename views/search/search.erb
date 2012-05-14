@@ -41,35 +41,11 @@
         </form>
   		</div>
 
-      <!--
-  		<div class="subscriptions related">
-  			<h5>
-  				Your related subscriptions
-  			</h5>
-  			<ul>
-  				<li>
-  					<a href="">State Bills - All</a>
-  				</li>
-  				<li>
-  					<a href="">State Bills - OR</a>
-  				</li>
-  				<li>
-  					<a href="">State Bills - WA</a>
-  				</li>
-  				<li>
-  					<a href="">State Bills - CA</a>
-  				</li>
-  			</ul>
-  			<ul>
-  				<li>
-  					<a href="">Bills in Congress - All</a>
-  				</li>
-  				<li>
-  					<a href="">Bills in Congress - Awaiting signature</a>
-  				</li>
-  			</ul>
-  		</div>
-      -->
+      <% if logged_in? %>
+    		<div class="subscriptions related">
+            <!-- will be filled in dynamically -->
+    		</div>
+      <% end %>
 
   	</div>
 
@@ -158,7 +134,7 @@
         </ul>
 
         <% unless subscription %>
-          <a href="/search/<%= s.subscription_type %>/<%= h query %>" class="viewMore">
+          <a href="<%= subscription_path s %>" class="viewMore">
             View more <span><%= s.search_name %></span>
           </a>
           <div class="clear"></div>
@@ -183,6 +159,13 @@
 </div>
 
 <div class="clear"></div>
+
+<!-- hidden, used to populate contents of sidebar dynamically -->
+<% if logged_in? and !interest.new_record? %>
+  <div class="template subscriptions related">
+    <%= partial "search/subscriptions", :engine => :erb, :locals => {:interest => interest, :current_subscription => subscription } %>
+  </div>
+<% end %>
 
 <script type="text/javascript">
   
@@ -210,7 +193,6 @@
       
       // serialize the filters and preserve the brackets
       var filterString = $.param(filters).replace(/%5B/g, "[").replace(/%5D/g, "]");
-
       var url = "/search/" + type + "/" + query;
       if (filterString) url += "?" + filterString;
 
@@ -262,8 +244,17 @@
 
 
     // show the field filter pane for the selected subscription
-    $(".filters ul").hide();
-    $(".filters ul." + subscriptionType).show();
+    
+    $(".filters ,.filters ul").hide();
+    <% if subscription %>
+      $(".filters, .filters ul." + subscriptionType).show();
+    <% end %>
+
+    $(".sidebar .subscriptions.related").hide();
+    <% if !interest.new_record? %>
+      var template = $(".subscriptions.related.template").html();
+      $(".sidebar .subscriptions.related").html(template).show();
+    <% end %>
 
     // show the data description pane for the selected subscription
     $(".data div").hide();

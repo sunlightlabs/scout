@@ -844,10 +844,11 @@ footer nav li{
     margin-top: 3px;
 }
 
-.subscriptions.related{
+.subscriptions.related {
     padding-left: 16px;
     padding-right: 16px;
     font-size: 11px;
+    display: none;
 }
 .subscriptions.related h5{
     margin-bottom: 12px;
@@ -865,7 +866,7 @@ footer nav li{
     margin-right: 7px;
     line-height: 1.5;
 }
-.subscriptions.related li:first-of-type{
+.subscriptions.related li a strong {
     font-weight: bold;
 }
 .subscriptions.related li:last-of-type{

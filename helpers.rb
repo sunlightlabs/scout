@@ -36,6 +36,12 @@ module GeneralHelpers
     Deliveries::Manager.interest_path interest
   end
 
+  def filters_short(subscription)
+    subscription.filters.map do |field, value|
+      "<span>#{subscription.filter_name field, value}</span>"
+    end.join(", ")
+  end
+
   def hide_search
     content_for(:hide_search) { true }
   end

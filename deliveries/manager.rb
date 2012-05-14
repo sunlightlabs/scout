@@ -2,6 +2,8 @@
 module Deliveries
   module Manager
 
+    extend Routing
+
     def self.deliver!(delivery_options)
       receipts = []
 
@@ -49,14 +51,8 @@ module Deliveries
       elsif interest.feed?
         interest.in # URL
       elsif interest.search?
-        # this sucks, and needs to change
-        if preferred_type
-          interest.subscriptions.first.scout_search_url(:subscription_type => preferred_type)
-        elsif interest.subscriptions.count > 1 
-          interest.subscriptions.first.scout_search_url(:subscription_type => "all")
-        else
-          interest.subscriptions.first.scout_search_url
-        end
+        # TODO: pass a subscription of that interest in to prefer that one
+        subscription_path interest.subscriptions.first
       end
     end
 

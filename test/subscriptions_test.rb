@@ -417,27 +417,4 @@ class SubscriptionsTest < Test::Unit::TestCase
     assert_equal "daily", interest.email_frequency
   end
 
-  # unit tests on subscriptions
-
-  def test_scout_search_urls_generate_properly
-    user = create :user
-
-    query_and_data = user.subscriptions.create! :subscription_type => "federal_bills", :interest_in => "yes", :data => {'query' => "yes", 'stage' => "enacted"}
-    assert_equal "/search/federal_bills/yes?federal_bills[stage]=enacted", query_and_data.scout_search_url
-
-    query = "yes and no"
-    query_no_data = user.subscriptions.create! :subscription_type => "federal_bills", :interest_in => query, :data => {'query' => query}
-    assert_equal "/search/federal_bills/#{URI.encode query}", query_no_data.scout_search_url
-
-    #TODO: when we support query-less searches
-    # data_no_query = user.subscriptions.create! :subscription_type => "state_bills", :data => {:state => "CA"}
-    # assert_equal "/search/state_bills?state_bills[state]=CA", data_no_query.scout_search_url
-
-    # no_data_no_query = user.subscriptions.create! :subscription_type => "federal_bills", :data => {}
-    # assert_equal "/search/federal_bills", no_data_no_query.scout_search_url
-
-    overridden_to_all = user.subscriptions.create! :subscription_type => "federal_bills", :interest_in => "yes", :data => {'query' => "yes"}
-    assert_equal "/search/all/yes", overridden_to_all.scout_search_url(:subscription_type => "all")
-  end
-
 end

@@ -15,15 +15,18 @@ get '/search/:subscription_type/?:query?' do
   types = types.select {|type| search_adapters.keys.include?(type)}
   halt 404 and return unless types.any?
 
-  subscriptions = types.map {|type| subscription_for type}
+  subscriptions = types.map {|type| subscription_for query, type}
   halt 404 and return unless subscriptions.any?
 
+  # could be nil if user is not logged in
+  interest = search_interest_for query
 
   erb :"search/search", :layout => !pjax?, :locals => {
     :subscriptions => subscriptions,
     :subscription => (subscriptions.size == 1 ? subscriptions.first : nil),
     :subscription_type => params[:subscription_type],
     :search_types => search_subscription_types,
+    :interest => interest,
     :query => query
   }
 end
@@ -32,7 +35,7 @@ get '/fetch/search/:subscription_type/?:query?' do
   query = stripped_query
   subscription_type = params[:subscription_type]
 
-  subscription = subscription_for subscription_type
+  subscription = subscription_for query, subscription_type
 
   page = params[:page].present? ? params[:page].to_i : 1
   per_page = params[:per_page].present? ? params[:per_page].to_i : nil
@@ -69,20 +72,18 @@ post '/subscriptions' do
 
   if params[:subscription_type] == "all"
     subscriptions = search_adapters.keys.map do |subscription_type|
-      subscription_for subscription_type
+      subscription_for query, subscription_type
     end
   else
-    subscriptions = [subscription_for(params[:subscription_type])]
+    subscriptions = [subscription_for(query, params[:subscription_type])]
   end
 
-  interest = current_user.interests.find_or_initialize_by(
-    :in => query, 
-    :interest_type => "search",
-    :data => {'query' => query}
-  )
+  interest = search_interest_for query
 
-  halt 200 and return unless subscriptions.select {|s| s.new_record?}.any?
+  halt 200 and return unless subscriptions.any? {|s| s.new_record?}
   
+  headers["Content-Type"] = "application/json"
+
   # make sure interest has the same validations as subscriptions
   if interest.valid? and subscriptions.reject {|s| s.valid?}.empty?
     interest.save! if interest.new_record?
@@ -91,9 +92,11 @@ post '/subscriptions' do
       subscription.save!
     end
     
-    halt 200
+    interest_pane = erb :"search/_subscriptions", :locals => {:interest => interest}
+    {
+      :interest_pane => interest_pane
+    }.to_json
   else
-    headers["Content-Type"] = "application/json"
     status 500
     {
       :errors => {
@@ -113,9 +116,9 @@ delete '/subscriptions' do
 
   if subscription_type == "all"
     types = ["federal_bills", "speeches", "state_bills", "regulations"]
-    subscriptions = types.map {|type| subscription_for type}
+    subscriptions = types.map {|type| subscription_for query, type}
   else
-    subscription = subscription_for subscription_type
+    subscription = subscription_for query, subscription_type
     halt 404 and return false if subscription.new_record?
     subscriptions = [subscription]
   end
@@ -212,9 +215,7 @@ helpers do
 
   # initializes a subscription of the given type, or, 
   # if the user is logged in, finds any existing one
-  def subscription_for(subscription_type)
-    query = stripped_query
-
+  def subscription_for(query, subscription_type)
     data = params[subscription_type] || {}
     
     if query
@@ -231,6 +232,16 @@ helpers do
       current_user.subscriptions.find_or_initialize_by criteria
     else
       Subscription.new criteria
+    end
+  end
+
+  def search_interest_for(query)
+    if logged_in?
+      current_user.interests.find_or_initialize_by(
+        :in => query, 
+        :interest_type => "search",
+        :data => {'query' => query}
+      )
     end
   end
 
