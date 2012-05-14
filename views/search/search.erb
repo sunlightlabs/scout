@@ -45,7 +45,7 @@
             <!-- will be filled in dynamically -->
         </div>
       <% end %>
-      
+
   	</div>
 
     <% if show_data? %>
@@ -160,7 +160,7 @@
 <div class="clear"></div>
 
 <!-- hidden, used to populate contents of sidebar dynamically -->
-<% if logged_in? and !interest.new_record? %>
+<% if logged_in? and interest and !interest.new_record? %>
   <div class="template subscriptions related">
     <%= partial "search/subscriptions", :engine => :erb, :locals => {:interest => interest, :current_subscription => subscription } %>
   </div>
@@ -250,7 +250,7 @@
     <% end %>
 
     $(".sidebar .subscriptions.related").hide();
-    <% if !interest.new_record? %>
+    <% if interest and !interest.new_record? %>
       loadInterestPane($(".subscriptions.related.template").html());
     <% end %>
 
