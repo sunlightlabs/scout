@@ -22,7 +22,22 @@
         <% end %>
     </div>
 
-    <%= recent_searches %>
+    <div class="module groups">
+        <h4>Groups</h4>
+
+        <div class="group_list">
+            <%= partial "account/groups", :engine => :erb, :locals => {:groups => groups} %>
+        </div>
+
+        <div class="group errors"></div>
+
+        <form action="/groups" method="post" class="new_group">
+            <input type="text" name="group[name]" placeholder="New group name" />
+            <button type="submit">
+                <span>Create</span>
+            </button>
+        </form>
+    </div>
 <% end %>
 
 <div class="contentArea left">
@@ -172,6 +187,21 @@
             container.find(".indicators .failed").show();
             Utils.log("Error updating interest " + interest_id);
         })
+    });
+
+    $("form.new_group").submit(function() {
+        $.post("/groups", $(this).serialize(), function(data) {
+            Utils.log("Group created: " + data.group_id);
+            $(".group_list").html(data.groups_pane);
+        }).error(function(xhr) {
+            Utils.log("Error creating group.");
+            var data = $.parseJson(xhr.responseText);
+            if (data && data.errors) {
+                Utils.log(data.errors.join("\n"));
+                $(".group.errors").html(data.errors.join("\n")).show();
+            }
+        });
+        return false;
     });
 
 </script>

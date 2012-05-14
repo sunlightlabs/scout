@@ -140,7 +140,10 @@ end
 get '/account/subscriptions' do
   requires_login
 
-  erb :"account/subscriptions", :locals => {:interests => current_user.interests.desc(:created_at)}
+  erb :"account/subscriptions", :locals => {
+    :interests => current_user.interests.desc(:created_at),
+    :groups => current_user.groups.asc(:created_at)
+  }
 end
 
 get '/account/settings' do

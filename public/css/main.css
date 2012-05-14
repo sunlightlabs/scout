@@ -274,6 +274,12 @@ strong {
 }
 
 
+/*-- Object errors (similar to flash) --*/
+
+.errors {
+    display: none;
+    color: #C13445;
+}
 
 
 /*-- Hat Styling --*/

@@ -7,7 +7,10 @@ class Group
   has_many :interests
   
   field :name
-  slug :name, :scope => :user
+  slug :name, :scope => :user_id
+
+  validates_presence_of :name
+  validates_uniqueness_of :name, :scope => :user_id
 
   # TODO:
   # per-group notifications

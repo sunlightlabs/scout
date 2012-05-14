@@ -1,0 +1,18 @@
+<% if groups.any? %>
+    <% groups.each do |group| %>
+        <h5 class="name">
+            <%= group.name %>
+        </h5>
+        <% if group.interests.any? %>
+            <ul class="interests">
+                <% group.interests.each do |interest| %>
+                    <li class="<%= interest.interest_type %>">
+                        <%= interest_name interest %>
+                    </li>
+                <% end %>
+            </ul>
+        <% end %>
+    <% end %>
+<% else %>
+    <p>You do not have any groups.</p>
+<% end %>
