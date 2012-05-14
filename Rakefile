@@ -18,7 +18,10 @@ task :travis => :environment do
     response = HTTParty.get "http://travis-ci.org/sunlightlabs/scout.json"
 
     new_build_status = response["last_build_status"]
-    next if new_build_status.nil? # mid-build, ignore this
+    if new_build_status.nil?
+      puts "Mid-build, ignoring."
+      next
+    end
 
     unless build_status = Flag.where(:key => "last_build_status").first
       puts "No flag set yet for last build status, marking this as the current state."
