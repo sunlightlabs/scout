@@ -2,28 +2,27 @@
   <% content_for :sidebar_left do %>
    	<div class="module controls">
   		<h4>Filter search results</h4>
-  		
-  	    <ul class="categories">
-          <li 
-            class="all <%= subscription ? "" : "current" %>"
+  		<ul class="categories">
+        <li 
+          class="all <%= subscription ? "" : "current" %>"
+          >
+          <a data-pjax="#center" href="/search/all/<%= h query %>">
+            Everything
+          </a>
+        </li>
+        <% current_type = (subscription ? subscription.subscription_type : "all") %>
+	      <% search_types.each do |subscription_type| %>
+	        <li 
+            class="<%= subscription_type %> <%= subscription_type == current_type ? "current" : "" %>"
             >
-            <a data-pjax="#center" href="/search/all/<%= h query %>">
-              Everything
-            </a>
-          </li>
-          <% current_type = (subscription ? subscription.subscription_type : "all") %>
-  	      <% search_types.each do |subscription_type| %>
-  	        <li 
-              class="<%= subscription_type %> <%= subscription_type == current_type ? "current" : "" %>"
-              >
-  	          <a data-pjax="#center" href="/search/<%= subscription_type %>/<%= h query %>">
-  	            <%= Subscription.adapter_for(subscription_type).search_name nil %>
-  	          </a>
-  	        </li>
-  	      <% end %>
-  	    </ul>
+	          <a data-pjax="#center" href="/search/<%= subscription_type %>/<%= h query %>">
+	            <%= Subscription.adapter_for(subscription_type).search_name nil %>
+	          </a>
+	        </li>
+	      <% end %>
+	    </ul>
   		
-  		<div class="filters">
+      <div class="filters">
         <form>
 
     	    <%= hidden_field_tag :query, :class => "query" %>
@@ -42,11 +41,11 @@
   		</div>
 
       <% if logged_in? %>
-    		<div class="subscriptions related">
+        <div class="subscriptions related">
             <!-- will be filled in dynamically -->
-    		</div>
+        </div>
       <% end %>
-
+      
   	</div>
 
     <% if show_data? %>
