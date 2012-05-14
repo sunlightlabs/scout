@@ -11,6 +11,7 @@ gem 'padrino-helpers', '0.10.6'
 gem "mongo", "1.6.2"
 gem "mongoid", '2.4.8'
 gem 'bson_ext', '1.6.2' # mongo gem asks for this
+gem 'mongoid_slug', '0.10.0', :require => 'mongoid/slug'
 
 gem 'ruby-hmac', '0.4.0'
 gem 'bcrypt-ruby', '3.0.1'

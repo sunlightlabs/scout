@@ -41,6 +41,7 @@ configure do
   end
 end
 
+require 'mongoid/slug'
 Dir.glob('app/models/*.rb').each {|filename| load filename}
 
 # helpers
@@ -50,7 +51,6 @@ helpers Padrino::Helpers
 helpers Helpers::General
 helpers Helpers::Subscriptions
 helpers Helpers::Routing
-
 
 # transmission mechanisms (Twilio, pony, postmark, "fake")
 require './config/email'
