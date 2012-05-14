@@ -31,7 +31,7 @@ task :travis => :environment do
 
     if build_status.value != new_build_status
       puts "Build status has changed, notifying admin"
-      build_status.set :value, :new_build_status
+      build_status.set :value, new_build_status
       Admin.travis_change new_build_status, response.to_hash
     else
       puts "Build status unchanged, nothing to say"
