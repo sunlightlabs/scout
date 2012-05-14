@@ -1,5 +1,5 @@
-module Subscriptions
-  module Helpers
+module Helpers
+  module Subscriptions
 
     def bill_code(type, number)
       "#{bill_type type} #{number}"
@@ -190,7 +190,7 @@ module Subscriptions
     end
 
     def state_map
-      @state_map ||= Subscriptions::Adapters::StateBills.state_map
+      @state_map ||= ::Subscriptions::Adapters::StateBills.state_map
     end
     
     def state_version_info?(bill)
@@ -271,7 +271,7 @@ module Subscriptions
     end
 
     def speaker_party(party)
-      Subscriptions::Adapters::Speeches.party_map[party]
+      ::Subscriptions::Adapters::Speeches.party_map[party]
     end
 
     def speaker_name_only(speech)

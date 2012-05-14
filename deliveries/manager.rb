@@ -2,7 +2,7 @@
 module Deliveries
   module Manager
 
-    extend Routing
+    extend Helpers::Routing
 
     def self.deliver!(delivery_options)
       receipts = []
@@ -131,9 +131,9 @@ module Deliveries
 
   # dummy proxy class to provide a context with helper modules included so that ERB can render properly
   class SeenItemProxy
-    include GeneralHelpers
-    include Routing
-    include ::Subscriptions::Helpers
+    include Helpers::General
+    include Helpers::Routing
+    include Helpers::Subscriptions
 
     attr_accessor :item
 

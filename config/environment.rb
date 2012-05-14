@@ -13,7 +13,6 @@ require 'sinatra'
 require 'mongoid'
 require 'tzinfo'
 require 'twilio-rb'
-require 'padrino-helpers'
 
 # restore the original to_json on core objects (damn you ActiveSupport)
 [Object, Array, FalseClass, Float, Hash, Integer, NilClass, String, TrueClass].each do |klass|
@@ -40,9 +39,17 @@ configure do
   end
 end
 
-# app-wide models and helpers
 Dir.glob('models/*.rb').each {|filename| load filename}
-require './helpers'
+
+# helpers
+require 'padrino-helpers'
+require './helpers/general'
+require './helpers/routing'
+require './helpers/subscriptions'
+helpers Padrino::Helpers
+helpers Helpers::General
+helpers Helpers::Subscriptions
+helpers Helpers::Routing
 
 # admin messages and reports
 require './config/admin'

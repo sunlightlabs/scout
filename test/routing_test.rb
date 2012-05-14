@@ -5,7 +5,7 @@ class RoutingTest < Test::Unit::TestCase
   include TestHelper::Methods
   include FactoryGirl::Syntax::Methods
 
-  class Anonymous; extend Routing; end
+  class Anonymous; extend Helpers::Routing; end
   def routing; Anonymous; end
 
   # unit tests on subscriptions

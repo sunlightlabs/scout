@@ -6,7 +6,7 @@ module Deliveries
   module Email
 
     # give these methods at the class level, since all the methods in here are class methods
-    extend Routing 
+    extend Helpers::Routing
 
     def self.deliver_for_user!(user, frequency, dry_run = false)
       failures = []
