@@ -252,8 +252,7 @@
 
     $(".sidebar .subscriptions.related").hide();
     <% if !interest.new_record? %>
-      var template = $(".subscriptions.related.template").html();
-      $(".sidebar .subscriptions.related").html(template).show();
+      loadInterestPane($(".subscriptions.related.template").html());
     <% end %>
 
     // show the data description pane for the selected subscription
@@ -291,6 +290,10 @@
     return $(".filters input.subscription_type").val();
   }
 
+  function loadInterestPane(html) {
+    $(".sidebar .subscriptions.related").html(html).show();
+  }
+
   function follow() {
     var subscription_type = currentSubscriptionType();
     var query = encodeURIComponent(currentQuery());
@@ -306,6 +309,7 @@
 
     $.post("/subscriptions", subscription, function(data) {
       Utils.log("Created new subscription.");
+      loadInterestPane(data.interest_pane);
     }).error(function() {
       Utils.log("ERROR creating new subscription.");
       $("button.follow").show();
@@ -330,6 +334,7 @@
 
     $.post("/subscriptions", $.extend(subscription, {_method: "delete"}), function(data) {
       Utils.log("Removed subscription.");
+      loadInterestPane(data.interest_pane);
     }).error(function() {
       Utils.log("ERROR removing subscription.");
       $("button.follow").hide();

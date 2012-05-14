@@ -82,8 +82,6 @@ post '/subscriptions' do
 
   halt 200 and return unless subscriptions.any? {|s| s.new_record?}
   
-  headers["Content-Type"] = "application/json"
-
   # make sure interest has the same validations as subscriptions
   if interest.valid? and subscriptions.reject {|s| s.valid?}.empty?
     interest.save! if interest.new_record?
@@ -91,19 +89,19 @@ post '/subscriptions' do
       subscription.interest = interest
       subscription.save!
     end
-    
-    interest_pane = erb :"search/_subscriptions", :locals => {:interest => interest}
-    {
+
+    subscription = subscriptions.size == 1 ? subscriptions.first : nil
+    interest_pane = partial "search/subscriptions", :engine => :erb, :locals => {:interest => interest, :current_subscription => subscription}
+    json 200, {
       :interest_pane => interest_pane
-    }.to_json
+    }
   else
-    status 500
-    {
+    json 500, {
       :errors => {
         :interest => interest.errors.full_messages,
         :subscription => subscription.errors.full_messages
       }
-    }.to_json
+    }
   end
 end
 
@@ -123,13 +121,21 @@ delete '/subscriptions' do
     subscriptions = [subscription]
   end
 
+  interest = search_interest_for query
+
   subscriptions = subscriptions.reject &:new_record?
   subscriptions.each &:destroy
 
-  interest = Interest.find subscriptions.first.interest_id
-  interest.destroy if interest.subscriptions.empty?
+  if interest.subscriptions.count == 0
+    interest.destroy
+    interest_pane = nil
+  else
+    interest_pane = partial "search/subscriptions", :engine => :erb, :locals => {:interest => interest, :current_subscription => nil}
+  end
 
-  halt 200
+  json 200, {
+    :interest_pane => interest_pane
+  }
 end
 
 delete '/interest/:id' do

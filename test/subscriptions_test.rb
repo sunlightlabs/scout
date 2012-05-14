@@ -166,8 +166,8 @@ class SubscriptionsTest < Test::Unit::TestCase
     user = create :user
     query1 = "environment"
     query2 = "guns"
-    i1 = user.interests.create! :in => query1, :interest_type => "search"
-    i2 = user.interests.create! :in => query2, :interest_type => "search"
+    i1 = user.interests.create! :in => query1, :interest_type => "search", :data => {"query" => query1}
+    i2 = user.interests.create! :in => query2, :interest_type => "search", :data => {"query" => query2}
     s1 = user.subscriptions.create! :interest => i1, :subscription_type => "state_bills", :interest_in => query1, :data => {"query" => query1}
     s2 = user.subscriptions.create! :interest => i2, :subscription_type => "state_bills", :interest_in => query2, :data => {"query" => query2, 'state' => "CA"}
 
