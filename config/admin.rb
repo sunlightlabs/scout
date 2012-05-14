@@ -36,13 +36,6 @@ module Admin
     deliver! "Feed", subject, body.strip
   end
 
-  # CI status has changed status, according to Travis
-  def self.travis_change(status, data)
-    subject = "[Travis] Build #{status.to_i == 0 ? "succeeded" : "failed"}"
-    body = JSON.pretty_generate data
-    deliver! "Travis", subject, body.strip
-  end
-
   # special case - a notice that Postmark itself is down, and email defaulted to Pony.
   # this email itself should be forced to be sent over Pony.
   # this isn't ideal, since it's bypassing some of the wrapper code around mail sending.
