@@ -51,7 +51,7 @@ module Subscriptions
       end
 
       def self.short_name(number, subscription, interest)
-        "#{subscription.data['state'] || "state"} #{number > 1 ? "bills" : "bill"}"
+        "state #{number > 1 ? "bills" : "bill"}"
       end
 
       def self.interest_name(interest)
