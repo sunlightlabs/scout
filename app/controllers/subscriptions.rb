@@ -155,7 +155,7 @@ post '/item/:interest_type/:item_id/follow' do
   interest_type = params[:interest_type]
   item_id = URI.decode params[:item_id] # can possibly have spaces, decode first
   
-  unless item = Subscriptions::Manager.find(interest_data[interest_type][:adapter], item_id)
+  unless item = Subscriptions::Manager.find(interest_data[interest_type]['adapter'], item_id)
     halt 404 and return
   end
 
@@ -165,7 +165,7 @@ post '/item/:interest_type/:item_id/follow' do
     :data => item.data
   )
 
-  subscriptions = interest_data[interest_type][:subscriptions].keys.map do |subscription_type|
+  subscriptions = interest_data[interest_type]['subscriptions'].keys.map do |subscription_type|
     current_user.subscriptions.new :interest_in => item_id, :subscription_type => subscription_type
   end
 

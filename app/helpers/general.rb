@@ -75,7 +75,7 @@ module Helpers
     end
 
     def developer_find_url(interest_type, item_id)
-      adapter = Subscription.adapter_for interest_data[interest_type][:adapter]
+      adapter = Subscription.adapter_for interest_data[interest_type]['adapter']
       adapter.url_for_detail item_id, :api_key => api_key
     end
 

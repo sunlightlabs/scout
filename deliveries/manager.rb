@@ -36,7 +36,7 @@ module Deliveries
 
     def self.interest_name(interest, quotes = false)
       if interest.item?
-        Subscription.adapter_for(interest_data[interest.interest_type][:adapter]).interest_name(interest)
+        Subscription.adapter_for(interest_data[interest.interest_type]['adapter']).interest_name(interest)
       elsif interest.feed?
         Subscriptions::Adapters::ExternalFeed.interest_name interest
       else # if interest.search?

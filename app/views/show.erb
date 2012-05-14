@@ -8,7 +8,7 @@
     <% end %>
 
     <div class="module data explanation small">
-      <%= partial "subscriptions/#{interest_data[interest_type][:adapter]}/data", :engine => "erb" %>
+      <%= partial "subscriptions/#{interest_data[interest_type]['adapter']}/data", :engine => "erb" %>
     </div>
 
     <%= recent_searches %>

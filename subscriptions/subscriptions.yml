@@ -1,0 +1,38 @@
+# names of adapters that are for searches, 
+# pointing to the name of the kind of item they search over
+search_adapters:
+  federal_bills: bill
+  state_bills: state_bill
+  speeches: speech
+  regulations: regulation
+
+# names of adapters that follow particular interests
+interest_adapters:
+  federal_bills_activity: bill
+  federal_bills_upcoming_floor: bill
+  state_bills_votes: state_bill
+  state_bills_activity: state_bill
+
+
+# going back the other way: 
+# given an item type, what adapters are relevant to it
+# TODO: get the hell rid of this awful thing
+interest_data:
+  bill:
+    adapter: federal_bills
+    subscriptions:
+      federal_bills_activity:
+        name: Activity
+      federal_bills_upcoming_floor:
+        name: Floor Schedule
+  state_bill:
+    adapter: state_bills
+    subscriptions:
+      state_bills_activity:
+        name: Activity
+      state_bills_votes:
+        name: Votes
+  regulation:
+    adapter: regulations
+  speech:
+    adapter: speeches

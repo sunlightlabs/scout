@@ -22,10 +22,12 @@ require 'twilio-rb'
 end
 
 
-
-
 def config
   @config ||= YAML.load_file File.join(File.dirname(__FILE__), "config.yml")
+end
+
+def subscription_map
+  @subscription_map ||= YAML.load_file File.join(File.dirname(__FILE__), "../subscriptions/subscriptions.yml")
 end
 
 configure do
@@ -64,57 +66,15 @@ Dir.glob('deliveries/*.rb').each {|filename| load filename}
 Dir.glob('subscriptions/adapters/*.rb').each {|filename| load filename}
 require './subscriptions/manager'
 
-# maps types of items to the subscription adapter they can be found with
+# convenience functions for sections of the subscriptions map
 def interest_data
-  {
-    'bill' => {
-      :adapter => "federal_bills",
-      :subscriptions => {
-        'federal_bills_activity' => {
-          :name => "Activity"
-        },
-        'federal_bills_upcoming_floor' => {
-          :name => "Floor Schedule"
-        }
-      }
-    },
-    'state_bill' => {
-      :adapter => "state_bills",
-      :subscriptions => {
-        'state_bills_activity' => {
-          :name => "Activity"
-        },
-        'state_bills_votes' => {
-          :name => "Votes"
-        }
-      }
-    },
-    'regulation' => {
-      :adapter => "regulations"
-    },
-    'speech' => {
-      :adapter => "speeches"
-    }
-  }
+  subscription_map['interest_data']
 end
 
-# adapters used to process keyword searches,
-# and the item type they search over
 def search_adapters
-  {
-    'federal_bills' => 'bill',
-    'state_bills' => 'state_bill',
-    'speeches' => 'speech',
-    'regulations' => 'regulation'
-  }
+  subscription_map['search_adapters']
 end
 
-# adapters used to follow activity around specific items
 def interest_adapters
-  {
-    'federal_bills_activity' => 'bill',
-    'federal_bills_upcoming_floor' => 'bill',
-    'state_bills_votes' => 'state_bill',
-    'state_bills_activity' => 'state_bill'
-  }
+  subscription_map['interest_adapters']
 end
