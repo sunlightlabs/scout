@@ -42,4 +42,7 @@
 0 * * * * /projects/alarms/current/config/cron/staging/check.sh state_bills_votes
 
 
+# external feed subscriptions, once an hour
+0 * * * * /projects/alarms/current/config/cron/staging/check.sh external_feeds
+
 # keep the newline below
