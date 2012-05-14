@@ -9,14 +9,14 @@
     <ul>
       <% sorted.each_with_index do |subscription, i| %>
         <li>
-          <% name = subscription.adapter.search_name subscription %>
+          <% name = "" %>
           <% if i == 0 %>
-            <% name = "<strong>#{name}</strong>" %>
+            <% name = "<strong>#{subscription.adapter.search_name subscription}</strong> - " %>
           <% end %>
           <% if subscription.filters.any? %>
-            <% name += " - #{filters_short subscription}" %>
+            <% name += "#{filters_short subscription}" %>
           <% else %>
-            <% name += " - All" %>
+            <% name += "All" %>
           <% end %>
 
           <% if subscription == current_subscription %>
