@@ -18,4 +18,14 @@ FactoryGirl.define do
     }
   end
 
+  factory :subscription do
+    user
+    interest
+    self.interest_in "foia"
+    subscription_type "federal_bills"
+    data {
+      {:query => self.interest_in}
+    }
+  end
+
 end

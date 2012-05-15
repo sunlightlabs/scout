@@ -65,11 +65,19 @@ class Subscription
     data.each {|key, value| find_criteria["data.#{key}"] = value}
 
     if user
-      if subscription = user.subscriptions.where(find_criteria).first
-        subscription
-      else
-        user.subscriptions.new criteria
+      # we use dot notation for the criteria instead of passing in a hash, because
+      # apparently hash key order is important in matching on the subdocument, which is ridiculous.
+      # 
+      # however, the approach of finding with dot notation means that we could find results
+      # that have fields we didn't ask for, which would not be right.
+      # 
+      # the only approach I've found so far is to find all candidates using dot notation,
+      # then filter the too-broad ones client-side. 
+      subscription = user.subscriptions.where(find_criteria).detect do |subscription|
+        subscription.data.keys.select {|key| !data.keys.include?(key)}.empty?
       end
+      
+      subscription || user.subscriptions.new(criteria)
     else
       Subscription.new criteria
     end
