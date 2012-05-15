@@ -217,7 +217,12 @@ put '/interest/:id' do
   end
 
   if interest.save
-    halt 200
+    pane = partial "account/tags", :engine => :erb, :locals => {:tags => current_user.interests.distinct(:tags)}
+    json 200, {
+      :tags => interest.tags,
+      :notifications => interest.notifications,
+      :tags_pane => pane
+    }
   else
     halt 500
   end

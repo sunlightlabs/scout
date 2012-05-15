@@ -7,20 +7,15 @@
         <a href="/import/feed">Import an RSS feed</a> from anywhere on the Internet.
     </div>
 
-<!--     <div class="module rss cluster">
+    <div class="module rss cluster">
         <h4>
-            Combined Feed
+            Everything
             <a class="rss feed" href="/account/<%= current_user.id %>.rss">RSS</a>
             <% if current_user.developer? %>    
                 <a class="json feed" href="/account/<%= current_user.id %>.json?apikey=<%= current_user.api_key %>">JSON</a>
             <% end %>
         </h4>
-        <% if current_user.developer? %>
-            <small>Combined RSS and JSON feeds of updates on everything you follow.</small>
-        <% else %>
-            <small>A combined RSS feed of updates on everything you follow.</small>
-        <% end %>
-    </div> -->
+    </div>
 
     <div class="module tags">
         <h4>Tags</h4>
@@ -72,21 +67,30 @@
 
                     <% if interest.search? %>
                         <div class="searchParameters">
-                            <% if interest.subscriptions.count == 1 %>
-                                <% subscription = interest.subscriptions.first %>
-    							<span class="category"><%= subscription.search_name %></span> 
-                                <% if subscription.filters.any? %>
-                                    <div class="filters">
-                                        <%= subscription.filters.map do |field, value|
-                                        "<span class=\"filter\">#{subscription.filter_name field, value}</span>"
-                                        end.join(", ") %>
-                                    </div>
-                                <% end %>
-                            <% else %>
-                                <%= interest.subscriptions.map do |subscription|
-                                    "<span class=\"category\">#{subscription.search_name}</span>"
-                                end.join(", ") %>
+                            <ul>
+                            <% grouped = interest.subscriptions.to_a.group_by(&:subscription_type) %>
+                            <% search_subscription_types.each do |subscription_type| %>
+                              <% if subscriptions = grouped[subscription_type] %>
+                                <% sorted = subscriptions.sort_by {|s| s.data.keys.size} %>
+                                  <% sorted.each_with_index do |subscription, i| %>
+                                    <li>
+                                      <% name = "" %>
+                                      <% if i == 0 %>
+                                        <% name = "<strong>#{subscription.adapter.search_name subscription}</strong> - " %>
+                                      <% end %>
+                                      <% if subscription.filters.any? %>
+                                        <% name += "#{filters_short subscription}" %>
+                                      <% else %>
+                                        <% name += "All" %>
+                                      <% end %>
+
+                                        <%= name %><%= "," unless i == (sorted.size - 1) %>
+                                    </li>
+                                  <% end %>
+                                
+                              <% end %>
                             <% end %>
+                            </ul>
                         </div>
                     <% end %>
 					<div class="clear"></div>
@@ -98,16 +102,29 @@
                             <% default = types.delete current_user.notifications %>
 							<ul>
 								<li>
-                            <%= notification_radio_for default, preference == default, true %>
+                                    <%= notification_radio_for default, preference == default, true %>
 								</li>
 
-                            <% types.each do |type| %>
-								<li>
-                                <%= notification_radio_for type, preference == type %>
-								</li>
+                                <% types.each do |type| %>
+    								<li>
+                                        <%= notification_radio_for type, preference == type %>
+    								</li>
 
-                            <% end %>
+                                <% end %>
 							</ul>
+                        </form>
+                    </div>
+
+                    <div class="tags">
+                        <form class="tags"
+                            data-interest_id="<%= interest.id %>"
+                            >
+                            <fieldset>
+                            <label>Tags</label>
+                            <input class="tags" type="text" name="interest[tags]" placeholder="Comma separated tags" 
+                                value="<%= interest.tags_display %>"
+                                />
+                            </fieldset>
                         </form>
                     </div>
 
@@ -180,17 +197,15 @@
         })
     });
 
-    $("form.new_group").submit(function() {
-        $.post("/groups", $(this).serialize(), function(data) {
-            Utils.log("Group created: " + data.group_id);
-            $(".group_list").html(data.groups_pane);
+    $("form.tags").submit(function() {
+        var interest_id = $(this).data("interest_id");
+        var tags = $(this).find("input.tags").val();
+
+        $.post("/interest/" + interest_id, {_method: "put", interest: {tags: tags}}, function(data) {
+            Utils.log("Interest updated with tags (" + data.tags.join(", ") + ")");
+            $(".tag_list").html(data.tags_pane);
         }).error(function(xhr) {
-            Utils.log("Error creating group.");
-            var data = $.parseJson(xhr.responseText);
-            if (data && data.errors) {
-                Utils.log(data.errors.join("\n"));
-                $(".group.errors").html(data.errors.join("\n")).show();
-            }
+            Utils.log("Error updating interest's tags");
         });
         return false;
     });

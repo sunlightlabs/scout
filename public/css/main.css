@@ -1272,6 +1272,9 @@ a.source, .resources{
     width: 565px;
     float: left;
 }
+.subscription div.notifications li span {
+    font-weight: normal;
+}
 .subscription div.indicators span.okay{
     width: 25px;
     height: 16px;
