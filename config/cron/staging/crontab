@@ -1,8 +1,3 @@
-######## Administrative tasks ########
-
-# Check CI for build status changes, once an hour
-0 * * * * /projects/alarms/current/config/cron/staging/rake.sh travis
-
 
 ######## Delivery tasks ########
 
@@ -27,7 +22,7 @@
 0 * * * *     /projects/alarms/current/config/cron/staging/check.sh state_bills
 
 # speeches in Congress - daily, bounded by GPO
-0 8,14 * * *  /projects/alarms/current/config/cron/staging/check.sh congressional_record
+0 8,14 * * *  /projects/alarms/current/config/cron/staging/check.sh speeches
 
 # regulations - once an hour, FederalRegister.gov updates at unknown intervals
 0 * * * *     /projects/alarms/current/config/cron/staging/check.sh regulations
@@ -49,6 +44,6 @@
 
 
 # external feed subscriptions, once an hour
-0 * * * * /projects/alarms/current/config/cron/staging/check.sh external_feeds
+0 * * * * /projects/alarms/current/config/cron/staging/check.sh external_feed
 
 # keep the newline below

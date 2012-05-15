@@ -21,7 +21,7 @@
 0 * * * *     /projects/scout/current/config/cron/production/check.sh state_bills
 
 # speeches in Congress - daily, bounded by GPO
-0 8,14 * * *  /projects/scout/current/config/cron/production/check.sh congressional_record
+0 8,14 * * *  /projects/scout/current/config/cron/production/check.sh speeches
 
 # regulations - once an hour, FederalRegister.gov updates at unknown intervals
 0 * * * *     /projects/scout/current/config/cron/production/check.sh regulations
