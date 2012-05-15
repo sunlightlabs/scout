@@ -10,7 +10,7 @@ FactoryGirl.define do
 
   factory :interest do
     user
-    tags ["first", "second"]
+    tags []
     self.in "foia"
     interest_type "search"
     data {

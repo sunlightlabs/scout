@@ -146,6 +146,24 @@ get '/account/subscriptions' do
   }
 end
 
+post '/account/public_tags' do
+  requires_login
+
+  tag = params[:tag].strip
+  current_user.public_tags = (current_user.public_tags + [tag]).uniq
+  current_user.save!
+  halt 200
+end
+
+delete '/account/public_tags' do
+  requires_login
+
+  tag = params[:tag].strip
+  current_user.public_tags = current_user.public_tags.reject {|t| t == tag}
+  current_user.save!
+  halt 200
+end
+
 get '/account/settings' do
   requires_login
 

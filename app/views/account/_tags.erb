@@ -1,6 +1,8 @@
 <% if tags.any? %>
     <% tags.each do |tag| %>
-        <li><%= tag %></li>
+        <li>
+          <span class="name"><%= tag %></span>
+        </li>
     <% end %>
 <% else %>
     <p>

@@ -51,6 +51,11 @@ class Interest
     ]
   end
 
+  def new_tags=(string)
+    self.tags = string.split(/\s*,\s*/).map do |tag|
+      tag.gsub(/[^\w\d\s]/, '').gsub(/\s{2,}/, ' ')
+    end.select(&:present?).uniq
+  end
   
   # the mechanism this subscription prefers to be delivered as (e.g. email or SMS).
   # for right now, reads right from the user's preferences, but could be changed
