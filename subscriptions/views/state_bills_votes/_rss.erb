@@ -1,13 +1,7 @@
 <% vote = item.data %>
-<item>
-  <title>
-    <%= interest_name interest %> - <%= just_date vote['date'] %> - <%= state_vote_type vote %> vote, <%= state_vote_count vote %>
-  </title>
-  <description><![CDATA[
-    <%= vote['motion'] %>
-  ]]></description>
-    
-  <link>http://<%= config[:hostname] %><%= item_path item %></link>
-  <guid>http://<%= config[:hostname] %><%= item_path item %></guid>
-  <pubDate><%= rss_date item.date %></pubDate>
-</item>
+<title>
+  <%= interest_name interest %> - <%= just_date vote['date'] %> - <%= state_vote_type vote %> vote, <%= state_vote_count vote %>
+</title>
+<description><![CDATA[
+  <%= vote['motion'] %>
+]]></description>

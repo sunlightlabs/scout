@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Scout - Activity for <%= interest_name interest %></title>
+    <title>Scout - Activity for tag "<%= tag %>"</title>
     <link>http://<%= config[:hostname] %></link>
     <description>
       US government-wide search and notification service. Created by the Sunlight Foundation, a non-profit dedicated to using the power of technology to increase government transparency and accountability.
@@ -10,5 +10,6 @@
     <atom:link href="<%= url %>" rel="self" type="application/rss+xml" />
     
     <%= partial "rss/items", :engine => :erb, :locals => {:items => items} %>
+    
   </channel>
 </rss>

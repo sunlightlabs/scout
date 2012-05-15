@@ -24,6 +24,15 @@ module Helpers
       end
     end
 
+    # only needed in RSS feeds, and external feeds are the only time we override the guid
+    def item_guid(item)
+      if item.subscription_type == "external_feed"
+        item.data['guid']
+      else
+        item_url item
+      end
+    end
+
     # given a subscription, serialize it to a URL
     # assumes it is a search subscription
     def subscription_path(subscription)

@@ -1,9 +1,4 @@
-<item>
-  <title><%= item.data['title'] %></title>
-  <description><![CDATA[
-    <%= truncate item.data['description'], 500 %>
-  ]]></description>
-  <link><%= item.data['link'] %></link>
-  <guid><%= item.data['guid'] %></guid>
-  <pubDate><%= rss_date item.date %></pubDate>
-</item>
+<title><%= item.data['title'] %></title>
+<description><![CDATA[
+  <%= truncate item.data['description'], 500 %>
+]]></description>

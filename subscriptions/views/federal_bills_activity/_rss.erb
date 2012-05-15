@@ -1,15 +1,9 @@
 <% action = item.data %>
 <% bill_fields = bill_fields_from interest.in %>
 <% bill_code = bill_code bill_fields[0], bill_fields[1] %>
-<item>
-  <title>
-    <%= interest_name interest %> - New activity
-  </title>
-  <description><![CDATA[
-    <%= action['text'] %>
-  ]]></description>
-    
-  <link>http://<%= config[:hostname] %><%= item_path item %></link>
-  <guid>http://<%= config[:hostname] %><%= item_path item %></guid>
-  <pubDate><%= rss_date item.date %></pubDate>
-</item>
+<title>
+  <%= interest_name interest %> - New activity
+</title>
+<description><![CDATA[
+  <%= action['text'] %>
+]]></description>

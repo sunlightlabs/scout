@@ -170,6 +170,10 @@ get '/account/settings' do
   erb :"account/settings", :locals => {:user => current_user}
 end
 
+put '/account/username' do
+  
+end
+
 put '/account/phone' do
   requires_login
 

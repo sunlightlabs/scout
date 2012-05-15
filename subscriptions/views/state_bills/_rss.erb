@@ -1,13 +1,7 @@
 <% bill = item.data %>
-<item>
-  <title>
-    "<%= interest.in %>" - <%= bill['bill_id'] %> (<%= bill['state'].upcase %>)
-  </title>
-  <description><![CDATA[
-    <%= excerpt bill['title'], interest.in %>
-  ]]></description>
-    
-  <link><%= item_url item %></link>
-  <guid><%= item_url item %></guid>
-  <pubDate><%= rss_date item.date %></pubDate>
-</item>
+<title>
+  "<%= interest.in %>" - <%= bill['bill_id'] %> (<%= bill['state'].upcase %>)
+</title>
+<description><![CDATA[
+  <%= excerpt bill['title'], interest.in %>
+]]></description>

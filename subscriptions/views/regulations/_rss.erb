@@ -1,14 +1,9 @@
 <% regulation = item.data %>
-<item>
-  <title><%= regulation['title'] %></title>
-  <% if regulation['search']['highlight'] %>
-    <description><![CDATA[
-      <%= regulation_highlight item, interest.in %>
-    ]]></description>
-  <% else %>
-    <description><%= regulation['abstract'] %></description>
-  <% end %>
-  <link><%= regulation['federal_register_url'] %></link>
-  <guid><%= regulation['federal_register_url'] %></guid>
-  <pubDate><%= rss_date item.date %></pubDate>
-</item>
+<title><%= regulation['title'] %></title>
+<% if regulation['search']['highlight'] %>
+  <description><![CDATA[
+    <%= regulation_highlight item, interest.in %>
+  ]]></description>
+<% else %>
+  <description><%= regulation['abstract'] %></description>
+<% end %>
