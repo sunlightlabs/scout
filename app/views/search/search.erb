@@ -75,7 +75,7 @@
   <% end %>
 <% end %>
 
-<div class="results contentArea right single">
+<div class="results contentArea right <%= subscription ? "single" : "" %>">
 	<div class="pageTitle">
     <div class="searchParameters">
       <h2>"<%= h query %>"</h2>
