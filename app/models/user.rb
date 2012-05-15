@@ -4,8 +4,6 @@ class User
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  has_many :groups
-
   field :admin, :type => Boolean, :default => false
 
   field :email
@@ -26,6 +24,9 @@ class User
   field :announcements, :type => Boolean, :default => true
   field :sunlight_announcements, :type => Boolean, :default => false
   
+  # tags the user has marked as safe for public viewing
+  field :public_tags, :type => Array, :default => []
+
   has_many :subscriptions, :dependent => :destroy
   has_many :interests, :dependent => :destroy
   has_many :deliveries, :dependent => :destroy

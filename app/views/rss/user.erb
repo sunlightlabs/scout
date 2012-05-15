@@ -10,7 +10,7 @@
     <atom:link href="<%= url %>" rel="self" type="application/rss+xml" />
     
     <% items.each do |item| %>
-      <%= partial "subscriptions/#{item.subscription.subscription_type}/rss", :engine => "erb", :locals => {:item => item, :interest => item.interest} %>
+      <%= partial "subscriptions/#{item.subscription_type}/rss", :engine => "erb", :locals => {:item => item, :interest => item.interest} %>
     <% end %>
   </channel>
 </rss>

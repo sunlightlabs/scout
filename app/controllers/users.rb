@@ -142,7 +142,7 @@ get '/account/subscriptions' do
 
   erb :"account/subscriptions", :locals => {
     :interests => current_user.interests.desc(:created_at),
-    :groups => current_user.groups.asc(:created_at)
+    :tags => current_user.interests.distinct(:tags)
   }
 end
 

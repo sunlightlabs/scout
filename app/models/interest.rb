@@ -3,7 +3,6 @@ class Interest
   include Mongoid::Timestamps
   
   belongs_to :user
-  belongs_to :group
   has_many :subscriptions, :dependent => :destroy
   has_many :seen_items # convenience, subscriptions will do the destroy on them
 
@@ -19,6 +18,9 @@ class Interest
   #   item - metadata about the related item 
   #     (e.g. "chamber" => "house", "state" => "NY", "bill_id" => "hr2134-112")
   field :data, :type => Hash, :default => {}
+
+  # tags the user has set on this interest
+  field :tags, :type => Array, :default => []
 
   # per-interest override of notification mechanism
   field :notifications

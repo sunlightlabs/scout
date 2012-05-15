@@ -8,15 +8,9 @@ FactoryGirl.define do
     password_confirmation "test"
   end
 
-  factory :group do
-    user
-    name "Group name"
-    slug "group-name"
-  end
-
   factory :interest do
     user
-    group nil # default to be group-less
+    tags ["first", "second"]
     self.in "foia"
     interest_type "search"
     data {

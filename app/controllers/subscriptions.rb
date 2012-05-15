@@ -208,7 +208,13 @@ put '/interest/:id' do
     halt 404 and return false
   end
 
-  interest.notifications = params[:interest]['notifications']
+  if params[:interest]['notifications']
+    interest.notifications = params[:interest]['notifications']
+  end
+
+  if params[:interest]['tags']
+    interest.new_tags = params[:interest]['tags']
+  end
 
   if interest.save
     halt 200

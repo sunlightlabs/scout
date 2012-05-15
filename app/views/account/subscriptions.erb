@@ -22,21 +22,12 @@
         <% end %>
     </div> -->
 
-    <div class="module groups">
-        <h4>Groups</h4>
+    <div class="module tags">
+        <h4>Tags</h4>
 
-        <ul class="group_list">
-            <%= partial "account/groups", :engine => :erb, :locals => {:groups => groups} %>
+        <ul class="tag_list">
+            <%= partial "account/tags", :engine => :erb, :locals => {:tags => tags} %>
         </ul>
-
-        <div class="group errors"></div>
-
-        <form action="/groups" method="post" class="new_group">
-            <input type="text" name="group[name]" placeholder="New group name" />
-            <button type="submit">
-                <span>Create</span>
-            </button>
-        </form>
     </div>
 <% end %>
 
