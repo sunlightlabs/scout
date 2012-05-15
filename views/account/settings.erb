@@ -3,33 +3,45 @@
 <div class="contentArea full user settings">
   <%= flash_for [:user] %>
   <%= errors_for user %>
-	<div class="module passwordChange">
+	<div class="module allUserSettings">
 		<h2>Account Settings</h2>
-    <%= flash_for [:phone] %>
+		<div class="module user">
+			<form>
+				<ul>
+					<li class="email">
+			            <label for="email">Email Address</label>
+			            <input type="email" name="email" placeholder="useraddress@domain.com"/>
+			        </li>
+					<li class="username">
+			            <label for="username">Username</label>
+			            <input type="text" name="username" />
+			        </li>
+				</ul>
+			</form>
+		</div>
+		<div class="module passwordChange">
+	    <%= flash_for [:phone] %>
 
-    <% form_for user, "/account/password/change", :method => "put" do |f| %>
-        <ul>
-	        <li>
-                <label for="email">Email Address</label>
-                <input type="email" name="email" />
-            </li>
-            <li class="password">
-                <label for="old_password">Old Password</label>
-                <input type="password" name="old_password" />
-            </li>
-            <li class="password">
-                <label for="password">New Password</label>
-                <input type="password" name="password" />
-            </li>
-            <li class="password">
-                <label for="password_confirmation">New Password (again)</label>
-                <input type="password" name="password_confirmation" />
-            </li>
-        </ul>
-        <button type="submit">
-            <span>Update</span>
-        </button>
-    <% end %>
+	    <% form_for user, "/account/password/change", :method => "put" do |f| %>
+	        <ul>
+	            <li class="password">
+	                <label for="old_password">Old Password</label>
+	                <input type="password" name="old_password" />
+	            </li>
+	            <li class="password">
+	                <label for="password">New Password</label>
+	                <input type="password" name="password" />
+	            </li>
+	            <li class="password">
+	                <label for="password_confirmation">New Password (again)</label>
+	                <input type="password" name="password_confirmation" />
+	            </li>
+	        </ul>
+	        <button type="submit">
+	            <span>Update</span>
+	        </button>
+	    <% end %>
+		</div>
 	</div>
     <div class="module allNotifications">
 		<div class="module notifications">

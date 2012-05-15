@@ -1309,33 +1309,44 @@ button.item.follow, button.item.following {
 
 /*-- Settings Styling --*/
 
-.user.settings.contentArea form input[type="text"]{
-    width: 50%;
-}
 .user.settings.contentArea form input[type="password"]{
     width: 100%;
 }
+
 .password{
-    width: 25%;
-    float: left;
-    padding-right: 20px;
 }
-.settings.contentArea form input[type="text"], .settings.contentArea form input[type="password"], .settings.contentArea form input[type="email"], .settings.contentArea form.phone input[type="text"] {
+.settings.contentArea form input[type="text"], .settings.contentArea form input[type="password"], .settings.contentArea form input[type="email"], .settings.contentArea form.phone input[type="text"], .settings.contentArea .email input, .settings.contentArea .username input {
     width: 100%;
     height: 30px;
 }
-.sidebar .forgotPassword form input[type="email"]{
-    height: 30px;
-    width: 150px;
-}
 
+.settings.contentArea .module .module{
+    background: none;
+}
+.settings.contentArea .module .module, .settings.contentArea .module.donate, .settings.contentArea .module.passwordChange{
+    padding-top: 33px;
+    padding-bottom: 33px;
+}
 .settings.contentArea .module.phoneSettings{
     background: none;
     padding-left: 33px;
     padding-right: 0;
 }
-.settings.contentArea .module.notifications{
+.settings.contentArea .module.notifications, .settings.contentArea .module.phoneSettings, .settings.contentArea .module.user{
     background: url('../images/tinyborder_andshadow_vertical.png') right top repeat-y;
+}
+.settings.contentArea .module.notifications, .settings.contentArea .module.user{
+    padding-left: 10px;
+    padding-right: 33px;
+}
+.settings.contentArea .module.phoneSettings, .settings.contentArea .module.passwordChange{
+    padding-left: 33px;
+    padding-right: 33px;
+}
+.settings.contentArea .module.developer_mode{
+    background: none;
+    padding-left: 33px;
+    padding-right: 10px;
 }
 .settings.contentArea .module.notifications legend{
     width: 100%;
@@ -1366,17 +1377,19 @@ button.item.follow, button.item.following {
 }
 .settings.contentArea .module{
     background: url('/images/tinyborder.png') center bottom repeat-x;
-    padding: 33px 33px 33px 10px;
+    padding: 0;
     width: 33%;
     float: left;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
 }
-.user.settings.contentArea .module.passwordChange, .user.settings.contentArea .module.allNotifications, .user.settings.contentArea .module.donate{
+.user.settings.contentArea .module.allUserSettings, .user.settings.contentArea .module.allNotifications, .user.settings.contentArea .module.donate{
     width: 100%;
 }
-
+.user.settings.contentArea .module.allUserSettings{
+    padding-top: 33px;
+}
 .settings h2{
     margin-bottom: 16px;
 }
