@@ -46,6 +46,34 @@ class Subscription
   def self.adapter_for(type)
     "Subscriptions::Adapters::#{type.camelize}".constantize rescue nil
   end
+
+  # does the user have a subscription of this subscription type, and this data hash?
+  # if so, find it, otherwise, initialize one
+  # if the user is nil, it must not exist, so initialize it
+  def self.for(user, subscription_type, interest_in, data)
+
+    criteria = {
+      'interest_in' => interest_in,
+      'subscription_type' => subscription_type,
+      'data' => data
+    }
+
+    find_criteria = {
+      'interest_in' => interest_in,
+      'subscription_type' => subscription_type,
+    }
+    data.each {|key, value| find_criteria["data.#{key}"] = value}
+
+    if user
+      if subscription = user.subscriptions.where(find_criteria).first
+        subscription
+      else
+        user.subscriptions.new criteria
+      end
+    else
+      Subscription.new criteria
+    end
+  end
   
   def search(options = {})
     Subscriptions::Manager.search self, options

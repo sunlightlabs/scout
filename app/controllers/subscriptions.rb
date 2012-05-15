@@ -15,7 +15,7 @@ get '/search/:subscription_type/?:query?' do
   types = types.select {|type| search_adapters.keys.include?(type)}
   halt 404 and return unless types.any?
 
-  subscriptions = types.map {|type| subscription_for query, type}
+  subscriptions = types.map {|type| search_subscription_for query, type}
   halt 404 and return unless subscriptions.any?
 
   # could be nil if user is not logged in
@@ -35,7 +35,7 @@ get '/fetch/search/:subscription_type/?:query?' do
   query = stripped_query
   subscription_type = params[:subscription_type]
 
-  subscription = subscription_for query, subscription_type
+  subscription = search_subscription_for query, subscription_type
 
   page = params[:page].present? ? params[:page].to_i : 1
   per_page = params[:per_page].present? ? params[:per_page].to_i : nil
@@ -72,10 +72,10 @@ post '/subscriptions' do
 
   if params[:subscription_type] == "all"
     subscriptions = search_adapters.keys.map do |subscription_type|
-      subscription_for query, subscription_type
+      search_subscription_for query, subscription_type
     end
   else
-    subscriptions = [subscription_for(query, params[:subscription_type])]
+    subscriptions = [search_subscription_for(query, params[:subscription_type])]
   end
 
   interest = search_interest_for query
@@ -114,9 +114,9 @@ delete '/subscriptions' do
 
   if subscription_type == "all"
     types = ["federal_bills", "speeches", "state_bills", "regulations"]
-    subscriptions = types.map {|type| subscription_for query, type}
+    subscriptions = types.map {|type| search_subscription_for query, type}
   else
-    subscription = subscription_for query, subscription_type
+    subscription = search_subscription_for query, subscription_type
     halt 404 and return false if subscription.new_record?
     subscriptions = [subscription]
   end
@@ -232,34 +232,14 @@ helpers do
 
   # initializes a subscription of the given type, or, 
   # if the user is logged in, finds any existing one
-  def subscription_for(query, subscription_type)
+  def search_subscription_for(query, subscription_type)
     data = params[subscription_type] || {}
-    
+
     if query
-      data = data.merge('query' => query)
+      data['query'] = query
     end
 
-    criteria = {
-      'interest_in' => query,
-      'subscription_type' => subscription_type,
-      'data' => data
-    }
-
-    find_criteria = {
-      'interest_in' => query,
-      'subscription_type' => subscription_type,
-    }
-    data.each {|key, value| find_criteria["data.#{key}"] = value}
-
-    if logged_in?
-      if subscription = current_user.subscriptions.where(find_criteria).first
-        subscription
-      else
-        current_user.subscriptions.new criteria
-      end
-    else
-      Subscription.new criteria
-    end
+    Subscription.for current_user, subscription_type, query, data
   end
 
   def search_interest_for(query)
