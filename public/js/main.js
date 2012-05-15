@@ -3,10 +3,6 @@ $(function() {
   // login link should always point to redirect back
   $("a.login, a.logout").attr("href", $("a.login, a.logout").attr("href") + "?redirect=" + Utils.currentPath());
 
-  $("#search_form input.query").focus(function() {
-    $(".initialFilters").show();
-  });
-
   $("#content").on("click", "a.untruncate", function() {
     var to_hide = $(this).parent(".truncated");
     var tag = to_hide.data("tag");
@@ -15,14 +11,17 @@ $(function() {
     return false;
   });
 
+  $("#content").on("click", 'a[data-pjax]', function() {
+    Utils.pjax($(this).attr("href"), $(this).data("pjax"));
+    return false;
+  });
+
   $("form#search_form").submit(function() {
     var query = $(this).find("input.query").val();
     if (query) query = $.trim(query);
     if (!query) return false;
 
-    var type = $("select.subscription_type").val();
-
-    var path = "/search/" + type + "/" + encodeURIComponent(query);
+    var path = "/search/all/" + encodeURIComponent(query);
     window.location = path;
     
     return false;
@@ -42,7 +41,7 @@ var Utils = {
 
     pjax: function(href, container) {
       if (!container)
-        container = "#content";
+        container = "#center";
 
       $.pjax({
           url: href,

@@ -1,0 +1,11 @@
+<% if tags.any? %>
+    <% tags.each do |tag| %>
+        <li>
+          <span class="name"><%= tag %></span>
+        </li>
+    <% end %>
+<% else %>
+    <p>
+        Add tags to your alerts to organize and share them.
+    </p>
+<% end %>

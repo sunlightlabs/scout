@@ -2,6 +2,8 @@
 module Deliveries
   module Manager
 
+    extend Helpers::Routing
+
     def self.deliver!(delivery_options)
       receipts = []
 
@@ -32,11 +34,13 @@ module Deliveries
       puts "Error during delivery, emailed report."
     end
 
-    def self.interest_name(interest)
+    def self.interest_name(interest, quotes = false)
       if interest.item?
-        Subscription.adapter_for(interest_data[interest.interest_type][:adapter]).interest_name(interest)
-      else
-        interest.in
+        Subscription.adapter_for(interest_data[interest.interest_type]['adapter']).interest_name(interest)
+      elsif interest.feed?
+        Subscriptions::Adapters::ExternalFeed.interest_name interest
+      else # if interest.search?
+        quotes ? "\"#{interest.in}\"" : interest.in
       end
     end
 
@@ -44,15 +48,11 @@ module Deliveries
     def self.interest_path(interest, preferred_type = nil)
       if interest.item?
         "/item/#{interest.interest_type}/#{interest.in}"
+      elsif interest.feed?
+        interest.in # URL
       elsif interest.search?
-        # this sucks, and needs to change
-        if preferred_type
-          interest.subscriptions.first.scout_search_url(:subscription_type => preferred_type)
-        elsif interest.subscriptions.count > 1 
-          interest.subscriptions.first.scout_search_url(:subscription_type => "all")
-        else
-          interest.subscriptions.first.scout_search_url
-        end
+        # TODO: pass a subscription of that interest in to prefer that one
+        subscription_path interest.subscriptions.first
       end
     end
 
@@ -75,9 +75,9 @@ module Deliveries
       email_frequency ||= interest.email_frequency
 
       if !["email", "sms"].include?(mechanism)
-        puts "[#{subscription.user.email}][#{subscription.subscription_type}][#{subscription.interest_in}](#{item.item_id}) Not scheduling delivery, user wants no notifications for this interest"
+        puts "[#{subscription.user.email}][#{subscription.subscription_type}][#{subscription.interest_in}](#{item.item_id}) Not scheduling delivery, user wants no notifications for this interest" unless Sinatra::Application.test?
       else
-        puts "[#{subscription.user.email}][#{subscription.subscription_type}][#{subscription.interest_in}](#{item.item_id}) Scheduling delivery"
+        puts "[#{subscription.user.email}][#{subscription.subscription_type}][#{subscription.interest_in}](#{item.item_id}) Scheduling delivery" unless Sinatra::Application.test?
 
         Delivery.create!(
           :user_id => user.id,
@@ -131,9 +131,9 @@ module Deliveries
 
   # dummy proxy class to provide a context with helper modules included so that ERB can render properly
   class SeenItemProxy
-    include GeneralHelpers
-    include Routing
-    include ::Subscriptions::Helpers
+    include Helpers::General
+    include Helpers::Routing
+    include Helpers::Subscriptions
 
     attr_accessor :item
 

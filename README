@@ -1,9 +1,0 @@
-A government-wide search and notification system, called Scout.
-
-Sinatra is used for the web framework, MongoDB for the database, Postmark for email delivery, HTTParty for API consumption.
-
-The architecture is conceived of as a series of tubes that receive search result data from remote APIs that users can subscribe to for updates. Each type of data that comes into the system (bills in Congress, federal regulations, etc.) is defined a set of small adapters to consume that data and display it in a variety of places.
-
-Users can search for keywords across a variety of data sources, and subscribe for updates over email, RSS, and SMS. Users can also follow specific items (such as bills), and subscribe to a variety of kinds of notifications specific to that kind of item. For example, for bills in Congress, users can be notified of new official activity on the bill, and when the bill has been scheduled by party leadership to appear on the floor for debate or a vote.
-
-Search functionality and data quality is bounded by the remote services this application depends on. Scout only keeps information in a local database for purposes of caching and distinguishing new items from old.

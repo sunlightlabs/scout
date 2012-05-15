@@ -122,22 +122,22 @@ class AccountsTest < Test::Unit::TestCase
   def test_update_account_settings
     user = new_user!
 
-    assert_equal 'email_daily', user.notifications
+    assert_equal 'email_immediate', user.notifications
     assert_equal true, user.announcements
 
-    put '/account/settings', {:user => {:notifications => "email_immediate", :announcements => "false"}}, login(user)
+    put '/account/settings', {:user => {:notifications => "email_daily", :announcements => "false"}}, login(user)
     assert_redirect "/account/settings"
 
     user.reload
 
-    assert_equal 'email_immediate', user.notifications
+    assert_equal 'email_daily', user.notifications
     assert_equal false, user.announcements
   end
 
   def test_update_account_settings_invalid
     user = new_user!
 
-    assert_equal 'email_daily', user.notifications
+    assert_equal 'email_immediate', user.notifications
     assert_equal true, user.announcements
 
     put '/account/settings', {:user => {:notifications => "not_valid", :announcements => "false"}}, login(user)
@@ -145,7 +145,7 @@ class AccountsTest < Test::Unit::TestCase
 
     user.reload
 
-    assert_equal 'email_daily', user.notifications
+    assert_equal 'email_immediate', user.notifications
     assert_equal true, user.announcements
   end
 

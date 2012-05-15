@@ -1,5 +1,4 @@
 require 'httparty'
-require './subscriptions/helpers'
 
 module Subscriptions
 
@@ -46,7 +45,7 @@ module Subscriptions
       # 2) stores any items as yet unseen by this subscription in seen_ids
       # 3) stores any items as yet unseen by this subscription in the delivery queue
       unless results = Subscriptions::Manager.poll(subscription, :check)
-        Admin.report Report.warning("Check", "Error while checking a subscription, will check again next time.", :subscription_id => subscription.id)
+        Admin.report Report.warning("Check", "Error while checking a subscription, will check again next time.", :subscription => subscription.attributes.dup)
         return nil
       end
 
@@ -61,7 +60,7 @@ module Subscriptions
           mark_as_seen! subscription, item
 
           # accumulate backfilled items to report per-subscription.
-          # buffer of 8 days, to allow for information to make its way through whatever 
+          # buffer of 30 days, to allow for information to make its way through whatever 
           # pipelines it has to go through (could eventually configure this per-adapter)
           
           # Was 5 days, bumped it to 30 because of federal_bills. The LOC, CRS, and GPO all 
@@ -94,13 +93,21 @@ module Subscriptions
       url = adapter.url_for subscription, function, options
       
       puts "\n[#{subscription.subscription_type}][#{function}][#{subscription.interest_in}][#{subscription.id}] #{url}\n\n" if config[:debug][:output_urls]
-      
-      begin
-        response = HTTParty.get url
-      rescue Timeout::Error, Errno::ECONNREFUSED, Errno::ETIMEDOUT => ex
-        # will do function-specific reports in places that call poll
-        # Admin.report Report.warning("Poll", "[#{subscription.subscription_type}][#{function}][#{subscription.interest_in}] poll timeout, returned an empty list")
-        return nil
+
+      response = nil
+      if adapter.respond_to?(:url_to_response)
+        begin
+          response = adapter.url_to_response url
+        rescue Exception => ex
+          Report.exception self, "Exception processing URL #{url}", ex, :subscription_type => subscription.subscription_type, :function => function, :interest_in => subscription.interest_in, :subscription_id => subscription.id
+          return nil
+        end
+      else
+        begin
+          response = HTTParty.get url
+        rescue Timeout::Error, Errno::ECONNREFUSED, Errno::ETIMEDOUT => ex
+          return nil
+        end
       end
       
       items = adapter.items_for response, function, options

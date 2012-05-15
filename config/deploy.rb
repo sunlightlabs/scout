@@ -8,15 +8,17 @@ else
   set :domain, 'ec2-50-16-84-118.compute-1.amazonaws.com'
 end
 
+
 # RVM stuff - not sure how/why this works, awesome
-set :rvm_ruby_string, '1.9.3-p125@scout' 
-set :rvm_type, :user
+set :rvm_ruby_string, '1.9.3-p194@scout' 
+# rvm-capistrano gem must be installed outside of the bundle
+require 'rvm/capistrano'
+
 
 set :application, user
 set :sock, "#{user}.sock"
 
 set :deploy_to, "/projects/#{user}/"
-set :local_bin, "/projects/#{user}/.gem/ruby/1.8/bin"
 
 
 set :scm, :git
@@ -39,6 +41,7 @@ after "deploy", "deploy:cleanup"
 
 namespace :deploy do
   task :start do
+    # run "echo `which unicorn`"
     run "cd #{current_path} && unicorn -D -l #{shared_path}/#{sock} -c #{current_path}/unicorn.rb"
   end
   
@@ -60,7 +63,7 @@ namespace :deploy do
   
   desc "Run bundle install --local"
   task :bundle_install, :roles => :app, :except => {:no_release => true} do
-    run "cd #{release_path} && #{local_bin}/bundle install --local"
+    run "cd #{release_path} && bundle install --local"
   end
 
   # current_path is correct here because this happens after deploy, not after deploy:update_code

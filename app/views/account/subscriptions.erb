@@ -1,0 +1,213 @@
+<% content_for :title do %>
+    <h2>Subscriptions</h2>
+<% end %>
+
+<% content_for :sidebar_right do %>
+    <div class="module rss cluster">
+        <a href="/import/feed">Import an RSS feed</a> from anywhere on the Internet.
+    </div>
+
+    <div class="module rss cluster">
+        <h4>
+            Everything
+            <a class="rss feed" href="/account/<%= current_user.id %>.rss">RSS</a>
+            <% if current_user.developer? %>    
+                <a class="json feed" href="/account/<%= current_user.id %>.json?apikey=<%= current_user.api_key %>">JSON</a>
+            <% end %>
+        </h4>
+    </div>
+
+    <div class="module tags">
+        <h4>Tags</h4>
+
+        <ul class="tag_list">
+            <%= partial "account/tags", :engine => :erb, :locals => {:tags => tags} %>
+        </ul>
+    </div>
+<% end %>
+
+<div class="contentArea left">
+	<div class="pageTitle">
+	    <p class="default">
+	        <% if current_user.notifications == "none" %>
+	            Your default notification preference is <strong>off, feeds only</strong>.
+	        <% elsif current_user.notifications == "email_immediate" %>
+	            Your default notification preference is <strong>email immediately</strong>.
+	        <% elsif current_user.notifications == "email_daily" %>
+	            Your default notification preference is <strong>a single daily email</strong>.
+	        <% else %>
+	            Your default notification preference is unknown(?).
+	        <% end %>
+
+	        <a href="/account/settings">Change</a>
+	    </p>
+	</div>
+
+
+    <div class="subscriptionsList">
+
+        <% if interests.any? %>
+
+            <% interests.each do |interest| %>
+                <div class="subscription" data-id="<%= interest.id %>">
+                    
+                    <h3>
+                        <a href="<%= interest_path interest %>">
+                            <%= interest_name interest, true %>
+                        </a>
+                    </h3>
+
+                    <% unless interest.feed? %>
+                        <a class="rss feed" href="/interest/<%= interest.id %>.rss">RSS</a>
+                        
+                        <% if current_user.developer? %>
+                            <a class="json feed" href="/interest/<%= interest.id %>.json?apikey=<%= current_user.api_key %>">JSON</a>
+                        <% end %>
+                    <% end %>
+
+                    <% if interest.search? %>
+                        <div class="searchParameters">
+                            <ul>
+                            <% grouped = interest.subscriptions.to_a.group_by(&:subscription_type) %>
+                            <% search_subscription_types.each do |subscription_type| %>
+                              <% if subscriptions = grouped[subscription_type] %>
+                                <% sorted = subscriptions.sort_by {|s| s.data.keys.size} %>
+                                  <% sorted.each_with_index do |subscription, i| %>
+                                    <li>
+                                      <% name = "" %>
+                                      <% if i == 0 %>
+                                        <% name = "<strong>#{subscription.adapter.search_name subscription}</strong> - " %>
+                                      <% end %>
+                                      <% if subscription.filters.any? %>
+                                        <% name += "#{filters_short subscription}" %>
+                                      <% else %>
+                                        <% name += "All" %>
+                                      <% end %>
+
+                                        <%= name %><%= "," unless i == (sorted.size - 1) %>
+                                    </li>
+                                  <% end %>
+                                
+                              <% end %>
+                            <% end %>
+                            </ul>
+                        </div>
+                    <% end %>
+					<div class="clear"></div>
+                    
+                    <div class="notifications">
+                        <form>
+                            <% types = current_user.allowable_notifications %>
+                            <% preference = interest.notifications || current_user.notifications %>
+                            <% default = types.delete current_user.notifications %>
+							<ul>
+								<li>
+                                    <%= notification_radio_for default, preference == default, true %>
+								</li>
+
+                                <% types.each do |type| %>
+    								<li>
+                                        <%= notification_radio_for type, preference == type %>
+    								</li>
+
+                                <% end %>
+							</ul>
+                        </form>
+                    </div>
+
+                    <div class="tags">
+                        <form class="tags"
+                            data-interest_id="<%= interest.id %>"
+                            >
+                            <fieldset>
+                            <label>Tags</label>
+                            <input class="tags" type="text" name="interest[tags]" placeholder="Comma separated tags" 
+                                value="<%= interest.tags_display %>"
+                                />
+                            </fieldset>
+                        </form>
+                    </div>
+
+                    <div class="indicators">
+                        <span class="spinning">spinning</span>
+                        <span class="okay">okay</span>
+                        <span class="failed">not okay</span>
+                    </div>
+					<div class="clear"></div>
+
+                    <div class="removeSubscription">
+                        <input id="remove-<%= interest.id %>" type="checkbox" name="remove" class="remove" />
+                        <span><label for="remove-<%= interest.id %>">Remove</span>
+                        <button class="remove smallButton">Yes, remove</button>
+						<div class="clear"></div>
+                    </div>
+
+                </div>
+            <% end %>
+
+        <% else %>
+            <span class="no_subscriptions">
+                You haven't subscribed to anything yet.
+            </span>
+        <% end %>
+
+    </div>
+
+</div>
+
+<script type="text/javascript">
+
+    $("input[type=checkbox].remove").change(function() {
+        $(this).siblings("button.remove").toggle();
+    });
+
+    $("button.remove").click(function() {
+        var container = $(this).parents(".subscription");
+        var interest_id = container.data("id");
+
+        container.find(".indicators span").hide();
+        container.find(".indicators .spinning").show();
+        $.post("/interest/" + interest_id, {_method: "delete"}, function(data) {
+            Utils.log("Deleted interest " + interest_id);
+            container.remove();
+        }).error(function() {
+            Utils.log("Error deleting interest " + interest_id);
+            container.find(".indicators span").hide();
+            container.find(".indicators .failed").show();
+        })
+    });
+
+    $("input.notifications").change(function() {
+        var container = $(this).parents(".subscription");
+        var interest_id = container.data("id");
+
+        var notifications = container.find("input[name=notifications]:checked").val();
+        var attrs = {interest: {notifications: notifications}};
+
+        container.find(".indicators span").hide();
+        container.find(".indicators .spinning").show();
+        $.post("/interest/" + interest_id, $.extend(attrs, {_method: "put"}), function(data) {
+            container.find(".indicators span").hide();
+            container.find(".indicators .okay").show();
+            Utils.log("Updated interest " + interest_id);
+        }).error(function() {
+            container.find(".indicators span").hide();
+            container.find(".indicators .failed").show();
+            Utils.log("Error updating interest " + interest_id);
+        })
+    });
+
+    $("form.tags").submit(function() {
+        var interest_id = $(this).data("interest_id");
+        var tags = $(this).find("input.tags").val();
+
+        $.post("/interest/" + interest_id, {_method: "put", interest: {tags: tags}}, function(data) {
+            Utils.log("Interest updated with tags (" + data.tags.join(", ") + ")");
+            $(".tag_list").html(data.tags_pane);
+        }).error(function(xhr) {
+            Utils.log("Error updating interest's tags");
+        });
+        return false;
+    });
+
+</script>

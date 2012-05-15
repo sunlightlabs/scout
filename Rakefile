@@ -4,6 +4,15 @@ task :environment do
   require './config/environment'
 end
 
+# does not hinge on the environment, test_helper loads it itself
+task :test do
+  responses = Dir.glob("test/*_test.rb").map do |file|
+    puts "Running #{file}:"
+    system "ruby #{file}"
+  end
+  exit (responses.any? {|code| code == false} ? -1 : 0)
+end
+
 desc "Set the crontab in place for this environment"
 task :set_crontab => :environment do
   environment = ENV['environment']
@@ -11,7 +20,7 @@ task :set_crontab => :environment do
   
   if environment.blank? or current_path.blank?
     Admin.message "No environment or current path given, emailing and exiting."
-    exit
+    next
   end
   
   if system("cat #{current_path}/config/cron/#{environment}/crontab | crontab")

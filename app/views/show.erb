@@ -1,0 +1,106 @@
+<% content_for :sidebar_right do %>
+    
+    <% if show_data? %>
+        <div class="module developer json">
+          <h4>The Data</h4>
+          See the <a href="<%= developer_find_url interest_type, item_id %>">underlying data</a>.
+        </div>
+    <% end %>
+
+    <div class="module data explanation">
+	  <h4>Source</h4>
+      <%= partial "subscriptions/#{interest_data[interest_type]['adapter']}/data", :engine => "erb" %>
+    </div>
+
+    <%= recent_searches %>
+<% end %>
+
+<div class="entry contentArea left <%= interest_type %>">
+
+    <div class="loading">
+        <span>Fetching...</span>
+    </div>
+
+    <div class="error">
+        Error loading information.
+    </div>
+
+    <div class="content">
+        <!-- load in content -->
+    </div>
+
+</div>
+
+
+<script type="text/javascript">
+
+    var interest_type = "<%= h interest_type %>";
+    var item_id = "<%= h item_id %>";
+
+    $(function() {
+        var container = $(".entry.contentArea");
+
+        container.find(".loading").show();
+        container.find(".error").hide();
+        container.find(".content").hide();
+
+        $.get("/fetch" + window.location.pathname, {}, function(data) {
+            container.find(".loading").hide();
+            container.find(".content").show().html(data);
+
+            initializeControls();
+        }).error(function() {
+            container.find(".loading").hide();
+            container.find(".error").show();
+        });
+    });
+
+  function initializeControls() {
+    $("button.follow").hide();
+    $("button.following").hide();
+
+    <% if interest.new_record? %>
+      $("button.follow").show();
+    <% else %>
+      $("button.following").show();
+    <% end %>
+
+    <% if logged_in? %>
+      $("button.follow").off("click").click(follow);
+      $("button.following").off("click").click(unfollow);
+    <% else %>
+      $("button.follow").off("click").click(function() {window.location = "/login?redirect=" + Utils.currentPath();});
+      $("button.following").off("click");
+    <% end %>
+  }
+
+  function follow() {
+    $("button.follow").hide();
+    $("button.following").show();
+
+    $.post("/item/" + interest_type + "/" + item_id + "/follow", function(data) {
+      Utils.log("Followed " + interest_type + " " + item_id + ".");
+    }).error(function() {
+      Utils.log("ERROR following item.");
+      $("button.follow").show();
+      $("button.following").hide();
+    });
+
+    return false;
+  }
+
+  function unfollow() {
+    $("button.follow").show();
+    $("button.following").hide();
+
+    $.post("/item/" + interest_type + "/" + item_id + "/unfollow", {_method: "delete"}, function(data) {
+      Utils.log("Unfollowed " + interest_type + " " + item_id + ".");
+    }).error(function() {
+      Utils.log("ERROR unfollowing item.");
+      $("button.follow").hide();
+      $("button.following").show();
+    });
+
+    return false;
+  }
+</script>
