@@ -782,6 +782,9 @@ footer nav li{
     margin-bottom: 0;
     text-align: right;
 }
+.results .resultsIntro {
+    text-align: right;
+}
 .share{
     float: left;
     width: 155px;
@@ -1068,15 +1071,13 @@ button.item.follow, button.item.following {
 
 .resources{
     float: left;
-    background-color: #f5f6f5;
-/*    
+    background: #f5f6f5;
     -webkit-box-shadow: inset -14px 0px 14px -7px #e2e3e0;
     -moz-box-shadow: inset -14px 0px 14px -7px #e2e3e0;
     box-shadow: inset -14px 0px 14px -7px #e2e3e0;
-*/
-    padding: 8px;
+    padding: 8px 33px 8px 10px;
     margin-bottom: 20px;
-    width: 100%;
+    width: 666px;
 }
 
 .resources li{
@@ -1093,6 +1094,7 @@ button.item.follow, button.item.following {
     float: left;
     padding-top: 0;
     width: 592px;
+    font-weight: bold;
 }
 .resources span{
     background-image: url('../images/icons_resources.png');
@@ -1133,10 +1135,13 @@ button.item.follow, button.item.following {
 .resources .source {
     float: right;
     margin-right: 0;
+    font-weight: normal;
 }
 
 .entryHeader{
     float: left;
+    margin-left: 10px;
+    margin-right: 33px;
 }
 
 .entry .loading {
@@ -1165,7 +1170,11 @@ button.item.follow, button.item.following {
     box-sizing: border-box;
 }
 .entry .summary{
-    padding: 33px 33px 33px 10px;
+    padding: 33px 0;
+}
+.entry .summary p{
+    margin-left: 10px;
+    margin-right: 33px;
 }
 
 .entry .summary.followable {
