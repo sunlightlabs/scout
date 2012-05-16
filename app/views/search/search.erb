@@ -175,6 +175,11 @@
 
     initializeSubscriptions();
     
+    <% if logged_in? and (params[:follow] == "now") %>
+      if ($("button.follow:visible").size() > 0)
+        follow();
+    <% end %>
+
     <% subscriptions.each do |subscription| %>
       search("<%= h subscription.subscription_type %>");
     <% end %>
@@ -216,7 +221,9 @@
       $("button.follow").off("click").click(follow);
       $("button.following").off("click").click(unfollow);
     <% else %>
-      $("button.follow").off("click").click(function() {window.location = "/login?redirect=" + Utils.currentPath();});
+      $("button.follow").off("click").click(function() {
+        window.location = "/login?redirect=" + Utils.currentPath({follow: "now"});
+      });
       $("button.following").off("click");
     <% end %>
 
@@ -290,7 +297,7 @@
   }
 
   function loadInterestPane(html) {
-    $(".sidebar .subscriptions.related").html(html).show();
+    $(".sidebar .subscriptions.related").show().html(html);
   }
 
   function follow() {

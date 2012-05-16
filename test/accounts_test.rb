@@ -165,6 +165,7 @@ class AccountsTest < Test::Unit::TestCase
     assert_equal password_hash, user.password_hash
   end
 
+
   # password management
 
   def test_start_reset_password_process

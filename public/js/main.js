@@ -54,9 +54,17 @@ var Utils = {
     },
 
     // returns a path string suitable for redirects back to this location
-    currentPath: function() {
+    currentPath: function(options) {
       var fullDomain = window.location.protocol + "//" + window.location.host;
       var queryString = window.location.href.replace(fullDomain + window.location.pathname, "");
+      
+      if (options) {
+        if (queryString)
+          queryString += "&" + $.param(options);
+        else
+          queryString = "?" + $.param(options);
+      }
+
       return window.location.pathname + queryString;
     }
 };
