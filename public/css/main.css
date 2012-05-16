@@ -1093,7 +1093,7 @@ button.item.follow, button.item.following {
     display: block;
     float: left;
     padding-top: 0;
-    width: 592px;
+    width: 591px;
     font-weight: bold;
 }
 .resources span{
@@ -1340,6 +1340,19 @@ button.item.follow, button.item.following {
 .settings.contentArea .module .module{
     background: none;
 }
+.settings.contentArea .module .username.highlight label{
+    background: #E5E6E3 url('../images/bg_currentCat.png') 5px center no-repeat;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 16px;
+}
+.settings.contentArea .module.allNotifications{
+    overflow: hidden;
+}
+.settings.contentArea .module.allNotifications .module, .settings.contentArea .module.allUserSettings .module{
+    margin-bottom: -99999px;
+    padding-bottom: 99999px;
+}
 .settings.contentArea .module .module, .settings.contentArea .module.donate, .settings.contentArea .module.passwordChange{
     padding-top: 33px;
     padding-bottom: 33px;
@@ -1349,7 +1362,8 @@ button.item.follow, button.item.following {
     padding-left: 33px;
     padding-right: 0;
 }
-.settings.contentArea .module.notifications, .settings.contentArea .module.phoneSettings, .settings.contentArea .module.user{
+
+.settings.contentArea .module.notifications, .settings.contentArea .module.phoneSettings{
     background: url('../images/tinyborder_andshadow_vertical.png') right top repeat-y;
 }
 .settings.contentArea .module.notifications, .settings.contentArea .module.user{
@@ -1360,13 +1374,16 @@ button.item.follow, button.item.following {
     padding-left: 33px;
     padding-right: 33px;
 }
-.settings.contentArea .module.developer_mode{
+.settings.contentArea .module.developer_mode, .settings.contentArea .module.updateSettings{
     background: none;
     padding-left: 33px;
     padding-right: 10px;
 }
 .settings.contentArea .module.notifications legend{
     width: 100%;
+}
+.settings.contentArea .module.notifications form, .settings.contentArea .module.allUserSettings form{
+    margin-bottom: 33px;
 }
 .settings li, .settings label{
     list-style-type: none;
@@ -1387,8 +1404,12 @@ button.item.follow, button.item.following {
     font-style: italic;
     font-weight: normal;
     display: block;
+    margin-bottom: 10px;
+    margin-top: 5px;
 }
-
+.updateSettings button{
+    margin-top: 15px;
+}
 .settings .phone_settings {
     display: none;
 }

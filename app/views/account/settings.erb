@@ -5,8 +5,8 @@
   <%= errors_for user %>
 	<div class="module allUserSettings">
 		<h2>Account Settings</h2>
+		<% form_for user, "/account/password/change", :method => "put" do |f| %>
 		<div class="module user">
-			<form>
 				<ul>
 					<li class="email">
 			            <label for="email">Email Address</label>
@@ -14,15 +14,13 @@
 			        </li>
 					<li class="username">
 			            <label for="username">Username</label>
+						<small>Usernames are only necessary if you want to allow public sharing of your topics pages.</small>
 			            <input type="text" name="username" />
 			        </li>
 				</ul>
-			</form>
 		</div>
 		<div class="module passwordChange">
 	    <%= flash_for [:phone] %>
-
-	    <% form_for user, "/account/password/change", :method => "put" do |f| %>
 	        <ul>
 	            <li class="password">
 	                <label for="old_password">Old Password</label>
@@ -37,11 +35,14 @@
 	                <input type="password" name="password_confirmation" />
 	            </li>
 	        </ul>
-	        <button type="submit">
-	            <span>Update</span>
-	        </button>
-	    <% end %>
 		</div>
+		<div class="module updateSettings">
+	        <button type="submit">
+	            <span>Update Account Info</span>
+	        </button>
+		</div>
+		<div class="clear"></div>
+		<% end %>
 	</div>
     <div class="module allNotifications">
 		<div class="module notifications">
