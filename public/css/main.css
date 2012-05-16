@@ -674,22 +674,15 @@ footer nav li{
     
 }
 .homeWrapper #search_form input[type="search"]{
-    width: 661px;
+    width: 454px;
 }
 
 .homeWrapper #search_form{
     margin-top: 30px;
     width: 677px;
-}
-
-.homeWrapper #search_form button{
-    float: right;
-}    
+} 
 .homeWrapper #search_form button:hover{
     }
-.homeWrapper [type="search"]{
-    margin-bottom: 16px;
-}
 .homeWrapper .initialFilters{
     width: 470px;
     float: left;
