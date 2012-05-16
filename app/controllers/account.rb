@@ -1,4 +1,3 @@
-## Login/signup/forgot
 
 get '/logout' do
   log_out if logged_in?
@@ -44,6 +43,10 @@ post '/account/new' do
   else
     erb :"account/login"
   end
+end
+
+get '/account/password/forgot' do
+  erb :"account/forgot"
 end
 
 post '/account/password/forgot' do
