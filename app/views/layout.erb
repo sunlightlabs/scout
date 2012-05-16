@@ -113,8 +113,10 @@
 	                <%= left_bar %>
 	            </div>
 	        <% end %> 
-
+            
+            <div id="center">
 	            <%= yield %>
+            </div>
 
 	        <% if right_bar = content_from(:sidebar_right) %>
 	            <div class="sidebar right">
@@ -129,6 +131,7 @@
 			<a href="http://sunlightfoundation.com" class="sunlightFoundation textIndent">
                 Sunlight Foundation
             </a>
+
             <div class="aboutSF">
 				<p>
                 Founded in 2006, the Sunlight Foundation is a non-partisan non-profit that uses cutting-edge technology and ideas to make government transparent and accountable.	</p>
@@ -136,12 +139,10 @@
 					Visit <a href="http://sunlightfoundation.com">SunlightFoundation.com</a> to learn more.
 				</p>
 			</div>
+            
             <nav>
                 <a href="/about">About</a>
-
             </nav>
-
-
 
             <div class="clear"></div>
         </footer>
