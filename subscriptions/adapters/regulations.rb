@@ -6,11 +6,11 @@ module Subscriptions
       def self.filters
         {
           "agency" => {
-            :field => "agency_ids",
-            :name => lambda {|id| executive_agency_abbreviations[executive_agency_map[id]] || executive_agency_map[id]}
+            field: "agency_ids",
+            name: -> id {executive_agency_abbreviations[executive_agency_map[id]] || executive_agency_map[id]}
           },
           "stage" => {
-            :name => lambda {|s| "#{s.capitalize} Rule"}
+            name: -> stage {"#{stage.capitalize} Rule"}
           }
         }
       end

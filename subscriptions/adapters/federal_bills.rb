@@ -6,7 +6,7 @@ module Subscriptions
       def self.filters
         {
           "stage" => {
-            :name => lambda {|v| v.split("_").map(&:capitalize).join " "}
+            name: -> v {v.split("_").map(&:capitalize).join " "}
           }
         }
       end
