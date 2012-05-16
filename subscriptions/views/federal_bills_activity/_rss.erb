@@ -1,8 +1,6 @@
 <% action = item.data %>
-<% bill_fields = bill_fields_from interest.in %>
-<% bill_code = bill_code bill_fields[0], bill_fields[1] %>
 <title>
-  <%= interest_name interest %> - New activity
+  <%= interest_name item.interest %> - New activity
 </title>
 <description><![CDATA[
   <%= action['text'] %>

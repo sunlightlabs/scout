@@ -8,9 +8,9 @@ get "/account/:id.:format" do
   items = SeenItem.where(:user_id => user.id).desc(:date)
 
   if params[:format] == 'rss'
-    rss_for items, params
+    rss_for "user", items
   else
-    json_for items, params
+    json_for items
   end
 end
 
@@ -24,9 +24,9 @@ get "/interest/:interest_id.:format" do
   items = SeenItem.where(:interest_id => interest.id).desc :date
 
   if params[:format] == 'rss'
-    rss_for items, params
+    rss_for "interest", items, :interest => interest
   else
-    json_for items, params
+    json_for items
   end
 end
 
@@ -41,9 +41,9 @@ get "/account/:id/tags/:tag.:format" do
   items = SeenItem.where(:interest_id => {"$in" => interest_ids}).desc :date
 
   if params[:format] == 'rss'
-    rss_for items, params
+    rss_for "tag", items, :tag => params[:tag]
   else
-    json_for items, params
+    json_for items
   end
 end
 
@@ -53,7 +53,7 @@ helpers do
     halt 404 unless ['rss', 'json'].include?(params[:format])
   end
 
-  def rss_for(items, params)
+  def rss_for(view, items, locals = {})
     page = (params[:page] || 1).to_i
     page = 1 if page <= 0 or page > 200000000
     per_page = 100
@@ -61,20 +61,13 @@ helpers do
     items = items.skip(per_page * (page - 1)).limit(per_page)
 
     headers["Content-Type"] = "application/rss+xml"
-    erb :"rss/user", :layout => false, :locals => {
+    erb :"rss/#{view}", :layout => false, :locals => {
       :items => items,
       :url => request.url
-    }
+    }.merge(locals)
   end
   
-  def jsonp(results, params)
-    response['Content-Type'] = 'application/json'
-    json = results.to_json
-    params[:callback].present? ? "#{params[:callback]}(#{json});" : json
-  end
-
-
-  def json_for(items, params)
+  def json_for(items)
     count = items.count
     
     pagination = pagination_for params
@@ -92,9 +85,10 @@ helpers do
       }
     }
 
-    jsonp results, params
+    response['Content-Type'] = 'application/json'
+    json = results.to_json
+    params[:callback].present? ? "#{params[:callback]}(#{json});" : json
   end
-
 
   def pagination_for(params)
     default_per_page = 50

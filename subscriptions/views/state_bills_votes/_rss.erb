@@ -1,6 +1,6 @@
 <% vote = item.data %>
 <title>
-  <%= interest_name interest %> - <%= just_date vote['date'] %> - <%= state_vote_type vote %> vote, <%= state_vote_count vote %>
+  <%= interest_name item.interest %> - <%= state_vote_type vote %> vote, <%= state_vote_count vote %>
 </title>
 <description><![CDATA[
   <%= vote['motion'] %>

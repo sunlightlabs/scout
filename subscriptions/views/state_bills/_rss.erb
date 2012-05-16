@@ -1,7 +1,7 @@
 <% bill = item.data %>
 <title>
-  "<%= interest.in %>" - <%= bill['bill_id'] %> (<%= bill['state'].upcase %>)
+  <%= bill['bill_id'] %> (<%= bill['state'].upcase %>)
 </title>
 <description><![CDATA[
-  <%= excerpt bill['title'], interest.in %>
+  <%= excerpt bill['title'], item.interest_in %>
 ]]></description>
