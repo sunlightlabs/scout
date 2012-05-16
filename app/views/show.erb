@@ -49,6 +49,10 @@
             container.find(".content").show().html(data);
 
             initializeControls();
+
+            <% if logged_in? and interest.new_record? and (params[:follow] == "now") %>
+              follow();
+            <% end %>
         }).error(function() {
             container.find(".loading").hide();
             container.find(".error").show();
@@ -69,7 +73,9 @@
       $("button.follow").off("click").click(follow);
       $("button.following").off("click").click(unfollow);
     <% else %>
-      $("button.follow").off("click").click(function() {window.location = "/login?redirect=" + Utils.currentPath();});
+      $("button.follow").off("click").click(function() {
+        window.location = "/login?redirect=" + Utils.currentPath({follow: "now"});
+      });
       $("button.following").off("click");
     <% end %>
   }
