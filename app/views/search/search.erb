@@ -133,7 +133,7 @@
         </ul>
 
         <% unless subscription %>
-          <a href="<%= subscription_path s %>" class="viewMore">
+          <a href="<%= subscription_path s %>" class="viewMore" data-pjax="#center">
             View more <span><%= s.search_name %></span>
           </a>
           <div class="clear"></div>
