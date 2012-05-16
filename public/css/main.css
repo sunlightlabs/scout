@@ -446,30 +446,7 @@ select.subscription_type {
 #search_form .categoryMenu legend{
     margin-bottom: 7px;
 }
-.donate form{
-    margin-top: 20px;
-    margin-bottom: 0px;
-}
-.donate label{
-    float: left;
-    font-size: 180%;
-    padding-right: 5px;
-    color: #C5C7C7;
-    font-weight: normal;
-}
-.sidebar .donate input{
-    width: 95px;
-    margin-bottom: 20px;
-    float: left;
-    margin-right: 0;
-}
-.donate button {
-    width: ;
-}
-.donate button span{
-    width: ;
-    display: block;
-}
+
 
 /*-- Basic Content Structure --*/
 .fauxBody{
@@ -1422,6 +1399,34 @@ button.item.follow, button.item.following {
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
 }
+.settings.contentArea .module.donate{
+    background: url('../images/splash.png') center -130px no-repeat;
+}
+.settings.contentArea .module.donate p{
+    width: 365px;
+    float: left;
+}
+.donate form{
+    margin-bottom: 0px;
+    float: left;
+    width: 400px;
+}
+.donate label{
+    float: left;
+    font-size: 180%;
+    padding-right: 5px;
+    color: #C5C7C7;
+    font-weight: normal;
+}
+.donate input{
+    width: 50%;
+}
+
+.donate button span{
+    display: block;
+}
+
+
 .user.settings.contentArea .module.allUserSettings, .user.settings.contentArea .module.allNotifications, .user.settings.contentArea .module.donate{
     width: 100%;
 }
