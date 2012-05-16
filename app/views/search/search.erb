@@ -175,9 +175,8 @@
 
     initializeSubscriptions();
     
-    <% if logged_in? and (params[:follow] == "now") %>
-      if ($("button.follow:visible").size() > 0)
-        follow();
+    <% if logged_in? and (params[:follow] == "now") and (subscriptions.any? {|s| s.new_record?})%>
+      follow();
     <% end %>
 
     <% subscriptions.each do |subscription| %>
