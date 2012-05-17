@@ -1200,6 +1200,32 @@ button.item.follow, button.item.following {
     -webkit-column-break-inside: avoid;
     font-weight: normal;
 }
+.interestHeader{
+    background: #F5F6F3;
+    padding: 16px 0 16px 10px;
+    -webkit-box-shadow: inset -14px 0px 14px -7px #E2E3E0;
+    -moz-box-shadow: inset -14px 0px 14px -7px #e2e3e0;
+    box-shadow: inset -14px 0px 14px -7px #E2E3E0;
+    padding: 16px 33px 16px 10px;
+}
+.interestHeader h3{
+    border-bottom: 1px dashed #9D9B9B;
+}
+
+.subscription .edit{
+    float: left;
+    width: 100px;
+}
+.subscription .details{
+    float: left;
+}
+.subscription h4{
+    font-weight: bold;
+    font-size: 127%;
+    float: left;
+    margin-bottom: 5px;
+    width: 490px;
+}
 .subscription .notifications{
     margin-top: 10px;
 }
@@ -1246,13 +1272,10 @@ button.item.follow, button.item.following {
     -webkit-padding-end: 0;
 }
 .removeSubscription{
-    border: 1px solid #dcddda;
-    background-color: #f5f6f3;
-    padding: 7px;
     clear: both;
     display: block;
     font-style: italic;
-    margin-top: 10px;
+    margin-right: 20px;
 }
 .removeSubscription input, .removeSubscription label{
     margin: 7px 0 7px 0;
@@ -1268,8 +1291,7 @@ button.item.follow, button.item.following {
     display: none;
 }
 .subscription div.notifications{
-    width: 565px;
-    float: left;
+    width: 490px;
 }
 .subscription div.notifications li span {
     font-weight: normal;
@@ -1297,6 +1319,10 @@ button.item.follow, button.item.following {
     display: none;
     text-indent: -9999em;
     float: right;
+}
+
+.subscription .tags input{
+    display: inline;
 }
 
 
