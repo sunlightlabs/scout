@@ -12,6 +12,9 @@ class Interest
   # 'search', or the type of item the ID refers to (e.g. 'bill')
   field :interest_type
 
+  # if interest_type is a "search", can be "all" or the subscription_type in question
+  field :search_type 
+
   # arbitrary metadata
   #   search query - metadata about the search query
   #     (e.g. "query" => "copyright")
@@ -84,6 +87,41 @@ class Interest
       "daily"
     else
       nil
+    end
+  end
+
+  # does the user have a search interest of this search type ("all" or an individual type), and this data hash?
+  def self.search_for(user, search_type, interest_in, data = {})
+
+    criteria = {
+      'in' => interest_in,
+      'interest_type' => 'search',
+      'search_type' => search_type,
+    }
+    find_criteria = criteria.dup
+
+    if data
+      criteria['data'] = data
+    end
+
+    data.each {|key, value| find_criteria["data.#{key}"] = value}
+
+    if user
+      # we use dot notation for the criteria instead of passing in a hash, because
+      # apparently hash key order is important in matching on the subdocument, which is ridiculous.
+      # 
+      # however, the approach of finding with dot notation means that we could find results
+      # that have fields we didn't ask for, which would not be right.
+      # 
+      # the only approach I've found so far is to find all candidates using dot notation,
+      # then filter the too-broad ones client-side. 
+      interest = user.interests.where(find_criteria).detect do |interest|
+        interest.data.keys.select {|key| !data.keys.include?(key)}.empty?
+      end
+      
+      interest || user.interests.new(criteria)
+    else
+      Interest.new criteria
     end
   end
 

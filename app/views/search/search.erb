@@ -10,10 +10,9 @@
             Everything
           </a>
         </li>
-        <% current_type = (subscription ? subscription.subscription_type : "all") %>
 	      <% search_types.each do |subscription_type| %>
 	        <li 
-            class="<%= subscription_type %> <%= subscription_type == current_type ? "current" : "" %>"
+            class="<%= subscription_type %> <%= subscription_type == interest.search_type ? "current" : "" %>"
             >
 	          <a data-pjax="#center" href="/search/<%= subscription_type %>/<%= h query %>">
 	            <%= Subscription.adapter_for(subscription_type).search_name nil %>
@@ -66,7 +65,7 @@
         </p>
       </div>
 
-      <% search_types.each do |subscription_type| %>
+      <% search_adapters.keys.each do |subscription_type| %>
         <div class="<%= subscription_type %>">
           <%= partial "subscriptions/#{subscription_type}/data", :engine => "erb" %>
         </div>
@@ -75,12 +74,16 @@
   <% end %>
 <% end %>
 
-<div class="results contentArea right <%= subscription ? "single" : "" %>">
+<div class="results contentArea right <%= interest.search_type == "all" ? "" : "single" %>">
 	<div class="pageTitle">
     <div class="searchParameters">
       <h2>"<%= h query %>"</h2>
       in 
-      <% if subscription %>
+      <% if interest.search_type == "all" %>
+        <span class="category">
+          Everything
+        </span>
+      <% else %>
         <span class="category">
           <%= subscription.search_name %>
         </span> 
@@ -92,10 +95,6 @@
             end.join(", ") %>
           </div>
         <% end %>
-      <% else %>
-        <span class="category">
-          Everything
-        </span>
       <% end %>
     </div>
 
@@ -160,9 +159,9 @@
 <div class="clear"></div>
 
 <!-- hidden, used to populate contents of sidebar dynamically -->
-<% if logged_in? and interest and !interest.new_record? %>
+<% if logged_in? and related_interests and related_interests.any? %>
   <div class="template subscriptions related">
-    <%= partial "search/subscriptions", :engine => :erb, :locals => {:interest => interest, :current_subscription => subscription } %>
+    <%= partial "search/related_interests", :engine => :erb, :locals => {:related_interests => related_interests, :current_interest => interest} %>
   </div>
 <% end %>
 
@@ -175,7 +174,7 @@
 
     initializeSubscriptions();
     
-    <% if logged_in? and (params[:follow] == "now") and (subscriptions.any? {|s| s.new_record?})%>
+    <% if logged_in? and (params[:follow] == "now") and interest.new_record? %>
       follow();
     <% end %>
 
@@ -189,7 +188,6 @@
     // set up the filter events
     $(".filters .filter_control").off("change").change(function() {
       var type = $(this).parents("ul.filter_controls").data("subscription_type");
-      window.elem = $(this);
 
       var query = encodeURIComponent(currentQuery());
       var filters = currentFilters();
@@ -207,7 +205,7 @@
     // set the given query and subscription type as current
     // the subscription type can be "all"
     $(".filters input.query").val("<%= h query %>");
-    $(".filters input.subscription_type").val("<%= h subscription_type %>");
+    $(".filters input.subscription_type").val("<%= h interest.search_type %>");
 
     var subscriptionType = currentSubscriptionType();
 
@@ -226,7 +224,7 @@
       $("button.following").off("click");
     <% end %>
 
-    <% if subscriptions.any? {|s| s.new_record?} %>
+    <% if interest.new_record? %>
       $("button.follow").show();
     <% else %>
       $("button.following").show();
@@ -256,7 +254,7 @@
     <% end %>
 
     $(".sidebar .subscriptions.related").hide();
-    <% if interest and !interest.new_record? %>
+    <% if related_interests and related_interests.any? %>
       loadInterestPane($(".subscriptions.related.template").html());
     <% end %>
 
@@ -305,14 +303,14 @@
     var filters = currentFilters();
 
     var subscription = $.extend(filters, {
-      subscription_type: subscription_type,
+      search_type: subscription_type,
       query: query
     });
 
     $("button.follow").hide();
     $("button.following").show();
 
-    $.post("/subscriptions", subscription, function(data) {
+    $.post("/interests/search", subscription, function(data) {
       Utils.log("Created new subscription.");
       loadInterestPane(data.interest_pane);
     }).error(function() {
@@ -330,14 +328,14 @@
     var filters = currentFilters();
 
     var subscription = $.extend(filters, {
-      subscription_type: subscription_type,
+      search_type: subscription_type,
       query: query
     });
 
     $("button.follow").show();
     $("button.following").hide();
 
-    $.post("/subscriptions", $.extend(subscription, {_method: "delete"}), function(data) {
+    $.post("/interests/search", $.extend(subscription, {_method: "delete"}), function(data) {
       Utils.log("Removed subscription.");
       loadInterestPane(data.interest_pane);
     }).error(function() {

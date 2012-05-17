@@ -48,5 +48,18 @@ module Helpers
       base
     end
 
+    # given an interest, serialize it to a URL
+    # assumes it is a search interest
+    def search_interest_path(interest)
+      if interest.search_type == "all"
+        base = "/search/all"
+        base << "/#{URI.encode interest.data['query']}" if interest.data['query']
+        base
+      else
+        subscription_path interest.subscriptions.first
+      end
+    end
+
+
   end
 end

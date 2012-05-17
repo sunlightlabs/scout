@@ -1,0 +1,39 @@
+<h5>
+  Your related subscriptions
+</h5>
+
+<% grouped = related_interests.to_a.group_by(&:search_type) %>
+<% (["all"] + search_subscription_types).each do |search_type| %>
+  <% if interests = grouped[search_type] %>
+    <% sorted = interests.sort_by {|s| s.data.keys.size} %>
+    <ul>
+      <% sorted.each_with_index do |interest, i| %>
+        <li>
+          <% name = "" %>
+          <% if interest.search_type == "all" %>
+            <% name = "<strong>Everything</strong>" %>
+          
+          <% else %>
+            <% subscription = interest.subscriptions.first %>
+
+            <% if i == 0 %>
+              <% name = "<strong>#{subscription.adapter.search_name subscription}</strong> - " %>
+            <% end %>
+            <% if subscription.filters.any? %>
+              <% name += "#{filters_short subscription}" %>
+            <% else %>
+              <% name += "All" %>
+            <% end %>
+
+          <% end %>
+
+          <% if interest == current_interest %>
+            <%= name %>
+          <% else %>
+            <a href="<%= search_interest_path interest %>" data-pjax="#center"><%= name %></a>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+<% end %>

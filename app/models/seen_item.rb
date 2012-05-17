@@ -46,6 +46,7 @@ class SeenItem
   end
 
   # take a SeenItem right from an adapter and assign it a particular subscription
+  # this is where the main bit of denormalization happens, where things could potentially get out of sync
   def assign_to_subscription(subscription)
     interest_type = search_adapters[subscription.subscription_type] || interest_adapters[subscription.subscription_type]
     

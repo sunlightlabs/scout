@@ -1,32 +1,22 @@
 # search results
 
 get '/search/:subscription_type/?:query?' do
+  halt 404 and return unless (search_adapters.keys + ["all"]).include?(params[:subscription_type])
+
   query = stripped_query
 
-  if params[:subscription_type] == "all"
-
-    # hardcoded to preserve order...need a better solution
-    types = search_subscription_types
-
-  else
-    types = [params[:subscription_type]]
-  end
-
-  types = types.select {|type| search_adapters.keys.include?(type)}
-  halt 404 and return unless types.any?
-
-  subscriptions = types.map {|type| search_subscription_for query, type}
-  halt 404 and return unless subscriptions.any?
-
-  # could be nil if user is not logged in
-  interest = search_interest_for query
+  interest = search_interest_for query, params[:subscription_type]
+  subscriptions = search_subscriptions_for interest
 
   erb :"search/search", :layout => !pjax?, :locals => {
+    :interest => interest,
+
     :subscriptions => subscriptions,
     :subscription => (subscriptions.size == 1 ? subscriptions.first : nil),
-    :subscription_type => params[:subscription_type],
-    :search_types => search_subscription_types,
-    :interest => interest,
+
+    :search_types => search_subscription_types, # ditch this, ugh
+
+    :related_interests => related_interests(query),
     :query => query
   }
 end
@@ -35,8 +25,9 @@ get '/fetch/search/:subscription_type/?:query?' do
   query = stripped_query
   subscription_type = params[:subscription_type]
 
-  subscription = search_subscription_for query, subscription_type
-
+  interest = search_interest_for query, params[:subscription_type]
+  subscription = search_subscriptions_for(interest).first
+  
   page = params[:page].present? ? params[:page].to_i : 1
   per_page = params[:per_page].present? ? params[:per_page].to_i : nil
 
@@ -65,33 +56,25 @@ get '/fetch/search/:subscription_type/?:query?' do
   }.to_json
 end
 
-post '/subscriptions' do
+post '/interests/search' do
   requires_login
 
   query = stripped_query
+  interest = search_interest_for query, params[:search_type]
 
-  if params[:subscription_type] == "all"
-    subscriptions = search_adapters.keys.map do |subscription_type|
-      search_subscription_for query, subscription_type
-    end
-  else
-    subscriptions = [search_subscription_for(query, params[:subscription_type])]
-  end
+  halt 200 and return unless interest.new_record?
 
-  interest = search_interest_for query
-
-  halt 200 and return unless subscriptions.any? {|s| s.new_record?}
+  subscriptions = search_subscriptions_for interest
   
   # make sure interest has the same validations as subscriptions
   if interest.valid? and subscriptions.reject {|s| s.valid?}.empty?
-    interest.save! if interest.new_record?
+    interest.save!
     subscriptions.each do |subscription|
       subscription.interest = interest
       subscription.save!
     end
 
-    subscription = subscriptions.size == 1 ? subscriptions.first : nil
-    interest_pane = partial "search/subscriptions", :engine => :erb, :locals => {:interest => interest, :current_subscription => subscription}
+    interest_pane = partial "search/related_interests", :engine => :erb, :locals => {:related_interests => related_interests(query), :current_interest => interest}
     json 200, {
       :interest_pane => interest_pane
     }
@@ -99,39 +82,28 @@ post '/subscriptions' do
     json 500, {
       :errors => {
         :interest => interest.errors.full_messages,
-        :subscription => subscription.errors.full_messages
+        :subscription => subscriptions.first.errors.full_messages
       }
     }
   end
 end
 
 # delete the subscription, and, if it's the last subscription under the interest, delete the interest
-delete '/subscriptions' do
+delete '/interests/search' do
   requires_login
 
   query = stripped_query
-  subscription_type = params[:subscription_type]
+  search_type = params[:search_type]
 
-  if subscription_type == "all"
-    types = ["federal_bills", "speeches", "state_bills", "regulations"]
-    subscriptions = types.map {|type| search_subscription_for query, type}
-  else
-    subscription = search_subscription_for query, subscription_type
-    halt 404 and return false if subscription.new_record?
-    subscriptions = [subscription]
-  end
+  interest = search_interest_for query, params[:search_type]
+  halt 404 and return false if interest.new_record?
+  
+  interest.destroy
 
-  interest = search_interest_for query
-
-  subscriptions = subscriptions.reject &:new_record?
-  subscriptions.each &:destroy
-
-  if interest.subscriptions.count == 0
-    interest.destroy
-    interest_pane = nil
-  else
-    interest_pane = partial "search/subscriptions", :engine => :erb, :locals => {:interest => interest, :current_subscription => nil}
-  end
+  interest_pane = partial "search/related_interests", :engine => :erb, :locals => {
+    :related_interests => related_interests(query), 
+    :current_interest => nil
+  }
 
   json 200, {
     :interest_pane => interest_pane
@@ -230,24 +202,50 @@ end
 
 helpers do
 
-  # initializes a subscription of the given type, or, 
-  # if the user is logged in, finds any existing one
-  def search_subscription_for(query, subscription_type)
-    data = params[subscription_type] || {}
+  # # initializes a subscription of the given type, or, 
+  # # if the user is logged in, finds any existing one
+  # def search_subscription_for(query, subscription_type)
+  #   data = params[subscription_type] || {}
+
+  #   if query
+  #     data['query'] = query
+  #   end
+
+  #   Subscription.for current_user, subscription_type, query, data
+  # end
+
+  # subscription_type can be "all"
+  def search_interest_for(query, search_type)
+    data = params[search_type] || {}
 
     if query
       data['query'] = query
     end
 
-    Subscription.for current_user, subscription_type, query, data
+    Interest.search_for current_user, search_type, query, data
   end
 
-  def search_interest_for(query)
+  # assumes that oneself is a new record, and a search interest
+  def search_subscriptions_for(interest)
+    if interest.new_record?
+      types = (interest.search_type == "all") ? search_adapters.keys : [interest.search_type]
+      types.map do |subscription_type|
+        interest.subscriptions.new(
+          :interest_in => interest.in, :subscription_type => subscription_type,
+          :data => interest.data, # will only be relevant for single-search interests,
+          :user => current_user
+        )
+      end
+    else
+      interest.subscriptions
+    end
+  end
+
+  def related_interests(query)
     if logged_in?
-      current_user.interests.find_or_initialize_by(
+      current_user.interests.where(
         :in => query, 
-        :interest_type => "search",
-        :data => {'query' => query}
+        :interest_type => "search"
       )
     end
   end

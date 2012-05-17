@@ -7,7 +7,7 @@ end
 # does not hinge on the environment, test_helper loads it itself
 task :test do
   responses = Dir.glob("test/*_test.rb").map do |file|
-    puts "Running #{file}:"
+    puts "\nRunning #{file}:\n"
     system "ruby #{file}"
   end
   exit (responses.any? {|code| code == false} ? -1 : 0)
@@ -52,7 +52,7 @@ end
 
 desc "Clear the database"
 task :clear_data => :environment do
-  models = Dir.glob('models/*.rb').map do |file|
+  models = Dir.glob('app/models/*.rb').map do |file|
     File.basename(file, File.extname(file)).camelize.constantize
   end
   

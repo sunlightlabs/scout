@@ -17,7 +17,7 @@ class SubscriptionsTest < Test::Unit::TestCase
     assert_equal 0, user.interests.count
 
 
-    post "/subscriptions", {:subscription_type => "federal_bills", :query => query}, login(user)
+    post "/interests/search", {:search_type => "federal_bills", :query => query}, login(user)
     assert_response 200
 
     assert_equal 1, user.subscriptions.count
@@ -30,67 +30,65 @@ class SubscriptionsTest < Test::Unit::TestCase
     assert_equal "federal_bills", subscription1.subscription_type
 
 
-    post "/subscriptions", {:subscription_type => "state_bills", :query => query}, login(user)
+    post "/interests/search", {:search_type => "state_bills", :query => query}, login(user)
     assert_response 200
+
+    criteria = user.subscriptions.where(:subscription_type => "state_bills", :interest_in => query)
+    assert_equal 1, criteria.count
+    subscription2 = criteria.first
+    interest2 = subscription2.interest
+
+    assert_not_equal interest1, interest2
 
     assert_equal 2, user.subscriptions.count
-    assert_equal 1, user.interests.count
-    assert_equal 2, interest1.subscriptions.count
-
-    subscription2 = interest1.reload.subscriptions.last
-    assert_equal "state_bills", subscription2.subscription_type
+    assert_equal 2, user.interests.where(:in => query).count
+    assert_equal 1, interest2.subscriptions.count
+    assert_equal 1, interest1.reload.subscriptions.count
 
 
-    post "/subscriptions", {:subscription_type => "state_bills", :query => query2}, login(user)
+    post "/interests/search", {:search_type => "state_bills", :query => query2}, login(user)
     assert_response 200
 
     assert_equal 3, user.subscriptions.count
-    assert_equal 2, user.interests.count
+    assert_equal 3, user.interests.count
 
-    interest2 = user.interests.where(:in => query2).first
-    assert_not_nil interest2
-    assert_equal 1, interest2.subscriptions.count
-    subscription3 = interest2.subscriptions.first
-    assert_equal "state_bills", subscription3.subscription_type
-
+    criteria = user.subscriptions.where(:subscription_type => "state_bills", :interest_in => query2)
+    assert_equal 1, criteria.count
+    subscription3 = criteria.first
+    interest3 = subscription3.interest
+    assert_equal 1, interest3.subscriptions.count
+    assert_equal 1, interest2.reload.subscriptions.count
+    
 
     # posting the same subscription should return 200, but be idempotent - nothing changed
-    post "/subscriptions", {:subscription_type => "state_bills", :query => query2}, login(user)
+    post "/interests/search", {:search_type => "state_bills", :query => query2}, login(user)
     assert_response 200
 
     assert_equal 3, user.subscriptions.count
-    assert_equal 2, user.interests.count
-
-    assert_equal 1, user.interests.where(:in => query2).count
-    assert_equal 1, user.subscriptions.where(:interest_in => query2).count
-    assert_equal 1, interest2.subscriptions.count
+    assert_equal 3, user.interests.count
 
 
     # but if we include filter data, it's different!
-    post "/subscriptions", {:subscription_type => "state_bills", :query => query2, :state_bills => {:state => "DE"}}, login(user)
+    post "/interests/search", {:search_type => "state_bills", :query => query2, :state_bills => {:state => "DE"}}, login(user)
     assert_response 200
 
     assert_equal 4, user.subscriptions.count
-    assert_equal 2, user.interests.count
+    assert_equal 4, user.interests.count
 
-    assert_equal 1, user.interests.where(:in => query2).count
-    assert_equal 2, user.subscriptions.where(:interest_in => query2).count
-    assert_equal 2, interest2.subscriptions.count
+    assert_equal 2, user.subscriptions.where(:subscription_type => "state_bills", :interest_in => query2).count
+    criteria = user.subscriptions.where(:subscription_type => "state_bills", :interest_in => query2, "data.state" => "DE")
+    assert_equal 1, criteria.count
+    subscription4 = criteria.first
+    interest4 = subscription4.interest
 
-    subscription4 = interest2.reload.subscriptions.last
-    assert_equal "DE", subscription4.data['state']
-
+    assert_equal 1, interest4.subscriptions.count
 
     # but, that data is also taken into account when finding duplicates
-    post "/subscriptions", {:subscription_type => "state_bills", :query => query2, :state_bills => {:state => "DE"}}, login(user)
+    post "/interests/search", {:search_type => "state_bills", :query => query2, :state_bills => {:state => "DE"}}, login(user)
     assert_response 200
 
     assert_equal 4, user.subscriptions.count
-    assert_equal 2, user.interests.count
-
-    assert_equal 1, user.interests.where(:in => query2).count
-    assert_equal 2, user.subscriptions.where(:interest_in => query2).count
-    assert_equal 2, interest2.subscriptions.count
+    assert_equal 4, user.interests.count
   end
 
   def test_subscribe_to_all_types_with_one_keyword
@@ -101,7 +99,7 @@ class SubscriptionsTest < Test::Unit::TestCase
     assert_equal 0, user.subscriptions.count
     assert_equal 0, user.interests.count
 
-    post "/subscriptions", {:subscription_type => "all", :query => query}, login(user)
+    post "/interests/search", {:search_type => "all", :query => query}, login(user)
     assert_response 200
 
     assert_equal search_adapters.keys.size, user.subscriptions.count
@@ -116,7 +114,7 @@ class SubscriptionsTest < Test::Unit::TestCase
     end
 
 
-    post "/subscriptions", {:subscription_type => "all", :query => query2}, login(user)
+    post "/interests/search", {:search_type => "all", :query => query2}, login(user)
     assert_response 200
 
     assert_equal search_adapters.keys.size * 2, user.subscriptions.count
@@ -127,7 +125,7 @@ class SubscriptionsTest < Test::Unit::TestCase
     assert_equal search_adapters.keys.size, interest2.subscriptions.count
     
 
-    post "/subscriptions", {:subscription_type => "all", :query => query2}, login(user)
+    post "/interests/search", {:search_type => "all", :query => query2}, login(user)
     assert_response 200
 
     assert_equal search_adapters.keys.size * 2, user.subscriptions.count
@@ -142,7 +140,7 @@ class SubscriptionsTest < Test::Unit::TestCase
     assert_equal 0, user.subscriptions.count
     assert_equal 0, user.interests.count
 
-    post "/subscriptions", {:subscription_type => "federal_bills", :query => query_encoded}, login(user)
+    post "/interests/search", {:search_type => "federal_bills", :query => query_encoded}, login(user)
     assert_response 200
 
     assert_equal 1, user.subscriptions.count
@@ -152,7 +150,7 @@ class SubscriptionsTest < Test::Unit::TestCase
     assert_equal query_decoded, user.interests.first.in
 
     # should have it decoded by the dupe detection step
-    post "/subscriptions", {:subscription_type => "federal_bills", :query => query_decoded}, login(user)
+    post "/interests/search", {:search_type => "federal_bills", :query => query_decoded}, login(user)
     assert_response 200
 
     assert_equal 1, user.subscriptions.count
@@ -166,24 +164,26 @@ class SubscriptionsTest < Test::Unit::TestCase
     user = create :user
     query1 = "environment"
     query2 = "guns"
-    i1 = user.interests.create! :in => query1, :interest_type => "search", :data => {"query" => query1}
-    i2 = user.interests.create! :in => query2, :interest_type => "search", :data => {"query" => query2}
-    s1 = user.subscriptions.create! :interest => i1, :subscription_type => "state_bills", :interest_in => query1, :data => {"query" => query1}
-    s2 = user.subscriptions.create! :interest => i2, :subscription_type => "state_bills", :interest_in => query2, :data => {"query" => query2, 'state' => "CA"}
+    i1 = create :search_interest, :user => user, :in => query1, :search_type => "state_bills"
+    i2 = create :search_interest, :user => user, :in => query2, :search_type => "state_bills", :data => {"query" => query2, 'state' => "CA"}
+    s1 = create :search_subscription, :user => user, :interest => i1, :subscription_type => "state_bills"
+    s2 = create :search_subscription, :user => user, :interest => i2, :subscription_type => "state_bills"
 
-    delete "/subscriptions", {:subscription_type => s1.subscription_type, :query => s1.interest_in}, login(user)
+    assert_equal i2.data['state'], s2.data['state']
+
+    delete "/interests/search", {:search_type => i1.search_type, :query => i1.in}, login(user)
     assert_response 200
 
     assert_nil Interest.find(i1.id)
     assert_nil Subscription.find(s1.id)
 
-    delete "/subscriptions", {:subscription_type => s2.subscription_type, :query => s2.interest_in, s2.subscription_type => {'state' => 'DE'}}, login(user)
+    delete "/interests/search", {:search_type => i2.search_type, :query => i2.in, i2.search_type => {'state' => 'DE'}}, login(user)
     assert_response 404
 
     assert_not_nil Interest.find(i2.id)
     assert_not_nil Subscription.find(s2.id)
 
-    delete "/subscriptions", {:subscription_type => s2.subscription_type, :query => s2.interest_in, s2.subscription_type => {'state' => "CA"}}, login(user)
+    delete "/interests/search", {:search_type => i2.search_type, :query => i2.in, i2.search_type => {'state' => "CA"}}, login(user)
     assert_response 200
 
     assert_nil Interest.find(i2.id)
@@ -193,11 +193,11 @@ class SubscriptionsTest < Test::Unit::TestCase
   def test_unsubscribe_to_type_of_all
     user = create :user
     query1 = "environment"
-    i1 = user.interests.create! :in => query1, :interest_type => "search", :data => {"query" => query1}
-    s1 = user.subscriptions.create! :interest => i1, :subscription_type => "state_bills", :interest_in => query1, :data => {"query" => query1}
-    s2 = user.subscriptions.create! :interest => i1, :subscription_type => "federal_bills", :interest_in => query1, :data => {"query" => query1}
+    i1 = create :search_interest, :user => user, :in => query1, :search_type => "all"
+    s1 = create :subscription, :interest => i1, :subscription_type => "state_bills"
+    s2 = create :subscription, :interest => i1, :subscription_type => "federal_bills"
 
-    delete "/subscriptions", {:subscription_type => "all", :query => s1.interest_in}, login(user)
+    delete "/interests/search", {:search_type => "all", :query => i1.in}, login(user)
     assert_response 200
 
     assert_nil Interest.find(i1.id)
