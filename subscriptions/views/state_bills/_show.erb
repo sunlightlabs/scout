@@ -25,17 +25,19 @@
 	</div>
         
     <div class="clear"></div>
+    <div class="resources">
+        <h5>Resources</h5>
+		<% if bill['versions'] and bill['versions'].any? %>
+	        <a class="source" href="<%= bill['versions'].last['url'] %>">
+	            Original Text
+	        </a>
 
-    <% if bill['versions'] and bill['versions'].any? %>
-        <a class="source" href="<%= bill['versions'].last['url'] %>">
-            Original Text
-        </a>
-
-    <% elsif bill['sources'] and bill['sources'].any? %>
-        <% bill['sources'].each_with_index do |source, i| %>
-            <a class="source" href="<%= source['url'] %>">Source <%= i + 1 %></a>
-        <% end %>
-    <% end %>
+	    <% elsif bill['sources'] and bill['sources'].any? %>
+	        <% bill['sources'].each_with_index do |source, i| %>
+	            <a class="source" href="<%= source['url'] %>">Source <%= i + 1 %></a>
+	        <% end %>
+	    <% end %>
+	</div>
 
     <p>
         <% if bill['+short_title'] %>

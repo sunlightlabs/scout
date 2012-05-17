@@ -19,13 +19,18 @@
     <div class="resources">
         <h5>Resources</h5>
         <ul>
-            <li><a href="<%= regulation['federal_register_url'] %>">Federal Register</a></li>
+            <li class="fedReg">
+				<a href="<%= regulation['federal_register_url'] %>">Federal Register</a>
+			</li>
+			<li class="source">
+				<% if regulation['federal_register'] and regulation['federal_register']['pdf_url'] %>
+			        <a href="<%= regulation['federal_register']['pdf_url'] %>">Original Text</a>
+			    <% end %>
+			</li>
         </ul>
     </div>
     
-    <% if regulation['federal_register'] and regulation['federal_register']['pdf_url'] %>
-        <a class="source" href="<%= regulation['federal_register']['pdf_url'] %>">Original Text</a>
-    <% end %>
+
 
     <div class="clear"></div>
 
