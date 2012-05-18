@@ -13,3 +13,5 @@ item_adapters:
   federal_bills_upcoming_floor: bill
   state_bills_votes: state_bill
   state_bills_activity: state_bill
+
+# external feed subscriptions/items are taken care of separately, they are their own beast
