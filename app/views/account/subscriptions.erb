@@ -18,7 +18,7 @@
     </div>
 
     <div class="module tags">
-        <h4>Tags</h4>
+        <h4>Topics</h4>
 
         <ul class="tag_list">
             <%= partial "account/tags", :engine => :erb, :locals => {:tags => tags} %>
@@ -26,186 +26,288 @@
     </div>
 <% end %>
 
-<div class="contentArea left">
-	<div class="pageTitle">
-	    <p class="default">
-	        <% if current_user.notifications == "none" %>
-	            Your default notification preference is <strong>off, feeds only</strong>.
-	        <% elsif current_user.notifications == "email_immediate" %>
-	            Your default notification preference is <strong>email immediately</strong>.
-	        <% elsif current_user.notifications == "email_daily" %>
-	            Your default notification preference is <strong>a single daily email</strong>.
-	        <% else %>
-	            Your default notification preference is unknown(?).
-	        <% end %>
-
-	        <a href="/account/settings">Change</a>
-	    </p>
-	</div>
-
-<div class="subscriptionsList">
-	<div class="section">
-		<h2>Keyword Subscriptions</h2>
-		<div class="interest">
-			<div class="interestHeader">
-			<h3>FOIA</h3>
-				Remove Alert
-			</div>
-			<div class="subscription">
-				<div class="edit">
-					<div class="indicators">
-						<span class="spinning">spinning</span>
-						<span class="okay">okay</span>
-						<span class="failed">not okay</span>
+	<div class="contentArea left subscriptionsList">
+		<div class="section keywords">
+			<h2>Keyword Subscriptions</h2>
+			<div class="interest">
+				<h3 class="interestHeader">"FOIA"</h3>
+				<div class="removeHeader">
+					<span>Remove</span>
+				</div>
+				
+				<div class="subscription">
+					<div class="edit">
+						<div class="clear"></div>
+						<div class="removeSubscription">
+							<input id="remove" type="checkbox" name="remove" class="remove" />
+							<label for="remove">Remove</label>
+							<button class="remove smallButton">Remove</button>
+							<div class="clear"></div>
+							<div class="indicators">
+								<span class="spinning">spinning</span>
+								<span class="okay">okay</span>
+								<span class="failed">not okay</span>
+							</div>
+						</div>
+					</div>
+					<div class="details">
+						<h4><a href="">Bills in Congress-all</a></h4>
+						<a class="rss feed" href="">RSS</a>
+						<a class="json feed" href="">JSON</a>
+						<div class="notifications">
+							<small>Email once a day <a href="">change</a></small>
+							<form>
+								<ul>
+									<li>
+									<input type="radio" name="notifications" class="notifications" value="email_daily" checked="">
+										<span>Email once a day (Default)</span>
+									</li>
+									<li>
+										<input type="radio" name="notifications" class="notifications" value="email_immediate">
+										<span>Email immediately</span>
+									</li>
+									<li>
+										<input type="radio" name="notifications" class="notifications" value="sms">
+										<span>SMS</span>
+									</li>
+									<li>
+										<input type="radio" name="notifications" class="notifications" value="none">
+										<span>None</span>
+									</li>
+								</ul>
+							</form>
+							<div class="indicators">
+								<span class="spinning">spinning</span>
+								<span class="okay">okay</span>
+								<span class="failed">not okay</span>
+							</div>
+						</div>
+						<div class="tags">
+							<form class="tags" data-interest_id="">
+								<label>Topic tags</label>
+								<input class="tags" type="text" name="interest[tags]" placeholder="Comma separated tags" value=""/>
+							</form>
+						</div>
 					</div>
 					<div class="clear"></div>
-					<div class="removeSubscription">
-						<input id="remove" type="checkbox" name="remove" class="remove" />
-						<span><label for="remove">Remove</label></span>
-						<button class="remove smallButton">Yes, remove</button>
-						<div class="clear"></div>
-					</div>
-				</div>
-				<div class="details">
-					<h4><a href="">Bills in Congress-all</a></h4>
-					<a class="rss feed" href="">RSS</a>
-					<a class="json feed" href="">JSON</a>
-					<div class="notifications">
-						<form>
-							<ul>
-								<li>
-								<input type="radio" name="notifications" class="notifications" value="email_daily" checked="">
-									<span>Email once a day (Default)</span>
-								</li>
-								<li>
-									<input type="radio" name="notifications" class="notifications" value="email_immediate">
-									<span>Email immediately</span>
-								</li>
-								<li>
-									<input type="radio" name="notifications" class="notifications" value="sms">
-									<span>SMS</span>
-								</li>
-								<li>
-									<input type="radio" name="notifications" class="notifications" value="none">
-									<span>None</span>
-								</li>
-							</ul>
-						</form>
-					</div>
-					<div class="tags">
-						<form class="tags" data-interest_id="">
-							<label>Tags</label>
-							<input class="tags" type="text" name="interest[tags]" placeholder="Comma separated tags" value=""/>
-						</form>
-					</div>
-				</div>
-				<div class="clear"></div>
-			</div>
-			<div class="subscription">
-				<div class="edit">
-					<div class="indicators">
-						<span class="spinning">spinning</span>
-						<span class="okay">okay</span>
-						<span class="failed">not okay</span>
-					</div>
-					<div class="clear"></div>
-					<div class="removeSubscription">
-						<input id="remove" type="checkbox" name="remove" class="remove" />
-						<span><label for="remove">Remove</label></span>
-						<button class="remove smallButton">Yes, remove</button>
-						<div class="clear"></div>
-					</div>
-				</div>
-				<div class="details">
-					<h4><a href="">Subscription Name (Bills in Congress-all)</a></h4>
-					<a class="rss feed" href="">RSS</a>
-					<a class="json feed" href="">JSON</a>
-					<div class="notifications">
-						<form>
-							<ul>
-								<li>
-								<input type="radio" name="notifications" class="notifications" value="email_daily" checked="">
-									<span>Email once a day (Default)</span>
-								</li>
-								<li>
-									<input type="radio" name="notifications" class="notifications" value="email_immediate">
-									<span>Email immediately</span>
-								</li>
-								<li>
-									<input type="radio" name="notifications" class="notifications" value="sms">
-									<span>SMS</span>
-								</li>
-								<li>
-									<input type="radio" name="notifications" class="notifications" value="none">
-									<span>None</span>
-								</li>
-							</ul>
-						</form>
-					</div>
-					<div class="tags">
-						<form class="tags" data-interest_id="">
-							<label>Tags</label>
-							<input class="tags" type="text" name="interest[tags]" placeholder="Comma separated tags" value=""/>
-						</form>
-					</div>
 				</div>
 			</div>
-		</div>
-	</div>
-	<div class="section">
-		<h2>Bill Subscriptions</h2>
-		<div class="interest">
-			<h3>interest</h3>
-			<div class="subscription">
-				<h4>Subscription Name (Bills in Congress-all)</h4>
-				<a class="rss feed" href="">RSS</a>
-				<a class="json feed" href="">JSON</a>
-				<div class="notifications">
-					<form>
-						<ul>
-							<li>
-							<input type="radio" name="notifications" class="notifications" value="email_daily" checked="">
-								<span>Email once a day (Default)</span>
-							</li>
-							<li>
-								<input type="radio" name="notifications" class="notifications" value="email_immediate">
-								<span>Email immediately</span>
-							</li>
-							<li>
-								<input type="radio" name="notifications" class="notifications" value="sms">
-								<span>SMS</span>
-							</li>
-							<li>
-								<input type="radio" name="notifications" class="notifications" value="none">
-								<span>None</span>
-							</li>
-						</ul>
-					</form>
+			<div class="interest">
+				<h3 class="interestHeader">"Alternative Energy"</h3>
+				<div class="removeHeader">
+					<span>Remove</span>
 				</div>
-				<div class="tags">
-					<form class="tags" data-interest_id="">
-						<fieldset>
-						<label>Tags</label>
-						<input class="tags" type="text" name="interest[tags]" placeholder="Comma separated tags" value=""/>
-						</fieldset>
-					</form>
-				</div>
-				<div class="indicators">
-					<span class="spinning">spinning</span>
-					<span class="okay">okay</span>
-					<span class="failed">not okay</span>
-				</div>
-				<div class="clear"></div>
-				<div class="removeSubscription">
-					<input id="remove" type="checkbox" name="remove" class="remove" />
-					<span><label for="remove">Remove</label></span>
-					<button class="remove smallButton">Yes, remove</button>
+				
+				<div class="subscription">
+					<div class="edit">
+						<div class="clear"></div>
+						<div class="removeSubscription">
+							<input id="remove" type="checkbox" name="remove" class="remove" />
+							<label for="remove">Remove</label>
+							<button class="remove smallButton">Remove</button>
+							<div class="clear"></div>
+							<div class="indicators">
+								<span class="spinning">spinning</span>
+								<span class="okay">okay</span>
+								<span class="failed">not okay</span>
+							</div>
+						</div>
+					</div>
+					<div class="details">
+						<h4><a href="">Bills in Congress-all</a></h4>
+						<a class="rss feed" href="">RSS</a>
+						<a class="json feed" href="">JSON</a>
+						<div class="notifications">
+							<small>Email once a day <a href="">change</a></small>
+							<form>
+								<ul>
+									<li>
+									<input type="radio" name="notifications" class="notifications" value="email_daily" checked="">
+										<span>Email once a day (Default)</span>
+									</li>
+									<li>
+										<input type="radio" name="notifications" class="notifications" value="email_immediate">
+										<span>Email immediately</span>
+									</li>
+									<li>
+										<input type="radio" name="notifications" class="notifications" value="sms">
+										<span>SMS</span>
+									</li>
+									<li>
+										<input type="radio" name="notifications" class="notifications" value="none">
+										<span>None</span>
+									</li>
+								</ul>
+							</form>
+							<div class="indicators">
+								<span class="spinning">spinning</span>
+								<span class="okay">okay</span>
+								<span class="failed">not okay</span>
+							</div>
+						</div>
+						<div class="tags">
+							<form class="tags" data-interest_id="">
+								<label>Topic tags</label>
+								<input class="tags" type="text" name="interest[tags]" placeholder="Comma separated tags" value=""/>
+							</form>
+						</div>
+					</div>
 					<div class="clear"></div>
 				</div>
 			</div>
 		</div>
+		<div class="section bills">
+			<h2>Bill Subscriptions</h2>
+			<div class="interest">
+				<h3 class="interestHeader">"FOIA"</h3>
+				<div class="removeHeader">
+					<span>Remove</span>
+				</div>
+				
+				<div class="subscription">
+					<div class="edit">
+						<div class="clear"></div>
+						<div class="removeSubscription">
+							<input id="remove" type="checkbox" name="remove" class="remove" />
+							<label for="remove">Remove</label>
+							<button class="remove smallButton">Remove</button>
+							<div class="clear"></div>
+							<div class="indicators">
+								<span class="spinning">spinning</span>
+								<span class="okay">okay</span>
+								<span class="failed">not okay</span>
+							</div>
+						</div>
+					</div>
+					<div class="details">
+						<h4><a href="">H.R. 3309</a> <span class="title"> Federal Communications Commission Process Reform Act of 2012</span></h4>
+						<a class="rss feed" href="">RSS</a>
+						<a class="json feed" href="">JSON</a>
+						<div class="notifications">
+							<small>Email once a day <a href="">change</a></small>
+							<form>
+								<ul>
+									<li>
+									<input type="radio" name="notifications" class="notifications" value="email_daily" checked="">
+										<span>Email once a day (Default)</span>
+									</li>
+									<li>
+										<input type="radio" name="notifications" class="notifications" value="email_immediate">
+										<span>Email immediately</span>
+									</li>
+									<li>
+										<input type="radio" name="notifications" class="notifications" value="sms">
+										<span>SMS</span>
+									</li>
+									<li>
+										<input type="radio" name="notifications" class="notifications" value="none">
+										<span>None</span>
+									</li>
+								</ul>
+							</form>
+							<div class="indicators">
+								<span class="spinning">spinning</span>
+								<span class="okay">okay</span>
+								<span class="failed">not okay</span>
+							</div>
+						</div>
+						<div class="tags">
+							<form class="tags" data-interest_id="">
+								<label>Topic tags</label>
+								<input class="tags" type="text" name="interest[tags]" placeholder="Comma separated tags" value=""/>
+							</form>
+						</div>
+					</div>
+					<div class="clear"></div>
+				</div>
+			</div>
+		</div>
+		<div class="section rsss">
+			<h2>RSS Feeds</h2>
+			<div class="interest">
+				<h3 class="interestHeader">"FOIA"</h3>
+				<div class="add rss">
+			        <h3>Import a Feed</h3>
+
+
+
+				  <form action="#" method="get" class="preview">
+					  <label>
+					    Paste in the URL of the feed you'd like to get alerts for:
+					  </label>
+				      <input type="text" placeholder="Feed URL" class="feed_url" 
+				        value="<%= h url %>"
+				        />
+				      <button type="submit" class="smallButton preview">
+				        Preview
+				      </button>
+					  <div class="clear"></div>
+				  </form>
+				  
+				</div>
+				<div class="removeHeader">
+					<span>Remove</span>
+				</div>
+				
+				<div class="subscription">
+					<div class="edit">
+						<div class="clear"></div>
+						<div class="removeSubscription">
+							<input id="remove" type="checkbox" name="remove" class="remove" />
+							<label for="remove">Remove</label>
+							<button class="remove smallButton">Remove</button>
+							<div class="clear"></div>
+							<div class="indicators">
+								<span class="spinning">spinning</span>
+								<span class="okay">okay</span>
+								<span class="failed">not okay</span>
+							</div>
+						</div>
+					</div>
+					<div class="details">
+						<h4><a href="">Sunlight Foundation Blog</a></h4>
+						<a class="rss feed" href="">RSS</a>
+						<a class="json feed" href="">JSON</a>
+						<div class="notifications">
+							<small>Email once a day <a href="">change</a></small>
+							<form>
+								<ul>
+									<li>
+									<input type="radio" name="notifications" class="notifications" value="email_daily" checked="">
+										<span>Email once a day (Default)</span>
+									</li>
+									<li>
+										<input type="radio" name="notifications" class="notifications" value="email_immediate">
+										<span>Email immediately</span>
+									</li>
+									<li>
+										<input type="radio" name="notifications" class="notifications" value="sms">
+										<span>SMS</span>
+									</li>
+									<li>
+										<input type="radio" name="notifications" class="notifications" value="none">
+										<span>None</span>
+									</li>
+								</ul>
+							</form>
+							<div class="indicators">
+								<span class="spinning">spinning</span>
+								<span class="okay">okay</span>
+								<span class="failed">not okay</span>
+							</div>
+						</div>
+						<div class="tags">
+							<form class="tags" data-interest_id="">
+								<label>Topic tags</label>
+								<input class="tags" type="text" name="interest[tags]" placeholder="Comma separated tags" value=""/>
+							</form>
+						</div>
+					</div>
+					<div class="clear"></div>
+				</div>
+			</div>
+		</div>
 	</div>
-</div>
 
 <!--	<div class="subscriptionsList">
 
@@ -317,10 +419,6 @@
     </div>
 
 	-->
-	
-	
-	
-</div>
 
 
 <script type="text/javascript">

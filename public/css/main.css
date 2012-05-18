@@ -1180,54 +1180,103 @@ button.item.follow, button.item.following {
 .default{
     margin-top: 10px;
 }
-.subscriptions .searchParameters{
-    font-style: italic;
-    margin-bottom: 20px;
-    clear: both;
-    width: 565pxpx;
+.subscriptionsList .section{
+    padding-top: 33px;
 }
-.subscriptionsList{
-    margin: -2px 0 33px 0;
+.subscriptionsList h2{
+    margin: 0 33px 16px 10px;
+}
+
+.subscriptionsList .interest{
+    margin-bottom: 33px;
 }
 .subscription{
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
-    padding: 33px 33px 33px 16px;
+    padding: 16px 33px 16px 16px;
     background: url('/images/tinyborder_andshadow.png') top left repeat-x;
     column-break-inside: avoid;
     -moz-column-break-inside: avoid;
     -webkit-column-break-inside: avoid;
     font-weight: normal;
 }
-.interestHeader{
+h3.interestHeader, .add.rss{
+    border-bottom: 1px dashed #9D9B9B;
     background: #F5F6F3;
-    padding: 16px 0 16px 10px;
     -webkit-box-shadow: inset -14px 0px 14px -7px #E2E3E0;
     -moz-box-shadow: inset -14px 0px 14px -7px #e2e3e0;
     box-shadow: inset -14px 0px 14px -7px #E2E3E0;
-    padding: 16px 33px 16px 10px;
+    padding: 16px 33px 10px 10px;
 }
-.interestHeader h3{
-    border-bottom: 1px dashed #9D9B9B;
+.add.rss{
+    padding-bottom: 16px;
+}
+.add.rss label{
+    margin-bottom: 4px;
+    display: block;
+}
+.add.rss input{
+    width: 588px;
+    margin-right: 16px;
+    float: left;
+}
+.bills h3, .rsss h3{
+    display: none;
+}
+.removeHeader{
+    background: #F5F6F3;
+    -webkit-box-shadow: inset -14px 0px 14px -7px #E2E3E0;
+    -moz-box-shadow: inset -14px 0px 14px -7px #e2e3e0;
+    box-shadow: inset -14px 0px 14px -7px #E2E3E0;
+    padding: 0 33px 0 10px;
+}
+.removeHeader span{
+    font-weight: bold;
+    width: 79px;
+    border-right: 1px dotted #E5E6E3;
+    display: block;
+    padding: 5px 0;
 }
 
 .subscription .edit{
     float: left;
-    width: 100px;
+    width: 72px;
+    position: relative;
 }
 .subscription .details{
     float: left;
+    border-left: 1px dotted #E5E6E3;
+    padding-left: 16px;
 }
 .subscription h4{
     font-weight: bold;
     font-size: 127%;
     float: left;
-    margin-bottom: 5px;
-    width: 490px;
+    width: 489px;
+}
+.subscription h4 .title{
+    font-weight: normal;
+    font-style: italic;
+    display: block;
+    font-size: 13px;
 }
 .subscription .notifications{
-    margin-top: 10px;
+    clear: both;
+}
+.subscription .notifications small{
+    display: block;
+    margin-bottom: 5px;
+}
+.subscription .notifications form{
+    display: none;
+    margin-bottom: 5px;
+}
+
+.subscription .tags input{
+    display: inline;
+    width: 503px;
+    margin-top: 5px;
 }
 .subscription h3{
     width: 565px;
@@ -1276,11 +1325,15 @@ button.item.follow, button.item.following {
     display: block;
     font-style: italic;
     margin-right: 20px;
+    float: left;
 }
 .removeSubscription input, .removeSubscription label{
     margin: 7px 0 7px 0;
 }
-.removeSubscription button, button.smallButton {
+.removeSubscription label{
+    display: none;
+}
+button.smallButton {
     float: right;
     height: 36px;
     font-size: 12px;
@@ -1289,6 +1342,12 @@ button.item.follow, button.item.following {
 }
 .removeSubscription button{
     display: none;
+    height: 36px;
+    font-size: 12px;
+    height: 24px;
+    border: 0;
+    padding: 0 7px;
+    margin-left: -1px;
 }
 .subscription div.notifications{
     width: 490px;
@@ -1296,33 +1355,34 @@ button.item.follow, button.item.following {
 .subscription div.notifications li span {
     font-weight: normal;
 }
+.indicators {
+    position: absolute;
+    top: 0;
+    right: 10px;
+}
 .subscription div.indicators span.okay{
     width: 25px;
     height: 16px;
     background: url('../images/icon_check.png') top center no-repeat;
-    margin-top: 18px;
+    margin-top: 4px;
 }
 .subscription div.indicators span.spinning{
     width: 25px;
     height: 16px;
     background: url('../images/loader-32.gif') top center no-repeat;
     background-size: 16px 16px;
-    margin-top: 18px;    
+    margin-top: 4px;    
 }
 .subscription div.indicators span.failed{
     width: 16px;
     height: 16px;
     background: url('../images/icon_error.png') top center no-repeat;
-    margin-top: 18px;
+    margin-top: 4px;
 }
 .subscription div.indicators span {
     display: none;
     text-indent: -9999em;
     float: right;
-}
-
-.subscription .tags input{
-    display: inline;
 }
 
 
@@ -1396,6 +1456,7 @@ button.item.follow, button.item.following {
 .settings li, .settings label{
     list-style-type: none;
     display: block;
+    margin-bottom: 4px;
 }
 
 .subscriptionsList .no_subscriptions {
