@@ -6,7 +6,7 @@ end
 
 # does not hinge on the environment, test_helper loads it itself
 task :test do
-  responses = Dir.glob("test/*_test.rb").map do |file|
+  responses = Dir.glob("test/**/*_test.rb").map do |file|
     puts "\nRunning #{file}:\n"
     system "ruby #{file}"
   end

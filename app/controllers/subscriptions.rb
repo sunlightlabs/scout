@@ -135,7 +135,7 @@ post '/item/:item_type/:item_id/follow' do
     :data => item.data
   )
 
-  subscriptions = item_types[item_type]['subscriptions'].keys.map do |subscription_type|
+  subscriptions = item_types[item_type]['subscriptions'].map do |subscription_type|
     current_user.subscriptions.new :interest_in => item_id, :subscription_type => subscription_type
   end
 
