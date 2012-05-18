@@ -3,7 +3,7 @@
 </h5>
 
 <% grouped = related_interests.to_a.group_by(&:search_type) %>
-<% (["all"] + search_subscription_types).each do |search_type| %>
+<% (["all"] + search_types).each do |search_type| %>
   <% if interests = grouped[search_type] %>
     <% sorted = interests.sort_by {|s| s.data.keys.size} %>
     <ul>

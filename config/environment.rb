@@ -76,5 +76,9 @@ def search_adapters
 end
 
 def interest_adapters
-  subscription_map['interest_adapters']
+  subscription_map['item_adapters']
+end
+
+def search_types
+  subscription_map['search_display_order']
 end

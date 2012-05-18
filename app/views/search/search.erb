@@ -65,7 +65,7 @@
         </p>
       </div>
 
-      <% search_adapters.keys.each do |subscription_type| %>
+      <% search_types.each do |subscription_type| %>
         <div class="<%= subscription_type %>">
           <%= partial "subscriptions/#{subscription_type}/data", :engine => "erb" %>
         </div>

@@ -1,6 +1,9 @@
 module Helpers
   module Subscriptions
 
+    # temporary
+    def search_subscription_types; search_types; end
+
     def bill_code(type, number)
       "#{bill_type type} #{number}"
     end

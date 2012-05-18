@@ -1,3 +1,10 @@
+# display order of search adapter types
+search_display_order:
+  - federal_bills
+  - speeches
+  - state_bills
+  - regulations
+
 # names of adapters that are for searches, 
 # pointing to the name of the kind of item they search over
 search_adapters:
@@ -6,8 +13,8 @@ search_adapters:
   speeches: speech
   regulations: regulation
 
-# names of adapters that follow particular interests
-interest_adapters:
+# names of adapters that follow particular kinds of items
+item_adapters:
   federal_bills_activity: bill
   federal_bills_upcoming_floor: bill
   state_bills_votes: state_bill

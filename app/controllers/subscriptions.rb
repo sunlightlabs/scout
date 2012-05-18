@@ -1,7 +1,7 @@
 # search results
 
 get '/search/:subscription_type/?:query?' do
-  halt 404 and return unless (search_adapters.keys + ["all"]).include?(params[:subscription_type])
+  halt 404 and return unless (search_types + ["all"]).include?(params[:subscription_type])
 
   query = stripped_query
 
@@ -13,8 +13,6 @@ get '/search/:subscription_type/?:query?' do
 
     :subscriptions => subscriptions,
     :subscription => (subscriptions.size == 1 ? subscriptions.first : nil),
-
-    :search_types => search_subscription_types, # ditch this, ugh
 
     :related_interests => related_interests(query),
     :query => query
@@ -228,7 +226,7 @@ helpers do
   # assumes that oneself is a new record, and a search interest
   def search_subscriptions_for(interest)
     if interest.new_record?
-      types = (interest.search_type == "all") ? search_adapters.keys : [interest.search_type]
+      types = (interest.search_type == "all") ? search_types : [interest.search_type]
       types.map do |subscription_type|
         interest.subscriptions.new(
           :interest_in => interest.in, :subscription_type => subscription_type,
@@ -252,10 +250,5 @@ helpers do
 
   def stripped_query
     params[:query] ? URI.decode(params[:query].strip.gsub("\"", "")) : nil
-  end
-
-  # search_adapter.keys, but in order
-  def search_subscription_types
-    ["federal_bills", "speeches", "state_bills", "regulations"]
   end
 end
