@@ -1,6 +1,6 @@
 require './test/test_helper'
 
-class SubscriptionsMapTest < Test::Unit::TestCase
+class MapTest < Test::Unit::TestCase
   include Rack::Test::Methods
   include TestHelper::Methods
   include FactoryGirl::Syntax::Methods
