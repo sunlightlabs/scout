@@ -1,8 +1,15 @@
 <% if tags.any? %>
+	<small>
+		<a href="/account/settings">Create a username</a> to allow public sharing.
+	</small>
+	<ul class="tag_list">
+
     <% tags.each do |tag| %>
         <li>
-          <span class="name"><%= tag %></span>
+          <a href="" class="name"><%= tag %></a>
         </li>
+    </ul>
+
     <% end %>
 <% else %>
     <p>

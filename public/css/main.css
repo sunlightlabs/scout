@@ -1221,6 +1221,16 @@ h3.interestHeader, .add.rss{
     margin-right: 16px;
     float: left;
 }
+.sidebar .rss h4, .sidebar .tags h4{
+    margin-bottom: 0;
+}
+.sidebar .tags small{
+    border-bottom: 1px dotted #E5E6E3;
+    padding-bottom: 5px;
+    margin-bottom: 16px;
+    display: block;
+}
+
 .bills h3, .rsss h3{
     display: none;
 }
