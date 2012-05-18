@@ -18,16 +18,6 @@ module Helpers
       <span>#{name}</span>"
     end
 
-    def search_types
-      [
-        ["Everything", :all],
-        ["Bills in Congress", :federal_bills],
-        ["State Bills", :state_bills,],
-        ["Federal Regulations", :regulations],
-        ["Speeches in Congress", :speeches]
-      ]
-    end
-
     def interest_name(interest, quotes = false)
       Deliveries::Manager.interest_name interest, quotes
     end
@@ -74,8 +64,8 @@ module Helpers
       subscription.search_url :api_key => api_key
     end
 
-    def developer_find_url(interest_type, item_id)
-      adapter = Subscription.adapter_for interest_data[interest_type]['adapter']
+    def developer_find_url(item_type, item_id)
+      adapter = Subscription.adapter_for item_types[item_type]['adapter']
       adapter.url_for_detail item_id, :api_key => api_key
     end
 
@@ -102,8 +92,8 @@ module Helpers
     end
 
     def follow_button(item)
-      interest_type = interest_adapters[item.subscription_type]
-      partial "partials/follow_item", :engine => "erb", :locals => {:item => item, :interest_type => interest_type}
+      item_type = item_adapters[item.subscription_type]
+      partial "partials/follow_item", :engine => "erb", :locals => {:item => item, :interest_type => item_type}
     end
 
     def truncate_more(tag, text, max)

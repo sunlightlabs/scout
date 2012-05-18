@@ -66,19 +66,43 @@ Dir.glob('deliveries/*.rb').each {|filename| load filename}
 Dir.glob('subscriptions/adapters/*.rb').each {|filename| load filename}
 require './subscriptions/manager'
 
+
 # convenience functions for sections of the subscriptions map
-def interest_data
-  subscription_map['interest_data']
-end
 
 def search_adapters
-  subscription_map['search_adapters']
+  if @search_adapters
+    @search_adapters
+  else 
+    @search_adapters = {}
+    subscription_map['search_adapters'].map {|h| [h.keys.first, h.values.first]}.each do |adapter, item_type|
+      @search_adapters[adapter] = item_type
+    end
+    @search_adapters
+  end
 end
 
-def interest_adapters
-  subscription_map['item_adapters']
+def item_adapters
+  @item_adapters ||= subscription_map['item_adapters']
 end
 
 def search_types
-  subscription_map['search_display_order']
+  @search_types ||= subscription_map['search_adapters'].map {|h| h.keys.first}
+end
+
+def item_types
+  if @item_types
+    @item_types
+  else
+    @item_types = {}
+    search_adapters.each do |adapter, item_type|
+      @item_types[item_type] ||= {}
+      @item_types[item_type]['adapter'] = adapter
+    end
+    item_adapters.each do |adapter, item_type|
+      @item_types[item_type] ||= {}
+      @item_types[item_type]['subscriptions'] ||= []
+      @item_types[item_type]['subscriptions'] << adapter
+    end
+    @item_types
+  end
 end

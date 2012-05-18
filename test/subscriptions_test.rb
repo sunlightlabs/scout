@@ -211,7 +211,7 @@ class SubscriptionsTest < Test::Unit::TestCase
 
   def test_follow_item_and_then_unfollow
     item_id = "hr4192-112"
-    interest_type = "bill"
+    item_type = "bill"
 
     user = create :user
 
@@ -224,17 +224,17 @@ class SubscriptionsTest < Test::Unit::TestCase
     })
     Subscriptions::Manager.stub(:find).and_return(item)
 
-    post "/item/#{interest_type}/#{item_id}/follow", {}, login(user)
+    post "/item/#{item_type}/#{item_id}/follow", {}, login(user)
     assert_response 200
 
     user.reload
     assert_equal 1, user.interests.count
     interest = user.interests.first
-    assert_equal interest_data[interest_type]['subscriptions'].keys.size, interest.subscriptions.count
+    assert_equal item_types[item_type]['subscriptions'].keys.size, interest.subscriptions.count
     assert_equal item_id, interest.in
-    assert_equal interest_data[interest_type]['subscriptions'].keys.sort, interest.subscriptions.map(&:subscription_type).sort
+    assert_equal item_types[item_type]['subscriptions'].keys.sort, interest.subscriptions.map(&:subscription_type).sort
   
-    delete "/item/#{interest_type}/#{item_id}/unfollow", {}, login(user)
+    delete "/item/#{item_type}/#{item_id}/unfollow", {}, login(user)
     assert_response 200
 
     user.reload

@@ -87,7 +87,7 @@ module Deliveries
       if interest.search?
         content << "\"#{interest.in}\""
       else
-        content << Subscription.adapter_for(interest_data[interest.interest_type]['adapter']).interest_name(interest)
+        content << Subscription.adapter_for(item_types[interest.interest_type]['adapter']).interest_name(interest)
       end
 
       [content, url]
