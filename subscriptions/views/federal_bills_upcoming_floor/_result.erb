@@ -1,9 +1,7 @@
 <% upcoming = item.data %>
-<tr>
-  <td class="time">
-    <time datetime="<%= html_date upcoming['legislative_day'] %>"><%= just_date upcoming['legislative_day'] %></time>
-  </td>
-  <td>
-    <a href="<%= upcoming['permalink'] %>"><%= upcoming['chamber'].capitalize %> Floor</a>
-  </td>
-</tr>
+<td class="time">
+  <time datetime="<%= html_date upcoming['legislative_day'] %>"><%= just_date upcoming['legislative_day'] %></time>
+</td>
+<td>
+  <a href="<%= upcoming['permalink'] %>"><%= upcoming['chamber'].capitalize %> Floor</a>
+</td>
