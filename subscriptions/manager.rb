@@ -144,6 +144,12 @@ module Subscriptions
         item
       end
     end
+
+    # helper function to straighten dates into UTC times (necessary for serializing to BSON, sigh)
+    def self.noon_utc_for(date)
+      return nil unless date
+      date.to_time.midnight + 12.hours
+    end
     
   end
   

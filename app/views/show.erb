@@ -3,38 +3,53 @@
     <% if show_data? %>
         <div class="module developer json">
           <h4>The Data</h4>
-          See the <a href="<%= developer_find_url interest_type, item_id %>">underlying data</a>.
+          See the <a href="<%= developer_find_url item_type, item_id %>">underlying data</a>.
         </div>
     <% end %>
 
     <div class="module data explanation">
 	  <h4>Source</h4>
-      <%= partial "subscriptions/#{item_types[interest_type]['adapter']}/data", :engine => "erb" %>
+      <%= partial "subscriptions/#{item_types[item_type]['adapter']}/data", :engine => "erb" %>
     </div>
 
     <%= recent_searches %>
 <% end %>
 
-<div class="entry contentArea left <%= interest_type %>">
+<div class="entry contentArea left <%= item_type %>">
 
-    <div class="loading">
-        <span>Fetching...</span>
-    </div>
+  <div class="loading">
+      <span>Fetching...</span>
+  </div>
 
-    <div class="error">
-        Error loading information.
-    </div>
+  <div class="error">
+      Error loading information.
+  </div>
 
-    <div class="content">
-        <!-- load in content -->
+  <div class="content">
+      <!-- load in content -->
+  </div>
+
+  <% if subscriptions.any? %>
+    <div class="details clear">
+
+      <% subscriptions.each do |subscription| %>
+        <div class="module of2 <%= subscription.subscription_type %>"
+          data-subscription_type="<%= subscription.subscription_type %>"
+          >
+        </div>
+      <% end %>
+      
+      <div class="clear"></div>
+
     </div>
+  <% end %>
 
 </div>
 
 
 <script type="text/javascript">
 
-    var interest_type = "<%= h interest_type %>";
+    var item_type = "<%= h item_type %>";
     var item_id = "<%= h item_id %>";
 
     $(function() {
@@ -53,6 +68,10 @@
             <% if logged_in? and interest.new_record? and (params[:follow] == "now") %>
               follow();
             <% end %>
+
+            $(".details .module.of2").each(function(i, elem) {
+              fetchStream($(elem).data("subscription_type"));
+            });
         }).error(function() {
             container.find(".loading").hide();
             container.find(".error").show();
@@ -80,12 +99,21 @@
     <% end %>
   }
 
+  function fetchStream(subscription_type) {
+    var url = "/fetch/item/" + item_type + "/" + item_id + "/" + subscription_type;
+    $.get(url, {}, function(data) {
+      $(".of2.module." + subscription_type).html(data);
+    }).error(function() {
+      Utils.log("Error loading data for " + subscription_type);
+    });
+  }
+
   function follow() {
     $("button.follow").hide();
     $("button.following").show();
 
-    $.post("/item/" + interest_type + "/" + item_id + "/follow", function(data) {
-      Utils.log("Followed " + interest_type + " " + item_id + ".");
+    $.post("/item/" + item_type + "/" + item_id + "/follow", function(data) {
+      Utils.log("Followed " + item_type + " " + item_id + ".");
     }).error(function() {
       Utils.log("ERROR following item.");
       $("button.follow").show();
@@ -99,8 +127,8 @@
     $("button.follow").show();
     $("button.following").hide();
 
-    $.post("/item/" + interest_type + "/" + item_id + "/unfollow", {_method: "delete"}, function(data) {
-      Utils.log("Unfollowed " + interest_type + " " + item_id + ".");
+    $.post("/item/" + item_type + "/" + item_id + "/unfollow", {_method: "delete"}, function(data) {
+      Utils.log("Unfollowed " + item_type + " " + item_id + ".");
     }).error(function() {
       Utils.log("ERROR unfollowing item.");
       $("button.follow").hide();

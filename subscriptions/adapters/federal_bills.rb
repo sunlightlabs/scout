@@ -88,7 +88,6 @@ module Subscriptions
         url
       end
 
-      #TODO: get rid of subscription parameter, move this back into environment hash
       def self.search_name(subscription)
         "Bills in Congress"
       end
@@ -135,19 +134,7 @@ module Subscriptions
         bill['last_version_on'] = noon_utc_for bill['last_version_on']
 
         if bill['last_version']
-          bill['last_version']['issued_on'] = noon_utc_for bill['last_version']['issued_on']
-        end
-
-        if bill['latest_upcoming']
-          bill['latest_upcoming'].each do |upcoming|
-            upcoming['legislative_day'] = noon_utc_for upcoming['legislative_day']
-          end
-        end
-
-        if bill['actions']
-          bill['actions'].each do |action|
-            action['acted_at'] = noon_utc_for action['acted_at']
-          end
+          bill['last_version']['issued_on'] = Subscriptions::Manager.noon_utc_for bill['last_version']['issued_on']
         end
 
         
@@ -156,12 +143,6 @@ module Subscriptions
           :date => bill['last_version_on'], # order by the last version published
           :data => bill
         )
-      end
-      
-      # helper function to straighten dates into UTC times (necessary for serializing to BSON, sigh)
-      def self.noon_utc_for(date)
-        return nil unless date
-        date.to_time.midnight + 12.hours
       end
       
     end

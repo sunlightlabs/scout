@@ -18,6 +18,10 @@ module Subscriptions
         url
       end
 
+      def self.search_name(subscription)
+        "Official Activity"
+      end
+
       def self.short_name(number, subscription, interest)
         "#{number > 1 ? "actions" : "action"}"
       end

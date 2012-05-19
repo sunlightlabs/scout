@@ -5,6 +5,20 @@ class ItemsTest < Test::Unit::TestCase
   include TestHelper::Methods
   include FactoryGirl::Syntax::Methods
 
+
+  def test_fetch_item_adapter_contents
+    item_id = "hr4192-112"
+    item_type = "bill"
+
+    user = create :user
+    interest = create :bill_interest, :user => user, :in => item_id, :item_type => item_type
+
+    
+
+    Subscriptions::Manager.search
+  end
+
+
   def test_follow_item_and_then_unfollow
     item_id = "hr4192-112"
     item_type = "bill"
