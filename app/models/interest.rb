@@ -9,11 +9,14 @@ class Interest
   # a search string or item ID
   field :in
 
-  # 'search', or the type of item the ID refers to (e.g. 'bill')
+  # 'search', or 'item'
   field :interest_type
 
   # if interest_type is a "search", can be "all" or the subscription_type in question
   field :search_type 
+
+  # if interest_type is an "item", the item type (e.g. 'bill')
+  field :item_type
 
   # arbitrary metadata
   #   search query - metadata about the search query
@@ -37,7 +40,7 @@ class Interest
   validates_presence_of :in
   
   def item?
-    (interest_type != "search") and (interest_type != "external_feed")
+    interest_type == "item"
   end
 
   def feed?
@@ -50,7 +53,7 @@ class Interest
 
   def self.public_json_fields
     [
-      'created_at', 'updated_at', 'interest_type', 'in'
+      'created_at', 'updated_at', 'interest_type', 'in', 'item_type', 'search_type'
     ]
   end
 

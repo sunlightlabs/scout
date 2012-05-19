@@ -53,21 +53,17 @@ post '/item/:item_type/:item_id/follow' do
   requires_login
 
   item_type = params[:item_type]
-  item_id = URI.decode params[:item_id] # can possibly have spaces, decode first
+  item_id = params[:item_id]
   
+  interest = item_interest_for item_id, item_type
+  halt 404 and return unless interest.new_record?
+
   unless item = Subscriptions::Manager.find(item_types[item_type]['adapter'], item_id)
     halt 404 and return
   end
 
-  interest = current_user.interests.new(
-    :interest_type => item_type, 
-    :in => item_id, 
-    :data => item.data
-  )
-
-  subscriptions = item_types[item_type]['subscriptions'].map do |subscription_type|
-    current_user.subscriptions.new :interest_in => item_id, :subscription_type => subscription_type
-  end
+  interest.data = item.data
+  subscriptions = item_subscriptions_for interest
 
   if interest.valid? and (subscriptions.reject {|s| s.valid?}.empty?)
     interest.save!
@@ -86,33 +82,26 @@ end
 delete '/item/:item_type/:item_id/unfollow' do
   requires_login
 
-  unless interest = current_user.interests.where(:in => params[:item_id], :interest_type => params[:item_type]).first
-    halt 404 and return
-  end
+  interest = item_interest_for params[:item_id], params[:item_type]
+  halt 404 and return unless interest and !interest.new_record?
 
-  subscriptions = interest.subscriptions.to_a
-    
   interest.destroy
-  subscriptions.each do |subscription| 
-    subscription.destroy
-  end
-  
   halt 200
 end
 
 
 helpers do
   def item_interest_for(item_id, item_type)
+    criteria = {
+      :in => item_id, 
+      :interest_type => 'item',
+      :item_type => item_type
+    }
+
     if logged_in?
-      current_user.interests.find_or_initialize_by(
-        :in => item_id, 
-        :interest_type => item_type
-      )
+      current_user.interests.find_or_initialize_by criteria
     else
-      Interest.new(
-        :in => item_id, 
-        :interest_type => item_type
-      )
+      Interest.new criteria
     end
   end
 
@@ -120,8 +109,16 @@ helpers do
   def item_subscription_for(interest, subscription_type)
     interest.subscriptions.new(
       :interest_in => interest.in, :subscription_type => subscription_type,
-      :user => current_user
+      :user => current_user,
+      :data => interest.data # pass on item data to child subscriptions
     )
+  end
+
+  def item_subscriptions_for(interest)
+    types = item_types[interest.item_type]['subscriptions'] || []
+    types.map do |subscription_type| 
+      item_subscription_for interest, subscription_type
+    end
   end
 
 end

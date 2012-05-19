@@ -24,7 +24,8 @@ FactoryGirl.define do
 
     factory :bill_interest do
       self.in "hr1234-112"
-      interest_type "bill"
+      interest_type "item"
+      item_type "bill"
       data {
         {:bill_id => self.in}
       }

@@ -13,9 +13,8 @@ class ItemsTest < Test::Unit::TestCase
     user = create :user
     interest = create :bill_interest, :user => user, :in => item_id, :item_type => item_type
 
-    
-
-    Subscriptions::Manager.search
+  
+  #  Subscriptions::Manager.search
   end
 
 

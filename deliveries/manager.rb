@@ -36,7 +36,7 @@ module Deliveries
 
     def self.interest_name(interest, quotes = false)
       if interest.item?
-        Subscription.adapter_for(item_types[interest.interest_type]['adapter']).interest_name(interest)
+        Subscription.adapter_for(item_types[interest.item_type]['adapter']).interest_name(interest)
       elsif interest.feed?
         Subscriptions::Adapters::ExternalFeed.interest_name interest
       else # if interest.search?
@@ -47,7 +47,7 @@ module Deliveries
     # used in linking to interests in SMS
     def self.interest_path(interest, preferred_type = nil)
       if interest.item?
-        "/item/#{interest.interest_type}/#{interest.in}"
+        "/item/#{interest.item_type}/#{interest.in}"
       elsif interest.feed?
         interest.in # URL
       elsif interest.search?

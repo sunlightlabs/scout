@@ -87,13 +87,9 @@ module Helpers
       partial "partials/flash", :engine => "erb", :locals => {:types => types}
     end
 
-    def recent_searches
-      partial "partials/recent_searches", :engine => "erb"
-    end
-
     def follow_button(item)
       item_type = item_adapters[item.subscription_type]
-      partial "partials/follow_item", :engine => "erb", :locals => {:item => item, :interest_type => item_type}
+      partial "partials/follow_item", :engine => "erb"
     end
 
     def truncate_more(tag, text, max)

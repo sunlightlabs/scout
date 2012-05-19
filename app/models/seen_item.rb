@@ -17,6 +17,12 @@ class SeenItem
   field :interest_id
   field :interest_in
 
+  field :interest_type # 'search', 'item', 'external_feed'
+  
+  # doesn't refer to the type of the item itself, but 
+  # rather which one of the standard item_type's it relates to
+  field :item_type # 'bill', 'speech', etc.
+
   # reference by user for user-level feeds
   field :user_id
 
@@ -48,11 +54,22 @@ class SeenItem
   # take a SeenItem right from an adapter and assign it a particular subscription
   # this is where the main bit of denormalization happens, where things could potentially get out of sync
   def assign_to_subscription(subscription)
-    interest_type = search_adapters[subscription.subscription_type] || item_adapters[subscription.subscription_type]
+
+    # interest may not exist on the subscription
+    if subscription.subscription_type == "external_feed"
+      item_type = "external_feed_item" # ?
+      interest_type = "external_feed"
+    elsif item_type = search_adapters[subscription.subscription_type]
+      interest_type = "search"
+    elsif item_type = item_adapters[subscription.subscription_type]
+      interest_type = "item"
+    end
     
     self.attributes = {
       :subscription => subscription,
       :subscription_type => subscription.subscription_type,
+      
+      :item_type => item_type,
       :interest_type => interest_type,
       :interest_in => subscription.interest_in,
 
