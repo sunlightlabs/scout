@@ -88,7 +88,6 @@ module Helpers
     end
 
     def follow_button(item)
-      item_type = item_adapters[item.subscription_type]
       partial "partials/follow_item", :engine => "erb"
     end
 

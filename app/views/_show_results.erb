@@ -5,7 +5,9 @@
   <tbody>
     <% if items.any? %>
       <% items.sort {|a, b| b.date <=> a.date}.first(5).each do |item| %>
-        <%= partial "subscriptions/#{subscription.subscription_type}/result", :engine => :erb, :locals => {:item => item} %>
+        <tr>
+          <%= partial "subscriptions/#{subscription.subscription_type}/result", :engine => :erb, :locals => {:item => item} %>
+        </tr>
       <% end %>
     <% else %>
       <tr>

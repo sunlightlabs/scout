@@ -17,6 +17,8 @@ get "/item/:item_type/:item_id" do
 end
 
 get "/fetch/item/:item_type/:item_id" do
+  valid_item
+  
   item_type = params[:item_type].strip
   item_id = params[:item_id].strip
   subscription_type = item_types[item_type]['adapter']
@@ -35,7 +37,7 @@ get "/fetch/item/:item_type/:item_id" do
 end
 
 get "/fetch/item/:item_type/:item_id/:subscription_type" do
-  halt 404 unless (type = item_types[params[:item_type]]) and (type['subscriptions'].include?(params[:subscription_type]))
+  valid_item
 
   interest = item_interest_for params[:item_id], params[:item_type]
   subscription = item_subscription_for interest, params[:subscription_type]
@@ -56,7 +58,7 @@ post '/item/:item_type/:item_id/follow' do
   item_id = params[:item_id]
   
   interest = item_interest_for item_id, item_type
-  halt 404 and return unless interest.new_record?
+  halt 200 and return unless interest.new_record?
 
   unless item = Subscriptions::Manager.find(item_types[item_type]['adapter'], item_id)
     halt 404 and return
@@ -91,6 +93,13 @@ end
 
 
 helpers do
+  def valid_item
+    halt 404 and return unless type = item_types[params[:item_type]]
+    if params[:subscription_type]
+      halt 404 unless type['subscriptions'].include?(params[:subscription_type])
+    end
+  end
+
   def item_interest_for(item_id, item_type)
     criteria = {
       :in => item_id, 

@@ -1,16 +1,15 @@
 <% if tags.any? %>
-	<small>
+    <small>
 		<a href="/account/settings">Create a username</a> to allow public sharing.
 	</small>
+
 	<ul class="tag_list">
-
-    <% tags.each do |tag| %>
-        <li>
-          <a href="" class="name"><%= tag %></a>
-        </li>
+        <% tags.each do |tag| %>
+            <li>
+              <a href="" class="name"><%= tag %></a>
+            </li>
+        <% end %>
     </ul>
-
-    <% end %>
 <% else %>
     <p>
         Add tags to your alerts to organize and share them.
