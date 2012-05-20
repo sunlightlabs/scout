@@ -1,0 +1,110 @@
+<div class="subscription"
+  data-interest_id="<%= interest.id %>"
+  >
+  
+  <div class="edit">
+    <div class="clear"></div>
+
+    <div class="removeSubscription">
+      <input id="remove" type="checkbox" name="remove" class="remove" />
+      <label for="remove">Remove</label>
+      <button class="remove smallButton">Remove</button>
+
+      <div class="clear"></div>
+      
+      <div class="indicators">
+        <span class="spinning">spinning</span>
+        <span class="okay">okay</span>
+        <span class="failed">not okay</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="details">
+    <h4>
+      <a href="<%= interest_path interest %>">
+        <% if interest.search? %>
+          <% if interest.search_type == "all" %>
+            Everything
+          <% else %>
+            <%= interest.subscriptions.first.search_name %>
+          <% end %>
+        <% else %>
+          <%= interest_name interest %>
+        <% end %>
+      </a>
+
+      <span class="title">
+        <% if interest.search? %>
+
+          <% if interest.search_type == "all" %>
+            <%= interest.subscriptions.map(&:search_name).join(", ") %>
+          <% elsif interest.subscriptions.first.filters.any? %>
+            <%= filters_short interest.subscriptions.first %>
+          <% end %>
+
+        <% elsif interest.item? %>
+
+          <% if interest_adapter(interest).respond_to?(:interest_subtitle) %>
+            <%= truncate interest_adapter(interest).interest_subtitle(interest), 75 %>
+          <% end %>
+
+        <% elsif interest.feed? %>
+          <%= truncate interest.data['description'], 75 %>
+        <% end %>
+      </span>
+    </h4>
+    
+    <% unless interest.feed? %>
+      <a class="rss feed" href="/interest/<%= interest.id %>.rss">RSS</a>
+      <% if current_user.developer? %>
+        <a class="json feed" href="/interest/<%= interest.id %>.json?apikey=<%= current_user.api_key %>">JSON</a>
+      <% end %>
+    <% end %>
+    
+    <div class="notifications">
+      <small>
+        <%= notification_name(interest.notifications || current_user.notifications) %>
+        <a href="#" class="open_notifications">change</a>
+      </small>
+      
+      <form>
+        <ul>
+          <% types = ["email_immediate", "email_daily", "sms", "none"] %>
+          <% allowable = current_user.allowable_notifications %>
+          <% preference = interest.notifications || current_user.notifications %>
+          <% default = types.delete current_user.notifications %>
+
+          <li>
+            <%= notification_radio_for default, preference == default, true, allowable.include?(default) %>
+          </li>
+
+          <% types.each do |type| %>
+            <li>
+              <%= notification_radio_for type, preference == type, false, allowable.include?(type) %>
+            </li>
+          <% end %>
+
+        </ul>
+      </form>
+
+      <div class="indicators">
+        <span class="spinning">spinning</span>
+        <span class="okay">okay</span>
+        <span class="failed">not okay</span>
+      </div>
+
+    </div>
+    
+    <div class="tags">
+      <form>
+        <label>Tags</label>
+        <input class="tags" type="text" name="interest[tags]" placeholder="" value="<%= interest.tags.join(", ") %>"/>
+        <!-- <button class="smallButton">OK</button> -->
+      </form>
+    </div>
+
+  </div>
+  
+  <div class="clear"></div>
+</div>

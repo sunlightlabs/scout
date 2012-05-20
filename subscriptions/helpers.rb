@@ -255,15 +255,6 @@ module Helpers
       end
     end
 
-    def truncate(string, length)
-      string ||= ""
-      if string.size > (length + 3)
-        string[0...length] + "..."
-      else
-        string
-      end
-    end
-    
     def speaker_name(speech)
       party = speech['speaker_party']
       state = speech['speaker_state']

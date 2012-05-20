@@ -1,17 +1,19 @@
-<% if tags.any? %>
-    <small>
-		<a href="/account/settings">Create a username</a> to allow public sharing.
-	</small>
+<h4>Topics</h4>
 
-	<ul class="tag_list">
-        <% tags.each do |tag| %>
-            <li>
-              <a href="" class="name"><%= tag %></a>
-            </li>
-        <% end %>
-    </ul>
+<% if tags.any? %>
+  <small>
+    <a href="/account/settings?highlight=username">Create a username</a> to allow public sharing.
+  </small>
+
+  <ul class="tag_list">
+    <% tags.each do |tag| %>
+      <li>
+        <a href="<%= tag_path current_user, tag %>" class="name"><%= h tag %></a>
+      </li>
+    <% end %>
+  </ul>
 <% else %>
-    <p>
-        Add tags to your alerts to organize and share them.
-    </p>
+  <p>
+    Add tags to your alerts to organize and share them.
+  </p>
 <% end %>

@@ -109,6 +109,10 @@ module Subscriptions
         }[interest.data['bill_type']]
         "#{code} #{interest.data['number']}"
       end
+
+      def self.interest_subtitle(interest)
+        interest.data['short_title'] || interest.data['official_title']
+      end
       
       # takes parsed response and returns an array where each item is 
       # a hash containing the id, title, and post date of each item found

@@ -2,14 +2,27 @@
 module Helpers
   module Routing
 
+    # for item interests
+    def interest_adapter(interest)
+      Subscription.adapter_for(item_types[interest.item_type]['adapter'])
+    end
+
     def interest_name(interest)
       if interest.item?
-        Subscription.adapter_for(item_types[interest.item_type]['adapter']).interest_name(interest)
+        interest_adapter(interest).interest_name interest
       elsif interest.feed?
-        Subscriptions::Adapters::ExternalFeed.interest_name interest
+        ::Subscriptions::Adapters::ExternalFeed.interest_name interest
       elsif interest.search?
         interest.in
       end
+    end
+
+    # temporary
+    def item_type_name(item_type)
+      {
+        'state_bill' => 'State Bill',
+        'bill' => 'Bill'
+      }[item_type]
     end
 
     def interest_path(interest)
@@ -63,6 +76,10 @@ module Helpers
       else
         "http://#{config[:hostname]}#{item_path item}"
       end
+    end
+
+    def tag_path(user, tag)
+      "/#{user.username || user.id.to_s}/#{URI.encode tag}"
     end
 
     # only needed in RSS feeds, and external feeds are the only time we override the guid

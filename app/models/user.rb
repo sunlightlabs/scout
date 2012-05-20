@@ -4,11 +4,12 @@ class User
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  field :admin, :type => Boolean, :default => false
+  field :username
 
   field :email
-
   field :phone
+
+  field :admin, :type => Boolean, :default => false
 
   # will get assigned automatically by the API key syncing service
   # if a user has one, we turn on various features in the site

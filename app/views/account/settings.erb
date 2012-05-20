@@ -3,207 +3,224 @@
 <div class="contentArea full user settings">
   <%= flash_for [:user] %>
   <%= errors_for user %>
-	<div class="module allUserSettings">
-		<h2>Account Settings</h2>
-		<% form_for user, "/account/password/change", :method => "put" do |f| %>
-		<div class="module user">
-				<ul>
-					<li class="email">
-			            <label for="email">Email Address</label>
-			            <input type="email" name="email" placeholder="useraddress@domain.com"/>
-			        </li>
-					<li class="username">
-			            <label for="username">Username</label>
-						<small>Usernames are only necessary if you want to allow public sharing of your topics pages.</small>
-			            <input type="text" name="username" />
-			        </li>
-				</ul>
-		</div>
-		<div class="module passwordChange">
-	    <%= flash_for [:phone] %>
-	        <ul>
-	            <li class="password">
-	                <label for="old_password">Old Password</label>
-	                <input type="password" placeholder="******" name="old_password" />
-	            </li>
-	            <li class="password">
-	                <label for="password">New Password</label>
-	                <input type="password" name="password" />
-	            </li>
-	            <li class="password">
-	                <label for="password_confirmation">New Password (again)</label>
-	                <input type="password" name="password_confirmation" />
-	            </li>
-	        </ul>
-		</div>
-		<div class="module updateSettings">
-	        <button type="submit">
-	            <span>Update Account Info</span>
-	        </button>
-		</div>
-		<div class="clear"></div>
-		<% end %>
-	</div>
-    <div class="module allNotifications">
-		<div class="module notifications">
-	    <h3>Email Notifications</h3>
-	    <% form_for user, "/account/settings", :method => "put" do |f| %>
-		<fieldset>
-			<legend>
-				We can email you about all the new things that you're following.
-				<small>You can also control this <a href="/account/subscriptions">per-subscription</a>.</small>
-			</legend>
-			
-            <ul>
-                <li>
-                    <label for="user_delivery_email">
-                        <%= f.radio_button :notifications, :value => "email_daily" %>
-                        <span>Yes, once a day</span>
-                    </label>
 
-                    <label for="user_delivery_email">
-                        <%= f.radio_button :notifications, :value => "email_immediate" %>
-                        <span>Yes, immediately</span>
-                    </label>
+  <div class="module allUserSettings">
+    <h2>Account Settings</h2>
 
-                    <label for="user_delivery_none">
-                        <%= f.radio_button :notifications, :value => "none" %>
-                        <span>No, thanks</span>
-                    </label>
-                </li>
-            </ul>
-		</fieldset>
-		<fieldset>
-			<label for="user_announcements">
-				<%= f.check_box :announcements, :uncheck_value => 'false' %>
-				<span>Get updates about new Scout features</span>
-			</label>
-      <label for="sunlight_announcements">
-        <%= f.check_box :sunlight_announcements, :uncheck_value => 'false' %>
-        <span>Get updates about the Sunlight Foundation</span>
-      </label>
-		</fieldset>
+    <% form_for user, "/account/password/change", :method => "put" do |f| %>
+      <div class="module user">
+        <ul>
+          <li class="email">
+            <label for="email">Email Address</label>
+            <input type="email" name="email" val="<%= user.email %>" />
+          </li>
 
-	    <button type="submit">
-	        <span>Submit Changes</span>
-	    </button>
-
-	    <% end %>
-		</div>
-		<div class="module phoneSettings">
-
-		    <h3>SMS</h3>
-
-		    <%= flash_for [:phone] %>
-
-		    <div class="confirmed phone_settings">
-		        <span>
-		            <%= user.phone %> <strong>(Verified)</strong>
-		        </span>
-		        <a href="#" class="dismiss phone">
-		            Change
-		        </a>
-		    </div>
-
-		    <div class="unconfirmed phone_settings">
-		        <span>
-		            <%= user.phone %> (Unverified)
-		        </span>
-		        <p>
-		            To confirm your phone number, Enter the verification code we sent you.
-		        </p>
-
-		        <form class="phone verify" action="/account/phone/confirm" method="post">
-		            <%= text_field_tag "phone_verify_code" %>
-		             <button type="submit">
-		                <span>Verify</span>
-		            </button>
-		        </form>
-
-		        <form class="phone resend" action="/account/phone/resend" method="post">
-		            <button type="submit">
-		                <span>Resend Code</span>
-		            </button>
-		        </form>
-		    </div>
-
-		    <div class="none phone_settings">
-		        <p>
-		            If you provide a phone number, you can turn on SMS notifications for your subscriptions. We'll send you a text message to confirm.
-		        </p>
-
-		        <% form_for user, "/account/phone", :method => "put" do |f| %>
-		            <%= f.label :phone %>
-		            <%= f.text_field :phone %>
-
-		            <button type="submit">
-		                <span>Add Phone Number</span>
-		            </button>
-		        <% end %>
-		    </div>
-		</div>
-		<div class="module developer_mode">
-	        <h3>Data Mode</h3>
-	        <% if current_user.developer? %>
-	            <p>
-	                You have a Sunlight API key, so we're turning on Data Mode. Now you can:
-	            </p>
-	            <ul>
-	                <li>
-	                    Use JSON feeds for <a href="/account/subscriptions">all of your subscriptions.</a>
-	                </li>
-
-	                <li>
-	                    See the JSON feeds underlying <a href="/search/federal_bills/open%20government">every search</a>.
-	                </li>
-
-	                <li>
-	                    Set up web hooks to push JSON for new results to a URL of your choice (coming soon).
-	                </li>
-	            </ul>
-	        <% else %>
-	            <p>
-	                Data Mode opens the hood of the website, and gives you access to more powerful feeds. (If you know what JSON is, you should turn it on.)
-	            </p>
-	            <p>
-	                It will turn on automatically, if you create a Sunlight API key for this email address.
-	            </p>
-	            <a class="button" href="http://services.sunlightlabs.com/accounts/register/">
-	                Go get a Sunlight key
-	            </a>
-	        <% end %>
-	    </div>
-    </div>
-	
-	<div class="module donate">
-		<h3>You're on the <em>free plan</em>. Everyone is!</h3> 
-		<p>
-			But if you like this service and want to give us money anyway, by all means:
-	    </p>
-
-	    <form action="https://checkout.google.com/cws/v2/Donations/548702786961191/checkoutForm" id="BB_BuyButtonForm" method="post" name="BB_BuyButtonForm" target="_top">
+          <li class="username">
+            <label for="username">Username</label>
+            <% if user.username.blank? %>
+              <small>
+                Usernames are only necessary if you want to publicly share your subscriptions.
+              </small>
+            <% end %>
             
-	        <input name="item_name_1" type="hidden" value="Scout - Donation to support the service"/>
-	        <input name="item_description_1" type="hidden" value="The Sunlight Foundation is a non-profit, nonpartisan organization that uses the power of the Internet to catalyze greater government openness and transparency and to provide new tools and resources for media and individuals alike."/>
-	        <input name="item_quantity_1" type="hidden" value="1"/>
-	        <input name="item_currency_1" type="hidden" value="USD"/>
-	        <input name="item_is_modifiable_1" type="hidden" value="true"/>
-	        <input name="item_min_price_1" type="hidden" value="0.01"/>
-	        <input name="item_max_price_1" type="hidden" value="25000.0"/>
-	        <input name="_charset_" type="hidden" value="utf-8"/>
-        	<label>$</label>
-	        <input id="item_price_1" name="item_price_1" type="text" value="10.00" placeholder="10.00"/>
-        
-	        <button class="donatebutton smallButton" type="submit">
-	            <span>Donate</span>
-	        </button>
-        	<div class="clear"></div>
-	    </form>
-		
-	    <small>
-	        The Sunlight Foundation is a 501 (c)(3) nonprofit, nonpartisan organization. All contributions are tax-deductible.
-	    </small>
-	</div>
+            <input type="text" name="username" val="<%= user.username %>" />
+          </li>
+        </ul>
+      </div>
+
+      <div class="module passwordChange">
+        <%= flash_for [:password] %>
+        <ul>
+          <li class="password">
+            <label for="old_password">Old Password</label>
+            <input type="password" name="old_password" />
+          </li>
+          <li class="password">
+            <label for="password">New Password</label>
+            <input type="password" name="password" />
+          </li>
+          <li class="password">
+            <label for="password_confirmation">New Password (again)</label>
+            <input type="password" name="password_confirmation" />
+          </li>
+        </ul>
+      </div>
+      <div class="module updateSettings">
+            <button type="submit">
+                <span>Update Account Info</span>
+            </button>
+      </div>
+      <div class="clear"></div>
+    <% end %>
+  </div>
+
+  <div class="module allNotifications">
+    <div class="module notifications">
+      <h3>Email Notifications</h3>
+      <% form_for user, "/account/settings", :method => "put" do |f| %>
+        <fieldset>
+          <legend>
+            We can email you about all the new things that you're following.
+            <small>You can also control this <a href="/account/subscriptions">per-subscription</a>.</small>
+          </legend>
+      
+          <ul>
+            <li>
+              <label for="user_delivery_email">
+                <%= f.radio_button :notifications, :value => "email_daily" %>
+                <span>Yes, once a day</span>
+              </label>
+
+              <label for="user_delivery_email">
+                <%= f.radio_button :notifications, :value => "email_immediate" %>
+                <span>Yes, immediately</span>
+              </label>
+
+              <label for="user_delivery_none">
+                <%= f.radio_button :notifications, :value => "none" %>
+                <span>No, thanks</span>
+              </label>
+            </li>
+          </ul>
+        </fieldset>
+
+        <fieldset>
+          <label for="user_announcements">
+            <%= f.check_box :announcements, :uncheck_value => 'false' %>
+            <span>Get updates about new Scout features</span>
+          </label>
+          <label for="sunlight_announcements">
+            <%= f.check_box :sunlight_announcements, :uncheck_value => 'false' %>
+            <span>Get updates about the Sunlight Foundation</span>
+          </label>
+        </fieldset>
+
+        <button type="submit">
+          <span>Submit Changes</span>
+        </button>
+
+      <% end %>
+    </div>
+
+    <div class="module phoneSettings">
+
+        <h3>SMS</h3>
+
+        <%= flash_for [:phone] %>
+
+        <div class="confirmed phone_settings">
+          <span>
+            <%= user.phone %> <strong>(Verified)</strong>
+          </span>
+          <a href="#" class="dismiss phone">
+            Change
+          </a>
+        </div>
+
+        <div class="unconfirmed phone_settings">
+          <span>
+            <%= user.phone %> (Unverified)
+          </span>
+          <p>
+            To confirm your phone number, Enter the verification code we sent you.
+          </p>
+
+          <form class="phone verify" action="/account/phone/confirm" method="post">
+            <%= text_field_tag "phone_verify_code" %>
+             <button type="submit">
+                <span>Verify</span>
+            </button>
+          </form>
+
+          <form class="phone resend" action="/account/phone/resend" method="post">
+            <button type="submit">
+              <span>Resend Code</span>
+            </button>
+          </form>
+        </div>
+
+        <div class="none phone_settings">
+          <p>
+            If you provide a phone number, you can turn on SMS notifications for your subscriptions. We'll send you a text message to confirm.
+          </p>
+
+          <% form_for user, "/account/phone", :method => "put" do |f| %>
+            <%= f.label :phone %>
+            <%= f.text_field :phone %>
+
+            <button type="submit">
+              <span>Add Phone Number</span>
+            </button>
+          <% end %>
+        </div>
+    </div>
+
+    <div class="module developer_mode">
+      <h3>Data Mode</h3>
+
+      <% if current_user.developer? %>
+        <p>
+          You have a Sunlight API key, so we're turning on Data Mode. Now you can:
+        </p>
+        <ul>
+          <li>
+            Use JSON feeds for
+            <a href="/account/subscriptions">all of your subscriptions.</a>
+          </li>
+
+          <li>
+            See the JSON feeds underlying
+            <a href="/search/federal_bills/open%20government">every search</a>.
+          </li>
+
+          <li>
+            Set up web hooks to push JSON for new results to a URL of your choice (coming soon).
+          </li>
+        </ul>
+
+      <% else %>
+        <p>
+          Data Mode opens the hood of the website, and gives you access to more powerful feeds. (If you know what JSON is, you should turn it on.)
+        </p>
+        <p>
+          It will turn on automatically, if you create a Sunlight API key for this email address.
+        </p>
+        <a class="button" href="http://services.sunlightlabs.com/accounts/register/">
+          Go get a Sunlight key
+        </a>
+      <% end %>
+    </div>
+  </div>
+  
+  <div class="module donate">
+    <h3>You're on the <em>free plan</em>. Everyone is!</h3> 
+    <p>
+      But if you like this service and want to give us money anyway, by all means:
+    </p>
+
+    <form action="https://checkout.google.com/cws/v2/Donations/548702786961191/checkoutForm" id="BB_BuyButtonForm" method="post" name="BB_BuyButtonForm" target="_top">
+            
+      <input name="item_name_1" type="hidden" value="Scout - Donation to support the service"/>
+      <input name="item_description_1" type="hidden" value="The Sunlight Foundation is a non-profit, nonpartisan organization that uses the power of the Internet to catalyze greater government openness and transparency and to provide new tools and resources for media and individuals alike."/>
+      <input name="item_quantity_1" type="hidden" value="1"/>
+      <input name="item_currency_1" type="hidden" value="USD"/>
+      <input name="item_is_modifiable_1" type="hidden" value="true"/>
+      <input name="item_min_price_1" type="hidden" value="0.01"/>
+      <input name="item_max_price_1" type="hidden" value="25000.0"/>
+      <input name="_charset_" type="hidden" value="utf-8"/>
+      <label>$</label>
+      <input id="item_price_1" name="item_price_1" type="text" value="10.00" placeholder="10.00"/>
+    
+      <button class="donatebutton smallButton" type="submit">
+          <span>Donate</span>
+      </button>
+      <div class="clear"></div>
+    </form>
+    
+    <small>
+      The Sunlight Foundation is a 501 (c)(3) nonprofit, nonpartisan organization. All contributions are tax-deductible.
+    </small>
+  </div>
 
 </div>
 

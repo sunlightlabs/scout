@@ -2,8 +2,17 @@
 module Helpers
   module General
 
-    def notification_radio_for(type, checked, default = false)
-      name = {
+    def notification_radio_for(type, checked, default, enabled)
+      name = notification_name type
+
+      name << " (Default)" if default
+      
+      "<input type=\"radio\" name=\"notifications\" class=\"notifications\" value=\"#{type}\" #{"checked" if checked} #{"disabled" unless enabled}/>
+      <span class=\"#{"disabled" unless enabled}\">#{name}</span>"
+    end
+
+    def notification_name(type)
+      {
         "email_immediate" => "Email immediately",
         "email_daily" => "Email once a day",
         "sms" => "SMS",
@@ -11,11 +20,6 @@ module Helpers
         nil => "None",
         "" => "None"
       }[type]
-
-      name << " (Default)" if default
-      
-      "<input type=\"radio\" name=\"notifications\" class=\"notifications\" value=\"#{type}\" #{"checked" if checked}/>
-      <span>#{name}</span>"
     end
 
     def filters_short(subscription)
@@ -64,6 +68,15 @@ module Helpers
 
     def follow_button(item)
       partial "partials/follow_item", :engine => "erb"
+    end
+
+    def truncate(string, length)
+      string ||= ""
+      if string.size > (length + 3)
+        string[0...length] + "..."
+      else
+        string
+      end
     end
 
     def truncate_more(tag, text, max)
