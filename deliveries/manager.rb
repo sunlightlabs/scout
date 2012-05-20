@@ -34,28 +34,6 @@ module Deliveries
       puts "Error during delivery, emailed report."
     end
 
-    def self.interest_name(interest, quotes = false)
-      if interest.item?
-        Subscription.adapter_for(item_types[interest.item_type]['adapter']).interest_name(interest)
-      elsif interest.feed?
-        Subscriptions::Adapters::ExternalFeed.interest_name interest
-      else # if interest.search?
-        quotes ? "\"#{interest.in}\"" : interest.in
-      end
-    end
-
-    # used in linking to interests in SMS
-    def self.interest_path(interest, preferred_type = nil)
-      if interest.item?
-        "/item/#{interest.item_type}/#{interest.in}"
-      elsif interest.feed?
-        interest.in # URL
-      elsif interest.search?
-        # TODO: pass a subscription of that interest in to prefer that one
-        subscription_path interest.subscriptions.first
-      end
-    end
-
     def self.schedule_delivery!(item, 
       # Allow subscription to optionally be passed in to prevent a database lookup
       subscription = nil, 

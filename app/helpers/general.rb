@@ -18,34 +18,24 @@ module Helpers
       <span>#{name}</span>"
     end
 
-    def interest_name(interest, quotes = false)
-      Deliveries::Manager.interest_name interest, quotes
-    end
-
-    def interest_path(interest)
-      Deliveries::Manager.interest_path interest
-    end
-
     def filters_short(subscription)
       subscription.filters.map do |field, value|
         "<span>#{subscription.filter_name field, value}</span>"
       end.join(", ")
     end
 
-    def hide_search
-      content_for(:hide_search) { true }
-    end
-
     def set_home
       content_for(:home) { true }
     end
 
-    def search?
-      request.path =~ /^\/search\//
-    end
-
     def home?
       content_from :home
+    end
+
+    # don't give me empty strings
+    def content_from(symbol)
+      content = yield_content symbol
+      content.present? ? content : nil
     end
 
     def show_data?
@@ -60,27 +50,12 @@ module Helpers
       end
     end
 
-    def developer_search_url(subscription)
-      subscription.search_url :api_key => api_key
-    end
-
-    def developer_find_url(item_type, item_id)
-      adapter = Subscription.adapter_for item_types[item_type]['adapter']
-      adapter.url_for_detail item_id, :api_key => api_key
-    end
-
     def errors_for(object)
       if object and object.errors
         object.errors.map do |field, msg|
           "<div class=\"error\">#{msg}</div>"
         end.join
       end
-    end
-
-    # don't give me empty strings
-    def content_from(symbol)
-      content = yield_content symbol
-      content.present? ? content : nil
     end
 
     def flash_for(types)
@@ -102,12 +77,6 @@ module Helpers
         </span>
         <span class=\"untruncated\" data-tag=\"#{tag}\">#{text}</span>"
       end
-    end
-
-    def button(text)
-      "<button>
-        <span>#{text}</span>
-      </button>"
     end
 
     def safe_capitalize(string)
@@ -138,10 +107,6 @@ module Helpers
 
     def js_escape(string)
       URI.decode(string.to_s).gsub "\"", "\\\""
-    end
-    
-    def id_escape(id)
-      id.gsub(" ", "_").gsub("|", "__").gsub(".", "__")
     end
     
     def long_date(time)

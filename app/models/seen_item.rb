@@ -51,11 +51,23 @@ class SeenItem
     ]
   end
 
+  def search?
+    interest_type == "search"
+  end
+
+  def feed?
+    interest_type == "external_feed"
+  end
+
+  def item?
+    interest_type == "item"
+  end
+
   # take a SeenItem right from an adapter and assign it a particular subscription
   # this is where the main bit of denormalization happens, where things could potentially get out of sync
   def assign_to_subscription(subscription)
 
-    # interest may not exist on the subscription
+    # interest may not exist on the subscription, infer it from the subscription_type
     if subscription.subscription_type == "external_feed"
       item_type = "external_feed_item" # ?
       interest_type = "external_feed"
