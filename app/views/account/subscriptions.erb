@@ -330,7 +330,7 @@
                         <div class="searchParameters">
                             <ul>
                             <% grouped = interest.subscriptions.to_a.group_by(&:subscription_type) %>
-                            <% search_subscription_types.each do |subscription_type| %>
+                            <% search_types.each do |subscription_type| %>
                               <% if subscriptions = grouped[subscription_type] %>
                                 <% sorted = subscriptions.sort_by {|s| s.data.keys.size} %>
                                   <% sorted.each_with_index do |subscription, i| %>
