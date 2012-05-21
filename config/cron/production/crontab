@@ -41,5 +41,8 @@
 # activity on bills in the States - once an hour, who knows when these will be updated
 0 * * * * /projects/scout/current/config/cron/production/check.sh state_bills_votes
 
+# external feed subscriptions, once an hour
+0 * * * * /projects/alarms/current/config/cron/staging/check.sh external_feed
+
 
 # keep the newline below
