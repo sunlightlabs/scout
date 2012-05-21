@@ -11,16 +11,20 @@
           <a class="json feed" href="/account/<%= current_user.id %>.json?apikey=<%= current_user.api_key %>">JSON</a>
       <% end %>
     </h4>
+
+    <small class="clear">
+      The combined results of all of your subscriptions.
+    </small>
   </div>
 
   <!-- also filled in dynamically when tags are added/removed -->
-  <div class="module tags">
+  <!-- <div class="module tags">
     <%= partial "account/tags", :engine => :erb, :locals => {:tags => tags} %>
-  </div>
+  </div> -->
 
-  <div class="module rss">
+  <!-- <div class="module rss">
     <a href="/import/feed">Import an RSS feed</a> from anywhere on the Internet.
-  </div>
+  </div> -->
 <% end %>
 
 <div class="contentArea left subscriptionsList">
@@ -79,39 +83,41 @@
 
   <% end %>
 
-  <div class="section feeds">
-    <h2>Feeds</h2>
-    <div class="interest">
+  <% if grouped['external_feed'] and grouped['external_feed'].any? %>
+    <div class="section feeds">
+      <h2>Feeds</h2>
+      <div class="interest">
 
-      <div class="add rss">
-        <h3>Import a Feed</h3>
+        <div class="add rss">
+          <h3>Import a Feed</h3>
 
-        <form action="#" method="get" class="preview">
-          <label>
-            Paste in the URL of the feed you'd like to get alerts for:
-          </label>
-            <input type="text" placeholder="Feed URL" class="feed_url" 
-              value="<%= h url %>"
-              />
-            <button type="submit" class="smallButton preview">
-              Preview
-            </button>
-          <div class="clear"></div>
-        </form>
-      </div>
-
-      <% if grouped['external_feed'] and grouped['external_feed'].any? %>
-        <div class="removeHeader">
-          <span>Remove</span>
+          <form action="#" method="get" class="preview">
+            <label>
+              Paste in the URL of the feed you'd like to get alerts for:
+            </label>
+              <input type="text" placeholder="Feed URL" class="feed_url" 
+                value="<%= h url %>"
+                />
+              <button type="submit" class="smallButton preview">
+                Preview
+              </button>
+            <div class="clear"></div>
+          </form>
         </div>
 
-        <% grouped['external_feed'].each do |interest| %>
-          <%= partial "account/interest", :engine => "erb", :locals => {:interest => interest} %>
-        <% end %>
-      <% end %>
+        <% if grouped['external_feed'] and grouped['external_feed'].any? %>
+          <div class="removeHeader">
+            <span>Remove</span>
+          </div>
 
+          <% grouped['external_feed'].each do |interest| %>
+            <%= partial "account/interest", :engine => "erb", :locals => {:interest => interest} %>
+          <% end %>
+        <% end %>
+
+      </div>
     </div>
-  </div>
+  <% end %>
 
 </div>
 
