@@ -102,7 +102,7 @@ module Helpers
     end
 
     # shrug
-    def search?
+    def searching?
       request.path =~ /^\/search\//
     end
 
