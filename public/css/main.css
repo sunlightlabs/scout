@@ -1400,6 +1400,71 @@ button.smallButton {
 
 
 
+
+/*-- Import Feed Page --*/
+.import label{
+    font-weight: bold;
+}
+
+.import .add.rss{
+    padding-left: 33px;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    padding-top: 33px;
+}
+.import .add.rss input{
+    width: 815px;
+}
+.import .add.rss ul{
+    margin-top: 16px;
+    margin-left: 16px;
+}
+.import .hide_start {
+    display: none;
+}
+.import h2{
+    margin-bottom: 16px;
+}
+.import .details{
+    margin-bottom: 16px;
+    clear: both;
+    width: 730px;
+    float: left;
+}
+.import .feed_preview{
+    padding: 33px;
+    position: relative;
+}
+.import .details .title, .import .details .description{
+    width: 345px;
+    float: left;
+    margin-right: 20px;
+}
+.import .details input, .import .details p{
+    width: 100%;
+}
+.import h3{
+    float: left;
+}
+.import .feed_preview button {
+    float: right;
+}
+.feed_preview h4{
+    font-weight: bold;
+    font-size: 127%;
+}
+.feed_preview ul.items{
+    background: none;
+}
+.feed_preview ul.items li{
+    list-style-type: none;
+    background: url('/images/tinyborder_andshadow.png') top left repeat-x;
+    padding: 16px 33px 8px 33px;
+}
+
+
+
 /*-- Settings Styling --*/
 
 .user.settings.contentArea form input[type="password"]{
@@ -1576,33 +1641,6 @@ button.smallButton {
     padding: 0;
 }
 
-
-/*-- Import Feed Styling --*/
-
-fieldset.preview input {float: left;}
-fieldset.preview button {float: left;}
-ul.feed_rules {
-    clear: none;
-    font-size: 80%;
-}
-
-.import .hide_start {
-    display: none;
-}
-
-.import .feed_preview .details fieldset,
-.import .feed_preview .details button {
-    float: left;
-}
-.import .feed_preview .details fieldset.description {clear: both;}
-
-.import .feed_preview .details {
-    clear: both;
-}
-
-.import .feed_preview .contents {
-    clear: both;
-}
 
 
 

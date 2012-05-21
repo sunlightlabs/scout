@@ -3,7 +3,7 @@
 
     <%= partial "subscriptions/#{item.subscription_type}/rss", :engine => "erb", :locals => {:item => item} %>
 
-    <link><%= item_url item %></link>
+    <h4><link><%= item_url item %></link></h4>
     <guid><%= item_guid item %></guid>
     <pubDate><%= rss_date item.date %></pubDate>
   </item>
