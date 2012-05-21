@@ -8,7 +8,7 @@
     <h2>Account Settings</h2>
 
     <% form_for user, "/account/password/change", :method => "put" do |f| %>
-      <div class="module user">
+<!--       <div class="module user">
         <ul>
           <li class="email">
             <label for="email">Email Address</label>
@@ -26,7 +26,7 @@
             <input type="text" name="username" val="<%= user.username %>" />
           </li>
         </ul>
-      </div>
+      </div> -->
 
       <div class="module passwordChange">
         <%= flash_for [:password] %>
@@ -152,6 +152,9 @@
               <span>Add Phone Number</span>
             </button>
           <% end %>
+          <small>
+            Standard text message charges may apply. Some subscriptions can generate a lot of results &mdash; be careful what you sign up for.
+          </small>
         </div>
     </div>
 
