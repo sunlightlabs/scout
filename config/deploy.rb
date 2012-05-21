@@ -36,7 +36,7 @@ set :use_sudo, false
 after "deploy:update_code", "deploy:shared_links"
 after "deploy:update_code", "deploy:bundle_install"
 after "deploy:update_code", "deploy:create_indexes"
-after "deploy", "deploy:set_cron"
+after "deploy", "deploy:set_crontab"
 after "deploy", "deploy:cleanup"
 
 namespace :deploy do
@@ -68,8 +68,13 @@ namespace :deploy do
 
   # current_path is correct here because this happens after deploy, not after deploy:update_code
   desc "Load the crontasks"
-  task :set_cron, :roles => :app, :except => {:no_release => true} do
+  task :set_crontab, :roles => :app, :except => {:no_release => true} do
     run "cd #{current_path} && rake set_crontab environment=#{environment} current_path=#{current_path}"
+  end
+
+  desc "Stop the crontasks"
+  task :disable_crontab, :roles => :app, :except => {:no_release => true} do
+    run "cd #{current_path} && rake disable_crontab"
   end
   
   desc "Get shared files into position"

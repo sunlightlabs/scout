@@ -31,6 +31,16 @@ task :set_crontab => :environment do
   end
 end
 
+desc "Disable/clear the crontab for this environment"
+task :disable_crontab => :environment do
+  if system("echo | crontab")
+    puts "Successfully disabled crontab."
+  else
+    Admin.message "Somehow failed at disabling crontab."
+    puts "Unsuccessful (somehow) at disabling crontab, emailed report."
+  end
+end
+
 desc "Run through each model and create all indexes" 
 task :create_indexes => :environment do
   begin
