@@ -265,13 +265,18 @@ strong {
 }
 
 #flash div.flash.failure,
-#flash div.flash.user,
 #flash div.flash.password,
 #flash div.flash.forgot {
   color: #C13445;
   padding: 0;
 
 }
+
+#flash div.flash.user, #flash div.flash.phone{
+    color: #438C2A;
+    padding: 0;
+}
+
 
 
 /*-- Object errors (similar to flash) --*/
