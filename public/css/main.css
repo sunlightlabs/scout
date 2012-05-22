@@ -265,13 +265,18 @@ strong {
 }
 
 #flash div.flash.failure,
-#flash div.flash.user,
 #flash div.flash.password,
 #flash div.flash.forgot {
   color: #C13445;
   padding: 0;
 
 }
+
+#flash div.flash.user, #flash div.flash.phone{
+    color: #438C2A;
+    padding: 0;
+}
+
 
 
 /*-- Object errors (similar to flash) --*/
@@ -894,7 +899,8 @@ footer nav li{
 
 .feed_preview .loading span, .feed_preview .error span, .feed_preview.empty span,
 .entry .loading, .results .loading span, .results .error span, .results .empty span {
-  color: #444; font-size: 150%;
+  color: #444; 
+  font-size: 150%;
   display: block;
   padding-top: 20px; padding: 20px; padding-left: 50px;
 }
@@ -903,6 +909,11 @@ footer nav li{
   background-position: left;
   background-image: url(/images/loader-32.gif);
   background-repeat: no-repeat;
+  display: block;
+  height: 40px;  
+  padding-top: 20px;
+  padding-left: 50px;
+  
 }
 .results.contentArea h4{
     font-weight: bold;

@@ -65,6 +65,6 @@ var Utils = {
           queryString = "?" + $.param(options);
       }
 
-      return window.location.pathname + queryString;
+      return escape(window.location.pathname + queryString);
     }
 };

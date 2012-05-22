@@ -17,14 +17,6 @@ module Helpers
       end
     end
 
-    # temporary
-    def item_type_name(item_type)
-      {
-        'state_bill' => 'State Bill',
-        'bill' => 'Bill'
-      }[item_type]
-    end
-
     def interest_path(interest)
       if interest.item?
         "/item/#{interest.item_type}/#{interest.in}"
