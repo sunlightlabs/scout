@@ -1418,7 +1418,7 @@ button.smallButton {
     padding-top: 33px;
 }
 .import .add.rss input{
-    width: 815px;
+    width: 805px;
 }
 .import .add.rss ul{
     margin-top: 16px;
@@ -1440,13 +1440,13 @@ button.smallButton {
     padding: 33px;
     position: relative;
 }
-.import .details .title, .import .details .description{
-    width: 344px;
+.import .details fieldset.title, .import .details .description{
+    width: 340px;
     float: left;
     margin-right: 20px;
 }
 .import .details textarea{
-    width: 345px;
+    width: 100%;
     display: block;
     background-color: white;
     border: 0;
