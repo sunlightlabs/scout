@@ -167,6 +167,10 @@ delete '/account/public_tags' do
   halt 200
 end
 
+get '/account/tag' do
+  erb :"account/tag"
+end
+
 get '/account/settings' do
   requires_login
 
