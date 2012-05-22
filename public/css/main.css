@@ -1413,6 +1413,10 @@ button.smallButton {
 
 
 /*-- Import Feed Page --*/
+.contentArea.import{
+    margin-bottom: 66px;
+}
+
 .import label{
     font-weight: bold;
 }
@@ -1425,7 +1429,7 @@ button.smallButton {
     padding-top: 33px;
 }
 .import .add.rss input{
-    width: 815px;
+    width: 805px;
 }
 .import .add.rss ul{
     margin-top: 16px;
@@ -1440,17 +1444,29 @@ button.smallButton {
 .import .details{
     margin-bottom: 16px;
     clear: both;
-    width: 730px;
+    width: 728px;
     float: left;
 }
 .import .feed_preview{
     padding: 33px;
     position: relative;
+
 }
-.import .details .title, .import .details .description{
-    width: 345px;
+.import .details fieldset.title, .import .details .description{
+    width: 340px;
     float: left;
     margin-right: 20px;
+}
+.import .details textarea{
+    width: 100%;
+    display: block;
+    background-color: white;
+    border: 0;
+    border-top: 1px solid #D5D5D2;
+    border-bottom: 1px solid #F2F2F1;
+    padding: 8px 5px 22px 5px;
+    color: #5C5B60;
+    margin: 0;
 }
 .import .details input, .import .details p{
     width: 100%;
@@ -1460,6 +1476,9 @@ button.smallButton {
 }
 .import .feed_preview button {
     float: right;
+    margin-top: 16px;
+    margin-left: 0;
+    margin-right: 0;
 }
 .feed_preview h4{
     font-weight: bold;

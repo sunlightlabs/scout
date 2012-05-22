@@ -3,7 +3,8 @@
   <div class="add rss">
     <h2>Import a Feed</h2>
     <form action="#" method="get" class="preview">
-      <label>
+      
+		<label>
         Paste in the URL of the feed you'd like to get alerts for:
       </label>
       <input type="text" placeholder="Feed URL" class="feed_url" value="<%= h url %>"/>
@@ -35,12 +36,10 @@
         <label>Title</label>
         <input type="text" placeholder="Enter a title" name="title" class="title" />
       </fieldset>
-      <div class="description">
+      <fieldset class="description">
         <h5>Description</h5>
-        <p>
-          No description found.
-        </p>
-      </div>
+        <textarea name="description"></textarea>
+      </fieldset>
     </div>
 
     <button class="create">
@@ -94,7 +93,7 @@
         preview.find(".previewing").hide();
 
         preview.find("input.title").val(data.title);
-        preview.find("div.description p").html(data.description || "No description found.");
+        preview.find("fieldset.description textarea").html(data.description);
         preview.find("ul.items").html(data.html);
         preview.find(".header, .details, ul.items").show();
       }).error(function() {
