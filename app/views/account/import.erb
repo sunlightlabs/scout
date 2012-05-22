@@ -35,10 +35,10 @@
         <label>Title</label>
         <input type="text" placeholder="Enter a title" name="title" class="title" />
       </fieldset>
-      <div class="description">
+      <fieldset class="description">
         <h5>Description</h5>
         <textarea name="description"></textarea>
-      </div>
+      </fieldset>
     </div>
 
     <button class="create">
@@ -92,7 +92,7 @@
         preview.find(".previewing").hide();
 
         preview.find("input.title").val(data.title);
-        preview.find("div.description textarea").html(data.description);
+        preview.find("fieldset.description textarea").html(data.description);
         preview.find("ul.items").html(data.html);
         preview.find(".header, .details, ul.items").show();
       }).error(function() {
