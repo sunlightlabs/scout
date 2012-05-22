@@ -1402,6 +1402,10 @@ button.smallButton {
 
 
 /*-- Import Feed Page --*/
+.contentArea.import{
+    margin-bottom: 66px;
+}
+
 .import label{
     font-weight: bold;
 }
