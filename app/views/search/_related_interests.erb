@@ -1,5 +1,5 @@
 <h5>
-  Your related subscriptions
+  Your "<%= interest_name current_interest %>" subscriptions
 </h5>
 
 <% grouped = related_interests.to_a.group_by(&:search_type) %>
