@@ -37,9 +37,7 @@
       </fieldset>
       <div class="description">
         <h5>Description</h5>
-        <p>
-          No description found.
-        </p>
+        <textarea name="description"></textarea>
       </div>
     </div>
 
@@ -94,7 +92,7 @@
         preview.find(".previewing").hide();
 
         preview.find("input.title").val(data.title);
-        preview.find("div.description p").html(data.description || "No description found.");
+        preview.find("div.description textarea").html(data.description);
         preview.find("ul.items").html(data.html);
         preview.find(".header, .details, ul.items").show();
       }).error(function() {
