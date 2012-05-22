@@ -1,60 +1,58 @@
-<div class="contentArea left import">
+<div class="contentArea full import">
 
-  <h3>Import a Feed</h3>
-
-  <strong>
-    Paste in the URL of the feed you'd like to get alerts for:
-  </strong>
-
-  <form action="#" method="get" class="preview">
-    <fieldset class="preview">
-      <input type="text" placeholder="Feed URL" class="feed_url" 
-        value="<%= h url %>"
-        />
-
-      <button type="submit" class="preview">
-        <span>Preview</span>
+  <div class="add rss">
+    <h2>Import a Feed</h2>
+    <form action="#" method="get" class="preview">
+      <label>
+        Paste in the URL of the feed you'd like to get alerts for:
+      </label>
+      <input type="text" placeholder="Feed URL" class="feed_url" value="<%= h url %>"/>
+      <button type="submit" class="smallButton preview">
+        Preview
       </button>
-    </fieldset>
-  </form>
-
-  <ul class="feed_rules">
-    <li>Must be a valid RSS feed, not bigger than 1MB in size.</li>
-    <li>Nothing obscene or otherwise inappropriate (for that, maybe you want <a href="http://ifttt.com/wtf">ifttt</a>).</li>
-  </ul>
+      <div class="clear"></div>
+    </form>
+    <ul class="feed_rules">
+      <li>
+        Must be a valid RSS feed, not bigger than 1MB in size.
+      </li>
+      <li>
+        Nothing obscene or otherwise inappropriate (for that, maybe you want <a href="http://ifttt.com/wtf">ifttt</a>).
+      </li>
+    </ul>
+  </div>
 
   <div class="feed_preview hide_start">
 
-    <div class="header hide_start">
-      <strong>
-        Does this look right?
-      </strong>
-    </div>
+    <h3 class="header hide_start">
+      Does this look right?
+    </h3>
+
+    <div class="clear"></div>
 
     <div class="details hide_start">
       <fieldset class="title">
         <label>Title</label>
         <input type="text" placeholder="Enter a title" name="title" class="title" />
       </fieldset>
-
-      <button class="create">
-        <span>Create Alert</span>
-      </button>
-
-      <fieldset class="description">
-        <label>Description</label>
+      <div class="description">
+        <h5>Description</h5>
         <p>
           No description found.
         </p>
-      </fieldset>
+      </div>
     </div>
 
+    <button class="create">
+      <span>Create Alert</span>
+    </button>
+    
+    <div class="clear"></div>
+
     <div class="contents">
-      
       <ul class="items hide_start">
         <!-- fill in with items! -->
       </ul>
-
       <div class="previewing loading hide_start">
         <span>Fetching feed for preview...</span>
       </div>
@@ -72,12 +70,10 @@
       </div>
 
       <div class="created hide_start">
-        <span>Subscription created. <a href="/account/subscriptions">Return to your subscriptions.</a></span>
+        <span>Subscription created.</span>
       </div>
     </div>
-
   </div>
-
 </div>
 
 <script type="text/javascript">
@@ -98,7 +94,7 @@
         preview.find(".previewing").hide();
 
         preview.find("input.title").val(data.title);
-        preview.find("fieldset.description p").html(data.description || "No description found.");
+        preview.find("div.description p").html(data.description || "No description found.");
         preview.find("ul.items").html(data.html);
         preview.find(".header, .details, ul.items").show();
       }).error(function() {
