@@ -72,7 +72,12 @@ post '/interests/search' do
       subscription.save!
     end
 
-    interest_pane = partial "search/related_interests", :engine => :erb, :locals => {:related_interests => related_interests(query), :current_interest => interest}
+    interest_pane = partial "search/related_interests", :engine => :erb, :locals => {
+      :related_interests => related_interests(query), 
+      :current_interest => interest,
+      :query => query
+    }
+
     json 200, {
       :interest_pane => interest_pane
     }
@@ -100,7 +105,8 @@ delete '/interests/search' do
 
   interest_pane = partial "search/related_interests", :engine => :erb, :locals => {
     :related_interests => related_interests(query), 
-    :current_interest => nil
+    :current_interest => nil,
+    :query => query
   }
 
   json 200, {
