@@ -1439,8 +1439,7 @@ button.smallButton {
 .import .feed_preview{
     padding: 33px;
     position: relative;
-    margin-left: 0;
-    margin-right: 0;
+
 }
 .import .details fieldset.title, .import .details .description{
     width: 340px;
@@ -1467,6 +1466,8 @@ button.smallButton {
 .import .feed_preview button {
     float: right;
     margin-top: 16px;
+    margin-left: 0;
+    margin-right: 0;
 }
 .feed_preview h4{
     font-weight: bold;
