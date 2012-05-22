@@ -2,6 +2,14 @@
 module Helpers
   module General
 
+    # temporary
+    def item_type_name(item_type)
+      {
+        'state_bill' => 'State Bills',
+        'bill' => 'Bills in Congress'
+      }[item_type]
+    end
+
     def notification_radio_for(type, checked, default, enabled)
       name = notification_name type
 
