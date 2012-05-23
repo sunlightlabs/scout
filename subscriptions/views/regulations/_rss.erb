@@ -1,9 +1,9 @@
 <% regulation = item.data %>
 <title><%= regulation['title'] %></title>
-<% if regulation['search']['highlight'] %>
-  <description><![CDATA[
+<description><![CDATA[
+  <% if regulation['search']['highlight'] %>
     <%= regulation_highlight item, item.interest_in %>
-  ]]></description>
-<% else %>
-  <description><%= regulation['abstract'] %></description>
-<% end %>
+  <% else %>
+    <%= regulation['abstract'] %>
+  <% end %>
+]]></description>

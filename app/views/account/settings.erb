@@ -1,8 +1,7 @@
 
 
 <div class="contentArea full user settings">
-  <%= flash_for [:user] %>
-  <%= errors_for user %>
+
 
   <div class="module allUserSettings">
     <h2>Account Settings</h2>
@@ -28,8 +27,9 @@
         </ul>
       </div> -->
 
+      <%= flash_for [:password] %>
+
       <div class="module passwordChange">
-        <%= flash_for [:password] %>
         <ul>
           <li class="password">
             <label for="old_password">Old Password</label>
@@ -57,6 +57,8 @@
   <div class="module allNotifications">
     <div class="module notifications">
       <h3>Email Notifications</h3>
+	  <%= flash_for [:user] %>
+	  <%= errors_for user %>
       <% form_for user, "/account/settings", :method => "put" do |f| %>
         <fieldset>
           <legend>
@@ -134,7 +136,7 @@
 
           <form class="phone resend" action="/account/phone/resend" method="post">
             <button type="submit">
-              <span>Resend Code</span>
+              <span>Resend</span>
             </button>
           </form>
         </div>

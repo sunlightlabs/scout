@@ -265,13 +265,18 @@ strong {
 }
 
 #flash div.flash.failure,
-#flash div.flash.user,
 #flash div.flash.password,
 #flash div.flash.forgot {
   color: #C13445;
   padding: 0;
 
 }
+
+#flash div.flash.user, #flash div.flash.phone{
+    color: #438C2A;
+    padding: 0;
+}
+
 
 
 /*-- Object errors (similar to flash) --*/
@@ -894,7 +899,8 @@ footer nav li{
 
 .feed_preview .loading span, .feed_preview .error span, .feed_preview.empty span,
 .entry .loading, .results .loading span, .results .error span, .results .empty span {
-  color: #444; font-size: 150%;
+  color: #444; 
+  font-size: 150%;
   display: block;
   padding-top: 20px; padding: 20px; padding-left: 50px;
 }
@@ -903,6 +909,11 @@ footer nav li{
   background-position: left;
   background-image: url(/images/loader-32.gif);
   background-repeat: no-repeat;
+  display: block;
+  height: 40px;  
+  padding-top: 20px;
+  padding-left: 50px;
+  
 }
 .results.contentArea h4{
     font-weight: bold;
@@ -1218,7 +1229,7 @@ h3.interestHeader, .add.rss{
 }
 .add.rss input{
     width: 588px;
-    margin-right: 16px;
+    margin-right: 6px;
     float: left;
 }
 .sidebar .rss h4, .sidebar .tags h4{
@@ -1400,7 +1411,96 @@ button.smallButton {
 
 
 
+
+/*-- Import Feed Page --*/
+.contentArea.import{
+    margin-bottom: 66px;
+}
+
+.import label{
+    font-weight: bold;
+}
+
+.import .add.rss{
+    padding-left: 33px;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    padding-top: 33px;
+}
+.import .add.rss input{
+    width: 805px;
+}
+.import .add.rss ul{
+    margin-top: 16px;
+    margin-left: 16px;
+}
+.import .hide_start {
+    display: none;
+}
+.import h2{
+    margin-bottom: 16px;
+}
+.import .details{
+    margin-bottom: 16px;
+    clear: both;
+    width: 728px;
+    float: left;
+}
+.import .feed_preview{
+    padding: 33px;
+    position: relative;
+
+}
+.import .details fieldset.title, .import .details .description{
+    width: 340px;
+    float: left;
+    margin-right: 20px;
+}
+.import .details textarea{
+    width: 100%;
+    display: block;
+    background-color: white;
+    border: 0;
+    border-top: 1px solid #D5D5D2;
+    border-bottom: 1px solid #F2F2F1;
+    padding: 8px 5px 22px 5px;
+    color: #5C5B60;
+    margin: 0;
+}
+.import .details input, .import .details p{
+    width: 100%;
+}
+.import h3{
+    float: left;
+}
+.import .feed_preview button {
+    float: right;
+    margin-top: 16px;
+    margin-left: 0;
+    margin-right: 0;
+}
+.feed_preview h4{
+    font-weight: bold;
+    font-size: 127%;
+}
+.feed_preview ul.items{
+    background: none;
+}
+.feed_preview ul.items li{
+    list-style-type: none;
+    background: url('/images/tinyborder_andshadow.png') top left repeat-x;
+    padding: 16px 33px 8px 33px;
+}
+
+
+
 /*-- Settings Styling --*/
+
+
+.login.settings.contentArea .module.notifications, .login.settings.contentArea .module.user{
+    padding-top: 33px;
+}
 
 .user.settings.contentArea form input[type="password"]{
     width: 100%;
@@ -1576,33 +1676,6 @@ button.smallButton {
     padding: 0;
 }
 
-
-/*-- Import Feed Styling --*/
-
-fieldset.preview input {float: left;}
-fieldset.preview button {float: left;}
-ul.feed_rules {
-    clear: none;
-    font-size: 80%;
-}
-
-.import .hide_start {
-    display: none;
-}
-
-.import .feed_preview .details fieldset,
-.import .feed_preview .details button {
-    float: left;
-}
-.import .feed_preview .details fieldset.description {clear: both;}
-
-.import .feed_preview .details {
-    clear: both;
-}
-
-.import .feed_preview .contents {
-    clear: both;
-}
 
 
 /*-- Tag Grouping Topic Styling --*/

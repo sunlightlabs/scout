@@ -10,5 +10,5 @@
 </div>
 
 <p>
-  <%= excerpt bill['title'], interest %>
+  <%= excerpt((bill['+short_title'] || bill['title']), interest) %>
 </p>

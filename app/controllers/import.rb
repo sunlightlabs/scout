@@ -43,6 +43,7 @@ post "/import/feed/create" do
 
   url = params[:url].present? ? params[:url].strip : nil
   title = params[:title].present? ? params[:title].strip : nil
+  description = params[:description].present? ? params[:description].strip : nil
 
   unless url.present? and title.present? and feed_details = Subscriptions::Adapters::ExternalFeed.validate_feed(url)
     halt 500 and return
@@ -50,6 +51,7 @@ post "/import/feed/create" do
 
   subscription = feed_subscription_from url
   subscription.data['title'] = title
+  subscription.data['description'] = description
   subscription.data['original_title'] = feed_details['title']
   subscription.data['original_description'] = feed_details['description']
 
