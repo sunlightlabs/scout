@@ -10,11 +10,9 @@ module Helpers
       }[item_type]
     end
 
-    def notification_radio_for(type, checked, default, enabled)
+    def notification_radio_for(type, checked, enabled)
       name = notification_name type
 
-      name << " (Default)" if default
-      
       "<input type=\"radio\" name=\"notifications\" class=\"notifications\" value=\"#{type}\" #{"checked" if checked} #{"disabled" unless enabled}/>
       <span class=\"#{"disabled" unless enabled}\">#{name}</span>"
     end

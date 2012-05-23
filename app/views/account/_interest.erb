@@ -76,12 +76,12 @@
           <% default = types.delete current_user.notifications %>
 
           <li>
-            <%= notification_radio_for default, preference == default, true, allowable.include?(default) %>
+            <%= notification_radio_for default, preference == default, allowable.include?(default) %>
           </li>
 
           <% types.each do |type| %>
             <li>
-              <%= notification_radio_for type, preference == type, false, allowable.include?(type) %>
+              <%= notification_radio_for type, preference == type, allowable.include?(type) %>
             </li>
           <% end %>
 
