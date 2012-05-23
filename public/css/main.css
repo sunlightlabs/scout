@@ -1497,6 +1497,11 @@ button.smallButton {
 
 /*-- Settings Styling --*/
 
+
+.login.settings.contentArea .module.notifications, .login.settings.contentArea .module.user{
+    padding-top: 33px;
+}
+
 .user.settings.contentArea form input[type="password"]{
     width: 100%;
 }
