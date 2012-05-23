@@ -28,8 +28,7 @@ class AccountsTest < Test::Unit::TestCase
     post '/login', :email => email, :password => password, :redirect => redirect
     assert_redirect redirect
   end
-
-
+  
   def test_login_invalid
     email = "test@example.com"
     password = "test"

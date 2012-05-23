@@ -2,50 +2,51 @@
 
     <div class="module notifications">
 
-	    <h2>Login</h2>
-	    <form action="/login" method="post" class="signup_form">
-	        <input class="redirect" name="redirect" type="hidden" value="<%= h params[:redirect] %>" />
+      <h2>Login</h2>
+      <form action="/login" method="post" class="signup_form">
+          <input class="redirect" name="redirect" type="hidden" value="<%= h params[:redirect] %>" />
 
-	        <input class="email" type="email" placeholder="your email" name="email" />
-	        <input class="password" type="password" placeholder="password" name="password" />
-	        
-					<a href="/account/password/forgot">Forgot your password?</a>
+          <input class="email" type="email" placeholder="your email" name="email" />
+          <input class="password" type="password" placeholder="password" name="password" />
+          
+          <a href="/account/password/forgot">Forgot your password?</a>
         
-	        <button class="text login"><span>Login</span></button>
-	    </form>
-	</div>
+          <button class="text login"><span>Login</span></button>
+      </form>
+	  </div>
 
-    <%= flash_for [:user, :forgot] %>
-	<div class="module notifications">
+  	<%= flash_for [:user, :forgot] %>
+  	
+  	<div class="module notifications">
 
-	    <h2>Sign Up</h2>
+      <h2>Sign Up</h2>
 
-	    <% if @new_user and @new_user.errors %>
-	        <% @new_user.errors.each do |field, msg| %>
-	            <div class="error"><%= msg %></div>
-	        <% end %>
-	    <% end %>
+      <% if @new_user and @new_user.errors %>
+          <% @new_user.errors.each do |field, msg| %>
+              <div class="error"><%= msg %></div>
+          <% end %>
+      <% end %>
 
 
     <% form_for @new_user, "/account/new", :method => "post", :class => "signup_form" do |f| %>
         <input class="redirect" name="redirect" type="hidden" value="<%= h params[:redirect] %>" />
 
-	        <%= f.text_field :email, :type => "email", :placeholder => "your email" %>
-	        <%= f.password_field :password, :placeholder => "password" %>
-	        <%= f.password_field :password_confirmation, :placeholder => "password again" %>
+          <%= f.text_field :email, :type => "email", :placeholder => "your email" %>
+          <%= f.password_field :password, :placeholder => "password" %>
+          <%= f.password_field :password_confirmation, :placeholder => "password again" %>
         
-	        <label for="user_announcements">
-	            <%= f.check_box :announcements, :uncheck_value => 'false' %>
-	            <span>Get updates about new Scout features</span>
-	        </label>
+          <label for="user_announcements">
+              <%= f.check_box :announcements, :uncheck_value => 'false' %>
+              <span>Get updates about new Scout features</span>
+          </label>
         
-	        <label for="sunlight_announcements">
-	            <%= f.check_box :sunlight_announcements, :uncheck_value => 'false' %>
-	            <span>Get updates about the Sunlight Foundation</span>
-	        </label>
+          <label for="sunlight_announcements">
+              <%= f.check_box :sunlight_announcements, :uncheck_value => 'false' %>
+              <span>Get updates about the Sunlight Foundation</span>
+          </label>
         
-	        <button class="text login"><span>Sign Up</span></button>
-	    </form>
-	    <% end %>
-	</div>
+          <button class="text login"><span>Sign Up</span></button>
+      </form>
+      <% end %>
+  </div>
 </div>

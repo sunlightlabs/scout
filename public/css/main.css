@@ -260,9 +260,6 @@ strong {
   margin-bottom: 15px;
 }
 
-#flash div.flash.success {
-  color: #348145;
-}
 
 #flash div.flash.failure,
 #flash div.flash.password,
@@ -280,6 +277,10 @@ strong {
 
 
 /*-- Object errors (similar to flash) --*/
+
+div.error {
+    color: #C13445; padding: 10px 0;
+}
 
 .errors {
     display: none;
