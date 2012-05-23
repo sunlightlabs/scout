@@ -57,6 +57,7 @@ class ImportTest < Test::Unit::TestCase
     original_title = "Original Title"
     original_description = "Original Description"
     new_title = "My Title"
+    new_description = "My Description"
 
     subscription_count = Subscription.count
     interest_count = Interest.count
@@ -67,7 +68,7 @@ class ImportTest < Test::Unit::TestCase
       'title' => original_title, 'description' => original_description
     })
 
-    post "/import/feed/create", {:url => url, :title => new_title}, login(user)
+    post "/import/feed/create", {:url => url, :title => new_title, :description => new_description}, login(user)
     assert_response 200
 
     assert_equal(subscription_count + 1, Subscription.count)
@@ -83,6 +84,7 @@ class ImportTest < Test::Unit::TestCase
     [subscription, interest].each do |object|
       assert_equal url, object.data['url']
       assert_equal new_title, object.data['title']
+      assert_equal new_description, object.data['description']
       assert_equal original_title, object.data['original_title']
       assert_equal original_description, object.data['original_description']
     end

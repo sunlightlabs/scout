@@ -90,16 +90,14 @@
       <div class="add rss">
         <h3>Import a Feed</h3>
 
-        <form action="#" method="get" class="preview">
+        <form action="/import/feed" method="get" class="preview">
           <label>
-            Paste in the URL of the feed you'd like to get alerts for:
+            Enter a URL of a feed to get alerts whenever it's updated:
           </label>
-            <input type="text" placeholder="Feed URL" class="feed_url" 
-              value="<%= h url %>"
-              />
-            <button type="submit" class="smallButton preview">
-              Preview
-            </button>
+          <input type="text" placeholder="Feed URL" name="url" class="feed_url" />
+          <button type="submit" class="smallButton preview">
+            Preview
+          </button>
           <div class="clear"></div>
         </form>
       </div>

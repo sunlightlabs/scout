@@ -1229,7 +1229,7 @@ h3.interestHeader, .add.rss{
 }
 .add.rss input{
     width: 588px;
-    margin-right: 16px;
+    margin-right: 6px;
     float: left;
 }
 .sidebar .rss h4, .sidebar .tags h4{

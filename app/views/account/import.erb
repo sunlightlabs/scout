@@ -111,12 +111,13 @@
       if (!url) return false;
 
       var title = $.trim($("input.title").val());
+      var description = $.trim($(".description textarea").val());
 
       var preview = $("div.feed_preview");
       preview.find("ul.items").hide();
       preview.find(".creating").show();
 
-      $.post("/import/feed/create", {url: url, title: title}, function(data) {
+      $.post("/import/feed/create", {url: url, title: title, description: description}, function(data) {
         preview.find(".creating").hide();
 
         console.log("Created feed with ID " + data.interest_id);
