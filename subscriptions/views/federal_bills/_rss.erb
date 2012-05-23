@@ -5,7 +5,11 @@
       <%= highlight %>
     ]]></description>
 <% elsif bill['summary'].present? %>
-  <description><%= truncate bill['summary'], 500 %></description>
+  <description><![CDATA[
+    <%= truncate bill['summary'], 500 %>
+    ]]></description>
 <% else %>
-  <description>No excerpt available.</description>
+  <description>
+    No excerpt available.
+  </description>
 <% end %>
