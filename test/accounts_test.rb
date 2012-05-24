@@ -3,6 +3,7 @@ require './test/test_helper'
 class AccountsTest < Test::Unit::TestCase
   include Rack::Test::Methods
   include TestHelper::Methods
+  include FactoryGirl::Syntax::Methods
 
   def test_login
     email = "test@example.com"
@@ -229,7 +230,7 @@ class AccountsTest < Test::Unit::TestCase
     assert !User.authenticate(user, "not-test")
     assert user.should_change_password
 
-    put '/account/password/change', {:old_password => "test", :password => "not-test", :password_confirmation => "not-test"}, login(user)
+    put '/account/settings', {:old_password => "test", :password => "not-test", :password_confirmation => "not-test"}, login(user)
     assert_redirect '/account/settings'
 
     user.reload
@@ -240,59 +241,157 @@ class AccountsTest < Test::Unit::TestCase
   end
 
   def test_change_password_not_logged_in
-    put '/account/password/change', {:old_password => "test", :password => "not-test", :password_confirmation => "not-test"}
-
-    assert_equal 302, last_response.status
-    assert_equal '/', redirect_path
+    put '/account/settings', {:old_password => "test", :password => "not-test", :password_confirmation => "not-test"}
+    assert_redirect '/'
   end
 
   def test_change_password_wrong_original_password
-    user = new_user! :password => "test", :password_confirmation => "test"
+    password = "test"
+    new_password = password.succ
+    user = create :user, :password => password
 
-    assert User.authenticate(user, "test")
-    assert !User.authenticate(user, "not-test")
+    assert User.authenticate(user, password)
+    assert !User.authenticate(user, new_password)
 
-    put '/account/password/change', {:old_password => "uh oh", :password => "not-test", :password_confirmation => "not-test"}, login(user)
+    put '/account/settings', {:old_password => new_password.succ, :password => new_password, :password_confirmation => new_password}, login(user)
+    assert_response 200
 
     user.reload
-    assert User.authenticate(user, "test")
-    assert !User.authenticate(user, "not-test")
-
-    assert_equal 302, last_response.status
-    assert_equal '/account/settings', redirect_path
+    assert User.authenticate(user, password)
+    assert !User.authenticate(user, new_password)
   end
 
   def test_change_password_mismatched_new_passwords
-    user = new_user! :password => "test", :password_confirmation => "test"
+    password = "test"
+    new_password = password.succ
+    user = create :user, :password => password
 
-    assert User.authenticate(user, "test")
-    assert !User.authenticate(user, "not-test")
+    assert User.authenticate(user, password)
+    assert !User.authenticate(user, new_password)
 
-    put '/account/password/change', {:old_password => "test", :password => "not-test", :password_confirmation => "not-not-test"}, login(user)
-
-    user.reload
-    assert User.authenticate(user, "test")
-    assert !User.authenticate(user, "not-test")
-
-    # will render directly with user errors
-    assert_equal 200, last_response.status
-  end
-
-  def test_change_password_disallow_blank_password
-    user = new_user! :password => "test", :password_confirmation => "test"
-
-    assert User.authenticate(user, "test")
-    assert !User.authenticate(user, "")
-
-    put '/account/password/change', {:old_password => "test", :password => "", :password_confirmation => ""}, login(user)
+    put '/account/settings', {:old_password => password, :password => new_password, :password_confirmation => new_password.succ}, login(user)
+    assert_response 200
 
     user.reload
-    assert User.authenticate(user, "test")
-    assert !User.authenticate(user, "")
-
-    assert_equal 302, last_response.status
-    assert_equal '/account/settings', redirect_path
+    assert User.authenticate(user, password)
+    assert !User.authenticate(user, new_password)
   end
+
+  def test_update_name_details
+    user = create :user
+    assert user.display_name.blank?
+    assert user.username.blank?
+
+    username = "username"
+    display_name = "User Name"
+
+    put '/account/settings', {'user' => {'username' => username, 'display_name' => display_name}}, login(user)
+    assert_redirect '/account/settings'
+
+    user.reload
+    assert_equal username, user.username
+    assert_equal display_name, user.display_name
+  end
+
+  def test_update_name_details_invalid
+    username = "username"
+    display_name = "User Name"
+
+    other_user = create :user, :username => username
+
+    user = create :user
+    assert user.display_name.blank?
+    assert user.username.blank?
+
+    put '/account/settings', {'user' => {'username' => username, 'display_name' => display_name}}, login(user)
+    assert_response 200
+
+    user.reload
+    assert user.display_name.blank?
+    assert user.username.blank?
+  end
+
+  def test_update_name_details_and_valid_password
+    password = "test"
+    new_password = password.succ
+
+    user = create :user, :password => password, :should_change_password => true
+
+    assert User.authenticate(user, password)
+    assert !User.authenticate(user, new_password)
+
+    assert user.display_name.blank?
+    assert user.username.blank?
+
+    old_password_hash = user.password_hash
+    username = "username"
+    display_name = "User Name"
+
+    put '/account/settings', {
+      'user' => {'username' => username, 'display_name' => display_name},
+      'old_password' => password, 'password' => new_password, 'password_confirmation' => new_password
+      }, login(user)
+    assert_redirect '/account/settings'
+
+    user.reload
+    assert_equal username, user.username
+    assert_equal display_name, user.display_name
+
+    assert_not_equal old_password_hash, user.password_hash
+    assert !User.authenticate(user, password)
+    assert User.authenticate(user, new_password)
+    assert !user.should_change_password
+  end
+
+  def test_update_name_details_and_invalid_old_password
+    password = "test"
+    new_password = password.succ
+
+    user = create :user, :password => password, :should_change_password => true
+
+    assert User.authenticate(user, password)
+    assert !User.authenticate(user, new_password)
+
+    assert user.display_name.blank?
+    assert user.username.blank?
+    assert user.should_change_password
+
+    old_password_hash = user.password_hash
+    username = "username"
+    display_name = "User Name"
+
+    put '/account/settings', {
+      'user' => {'username' => username, 'display_name' => display_name},
+      'old_password' => new_password.succ, 'password' => new_password, 'password_confirmation' => new_password
+      }, login(user)
+    assert_response 200
+
+    user.reload
+    assert user.display_name.blank?
+    assert user.username.blank?
+
+    assert_equal old_password_hash, user.password_hash
+    assert User.authenticate(user, password)
+    assert !User.authenticate(user, new_password)
+    assert user.should_change_password
+  end
+
+  def test_update_name_slugifies_username
+    user = create :user
+    assert user.display_name.blank?
+    assert user.username.blank?
+
+    username = "User Name And 2 Things!"
+    display_name = "User Name"
+
+    put '/account/settings', {'user' => {'username' => username, 'display_name' => display_name}}, login(user)
+    assert_redirect '/account/settings'
+
+    user.reload
+    assert_equal "user_name_and_2_things", user.username
+    assert_equal display_name, user.display_name
+  end
+
 
   # phone settings
 

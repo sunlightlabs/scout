@@ -279,10 +279,14 @@ strong {
 
 
 
-/*-- Object errors (similar to flash) --*/
-
 .errors {
     display: none;
+    color: #C13445;
+}
+
+/*-- Object errors (similar to flash) --*/
+
+.error.user {
     color: #C13445;
 }
 

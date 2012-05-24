@@ -4,8 +4,6 @@ class User
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  field :username
-
   field :email
   field :phone
 
@@ -28,9 +26,25 @@ class User
   # tags the user has marked as safe for public viewing
   field :public_tags, :type => Array, :default => []
 
+  # used for sharing things
+  field :username
+  field :display_name
+
+  validates_uniqueness_of :username, :allow_blank => true, :message => "has already been taken."
+
   has_many :subscriptions, :dependent => :destroy
   has_many :interests, :dependent => :destroy
   has_many :deliveries, :dependent => :destroy
+
+
+  before_validation :slugify_username
+  def slugify_username
+    if self.username.present?
+      self.username = self.username.gsub(/[^\w\d\s]/, '')
+      self.username = self.username.strip.downcase
+      self.username = self.username.gsub(/\s+/, '_')
+    end
+  end
 
 
   after_save :find_api_key
