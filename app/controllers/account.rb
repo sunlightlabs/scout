@@ -77,26 +77,7 @@ end
 put '/account/password/change' do
   requires_login
 
-  unless User.authenticate(current_user, params[:old_password])
-    flash[:password] = "Incorrect current password."
-    redirect "/account/settings" and return
-  end
-
-  unless params[:password].present? and params[:password_confirmation].present?
-    flash[:password] = "Can't use a blank password."
-    redirect "/account/settings" and return
-  end
-
-  current_user.password = params[:password]
-  current_user.password_confirmation = params[:password_confirmation]
-  current_user.should_change_password = false
-
-  if current_user.save
-    flash[:password] = "Your password has been changed."
-    redirect "/account/settings" and return
-  else
-    erb :"account/settings", :locals => {:user => current_user}
-  end
+  
 
 end
 
@@ -130,10 +111,24 @@ end
 put '/account/settings' do
   requires_login
   
+  # first, any attributes given under the user hash
   current_user.attributes = params[:user]
+
+  # second, if there is a 'password' param then we need to verify the old password and pass in the confirmation
+  if params[:password].present?
+    unless User.authenticate(current_user, params[:old_password])
+      flash.now[:password] = "Incorrect current password."
+      return erb :"/account/settings", :locals => {:user => current_user}
+    end
+
+    current_user.password = params[:password]
+    current_user.password_confirmation = params[:password_confirmation]
+    current_user.should_change_password = false
+  end
   
   if current_user.save
     flash[:user] = "Your settings have been updated."
+    flash[:password] = "Your password has been changed." if params[:password].present?
     redirect "/account/settings"
   else
     erb :"account/settings", :locals => {:user => current_user}
@@ -167,16 +162,16 @@ delete '/account/public_tags' do
   halt 200
 end
 
+get '/account/tag' do
+  erb :"account/tag"
+end
+
 get '/account/settings' do
   requires_login
 
   erb :"account/settings", :locals => {:user => current_user}
 end
 
-#TODO
-put '/account/username' do
-  
-end
 
 put '/account/phone' do
   requires_login

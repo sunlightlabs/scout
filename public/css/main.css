@@ -274,17 +274,15 @@ strong {
     padding: 0;
 }
 
-
+.errors {
+    display: none;
+    color: #C13445;
+}
 
 /*-- Object errors (similar to flash) --*/
 
 div.error {
     color: #C13445; padding: 10px 0;
-}
-
-.errors {
-    display: none;
-    color: #C13445;
 }
 
 
@@ -1297,7 +1295,7 @@ h3.interestHeader, .add.rss{
 
 .subscription .tags input{
     display: inline;
-    width: 503px;
+    width: 538px;
     margin-top: 5px;
 }
 .subscription h3{
@@ -1677,6 +1675,88 @@ button.smallButton {
     padding: 0;
 }
 
+
+
+/*-- Tag Grouping Topic Styling --*/
+
+
+.tagHeader{
+    background: #F5F6F3 url('/images/tinyborder.png') bottom left repeat-x;
+    padding: 16px 0 16px 10px;
+    -webkit-box-shadow: inset -14px 0px 14px -7px #E2E3E0;
+    -moz-box-shadow: inset -14px 0px 14px -7px #e2e3e0;
+    box-shadow: inset -14px 0px 14px -7px #E2E3E0;
+    padding: 16px 33px 16px 10px;
+    margin-bottom: 33px;
+}
+.tag .author{
+    font-weight: bold;
+}
+.tag textarea {
+    display: block;
+    background-color: white;
+    border: 0;
+    border-top: 1px solid #D5D5D2;
+    border-bottom: 1px solid #F2F2F1;
+    padding: 8px 5px;
+    color: #5C5B60;
+    width: 100%;
+}
+.tag .subscription .description{
+    margin-top: 16px;
+    width: none;
+}
+.tag .details{
+    width: 572px;
+}
+.tag .details .feed{
+    float: right;
+}
+.tagHeader .feed, .tagHeader h2{
+    float: left;
+    display: block;
+    width: none;
+}
+.tag .feed{
+    margin: 10px 0 0 10px;
+    
+}
+.tag .tagHeader button{
+    float: right;
+    display: none;
+}
+.tag p.description{
+    display: none;
+    font-style: italic;
+    margin-top: 16px;
+}
+.tag .interest{
+    margin-bottom: 33px;
+}
+
+
+
+
+/*-- PUBLIC Tag Grouping Topic Styling --*/
+
+.tag.public .tagHeader button, .tag.public p.description{
+    display: block;
+}
+
+.tag.public textarea.description, .tag.public .edit, .tag.public .removeHeader, .tag.public .tags{
+    display: none;
+}
+.tag.public .subscription .details{
+    border-left: 0;
+    padding-left: 0;
+}
+.tag.public .subscription h4{
+    width: 500px;
+}
+
+.tag.public .details{
+    width: 100%;
+}
 
 
 

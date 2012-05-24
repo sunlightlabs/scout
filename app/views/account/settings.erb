@@ -6,26 +6,33 @@
   <div class="module allUserSettings">
     <h2>Account Settings</h2>
 
-    <% form_for user, "/account/password/change", :method => "put" do |f| %>
-<!--       <div class="module user">
+    <%= flash_for [:user] %>
+    <%= errors_for user %>
+
+    <% form_for user, "/account/settings", :method => "put" do |f| %>
+      <div class="module user">
         <ul>
           <li class="email">
             <label for="email">Email Address</label>
-            <input type="email" name="email" val="<%= user.email %>" />
+            <input type="email" name="user[email]" value="<%= user.email %>" autocomplete="off" />
           </li>
 
           <li class="username">
-            <label for="username">Username</label>
-            <% if user.username.blank? %>
-              <small>
-                Usernames are only necessary if you want to publicly share your subscriptions.
-              </small>
-            <% end %>
-            
-            <input type="text" name="username" val="<%= user.username %>" />
+            <label for="username">User name (optional)</label>
+            <input type="text" name="user[username]" value="<%= user.username %>" autocomplete="off" />
           </li>
+
+          <li class="display_name">
+            <label for="display_name">Display Name (optional)</label>
+            <input type="text" name="user[display_name]" value="<%= user.display_name %>" autocomplete="off" />
+          </li>
+
+          <small>
+            User and display names are only used if you publicly share your subscriptions.
+          </small>
+
         </ul>
-      </div> -->
+      </div>
 
       <%= flash_for [:password] %>
 
@@ -33,15 +40,15 @@
         <ul>
           <li class="password">
             <label for="old_password">Old Password</label>
-            <input type="password" name="old_password" />
+            <input type="password" name="old_password" autocomplete="off" />
           </li>
           <li class="password">
             <label for="password">New Password</label>
-            <input type="password" name="password" />
+            <input type="password" name="password" autocomplete="off" />
           </li>
           <li class="password">
             <label for="password_confirmation">New Password (again)</label>
-            <input type="password" name="password_confirmation" />
+            <input type="password" name="password_confirmation" autocomplete="off" />
           </li>
         </ul>
       </div>
@@ -57,8 +64,6 @@
   <div class="module allNotifications">
     <div class="module notifications">
       <h3>Email Notifications</h3>
-	  <%= flash_for [:user] %>
-	  <%= errors_for user %>
       <% form_for user, "/account/settings", :method => "put" do |f| %>
         <fieldset>
           <legend>
