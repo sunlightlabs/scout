@@ -2,7 +2,9 @@
     <fieldset class="searchField">
         <label for="query">Search</label>
         <input class="transparent query" name="query" type="search" 
-            placeholder="<%= searching? ? "Start a new search..." : "Search for a keyword or phrase..." %>" />
+            placeholder="<%= searching? ? "Start a new search..." : "Search for a keyword or phrase..." %>" 
+            value="<%= h params[:query] %>"
+            />
     </fieldset>
 
     <div class="clear"></div>

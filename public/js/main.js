@@ -21,15 +21,24 @@ $(function() {
     if (query) query = $.trim(query);
     if (!query) return false;
 
-    var path = "/search/all/" + encodeURIComponent(query);
-    window.location = path;
+    // if we are on the search page itself, this search box integrates with the filters
+    var subscription_type = $(".filters input.subscription_type").val();
+
+    // if we got the subscription type from the filters, pjax our way into the next screen
+    var pjax = false;
+    if (subscription_type) 
+      pjax = true;
+    else
+      subscription_type = "all";
+
+    var path = "/search/" + subscription_type + "/" + encodeURIComponent(query);
+
+    if (pjax)
+      Utils.pjax(path);
+    else
+      window.location = path;
     
     return false;
-  });
-
-  $("form#search_form select.subscription_type").change(function() {
-    $(".filter.initial").hide();
-    $(".filter.initial." + $(this).val()).show();
   });
 
 });
