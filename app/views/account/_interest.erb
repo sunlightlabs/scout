@@ -55,11 +55,17 @@
       </span>
     </h4>
     
-    <% unless interest.feed? %>
-      <a class="rss feed" href="/interest/<%= interest.id %>.rss">RSS</a>
-      <% if current_user.developer? %>
-        <a class="json feed" href="/interest/<%= interest.id %>.json?apikey=<%= current_user.api_key %>">JSON</a>
+    <a class="rss feed" 
+      <% if interest.feed? %>
+        href="<%= interest.data['url'] %>"
+      <% else %>
+        href="/interest/<%= interest.id %>.rss"
       <% end %>
+      >
+      RSS
+    </a>
+    <% if show_data? %>
+      <a class="json feed" href="/interest/<%= interest.id %>.json?apikey=<%= api_key %>">JSON</a>
     <% end %>
     
     <div class="notifications">

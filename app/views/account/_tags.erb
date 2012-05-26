@@ -6,8 +6,8 @@
       <li>
         <a href="<%= tag_path current_user, tag %>" class="name"><%= h tag.name %></a>
         <a class="rss feed" href="<%= tag_feed_path current_user, tag, "rss" %>">RSS</a>
-        <% if current_user.developer? %>
-          <a class="json feed" href="<%= tag_feed_path current_user, tag, "json" %>?apikey=<%= current_user.api_key %>">JSON</a>
+        <% if show_data? %>
+          <a class="json feed" href="<%= tag_feed_path current_user, tag, "json" %>?apikey=<%= api_key %>">JSON</a>
         <% end %>
       </li>
     <% end %>

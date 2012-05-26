@@ -7,8 +7,8 @@
     <h4>
       Everything
       <a class="rss feed" href="/account/<%= current_user.id %>.rss">RSS</a>
-      <% if current_user.developer? %>    
-          <a class="json feed" href="/account/<%= current_user.id %>.json?apikey=<%= current_user.api_key %>">JSON</a>
+      <% if show_data? %>    
+          <a class="json feed" href="/account/<%= current_user.id %>.json?apikey=<%= api_key %>">JSON</a>
       <% end %>
     </h4>
 
