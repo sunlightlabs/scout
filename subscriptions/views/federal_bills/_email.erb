@@ -6,6 +6,9 @@
 <% end %>
 
  <% if item.data['search']['highlight'] and (highlight = bill_highlight item, interest.in, false) %>
-<%= highlight %><% elsif bill['summary'] %>
-<%= truncate bill['summary'], 500 %><% else %>
-No excerpt available.<% end %>
+<%= highlight %>
+ <% elsif bill['summary'] %>
+<%= truncate bill['summary'], 500 %>
+ <% else %>
+No excerpt available.
+<% end %>
