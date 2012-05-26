@@ -292,11 +292,11 @@ div.error {
     margin-top: 0;
 }
 .hatWrap{
-    background: url('../images/bg_hat.png') center top repeat-x;
+    background: url('/images/bg_hat.png') center top repeat-x;
     height: 45px;
 }
 .productOf{
-    background: url('../images/productOf.png') center top no-repeat;
+    background: url('/images/productOf.png') center top no-repeat;
     width: 198px;
     height: 26px;
     text-indent: -99999em;
@@ -382,7 +382,7 @@ header h1{
 }
 .searchField{
     float: left;
-    background: url('../images/newSearch.png') top left repeat-x;
+    background: url('/images/newSearch.png') top left repeat-x;
     margin-right: 20px;
     padding: 7px;
     margin-bottom: 7px;
@@ -414,7 +414,7 @@ header h1{
 
 
 #search_form button span, #search_form a.update.button span {
-    background:url('../images/icon_search.png') center -4px no-repeat ;
+    background:url('/images/icon_search.png') center -4px no-repeat ;
     text-indent: -9999em;
     display: block;
     width: 32px;
@@ -445,7 +445,7 @@ select.subscription_type {
 .categoryMenu{
     padding-right: 33px;
     margin-right: 33px;
-    background: url('../images/tinyborder_andshadow_vertical_dark.png') right top repeat-y;
+    background: url('/images/tinyborder_andshadow_vertical_dark.png') right top repeat-y;
 }
 #search_form .categoryMenu legend{
     margin-bottom: 7px;
@@ -573,7 +573,7 @@ div.contentWrapper{
 /*-- Footer Styling --*/
 .footerWrapper{
     display: block;
-    background: url('../images/bg_footer.png') center top repeat-x;
+    background: url('/images/bg_footer.png') center top repeat-x;
 }
 
 .sunlightFoundation{
@@ -597,7 +597,7 @@ footer{
     font-size: 88%;
     margin-bottom: 6px;
     margin-top: 40px;
-    background: url('../images/tinyborder_footer.png') left top repeat-y;
+    background: url('/images/tinyborder_footer.png') left top repeat-y;
     padding: 0 45px;
 }
 .aboutSF p{
@@ -607,7 +607,7 @@ footer nav{
     float: left;
     margin-top: 40px;
     padding-left: 45px;
-    background: url('../images/tinyborder_footer.png') left top repeat-y;
+    background: url('/images/tinyborder_footer.png') left top repeat-y;
 }
 
 footer a{
@@ -637,13 +637,13 @@ footer nav li{
     margin-top: -79px;
 }
 .homeWrapper{
-    background: url('../images/bg_homeWrapper.png') center 170px repeat-x;
+    background: url('/images/bg_homeWrapper.png') center 170px repeat-x;
 }
 .homeWrapper header.contentWrapper{
-    background: url('../images/splash.png') center -13px repeat-x;
+    background: url('/images/splash.png') center -13px repeat-x;
 }
 .homeWrapper #search_form button span, .homeWrapper #search_form a.update.button span {
-    background: url('../images/icon_search.png') 5px -2px no-repeat ;
+    background: url('/images/icon_search.png') 5px -2px no-repeat ;
     text-indent: 0;
     display: block;
     padding-left: 35px;
@@ -678,8 +678,9 @@ footer nav li{
     float: left;
     width: 280px;
     padding: 33px 33px 33px 49px;
-    background: url('../images/tinyborder_andshadow_vertical.png') left top repeat-y;
+    background: url('/images/tinyborder_andshadow_vertical.png') left top repeat-y;
 }
+
 .home.modules li{
     margin-bottom: 10px;
 }
@@ -701,7 +702,7 @@ footer nav li{
     margin-bottom: 16px;
 }
 .splashtext{
-    background: url('../images/splash_text.png') center top no-repeat;
+    background: url('/images/splash_text.png') center top no-repeat;
     width: 440px;
     height: 140px;
     text-indent: -9999em;
@@ -773,7 +774,7 @@ footer nav li{
     font-style: normal;
 }
 .st_facebook_button_custom{
-	background: url('../images/icons_share.png') no-repeat scroll right top transparent;
+	background: url('/images/icons_share.png') no-repeat scroll right top transparent;
 	padding:0;
 	width: 23px;
 	height: 23px;
@@ -782,7 +783,7 @@ footer nav li{
 	margin-top: -4px;
 }
 .st_twitter_button_custom{
-	background: url('../images/icons_share.png') no-repeat scroll left top transparent;
+	background: url('/images/icons_share.png') no-repeat scroll left top transparent;
 	padding:0;
 	width: 23px;
 	height: 23px;
@@ -808,7 +809,7 @@ footer nav li{
 .module.controls form{
     padding-left: 16px;
     padding-right: 16px;
-    background: url('../images/tinyborder.png') center bottom repeat-x;
+    background: url('/images/tinyborder.png') center bottom repeat-x;
     padding-bottom: 10px;
     margin-bottom: 25px;
 }
@@ -816,7 +817,7 @@ footer nav li{
     padding-left: 16px;
 }
 .module.controls .categories{
-    background: url('../images/tinyborder.png') center bottom repeat-x;
+    background: url('/images/tinyborder.png') center bottom repeat-x;
     padding-bottom: 20px;
     margin-bottom: 25px;
 }
@@ -828,7 +829,7 @@ footer nav li{
     text-decoration: none;
 }
 .module.controls .categories .current{
-    background: #e5e6e3 url('../images/bg_currentCat.png') 5px 12px no-repeat;
+    background: #e5e6e3 url('/images/bg_currentCat.png') 5px 12px no-repeat;
     font-weight: bold;
 }
 
@@ -854,7 +855,7 @@ footer nav li{
 }
 .subscriptions.related li{
     display: inline;
-    background: url('../images/bullet.png') right center no-repeat;
+    background: url('/images/bullet.png') right center no-repeat;
     padding-right: 7px;
     margin:0;
     margin-right: 7px;
@@ -869,13 +870,13 @@ footer nav li{
     margin:0;
 }
 .contentArea.right ul{
-    background: url('../images/tinyborder_andshadow.png') center bottom repeat-x;    
+    background: url('/images/tinyborder_andshadow.png') center bottom repeat-x;    
 }
 .contentArea.right div.search{
     padding-bottom: 105px;
 }
 .contentArea.right .section{
-    background: url('../images/tinyborder_andshadow.png') center top repeat-x;
+    background: url('/images/tinyborder_andshadow.png') center top repeat-x;
     padding-bottom: 17px;
 }
 
@@ -931,7 +932,7 @@ footer nav li{
 ul.items{
     margin-top: -2px;
     display: none;
-    background: url('../images/tinyborder_andshadow.png') center top repeat-x;
+    background: url('/images/tinyborder_andshadow.png') center top repeat-x;
 }
 
 
@@ -1084,7 +1085,7 @@ button.item.follow, button.item.following {
     font-weight: bold;
 }
 .resources span{
-    background-image: url('../images/icons_resources.png');
+    background-image: url('/images/icons_resources.png');
     background-repeat: none;
     text-indent: -9999em;
     display: block;
@@ -1389,20 +1390,20 @@ button.smallButton {
 .subscription div.indicators span.okay{
     width: 25px;
     height: 16px;
-    background: url('../images/icon_check.png') top center no-repeat;
+    background: url('/images/icon_check.png') top center no-repeat;
     margin-top: 4px;
 }
 .subscription div.indicators span.spinning{
     width: 25px;
     height: 16px;
-    background: url('../images/loader-32.gif') top center no-repeat;
+    background: url('/images/loader-32.gif') top center no-repeat;
     background-size: 16px 16px;
     margin-top: 4px;    
 }
 .subscription div.indicators span.failed{
     width: 16px;
     height: 16px;
-    background: url('../images/icon_error.png') top center no-repeat;
+    background: url('/images/icon_error.png') top center no-repeat;
     margin-top: 4px;
 }
 .subscription div.indicators span {
@@ -1529,7 +1530,7 @@ button.smallButton {
     background: none;
 }
 .settings.contentArea .module .username.highlight label{
-    background: #E5E6E3 url('../images/bg_currentCat.png') 5px center no-repeat;
+    background: #E5E6E3 url('/images/bg_currentCat.png') 5px center no-repeat;
     padding-top: 4px;
     padding-bottom: 4px;
     padding-left: 16px;
@@ -1552,7 +1553,7 @@ button.smallButton {
 }
 
 .settings.contentArea .module.notifications, .settings.contentArea .module.phoneSettings{
-    background: url('../images/tinyborder_andshadow_vertical.png') right top repeat-y;
+    background: url('/images/tinyborder_andshadow_vertical.png') right top repeat-y;
 }
 .settings.contentArea .module.notifications, .settings.contentArea .module.user{
     padding-left: 10px;
@@ -1612,7 +1613,7 @@ button.smallButton {
     box-sizing: border-box;
 }
 .settings.contentArea .module.donate{
-    background: url('../images/splash.png') -170px -130px no-repeat;
+    background: url('/images/splash.png') -170px -130px no-repeat;
     padding-left: 10px;
     padding-right: 10px;
 }

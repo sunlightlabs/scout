@@ -120,63 +120,74 @@
 
 <script type="text/javascript">
 
-  $("input[type=checkbox].remove").change(function() {
-    $(this).siblings("button.remove").toggle();
-  });
-
-  $("button.remove").click(function() {
-    var container = $(this).parents(".subscription");
-    var interest_id = container.data("interest_id");
-
-    container.find(".removeSubscription .indicators span").hide();
-    container.find(".removeSubscription .indicators .spinning").show();
-    $.post("/interest/" + interest_id, {_method: "delete"}, function(data) {
-      Utils.log("Deleted interest " + interest_id);
-      container.remove();
-    }).error(function() {
-      Utils.log("Error deleting interest " + interest_id);
-      container.find(".removeSubscription .indicators span").hide();
-      container.find(".removeSubscription .indicators .failed").show();
-    })
-  });
-
-  $("input.notifications").change(function() {
-    var container = $(this).parents(".subscription");
-    var interest_id = container.data("interest_id");
-
-    var notifications = container.find("input[name=notifications]:checked").val();
-    var attrs = {interest: {notifications: notifications}};
-
-    container.find(".notifications .indicators span").hide();
-    container.find(".notifications .indicators .spinning").show();
-    $.post("/interest/" + interest_id, $.extend(attrs, {_method: "put"}), function(data) {
-        container.find(".notifications .indicators span").hide();
-        container.find(".notifications .indicators .okay").show();
-        Utils.log("Updated interest " + interest_id + " with interval " + data.notifications);
-    }).error(function() {
-        container.find(".notifications .indicators span").hide();
-        container.find(".notifications .indicators .failed").show();
-        Utils.log("Error updating interest " + interest_id);
+  $(function() {
+    $("input[type=checkbox].remove").change(function() {
+      $(this).siblings("button.remove").toggle();
     });
-  });
 
-  $("a.open_notifications").click(function() {
-    $(this).parents(".subscription").find(".notifications form").toggle();
-    return false;
-  });
+    $("button.remove").click(function() {
+      var container = $(this).parents(".subscription");
+      var interest_id = container.data("interest_id");
 
-  $("div.tags form").submit(function() {
-    var container = $(this).parents(".subscription");
-    var interest_id = container.data("interest_id");
-    var tags = $(this).find("input.tags").val();
-
-    $.post("/interest/" + interest_id, {_method: "put", interest: {tags: tags}}, function(data) {
-        Utils.log("Interest " + interest_id + " updated with tags (" + data.interest_tags.join(", ") + ")");
-        $(".module.tags").html(data.tags_pane);
-    }).error(function(xhr) {
-        Utils.log("Error updating tags for interest " + interest_id);
+      container.find(".indicators span").hide();
+      container.find(".indicators .spinning").show();
+      $.post("/interest/" + interest_id, {_method: "delete"}, function(data) {
+        Utils.log("Deleted interest " + interest_id);
+        container.remove();
+      }).error(function() {
+        Utils.log("Error deleting interest " + interest_id);
+        container.find(".indicators span").hide();
+        container.find(".indicators .failed").show();
+      })
     });
-    return false;
+
+    $("input.notifications").change(function() {
+      var container = $(this).parents(".subscription");
+      var interest_id = container.data("interest_id");
+
+      var notifications = container.find("input[name=notifications]:checked").val();
+      var attrs = {interest: {notifications: notifications}};
+
+      container.find(".indicators span").hide();
+      container.find(".indicators .spinning").show();
+      $.post("/interest/" + interest_id, $.extend(attrs, {_method: "put"}), function(data) {
+          container.find(".indicators span").hide();
+          container.find(".indicators .okay").show().delay(1000).fadeOut(600);
+          Utils.log("Updated interest " + interest_id + " with interval " + data.notifications);
+      }).error(function() {
+          container.find(".indicators span").hide();
+          container.find(".indicators .failed").show();
+          Utils.log("Error updating interest " + interest_id);
+      });
+    });
+
+    $("a.open_notifications").click(function() {
+      $(this).parents(".subscription").find(".notifications form").toggle();
+      return false;
+    });
+
+    $("div.tags form").submit(function() {
+      var container = $(this).parents(".subscription");
+      var interest_id = container.data("interest_id");
+      var tags = $(this).find("input.tags").val();
+
+      container.find(".indicators span").hide();
+      container.find(".indicators .spinning").show();
+
+      $.post("/interest/" + interest_id, {_method: "put", interest: {tags: tags}}, function(data) {
+          container.find(".indicators span").hide();
+          container.find(".indicators .okay").show().delay(1000).fadeOut(600);
+
+          Utils.log("Interest " + interest_id + " updated with tags (" + data.interest_tags.join(", ") + ")");
+          $(".module.tags").html(data.tags_pane);
+      }).error(function(xhr) {
+          container.find(".indicators span").hide();
+          container.find(".indicators .failed").show();
+
+          Utils.log("Error updating tags for interest " + interest_id);
+      });
+      return false;
+    });
   });
 
 </script>
