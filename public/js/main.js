@@ -22,22 +22,12 @@ $(function() {
     if (!query) return false;
 
     // if we are on the search page itself, this search box integrates with the filters
-    var subscription_type = $(".filters input.subscription_type").val();
-
-    // if we got the subscription type from the filters, pjax our way into the next screen
-    var pjax = false;
-    if (subscription_type) 
-      pjax = true;
-    else
-      subscription_type = "all";
-
-    var path = "/search/" + subscription_type + "/" + encodeURIComponent(query);
-
-    if (pjax)
-      Utils.pjax(path);
-    else
-      window.location = path;
-    
+    if (typeof(goToSearch) != "undefined") {
+      $(".filters input.query").val(query);
+      goToSearch();
+    } else {
+      window.location = "/search/all/" + encodeURIComponent(query);
+    }
     return false;
   });
 

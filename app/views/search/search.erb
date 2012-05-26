@@ -191,19 +191,20 @@
 
   function initializeControls() {
     // set up the filter events
-    $(".filters .filter_control").off("change").change(function() {
-      var type = $(this).parents("ul.filter_controls").data("subscription_type");
+    $(".filters .filter_control").off("change").change(goToSearch);
+  }
 
-      var query = encodeURIComponent(currentQuery());
-      var filters = currentFilters();
-      
-      // serialize the filters and preserve the brackets
-      var filterString = $.param(filters).replace(/%5B/g, "[").replace(/%5D/g, "]");
-      var url = "/search/" + type + "/" + query;
-      if (filterString) url += "?" + filterString;
+  function goToSearch() {
+    var type = currentSubscriptionType();
+    var query = encodeURIComponent(currentQuery());
+    var filters = currentFilters();
+    
+    // serialize the filters and preserve the brackets
+    var filterString = $.param(filters).replace(/%5B/g, "[").replace(/%5D/g, "]");
+    var url = "/search/" + type + "/" + query;
+    if (filterString) url += "?" + filterString;
 
-      Utils.pjax(url, "#center");
-    });
+    Utils.pjax(url, "#center");
   }
 
   function initializeSubscriptions() {
