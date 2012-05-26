@@ -8,6 +8,11 @@ FactoryGirl.define do
     password_confirmation "test"
   end
 
+  factory :tag do
+    user
+    sequence(:name) {|n| "name#{n}"}
+  end
+
   factory :interest do
     user
     tags []

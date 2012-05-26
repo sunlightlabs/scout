@@ -144,23 +144,23 @@ get '/account/subscriptions' do
   }
 end
 
-post '/account/public_tags' do
+put '/account/tag/:name' do
   requires_login
 
-  tag = params[:tag].strip
-  current_user.public_tags = (current_user.public_tags + [tag]).uniq
-  current_user.save!
-  halt 200
+  name = params[:name].strip.downcase
+  unless tag = current_user.tags.where(:name => name).first
+    halt 404 and return
+  end
+
+  tag.attributes = params[:tag]
+
+  if tag.save
+    halt 200
+  else
+    halt 500
+  end
 end
 
-delete '/account/public_tags' do
-  requires_login
-
-  tag = params[:tag].strip
-  current_user.public_tags = current_user.public_tags.reject {|t| t == tag}
-  current_user.save!
-  halt 200
-end
 
 get '/account/tag' do
   erb :"account/tag"

@@ -39,6 +39,7 @@ class Interest
   validates_presence_of :user_id
   validates_presence_of :in
   
+  
   def item?
     interest_type == "item"
   end
@@ -59,7 +60,7 @@ class Interest
 
   def new_tags=(string)
     self.tags = string.split(/\s*,\s*/).map do |tag|
-      tag.gsub(/[^\w\d\s]/, '').gsub(/\s{2,}/, ' ')
+      Tag.normalize tag
     end.select(&:present?).uniq
   end
 

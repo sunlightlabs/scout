@@ -23,11 +23,18 @@ put '/interest/:id' do
     interest.notifications = params[:interest]['notifications']
   end
 
+  tags = []
   if params[:interest]['tags']
     interest.new_tags = params[:interest]['tags']
+    tags = interest.tags.map do |name| 
+      current_user.tags.find_or_initialize_by :name => name
+    end
   end
 
   if interest.save
+    # should be guaranteed to be safe
+    tags.each {|tag| tag.save! if tag.new_record?}
+
     pane = partial "account/tags", :engine => :erb, :locals => {:tags => current_user.interests.distinct(:tags)}
     json 200, {
       :tags => interest.tags,

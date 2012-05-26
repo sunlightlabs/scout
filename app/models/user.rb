@@ -22,9 +22,6 @@ class User
   # defaults to true (opt-out)
   field :announcements, :type => Boolean, :default => true
   field :sunlight_announcements, :type => Boolean, :default => false
-  
-  # tags the user has marked as safe for public viewing
-  field :public_tags, :type => Array, :default => []
 
   # used for sharing things
   field :username
@@ -32,9 +29,10 @@ class User
 
   validates_uniqueness_of :username, :allow_blank => true, :message => "has already been taken."
 
-  has_many :subscriptions, :dependent => :destroy
   has_many :interests, :dependent => :destroy
+  has_many :subscriptions # interests will destroy their own subscriptions
   has_many :deliveries, :dependent => :destroy
+  has_many :tags, :dependent => :destroy
 
 
   before_validation :slugify_username
