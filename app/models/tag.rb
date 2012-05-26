@@ -11,7 +11,7 @@ class Tag
   validates_uniqueness_of :name, :scope => :user_id
   
   scope :public, where(:public => true)
-
+  default_scope desc(:created_at)
 
   # not a formal relationship, depends on interests keeping their own tag array
   def interests

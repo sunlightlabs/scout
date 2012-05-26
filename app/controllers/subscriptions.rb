@@ -35,9 +35,9 @@ put '/interest/:id' do
     # should be guaranteed to be safe
     tags.each {|tag| tag.save! if tag.new_record?}
 
-    pane = partial "account/tags", :engine => :erb, :locals => {:tags => current_user.interests.distinct(:tags)}
+    pane = partial "account/tags", :engine => :erb, :locals => {:tags => current_user.tags}
     json 200, {
-      :tags => interest.tags,
+      :interest_tags => interest.tags,
       :notifications => interest.notifications,
       :tags_pane => pane
     }

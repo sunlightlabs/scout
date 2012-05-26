@@ -1,4 +1,4 @@
-<h4>Topics</h4>
+<h4>Tags</h4>
 
 <% if tags.any? %>
   <small>
@@ -8,7 +8,7 @@
   <ul class="tag_list">
     <% tags.each do |tag| %>
       <li>
-        <a href="<%= tag_path current_user, tag %>" class="name"><%= h tag %></a>
+        <a href="<%= tag_path current_user, tag %>" class="name"><%= h tag.name %></a>
       </li>
     <% end %>
   </ul>

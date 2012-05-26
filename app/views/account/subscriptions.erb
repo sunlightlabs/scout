@@ -18,9 +18,9 @@
   </div>
 
   <!-- also filled in dynamically when tags are added/removed -->
-  <!-- <div class="module tags">
+  <div class="module tags">
     <%= partial "account/tags", :engine => :erb, :locals => {:tags => tags} %>
-  </div> -->
+  </div>
 
   <div class="module rss">
     <a href="/import/feed">Import an RSS feed</a> from anywhere on the Internet.
@@ -152,7 +152,7 @@
     $.post("/interest/" + interest_id, $.extend(attrs, {_method: "put"}), function(data) {
         container.find(".notifications .indicators span").hide();
         container.find(".notifications .indicators .okay").show();
-        Utils.log("Updated interest " + interest_id);
+        Utils.log("Updated interest " + interest_id + " with interval " + data.notifications);
     }).error(function() {
         container.find(".notifications .indicators span").hide();
         container.find(".notifications .indicators .failed").show();
@@ -171,7 +171,7 @@
     var tags = $(this).find("input.tags").val();
 
     $.post("/interest/" + interest_id, {_method: "put", interest: {tags: tags}}, function(data) {
-        Utils.log("Interest " + interest_id + " updated with tags (" + data.tags.join(", ") + ")");
+        Utils.log("Interest " + interest_id + " updated with tags (" + data.interest_tags.join(", ") + ")");
         $(".module.tags").html(data.tags_pane);
     }).error(function(xhr) {
         Utils.log("Error updating tags for interest " + interest_id);

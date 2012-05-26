@@ -96,12 +96,15 @@
 
     </div>
     
-    <!-- <div class="tags">
+    <div class="tags">
       <form>
         <label>Tags</label>
-        <input class="tags" type="text" name="interest[tags]" placeholder="" value="<%= interest.tags.join(", ") %>"/>
+        <input class="tags" type="text" name="interest[tags]" 
+          placeholder="comma separated"
+          value="<%= interest.tags.join(", ") %>"
+          />
       </form>
-    </div> -->
+    </div>
 
   </div>
   
