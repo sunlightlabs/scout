@@ -1299,9 +1299,17 @@ h3.interestHeader, .add.rss{
 
 .subscription .tags input{
     display: inline;
-    width: 538px;
+    width: 458px;
     margin-top: 5px;
 }
+
+.subscription .tags button {
+    display: inline;
+    width: 45px;
+    margin-top: 5px;
+    margin-left: 5px;
+}
+
 .subscription h3{
     width: 565px;
     float: left;
