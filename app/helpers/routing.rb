@@ -71,7 +71,11 @@ module Helpers
     end
 
     def tag_path(user, tag)
-      "/#{user.username || user.id.to_s}/#{URI.encode tag.name}"
+      "/#{user.username || user.id.to_s}/#{Tag.slugify tag.name}"
+    end
+
+    def tag_feed_path(user, tag, format)
+      "/account/#{user.id}/tags/#{Tag.slugify tag.name}.#{format}"
     end
 
     # only needed in RSS feeds, and external feeds are the only time we override the guid

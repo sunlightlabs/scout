@@ -36,7 +36,10 @@ configure(:development) do |config|
   config.also_reload "./deliveries/*.rb"
 end
 
-Dir.glob('app/controllers/*.rb').each {|filename| load filename}
+# 'user' must go last, it has the wildcard routes
+[:account, :api_keys, :feeds, :import, :items, :search, :subscriptions, :user].each do |c|
+  require "./app/controllers/#{c}"
+end
 
 
 before do

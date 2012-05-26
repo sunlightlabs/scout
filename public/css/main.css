@@ -1231,8 +1231,11 @@ h3.interestHeader, .add.rss{
     margin-right: 6px;
     float: left;
 }
-.sidebar .rss h4, .sidebar .tags h4{
+.sidebar .rss h4 {
     margin-bottom: 0;
+}
+.sidebar .tags h4 {
+    margin-bottom: 10px;
 }
 .sidebar .tags small{
     border-bottom: 1px dotted #E5E6E3;

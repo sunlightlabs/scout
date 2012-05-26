@@ -33,7 +33,7 @@ end
 get "/account/:id/tags/:tag.:format" do
   feed_only
 
-  unless (user = User.find(params[:id])) and user.public_tags.include?(params[:tag])
+  unless (user = User.find(params[:id])) and (tag = user.tags.where(:name => Tag.deslugify(params[:tag])))
     halt 404 and return
   end
 

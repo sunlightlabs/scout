@@ -22,15 +22,15 @@ class Tag
     !public?
   end
 
-  def self.normalize(tag)
-    tag.gsub(/[^\w\d\s]/, '').gsub(/\s{2,}/, ' ').downcase
+  def self.normalize(name)
+    name.gsub(/[^\w\d\s]/, '').gsub(/\s{2,}/, ' ').downcase
   end
 
-  def self.slugify(tag)
-    tag.tr ' ', '-'
+  def self.slugify(name)
+    name.strip.tr ' ', '-'
   end
 
-  def self.deslugify(tag)
-    tag.tr '-', ' '
+  def self.deslugify(name)
+    name.strip.tr '-', ' '
   end
 end
