@@ -1,7 +1,7 @@
 
 # controller must be loaded last, because it's got the wildcard routes
 
-get "/:user_id/:tag" do
+get "/user/:user_id/:tag" do
   unless user = load_user
     halt 404 and return
   end

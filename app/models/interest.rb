@@ -58,8 +58,8 @@ class Interest
     ]
   end
 
-  def new_tags=(string)
-    self.tags = string.split(/\s*,\s*/).map do |tag|
+  def new_tags=(names)
+    self.tags = names.split(/\s*,\s*/).map do |tag|
       Tag.normalize tag
     end.select(&:present?).uniq
   end

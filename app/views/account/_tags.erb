@@ -1,17 +1,29 @@
 <h4>Tags</h4>
 
 <% if tags.any? %>
-  <ul class="tag_list">
-    <% tags.each do |tag| %>
-      <li>
-        <a href="<%= tag_path current_user, tag %>" class="name"><%= h tag.name %></a>
-        <a class="rss feed" href="<%= tag_feed_path current_user, tag, "rss" %>">RSS</a>
-        <% if show_data? %>
-          <a class="json feed" href="<%= tag_feed_path current_user, tag, "json" %>?apikey=<%= api_key %>">JSON</a>
-        <% end %>
-      </li>
-    <% end %>
-  </ul>
+  <form action="/account/tags" method="post" class="delete_tags">
+    <input type="hidden" name="_method" value="delete" />
+
+    <ul class="tag_list">
+      <% tags.each do |tag| %>
+        <li>
+          <input type="checkbox" class="tag_delete" name="names[]"
+            value="<%= Tag.slugify h(tag.name) %>"
+            />
+          <a href="<%= tag_path current_user, tag %>" class="name"><%= h tag.name %></a>
+          <a class="rss feed" href="<%= tag_feed_path current_user, tag, "rss" %>">RSS</a>
+          <% if show_data? %>
+            <a class="json feed" href="<%= tag_feed_path current_user, tag, "json" %>?apikey=<%= api_key %>">JSON</a>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+
+    <button type="submit" class="smallButton delete">
+      Remove Selected
+    </button>
+    <div class="clear"></div>
+  </form>
 <% else %>
   <p>
     Add tags to your alerts to organize and share them.

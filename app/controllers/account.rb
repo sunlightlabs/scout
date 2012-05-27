@@ -161,9 +161,18 @@ put '/account/tag/:name' do
   end
 end
 
+delete "/account/tags" do
+  requires_login
 
-get '/account/tag' do
-  erb :"account/tag"
+  names = params[:names].map {|name| Tag.deslugify name}
+
+  names.each do |name|
+    if tag = current_user.tags.where(:name => name).first
+      tag.destroy
+    end
+  end
+
+  redirect "/account/subscriptions"
 end
 
 get '/account/settings' do

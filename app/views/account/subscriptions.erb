@@ -166,7 +166,7 @@
       return false;
     });
 
-    $("div.tags form").submit(function() {
+    $(".subscription .tags form").submit(function() {
       var container = $(this).parents(".subscription");
       var interest_id = container.data("interest_id");
       var tags = $(this).find("input.tags").val();

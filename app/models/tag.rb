@@ -18,6 +18,13 @@ class Tag
     user.interests.where :tags => name
   end
 
+  after_destroy :remove_from_interests
+  def remove_from_interests
+    interests.each do |interest|
+      interest.pull :tags, name
+    end
+  end
+
   def private?
     !public?
   end

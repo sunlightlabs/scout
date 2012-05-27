@@ -204,7 +204,8 @@ nav li{
     padding: 0 30px 0 0;
     display: block;
 }
-form{
+
+form label {
     font-weight: bold;
 }
 
@@ -1577,7 +1578,8 @@ button.smallButton {
     padding-right: 10px;
 }
 .settings.contentArea .module.notifications legend{
-    width: 100%;
+    width: 100%; 
+    font-weight: bold;
 }
 .settings.contentArea .module.notifications form, .settings.contentArea .module.allUserSettings form{
     margin-bottom: 33px;
@@ -1687,6 +1689,12 @@ button.smallButton {
     padding: 0;
 }
 
+
+/*-- Tag sidebar pane --*/
+
+.module.tags button.delete {
+    float: left; 
+}
 
 
 /*-- Tag Grouping Topic Styling --*/
