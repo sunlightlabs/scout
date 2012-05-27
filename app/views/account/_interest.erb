@@ -1,24 +1,28 @@
+<% edit = defined?(edit) ? edit : false %>
+
 <div class="subscription"
   data-interest_id="<%= interest.id %>"
   >
   
-  <div class="edit">
-    <div class="clear"></div>
-
-    <div class="removeSubscription">
-      <input id="remove" type="checkbox" name="remove" class="remove" />
-      <label for="remove">Remove</label>
-      <button class="remove smallButton">Remove</button>
-
+  <% if edit %>
+    <div class="edit">
       <div class="clear"></div>
-      
-      <div class="indicators">
-        <span class="spinning">spinning</span>
-        <span class="okay">okay</span>
-        <span class="failed">not okay</span>
+
+      <div class="removeSubscription">
+        <input id="remove" type="checkbox" name="remove" class="remove" />
+        <label for="remove">Remove</label>
+        <button class="remove smallButton">Remove</button>
+
+        <div class="clear"></div>
+        
+        <div class="indicators">
+          <span class="spinning">spinning</span>
+          <span class="okay">okay</span>
+          <span class="failed">not okay</span>
+        </div>
       </div>
     </div>
-  </div>
+  <% end %>
 
   <div class="details">
     <h4>
@@ -68,46 +72,48 @@
       <a class="json feed" href="/interest/<%= interest.id %>.json?apikey=<%= api_key %>">JSON</a>
     <% end %>
     
-    <div class="notifications">
-      <small>
-        <%= notification_name(interest.notifications || current_user.notifications) %>
-        <a href="#" class="open_notifications">change</a>
-      </small>
-      
-      <form>
-        <ul>
-          <% types = ["email_immediate", "email_daily", "sms", "none"] %>
-          <% allowable = current_user.allowable_notifications %>
-          <% preference = interest.notifications || current_user.notifications %>
-          <% default = types.delete current_user.notifications %>
+    <% if edit %>
+      <div class="notifications">
+        <small>
+          <%= notification_name(interest.notifications || current_user.notifications) %>
+          <a href="#" class="open_notifications">change</a>
+        </small>
+        
+        <form>
+          <ul>
+            <% types = ["email_immediate", "email_daily", "sms", "none"] %>
+            <% allowable = current_user.allowable_notifications %>
+            <% preference = interest.notifications || current_user.notifications %>
+            <% default = types.delete current_user.notifications %>
 
-          <li>
-            <%= notification_radio_for default, preference == default, allowable.include?(default) %>
-          </li>
-
-          <% types.each do |type| %>
             <li>
-              <%= notification_radio_for type, preference == type, allowable.include?(type) %>
+              <%= notification_radio_for default, preference == default, allowable.include?(default) %>
             </li>
-          <% end %>
 
-        </ul>
-      </form>
+            <% types.each do |type| %>
+              <li>
+                <%= notification_radio_for type, preference == type, allowable.include?(type) %>
+              </li>
+            <% end %>
 
-    </div>
-    
-    <div class="tags">
-      <form>
-        <label>Tags</label>
-        <input class="tags" type="text" name="interest[tags]" 
-          placeholder="comma separated"
-          value="<%= interest.tags.join(", ") %>"
-          />
-        <button type="submit" class="smallButton tagsOK">
-          OK
-        </button>
-      </form>
-    </div>
+          </ul>
+        </form>
+
+      </div>
+      
+      <div class="tags">
+        <form>
+          <label>Tags</label>
+          <input class="tags" type="text" name="interest[tags]" 
+            placeholder="comma separated"
+            value="<%= interest.tags.join(", ") %>"
+            />
+          <button type="submit" class="smallButton tagsOK" style="display: none">
+            OK
+          </button>
+        </form>
+      </div>
+    <% end %>
 
   </div>
   

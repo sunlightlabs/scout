@@ -1,4 +1,5 @@
 get "/user/:user_id/:tag" do
+
   unless user = load_user
     halt 404 and return
   end
@@ -7,8 +8,14 @@ get "/user/:user_id/:tag" do
     halt 404 and return
   end
 
+  if tag.private? and (user != current_user)
+    halt 404 and return
+  end
+
   erb :"account/tag", :locals => {
     :tag => tag,
-    :user => user
+    :user => user,
+    :interests => tag.interests,
+    :edit => (user == current_user)
   }
 end

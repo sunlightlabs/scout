@@ -119,6 +119,18 @@ class TagsTest < Test::Unit::TestCase
     assert_response 404
   end
 
+  def test_update_tag_description_ones_own
+    # todo
+  end
+
+  def test_update_tag_description_someone_elses
+    # todo
+  end
+
+  def test_update_tag_description_not_logged_in
+    # todo
+  end
+
   def test_delete_tags_en_masse
     name1 = "one tag"
     name2 = "two"
@@ -236,6 +248,76 @@ class TagsTest < Test::Unit::TestCase
     assert_equal [], interest2.reload.tags
     assert_equal [name4], interest3.reload.tags
     assert_equal [name1, name3, name5], interest4.reload.tags
+  end
+
+  def test_public_tags_ones_own
+    username = "valid_name"
+    user = create :user, :username => username
+    tag = create :tag, :user => user, :public => true
+
+    assert tag.public?
+
+    get "/user/#{user.username}/#{Tag.slugify tag.name}", {}, login(user)
+    assert_response 200
+  end
+
+  def test_public_tag_someone_elses
+    username = "valid_name"
+    user = create :user, :username => username
+    tag = create :tag, :user => user, :public => true
+
+    user2 = create :user, :username => username.succ
+
+    assert tag.public?
+
+    get "/user/#{user.username}/#{Tag.slugify tag.name}", {}, login(user2)
+    assert_response 200
+  end
+
+  def test_public_tag_not_logged_in
+    username = "valid_name"
+    user = create :user, :username => username
+    tag = create :tag, :user => user, :public => true
+
+    assert tag.public?
+
+    get "/user/#{user.username}/#{Tag.slugify tag.name}", {}
+    assert_response 200
+  end
+
+  def test_private_tag_ones_own
+    username = "valid_name"
+    user = create :user, :username => username
+    tag = create :tag, :user => user
+
+    assert tag.private?
+
+    get "/user/#{user.username}/#{Tag.slugify tag.name}", {}, login(user)
+    assert_response 200
+  end
+
+  def test_private_tag_someone_elses_not_found
+    username = "valid_name"
+    user = create :user, :username => username
+    tag = create :tag, :user => user
+
+    user2 = create :user, :username => username.succ
+
+    assert tag.private?
+
+    get "/user/#{user.username}/#{Tag.slugify tag.name}", {}, login(user2)
+    assert_response 404
+  end
+
+  def test_private_tag_not_logged_in_not_found
+    username = "valid_name"
+    user = create :user, :username => username
+    tag = create :tag, :user => user
+
+    assert tag.private?
+
+    get "/user/#{user.username}/#{Tag.slugify tag.name}", {}
+    assert_response 404
   end
 
 

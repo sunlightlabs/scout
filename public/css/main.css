@@ -1224,6 +1224,11 @@ h3.interestHeader, .add.rss{
 .add.rss{
     padding-bottom: 16px;
 }
+
+.add.rss button.smallButton {
+    float: right;
+}
+
 .add.rss label{
     margin-bottom: 4px;
     display: block;
@@ -1304,7 +1309,7 @@ h3.interestHeader, .add.rss{
     margin-top: 5px;
 }
 
-.subscription .tags button {
+.subscription .tags button.smallButton {
     display: inline;
     width: 45px;
     margin-top: 5px;
@@ -1367,7 +1372,6 @@ h3.interestHeader, .add.rss{
     display: none;
 }
 button.smallButton {
-    float: right;
     height: 36px;
     font-size: 12px;
     height: 29px;
@@ -1739,7 +1743,7 @@ button.smallButton {
     font-weight: bold;
 }
 .tag textarea {
-    display: block;
+    xdisplay: block;
     background-color: white;
     border: 0;
     border-top: 1px solid #D5D5D2;
@@ -1760,19 +1764,19 @@ button.smallButton {
 }
 .tagHeader .feed, .tagHeader h2{
     float: left;
-    display: block;
+    xdisplay: block;
     width: none;
 }
 .tag .feed{
     margin: 10px 0 0 10px;
     
 }
-.tag .tagHeader button{
+.tag .tagHeader button.tag {
     float: right;
-    display: none;
+    xdisplay: none;
 }
 .tag p.description{
-    display: none;
+    xdisplay: none;
     font-style: italic;
     margin-top: 16px;
 }
@@ -1786,12 +1790,13 @@ button.smallButton {
 /*-- PUBLIC Tag Grouping Topic Styling --*/
 
 .tag.public .tagHeader button, .tag.public p.description{
-    display: block;
+    xdisplay: block;
 }
 
 .tag.public textarea.description, .tag.public .edit, .tag.public .removeHeader, .tag.public .tags{
-    display: none;
+    xdisplay: none;
 }
+
 .tag.public .subscription .details{
     border-left: 0;
     padding-left: 0;
