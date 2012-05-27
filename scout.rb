@@ -36,10 +36,7 @@ configure(:development) do |config|
   config.also_reload "./deliveries/*.rb"
 end
 
-# 'user' must go last, it has the wildcard routes
-[:account, :api_keys, :feeds, :import, :items, :search, :subscriptions, :user].each do |c|
-  require "./app/controllers/#{c}"
-end
+Dir.glob("./app/controllers/*.rb").each {|filename| load filename}
 
 
 before do
@@ -80,6 +77,17 @@ helpers do
     headers["Content-Type"] = "application/json"
     status code
     object.to_json
+  end
+
+  def load_user
+    user_id = params[:user_id].strip
+    if user = User.where(:username => user_id).first
+      user
+    elsif BSON::ObjectId.legal?(user_id)
+      User.find user_id
+    else
+      nil
+    end
   end
 
 end

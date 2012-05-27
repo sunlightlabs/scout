@@ -30,6 +30,21 @@ def subscription_map
   @subscription_map ||= YAML.load_file File.join(File.dirname(__FILE__), "../subscriptions/subscriptions.yml")
 end
 
+# words not allowed to be usernames, very inclusive to preserve flexibility in routing
+def reserved_names
+  names = %w{user account subscription interest item fetch
+    ajax pjax tag seen delivery receipt report email route
+    sms admin login logout session signup signout request response
+    server client rss feed atom json xml search api api_key import 
+    export download upload favicon index about privacy_policy privacy 
+    terms legal contact username slug name
+    
+    bill state_bill regulation speech document hearing update floor_update
+    rule uscode cfr 
+  }
+  names + names.map(&:pluralize)
+end
+
 configure do
   Mongoid.load! "config/mongoid.yml"
   

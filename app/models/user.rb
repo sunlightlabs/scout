@@ -28,6 +28,7 @@ class User
   field :display_name
 
   validates_uniqueness_of :username, :allow_blank => true, :message => "has already been taken."
+  validates_exclusion_of :username, :in => reserved_names, :message => "cannot be used."
 
   has_many :interests, :dependent => :destroy
   has_many :subscriptions # interests will destroy their own subscriptions

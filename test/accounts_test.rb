@@ -281,7 +281,7 @@ class AccountsTest < Test::Unit::TestCase
     assert user.display_name.blank?
     assert user.username.blank?
 
-    username = "username"
+    username = "valid_username"
     display_name = "User Name"
 
     put '/account/settings', {'user' => {'username' => username, 'display_name' => display_name}}, login(user)
@@ -293,7 +293,7 @@ class AccountsTest < Test::Unit::TestCase
   end
 
   def test_update_name_details_invalid
-    username = "username"
+    username = "valid_username"
     display_name = "User Name"
 
     other_user = create :user, :username => username
@@ -301,6 +301,22 @@ class AccountsTest < Test::Unit::TestCase
     user = create :user
     assert user.display_name.blank?
     assert user.username.blank?
+
+    put '/account/settings', {'user' => {'username' => username, 'display_name' => display_name}}, login(user)
+    assert_response 200
+
+    user.reload
+    assert user.display_name.blank?
+    assert user.username.blank?
+  end
+
+  def test_update_name_reserved_name
+    user = create :user
+    assert user.display_name.blank?
+    assert user.username.blank?
+
+    username = reserved_names.first
+    display_name = "User Name"
 
     put '/account/settings', {'user' => {'username' => username, 'display_name' => display_name}}, login(user)
     assert_response 200
@@ -323,7 +339,7 @@ class AccountsTest < Test::Unit::TestCase
     assert user.username.blank?
 
     old_password_hash = user.password_hash
-    username = "username"
+    username = "valid_username"
     display_name = "User Name"
 
     put '/account/settings', {
@@ -356,7 +372,7 @@ class AccountsTest < Test::Unit::TestCase
     assert user.should_change_password
 
     old_password_hash = user.password_hash
-    username = "username"
+    username = "valid_username"
     display_name = "User Name"
 
     put '/account/settings', {

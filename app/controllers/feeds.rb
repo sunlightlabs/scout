@@ -30,10 +30,10 @@ get "/interest/:interest_id.:format" do
   end
 end
 
-get "/account/:id/tags/:tag.:format" do
+get "/user/:user_id/:tag.:format" do
   feed_only
 
-  unless (user = User.find(params[:id])) and (tag = user.tags.where(:name => Tag.deslugify(params[:tag])))
+  unless (user = load_user) and (tag = user.tags.where(:name => Tag.deslugify(params[:tag])))
     halt 404 and return
   end
 
