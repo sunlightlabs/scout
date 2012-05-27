@@ -3,9 +3,11 @@ set :environment, (ENV['target'] || 'staging')
 if environment == 'production'
   set :user, 'scout'
   set :domain, 'scout.sunlightfoundation.com'
+  set :branch, 'master'
 else
   set :user, 'alarms'
   set :domain, 'ec2-50-16-84-118.compute-1.amazonaws.com'
+  set :branch, 'sharing'
 end
 
 
@@ -23,7 +25,6 @@ set :deploy_to, "/projects/#{user}/"
 
 set :scm, :git
 set :repository, "git@github.com:sunlightlabs/scout.git"
-set :branch, 'master'
 
 set :deploy_via, :remote_cache
 set :runner, user
