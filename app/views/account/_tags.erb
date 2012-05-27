@@ -1,4 +1,9 @@
-<h4>Tags</h4>
+<h4>
+  Tags
+  <% if tags.any? %>
+    <a class="edit" href="#">edit</a>
+  <% end %>
+</h4>
 
 <% if tags.any? %>
   <form action="/account/tags" method="post" class="delete_tags">

@@ -1692,8 +1692,34 @@ button.smallButton {
 
 /*-- Tag sidebar pane --*/
 
+.module.tags h4 {
+    margin-bottom: 20px;
+}
+
+.module.tags h4 a {
+    font-family: arial, 'helvetica Neue', sans-serif;
+    text-transform: none;
+    font-size: 60%;
+    font-style: italic;
+    float: right;
+    margin-top: 5px;
+}
+
+.module.tags ul {
+    clear: both;
+}
+
+.module.tags ul li {
+}
+
 .module.tags button.delete {
     float: left; 
+    display: none;
+}
+
+.module.tags input[type=checkbox] {
+    display: none;
+    margin-top: 3px;
 }
 
 
