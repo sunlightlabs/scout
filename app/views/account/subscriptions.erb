@@ -189,7 +189,7 @@
       return false;
     });
 
-    $(".module.tags h4 a").click(function() {
+    $(".module.tags").on("click", "h4 a", function() {
       $(".module.tags button, .module.tags input[type=checkbox]").toggle();
       return false;
     });
