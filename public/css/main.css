@@ -1719,7 +1719,8 @@ div.indicators span {
     clear: both;
 }
 
-.module.tags ul li {
+.module.tags ul li.public a {
+    
 }
 
 .module.tags button.delete {
