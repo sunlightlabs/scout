@@ -56,7 +56,7 @@ module Helpers
       if item.item?
         "/item/#{item.item_type}/#{item.interest_in}##{item.item_id}"
       elsif item.feed?
-        item.data['link']
+        item.data['url']
       elsif item.search?
         "/item/#{item.item_type}/#{item.item_id}"
       end
@@ -64,7 +64,7 @@ module Helpers
 
     def item_url(item)
       if item.subscription_type == "external_feed"
-        item.data['link']
+        item.data['url']
       else
         "http://#{config[:hostname]}#{item_path item}"
       end
