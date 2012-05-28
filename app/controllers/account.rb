@@ -141,7 +141,7 @@ put '/account/tag/:name/description' do
   requires_login
 
   name = params[:name].strip.downcase
-  unless tag = current_user.tags.where(:name => name).first
+  unless tag = current_user.tags.where(:name => Tag.deslugify(name)).first
     halt 404 and return
   end
 
@@ -164,7 +164,7 @@ put '/account/tag/:name/public' do
   requires_login
 
   name = params[:name].strip.downcase
-  unless tag = current_user.tags.where(:name => name).first
+  unless tag = current_user.tags.where(:name => Tag.deslugify(name)).first
     halt 404 and return
   end
 
