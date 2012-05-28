@@ -24,7 +24,7 @@
 						This tag is <strong>public</strong>. Anybody who has the URL can see it.
 					</p>
 
-					<button type="submit" class="tag_public">
+					<button type="submit" class="smallButton tag_public">
 						Make Tag Private
 					</button>
 				</form>
@@ -42,7 +42,7 @@
 					<p>
 						You can make this tag public, so other people can see these subscriptions and follow them.
 					</p>
-					<button type="submit" class="tag_public">
+					<button type="submit" class="smallButton tag_public">
 						Make Tag Public
 					</button>
 				</form>
@@ -76,17 +76,15 @@
 
 		<div class="clear"></div>
 		
-		<% if tag.public? %>
-			<% if name = (user.display_name || user.username) %>
-				<span class="username author">
-					<%= h name %>
-				</span>
-			<% end %>
-
-			<div class="description_container">
-				<%= partial "account/description", :engine => "erb", :locals => {:user => user, :tag => tag} %>
-			</div>
+		<% if name = (user.display_name || user.username) %>
+			<span class="username author">
+				<%= h name %>
+			</span>
 		<% end %>
+
+		<div class="description_container">
+			<%= partial "account/description", :engine => "erb", :locals => {:user => user, :tag => tag} %>
+		</div>
 
 	</div>
 

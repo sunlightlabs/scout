@@ -5,15 +5,17 @@
   <% end %>
 
   <% if user == current_user %>
-    <% if tag.description.present? %>
-      <a href="#" class="description edit">
-        edit description
-      </a>
-    <% else %>
-      <a href="#" class="description new">
-        add description
-      </a>
-    <% end %>
+    <div class="edit_link">
+      <% if tag.description.present? %>
+        <a href="#" class="description edit">
+          edit description
+        </a>
+      <% else %>
+        <a href="#" class="description new">
+          add description
+        </a>
+      <% end %>
+    </div>
   <% end %>
 </div>
 

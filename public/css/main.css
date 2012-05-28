@@ -1777,10 +1777,12 @@ div.indicators span {
     display: inline;
 }
 
+.tag div.edit_link {
+    margin-top: 5px;
+}
+
 .tag a.description {
     font-style: italic;
-    margin-top: 5px;
-    display: block;
 }
 
 .tag a.description.cancel {
