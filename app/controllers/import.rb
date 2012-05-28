@@ -10,11 +10,15 @@ end
 get "/import/feed/preview" do
   url = params[:url] ? params[:url].strip : ""
 
-  unless feed_details = Subscriptions::Adapters::ExternalFeed.validate_feed(url)
+  unless feed = Subscriptions::Adapters::ExternalFeed.url_to_response(url)
     halt 500 and return
   end
 
-  subscription = feed_subscription_from url
+  feed_details = Subscriptions::Adapters::ExternalFeed.feed_details feed
+
+  actual_url = feed_details['feed_url'] || url
+
+  subscription = feed_subscription_from actual_url
   unless results = subscription.search
     halt 500 and return
   end
@@ -49,11 +53,25 @@ post "/import/feed/create" do
     halt 500 and return
   end
 
-  subscription = feed_subscription_from url
+  # what the user gave us may not be the feed's preferred canonical URL
+  # we'll store and use that canonical URL
+  actual_url = feed_details['feed_url'] || url
+
+  # create subscription by the canonical URL
+  subscription = feed_subscription_from actual_url
+
+  # details used to render and link to feed
   subscription.data['title'] = title
   subscription.data['description'] = description
+  subscription.data['site_url'] = feed_details['site_url']
+
+  # record what the user originally put in as a URL
+  subscription.data['original_url'] = url
+
+  # record what the feed originally listed as its title and description
   subscription.data['original_title'] = feed_details['title']
   subscription.data['original_description'] = feed_details['description']
+
 
   interest = current_user.interests.new(
     :in => url,

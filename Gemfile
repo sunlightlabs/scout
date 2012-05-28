@@ -37,6 +37,8 @@ group :test do
   gem 'factory_girl'
 end
 
+# most subscription parsing
 gem 'httparty', '0.8.3'
-gem 'nokogiri', '1.5.2'
-gem 'loofah', '1.2.1'
+
+# feed parsing
+gem 'feedzirra', '0.2.0.rc1'

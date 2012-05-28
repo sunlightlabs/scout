@@ -98,8 +98,11 @@ module Subscriptions
       if adapter.respond_to?(:url_to_response)
         begin
           response = adapter.url_to_response url
+        rescue Timeout::Error, Errno::ECONNREFUSED, Errno::ETIMEDOUT => ex
+          return nil
         rescue Exception => ex
-          Report.exception self, "Exception processing URL #{url}", ex, :subscription_type => subscription.subscription_type, :function => function, :interest_in => subscription.interest_in, :subscription_id => subscription.id
+          report = Report.exception self, "Exception processing URL #{url}", ex, :subscription_type => subscription.subscription_type, :function => function, :interest_in => subscription.interest_in, :subscription_id => subscription.id
+          puts report.to_s
           return nil
         end
       else

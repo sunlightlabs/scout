@@ -21,7 +21,7 @@ module Helpers
       if interest.item?
         "/item/#{interest.item_type}/#{interest.in}"
       elsif interest.feed?
-        interest.in # URL
+        interest.data['site_url'] || interest.data['url'] # URL
       elsif interest.search?
         search_interest_path interest
       end
