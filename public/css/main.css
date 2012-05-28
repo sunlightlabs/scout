@@ -1822,7 +1822,10 @@ div.indicators span {
     margin-bottom: 33px;
 }
 
-
+.tag p.empty {
+    margin: 10px 10px;
+    margin-bottom: 33px;
+}
 
 
 /*-- PUBLIC Tag Grouping Topic Styling --*/
