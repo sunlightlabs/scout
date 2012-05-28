@@ -1237,6 +1237,7 @@ h3.interestHeader, .add.rss{
     margin-right: 6px;
     float: left;
 }
+
 .sidebar .rss h4 {
     margin-bottom: 0;
 }
@@ -1453,8 +1454,13 @@ div.indicators span {
     width: 805px;
 }
 .import .add.rss ul{
-    margin-top: 16px;
-    margin-left: 16px;
+    margin-top: 6px;
+    font-size: 80%; 
+    font-style: italic;
+}
+.import .add.rss li {
+    padding: 3px 0;
+    
 }
 .import .hide_start {
     display: none;
