@@ -155,6 +155,6 @@ helpers do
   end
 
   def stripped_query
-    params[:query] ? URI.decode(params[:query].strip.gsub("\"", "")) : nil
+    params[:query] ? URI.decode(params[:query]).strip.gsub("\"", "") : nil
   end
 end
