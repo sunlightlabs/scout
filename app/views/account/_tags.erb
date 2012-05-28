@@ -15,11 +15,11 @@
           <input type="checkbox" class="tag_delete" name="names[]"
             value="<%= Tag.slugify h(tag.name) %>"
             />
-          <a href="<%= tag_path current_user, tag %>" 
+          <!-- <a href="<%= tag_path current_user, tag %>" 
             class="name"
-            >
+            > -->
             <%= h tag.name %>
-          </a>
+          <!-- </a> -->
           <a class="rss feed" href="<%= tag_feed_path current_user, tag, "rss" %>">RSS</a>
           <% if show_data? %>
             <a class="json feed" href="<%= tag_feed_path current_user, tag, "json" %>?apikey=<%= api_key %>">JSON</a>
