@@ -1802,6 +1802,12 @@ div.indicators span {
 .tag .details .feed{
     float: right;
 }
+
+.tag .details .json.feed {
+    margin-top: 13px;
+    margin-right: 0px;
+}
+
 .tagHeader .feed, .tagHeader h2{
     float: left;
     width: none;
