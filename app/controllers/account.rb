@@ -74,13 +74,6 @@ end
 
 ## Account management
 
-put '/account/password/change' do
-  requires_login
-
-  
-
-end
-
 get '/account/password/reset' do
   unless params[:reset_token] and user = User.where(:reset_token => params[:reset_token]).first
     halt 404 and return
@@ -144,7 +137,7 @@ get '/account/subscriptions' do
   }
 end
 
-put '/account/tag/:name' do
+put '/account/tag/:name/description' do
   requires_login
 
   name = params[:name].strip.downcase
@@ -152,13 +145,33 @@ put '/account/tag/:name' do
     halt 404 and return
   end
 
-  tag.attributes = params[:tag]
+  tag.description = params[:description]
 
   if tag.save
-    halt 200
+    description = partial "account/description", :engine => "erb", :locals => {
+      :user => current_user, :tag => tag
+    }
+
+    json 200, {
+      :description_pane => description
+    }
   else
     halt 500
   end
+end
+
+put '/account/tag/:name/public' do
+  requires_login
+
+  name = params[:name].strip.downcase
+  unless tag = current_user.tags.where(:name => name).first
+    halt 404 and return
+  end
+
+  tag.public = params[:public]
+  tag.save!
+
+  redirect tag_path(current_user, tag)
 end
 
 delete "/account/tags" do

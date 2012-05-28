@@ -68,6 +68,7 @@ class TagsTest < Test::Unit::TestCase
     assert_equal 3, user2.tags.count
   end
 
+
   def test_update_tag_public
     user = create :user
     name1 = "one"
@@ -79,29 +80,29 @@ class TagsTest < Test::Unit::TestCase
 
 
     # turn it on
-    put "/account/tag/#{name1}", {:tag => {"public" => true}}, login(user)
-    assert_response 200
+    put "/account/tag/#{name1}/public", {:public => true}, login(user)
+    assert_response 302
 
     assert tag1.reload.public?
 
 
     # turn it off
-    put "/account/tag/#{name1}", {:tag => {'public' => false}}, login(user)
-    assert_response 200
+    put "/account/tag/#{name1}/public", {:public => false}, login(user)
+    assert_response 302
 
     assert tag1.reload.private?
 
 
     # turn it off again
-    put "/account/tag/#{name1}", {:tag => {'public' => false}}, login(user)
-    assert_response 200
+    put "/account/tag/#{name1}/public", {:public => false}, login(user)
+    assert_response 302
 
     assert tag1.reload.private?    
 
 
     # turn on another one
-    put "/account/tag/#{name2}", {:tag => {'public' => true}}, login(user)
-    assert_response 200
+    put "/account/tag/#{name2}/public", {:public => true}, login(user)
+    assert_response 302
 
     assert tag1.reload.private?
     assert tag2.reload.public?
@@ -115,20 +116,63 @@ class TagsTest < Test::Unit::TestCase
 
     assert_equal 0, user.tags.where(:tag => name).count
 
-    put "/account/tag/#{name}", {:tag => {'public' => true}}, login(user)
+    put "/account/tag/#{name}/public", {:public => true}, login(user)
     assert_response 404
   end
 
+
   def test_update_tag_description_ones_own
-    # todo
+    user = create :user
+    tag = create :tag, :user => user, :description => nil
+
+    assert_nil tag.description
+
+    description = "new description"
+    description2 = "new new description"
+
+    
+    put "/account/tag/#{Tag.slugify tag.name}/description", {:description => description}, login(user)
+    assert_response 200
+
+    assert_not_nil json_response['description_pane'][description]
+    assert_equal description, tag.reload.description
+
+    put "/account/tag/#{Tag.slugify tag.name}/description", {:description => description2}, login(user)
+    assert_response 200
+
+    assert_not_nil json_response['description_pane'][description2]
+    assert_equal description2, tag.reload.description
   end
 
   def test_update_tag_description_someone_elses
-    # todo
+    user = create :user
+    tag = create :tag, :user => user, :description => nil
+
+    other_user = create :user
+
+    assert_nil tag.description
+
+    description = "new description"
+    
+    put "/account/tag/#{Tag.slugify tag.name}/description", {:description => description}, login(other_user)
+    assert_response 404
+
+    assert_nil tag.reload.description
   end
 
   def test_update_tag_description_not_logged_in
-    # todo
+    user = create :user
+    tag = create :tag, :user => user, :description => nil
+
+    assert_nil tag.description
+
+    description = "new description"
+    description2 = "new new description"
+
+    put "/account/tag/#{Tag.slugify tag.name}/description", {:description => description}, {}
+    assert_redirect '/'
+
+    assert_nil tag.reload.description
   end
 
   def test_delete_tags_en_masse

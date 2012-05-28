@@ -1316,6 +1316,10 @@ h3.interestHeader, .add.rss{
     margin-left: 10px;
 }
 
+.subscription .tags small.separate {
+    display: block; margin-top: 5px;
+}
+
 .subscription h3{
     width: 565px;
     float: left;
@@ -1400,26 +1404,28 @@ button.smallButton {
     top: 0;
     right: 10px;
 }
-.subscription div.indicators span.okay{
+div.indicators span.okay{
     width: 25px;
     height: 16px;
     background: url('/images/icon_check.png') top center no-repeat;
     margin-top: 4px;
 }
-.subscription div.indicators span.spinning{
+div.indicators span.spinning{
     width: 25px;
     height: 16px;
     background: url('/images/loader-32.gif') top center no-repeat;
     background-size: 16px 16px;
     margin-top: 4px;    
 }
-.subscription div.indicators span.failed{
+
+div.indicators span.failed{
     width: 16px;
     height: 16px;
     background: url('/images/icon_error.png') top center no-repeat;
     margin-top: 4px;
 }
-.subscription div.indicators span {
+
+div.indicators span {
     display: none;
     text-indent: -9999em;
     float: right;
@@ -1726,6 +1732,12 @@ button.smallButton {
     margin-top: 3px;
 }
 
+/*-- Tag landing page sidebar --*/
+
+.module.sharing small.username {
+    margin-top: 10px;
+}
+
 
 /*-- Tag Grouping Topic Styling --*/
 
@@ -1742,8 +1754,12 @@ button.smallButton {
 .tag .author{
     font-weight: bold;
 }
+
+.tag div.edit {
+    display: none;
+}
+
 .tag textarea {
-    xdisplay: block;
     background-color: white;
     border: 0;
     border-top: 1px solid #D5D5D2;
@@ -1751,11 +1767,32 @@ button.smallButton {
     padding: 8px 5px;
     color: #5C5B60;
     width: 100%;
+    height: 90px;
+    line-height: 17px;
+    margin-top: 10px;
+    margin-bottom: 5px;
 }
+
+.tag button.description {
+    display: inline;
+}
+
+.tag a.description {
+    font-style: italic;
+    margin-top: 5px;
+    display: block;
+}
+
+.tag a.description.cancel {
+    display: inline;
+    margin-left: 5px;
+}
+
 .tag .subscription .description{
     margin-top: 16px;
     width: none;
 }
+
 .tag .details{
     width: 572px;
 }
@@ -1764,7 +1801,6 @@ button.smallButton {
 }
 .tagHeader .feed, .tagHeader h2{
     float: left;
-    xdisplay: block;
     width: none;
 }
 .tag .feed{
@@ -1773,13 +1809,12 @@ button.smallButton {
 }
 .tag .tagHeader button.tag {
     float: right;
-    xdisplay: none;
 }
-.tag p.description{
-    xdisplay: none;
+.tag div.display p {
     font-style: italic;
-    margin-top: 16px;
+    margin-top: 5px;
 }
+
 .tag .interest{
     margin-bottom: 33px;
 }
@@ -1790,11 +1825,11 @@ button.smallButton {
 /*-- PUBLIC Tag Grouping Topic Styling --*/
 
 .tag.public .tagHeader button, .tag.public p.description{
-    xdisplay: block;
+    
 }
 
 .tag.public textarea.description, .tag.public .edit, .tag.public .removeHeader, .tag.public .tags{
-    xdisplay: none;
+    
 }
 
 .tag.public .subscription .details{

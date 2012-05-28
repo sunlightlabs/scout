@@ -1,3 +1,5 @@
+require 'rinku'
+
 # general display helpers
 module Helpers
   module General
@@ -150,6 +152,13 @@ module Helpers
     
     def zero_prefix(number)
       number.to_i < 10 ? "0#{number}" : number.to_s
+    end
+
+    def light_format(string)
+      return "" unless string.present?
+      string = strip_tags string
+      string = simple_format h(string)
+      Rinku.auto_link string, :all, "rel='nofollow'"
     end
     
   end

@@ -7,6 +7,7 @@ gem 'sinatra-contrib', '1.3.1'
 gem 'sinatra-flash', '0.3.0'
 
 gem 'padrino-helpers', '0.10.6'
+gem 'rinku', '1.5.1'
 
 gem "mongo", "1.6.2"
 gem "mongoid", '2.4.8'

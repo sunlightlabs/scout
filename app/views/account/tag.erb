@@ -1,16 +1,55 @@
 <% content_for :sidebar_right do %>
 
-	<div class="module tag">
-		<% if user == current_user %>
+	<% if !logged_in? %>
+	<!-- 	<div class="module tag">
+			<p>
+				<%= user.display_name || user.username || "This user" %> is using Scout, a notification platform for government action.
+			</p>
+
+			<p>
+
+			</p>
+		</div> -->
+	<% end %>
+
+	<% if user == current_user %>
+		<div class="module sharing">
 			<% if tag.public? %>
-				This tag is public.
+
+				<form action="/account/tag/<%= Tag.slugify h(tag.name) %>/public" method="post">
+					<input type="hidden" name="_method" value="put" />
+					<input type="hidden" name="public" value="false" />
+					
+					<p>
+						This tag is <strong>public</strong>. Anybody who has the URL can see it.
+					</p>
+
+					<button type="submit" class="tag_public">
+						Make Tag Private
+					</button>
+				</form>
+
+				<% if user.username.blank? %>
+					<small class="username">
+						<a href="/account/settings">Set a username</a> for a prettier URL.
+					</small>
+				<% end %>
+				
 			<% else %>
-				This is everything you've tagged with "<%= h tag.name %>".
+				<form action="/account/tag/<%= Tag.slugify h(tag.name) %>/public" method="post">
+					<input type="hidden" name="_method" value="put" />
+					<input type="hidden" name="public" value="true" />
+					<p>
+						You can make this tag public, so other people can see these subscriptions and follow them.
+					</p>
+					<button type="submit" class="tag_public">
+						Make Tag Public
+					</button>
+				</form>
 			<% end %>
-		<% else %>
-			You're looking at <%= user.display_name || user.username || "this user" %>'s subscriptions tagged "<%= h tag.name %>".
-		<% end %>
-	</div>
+
+		</div>
+	<% end %>
 
 <% end %>
 
@@ -25,13 +64,13 @@
 
 		<% if tag.public? %>
 			<% if user != current_user %>
-				<button class="follow tag">
+				<!-- <button class="follow tag">
 	  	    <span>Follow</span>
 		    </button>
 
 		    <button class="following tag">
 		      <span>Unfollow</span>
-		    </button>
+		    </button> -->
 			<% end %>
 		<% end %>
 
@@ -44,23 +83,12 @@
 				</span>
 			<% end %>
 
-			<% if user == current_user %>
-				<textarea class="description" 
-					placeholder="Describe the alerts you've collected together. (optional)"><%= h tag.description %></textarea>
-				<button class="smallButton description">
-					Update
-				</button>
-			<% elsif tag.description.present? %>
-				<p class="description">
-					<%= h tag.description %>
-				</p>
-			<% end %>	
+			<div class="description_container">
+				<%= partial "account/description", :engine => "erb", :locals => {:user => user, :tag => tag} %>
+			</div>
 		<% end %>
 
 	</div>
-
-
-
 
 
 	<% if interests.empty? %>
@@ -126,3 +154,36 @@
 	<% end %>
 
 </div>
+
+<script type="text/javascript">
+
+	$(function() {
+
+		$("div.tag").on("click", "a.description", function() {
+			$("div.display, div.edit").toggle();
+			return false;
+		});
+
+		$("div.tag").on("click", "button.description", function() {
+			var container = $(this).parents("div.edit");
+			var user = container.data("user");
+			var tag = container.data("tag");
+
+			var options = {
+				description: $.trim($("textarea.description").val()),
+				_method: "put"
+			};
+
+			$.post("/account/tag/<%= Tag.slugify h(tag.name) %>/description", options, function(data) {
+				Utils.log("Updated description for tag.");
+				$("div.description_container").html(data.description_pane);
+			}).error(function() {
+				// todo
+			});
+
+			return false;
+		});
+
+	});
+
+</script>
