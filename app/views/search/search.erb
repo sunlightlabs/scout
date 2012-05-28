@@ -210,7 +210,7 @@
   function initializeSubscriptions() {
     // set the given query and subscription type as current
     // the subscription type can be "all"
-    $(".filters input.query").val("<%= h query %>");
+    $(".filters input.query").val("<%= escape_javascript query %>");
     $(".filters input.subscription_type").val("<%= h interest.search_type %>");
 
     var subscriptionType = currentSubscriptionType();

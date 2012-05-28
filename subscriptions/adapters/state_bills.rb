@@ -15,7 +15,7 @@ module Subscriptions
         api_key = options[:api_key] || config[:subscriptions][:sunlight_api_key]
 
         endpoint = "http://openstates.org/api/v1"
-        query = URI.escape subscription.interest_in
+        query = URI.escape "\"#{subscription.interest_in}\""
         
         fields = %w{ id bill_id subjects state chamber created_at updated_at title sources versions session %2Bshort_title }
         
