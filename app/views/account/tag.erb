@@ -12,10 +12,10 @@
 		</div> -->
 	<% end %>
 
-	<% if user == current_user %>
+	<% if false and (user == current_user) %>
 		<div class="module sharing">
+			
 			<% if tag.public? %>
-
 				<form action="/account/tag/<%= Tag.slugify h(tag.name) %>/public" method="post">
 					<input type="hidden" name="_method" value="put" />
 					<input type="hidden" name="public" value="false" />
