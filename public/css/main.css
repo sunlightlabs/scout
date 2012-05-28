@@ -901,7 +901,7 @@ footer nav li{
 .feed_preview .loading span, .feed_preview .error span, .feed_preview.empty span,
 .entry .loading, .results .loading span, .results .error span, .results .empty span {
   color: #444; 
-  font-size: 150%;
+  font-size: 125%;
   display: block;
   padding-top: 20px; padding: 20px; padding-left: 50px;
 }
@@ -910,10 +910,12 @@ footer nav li{
   background-position: left;
   background-image: url(/images/loader-32.gif);
   background-repeat: no-repeat;
+  background-size: 24px 24px;
   display: block;
-  height: 40px;  
+  height: 20px;
   padding-top: 20px;
-  padding-left: 50px;
+  padding-bottom: 20px;
+  padding-left: 40px;
   
 }
 .results.contentArea h4{
@@ -1133,9 +1135,6 @@ button.item.follow, button.item.following {
     margin-right: 33px;
 }
 
-.entry .loading {
-
-}
 .entry .details{
     padding: 33px 0 33px 10px;
     margin-bottom: 155px;
