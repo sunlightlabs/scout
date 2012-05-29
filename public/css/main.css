@@ -1576,6 +1576,11 @@ div.indicators span {
     padding-right: 0;
 }
 
+.settings.contentArea .module.notifications div.forgot {
+    margin: 10px 0;
+    padding-left: 5px;
+}
+
 .settings.contentArea .module.notifications, .settings.contentArea .module.phoneSettings{
     background: url('/images/tinyborder_andshadow_vertical.png') right top repeat-y;
 }
@@ -1836,6 +1841,12 @@ div.indicators span {
 .tag p.empty {
     margin: 10px 10px;
     margin-bottom: 33px;
+}
+
+.subscriptionsList p.empty {
+    margin-top: 20px;
+    margin-bottom: 0px;
+    margin-left: 10px;
 }
 
 
