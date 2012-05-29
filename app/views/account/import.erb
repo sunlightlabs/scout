@@ -14,7 +14,7 @@
       <div class="clear"></div>
     </form>
     <ul class="feed_rules">
-      Must be a valid RSS feed, not bigger than 1MB in size. Nothing obscene or otherwise inappropriate.
+      Must not be more than 1MB in size. Nothing obscene or otherwise inappropriate.
     </ul>
   </div>
 
@@ -27,6 +27,7 @@
     <div class="clear"></div>
 
     <div class="details hide_start">
+      <input type="hidden" class="actual_feed_url" name="actual_feed_url" value="" />
       <fieldset class="title">
         <label>Title</label>
         <input type="text" placeholder="Enter a title" name="title" class="title" />
@@ -89,6 +90,7 @@
       $.get("/import/feed/preview", {url: url}, function(data) {
         preview.find(".previewing").hide();
 
+        preview.find("input.actual_feed_url").val(data.feed_url);
         preview.find("input.title").val(data.title);
         preview.find("fieldset.description textarea").html(data.description);
         preview.find("ul.items").html(data.html);
@@ -104,7 +106,8 @@
 
     var createSubscription = function() {
 
-      var url = $.trim($("input.feed_url").val());
+      var url = $.trim($("input.actual_feed_url").val());
+      var original_url = $.trim($("input.feed_url").val());
       if (!url) return false;
 
       var title = $.trim($("input.title").val());
@@ -114,7 +117,10 @@
       preview.find("ul.items").hide();
       preview.find(".creating").show();
 
-      $.post("/import/feed/create", {url: url, title: title, description: description}, function(data) {
+      $.post("/import/feed/create", {
+        url: url, original_url: original_url,
+        title: title, description: description
+      }, function(data) {
         preview.find(".creating").hide();
 
         console.log("Created feed with ID " + data.interest_id);

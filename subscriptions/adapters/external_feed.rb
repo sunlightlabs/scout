@@ -90,7 +90,9 @@ module Subscriptions
 
         # re-fetch it to take advantage of Feedzirra's full pipeline 
         # (including proper logging of the final feed URL location)
-        Feedzirra::Feed.fetch_and_parse url, :timeout => 5
+        response = Feedzirra::Feed.fetch_and_parse url, :timeout => 5
+
+        response.is_a?(Fixnum) ? nil : response
       end
 
       # extract feed-level details

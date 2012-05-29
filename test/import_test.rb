@@ -10,16 +10,16 @@ class ImportTest < Test::Unit::TestCase
     original_title = "Original Title"
     original_description = "Original Description"
 
-    Subscriptions::Adapters::ExternalFeed.should_receive(:validate_feed).with(url).and_return({
+    Subscriptions::Adapters::ExternalFeed.should_receive(:url_to_response).with(url).and_return(double())
+    Subscriptions::Adapters::ExternalFeed.should_receive(:feed_details).with(anything).and_return({
       'title' => original_title, 'description' => original_description
     })
 
     get "/import/feed/preview", :url => url
-
     assert_response 200
-    response = json_response
-    assert_equal response['title'], original_title
-    assert_equal response['description'], original_description
+
+    assert_equal json_response['title'], original_title
+    assert_equal json_response['description'], original_description
   end
 
   def test_preview_feed_with_invalid_feed_halts
@@ -27,10 +27,9 @@ class ImportTest < Test::Unit::TestCase
     original_title = "Original Title"
     original_description = "Original Description"
 
-    Subscriptions::Adapters::ExternalFeed.should_receive(:validate_feed).with(url).and_return(nil)
+    Subscriptions::Adapters::ExternalFeed.should_receive(:url_to_response).with(url).and_return(nil)
 
     get "/import/feed/preview", :url => url
-
     assert_response 500
   end
 
@@ -39,9 +38,11 @@ class ImportTest < Test::Unit::TestCase
     original_title = "Original Title"
     original_description = "Original Description"
 
-    Subscriptions::Adapters::ExternalFeed.should_receive(:validate_feed).with(url).and_return({
+    Subscriptions::Adapters::ExternalFeed.should_receive(:url_to_response).with(url).and_return(double())
+    Subscriptions::Adapters::ExternalFeed.should_receive(:feed_details).with(anything).and_return({
       'title' => original_title, 'description' => original_description
     })
+
     Subscription.any_instance.should_receive(:search).and_return(nil)
 
     get "/import/feed/preview", :url => url
@@ -64,7 +65,8 @@ class ImportTest < Test::Unit::TestCase
 
     Email.should_receive(:deliver!).with("Feed", anything, anything, anything)
 
-    Subscriptions::Adapters::ExternalFeed.should_receive(:validate_feed).with(url).and_return({
+    Subscriptions::Adapters::ExternalFeed.should_receive(:url_to_response).with(url).and_return(double())
+    Subscriptions::Adapters::ExternalFeed.should_receive(:feed_details).with(anything).and_return({
       'title' => original_title, 'description' => original_description
     })
 
@@ -101,7 +103,8 @@ class ImportTest < Test::Unit::TestCase
     subscription_count = Subscription.count
     interest_count = Interest.count
 
-    Subscriptions::Adapters::ExternalFeed.stub(:validate_feed).with(url).and_return({
+    Subscriptions::Adapters::ExternalFeed.should_receive(:url_to_response).with(url).and_return(double())
+    Subscriptions::Adapters::ExternalFeed.should_receive(:feed_details).with(anything).and_return({
       'title' => original_title, 'description' => original_description
     })
 
@@ -123,7 +126,8 @@ class ImportTest < Test::Unit::TestCase
     subscription_count = Subscription.count
     interest_count = Interest.count
 
-    Subscriptions::Adapters::ExternalFeed.stub(:validate_feed).with(url).and_return({
+    Subscriptions::Adapters::ExternalFeed.should_receive(:url_to_response).with(url).and_return(double())
+    Subscriptions::Adapters::ExternalFeed.should_receive(:feed_details).with(anything).and_return({
       'title' => original_title, 'description' => original_description
     })
 
@@ -146,7 +150,8 @@ class ImportTest < Test::Unit::TestCase
     interest_count = Interest.count
 
     Email.should_not_receive(:deliver!)
-    Subscriptions::Adapters::ExternalFeed.should_receive(:validate_feed).with(url).and_return({
+    Subscriptions::Adapters::ExternalFeed.should_receive(:url_to_response).with(url).and_return(double())
+    Subscriptions::Adapters::ExternalFeed.should_receive(:feed_details).with(anything).and_return({
       'title' => original_title, 'description' => original_description
     })
 
@@ -169,7 +174,7 @@ class ImportTest < Test::Unit::TestCase
     interest_count = Interest.count
 
     Email.should_not_receive(:deliver!)
-    Subscriptions::Adapters::ExternalFeed.should_receive(:validate_feed).with(url).and_return(nil)
+    Subscriptions::Adapters::ExternalFeed.should_receive(:url_to_response).with(url).and_return(nil)
 
     post "/import/feed/create", {:url => url, :title => new_title}, login(user)
     assert_response 500
