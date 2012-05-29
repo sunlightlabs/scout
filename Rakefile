@@ -135,6 +135,19 @@ namespace :test do
     Admin.report Report.exception("Admin.report 2", "Testing exception reports", Exception.new("WOW! OUCH!!"))
   end
 
+  desc "Send a test SMS"
+  task :sms => :environment do
+    message = ENV['msg'] || "Test SMS. May you receive this in good health."
+    number = ENV['number']
+
+    unless number.present?
+      puts "Include a 'number' parameter."
+      return
+    end
+
+    ::SMS.deliver! "Test", number, message
+  end
+
   desc "Forces emails or SMSes to be sent for the first X results of every subscription a user has"
   task :send_user => :environment do
     email = ENV['email'] || config[:admin].first

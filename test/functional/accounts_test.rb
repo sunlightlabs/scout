@@ -8,7 +8,7 @@ class AccountsTest < Test::Unit::TestCase
   def test_login
     email = "test@example.com"
     password = "test"
-    user = new_user! :email => email, :password => password, :password_confirmation => password
+    user = create :user, :email => email, :password => password, :password_confirmation => password
 
     assert !user.should_change_password
 
@@ -22,7 +22,7 @@ class AccountsTest < Test::Unit::TestCase
   def test_login_redirects_back
     email = "test@example.com"
     password = "test"
-    user = new_user! :email => email, :password => password, :password_confirmation => password
+    user = create :user, :email => email, :password => password, :password_confirmation => password
 
     redirect = "/search/federal_bills/anything"
 
@@ -33,7 +33,7 @@ class AccountsTest < Test::Unit::TestCase
   def test_login_invalid
     email = "test@example.com"
     password = "test"
-    user = new_user! :email => email, :password => password, :password_confirmation => password
+    user = create :user, :email => email, :password => password, :password_confirmation => password
 
     assert !user.should_change_password
 
@@ -49,7 +49,7 @@ class AccountsTest < Test::Unit::TestCase
   def test_login_does_not_reset_should_change_password
     email = "test@example.com"
     password = "test"
-    user = new_user! :email => email, :password => password, :password_confirmation => password, :should_change_password => true
+    user = create :user, :email => email, :password => password, :password_confirmation => password, :should_change_password => true
 
     assert user.should_change_password
 
@@ -120,7 +120,7 @@ class AccountsTest < Test::Unit::TestCase
   end
 
   def test_update_account_settings
-    user = new_user!
+    user = create :user
 
     assert_equal 'email_immediate', user.notifications
     assert_equal true, user.announcements
@@ -135,7 +135,7 @@ class AccountsTest < Test::Unit::TestCase
   end
 
   def test_update_account_settings_invalid
-    user = new_user!
+    user = create :user
 
     assert_equal 'email_immediate', user.notifications
     assert_equal true, user.announcements
@@ -151,7 +151,7 @@ class AccountsTest < Test::Unit::TestCase
 
   # ensures callbacks on generating a new password don't occur on any old update of the model
   def test_update_account_settings_does_not_reset_password
-    user = new_user!
+    user = create :user
     password_hash = user.password_hash
 
     put '/account/settings', {:user => {:notifications => "email_immediate", :announcements => "false"}}, login(user)
@@ -171,7 +171,7 @@ class AccountsTest < Test::Unit::TestCase
   def test_start_reset_password_process
     # post '/subscriptions', :interest => "testing", :subscription_type => "federal_bills"
     # assert_equal 302, last_response.status
-    user = new_user!
+    user = create :user
     old_token = user.reset_token
 
     Email.should_receive(:deliver!).with("Password Reset Request", user.email, anything, anything)
@@ -190,7 +190,7 @@ class AccountsTest < Test::Unit::TestCase
   end
 
   def test_visit_reset_password_link
-    user = new_user!
+    user = create :user
     reset_token = user.reset_token
     old_password_hash = user.password_hash
     assert !user.should_change_password
@@ -222,7 +222,7 @@ class AccountsTest < Test::Unit::TestCase
   end
 
   def test_change_password
-    user = new_user! :password => "test", :password_confirmation => "test", :should_change_password => true
+    user = create :user, :password => "test", :password_confirmation => "test", :should_change_password => true
 
     old_password_hash = user.password_hash
     assert User.authenticate(user, "test")
@@ -411,7 +411,7 @@ class AccountsTest < Test::Unit::TestCase
   # phone settings
 
   def test_add_phone_number_when_user_has_none
-    user = new_user!
+    user = create :user
     phone = "1234567890"
 
     assert_nil user.phone
@@ -434,7 +434,7 @@ class AccountsTest < Test::Unit::TestCase
     phone1 = "1234567890"
     phone2 = phone1.succ
     original_verify_code = "1234"
-    user = new_user! :phone => phone1, :phone_confirmed => true, :phone_verify_code => original_verify_code
+    user = create :user, :phone => phone1, :phone_confirmed => true, :phone_verify_code => original_verify_code
 
     assert user.phone_confirmed?
     SMS.should_receive(:deliver).with("Verification Code", phone2, anything)
@@ -451,7 +451,7 @@ class AccountsTest < Test::Unit::TestCase
   end
 
   def test_add_invalid_phone_number
-    user = new_user!
+    user = create :user
     invalid_phone = "abcdefghij"
 
     assert_nil user.phone
@@ -472,7 +472,7 @@ class AccountsTest < Test::Unit::TestCase
   def test_resend_phone_verification_code
     phone = "1234567890"
     verify_code = "1234"
-    user = new_user! :phone => phone, :phone_verify_code => verify_code
+    user = create :user, :phone => phone, :phone_verify_code => verify_code
 
     assert !user.phone_confirmed?
     SMS.should_receive(:deliver).with("Resend Verification Code", phone, anything)
@@ -491,7 +491,7 @@ class AccountsTest < Test::Unit::TestCase
   def test_confirm_phone_verification_code_valid
     phone = "1234567890"
     verify_code = "1234"
-    user = new_user! :phone => phone, :phone_verify_code => verify_code
+    user = create :user, :phone => phone, :phone_verify_code => verify_code
 
     assert !user.phone_confirmed?
 
@@ -509,7 +509,7 @@ class AccountsTest < Test::Unit::TestCase
   def test_confirm_phone_verification_code_invalid
     phone = "1234567890"
     verify_code = "1234"
-    user = new_user! :phone => phone, :phone_verify_code => verify_code
+    user = create :user, :phone => phone, :phone_verify_code => verify_code
 
     assert !user.phone_confirmed?
 

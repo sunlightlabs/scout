@@ -17,7 +17,7 @@ class SeenItem
   field :interest_id
   field :interest_in
 
-  field :interest_type # 'search', 'item', 'external_feed'
+  field :interest_type # 'search', 'item', 'feed'
   
   # doesn't refer to the type of the item itself, but 
   # rather which one of the standard item_type's it relates to
@@ -56,7 +56,7 @@ class SeenItem
   end
 
   def feed?
-    interest_type == "external_feed"
+    interest_type == "feed"
   end
 
   def item?
@@ -68,9 +68,9 @@ class SeenItem
   def assign_to_subscription(subscription)
 
     # interest may not exist on the subscription, infer it from the subscription_type
-    if subscription.subscription_type == "external_feed"
-      item_type = "external_feed_item" # ?
-      interest_type = "external_feed"
+    if subscription.subscription_type == "feed"
+      item_type = "feed_item" # ?
+      interest_type = "feed"
     elsif item_type = search_adapters[subscription.subscription_type]
       interest_type = "search"
     elsif item_type = item_adapters[subscription.subscription_type]

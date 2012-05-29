@@ -3,15 +3,15 @@ require './test/test_helper'
 class ImportTest < Test::Unit::TestCase
   include Rack::Test::Methods
   include TestHelper::Methods
-
+  include FactoryGirl::Syntax::Methods
 
   def test_preview_feed
     url = "http://example.com/rss.xml"
     original_title = "Original Title"
     original_description = "Original Description"
 
-    Subscriptions::Adapters::ExternalFeed.should_receive(:url_to_response).with(url).and_return(double())
-    Subscriptions::Adapters::ExternalFeed.should_receive(:feed_details).with(anything).and_return({
+    Subscriptions::Adapters::Feeds.should_receive(:url_to_response).with(url).and_return(double())
+    Subscriptions::Adapters::Feeds.should_receive(:feed_details).with(anything).and_return({
       'title' => original_title, 'description' => original_description
     })
 
@@ -27,7 +27,7 @@ class ImportTest < Test::Unit::TestCase
     original_title = "Original Title"
     original_description = "Original Description"
 
-    Subscriptions::Adapters::ExternalFeed.should_receive(:url_to_response).with(url).and_return(nil)
+    Subscriptions::Adapters::Feeds.should_receive(:url_to_response).with(url).and_return(nil)
 
     get "/import/feed/preview", :url => url
     assert_response 500
@@ -38,8 +38,8 @@ class ImportTest < Test::Unit::TestCase
     original_title = "Original Title"
     original_description = "Original Description"
 
-    Subscriptions::Adapters::ExternalFeed.should_receive(:url_to_response).with(url).and_return(double())
-    Subscriptions::Adapters::ExternalFeed.should_receive(:feed_details).with(anything).and_return({
+    Subscriptions::Adapters::Feeds.should_receive(:url_to_response).with(url).and_return(double())
+    Subscriptions::Adapters::Feeds.should_receive(:feed_details).with(anything).and_return({
       'title' => original_title, 'description' => original_description
     })
 
@@ -52,7 +52,7 @@ class ImportTest < Test::Unit::TestCase
 
 
   def test_create_feed
-    user = new_user!
+    user = create :user
 
     url = "http://example.com/rss.xml"
     original_title = "Original Title"
@@ -65,8 +65,8 @@ class ImportTest < Test::Unit::TestCase
 
     Email.should_receive(:deliver!).with("Feed", anything, anything, anything)
 
-    Subscriptions::Adapters::ExternalFeed.should_receive(:url_to_response).with(url).and_return(double())
-    Subscriptions::Adapters::ExternalFeed.should_receive(:feed_details).with(anything).and_return({
+    Subscriptions::Adapters::Feeds.should_receive(:url_to_response).with(url).and_return(double())
+    Subscriptions::Adapters::Feeds.should_receive(:feed_details).with(anything).and_return({
       'title' => original_title, 'description' => original_description
     })
 
@@ -77,7 +77,7 @@ class ImportTest < Test::Unit::TestCase
     assert_equal(interest_count + 1, Interest.count)
 
     interest = Interest.where(:in => url).first
-    subscription = interest.subscriptions.where(:interest_in => url, :subscription_type => "external_feed").first
+    subscription = interest.subscriptions.where(:interest_in => url, :subscription_type => "feed").first
 
     assert_not_nil interest
     assert_not_nil subscription
@@ -93,7 +93,7 @@ class ImportTest < Test::Unit::TestCase
   end
 
   def test_create_feed_requires_url
-    user = new_user!
+    user = create :user
 
     url = "http://example.com/rss.xml"
     original_title = "Original Title"
@@ -103,8 +103,8 @@ class ImportTest < Test::Unit::TestCase
     subscription_count = Subscription.count
     interest_count = Interest.count
 
-    Subscriptions::Adapters::ExternalFeed.should_receive(:url_to_response).with(url).and_return(double())
-    Subscriptions::Adapters::ExternalFeed.should_receive(:feed_details).with(anything).and_return({
+    Subscriptions::Adapters::Feeds.should_receive(:url_to_response).with(url).and_return(double())
+    Subscriptions::Adapters::Feeds.should_receive(:feed_details).with(anything).and_return({
       'title' => original_title, 'description' => original_description
     })
 
@@ -116,7 +116,7 @@ class ImportTest < Test::Unit::TestCase
   end
 
   def test_create_feed_requires_title
-    user = new_user!
+    user = create :user
 
     url = "http://example.com/rss.xml"
     original_title = "Original Title"
@@ -126,8 +126,8 @@ class ImportTest < Test::Unit::TestCase
     subscription_count = Subscription.count
     interest_count = Interest.count
 
-    Subscriptions::Adapters::ExternalFeed.should_receive(:url_to_response).with(url).and_return(double())
-    Subscriptions::Adapters::ExternalFeed.should_receive(:feed_details).with(anything).and_return({
+    Subscriptions::Adapters::Feeds.should_receive(:url_to_response).with(url).and_return(double())
+    Subscriptions::Adapters::Feeds.should_receive(:feed_details).with(anything).and_return({
       'title' => original_title, 'description' => original_description
     })
 
@@ -139,7 +139,7 @@ class ImportTest < Test::Unit::TestCase
   end
 
   def test_create_feed_requires_login
-    user = new_user!
+    user = create :user
 
     url = "http://example.com/rss.xml"
     original_title = "Original Title"
@@ -150,8 +150,8 @@ class ImportTest < Test::Unit::TestCase
     interest_count = Interest.count
 
     Email.should_not_receive(:deliver!)
-    Subscriptions::Adapters::ExternalFeed.should_receive(:url_to_response).with(url).and_return(double())
-    Subscriptions::Adapters::ExternalFeed.should_receive(:feed_details).with(anything).and_return({
+    Subscriptions::Adapters::Feeds.should_receive(:url_to_response).with(url).and_return(double())
+    Subscriptions::Adapters::Feeds.should_receive(:feed_details).with(anything).and_return({
       'title' => original_title, 'description' => original_description
     })
 
@@ -163,7 +163,7 @@ class ImportTest < Test::Unit::TestCase
   end
 
   def test_create_feed_with_invalid_feed_creates_nothing
-    user = new_user!
+    user = create :user
 
     url = "http://example.com/not-rss.xml"
     original_title = "Original Title"
@@ -174,7 +174,7 @@ class ImportTest < Test::Unit::TestCase
     interest_count = Interest.count
 
     Email.should_not_receive(:deliver!)
-    Subscriptions::Adapters::ExternalFeed.should_receive(:url_to_response).with(url).and_return(nil)
+    Subscriptions::Adapters::Feeds.should_receive(:url_to_response).with(url).and_return(nil)
 
     post "/import/feed/create", {:url => url, :title => new_title}, login(user)
     assert_response 500

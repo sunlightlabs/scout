@@ -24,6 +24,7 @@ class ItemsTest < Test::Unit::TestCase
     assert_response 404
   end
 
+  # TODO: need fixtures, the render step breaks without having actual data
   # def test_fetch_item_itself
   #   item_id = "hr4192-112"
   #   item_type = "bill"

@@ -12,18 +12,18 @@ get "/import/feed/preview" do
   url = params[:url] ? params[:url].strip : ""
 
 
-  unless feed = Subscriptions::Adapters::ExternalFeed.url_to_response(url)
+  unless feed = Subscriptions::Adapters::Feeds.url_to_response(url)
 
     # give a try at autodiscovery
     urls = Timeout::timeout(5) {Feedbag.find url}
     url = urls.first
 
-    unless url and (feed = Subscriptions::Adapters::ExternalFeed.url_to_response(url))
+    unless url and (feed = Subscriptions::Adapters::Feeds.url_to_response(url))
       halt 500 and return
     end
   end
 
-  feed_details = Subscriptions::Adapters::ExternalFeed.feed_details feed
+  feed_details = Subscriptions::Adapters::Feeds.feed_details feed
   feed_url = feed_details['feed_url'] || url
 
   subscription = feed_subscription_from feed_url
@@ -61,8 +61,8 @@ post "/import/feed/create" do
 
   # for creating, a valid feed URL and title need to be prepared already
   unless url.present? and title.present? and 
-    (feed = Subscriptions::Adapters::ExternalFeed.url_to_response(url)) and
-    (feed_details = Subscriptions::Adapters::ExternalFeed.feed_details(feed))
+    (feed = Subscriptions::Adapters::Feeds.url_to_response(url)) and
+    (feed_details = Subscriptions::Adapters::Feeds.feed_details(feed))
     halt 500 and return
   end
 
@@ -87,7 +87,7 @@ post "/import/feed/create" do
 
   interest = current_user.interests.new(
     :in => url,
-    :interest_type => "external_feed",
+    :interest_type => "feed",
     :data => subscription.data.dup
   )
 
@@ -106,7 +106,7 @@ helpers do
   
   def feed_subscription_from(url)
     (current_user ? current_user.subscriptions : Subscription).new(
-      :subscription_type => "external_feed",
+      :subscription_type => "feed",
       :interest_in => url,
       :data => {
         'url' => url

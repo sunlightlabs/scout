@@ -2,7 +2,7 @@ require './test/test_helper'
 
 # subscription management for one's account (generic destroy, update, etc.)
 
-class AccountTest < Test::Unit::TestCase
+class InterestsTest < Test::Unit::TestCase
   include Rack::Test::Methods
   include TestHelper::Methods
   include FactoryGirl::Syntax::Methods

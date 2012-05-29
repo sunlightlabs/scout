@@ -121,11 +121,6 @@ helpers do
   # subscription_type can be "all"
   def search_interest_for(query, search_type)
     data = params[search_type] || {}
-
-    if query
-      data['query'] = query
-    end
-
     Interest.search_for current_user, search_type, query, data
   end
 

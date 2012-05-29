@@ -3,9 +3,10 @@ require './test/test_helper'
 class DeliveryTest < Test::Unit::TestCase
   include Rack::Test::Methods
   include TestHelper::Methods
+  include FactoryGirl::Syntax::Methods
 
   def test_schedule_delivery_with_user_defaults
-    user = new_user!
+    user = create :user
     query = "copyright"
 
     interest = user.interests.create! :in => query, :interest_type => "search"
@@ -37,7 +38,7 @@ class DeliveryTest < Test::Unit::TestCase
   end
 
   def test_schedule_delivery_with_interest_override
-    user = new_user!
+    user = create :user
     query = "copyright"
 
     interest = user.interests.create! :in => query, :interest_type => "search", :notifications => "email_daily"
@@ -69,7 +70,7 @@ class DeliveryTest < Test::Unit::TestCase
   end
 
   def test_schedule_delivery_with_user_preference_of_none
-    user = new_user! :notifications => "none"
+    user = create :user, :notifications => "none"
     query = "copyright"
 
     interest = user.interests.create! :in => query, :interest_type => "search"

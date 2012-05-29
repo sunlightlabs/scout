@@ -20,7 +20,7 @@ gem 'bcrypt-ruby', '3.0.1'
 gem 'postmark', '0.9.10'
 gem 'mail', '2.4.4'
 gem 'pony', '1.4'
-gem 'twilio-rb', '2.1.3'
+gem 'twilio-rb', '2.2.0'
 
 gem 'rack', '1.4.1'
 gem 'rake', '0.9.2.2'

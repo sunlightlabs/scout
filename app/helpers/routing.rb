@@ -11,7 +11,7 @@ module Helpers
       if interest.item?
         interest_adapter(interest).interest_name interest
       elsif interest.feed?
-        ::Subscriptions::Adapters::ExternalFeed.interest_name interest
+        ::Subscriptions::Adapters::Feeds.interest_name interest
       elsif interest.search?
         interest.in
       end
@@ -63,7 +63,7 @@ module Helpers
     end
 
     def item_url(item)
-      if item.subscription_type == "external_feed"
+      if item.subscription_type == "feed"
         item.data['url']
       else
         "http://#{config[:hostname]}#{item_path item}"
@@ -84,7 +84,7 @@ module Helpers
 
     # only needed in RSS feeds, and external feeds are the only time we override the guid
     def item_guid(item)
-      if item.subscription_type == "external_feed"
+      if item.subscription_type == "feed"
         item.data['guid']
       else
         item_url item
