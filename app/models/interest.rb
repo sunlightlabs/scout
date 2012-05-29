@@ -94,8 +94,12 @@ class Interest
     end
   end
 
-  # does the user have a search interest of this search type ("all" or an individual type), and this data hash?
+  # does the user have a search interest for this query, of this 
+  # search type ("all" or an individual type), and this data hash?
   def self.search_for(user, search_type, interest_in, data = {})
+    
+    # ensure query is present in the data
+    data['query'] ||= interest_in
 
     criteria = {
       'in' => interest_in,
@@ -104,10 +108,7 @@ class Interest
     }
     find_criteria = criteria.dup
 
-    if data
-      criteria['data'] = data
-    end
-
+    criteria['data'] = data
     data.each {|key, value| find_criteria["data.#{key}"] = value}
 
     if user
