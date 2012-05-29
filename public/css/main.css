@@ -1518,6 +1518,7 @@ div.indicators span {
     list-style-type: none;
     background: url('/images/tinyborder_andshadow.png') top left repeat-x;
     padding: 16px 33px 8px 33px;
+    width: 90%;
 }
 
 
