@@ -94,11 +94,9 @@ class SeenItem
   # renders a *hash* suitable for turning into json, 
   # that includes attributes for its parent subscription and interest
   def json_view
-    self.subscription # needed to get this to load??
     self.interest
 
     SeenItem.clean_document(self, SeenItem.public_json_fields).merge(
-      :subscription => SeenItem.clean_document(self.subscription, Subscription.public_json_fields),
       :interest => SeenItem.clean_document(self.interest, Interest.public_json_fields)
     )
   end

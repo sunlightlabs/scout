@@ -1,4 +1,4 @@
-# intricate include order because of JSON serialization
+# intricate include order because of stupid JSON serialization disagreement between gems
 
 require 'json/ext'
 
@@ -13,6 +13,7 @@ require 'sinatra'
 require 'mongoid'
 require 'tzinfo'
 require 'twilio-rb'
+require 'feedbag'
 
 # restore the original to_json on core objects (damn you ActiveSupport)
 [Object, Array, FalseClass, Float, Hash, Integer, NilClass, String, TrueClass].each do |klass|
@@ -35,15 +36,16 @@ def reserved_names
   if @reserved_names
     @reserved_names
   else
-    names = %w{user account subscription interest item fetch
+    names = %w{
+      user account subscription interest item fetch
       ajax pjax tag seen delivery receipt report email route
       sms admin login logout session signup signout request response
       server client rss feed atom json xml search api api_key import 
       export download upload favicon index about privacy_policy privacy 
-      terms legal contact username slug name
+      terms legal contact username slug name 
       
       bill state_bill regulation speech document hearing update floor_update
-      rule uscode cfr 
+      rule uscode cfr report
     }
     @reserved_names = names + names.map(&:pluralize)
   end

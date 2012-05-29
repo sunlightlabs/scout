@@ -118,13 +118,11 @@ end
 
 helpers do
 
-  # subscription_type can be "all"
   def search_interest_for(query, search_type)
     data = params[search_type] || {}
-    Interest.search_for current_user, search_type, query, data
+    Interest.for_search current_user, search_type, query, data
   end
 
-  # assumes that oneself is a new record, and a search interest
   def search_subscriptions_for(interest)
     if interest.new_record?
       types = (interest.search_type == "all") ? search_types : [interest.search_type]

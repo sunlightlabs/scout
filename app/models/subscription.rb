@@ -44,42 +44,6 @@ class Subscription
     "Subscriptions::Adapters::#{type.camelize}".constantize rescue nil
   end
 
-  # does the user have a subscription of this subscription type, and this data hash?
-  # if so, find it, otherwise, initialize one
-  # if the user is nil, it must not exist, so initialize it
-  def self.for(user, subscription_type, interest_in, data)
-
-    criteria = {
-      'interest_in' => interest_in,
-      'subscription_type' => subscription_type,
-      'data' => data
-    }
-
-    find_criteria = {
-      'interest_in' => interest_in,
-      'subscription_type' => subscription_type,
-    }
-    data.each {|key, value| find_criteria["data.#{key}"] = value}
-
-    if user
-      # we use dot notation for the criteria instead of passing in a hash, because
-      # apparently hash key order is important in matching on the subdocument, which is ridiculous.
-      # 
-      # however, the approach of finding with dot notation means that we could find results
-      # that have fields we didn't ask for, which would not be right.
-      # 
-      # the only approach I've found so far is to find all candidates using dot notation,
-      # then filter the too-broad ones client-side. 
-      subscription = user.subscriptions.where(find_criteria).detect do |subscription|
-        subscription.data.keys.select {|key| !data.keys.include?(key)}.empty?
-      end
-      
-      subscription || user.subscriptions.new(criteria)
-    else
-      Subscription.new criteria
-    end
-  end
-  
   def search(options = {})
     Subscriptions::Manager.search self, options
   end
@@ -112,15 +76,6 @@ class Subscription
   def filter_name(field, value)
     if adapter.respond_to?(:filters)
       adapter.filters[field.to_s][:name].call value
-    else
-
     end
-  end
-  
-  # what fields are acceptable to syndicated through JSON
-  def self.public_json_fields
-    [
-      'created_at', 'data', 'last_checked_at', 'updated_at', 'subscription_type'
-    ]
   end
 end

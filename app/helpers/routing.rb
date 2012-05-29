@@ -11,7 +11,7 @@ module Helpers
       if interest.item?
         interest_adapter(interest).interest_name interest
       elsif interest.feed?
-        ::Subscriptions::Adapters::Feeds.interest_name interest
+        ::Subscriptions::Adapters::Feed.interest_name interest
       elsif interest.search?
         interest.in
       end

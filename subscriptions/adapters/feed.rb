@@ -6,7 +6,7 @@ require 'feedzirra'
 module Subscriptions  
   module Adapters
 
-    class Feeds
+    class Feed
 
       # data structure of an external RSS feed subscription/interest
       # data:
@@ -21,7 +21,7 @@ module Subscriptions
       
 
       def self.url_for(subscription, function, options = {})
-        subscription.data['url']
+        subscription.interest_in
       end
 
       def self.url_for_detail(item_id, options = {})

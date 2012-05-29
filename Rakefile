@@ -10,7 +10,14 @@ task :test do
     puts "\nRunning #{file}:\n"
     system "ruby #{file}"
   end
-  exit (responses.any? {|code| code == false} ? -1 : 0)
+  
+  if responses.any? {|code| code == false}
+    puts "\nFAILED\n"
+    exit -1
+  else
+    puts "\nSUCCESS\n"
+    exit 0
+  end
 end
 
 desc "Set the crontab in place for this environment"
