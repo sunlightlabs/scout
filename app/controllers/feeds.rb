@@ -33,11 +33,11 @@ end
 get "/user/:user_id/:tag.:format" do
   feed_only
 
-  unless (user = load_user) and (tag = user.tags.where(:name => Tag.deslugify(params[:tag])))
+  unless (user = load_user) and (tag = user.tags.where(:name => Tag.deslugify(params[:tag])).first)
     halt 404 and return
   end
 
-  interest_ids = user.interests.where(:tags => params[:tag]).only(:_id).map &:_id
+  interest_ids = tag.interests.only(:_id).map &:_id
   items = SeenItem.where(:interest_id => {"$in" => interest_ids}).desc :date
 
   if params[:format] == 'rss'
