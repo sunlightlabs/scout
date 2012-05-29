@@ -3,7 +3,7 @@ require './test/test_helper'
 class ImportTest < Test::Unit::TestCase
   include Rack::Test::Methods
   include TestHelper::Methods
-
+  include FactoryGirl::Syntax::Methods
 
   def test_preview_feed
     url = "http://example.com/rss.xml"
@@ -52,7 +52,7 @@ class ImportTest < Test::Unit::TestCase
 
 
   def test_create_feed
-    user = new_user!
+    user = create :user
 
     url = "http://example.com/rss.xml"
     original_title = "Original Title"
@@ -93,7 +93,7 @@ class ImportTest < Test::Unit::TestCase
   end
 
   def test_create_feed_requires_url
-    user = new_user!
+    user = create :user
 
     url = "http://example.com/rss.xml"
     original_title = "Original Title"
@@ -116,7 +116,7 @@ class ImportTest < Test::Unit::TestCase
   end
 
   def test_create_feed_requires_title
-    user = new_user!
+    user = create :user
 
     url = "http://example.com/rss.xml"
     original_title = "Original Title"
@@ -139,7 +139,7 @@ class ImportTest < Test::Unit::TestCase
   end
 
   def test_create_feed_requires_login
-    user = new_user!
+    user = create :user
 
     url = "http://example.com/rss.xml"
     original_title = "Original Title"
@@ -163,7 +163,7 @@ class ImportTest < Test::Unit::TestCase
   end
 
   def test_create_feed_with_invalid_feed_creates_nothing
-    user = new_user!
+    user = create :user
 
     url = "http://example.com/not-rss.xml"
     original_title = "Original Title"

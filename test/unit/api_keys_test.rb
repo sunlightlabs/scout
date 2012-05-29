@@ -3,13 +3,14 @@ require './test/test_helper'
 class ApiKeysTestTest < Test::Unit::TestCase
   include Rack::Test::Methods
   include TestHelper::Methods
+  include FactoryGirl::Syntax::Methods
 
   def test_create_user_finds_api_key_with_that_email
     email = "user1@example.com"
     key = "abcdef"
     
     ApiKey.create! :email => email, :key => key, :status => "A"
-    user = new_user! :email => email
+    user = create :user, :email => email
 
     assert_not_nil user.api_key
     assert user.developer?
@@ -19,7 +20,7 @@ class ApiKeysTestTest < Test::Unit::TestCase
     email = "user1@example.com"
     key = "abcdef"
     
-    user = new_user! :email => email
+    user = create :user, :email => email
 
     assert_nil user.api_key
     assert !user.developer?
@@ -35,7 +36,7 @@ class ApiKeysTestTest < Test::Unit::TestCase
     email = "user1@example.com"
     key = "abcdef"
     
-    user = new_user! :email => email
+    user = create :user, :email => email
 
     assert_nil user.api_key
     assert !user.developer?
@@ -51,7 +52,7 @@ class ApiKeysTestTest < Test::Unit::TestCase
     email = "user1@example.com"
     apikey = "abcdef"
     
-    user = new_user! :email => email    
+    user = create :user, :email => email    
     key = ApiKey.create! :email => email, :key => apikey, :status => "I"
     user.reload
 
@@ -70,8 +71,8 @@ class ApiKeysTestTest < Test::Unit::TestCase
     email1 = "user1@example.com"
     email2 = "user2@example.com"
     apikey1 = "abcdef"
-    user1 = new_user! :email => email1
-    user2 = new_user! :email => email2
+    user1 = create :user, :email => email1
+    user2 = create :user, :email => email2
 
     key = ApiKey.create! :email => email1, :key => apikey1, :status => "A"
     user1.reload

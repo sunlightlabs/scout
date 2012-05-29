@@ -8,8 +8,7 @@ class RoutingTest < Test::Unit::TestCase
   class Anonymous; extend Helpers::Routing; end
   def routing; Anonymous; end
 
-  # unit tests on subscriptions
-
+  
   def test_subscription_path
     user = create :user
 

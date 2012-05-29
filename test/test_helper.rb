@@ -7,7 +7,7 @@ require 'bundler/setup'
 require 'rack/test'
 
 require './scout'
-require './test/factories/factories'
+require './test/factories'
 
 require 'rspec/mocks'
 
@@ -57,9 +57,7 @@ module TestHelper
     end
 
 
-    def new_user!(options = {})
-      User.create!({:email => "fake@example.com", :password => "test", :password_confirmation => "test"}.merge(options))
-    end
+    # custom helpers
 
     def redirect_path
       last_response.headers['Location'].sub(/http:\/\/example.org/, '')
