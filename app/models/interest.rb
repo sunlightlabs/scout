@@ -45,7 +45,7 @@ class Interest
   end
 
   def feed?
-    interest_type == "external_feed"
+    interest_type == "feed"
   end
 
   def search?

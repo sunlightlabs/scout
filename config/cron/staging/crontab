@@ -44,6 +44,6 @@
 
 
 # external feed subscriptions, once an hour
-0 * * * * /projects/alarms/current/config/cron/staging/check.sh external_feed
+0 * * * * /projects/alarms/current/config/cron/staging/check.sh feed
 
 # keep the newline below

@@ -5,7 +5,27 @@ class InterestTest < Test::Unit::TestCase
   include TestHelper::Methods
   include FactoryGirl::Syntax::Methods
 
-  
+
+  def test_search_interest_deserialization
+  end
+
+  def test_search_interest_subscription_generation
+  end
+
+  def test_item_interest_deserialization
+  end
+
+  def test_item_interest_subscription_generation
+  end
+
+  def test_feed_interest_deserialization
+  end
+
+  def test_feed_interest_subscription_generation
+  end
+
+  # TODO: test on import_test that checks that 
+  # a create for the same feed does not make a new one
 
 
   # TODO: axe this

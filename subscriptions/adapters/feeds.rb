@@ -6,7 +6,7 @@ require 'feedzirra'
 module Subscriptions  
   module Adapters
 
-    class ExternalFeed
+    class Feeds
 
       # data structure of an external RSS feed subscription/interest
       # data:
