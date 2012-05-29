@@ -94,18 +94,14 @@ class Interest
     end
   end
 
-  # does the user have a search interest for this query, of this 
-  # search type ("all" or an individual type), and this data hash?
-  def self.search_for(user, search_type, interest_in, data = {})
-    
-    # ensure query is present in the data
-    data['query'] ||= interest_in
+  # does the user have an interest with this criteria, and this data hash?
+  def self.for(user, criteria, data = nil)
 
-    criteria = {
-      'in' => interest_in,
-      'interest_type' => 'search',
-      'search_type' => search_type,
-    }
+    # if no data given, we can do a much simpler lookup
+    if data.nil?
+      return (user ? user.interests : Interest).find_or_initialize_by criteria
+    end
+
     find_criteria = criteria.dup
 
     criteria['data'] = data
@@ -113,7 +109,8 @@ class Interest
 
     if user
       # we use dot notation for the criteria instead of passing in a hash, because
-      # apparently hash key order is important in matching on the subdocument, which is ridiculous.
+      # apparently hash key order is important in matching on the subdocument, 
+      # which is ridiculous.
       # 
       # however, the approach of finding with dot notation means that we could find results
       # that have fields we didn't ask for, which would not be right.
@@ -128,6 +125,32 @@ class Interest
     else
       Interest.new criteria
     end
+  end
+
+  # does the user have a search interest for this query, of this 
+  # search type ("all" or an individual type), and this set of filters?
+  def self.for_search(user, search_type, interest_in, data = {})
+    
+    # ensure query is present in the data
+    data['query'] ||= interest_in
+
+    criteria = {
+      'in' => interest_in,
+      'interest_type' => 'search',
+      'search_type' => search_type,
+    }
+    
+    self.for user, criteria, data
+  end
+
+  # does the user have a feed interest for this url?
+  def self.for_feed(user, url)
+    criteria = {
+      'in' => url,
+      'interest_type' => 'feed'
+    }
+
+    self.for user, criteria
   end
 
 end
