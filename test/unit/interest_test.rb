@@ -80,3 +80,5 @@ class InterestTest < Test::Unit::TestCase
     subscription = Subscription.for user, "speeches", query, {'query' => query}
     assert subscription.new_record?, "Subscription#for should not find subscriptions more specific than the type asked for"
   end
+  
+end
