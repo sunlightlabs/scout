@@ -1,4 +1,5 @@
 get "/user/:user_id/:tag" do
+  pass if params[:tag]['.']
 
   unless user = load_user
     halt 404 and return
