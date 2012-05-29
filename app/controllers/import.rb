@@ -1,4 +1,5 @@
 # Endpoints for managing the import of RSS feeds
+require 'feedbag'
 
 
 # landing page to begin, preview, and finalize the import of an RSS feed
@@ -10,11 +11,22 @@ end
 get "/import/feed/preview" do
   url = params[:url] ? params[:url].strip : ""
 
-  unless feed_details = Subscriptions::Adapters::ExternalFeed.validate_feed(url)
-    halt 500 and return
+
+  unless feed = Subscriptions::Adapters::ExternalFeed.url_to_response(url)
+
+    # give a try at autodiscovery
+    urls = Timeout::timeout(5) {Feedbag.find url}
+    url = urls.first
+
+    unless url and (feed = Subscriptions::Adapters::ExternalFeed.url_to_response(url))
+      halt 500 and return
+    end
   end
 
-  subscription = feed_subscription_from url
+  feed_details = Subscriptions::Adapters::ExternalFeed.feed_details feed
+  feed_url = feed_details['feed_url'] || url
+
+  subscription = feed_subscription_from feed_url
   unless results = subscription.search
     halt 500 and return
   end
@@ -32,6 +44,7 @@ get "/import/feed/preview" do
   {
     :title => feed_details['title'],
     :description => feed_details['description'],
+    :feed_url => feed_url,
     :size => items.size,
     :html => items
   }.to_json
@@ -42,18 +55,35 @@ post "/import/feed/create" do
   requires_login
 
   url = params[:url].present? ? params[:url].strip : nil
+  original_url = params[:original_url].present? ? params[:original_url].strip : nil
   title = params[:title].present? ? params[:title].strip : nil
   description = params[:description].present? ? params[:description].strip : nil
 
-  unless url.present? and title.present? and feed_details = Subscriptions::Adapters::ExternalFeed.validate_feed(url)
+  # for creating, a valid feed URL and title need to be prepared already
+  unless url.present? and title.present? and 
+    (feed = Subscriptions::Adapters::ExternalFeed.url_to_response(url)) and
+    (feed_details = Subscriptions::Adapters::ExternalFeed.feed_details(feed))
     halt 500 and return
   end
 
+  # what the user gave us may not be the feed's preferred canonical URL
+  # we'll store and use that canonical URL
+
+  # create subscription by the canonical URL
   subscription = feed_subscription_from url
+
+  # details used to render and link to feed
   subscription.data['title'] = title
   subscription.data['description'] = description
+  subscription.data['site_url'] = feed_details['site_url']
+
+  # record what the user originally put in as a URL
+  subscription.data['original_url'] = original_url
+
+  # record what the feed originally listed as its title and description
   subscription.data['original_title'] = feed_details['title']
   subscription.data['original_description'] = feed_details['description']
+
 
   interest = current_user.interests.new(
     :in => url,

@@ -24,6 +24,7 @@ module TestHelper
 
       Subscriptions::Manager.stub(:poll).and_return([])
       Subscriptions::Manager.stub(:find).and_return(double(:data => {}))
+      Feedbag.stub(:find).and_return([])
     end
 
     def verify
