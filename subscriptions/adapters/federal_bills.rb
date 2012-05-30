@@ -23,8 +23,6 @@ module Subscriptions
         
         sections = %w{ bill_id bill_type number short_title summary last_version_on latest_upcoming official_title introduced_at last_action_at last_action session last_version }
 
-        per_page = (function == :search) ? (options[:per_page] || 20) : 40
-
         url = "#{endpoint}/search/bills.json?apikey=#{api_key}"
         url << "&order=last_version_on"
         url << "&sections=#{sections.join ','}"
@@ -63,6 +61,7 @@ module Subscriptions
           url << "&page=#{options[:page]}"
         end
 
+        per_page = (function == :search) ? (options[:per_page] || 20) : 40
         url << "&per_page=#{per_page}"
         
         url

@@ -405,7 +405,7 @@
   // set/re-set after a page of results come back
   function onScroll() {
     var ratio = $(document).scrollTop() / $(document).height();
-    if (ratio > 0.80) {
+    if (ratio > 0.70) {
       $(document).off("scroll"); // search function will re-assign the callback after it's done
       var nextPage = $("ul.items").data("page") + 1;
       search(currentSubscriptionType(), {page: nextPage});

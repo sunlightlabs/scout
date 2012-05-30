@@ -43,6 +43,17 @@ module Subscriptions
           url << "&updated_since=#{updated_since}"
         end
 
+        
+        # pagination
+
+        if options[:page]
+          url << "&page=#{options[:page]}"
+        end
+
+        per_page = (function == :search) ? (options[:per_page] || 20) : 40
+        url << "&per_page=#{per_page}"
+
+
         url
       end
 
@@ -82,16 +93,16 @@ module Subscriptions
       def self.items_for(response, function, options = {})
         return if response.is_a?(String)
         
-        # OpenStates API does not have server-side pagination - so we do it here
-        per_page = options[:per_page] || 20
-        page = options[:page] || 1
-        beginning = per_page * (page - 1) # index of first item
-        ending = (beginning + per_page) - 1  # index of last item
+        # # OpenStates API does not have server-side pagination - so we do it here
+        # per_page = options[:per_page] || 20
+        # page = options[:page] || 1
+        # beginning = per_page * (page - 1) # index of first item
+        # ending = (beginning + per_page) - 1  # index of last item
 
-        # for searching, only return the first "page" of items, otherwise, handle any and all
-        items = (function == :search) ? (response[beginning..ending] || []) : response
+        # # for searching, only return the first "page" of items, otherwise, handle any and all
+        # items = (function == :search) ? (response[beginning..ending] || []) : response
 
-        items.map {|bill| item_for bill}
+        response.map {|bill| item_for bill}
       end
 
       def self.item_detail_for(bill)
