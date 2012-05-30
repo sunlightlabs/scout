@@ -76,12 +76,18 @@
 <script type="text/javascript">
   $(function() {
 
-    var preview = function() {
-
+    $("form.preview").submit(function() {
       var url = $.trim($("input.feed_url").val());
       if (!url) return false;
 
-      // reset
+      Utils.pjax("/import/feed?url=" + encodeURIComponent(url));
+      return false;
+    });
+
+    var preview = function() {
+      var url = $.trim($("input.feed_url").val());
+      if (!url) return false;
+
       $(".hide_start").hide();
 
       var preview = $("div.feed_preview").show();
@@ -140,8 +146,6 @@
     <% else %>
       $("button.create").click(function() {window.location = "/login?redirect=" + Utils.currentPath();});
     <% end %>
-
-    $("form.preview").submit(preview);
 
     if ($("input.feed_url").val())
       preview();

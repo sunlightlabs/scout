@@ -1,7 +1,7 @@
 
 # landing page to begin, preview, and finalize the import of an RSS feed
 get "/import/feed" do
-  erb :"account/import", :locals => {:url => (params[:url] || "").strip}
+  erb :"account/import", :locals => {:url => (params[:url] || "").strip}, :layout => !pjax?
 end
 
 # fetch a preview of the given RSS feed
@@ -35,7 +35,7 @@ get "/import/feed/preview" do
   end
 
   items = erb :"search/items", :layout => false, :locals => {
-    :items => results.first(2), 
+    :items => results.first(3), 
     :subscription => subscription,
 
     # could be removed if the partials were refactored not to necessarily expect these
