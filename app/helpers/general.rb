@@ -157,7 +157,7 @@ module Helpers
     def light_format(string)
       return "" unless string.present?
       string = strip_tags string
-      string = simple_format h(string)
+      string = simple_format string
       Rinku.auto_link string, :all, "rel='nofollow'"
     end
     
