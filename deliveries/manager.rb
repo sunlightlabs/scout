@@ -19,7 +19,7 @@ module Deliveries
         elsif delivery_options['mechanism'] == 'sms'
           receipts += Deliveries::SMS.deliver_for_user! user, dry_run
         else
-          Admin.message "Unsure how to deliver to user #{user.email}, no known delivery mechanism for #{delivery_options['mechanism']}"
+          Admin.message "Unsure how to deliver to user #{user.email || user.phone}, no known delivery mechanism for #{delivery_options['mechanism']}"
         end
       end
       
@@ -53,9 +53,9 @@ module Deliveries
       email_frequency ||= interest.email_frequency
 
       if !["email", "sms"].include?(mechanism)
-        puts "[#{subscription.user.email}][#{subscription.subscription_type}][#{subscription.interest_in}](#{item.item_id}) Not scheduling delivery, user wants no notifications for this interest" unless Sinatra::Application.test?
+        puts "[#{user.email || user.phone}][#{subscription.subscription_type}][#{subscription.interest_in}](#{item.item_id}) Not scheduling delivery, user wants no notifications for this interest" unless Sinatra::Application.test?
       else
-        puts "[#{subscription.user.email}][#{subscription.subscription_type}][#{subscription.interest_in}](#{item.item_id}) Scheduling delivery" unless Sinatra::Application.test?
+        puts "[#{user.email || user.phone}][#{subscription.subscription_type}][#{subscription.interest_in}](#{item.item_id}) Scheduling delivery" unless Sinatra::Application.test?
 
         Delivery.create!(
           :user_id => user.id,

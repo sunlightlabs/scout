@@ -8,7 +8,7 @@ module Admin
     # it's just a salted hash, but still
     user_attributes.delete "password_hash"
 
-    deliver! "User", "New user: #{user.email}", JSON.pretty_generate(user_attributes)
+    deliver! "User", "New user: #{user.email || user.phone}", JSON.pretty_generate(user_attributes)
   end
 
   def self.new_feed(interest)
