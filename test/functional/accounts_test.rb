@@ -114,6 +114,11 @@ class AccountsTest < Test::Unit::TestCase
     assert_response 200
 
     assert_equal count, User.count
+
+    post '/account/new', {:user => {:password => "test", :password_confirmation => "test"}}
+    assert_response 200
+
+    assert_equal count, User.count
   end
 
   # this has to be done in the controller
