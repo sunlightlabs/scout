@@ -27,6 +27,10 @@ module Helpers
       end
     end
 
+    def interest_url(interest)
+      "http://#{config[:hostname]}#{interest_path interest}"
+    end
+
     def search_interest_path(interest)
       if interest.search_type == "all"
         base = "/search/all"

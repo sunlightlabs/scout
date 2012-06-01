@@ -14,7 +14,7 @@ class Report
   def self.file(status, source, message, attached = {})
     report = Report.create!(:source => source.to_s, :status => status, :message => message, :attached => attached)
     # stdout, but don't bother stdout-ing reports that will be emailed
-    puts "\n#{report}" unless ['FAILURE', 'WARNING'].include?(status)
+    puts "\n#{report}" unless Sinatra::Application.test? or ['FAILURE', 'WARNING'].include?(status)
     report
   end
   

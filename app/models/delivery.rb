@@ -36,4 +36,23 @@ class Delivery
   validates_presence_of :user_id
   validates_presence_of :user_email
   validates_presence_of :item
+
+
+  def self.schedule!(user, subscription, item, mechanism, email_frequency)
+    create! :user_id => user.id,
+      :user_email => user.email,
+      :user_phone => user.phone,
+      
+      :subscription_id => subscription.id,
+      :subscription_type => subscription.subscription_type,
+      
+      :interest_in => subscription.interest_in,
+      :interest_id => subscription.interest_id,
+
+      :mechanism => mechanism,
+      :email_frequency => email_frequency,
+      
+      # drop the item into the delivery wholesale
+      :item => item.attributes.dup
+  end
 end

@@ -14,6 +14,8 @@ module Deliveries
       users = User.where(:_id => {"$in" => user_ids}).all
 
       users.each do |user|
+        next unless user.confirmed? # last-minute check, shouldn't be needed
+
         if delivery_options['mechanism'] == 'email'
           receipts += Deliveries::Email.deliver_for_user! user, delivery_options['email_frequency'], dry_run
         elsif delivery_options['mechanism'] == 'sms'
@@ -27,11 +29,8 @@ module Deliveries
       if receipts.any?
         Admin.message "Sent #{receipts.size} notifications", report_for(receipts, delivery_options)
       else
-        puts "No notifications sent."
+        puts "No notifications sent." unless Sinatra::Application.test?
       end
-    rescue Exception => ex
-      Admin.report Report.exception("Delivery", "Problem during delivery.", ex)
-      puts "Error during delivery, emailed report."
     end
 
     def self.schedule_delivery!(item, 
@@ -52,30 +51,18 @@ module Deliveries
       mechanism ||= interest.mechanism
       email_frequency ||= interest.email_frequency
 
+      header = "[#{user.email || user.phone}][#{subscription.subscription_type}][#{interest.in}](#{item.item_id})"
+
       if !["email", "sms"].include?(mechanism)
-        puts "[#{user.email || user.phone}][#{subscription.subscription_type}][#{interest.in}](#{item.item_id}) Not scheduling delivery, user wants no notifications for this interest" unless Sinatra::Application.test?
+        puts "#{header} Not scheduling delivery, user wants no notifications for this interest" unless Sinatra::Application.test?
       elsif !user.confirmed?
-        puts "[#{user.email || user.phone}][#{subscription.subscription_type}][#{interest.in}](#{item.item_id}) Not scheduling delivery, user is unconfirmed" unless test?
+        puts "#{header} Not scheduling delivery, user is unconfirmed" unless Sinatra::Application.test?
+      elsif (mechanism == "sms") and (user.phone.blank? or !user.phone_confirmed)
+        puts "#{header} Not scheduling delivery, it is for SMS and user has no confirmed phone number" unless Sinatra::Application.test?
       else
-        puts "[#{user.email || user.phone}][#{subscription.subscription_type}][#{interest.in}](#{item.item_id}) Scheduling delivery" unless Sinatra::Application.test?
+        puts "#{header} Scheduling delivery" unless Sinatra::Application.test?
 
-        Delivery.create!(
-          :user_id => user.id,
-          :user_email => user.email,
-          :user_phone => user.phone,
-          
-          :subscription_id => subscription.id,
-          :subscription_type => subscription.subscription_type,
-          
-          :interest_in => subscription.interest_in,
-          :interest_id => subscription.interest_id,
-
-          :mechanism => mechanism,
-          :email_frequency => email_frequency,
-          
-          # drop the item into the delivery wholesale
-          :item => item.attributes.dup
-        )
+        Delivery.schedule! user, subscription, item, mechanism, email_frequency
       end
     end
 

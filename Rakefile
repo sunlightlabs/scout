@@ -114,17 +114,32 @@ end
 namespace :deliver do
   desc "Deliveries for a single daily email digest"
   task :email_daily => :environment do
-    Deliveries::Manager.deliver! "mechanism" => "email", "email_frequency" => "daily"
+    begin
+      Deliveries::Manager.deliver! "mechanism" => "email", "email_frequency" => "daily"
+    rescue Exception => ex
+      Admin.report Report.exception("Delivery", "Problem during deliver:email_daily.", ex)
+      puts "Error during delivery, emailed report."
+    end
   end
 
   desc "Deliveries of emails for whenever, per-interest"
   task :email_immediate => :environment do
-    Deliveries::Manager.deliver! "mechanism" => "email", "email_frequency" => "immediate"
+    begin
+      Deliveries::Manager.deliver! "mechanism" => "email", "email_frequency" => "immediate"
+    rescue Exception => ex
+      Admin.report Report.exception("Delivery", "Problem during deliver:email_immediate.", ex)
+      puts "Error during delivery, emailed report."
+    end
   end
 
   desc "Deliveries of SMSes for whenever, per-interest"
   task :sms => :environment do
-    Deliveries::Manager.deliver! "mechanism" => "sms"
+    begin
+      Deliveries::Manager.deliver! "mechanism" => "sms"
+    rescue Exception => ex
+      Admin.report Report.exception("Delivery", "Problem during deliver:sms.", ex)
+      puts "Error during delivery, emailed report."
+    end
   end
 end
 

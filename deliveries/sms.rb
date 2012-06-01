@@ -3,9 +3,11 @@ require 'twilio-rb'
 module Deliveries
   module SMS
 
+    extend Helpers::Routing
+
     def self.deliver_for_user!(user, dry_run = false)
-      unless user.phone.present?
-        Admin.report Report.failure("Delivery", "#{user.email} is signed up for SMS alerts but has no phone", :email => user.email)
+      unless user.phone.present? and user.phone_confirmed?
+        Admin.report Report.failure("Delivery", "#{user.id} is signed up for SMS alerts but has no confirmed phone", :id => user.id.to_s, :email => user.email, :phone => user.phone, :phone_confirmed => user.phone_confirmed)
         return []
       end
 
@@ -69,12 +71,7 @@ module Deliveries
     def self.render_interest(interest, deliveries)
       grouped = deliveries.group_by &:subscription
 
-      url = "http://#{config[:hostname]}"
-      if grouped.keys.size == 1
-        url << Deliveries::Manager.interest_path(interest, grouped.keys.first.subscription_type)
-      else
-        url << Deliveries::Manager.interest_path(interest)
-      end      
+      url = interest_url interest
 
       content = ""
       
