@@ -125,6 +125,7 @@ module Subscriptions
 
       # parse response when asking for a single bill - RTC still returns an array of one
       def self.item_detail_for(response)
+        return nil unless response
         item_for response['bills'][0]
       end
       

@@ -153,6 +153,8 @@ module Subscriptions
       if item
         item.find_url = url
         item
+      else
+        nil
       end
     end
 

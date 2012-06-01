@@ -83,6 +83,7 @@ class AccountsTest < Test::Unit::TestCase
     assert User.authenticate(user, "test")
     assert !user.announcements
     assert user.sunlight_announcements
+    assert user.confirmed?
   end
 
   def test_create_user_redirects_back
@@ -430,7 +431,7 @@ class AccountsTest < Test::Unit::TestCase
     assert_nil user.phone
     assert !user.phone_confirmed?
     assert_nil user.phone_verify_code
-    SMS.should_receive(:deliver).with("Verification Code", phone, anything)
+    SMS.should_receive(:deliver!).with("Verification Code", phone, anything)
 
     put '/account/phone', {:user => {:phone => phone}}, login(user)
 
@@ -450,7 +451,7 @@ class AccountsTest < Test::Unit::TestCase
     user = create :user, :phone => phone1, :phone_confirmed => true, :phone_verify_code => original_verify_code
 
     assert user.phone_confirmed?
-    SMS.should_receive(:deliver).with("Verification Code", phone2, anything)
+    SMS.should_receive(:deliver!).with("Verification Code", phone2, anything)
 
     put '/account/phone', {:user => {:phone => phone2}}, login(user)
 
@@ -488,7 +489,7 @@ class AccountsTest < Test::Unit::TestCase
     user = create :user, :phone => phone, :phone_verify_code => verify_code
 
     assert !user.phone_confirmed?
-    SMS.should_receive(:deliver).with("Resend Verification Code", phone, anything)
+    SMS.should_receive(:deliver!).with("Resend Verification Code", phone, anything)
 
     post '/account/phone/resend', {}, login(user)
 

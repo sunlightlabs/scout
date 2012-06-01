@@ -93,7 +93,9 @@ namespace :subscriptions do
       task subscription_type.to_sym => :environment do
         begin
           Subscription.initialized.where(:subscription_type => subscription_type).each do |subscription|
-            Subscriptions::Manager.check! subscription
+            if subscription.user.confirmed?
+              Subscriptions::Manager.check! subscription
+            end
           end
         rescue Exception => ex
           Admin.report Report.exception("Check", "Problem during 'rake subscriptions:check:#{subscription_type}'.", ex)

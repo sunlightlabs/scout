@@ -106,6 +106,7 @@ module Subscriptions
       end
 
       def self.item_detail_for(bill)
+        return nil unless bill
         item_for bill.to_hash
       end
       

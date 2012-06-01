@@ -59,7 +59,13 @@ module TestHelper
 
     def mock_response(url, fixture)
       file = "test/fixtures/#{fixture}.json"
-      response = MultiJson.load(open file)
+      
+      if File.exists?(file)
+        response = MultiJson.load(open file)
+      else
+        response = nil
+      end
+
       HTTParty.should_receive(:get).with(url).and_return response
     end
 
@@ -98,8 +104,8 @@ module TestHelper
       end
     end
 
-    def assert_response(status)
-      assert_equal status, last_response.status
+    def assert_response(status, message = nil)
+      assert_equal status, last_response.status, (message || last_response.body)
     end
 
     def assert_redirect(path)

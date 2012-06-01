@@ -7,7 +7,12 @@ class User
   field :email
   field :phone
 
-  field :admin, :type => Boolean, :default => false
+  # accounts that sign up through the regular login process are auto-confirmed
+  # accounts signed up through the remote API have a confirmation step
+  field :confirmed, :type => Boolean, :default => true
+
+  # by default, accounts come from the web - we allow a remote API for limited use cases
+  field :source, default: "web"
 
   # will get assigned automatically by the API key syncing service
   # if a user has one, we turn on various features in the site
@@ -74,14 +79,19 @@ class User
   
   field :password_hash, :type => String # type needs to be specified, otherwise it'd be a BCrypt::Password
   
-  validates_presence_of :email, :message => "We need an email address."
-  validates_uniqueness_of :email, :message => "That email address is already signed up."
+  validates_presence_of :email, :message => "We need an email address.", :unless => :has_phone?
+  validates_uniqueness_of :email, :message => "That email address is already signed up.", :allow_blank => true
   validates_format_of :email, :with => /^[-a-z0-9_+\.]+\@([-a-z0-9]+\.)+[a-z0-9]{2,4}$/i, :message => "Not a valid email address.", :allow_blank => true
 
   validates_confirmation_of :password, :message => "Your passwords did not match."
   
   before_save :encrypt_password
   
+  # used to allow email-less user accounts
+  def has_phone?
+    self.phone.present?
+  end
+
   def self.authenticate(user, password)
     BCrypt::Password.new(user.password_hash) == password
   end
@@ -129,6 +139,7 @@ class User
   field :phone_confirmed, :type => Boolean, :default => false
 
   # only +, -, ., and digits allowed
+  validates_uniqueness_of :phone, :allow_blank => true
   validates_format_of :phone, :with => /^[\+\.\d\-]+$/, :allow_blank => true, :message => "Not a valid phone number."
 
   def new_phone_verify_code
@@ -150,6 +161,10 @@ class User
 
   def self.phone_verify_message(code)
     "[Scout] Your verification code is #{code}."
+  end
+
+  def self.phone_remote_subscribe_message
+    "[Scout] Please confirm your phone number by replying to this text with 'c'."
   end
 
 end
