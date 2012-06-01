@@ -14,6 +14,7 @@ require 'mongoid'
 require 'tzinfo'
 require 'twilio-rb'
 require 'feedbag'
+require 'phone'
 
 # restore the original to_json on core objects (damn you ActiveSupport)
 [Object, Array, FalseClass, Float, Hash, Integer, NilClass, String, TrueClass].each do |klass|
@@ -52,6 +53,9 @@ def reserved_names
 end
 
 configure do
+  # default country code for phone numbers
+  Phoner::Phone.default_country_code = '1'
+
   Mongoid.load! "config/mongoid.yml"
   
   if config[:twilio]

@@ -43,3 +43,6 @@ gem 'httparty', '0.8.3'
 # feed parsing
 gem 'feedzirra', '0.2.0.rc1'
 gem 'feedbag', '0.9.1'
+
+# phone number standardization - thrilling
+gem 'phone', '1.1'
