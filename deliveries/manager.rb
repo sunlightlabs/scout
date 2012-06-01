@@ -53,9 +53,11 @@ module Deliveries
       email_frequency ||= interest.email_frequency
 
       if !["email", "sms"].include?(mechanism)
-        puts "[#{user.email || user.phone}][#{subscription.subscription_type}][#{subscription.interest_in}](#{item.item_id}) Not scheduling delivery, user wants no notifications for this interest" unless Sinatra::Application.test?
+        puts "[#{user.email || user.phone}][#{subscription.subscription_type}][#{interest.in}](#{item.item_id}) Not scheduling delivery, user wants no notifications for this interest" unless Sinatra::Application.test?
+      elsif !user.confirmed?
+        puts "[#{user.email || user.phone}][#{subscription.subscription_type}][#{interest.in}](#{item.item_id}) Not scheduling delivery, user is unconfirmed" unless test?
       else
-        puts "[#{user.email || user.phone}][#{subscription.subscription_type}][#{subscription.interest_in}](#{item.item_id}) Scheduling delivery" unless Sinatra::Application.test?
+        puts "[#{user.email || user.phone}][#{subscription.subscription_type}][#{interest.in}](#{item.item_id}) Scheduling delivery" unless Sinatra::Application.test?
 
         Delivery.create!(
           :user_id => user.id,

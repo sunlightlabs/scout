@@ -6,6 +6,19 @@ FactoryGirl.define do
     sequence(:email) {|n| "fake#{n}@example.com"}
     password "test"
     password_confirmation "test"
+
+    factory :phone_user do
+      email nil
+      password "test"
+      password_confirmation "test"
+      phone "+15555551212"
+      phone_confirmed false
+      confirmed false
+      notifications "none"
+      should_reset_password true
+      announcements false
+      sunlight_announcements false
+    end
   end
 
   factory :tag do
