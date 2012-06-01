@@ -42,7 +42,7 @@ post "/remote/subscribe/sms" do
 
   source = params[:source].present? ? params[:source] : "remote"
 
-  item_type = params[:item_type]
+  item_type = params[:item_type] || "bill" # temporary
   item_id = params[:item_id]
 
   new_record = true
@@ -72,13 +72,15 @@ post "/remote/subscribe/sms" do
   if new_record
     user.save!
   end
-  
+
   interest = Interest.for_item user, item_id, item_type
+  interest.notifications = "sms" # force interests subscribed to this way to be sms notifications
   interest.data = item.data
   interest.save! # should be harmless whether or not item is created
 
   # ask user to confirm their new subscription
   if new_record
+    Admin.new_user user
     SMS.deliver! "Remote Subscription", user.phone, User.phone_remote_subscribe_message
   end
 
@@ -94,5 +96,5 @@ end
 # from the number in question (no confirmation code needed)
 
 post "/remote/confirm/sms" do
-  
+
 end

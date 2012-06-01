@@ -47,6 +47,7 @@ class RemoteTest < Test::Unit::TestCase
     assert_equal "item", interest.interest_type
     assert_equal item_type, interest.item_type
     assert_equal item_id, interest.in
+    assert_equal "sms", interest.notifications
     assert_not_nil interest.data['bill_id'] # loaded from fixture
   end
 
@@ -64,6 +65,7 @@ class RemoteTest < Test::Unit::TestCase
     assert_equal 0, user.interests.count
 
     # SMS should not be sent
+    Admin.should_not_receive(:new_user)
     SMS.should_not_receive(:deliver!).with("Remote Subscription", phone, anything)
 
     post "/remote/subscribe/sms", {
@@ -82,6 +84,7 @@ class RemoteTest < Test::Unit::TestCase
     assert_equal "item", interest.interest_type
     assert_equal item_type, interest.item_type
     assert_equal item_id, interest.in
+    assert_equal "sms", interest.notifications
     assert_not_nil interest.data['bill_id'] # loaded from fixture
 
     # verify *no* SMS was sent to user, not needed
@@ -131,12 +134,15 @@ class RemoteTest < Test::Unit::TestCase
     assert_response 500
     assert_nil User.where(:phone => phone).first
 
-    post "/remote/subscribe/sms", {
-      :phone => phone, :interest_type => "item", :item_id => item_id, :item_type => "",
-      :source => "testing"
-    }
-    assert_response 500
-    assert_nil User.where(:phone => phone).first
+
+    # relaxed until COC team can update their end
+
+    # post "/remote/subscribe/sms", {
+    #   :phone => phone, :interest_type => "item", :item_id => item_id, :item_type => "",
+    #   :source => "testing"
+    # }
+    # assert_response 500
+    # assert_nil User.where(:phone => phone).first
   end
 
   def test_subscribe_by_sms_when_remote_item_doesnt_exist_fails
