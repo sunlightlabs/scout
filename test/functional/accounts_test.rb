@@ -110,7 +110,6 @@ class AccountsTest < Test::Unit::TestCase
     count = User.count
 
     post '/account/new', {:user => {:email => "", :password => "test", :password_confirmation => "test"}}
-    puts redirect_path
     assert_response 200
 
     assert_equal count, User.count
