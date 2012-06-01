@@ -91,7 +91,11 @@ module TestHelper
     # custom helpers
 
     def redirect_path
-      last_response.headers['Location'].sub(/http:\/\/example.org/, '')
+      if last_response.headers['Location']
+        last_response.headers['Location'].sub(/http:\/\/example.org/, '')
+      else
+        nil
+      end
     end
 
     def assert_response(status)

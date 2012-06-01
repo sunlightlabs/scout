@@ -100,11 +100,20 @@ class AccountsTest < Test::Unit::TestCase
     assert_nil User.where(:email => email).first
 
     post '/account/new', {:user => {:email => email, :password => "test", :password_confirmation => "test"}}
+    assert_response 200 # render with errors
 
     assert_nil User.where(:email => email).first
+  end
 
-    # should render errors
-    assert_equal 200, last_response.status
+  # normal create user path requires an email
+  def test_create_user_without_email_fails
+    count = User.count
+
+    post '/account/new', {:user => {:email => "", :password => "test", :password_confirmation => "test"}}
+    puts redirect_path
+    assert_response 200
+
+    assert_equal count, User.count
   end
 
   # this has to be done in the controller
