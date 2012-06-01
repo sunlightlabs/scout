@@ -161,44 +161,33 @@ class SearchTest < Test::Unit::TestCase
     user = create :user
     query1 = "environment"
     query2 = "guns"
-    i1 = create :search_interest, :user => user, :in => query1, :search_type => "state_bills"
-    i2 = create :search_interest, :user => user, :in => query2, :search_type => "state_bills", :data => {"query" => query2, 'state' => "CA"}
-    s1 = create :search_subscription, :user => user, :interest => i1, :subscription_type => "state_bills"
-    s2 = create :search_subscription, :user => user, :interest => i2, :subscription_type => "state_bills"
-
-    assert_equal i2.data['state'], s2.data['state']
+    i1 = search_interest! user, "state_bills", query1
+    i2 = search_interest! user, "state_bills", query2, {"query" => query2, 'state' => "CA"}
 
     delete "/interests/search", {:search_type => i1.search_type, :query => i1.in}, login(user)
     assert_response 200
 
     assert_nil Interest.find(i1.id)
-    assert_nil Subscription.find(s1.id)
-
+    
     delete "/interests/search", {:search_type => i2.search_type, :query => i2.in, i2.search_type => {'state' => 'DE'}}, login(user)
     assert_response 404
 
     assert_not_nil Interest.find(i2.id)
-    assert_not_nil Subscription.find(s2.id)
-
+    
     delete "/interests/search", {:search_type => i2.search_type, :query => i2.in, i2.search_type => {'state' => "CA"}}, login(user)
     assert_response 200
 
     assert_nil Interest.find(i2.id)
-    assert_nil Subscription.find(s2.id)
   end
 
   def test_unsubscribe_to_type_of_all
     user = create :user
-    query1 = "environment"
-    i1 = create :search_interest, :user => user, :in => query1, :search_type => "all"
-    s1 = create :subscription, :interest => i1, :subscription_type => "state_bills"
-    s2 = create :subscription, :interest => i1, :subscription_type => "federal_bills"
-
-    delete "/interests/search", {:search_type => "all", :query => i1.in}, login(user)
+    query = "environment"
+    interest = search_interest! user, "all", query
+    
+    delete "/interests/search", {:search_type => "all", :query => interest.in}, login(user)
     assert_response 200
 
-    assert_nil Interest.find(i1.id)
-    assert_nil Subscription.find(s1.id)
-    assert_nil Subscription.find(s2.id)
+    assert_nil Interest.find(interest.id)
   end
 end

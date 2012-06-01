@@ -8,7 +8,8 @@ class TagsTest < Test::Unit::TestCase
   
   def test_tags_on_interests
     user = create :user
-    interest = create :interest, :user => user
+
+    interest = search_interest! user
 
     new_tags = "one, after, another"
     serialized = ["one", "after", "another"]
@@ -42,8 +43,8 @@ class TagsTest < Test::Unit::TestCase
   def test_two_users_can_have_same_tag
     user1 = create :user
     user2 = create :user
-    interest1 = create :interest, :user => user1
-    interest2 = create :interest, :user => user2
+    interest1 = search_interest! user1
+    interest2 = search_interest! user2
 
     new_tags = "one, two, three"
 
@@ -253,15 +254,15 @@ class TagsTest < Test::Unit::TestCase
     tag4 = create :tag, :user => user1, :name => name4
     tag5 = create :tag, :user => user1, :name => name5
 
-    interest1 = create :interest, :user => user1, :tags => [name1, name2]
-    interest2 = create :interest, :user => user1, :tags => [name3]
-    interest3 = create :interest, :user => user1, :tags => [name3, name4, name5]
+    interest1 = search_interest! user1, "all", "a", {}, :tags => [name1, name2]
+    interest2 = search_interest! user1, "all", "b", {}, :tags => [name3]
+    interest3 = search_interest! user1, "all", "c", {}, :tags => [name3, name4, name5]
 
     user2 = create :user
     tag4 = create :tag, :user => user2, :name => name1
     tag5 = create :tag, :user => user2, :name => name3
     tag6 = create :tag, :user => user2, :name => name5
-    interest4 = create :interest, :user => user2, :tags => [name1, name3, name5]
+    interest4 = search_interest! user2, "all", "d", {}, :tags => [name1, name3, name5]
 
     assert_equal 8, Tag.count
     assert_equal 5, user1.tags.count

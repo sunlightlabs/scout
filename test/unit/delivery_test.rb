@@ -9,8 +9,8 @@ class DeliveryTest < Test::Unit::TestCase
     user = create :user
     query = "copyright"
 
-    interest = user.interests.create! :in => query, :interest_type => "search"
-    subscription = user.subscriptions.create! :interest => interest, :subscription_type => "federal_bills", :interest_in => query
+    interest = search_interest! user, "federal_bills", query
+    subscription = interest.subscriptions.first
 
     item = SeenItem.new(
       :item_id => "hr2431-112",
@@ -41,8 +41,9 @@ class DeliveryTest < Test::Unit::TestCase
     user = create :user
     query = "copyright"
 
-    interest = user.interests.create! :in => query, :interest_type => "search", :notifications => "email_daily"
-    subscription = user.subscriptions.create! :interest => interest, :subscription_type => "federal_bills", :interest_in => query
+    interest = search_interest! user, "federal_bills", query, {}, :notifications => "email_daily"
+    
+    subscription = interest.subscriptions.first
 
     item = SeenItem.new(
       :item_id => "hr2431-112",
@@ -73,8 +74,8 @@ class DeliveryTest < Test::Unit::TestCase
     user = create :user, :notifications => "none"
     query = "copyright"
 
-    interest = user.interests.create! :in => query, :interest_type => "search"
-    subscription = user.subscriptions.create! :interest => interest, :subscription_type => "federal_bills", :interest_in => query
+    interest = search_interest! user, "federal_bills", query
+    subscription = interest.subscriptions.first
 
     item = SeenItem.new(
       :item_id => "hr2431-112",

@@ -45,6 +45,16 @@ module TestHelper
     end
 
 
+    # factory for interests
+
+    def search_interest!(user, search_type = "all", interest_in = "foia", data = {}, attributes = {})
+      interest = Interest.for_search user, search_type, interest_in, data
+      interest.attributes = attributes
+      interest.save!
+      interest
+    end
+
+
     # mock helpers for faking remote content
 
     def mock_response(url, fixture)

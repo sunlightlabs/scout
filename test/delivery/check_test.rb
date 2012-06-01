@@ -8,9 +8,9 @@ class CheckTest < Test::Unit::TestCase
 
   def test_poll_subscription
     query = "environment"
-
-    interest = build :search_interest, :in => query
-    subscription = build :subscription, :interest_in => query, :subscription_type => "federal_bills", :data => interest.data.dup
+    user = create :user
+    interest = search_interest! user, "federal_bills", query
+    subscription = interest.subscriptions.first
 
     mock_search subscription
     items = subscription.search

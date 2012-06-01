@@ -11,53 +11,59 @@ class InterestsTest < Test::Unit::TestCase
   def test_destroy_interest
     user = create :user
     query = "environment"
-    interest = user.interests.create! :in => query, :interest_type => "search"
-    s1 = interest.subscriptions.create! :subscription_type => "federal_bills", :user_id => user.id, :interest_in => query
+
+    interest = search_interest! user, "federal_bills", query
+
+    assert_equal 1, Interest.count
+    assert_equal 1, Subscription.count
 
     delete "/interest/#{interest.id}", {}, login(user)
     assert_equal 200, last_response.status
 
-    assert_nil Interest.find(interest.id)
-    assert_nil Subscription.find(s1.id)
+    assert_equal 0, Interest.count
+    assert_equal 0, Subscription.count
   end
 
   def test_destroy_interest_not_users_own
     user = create :user
     query = "environment"
-    interest = user.interests.create! :in => query, :interest_type => "search"
-    s1 = interest.subscriptions.create! :subscription_type => "federal_bills", :user_id => user.id, :interest_in => query
+    
+    interest = search_interest! user, "federal_bills", query
 
     user2 = create :user, :email => user.email.succ
+
+    assert_equal 1, Interest.count
+    assert_equal 1, Subscription.count
 
     delete "/interest/#{interest.id}", {}, login(user2)
     assert_equal 404, last_response.status
 
-    assert_not_nil Interest.find(interest.id)
-    assert_not_nil Subscription.find(s1.id)
+    assert_equal 1, Interest.count
+    assert_equal 1, Subscription.count
   end
 
   def test_destroy_interest_not_logged_in
     user = create :user
     query = "environment"
-    interest = user.interests.create! :in => query, :interest_type => "search"
-    s1 = interest.subscriptions.create! :subscription_type => "federal_bills", :user_id => user.id, :interest_in => query
+    interest = search_interest! user, "federal_bills", query
 
     user2 = create :user, :email => user.email.succ
+
+    assert_equal 1, Interest.count
+    assert_equal 1, Subscription.count
 
     delete "/interest/#{interest.id}"
     assert_equal 302, last_response.status
 
-    assert_not_nil Interest.find(interest.id)
-    assert_not_nil Subscription.find(s1.id)
+    assert_equal 1, Interest.count
+    assert_equal 1, Subscription.count
   end
 
   def test_update_interest_delivery_type_from_nothing_to_email
     user = create :user
     query = "environment"
-    interest = user.interests.create! :in => query, :interest_type => "search"
-    s1 = interest.subscriptions.create! :subscription_type => "federal_bills", :user_id => user.id, :interest_in => query
+    interest = search_interest! user, "federal_bills", query
 
-    # no easy way to do this without hardcoding the user notifications field default
     assert_equal "email_immediate", user.notifications
     assert_nil interest.notifications
 
@@ -80,10 +86,9 @@ class InterestsTest < Test::Unit::TestCase
   def test_update_interest_delivery_type_from_email_to_nothing
     user = create :user
     query = "environment"
-    interest = user.interests.create! :in => query, :interest_type => "search", :notifications => "email_daily"
-    s1 = interest.subscriptions.create! :subscription_type => "federal_bills", :user_id => user.id, :interest_in => query
 
-    # no easy way to do this without hardcoding the user notifications field default
+    interest = search_interest! user, "federal_bills", query, {}, :notifications => "email_daily"
+
     assert_equal "email_immediate", user.notifications
     assert_equal "email_daily", interest.notifications
 
@@ -106,10 +111,9 @@ class InterestsTest < Test::Unit::TestCase
   def test_update_interest_invalid_delivery_type
     user = create :user
     query = "environment"
-    interest = user.interests.create! :in => query, :interest_type => "search", :notifications => "email_daily"
-    s1 = interest.subscriptions.create! :subscription_type => "federal_bills", :user_id => user.id, :interest_in => query
 
-    # no easy way to do this without hardcoding the user notifications field default
+    interest = search_interest! user, "federal_bills", query, {}, :notifications => "email_daily"
+
     assert_equal "email_immediate", user.notifications
     assert_equal "email_daily", interest.notifications
 
@@ -133,10 +137,9 @@ class InterestsTest < Test::Unit::TestCase
     user = create :user
     user2 = create :user, :email => user.email.succ
     query = "environment"
-    interest = user.interests.create! :in => query, :interest_type => "search", :notifications => "email_daily"
-    s1 = interest.subscriptions.create! :subscription_type => "federal_bills", :user_id => user.id, :interest_in => query
 
-    # no easy way to do this without hardcoding the user notifications field default
+    interest = search_interest! user, "federal_bills", query, {}, :notifications => "email_daily"
+
     assert_equal "email_immediate", user.notifications
     assert_equal "email_daily", interest.notifications
 
@@ -159,10 +162,9 @@ class InterestsTest < Test::Unit::TestCase
   def test_update_interest_not_logged_in
     user = create :user
     query = "environment"
-    interest = user.interests.create! :in => query, :interest_type => "search", :notifications => "email_daily"
-    s1 = interest.subscriptions.create! :subscription_type => "federal_bills", :user_id => user.id, :interest_in => query
+    
+    interest = search_interest! user, "federal_bills", query, {}, :notifications => "email_daily"
 
-    # no easy way to do this without hardcoding the user notifications field default
     assert_equal "email_immediate", user.notifications
     assert_equal "email_daily", interest.notifications
 

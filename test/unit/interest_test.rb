@@ -86,7 +86,7 @@ class InterestTest < Test::Unit::TestCase
     item2_id = "s4567-112"
     item2_type = "bill"
     item3_id = item_id.dup # let's just pretend
-    item3_type = "regulation"
+    item3_type = "state_bill"
 
     i1 = Interest.for_item user, item_id, item_type
     assert i1.new_record?

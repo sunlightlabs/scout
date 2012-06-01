@@ -6,7 +6,8 @@ class TagTest < Test::Unit::TestCase
   include FactoryGirl::Syntax::Methods
 
   def test_new_tags
-    interest = create :interest
+    user = create :user
+    interest = search_interest! user
 
     assert_equal [], interest.tags
     
