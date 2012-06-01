@@ -160,6 +160,7 @@ namespace :test do
     email = ENV['email'] || config[:admin].first
     max = (ENV['max'] || ENV['limit'] || 2).to_i
     only = (ENV['only'] || "").split(",")
+    keywords = (ENV['keywords'] || "").split(",")
 
     mechanism = ENV['by'] || 'email'
     email_frequency = ENV['frequency'] || 'immediate'
@@ -181,6 +182,10 @@ namespace :test do
       interest.subscriptions.each do |subscription|
         if only.any?
           next unless only.include?(subscription.subscription_type)
+        end
+
+        if keywords.any?
+          next unless keywords.include?(subscription.interest_in)
         end
 
         puts "Searching for #{subscription.subscription_type} results for #{interest.in}..."
