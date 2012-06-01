@@ -85,6 +85,10 @@ module Subscriptions
     def self.mark_as_seen!(subscription, item)
       item.save!
     end
+
+    def self.test?
+      Sinatra::Application.test?
+    end
     
     # function is one of [:search, :initialize, :check]
     # options hash can contain epheremal modifiers for search (right now just a 'page' parameter)
@@ -92,9 +96,11 @@ module Subscriptions
       adapter = subscription.adapter
       url = adapter.url_for subscription, function, options
       
-      puts "\n[#{subscription.subscription_type}][#{function}][#{subscription.interest_in}][#{subscription.id}] #{url}\n\n" if config[:debug][:output_urls]
+      puts "\n[#{subscription.subscription_type}][#{function}][#{subscription.interest_in}][#{subscription.id}] #{url}\n\n" if !test? and config[:debug][:output_urls]
 
       response = nil
+
+      # this override is only used by the external feed parser, which is parsing some kind of XML feed
       if adapter.respond_to?(:url_to_response)
         begin
           response = adapter.url_to_response url
@@ -105,6 +111,8 @@ module Subscriptions
           puts report.to_s
           return nil
         end
+
+      # every other adapter is parsing a remote JSON feed
       else
         begin
           response = HTTParty.get url
@@ -131,7 +139,7 @@ module Subscriptions
       adapter = Subscription.adapter_for adapter_type
       url = adapter.url_for_detail item_id, options
       
-      puts "\n[#{adapter}][find][#{item_id}] #{url}\n\n" if config[:debug][:output_urls]
+      puts "\n[#{adapter}][find][#{item_id}] #{url}\n\n" if !test? and config[:debug][:output_urls]
       
       begin
         response = HTTParty.get url

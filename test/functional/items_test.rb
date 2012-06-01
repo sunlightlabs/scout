@@ -24,14 +24,15 @@ class ItemsTest < Test::Unit::TestCase
     assert_response 404
   end
 
-  # TODO: need fixtures, the render step breaks without having actual data
-  # def test_fetch_item_itself
-  #   item_id = "hr4192-112"
-  #   item_type = "bill"
+  def test_fetch_item_itself
+    item_id = "hr4192-112"
+    item_type = "bill"
 
-  #   get "/fetch/item/#{item_type}/#{item_id}"
-  #   assert_response 200
-  # end
+    mock_item item_id, item_type
+
+    get "/fetch/item/#{item_type}/#{item_id}"
+    assert_response 200
+  end
 
   def test_fetch_item_with_bad_item_type
     item_id = "hr4192-112"
@@ -51,11 +52,7 @@ class ItemsTest < Test::Unit::TestCase
     assert_equal 0, user.interests.count
     assert_equal 0, user.subscriptions.count
 
-    item = SeenItem.new(:item_id => item_id, :date => Time.now, :data => {
-     :bill_id => item_id,
-     :enacted => true
-    })
-    Subscriptions::Manager.stub(:find).and_return(item)
+    mock_item item_id, item_type
 
     post "/item/#{item_type}/#{item_id}/follow", {}, login(user)
     assert_response 200

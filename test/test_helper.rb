@@ -22,8 +22,7 @@ module TestHelper
     def setup
       RSpec::Mocks.setup(self)
 
-      Subscriptions::Manager.stub(:poll).and_return([])
-      Subscriptions::Manager.stub(:find).and_return(double(:data => {}))
+      HTTParty.stub(:get).and_return({})
       Feedbag.stub(:find).and_return([])
     end
 
@@ -43,6 +42,28 @@ module TestHelper
 
       # remove rspec mocks
       RSpec::Mocks.space.reset_all
+    end
+
+
+    # mock helpers for faking remote content
+
+    def mock_response(url, fixture)
+      file = "test/fixtures/#{fixture}.json"
+      response = MultiJson.load(open file)
+      HTTParty.should_receive(:get).with(url).and_return response
+    end
+
+    def mock_search(subscription, function = :search)
+      fixture = "#{subscription.subscription_type}/search/#{subscription.interest_in}"
+      url = subscription.adapter.url_for subscription, function, {}
+      mock_response url, fixture
+    end
+
+    def mock_item(item_id, item_type)
+      subscription_type = item_types[item_type]['adapter']
+      fixture = "#{subscription_type}/item/#{item_id}"
+      url = Subscription.adapter_for(subscription_type).url_for_detail item_id
+      mock_response url, fixture
     end
 
 

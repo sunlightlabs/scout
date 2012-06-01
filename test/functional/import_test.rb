@@ -11,6 +11,7 @@ class ImportTest < Test::Unit::TestCase
     original_description = "Original Description"
 
     Subscriptions::Adapters::Feed.should_receive(:url_to_response).with(url).and_return(double())
+    Subscriptions::Adapters::Feed.should_receive(:items_for).and_return([])
     Subscriptions::Adapters::Feed.should_receive(:feed_details).with(anything).and_return({
       'title' => original_title, 'description' => original_description
     })
@@ -66,6 +67,7 @@ class ImportTest < Test::Unit::TestCase
     Email.should_receive(:deliver!).with("Feed", anything, anything, anything)
 
     Subscriptions::Adapters::Feed.should_receive(:url_to_response).with(url).and_return(double())
+    Subscriptions::Adapters::Feed.should_receive(:items_for).and_return([])
     Subscriptions::Adapters::Feed.should_receive(:feed_details).with(anything).and_return({
       'title' => original_title, 'description' => original_description
     })

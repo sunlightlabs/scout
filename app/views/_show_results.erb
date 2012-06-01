@@ -3,7 +3,7 @@
 </h4>
 <table class="activity">
   <tbody>
-    <% if items.any? %>
+    <% if items and items.any? %>
       <% items.sort {|a, b| b.date <=> a.date}.first(5).each do |item| %>
         <tr>
           <%= partial "subscriptions/#{subscription.subscription_type}/result", :engine => :erb, :locals => {:item => item} %>
@@ -11,7 +11,13 @@
       <% end %>
     <% else %>
       <tr>
-        <td colspan="2">Nothing yet.</td>
+        <td colspan="2">
+          <% if items %>
+            Nothing yet.
+          <% else %>
+            Error loading information.
+          <% end %>
+        </td>
       </tr>
     <% end %>
   </tbody>
