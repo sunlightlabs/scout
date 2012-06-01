@@ -323,10 +323,10 @@
     $("button.following").show();
 
     $.post("/interests/search", subscription, function(data) {
-      Utils.log("Created new subscription.");
+      Utils.log("Created new search interest.");
       loadInterestPane(data.interest_pane);
     }).error(function() {
-      Utils.log("ERROR creating new subscription.");
+      Utils.log("ERROR creating new search interest.");
       $("button.follow").show();
       $("button.following").hide();
     });
@@ -348,10 +348,10 @@
     $("button.following").hide();
 
     $.post("/interests/search", $.extend(subscription, {_method: "delete"}), function(data) {
-      Utils.log("Removed subscription.");
+      Utils.log("Removed search interest.");
       loadInterestPane(data.interest_pane);
     }).error(function() {
-      Utils.log("ERROR removing subscription.");
+      Utils.log("ERROR removing search interest.");
       $("button.follow").hide();
       $("button.following").show();
     });

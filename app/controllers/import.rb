@@ -24,11 +24,7 @@ get "/import/feed/preview" do
   feed_url = feed_details['feed_url'] || url
 
   interest = Interest.for_feed nil, url
-  subscription = Subscription.new(
-    :interest_in => url,
-    :subscription_type => "feed",
-    :data => interest.data.dup
-  )
+  subscription = Interest.subscriptions_for(interest).first
 
   unless results = subscription.search
     halt 500 and return
@@ -89,18 +85,7 @@ post "/import/feed/create" do
   interest.data['original_description'] = feed_details['description']
 
   if interest.new_record?
-    subscription = current_user.subscriptions.new(
-      :interest_in => url,
-      :subscription_type => "feed",
-      :data => interest.data.dup
-    )
-
-    # should be non-controversial at this step
     interest.save!
-    subscription.interest_id = interest.id
-    subscription.save!
-
-    # send admin an email about new feed, for reactive review
     Admin.new_feed interest
   end
 

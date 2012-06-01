@@ -1,16 +1,11 @@
 # landing pages
 
 get "/item/:item_type/:item_id" do
-  interest = item_interest_for params[:item_id], params[:item_type]
-
-  types = item_types[params[:item_type]]['subscriptions'] || []
-  subscriptions = types.map do |subscription_type|
-    item_subscription_for interest, subscription_type
-  end
-
+  interest = item_interest
+  
   erb :show, :layout => !pjax?, :locals => {
     :interest => interest,
-    :subscriptions => subscriptions,
+    :subscriptions => Interest.subscriptions_for(interest),
     :item_type => params[:item_type],
     :item_id => params[:item_id]
   }
@@ -27,7 +22,7 @@ get "/fetch/item/:item_type/:item_id" do
     halt 404 and return
   end
 
-  interest = item_interest_for item_id, item_type
+  interest = item_interest
 
   erb :"subscriptions/#{subscription_type}/_show", :layout => false, :locals => {
     :item => item,
@@ -39,8 +34,8 @@ end
 get "/fetch/item/:item_type/:item_id/:subscription_type" do
   valid_item
 
-  interest = item_interest_for params[:item_id], params[:item_type]
-  subscription = item_subscription_for interest, params[:subscription_type]
+  interest = item_interest
+  subscription = Interest.subscription_for interest, params[:subscription_type]
 
   items = subscription.search
 
@@ -57,34 +52,25 @@ post '/item/:item_type/:item_id/follow' do
   item_type = params[:item_type]
   item_id = params[:item_id]
   
-  interest = item_interest_for item_id, item_type
+  interest = item_interest
   halt 200 and return unless interest.new_record?
 
   unless item = Subscriptions::Manager.find(item_types[item_type]['adapter'], item_id)
     halt 404 and return
   end
 
+  # populate the new interest with its actual fetched data
   interest.data = item.data
-  subscriptions = item_subscriptions_for interest
 
-  if interest.valid? and (subscriptions.reject {|s| s.valid?}.empty?)
-    interest.save!
-    subscriptions.each do |subscription|
-      subscription.interest = interest
-      subscription.save!
-    end
-
-    halt 200
-  else
-    halt 500
-  end
+  interest.save!
+  halt 200
 end
 
 
 delete '/item/:item_type/:item_id/unfollow' do
   requires_login
 
-  interest = item_interest_for params[:item_id], params[:item_type]
+  interest = item_interest
   halt 404 and return unless interest and !interest.new_record?
 
   interest.destroy
@@ -100,34 +86,11 @@ helpers do
     end
   end
 
-  def item_interest_for(item_id, item_type)
-    criteria = {
-      :in => item_id, 
-      :interest_type => 'item',
-      :item_type => item_type
-    }
+  def item_interest
+    item_id = params[:item_id].strip
+    item_type = params[:item_type].strip
 
-    if logged_in?
-      current_user.interests.find_or_initialize_by criteria
-    else
-      Interest.new criteria
-    end
-  end
-
-  # the interest need not be filled in with data
-  def item_subscription_for(interest, subscription_type)
-    interest.subscriptions.new(
-      :interest_in => interest.in, :subscription_type => subscription_type,
-      :user => current_user,
-      :data => interest.data # pass on item data to child subscriptions
-    )
-  end
-
-  def item_subscriptions_for(interest)
-    types = item_types[interest.item_type]['subscriptions'] || []
-    types.map do |subscription_type| 
-      item_subscription_for interest, subscription_type
-    end
+    Interest.for_item current_user, item_id, item_type
   end
 
 end

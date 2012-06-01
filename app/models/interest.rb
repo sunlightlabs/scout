@@ -97,7 +97,8 @@ class Interest
   # does the user have an interest with this criteria, and this data hash?
   def self.for(user, criteria, data = nil)
 
-    # if no data given, we can do a much simpler lookup
+    # if no data given, then we don't care whether the data differs,
+    # and we can do a much simpler lookup
     if data.nil?
       return (user ? user.interests : Interest).find_or_initialize_by criteria
     end
@@ -143,6 +144,16 @@ class Interest
     self.for user, criteria, data
   end
 
+  def self.for_item(user, item_id, item_type)
+    criteria = {
+      'in' => item_id,
+      'interest_type' => 'item',
+      'item_type' => item_type
+    }
+
+    self.for user, criteria
+  end
+
   # does the user have a feed interest for this url?
   def self.for_feed(user, url)
     criteria = {
@@ -151,6 +162,54 @@ class Interest
     }
 
     self.for user, criteria
+  end
+
+  # find or initialize all the subscriptions an interest should have,
+  # inferrable from the interest's type and subject
+  def self.subscriptions_for(interest)
+    if !interest.new_record?
+      return interest.subscriptions.all
+    end
+
+    subscription_types = if interest.search?
+      (interest.search_type == "all") ? search_types : [interest.search_type]
+    elsif interest.item?
+      item_types[interest.item_type]['subscriptions']
+    elsif interest.feed?
+      ["feed"]
+    end
+
+    subscription_types.map {|type| subscription_for interest, type}
+  end
+
+  # look up or generate a single subscription for this interest
+  # assumes an interest can have at most one subscription of a particular type
+  def self.subscription_for(interest, subscription_type)
+    if !interest.new_record?
+      return interest.subscriptions.where(:subscription_type => subscription_type).first
+    end
+
+    subscription = interest.subscriptions.new :subscription_type => subscription_type
+
+    # TODO: refactor these all away, make the subscription worth only its type
+    subscription.interest_in = interest.in
+    subscription.user = interest.user
+    subscription.data = interest.data.dup
+
+    subscription 
+  end
+
+
+  # split up before and after create because the subscriptions_for method
+  # (currently) will just look up existing subscriptions if the interest has an id
+  before_create :ensure_subscriptions
+  def ensure_subscriptions
+    self.subscriptions = Interest.subscriptions_for self
+  end
+
+  after_create :create_subscriptions
+  def create_subscriptions
+    self.subscriptions.each &:save!
   end
 
 end
