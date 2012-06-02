@@ -209,6 +209,26 @@ class TagsTest < Test::Unit::TestCase
     assert_equal (serialized + ["altogether"]).sort, user.reload.tags.map(&:name).sort
   end
 
+  def test_tag_interest_cannot_be_tagged
+    name = "foia"
+    sharing = create :user, username: "johnson"
+    tag = create :public_tag, user: sharing, name: name
+
+    user = create :user
+    interest = Interest.for_tag user, sharing, tag
+    interest.save!
+
+    new_tags = "one, after, another"
+    serialized = ["one", "after", "another"]
+
+    assert_equal [], interest.tags
+
+    put "/interest/#{interest.id}", {:interest => {"tags" => new_tags}}, login(user)
+    assert_response 500
+
+    assert_equal [], interest.reload.tags
+  end
+
   def test_two_users_can_have_same_tag
     user1 = create :user
     user2 = create :user

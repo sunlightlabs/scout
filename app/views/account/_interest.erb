@@ -43,17 +43,14 @@
       </span>
     </h4>
     
-    <a class="rss feed" 
-      <% if interest.feed? %>
-        href="<%= interest.data['url'] %>"
-      <% else %>
-        href="/interest/<%= interest.id %>.rss"
-      <% end %>
-      >
+    <a class="rss feed" href="<%= interest_feed_path interest %>">
       RSS
     </a>
+
     <% if show_data? %>
-      <a class="json feed" href="/interest/<%= interest.id %>.json?apikey=<%= api_key %>">JSON</a>
+      <a class="json feed" href="<%= interest_json_path interest %>?apikey=<%= api_key %>">
+        JSON
+      </a>
     <% end %>
     
     <% if edit %>
@@ -85,22 +82,24 @@
 
       </div>
       
-      <div class="tags">
-        <form>
-          <label>Tags</label>
-          <input class="tags" type="text" name="interest[tags]" 
-            placeholder=""
-            value="<%= interest.tags.join(", ") %>"
-            />
-          <button type="submit" class="smallButton tagsOK" style="display: none">
-            OK
-          </button>
-          
-          <small class="separate" style="display: none">
-            Separate tags with commas, e.g. "open government, transparency"
-          </small>
-        </form>
-      </div>
+      <% unless interest.tag? %>
+        <div class="tags">
+          <form>
+            <label>Tags</label>
+            <input class="tags" type="text" name="interest[tags]" 
+              placeholder=""
+              value="<%= interest.tags.join(", ") %>"
+              />
+            <button type="submit" class="smallButton tagsOK" style="display: none">
+              OK
+            </button>
+            
+            <small class="separate" style="display: none">
+              Separate tags with commas, e.g. "open government, transparency"
+            </small>
+          </form>
+        </div>
+      <% end %>
     <% end %>
 
   </div>

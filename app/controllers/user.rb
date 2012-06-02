@@ -9,7 +9,7 @@ post "/user/:user_id/:tag/follow" do
   interest.save! if interest.new_record?
 
   json 200, {
-    interest_id: interest.id
+    interest_id: interest.id.to_s
   }
 end
 
@@ -36,9 +36,12 @@ get "/user/:user_id/:tag" do
     halt 404 and return
   end
 
+  interest = Interest.for_tag current_user, user, tag
+
   erb :"account/tag", :locals => {
     :tag => tag,
     :user => user,
+    :interest => interest,
     :interests => tag.interests,
     :edit => (user == current_user)
   }

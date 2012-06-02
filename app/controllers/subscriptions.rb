@@ -25,6 +25,7 @@ put '/interest/:id' do
 
   tags = []
   if params[:interest]['tags']
+    halt 500 if interest.tag? # no!
     interest.new_tags = params[:interest]['tags']
     tags = interest.tags.map do |name| 
       current_user.tags.find_or_initialize_by :name => name

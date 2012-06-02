@@ -34,7 +34,25 @@ module Helpers
       elsif interest.feed?
         truncate interest.data['description'], 75
       elsif interest.tag?
-        interest.tag.description
+        truncate interest.tag.description, 75
+      end
+    end
+
+    def interest_feed_path(interest)
+      if interest.feed?
+        interest.data['url']
+      elsif interest.tag?
+        tag_feed_path interest.tag_user, interest.tag, "rss"
+      else
+        "/interest/#{interest.id}.rss"
+      end
+    end
+
+    def interest_json_path(interest)
+      if interest.tag?
+        tag_feed_path interest.tag_user, interest.tag, "json"
+      else
+        "/interest/#{interest.id}.json"
       end
     end
 
@@ -45,6 +63,8 @@ module Helpers
         interest.data['site_url'] || interest.data['url'] # URL
       elsif interest.search?
         search_interest_path interest
+      elsif interest.tag?
+        tag_path interest.tag_user, interest.tag
       end
     end
 

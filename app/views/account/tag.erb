@@ -64,13 +64,13 @@
 
 		<% if tag.public? %>
 			<% if user != current_user %>
-				<!-- <button class="follow tag">
+				<button class="follow tag">
 	  	    <span>Follow</span>
 		    </button>
 
 		    <button class="following tag">
 		      <span>Unfollow</span>
-		    </button> -->
+		    </button>
 			<% end %>
 		<% end %>
 
@@ -155,33 +155,96 @@
 
 <script type="text/javascript">
 
+	var tag_slug = "<%= Tag.slugify h(tag.name) %>";
+	var user_slug = "<%= h params[:user_id] %>";
+	
 	$(function() {
 
-		$("div.tag").on("click", "a.description", function() {
-			$("div.display, div.edit").toggle();
-			return false;
-		});
+		initializeControls();
 
-		$("div.tag").on("click", "button.description", function() {
-			var container = $(this).parents("div.edit");
-			var user = container.data("user");
-			var tag = container.data("tag");
-
-			var options = {
-				description: $.trim($("textarea.description").val()),
-				_method: "put"
-			};
-
-			$.post("/account/tag/<%= Tag.slugify h(tag.name) %>/description", options, function(data) {
-				Utils.log("Updated description for tag.");
-				$("div.description_container").html(data.description_pane);
-			}).error(function() {
-				// todo
-			});
-
-			return false;
-		});
+		<% if logged_in? and interest.new_record? and (params[:follow] == "now") %>
+      follow();
+    <% end %>
 
 	});
+
+
+	function initializeControls() {
+		<% if logged_in? and (user == current_user) %>
+			$("div.tag").on("click", "a.description", function() {
+				$("div.display, div.edit").toggle();
+				return false;
+			});
+
+			$("div.tag").on("click", "button.description", function() {
+				var container = $(this).parents("div.edit");
+				var user = container.data("user");
+				var tag = container.data("tag");
+
+				var options = {
+					description: $.trim($("textarea.description").val()),
+					_method: "put"
+				};
+
+				$.post("/account/tag/" + tag_slug + "/description", options, function(data) {
+					Utils.log("Updated description for tag.");
+					$("div.description_container").html(data.description_pane);
+				}).error(function() {
+					// todo
+				});
+
+				return false;
+			});
+		<% end %>
+
+    $("button.follow").hide();
+    $("button.following").hide();
+
+    <% if interest.new_record? %>
+      $("button.follow").show();
+    <% else %>
+      $("button.following").show();
+    <% end %>
+
+    <% if logged_in? %>
+      $("button.follow").off("click").click(follow);
+      $("button.following").off("click").click(unfollow);
+    <% else %>
+      $("button.follow").off("click").click(function() {
+        window.location = "/login?redirect=" + Utils.currentPath({follow: "now"});
+      });
+      $("button.following").off("click");
+    <% end %>
+  }
+
+	function follow() {
+    $("button.follow").hide();
+    $("button.following").show();
+
+    $.post("/user/" + user_slug + "/" + tag_slug + "/follow", function(data) {
+      Utils.log("Created tag interest " + data.interest_id);
+    }).error(function() {
+      Utils.log("ERROR following tag.");
+      $("button.follow").show();
+      $("button.following").hide();
+    });
+
+    return false;
+  }
+
+  function unfollow() {
+    $("button.follow").show();
+    $("button.following").hide();
+
+    $.post("/user/" + user_slug + "/" + tag_slug + "/unfollow", {_method: "delete"}, function(data) {
+      Utils.log("Destroyed tag interest.");
+    }).error(function() {
+      Utils.log("ERROR unfollowing tag.");
+      $("button.follow").hide();
+      $("button.following").show();
+    });
+
+    return false;
+  }
 
 </script>

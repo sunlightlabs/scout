@@ -1042,11 +1042,7 @@ time.item, .entry time, .time {
     float: right;
 }
 
-button.search.follow, button.search.following {
-    display: none;
-}
-
-button.item.follow, button.item.following {
+button.follow, button.following {
     display: none;
 }
 

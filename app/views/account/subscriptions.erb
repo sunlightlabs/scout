@@ -36,19 +36,17 @@
   <% if grouped['tag'] and grouped['tag'].any? %>
     <div class="section tags">
       <h2>Public Collections</h2>
-        <div class="interest">
+      <div class="interest">
 
-          <div class="removeHeader">
-            <span>Remove</span>
-          </div>
-
-          <% grouped['tag'].each do |interest| %>
-            <%= partial "account/interest", :engine => "erb", :locals => {:interest => interest, :edit => true} %>
-          <% end %>
-
+        <div class="removeHeader">
+          <span>Remove</span>
         </div>
 
-      <% end %>
+        <% grouped['tag'].each do |interest| %>
+          <%= partial "account/interest", :engine => "erb", :locals => {:interest => interest, :edit => true} %>
+        <% end %>
+
+      </div>
     </div>
   <% end %>
   
