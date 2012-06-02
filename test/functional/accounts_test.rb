@@ -426,7 +426,7 @@ class AccountsTest < Test::Unit::TestCase
 
   def test_add_phone_number_when_user_has_none
     user = create :user
-    phone = "1234567890"
+    phone = "+11234567890"
 
     assert_nil user.phone
     assert !user.phone_confirmed?
@@ -445,7 +445,7 @@ class AccountsTest < Test::Unit::TestCase
   end
 
   def test_add_phone_number_unconfirms_existing_number
-    phone1 = "1234567890"
+    phone1 = "+11234567890"
     phone2 = phone1.succ
     original_verify_code = "1234"
     user = create :user, :phone => phone1, :phone_confirmed => true, :phone_verify_code => original_verify_code
@@ -484,7 +484,7 @@ class AccountsTest < Test::Unit::TestCase
   end
 
   def test_resend_phone_verification_code
-    phone = "1234567890"
+    phone = "+11234567890"
     verify_code = "1234"
     user = create :user, :phone => phone, :phone_verify_code => verify_code
 
@@ -503,7 +503,7 @@ class AccountsTest < Test::Unit::TestCase
   end
 
   def test_confirm_phone_verification_code_valid
-    phone = "1234567890"
+    phone = "+11234567890"
     verify_code = "1234"
     user = create :user, :phone => phone, :phone_verify_code => verify_code
 
@@ -521,7 +521,7 @@ class AccountsTest < Test::Unit::TestCase
   end
 
   def test_confirm_phone_verification_code_invalid
-    phone = "1234567890"
+    phone = "+11234567890"
     verify_code = "1234"
     user = create :user, :phone => phone, :phone_verify_code => verify_code
 
