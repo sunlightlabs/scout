@@ -24,6 +24,10 @@ FactoryGirl.define do
   factory :tag do
     user
     sequence(:name) {|n| "name#{n}"}
+
+    factory :public_tag do
+      self.public true
+    end
   end
   
 end

@@ -39,23 +39,7 @@
       </a>
 
       <span class="title">
-        <% if interest.search? %>
-
-          <% if interest.search_type == "all" %>
-            <%= interest.subscriptions.map(&:search_name).join(", ") %>
-          <% elsif interest.subscriptions.first.filters.any? %>
-            <%= filters_short interest.subscriptions.first %>
-          <% end %>
-
-        <% elsif interest.item? %>
-
-          <% if interest_adapter(interest).respond_to?(:interest_subtitle) %>
-            <%= truncate interest_adapter(interest).interest_subtitle(interest), 75 %>
-          <% end %>
-
-        <% elsif interest.feed? %>
-          <%= truncate interest.data['description'], 75 %>
-        <% end %>
+        <%= interest_description interest %>
       </span>
     </h4>
     

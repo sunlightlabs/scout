@@ -39,11 +39,6 @@ module Subscriptions
         "#{number > 1 ? "results" : "result"}"
       end
 
-      def self.interest_name(interest)
-        interest.data['title']
-      end
-
-
       # go through each RSS item, exclude any invalid things
 
       def self.items_for(feed, function, options = {})

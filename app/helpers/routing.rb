@@ -1,4 +1,5 @@
 # router helpers, can also be mixed in elsewhere if need be
+
 module Helpers
   module Routing
 
@@ -11,9 +12,29 @@ module Helpers
       if interest.item?
         interest_adapter(interest).interest_name interest
       elsif interest.feed?
-        ::Subscriptions::Adapters::Feed.interest_name interest
+        interest.data['title']
       elsif interest.search?
         interest.in
+      elsif interest.tag?
+        interest.tag.name
+      end
+    end
+
+    def interest_description(interest)
+      if interest.search?
+        if interest.search_type == "all"
+          interest.subscriptions.map(&:search_name).join(", ")
+        elsif interest.subscriptions.first.filters.any?
+          filters_short interest.subscriptions.first
+        end
+      elsif interest.item?
+        if interest_adapter(interest).respond_to?(:interest_subtitle)
+          truncate interest_adapter(interest).interest_subtitle(interest), 75
+        end
+      elsif interest.feed?
+        truncate interest.data['description'], 75
+      elsif interest.tag?
+        interest.tag.description
       end
     end
 

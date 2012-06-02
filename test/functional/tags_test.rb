@@ -6,6 +6,175 @@ class TagsTest < Test::Unit::TestCase
   include FactoryGirl::Syntax::Methods
 
   
+  def test_follow_tag
+    name = "foia"
+    name2 = "open government"
+    sharing = create :user, username: "johnson"
+    tag = create :public_tag, user: sharing, name: name
+    tag2 = create :public_tag, user: sharing, name: name2
+
+    user = create :user
+    assert_equal 0, user.interests.count
+
+    post "/user/#{sharing.username}/#{name}/follow", {}, login(user)
+    assert_response 200
+
+    assert_equal 1, user.interests.count
+    interest = user.interests.where(in: tag.id.to_s).first
+    assert_not_nil interest
+    assert_equal tag, interest.tag
+    assert_equal sharing, interest.tag_user
+
+    # idempotent
+    post "/user/#{sharing.username}/#{Tag.slugify tag.name}/follow", {}, login(user)
+    assert_response 200
+
+    assert_equal 1, user.reload.interests.count
+
+    # lookup by user ID should also work
+    post "/user/#{sharing.id.to_s}/#{Tag.slugify tag2.name}/follow", {}, login(user)
+    assert_response 200
+
+    assert_equal 2, user.reload.interests.count
+    interest = user.interests.where(in: tag2.id.to_s).first
+    assert_not_nil interest
+    assert_equal tag2, interest.tag
+    assert_equal sharing, interest.tag_user
+  end
+
+  def test_follow_ones_own_tag_not_allowed
+    name = "foia"
+    sharing = create :user, username: "johnson"
+    tag = create :public_tag, user: sharing, name: name
+
+    assert_equal 0, sharing.interests.count
+
+    post "/user/#{sharing.username}/#{tag.name}/follow", {}, login(sharing)
+    assert_response 500
+
+    assert_equal 0, sharing.reload.interests.count
+  end
+
+  def test_follow_private_tag_not_allowed
+    name = "foia"
+    sharing = create :user, username: "johnson"
+    tag = create :tag, user: sharing, name: name
+
+    assert tag.private?
+
+    user = create :user
+    assert_equal 0, user.interests.count
+
+    post "/user/#{sharing.username}/#{tag.name}/follow", {}, login(user)
+    assert_response 404
+
+    assert_equal 0, user.reload.interests.count
+    assert_nil user.interests.where(in: tag.id.to_s).first
+  end
+
+  def test_follow_nonexistent_tag
+    name = "foia"
+    sharing = create :user, username: "johnson"
+    tag = create :public_tag, user: sharing, name: name
+
+    user = create :user
+    assert_equal 0, user.interests.count
+
+    post "/user/#{sharing.username}/#{tag.name.succ}/follow", {}, login(user)
+    assert_response 404
+
+    assert_equal 0, user.reload.interests.count
+  end
+
+  def test_follow_not_logged_in
+    name = "foia"
+    sharing = create :user, username: "johnson"
+    tag = create :public_tag, user: sharing, name: name
+
+    user = create :user
+    assert_equal 0, user.interests.count
+
+    post "/user/#{sharing.username}/#{tag.name}/follow", {}
+    assert_redirect '/'
+
+    assert_equal 0, user.reload.interests.count
+  end
+
+  def test_unfollow_tag
+    name = "foia"
+    name2 = "open government"
+    sharing = create :user, username: "johnson"
+    tag = create :public_tag, user: sharing, name: name
+    tag2 = create :public_tag, user: sharing, name: name2
+
+    user = create :user
+    interest1 = Interest.for_tag(user, sharing, tag)
+    assert interest1.new_record?
+    interest1.save!
+    interest2 = Interest.for_tag(user, sharing, tag2)
+    assert interest2.new_record?
+    interest2.save!
+
+    assert_equal 2, user.interests.count
+
+    delete "/user/#{sharing.username}/#{Tag.slugify tag.name}/unfollow", {} ,login(user)
+    assert_response 200
+
+    assert_equal 1, user.reload.interests.count
+    assert_nil user.interests.where(in: tag.id.to_s).first
+    assert_not_nil user.interests.where(in: tag2.id.to_s).first
+
+    # idempotent
+    delete "/user/#{sharing.username}/#{Tag.slugify tag.name}/unfollow", {} ,login(user)
+    assert_response 200
+
+    assert_equal 1, user.reload.interests.count
+    assert_nil user.interests.where(in: tag.id.to_s).first
+    assert_not_nil user.interests.where(in: tag2.id.to_s).first
+
+    # lookup by user ID should also work
+    delete "/user/#{sharing.id.to_s}/#{Tag.slugify tag2.name}/unfollow", {} ,login(user)
+    assert_response 200    
+
+    assert_equal 0, user.reload.interests.count
+    assert_nil user.interests.where(in: tag.id.to_s).first
+    assert_nil user.interests.where(in: tag2.id.to_s).first
+  end
+
+  def unfollow_not_logged_in
+    name = "foia"
+    sharing = create :user, username: "johnson"
+    tag = create :public_tag, user: sharing, name: name
+
+    user = create :user
+    interest = Interest.for_tag user, sharing, tag
+    interest.save!
+
+    assert_equal 1, user.interests.count
+
+    delete "/user/#{sharing.username}/#{Tag.slugify tag.name}/unfollow", {}, login(user)
+    assert_redirect '/'
+
+    assert_equal 1, user.reload.interests.count
+  end
+
+  def unfollow_nonexistent_tag
+    name = "foia"
+    sharing = create :user, username: "johnson"
+    tag = create :public_tag, user: sharing, name: name
+
+    user = create :user
+    interest = Interest.for_tag user, sharing, tag
+    interest.save!
+
+    assert_equal 1, user.interests.count
+
+    delete "/user/#{sharing.username}/#{Tag.slugify tag.name.succ}/unfollow", {}, login(user)
+    assert_response 404
+
+    assert_equal 1, user.reload.interests.count
+  end
+
   def test_tags_on_interests
     user = create :user
 

@@ -32,6 +32,25 @@
   <% end %>
 
   <% grouped = interests.group_by &:interest_type %>
+
+  <% if grouped['tag'] and grouped['tag'].any? %>
+    <div class="section tags">
+      <h2>Public Collections</h2>
+        <div class="interest">
+
+          <div class="removeHeader">
+            <span>Remove</span>
+          </div>
+
+          <% grouped['tag'].each do |interest| %>
+            <%= partial "account/interest", :engine => "erb", :locals => {:interest => interest, :edit => true} %>
+          <% end %>
+
+        </div>
+
+      <% end %>
+    </div>
+  <% end %>
   
   <% if grouped['search'] and grouped['search'].any? %>
     <div class="section keywords">

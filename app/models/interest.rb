@@ -52,6 +52,10 @@ class Interest
     interest_type == "search"
   end
 
+  def tag?
+    interest_type == "tag"
+  end
+
   def self.public_json_fields
     [
       'created_at', 'updated_at', 'interest_type', 'in', 'item_type', 'search_type'
@@ -62,6 +66,16 @@ class Interest
     self.tags = names.split(/\s*,\s*/).map do |tag|
       Tag.normalize tag
     end.select(&:present?).uniq
+  end
+
+  # for a tag interest only, fetches the associated tag
+  def tag
+    @tag ||= Tag.find self.in
+  end
+
+  # for a tag interest only, fetches and caches the associated sharing user
+  def tag_user
+    @tag_user ||= tag.user
   end
 
   def tags_display
@@ -130,13 +144,13 @@ class Interest
 
   # does the user have a search interest for this query, of this 
   # search type ("all" or an individual type), and this set of filters?
-  def self.for_search(user, search_type, interest_in, data = {})
+  def self.for_search(user, search_type, query, data = {})
     
     # ensure query is present in the data
-    data['query'] ||= interest_in
+    data['query'] ||= query
 
     criteria = {
-      'in' => interest_in,
+      'in' => query,
       'interest_type' => 'search',
       'search_type' => search_type,
     }
@@ -144,6 +158,8 @@ class Interest
     self.for user, criteria, data
   end
 
+  # if this is used to make a new item, the caller will have to 
+  # fetch and populate the item's relevant data
   def self.for_item(user, item_id, item_type)
     criteria = {
       'in' => item_id,
@@ -154,11 +170,23 @@ class Interest
     self.for user, criteria
   end
 
-  # does the user have a feed interest for this url?
+  # if this is used to make a new feed, the caller will have to 
+  # fetch the feed's title, description, site URL, and other details
   def self.for_feed(user, url)
     criteria = {
       'in' => url,
       'interest_type' => 'feed'
+    }
+
+    self.for user, criteria
+  end
+
+  # if this is used to make a new tag, the caller will have to
+  # populate the data hash with the tag's name
+  def self.for_tag(user, sharing_user, shared_tag)
+    criteria = {
+      'in' => shared_tag.id.to_s, # store as string
+      'interest_type' => 'tag'
     }
 
     self.for user, criteria
@@ -177,6 +205,8 @@ class Interest
       item_types[interest.item_type]['subscriptions']
     elsif interest.feed?
       ["feed"]
+    elsif interest.tag?
+      [] # no subscriptions, others' handle it
     end
 
     subscription_types.map {|type| subscription_for interest, type}
@@ -198,6 +228,10 @@ class Interest
 
     subscription 
   end
+
+
+  # before create, wipe any subscriptions that have been initialized away,
+  # regenerate them, and save them
 
 
   # split up before and after create because the subscriptions_for method
