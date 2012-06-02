@@ -6,7 +6,7 @@ class RemoteTest < Test::Unit::TestCase
   include FactoryGirl::Syntax::Methods
 
   def test_subscribe_by_sms
-    phone = "+16173140966"
+    phone = "+15555551212"
     item_id = "hr4192-112"
     item_type = "bill"
 
@@ -53,7 +53,7 @@ class RemoteTest < Test::Unit::TestCase
 
   def test_subscribe_by_sms_with_taken_phone_number_creates_new_interest_but_not_new_account
     # use an intentionally non-standard phone number, to make sure the matching works
-    phone = "6173140966"
+    phone = "5555551212"
     item_id = "hr4192-112"
     item_type = "bill"
 
@@ -113,7 +113,7 @@ class RemoteTest < Test::Unit::TestCase
 
   def test_subscribe_by_sms_with_invalid_interest_details_fails
     # test on 'interest_type', 'item_type', 'item_id'
-    phone = "+16173140966"
+    phone = "+15555551212"
     item_id = "hr4192-112"
     item_type = "bill"
 
@@ -147,7 +147,7 @@ class RemoteTest < Test::Unit::TestCase
   end
 
   def test_subscribe_by_sms_when_remote_item_doesnt_exist_fails
-    phone = "+16173140966"
+    phone = "+15555551212"
     item_id = "hr4195-112" # no fixture for this
     item_type = "bill"
 
