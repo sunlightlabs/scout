@@ -9,23 +9,30 @@ get '/login' do
 end
 
 post '/login' do
-  unless params[:email] and user = User.where(:email => params[:email]).first
-    flash[:user] = "No account found by that email."
-    redirect '/login'
-  end
+  redirect '/login' and return unless params[:login].present?
+  login = params[:login].strip
 
-  if User.authenticate(user, params[:password])
-    log_in user
-    redirect_back_or '/'
+  @new_user = User.new
+
+  if (user = User.where(email: login).first || User.by_phone(login)) and User.authenticate(user, params[:password])
+    if user.confirmed?
+      log_in user
+      redirect_back_or '/'
+    else
+      flash.now[:login] = "Your account has not been confirmed."
+      erb :"account/login"
+    end
   else
-    flash.now[:user] = "Invalid password."
-    @new_user = User.new
+    flash.now[:login] = "Invalid login or password."
     erb :"account/login"
   end
 end
 
 post '/account/new' do
-  @new_user = User.new params[:user]
+  @new_user = User.new
+  ['email', 'password', 'password_confirmation', 'announcements', 'sunlight_announcements'].each do |field|
+    @new_user.send "#{field}=", params[:user][field]
+  end
 
   unless @new_user.password.present? and @new_user.password_confirmation.present?
     flash[:password] = "Can't use a blank password."
@@ -103,10 +110,10 @@ helpers do
   end
   
   def log_in(user)
-    session['user_email'] = user.email
+    session['user_id'] = user.id
   end
   
   def log_out
-    session['user_email'] = nil
+    session['user_id'] = nil
   end
 end

@@ -66,8 +66,10 @@ class User
 
   # delivery notification stuff
   def allowable_notifications
-    types = ["email_daily", "email_immediate"]
-    types << "sms" if phone and phone_confirmed
+    types = []
+    types << "email_daily" if email.present?
+    types << "email_immediate" if email.present?
+    types << "sms" if phone.present? and phone_confirmed
     types << "none"
     types
   end

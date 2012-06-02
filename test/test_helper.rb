@@ -90,7 +90,7 @@ module TestHelper
     end
 
     def login(user)
-      {"rack.session" => {'user_email' => user.email}}
+      {"rack.session" => {'user_id' => user.id.to_s}}
     end
 
 
