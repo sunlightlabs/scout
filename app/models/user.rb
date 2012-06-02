@@ -152,6 +152,17 @@ class User
     end
   end
 
+  # runs the phone standardizer on lookup
+  def self.by_phone(phone)
+    phone = phone.dup # apparently Phoner can't handle frozen strings??
+    if Phoner::Phone.valid?(phone)
+      standard = Phoner::Phone.parse(phone).to_s
+      where(phone: standard).first
+    else
+      nil
+    end
+  end
+
   def new_phone_verify_code
     self.phone_verify_code = zero_prefix rand(10000)
   end

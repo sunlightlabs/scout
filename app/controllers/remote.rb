@@ -46,7 +46,7 @@ post "/remote/subscribe/sms" do
   item_id = params[:item_id]
 
   new_record = true
-  if user = User.where(:phone => params[:phone]).first
+  if user = User.by_phone(params[:phone])
     new_record = false
   else
     user = User.new(
@@ -85,8 +85,12 @@ post "/remote/subscribe/sms" do
   end
 
   json 200, {
-    :message => "Account and subscription created.",
-    :phone => user.phone
+    :message => (new_record ? "Account and subscription created." : "Subscription created for account."),
+    :phone => user.phone,
+    :user_id => user.id.to_s,
+    :interest_id => interest.id.to_s,
+    :interest_in => interest.in,
+    :item_type => interest.item_type
   }
 end
 

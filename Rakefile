@@ -175,11 +175,13 @@ namespace :test do
   desc "Forces emails or SMSes to be sent for the first X results of every subscription a user has"
   task :send_user => :environment do
     email = ENV['email'] || config[:admin].first
+    phone = ENV['phone']
+
     max = (ENV['max'] || ENV['limit'] || 2).to_i
     only = (ENV['only'] || "").split(",")
-    keywords = (ENV['keywords'] || "").split(",")
+    interest_in = (ENV['interest_in'] || "").split(",")
 
-    mechanism = ENV['by'] || 'email'
+    mechanism = ENV['by'] || (phone.present? ? 'sms' : 'email')
     email_frequency = ENV['frequency'] || 'immediate'
 
     unless ['immediate', 'daily'].include?(email_frequency)
@@ -187,13 +189,20 @@ namespace :test do
       return
     end
 
-    unless user = User.where(:email => email).first
-      puts "Can't find user by that email."
-      return
+    user = nil
+    if phone.present?
+      user = User.by_phone phone
+    else
+      user = User.where(:email => email).first
     end
 
-    puts "Clearing all deliveries for #{email}"
-    Delivery.where(:user_email => email).delete_all
+    unless user
+      puts "Can't find user by that email or phone."
+      exit -1
+    end
+
+    puts "Clearing all deliveries for #{user.email || user.phone}"
+    user.deliveries.delete_all
 
     user.interests.each do |interest|
       interest.subscriptions.each do |subscription|
@@ -201,8 +210,8 @@ namespace :test do
           next unless only.include?(subscription.subscription_type)
         end
 
-        if keywords.any?
-          next unless keywords.include?(subscription.interest_in)
+        if interest_in.any?
+          next unless interest_in.include?(subscription.interest_in)
         end
 
         puts "Searching for #{subscription.subscription_type} results for #{interest.in}..."
@@ -229,6 +238,28 @@ namespace :test do
       Deliveries::Manager.deliver! '_id' => BSON::ObjectId(id), 'mechanism' => delivery.mechanism, 'email_frequency' => delivery.email_frequency
     else
       puts "Couldn't locate delivery by provided ID"
+    end
+  end
+
+  namespace :remote do
+
+    desc "Test remote subscription via SMS"
+    task :subscribe => :environment do
+      unless (phone = ENV['phone']).present?
+        puts "Give a phone number with the 'phone' parameter."
+      end
+      item_type = ENV['item_type'] || 'bill'
+      item_id = ENV['item_id'] || 'hr1234-112'
+      hostname = ENV['host'] || config[:hostname]
+
+      url = "http://#{hostname}/remote/subscribe/sms"
+      response = HTTParty.post url, {body: {phone: phone, interest_type: "item", item_type: item_type, item_id: item_id}}
+      puts "Status: #{response.code}"
+      if response.code == 200
+        puts "Body: #{JSON.pretty_generate JSON.parse(response.body)}"
+      else
+        puts "Body: #{response.body}"
+      end
     end
   end
 

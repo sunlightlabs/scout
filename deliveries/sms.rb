@@ -102,7 +102,8 @@ module Deliveries
 
         :deliveries => deliveries.map {|delivery| delivery.attributes.dup},
 
-        :user_email => user.email,
+        :user_id => user.id,
+        :user_phone => user.phone,
         :user_notifications => user.notifications,
 
         :content => content,

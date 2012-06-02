@@ -74,9 +74,9 @@ module Deliveries
         delivery_type << "[#{delivery_options['email_frequency']}]"
       end
       
-      receipts.group_by(&:user_email).each do |email, user_receipts|
-        user = User.where(:email => email).first
-        report << "[#{email}]#{delivery_type} #{user_receipts.size} notifications"
+      receipts.group_by(&:user_id).each do |user_id, user_receipts|
+        user = User.find user_id
+        report << "[#{user.email || user.phone}]#{delivery_type} #{user_receipts.size} notifications"
 
         user_receipts.each do |receipt|
           receipt.deliveries.group_by {|d| d['interest_id']}.each do |interest_id, interest_deliveries|

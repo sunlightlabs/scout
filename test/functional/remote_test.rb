@@ -52,7 +52,8 @@ class RemoteTest < Test::Unit::TestCase
   end
 
   def test_subscribe_by_sms_with_taken_phone_number_creates_new_interest_but_not_new_account
-    phone = "+16173140966"
+    # use an intentionally non-standard phone number, to make sure the matching works
+    phone = "6173140966"
     item_id = "hr4192-112"
     item_type = "bill"
 

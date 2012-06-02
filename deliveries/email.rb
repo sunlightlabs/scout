@@ -88,6 +88,7 @@ module Deliveries
 
         :deliveries => deliveries,
 
+        :user_id => user.id,
         :user_email => user.email,
         :user_notifications => user.notifications,
 
