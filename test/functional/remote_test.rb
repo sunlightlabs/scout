@@ -168,5 +168,102 @@ class RemoteTest < Test::Unit::TestCase
   end
 
 
+  def test_receive_confirm
+    phone = "+15555551212"
+    user = create :phone_user
+
+    assert !user.confirmed?
+    assert !user.phone_confirmed?
+    current_pass = user.password_hash
+    assert user.should_change_password
+
+    post "/remote/twilio/receive", {
+      "Body" => "c",
+      "From" => phone
+    }
+    assert_response 200
+
+    user.reload
+    assert user.confirmed?
+    assert user.phone_confirmed?
+    assert_not_equal current_pass, user.password_hash
+    assert user.should_change_password
+    # SMS should also have been sent with the user's password
+  end
+
+  def test_receive_confirm_with_no_phone_or_body
+    phone = "+15555551212"
+    user = create :phone_user
+
+    assert !user.confirmed?
+    assert !user.phone_confirmed?
+    current_pass = user.password_hash
+    assert user.should_change_password
+
+    post "/remote/twilio/receive", {
+      "Body" => "c",
+      "From" => ""
+    }
+    assert_response 500
+
+    user.reload
+    assert !user.confirmed?
+    assert !user.phone_confirmed?
+
+    post "/remote/twilio/receive", {
+      "Body" => "",
+      "From" => phone
+    }
+    assert_response 500
+
+    user.reload
+    assert !user.confirmed?
+    assert !user.phone_confirmed?
+  end
+
+  def test_receive_confirm_from_unknown_phone
+    phone = "+15555551212"
+    user = create :phone_user, :phone => phone.succ
+
+    assert_nil User.by_phone(phone)
+
+    assert !user.confirmed?
+    assert !user.phone_confirmed?
+    current_pass = user.password_hash
+    assert user.should_change_password
+
+    post "/remote/twilio/receive", {
+      "Body" => "c",
+      "From" => phone
+    }
+    assert_response 404
+
+    user.reload
+    assert !user.confirmed?
+    assert !user.phone_confirmed?
+  end
+
+  def test_receive_confirm_from_phone_that_has_existing_confirmed_account
+    phone = "+15555551212"
+    user = create :user, :phone => phone, :phone_confirmed => true
+
+    assert user.phone_confirmed?
+    assert user.confirmed?
+    current_pass = user.password_hash
+    assert !user.should_change_password
+
+    post "/remote/twilio/receive", {
+      "Body" => "c",
+      "From" => phone
+    }
+    assert_response 200
+
+    user.reload
+    assert user.confirmed?
+    assert user.phone_confirmed?
+    assert_equal current_pass, user.password_hash
+    assert !user.should_change_password
+  end
+
 
 end

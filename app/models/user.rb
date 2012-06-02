@@ -113,17 +113,21 @@ class User
 
   # taken from authlogic
   # https://github.com/binarylogic/authlogic/blob/master/lib/authlogic/random.rb
-  def friendly_token
+  def self.friendly_token
     # use base64url as defined by RFC4648
     SecureRandom.base64(15).tr('+/=', '').strip.delete("\n")
   end
 
-  def new_reset_token
-    self.reset_token = friendly_token
+  def self.short_token
+    zero_prefix rand(10000)
   end
 
-  def reset_password
-    new_password = friendly_token
+  def new_reset_token
+    self.reset_token = User.friendly_token
+  end
+
+  def reset_password(short = false)
+    new_password = short ? User.short_token : User.friendly_token
     self.password = new_password
     self.password_confirmation = new_password
     self.should_change_password = true
@@ -164,11 +168,11 @@ class User
   end
 
   def new_phone_verify_code
-    self.phone_verify_code = zero_prefix rand(10000)
+    self.phone_verify_code = User.short_token
   end
 
   # zero prefixes a number below 10,000 out to 4 digits
-  def zero_prefix(number)
+  def self.zero_prefix(number)
     if number < 10
       "000#{number}"
     elsif number < 100
@@ -185,7 +189,10 @@ class User
   end
 
   def self.phone_remote_subscribe_message
-    "[Scout] Please confirm your phone number by replying to this text with 'c'."
+    "You've been signed up for SMS alerts. Confirm your phone number by replying to this text with 'C'."
   end
 
+  def self.phone_remote_confirm_message(password)
+    "Your number has been confirmed. Log in to scout.sunlightfoundation.com with the password \"#{password}\" to manage your alerts." # Text \"HELP\" for a list of commands."
+  end
 end

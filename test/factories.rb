@@ -15,7 +15,7 @@ FactoryGirl.define do
       phone_confirmed false
       confirmed false
       notifications "none"
-      should_reset_password true
+      should_change_password true
       announcements false
       sunlight_announcements false
     end

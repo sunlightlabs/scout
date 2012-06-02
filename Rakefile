@@ -253,6 +253,7 @@ namespace :test do
       hostname = ENV['host'] || config[:hostname]
 
       url = "http://#{hostname}/remote/subscribe/sms"
+
       response = HTTParty.post url, {body: {phone: phone, interest_type: "item", item_type: item_type, item_id: item_id}}
       puts "Status: #{response.code}"
       if response.code == 200
@@ -260,6 +261,16 @@ namespace :test do
       else
         puts "Body: #{response.body}"
       end
+    end
+
+    desc "Test confirmation of remote account, via SMS"
+    task :confirm => :environment do
+      unless (phone = ENV['phone']).present?
+        puts "Give a phone number with the 'phone' parameter."
+      end
+      hostname = ENV['host'] || config[:hostname]
+
+      url = "http://#{hostname}/remote/subscribe/sms"
     end
   end
 

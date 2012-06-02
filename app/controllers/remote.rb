@@ -95,10 +95,24 @@ post "/remote/subscribe/sms" do
 end
 
 
-# confirm an account that subscribed via SMS
-# confirmation is given by a Twilio-verified response via SMS 
-# from the number in question (no confirmation code needed)
+# Twilio SMS receiving endpoint, unfortunately needs to be one giant thing
+post "/remote/twilio/receive" do
+  
+  body = params['Body'] ? params['Body'].strip.downcase : nil
+  phone = params['From'] ? params['From'].strip : nil
+  halt 500 unless body.present? and phone.present?
+  halt 404 unless user = User.by_phone(phone)
 
-post "/remote/confirm/sms" do
+  if body == "c"
+    halt 200 if user.confirmed?
+    user.confirmed = true
+    user.phone_confirmed = true
+    new_password = user.reset_password true # with short token
+    SMS.deliver! "Remote SMS Confirmation", user.phone, User.phone_remote_confirm_message(new_password)
+    user.save!
+  else
+    SMS.deliver! "Remote Unknown Command", user.phone, "Unrecognized command."
+  end
 
+  status 200
 end
