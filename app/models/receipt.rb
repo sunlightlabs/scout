@@ -6,6 +6,7 @@ class Receipt
   
   field :deliveries, :type => Array
 
+  field :user_id
   field :user_email
   field :user_delivery
 
