@@ -35,6 +35,9 @@ class Interest
   index :in
   index :user_id
   index :interest_type
+  index :search_type
+  index :item_type
+  index :tags
   
   validates_presence_of :user_id
   validates_presence_of :in
@@ -81,7 +84,23 @@ class Interest
   def tags_display
     self.tags.join ", "
   end
-  
+
+
+  # other interests following this interest.
+  # only makes sense for a saved interest with a user that owns it
+  def followers
+    # for non-tag interests only
+    return [] if self.tag?
+
+    # does the user owning this interest have it included in any of their public tags?
+    public_tag_ids = user.tags.public.where(name: {"$in" => self.tags}).map {|tag| tag.id.to_s}
+    return [] unless public_tag_ids.any?
+
+    # anyone's interests following any of those public tags
+    Interest.where :interest_type => "tag", :in => {"$in" => public_tag_ids}
+  end
+
+
   # the mechanism this subscription prefers to be delivered as (e.g. email or SMS).
   # for right now, reads right from the user's preferences, but could be changed
   # to be per-interest or per-subscription.

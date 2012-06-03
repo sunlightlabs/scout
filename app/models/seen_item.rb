@@ -9,30 +9,24 @@ class SeenItem
   belongs_to :interest
   belongs_to :user
 
-  # origin subscription
-  field :subscription_id
-  field :subscription_type
-  
-  # reference by interest for interest-level feeds and landing page
-  field :interest_id
-  field :interest_in
+  #TODO: refactor this out
+  field :subscription_id 
 
-  field :interest_type # 'search', 'item', 'feed'
+  field :interest_in
+  field :interest_type
+  field :subscription_type
   
   # doesn't refer to the type of the item itself, but 
   # rather which one of the standard item_type's it relates to
   field :item_type # 'bill', 'speech', etc.
 
-  # reference by user for user-level feeds
-  field :user_id
-
   # result fields from remote source
   field :item_id
-  field :data, :type => Hash
-  field :date, :type => Time
+  field :data, type: Hash
+  field :date, type: Time
   field :search_url # search URL that originally produced this item
   field :find_url # if this came from a find request, produce that URL
-
+  
 
   index [
     [:subscription_id, Mongo::ASCENDING],
@@ -40,6 +34,9 @@ class SeenItem
   ]
 
   index :subscription_type
+  index :interest_id
+  index :user_id
+  index :seen_by_id
 
   validates_presence_of :subscription_id
   validates_presence_of :item_id
@@ -78,15 +75,20 @@ class SeenItem
     end
     
     self.attributes = {
-      :subscription => subscription,
+      # core fields
       :subscription_type => subscription.subscription_type,
-      
       :item_type => item_type,
       :interest_type => interest_type,
       :interest_in => subscription.interest_in,
 
       # the interest and user may not exist yet on the subscription
+      # TODO: refactor so that the interest is passed in and is always
+      # guaranteed to exist (user still may not be)
       :interest_id => subscription.interest_id,
+
+      # TODO: refactor this out
+      :subscription => subscription,
+
       :user_id => subscription.user_id
     }
   end

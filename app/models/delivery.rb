@@ -9,14 +9,16 @@ class Delivery
   belongs_to :interest
   belongs_to :user
   
-  field :subscription_id
-  field :user_id
-  field :interest_id
-  
   # core fields needed to deliver the goods
   field :user_email
   field :subscription_type
   field :interest_in
+
+  # if the user is not the owner of the "seen_by" interest, there will be another
+  # interest here, owned by the deliver's user, that the user saw the item "through"
+  belongs_to :seen_through, class_name: "Interest"
+
+
 
   # store where this delivery should go out over email or sms
   # the delivery task should look at *this* field, so that we can
@@ -29,7 +31,11 @@ class Delivery
   index :subscription_type
   index :user_email
   index "item.date"
+  index :interest_id
+  index :user_id
+  index :seen_through_id
   
+  validates_presence_of :interest_id
   validates_presence_of :subscription_id
   validates_presence_of :subscription_type
   validates_presence_of :interest_in

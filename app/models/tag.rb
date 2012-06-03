@@ -8,6 +8,9 @@ class Tag
   field :public, type: Boolean, default: false
   field :description
 
+  index :name
+  index :public
+
   validates_uniqueness_of :name, :scope => :user_id
   
   scope :public, where(:public => true)
