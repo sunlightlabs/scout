@@ -51,9 +51,11 @@ end
 desc "Run through each model and create all indexes" 
 task :create_indexes => :environment do
   begin
-    models = Dir.glob('models/*.rb').map do |file|
+    models = Dir.glob('app/models/*.rb').map do |file|
       File.basename(file, File.extname(file)).camelize.constantize
     end
+
+    raise Exception.new("What? No models") if models.empty?
 
     models.each do |model| 
       model.create_indexes 
