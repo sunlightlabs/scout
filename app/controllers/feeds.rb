@@ -1,19 +1,3 @@
-get "/account/:id.:format" do
-  feed_only 
-
-  unless user = User.find(params[:id])
-    halt 404 and return
-  end
-
-  items = SeenItem.where(:user_id => user.id).desc(:date)
-
-  if params[:format] == 'rss'
-    rss_for "user", items
-  else
-    json_for items
-  end
-end
-
 get "/interest/:interest_id.:format" do
   feed_only
 

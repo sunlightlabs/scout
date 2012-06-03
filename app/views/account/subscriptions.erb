@@ -1,19 +1,4 @@
 <% content_for :sidebar_right do %>
-  <div class="module rss">
-    <h4>
-      Everything
-      <a class="rss feed" href="/account/<%= current_user.id %>.rss">RSS</a>
-      <% if show_data? %>    
-          <a class="json feed" href="/account/<%= current_user.id %>.json?apikey=<%= api_key %>">JSON</a>
-      <% end %>
-    </h4>
-
-    <small class="clear">
-      The combined results of all of your subscriptions.
-    </small>
-  </div>
-
-  <!-- also filled in dynamically when tags are added/removed -->
   <div class="module tags">
     <%= partial "account/tags", :engine => :erb, :locals => {:tags => tags} %>
   </div>
