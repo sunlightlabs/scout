@@ -26,7 +26,6 @@ class SeenItem
   field :date, type: Time
   field :search_url # search URL that originally produced this item
   field :find_url # if this came from a find request, produce that URL
-  
 
   index [
     [:subscription_id, Mongo::ASCENDING],
@@ -61,7 +60,6 @@ class SeenItem
   end
 
   # take a SeenItem right from an adapter and assign it a particular subscription
-  # this is where the main bit of denormalization happens, where things could potentially get out of sync
   def assign_to_subscription(subscription)
 
     # interest may not exist on the subscription, infer it from the subscription_type
