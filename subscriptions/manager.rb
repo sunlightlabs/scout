@@ -10,23 +10,28 @@ module Subscriptions
     
     def self.initialize!(subscription)
 
+      # TODO: refactor so that these come in as the arguments
+      interest = subscription.interest
+      subscription_type = subscription.subscription_type
+
       # default strategy:
       # 1) does the initial poll
       # 2) stores every item ID as seen 
 
       # make initialization idempotent, remove any existing seen items first
-      subscription.seen_items.delete_all
+      interest.seen_items.where(subscription_type: subscription_type).delete_all
 
       unless results = Subscriptions::Manager.poll(subscription, :initialize)
         Admin.report Report.failure("Initialization", 
           "Error while initializing a subscription, subscription is remaining uninitialized.", 
-          :subscription => subscription.attributes
+          interest: interest.attributes,
+          subscription_type: subscription_type
           )
         return nil
       end
 
       results.each do |item|
-        mark_as_seen! subscription, item
+        mark_as_seen! item
       end
       
       subscription.initialized = true
@@ -36,42 +41,51 @@ module Subscriptions
     
     def self.check!(subscription)
       
+      # TODO: refactor so that these come in as the arguments
+      interest = subscription.interest
+      subscription_type = subscription.subscription_type
+      
+
       # catch any items which suddenly appear, dated in the past, 
       # that weren't caught during initialization or prior polls
+
+      # accumulate backfilled items to report per-subscription.
+      # buffer of 30 days, to allow for information to make its way through whatever 
+      # pipelines it has to go through (could eventually configure this per-adapter)
+      
+      # Was 5 days, bumped it to 30 because of federal_bills. The LOC, CRS, and GPO all 
+      # move in waves, apparently, of unpredictable frequency.
+
+      # disabled in test mode (for now, this is obviously not ideal)
+
       backfills = []
 
-      # default strategy:
+
       # 1) does a poll
       # 2) stores any items as yet unseen by this subscription in seen_ids
       # 3) stores any items as yet unseen by this subscription in the delivery queue
       unless results = Subscriptions::Manager.poll(subscription, :check)
-        Admin.report Report.warning("Check", "Error while checking a subscription, will check again next time.", :subscription => subscription.attributes.dup)
+        Admin.report Report.warning("Check", "Error while checking a subscription, will check again next time.", interest: interest.attributes.dup)
         return nil
       end
 
       results.each do |item|
 
-        unless SeenItem.where(:subscription_id => subscription.id, :item_id => item.item_id).first
+        unless SeenItem.where(:interest_id => interest.id, :item_id => item.item_id).first
           unless item.item_id
-            Admin.report Report.warning("Check", "[#{subscription.id}][#{subscription.subscription_type}][#{subscription.interest_in}] item with an empty ID")
+            Admin.report Report.warning("Check", "[#{interest.id}][#{subscription_type}][#{interest.in}] item with an empty ID")
             next
           end
 
-          mark_as_seen! subscription, item
+          mark_as_seen! item
 
-          # accumulate backfilled items to report per-subscription.
-          # buffer of 30 days, to allow for information to make its way through whatever 
-          # pipelines it has to go through (could eventually configure this per-adapter)
-          
-          # Was 5 days, bumped it to 30 because of federal_bills. The LOC, CRS, and GPO all 
-          # move in waves, apparently, of unpredictable frequency.
-          if item.date < 30.days.ago
+          if !test? and (item.date < 30.days.ago)
             backfills << item.attributes
-            next
+          else
+            Deliveries::Manager.schedule_delivery! item, subscription
           end
-
-          Deliveries::Manager.schedule_delivery! item, subscription
         end
+
       end
 
       if backfills.any?
@@ -82,7 +96,7 @@ module Subscriptions
       subscription.save!
     end
     
-    def self.mark_as_seen!(subscription, item)
+    def self.mark_as_seen!(item)
       item.save!
     end
 

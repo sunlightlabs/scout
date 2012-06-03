@@ -35,14 +35,17 @@ module Deliveries
 
     def self.schedule_delivery!(item, 
       # Allow subscription to optionally be passed in to prevent a database lookup
-      subscription = nil, 
+      subscription = nil,
+
+      # interest = nil,
+      # seen_through = nil,
 
       # Allow manual override of delivery options (useful for debugging)
       mechanism = nil, 
       email_frequency = nil
       )
 
-      # subscription and user can be looked up using only the item if need be
+      # subscription, interest, and user can be looked up using only the item if need be
       subscription ||= item.subscription
       interest = subscription.interest
       user = subscription.user
