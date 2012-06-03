@@ -70,7 +70,7 @@ module TestHelper
     end
 
     def mock_search(subscription, function = :search)
-      fixture = "#{subscription.subscription_type}/search/#{subscription.interest_in}"
+      fixture = "#{subscription.subscription_type}/#{subscription.interest_in}/#{function}"
       url = subscription.adapter.url_for subscription, function, {}
       mock_response url, fixture
     end

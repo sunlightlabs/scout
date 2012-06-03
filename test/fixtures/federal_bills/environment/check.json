@@ -1,0 +1,79 @@
+{
+    "bills": [
+        {
+            "bill_id": "s3241-112", 
+            "bill_type": "s", 
+            "introduced_at": "2012-05-24T12:00:00Z", 
+            "last_action": {
+                "acted_at": "2012-05-24T12:00:00Z", 
+                "text": "Placed on Senate Legislative Calendar under General Orders. Calendar No. 417.", 
+                "type": "calendar"
+            }, 
+            "last_action_at": "2012-05-24T12:00:00Z", 
+            "last_version": {
+                "bill_version_id": "s3241-112-pcs", 
+                "issued_on": "2012-05-24", 
+                "urls": {
+                    "html": "http://www.gpo.gov/fdsys/pkg/BILLS-112s3241pcs/html/BILLS-112s3241pcs.htm", 
+                    "pdf": "http://www.gpo.gov/fdsys/pkg/BILLS-112s3241pcs/pdf/BILLS-112s3241pcs.pdf", 
+                    "xml": "http://www.gpo.gov/fdsys/pkg/BILLS-112s3241pcs/xml/BILLS-112s3241pcs.xml"
+                },                 
+                "version_code": "pcs", 
+                "version_name": "Placed on Calendar Senate"
+            }, 
+            "last_version_on": "2012-05-24", 
+            "number": 3241, 
+            "official_title": "An original bill making appropriations for the Department of State, foreign operations, and related programs for the fiscal year ending September 30, 2013, and for other purposes.", 
+            "search": {
+                "query": "copyright", 
+                "score": 0.021804735
+            }, 
+            "session": 112, 
+            "short_title": null, 
+            "summary": null
+        }, 
+        {
+            "bill_id": "hr5326-112", 
+            "bill_type": "hr", 
+            "introduced_at": "2012-05-02T12:00:00Z", 
+            "last_action": {
+                "acted_at": "2012-05-14T12:00:00Z", 
+                "text": "Received in the Senate. Read twice. Placed on Senate Legislative Calendar under General Orders. Calendar No. 397.", 
+                "type": "calendar"
+            }, 
+            "last_action_at": "2012-05-14T12:00:00Z", 
+            "last_version": {
+                "bill_version_id": "hr5326-112-pcs", 
+                "issued_on": "2012-05-14", 
+                "urls": {
+                    "html": "http://www.gpo.gov/fdsys/pkg/BILLS-112hr5326pcs/html/BILLS-112hr5326pcs.htm", 
+                    "pdf": "http://www.gpo.gov/fdsys/pkg/BILLS-112hr5326pcs/pdf/BILLS-112hr5326pcs.pdf", 
+                    "xml": "http://www.gpo.gov/fdsys/pkg/BILLS-112hr5326pcs/xml/BILLS-112hr5326pcs.xml"
+                }, 
+                "version_code": "pcs", 
+                "version_name": "Placed on Calendar Senate"
+            }, 
+            "last_version_on": "2012-05-14", 
+            "number": 5326, 
+            "official_title": "Making appropriations for the Departments of Commerce and Justice, Science, and Related Agencies for the fiscal year ending September 30, 2013, and for other purposes.", 
+            "search": {
+                "highlight": {
+                    "versions": [
+                        " under which the use or occupancy of the space is authorized, up to $200,000, shall be credited to the appropriation or fund which initially bears the costs of such services. Sec. 107. Nothing in this title shall be construed to prevent a grant recipient from deterring child pornography, copyright infringement, or any other unlawful activity over its networks. Sec. 108. The Administrator of the National Oceanic and Atmospheric Administration is authorized to use, with their consent"
+                    ]
+                }, 
+                "query": "copyright", 
+                "score": 0.03373859
+            }, 
+            "session": 112, 
+            "short_title": "Commerce, Justice, Science, and Related Agencies Appropriations Act, 2013", 
+            "summary": "5/2/2012--Introduced.\nCommerce, Justice, Science, and Related Agencies Appropriations Act, 2013 - Makes appropriations for FY2013 for the Departments of Commerce and Justice (DOJ), science-related programs, and related agencies. Department of Commerce Appropriations Act, 2013 - Makes appropriations for 2013 for the Department of Commerce for various agencies and programs, including transfers of funds. Department of Justice Appropriations Act, 2013 - Makes appropriations for FY2013 for DOJ for various agencies and programs, including transfers of funds. Makes appropriations for FY2013 for: (1) the Office of Science and Technology Policy; (2) the National Aeronautics and Space Administration (NASA), including for the Office of Inspector General; and (3) the National Science Foundation (NSF), including for the Office of the National Science Board and the Office of Inspector General. Makes appropriations for FY2013 for: (1) the Commission on Civil Rights, (2) the Equal Employment Opportunity Commission (EEOC), (3) the International Trade Commission (ITC), (4) the Legal Services Corporation, (5) the Marine Mammal Commission, (6) the Office of the United States Trade Representative, and (7) the State Justice Institute. Specifies certain uses and limits on or prohibitions against the use of funds appropriated by this Act. Rescinds certain unobligated balances."
+        }
+    ], 
+    "count": 114, 
+    "page": {
+        "count": 2, 
+        "page": 1, 
+        "per_page": 2
+    }
+}

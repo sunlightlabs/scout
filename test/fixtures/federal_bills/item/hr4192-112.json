@@ -1,1 +1,71 @@
-{"count":1,"bills":[{"actions":[{"type":"action","text":"Referred to the Committee on Armed Services, and in addition to the Committee on Foreign Affairs, for a period to be subsequently determined by the Speaker, in each case for consideration of such provisions as fall within the jurisdiction of the committee concerned.","acted_at":"2012-03-08T12:00:00Z"},{"type":"action","text":"Referred to House Armed Services","acted_at":"2012-03-08T12:00:00Z"},{"type":"action","text":"Referred to House Foreign Affairs","acted_at":"2012-03-08T12:00:00Z"}],"bill_id":"hr4192-112","bill_type":"hr","cosponsors_count":62,"introduced_at":"2012-03-08T12:00:00Z","last_action":{"type":"action","text":"Referred to House Foreign Affairs","acted_at":"2012-03-08T12:00:00Z"},"last_action_at":"2012-03-08T12:00:00Z","last_version":{"issued_on":"2012-03-08","usc_extracted_ids":[],"urls":{"html":"http://www.gpo.gov/fdsys/pkg/BILLS-112hr4192ih/html/BILLS-112hr4192ih.htm","xml":"http://www.gpo.gov/fdsys/pkg/BILLS-112hr4192ih/xml/BILLS-112hr4192ih.xml","pdf":"http://www.gpo.gov/fdsys/pkg/BILLS-112hr4192ih/pdf/BILLS-112hr4192ih.pdf"},"version_code":"ih","usc_extracted":[],"bill_version_id":"hr4192-112-ih","version_name":"Introduced in House"},"last_version_on":"2012-03-08","number":4192,"official_title":"To amend the National Defense Authorization Act for Fiscal Year 2012 to provide for the trial of covered persons detained in the United States pursuant to the Authorization for Use of Military Force and to repeal the requirement for military custody.","session":112,"short_title":"Due Process and Military Detention Amendments Act","sponsor":{"title":"Rep","district":"9","nickname":"","bioguide_id":"S000510","last_name":"Smith","name_suffix":"","govtrack_id":"400379","party":"D","first_name":"Adam","chamber":"house","state":"WA"},"summary":"3/8/2012--Introduced.\nDue Process and Military Detention Amendments Act - Amends the National Defense Authorization Act for Fiscal Year 2012 to provide that, in the case of a person detained in the United States pursuant to the Authorization for Use of Military Force, disposition under the law of war shall only mean transfer for trial and proceedings by a court established under article III of the Constitution. Requires such trial and proceedings to have all due process provided under the Constitution. Repeals the requirement of detention in military custody pending disposition under the law of war for individuals determined to be a member or part of al Qaeda or an associated force who has participated in planning or carrying out an attack or attempted attack against the United States or its coalition partners."}],"page":{"count":1,"per_page":20,"page":1}}
+{
+    "bills": [
+        {
+            "actions": [
+                {
+                    "acted_at": "2012-03-08T12:00:00Z", 
+                    "text": "Referred to the Committee on Armed Services, and in addition to the Committee on Foreign Affairs, for a period to be subsequently determined by the Speaker, in each case for consideration of such provisions as fall within the jurisdiction of the committee concerned.", 
+                    "type": "action"
+                }, 
+                {
+                    "acted_at": "2012-03-08T12:00:00Z", 
+                    "text": "Referred to House Armed Services", 
+                    "type": "action"
+                }, 
+                {
+                    "acted_at": "2012-03-08T12:00:00Z", 
+                    "text": "Referred to House Foreign Affairs", 
+                    "type": "action"
+                }
+            ], 
+            "bill_id": "hr4192-112", 
+            "bill_type": "hr", 
+            "cosponsors_count": 62, 
+            "introduced_at": "2012-03-08T12:00:00Z", 
+            "last_action": {
+                "acted_at": "2012-03-08T12:00:00Z", 
+                "text": "Referred to House Foreign Affairs", 
+                "type": "action"
+            }, 
+            "last_action_at": "2012-03-08T12:00:00Z", 
+            "last_version": {
+                "bill_version_id": "hr4192-112-ih", 
+                "issued_on": "2012-03-08", 
+                "urls": {
+                    "html": "http://www.gpo.gov/fdsys/pkg/BILLS-112hr4192ih/html/BILLS-112hr4192ih.htm", 
+                    "pdf": "http://www.gpo.gov/fdsys/pkg/BILLS-112hr4192ih/pdf/BILLS-112hr4192ih.pdf", 
+                    "xml": "http://www.gpo.gov/fdsys/pkg/BILLS-112hr4192ih/xml/BILLS-112hr4192ih.xml"
+                }, 
+                "usc_extracted": [], 
+                "usc_extracted_ids": [], 
+                "version_code": "ih", 
+                "version_name": "Introduced in House"
+            }, 
+            "last_version_on": "2012-03-08", 
+            "number": 4192, 
+            "official_title": "To amend the National Defense Authorization Act for Fiscal Year 2012 to provide for the trial of covered persons detained in the United States pursuant to the Authorization for Use of Military Force and to repeal the requirement for military custody.", 
+            "session": 112, 
+            "short_title": "Due Process and Military Detention Amendments Act", 
+            "sponsor": {
+                "bioguide_id": "S000510", 
+                "chamber": "house", 
+                "district": "9", 
+                "first_name": "Adam", 
+                "govtrack_id": "400379", 
+                "last_name": "Smith", 
+                "name_suffix": "", 
+                "nickname": "", 
+                "party": "D", 
+                "state": "WA", 
+                "title": "Rep"
+            }, 
+            "summary": "3/8/2012--Introduced.\nDue Process and Military Detention Amendments Act - Amends the National Defense Authorization Act for Fiscal Year 2012 to provide that, in the case of a person detained in the United States pursuant to the Authorization for Use of Military Force, disposition under the law of war shall only mean transfer for trial and proceedings by a court established under article III of the Constitution. Requires such trial and proceedings to have all due process provided under the Constitution. Repeals the requirement of detention in military custody pending disposition under the law of war for individuals determined to be a member or part of al Qaeda or an associated force who has participated in planning or carrying out an attack or attempted attack against the United States or its coalition partners."
+        }
+    ], 
+    "count": 1, 
+    "page": {
+        "count": 1, 
+        "page": 1, 
+        "per_page": 20
+    }
+}
