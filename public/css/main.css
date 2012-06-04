@@ -1746,6 +1746,10 @@ div.indicators span {
     margin-top: 10px;
 }
 
+.module.sharing button {
+    margin: 20px 0;
+}
+
 
 /*-- Tag Grouping Topic Styling --*/
 
@@ -1786,11 +1790,20 @@ div.indicators span {
 }
 
 .tag div.edit_link {
-    margin-top: 5px;
+    margin-top: 10px;
 }
 
 .tag a.description {
-    font-style: italic;
+    font-style: italic; 
+}
+.tag a.edit_name {
+    font-style: italic; 
+    margin-left: 3px;
+    font-size: 80%;
+}
+
+.tag a.description.new {
+
 }
 
 .tag a.description.cancel {
