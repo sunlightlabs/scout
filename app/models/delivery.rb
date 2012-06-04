@@ -5,7 +5,6 @@ class Delivery
   include Mongoid::Document
   include Mongoid::Timestamps
   
-  belongs_to :subscription
   belongs_to :interest
   belongs_to :user
   
@@ -14,7 +13,7 @@ class Delivery
   field :subscription_type
   field :interest_in
 
-  # if the user is not the owner of the "seen_by" interest, there will be another
+  # if the user is not the owner of the main interest, there will be another
   # interest here, owned by the deliver's user, that the user saw the item "through"
   belongs_to :seen_through, class_name: "Interest"
 
@@ -31,28 +30,30 @@ class Delivery
   index :subscription_type
   index :user_email
   index "item.date"
+  index "item.item_id"
   index :interest_id
   index :user_id
   index :seen_through_id
   
   validates_presence_of :interest_id
-  validates_presence_of :subscription_id
   validates_presence_of :subscription_type
   validates_presence_of :interest_in
   validates_presence_of :user_id
   validates_presence_of :item
 
 
-  def self.schedule!(user, subscription, item, mechanism, email_frequency)
+  # user and delivery mechanism decided in advance
+  def self.schedule!(item, interest, subscription_type, seen_through, user, mechanism, email_frequency)
     create! :user_id => user.id,
       :user_email => user.email,
       :user_phone => user.phone,
       
-      :subscription_id => subscription.id,
-      :subscription_type => subscription.subscription_type,
+      :subscription_type => subscription_type,
       
-      :interest_in => subscription.interest_in,
-      :interest_id => subscription.interest_id,
+      :interest_in => interest.in,
+      :interest => interest,
+
+      :seen_through => seen_through,
 
       :mechanism => mechanism,
       :email_frequency => email_frequency,

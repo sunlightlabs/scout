@@ -22,7 +22,7 @@ module Subscriptions
         "Votes"
       end
 
-      def self.short_name(number, subscription, interest)
+      def self.short_name(number, interest)
         "#{number > 1 ? "votes" : "vote"}"
       end
       

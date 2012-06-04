@@ -223,8 +223,16 @@ namespace :test do
           next
         end
 
+        followers = interest.followers
+
         items.first(max).each do |item|
-          delivery = Deliveries::Manager.schedule_delivery! item, subscription, mechanism, email_frequency
+          delivery = Deliveries::Manager.schedule_delivery! item, interest, subscription.subscription_type, nil, mechanism, email_frequency
+
+          if ENV['include_followers'].present?
+            followers.each do |follower|
+              Deliveries::Manager.schedule_delivery! item, interest, subscription.subscription_type, follower, mechanism, email_frequency
+            end
+          end
         end
       end
 

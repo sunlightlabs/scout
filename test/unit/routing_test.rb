@@ -9,22 +9,19 @@ class RoutingTest < Test::Unit::TestCase
   def routing; Anonymous; end
 
   
-  def test_subscription_path
+  def test_interest_path
     user = create :user
 
-    query_and_data = user.subscriptions.create! :subscription_type => "federal_bills", :interest_in => "yes", :data => {'query' => "yes", 'stage' => "enacted"}
-    assert_equal "/search/federal_bills/yes?federal_bills[stage]=enacted", routing.subscription_path(query_and_data)
+    query = "yes and no" # has spaces
 
-    query = "yes and no"
-    query_no_data = user.subscriptions.create! :subscription_type => "federal_bills", :interest_in => query, :data => {'query' => query}
-    assert_equal "/search/federal_bills/#{URI.encode query}", routing.subscription_path(query_no_data)
+    all = search_interest! user, "all", query
+    assert_equal "/search/all/#{URI.encode query}", routing.interest_path(all)
 
-    #TODO: when we support query-less searches
-    # data_no_query = user.subscriptions.create! :subscription_type => "state_bills", :data => {:state => "CA"}
-    # assert_equal "/search/state_bills?state_bills[state]=CA", routing.subscription_path(data_no_query)
+    single_search = search_interest! user, "federal_bills", query
+    assert_equal "/search/federal_bills/#{URI.encode query}", routing.interest_path(single_search)
 
-    # no_data_no_query = user.subscriptions.create! :subscription_type => "federal_bills", :data => {}
-    # assert_equal "/search/federal_bills", routing.subscription_path(no_data_no_query)
+    search_with_data = search_interest! user, "federal_bills", query, {'stage' => "enacted"}
+    assert_equal "/search/federal_bills/#{URI.encode query}?federal_bills[stage]=enacted", routing.interest_path(search_with_data)
   end
 
 end

@@ -33,28 +33,34 @@ module Deliveries
       end
     end
 
-    def self.schedule_delivery!(item, 
-      # Allow subscription to optionally be passed in to prevent a database lookup
-      subscription = nil,
 
-      # interest = nil,
-      # seen_through = nil,
+    # given the item to be delivered, the interest that found it with what subscription_type
+    # and assuming the user's setup checks out (if sms, has phone, etc.)
+    # then schedule the delivery
+    def self.schedule_delivery!(
+      item, interest, subscription_type,
+
+      # interest that asked for the delivery (defaults to same as the finding interest)
+      seen_through = nil,
 
       # Allow manual override of delivery options (useful for debugging)
       mechanism = nil, 
       email_frequency = nil
       )
 
-      # subscription, interest, and user can be looked up using only the item if need be
-      subscription ||= item.subscription
-      interest = subscription.interest
-      user = subscription.user
+      # asking interest defaults to the interest that found it
+      seen_through ||= interest
 
-      # delivery options come from the interest, if none specified it inherits from the user
-      mechanism ||= interest.mechanism
-      email_frequency ||= interest.email_frequency
+      # the asking interest's user, who will get the delivery
+      user = seen_through.user
 
-      header = "[#{user.email || user.phone}][#{subscription.subscription_type}][#{interest.in}](#{item.item_id})"
+      # delivery options come from the interest it was seen through,
+      # if none is specified, the interest inherits the pref from the user
+      mechanism ||= seen_through.mechanism
+      email_frequency ||= seen_through.email_frequency
+
+      header = "[#{user.email || user.phone}][#{interest.in}][#{subscription_type}](#{item.item_id})"
+      header << "{through_tag}" if seen_through.tag?
 
       if !["email", "sms"].include?(mechanism)
         puts "#{header} Not scheduling delivery, user wants no notifications for this interest" unless Sinatra::Application.test?
@@ -65,7 +71,8 @@ module Deliveries
       else
         puts "#{header} Scheduling delivery" unless Sinatra::Application.test?
 
-        Delivery.schedule! user, subscription, item, mechanism, email_frequency
+        # finally schedule the actual delivery
+        Delivery.schedule! item, interest, subscription_type, seen_through, user, mechanism, email_frequency
       end
     end
 
@@ -82,9 +89,20 @@ module Deliveries
         report << "[#{user.email || user.phone}]#{delivery_type} #{user_receipts.size} notifications"
 
         user_receipts.each do |receipt|
-          receipt.deliveries.group_by {|d| d['interest_id']}.each do |interest_id, interest_deliveries|
+          receipt.deliveries.group_by {|d| [d['interest_id'], d['seen_through_id']]}.each do |interest_ids, interest_deliveries|
+            interest_id, seen_through_id = interest_ids
+            
             interest = Interest.find interest_id
+
             report << "\n\t#{interest_name interest} - #{interest_deliveries.size} things"
+            
+            if interest_id != seen_through_id 
+              seen_through = Interest.find seen_through_id
+              tag = seen_through.tag
+              user = seen_through.tag_user
+              report << "\n\tthrough: #{user.username || user.id} / #{tag.name}"
+            end
+
             report << "\n\t\t"
             report << interest_deliveries.group_by {|d| d['subscription_type']}.map do |subscription_type, subscription_deliveries|
               "#{subscription_type} (#{subscription_deliveries.size})"

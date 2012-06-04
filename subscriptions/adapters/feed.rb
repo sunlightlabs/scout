@@ -35,7 +35,7 @@ module Subscriptions
         subscription.data['title']
       end
 
-      def self.short_name(number, subscription, interest)
+      def self.short_name(number, interest)
         "#{number > 1 ? "results" : "result"}"
       end
 

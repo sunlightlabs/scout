@@ -27,7 +27,7 @@ module Subscriptions
         "Coming to the Floor"
       end
 
-      def self.short_name(number, subscription, interest)
+      def self.short_name(number, interest)
         "#{number > 1 ? "floor notices" : "floor notice"}"
       end
       

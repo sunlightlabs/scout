@@ -103,16 +103,16 @@ module Deliveries
     end
 
     def self.render_interest(interest, deliveries)
-      grouped = deliveries.group_by &:subscription
+      grouped = deliveries.group_by &:subscription_type
 
       content = ""
 
-      grouped.each do |subscription, group|
-        description = "#{group.size} #{subscription.adapter.short_name group.size, subscription, interest}"
+      grouped.each do |subscription_type, group|
+        description = "#{group.size} #{Subscription.adapter_for(subscription_type).short_name group.size, interest}"
 
-        if subscription.filters.any? 
-          filters = subscription.filters.map do |field, value|
-            subscription.filter_name field, value
+        if interest.filters.any? 
+          filters = interest.filters.map do |field, value|
+            interest.filter_name field, value
           end.join(", ")
           description << " (#{filters})"
         end
@@ -120,7 +120,7 @@ module Deliveries
         content << "- #{Deliveries::Manager.interest_name interest} - #{description}\n\n\n"
 
         group.each do |delivery|
-          content << render_delivery(subscription, interest, delivery)
+          content << render_delivery(delivery, interest, subscription_type)
           content << "\n\n\n"
         end
 
@@ -134,17 +134,17 @@ module Deliveries
     def self.render_subject(interest, deliveries)
       subject = "#{Deliveries::Manager.interest_name interest} - "
 
-      grouped = deliveries.group_by(&:subscription)
+      grouped = deliveries.group_by(&:subscription_type)
 
       if grouped.keys.size > 3
         subject << "#{deliveries.size} new results" # deliveries.size is guaranteed to be > 1 if the grouped is > 3
       else
-        subject << grouped.map do |subscription, subscription_deliveries|
-          type = "#{subscription_deliveries.size} #{subscription.adapter.short_name subscription_deliveries.size, subscription, interest}"
+        subject << grouped.map do |subscription_type, subscription_deliveries|
+          type = "#{subscription_deliveries.size} #{Subscription.adapter_for(subscription_type).short_name subscription_deliveries.size, interest}"
           
-          if grouped.keys.size == 1 and subscription.filters.any? 
-            filters = subscription.filters.map do |field, value|
-              subscription.filter_name field, value
+          if grouped.keys.size == 1 and interest.filters.any? 
+            filters = interest.filters.map do |field, value|
+              interest.filter_name field, value
             end.join(", ")
             type << " (#{filters})"
           end
@@ -164,10 +164,10 @@ module Deliveries
     end
 
     # render a Delivery into its email content
-    def self.render_delivery(subscription, interest, delivery)
+    def self.render_delivery(delivery, interest, subscription_type)
       item = Deliveries::SeenItemProxy.new(SeenItem.new(delivery.item))
-      template = Tilt::ERBTemplate.new "app/views/subscriptions/#{subscription.subscription_type}/_email.erb"
-      rendered = template.render item, :item => item, :subscription => subscription, :interest => interest, :trim => false
+      template = Tilt::ERBTemplate.new "app/views/subscriptions/#{subscription_type}/_email.erb"
+      rendered = template.render item, :item => item, :interest => interest, :trim => false
       rendered.force_encoding "utf-8"
       rendered << "\n\n#{item_url item}"
     end

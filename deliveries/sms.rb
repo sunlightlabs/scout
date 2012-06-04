@@ -69,24 +69,23 @@ module Deliveries
     end
 
     def self.render_interest(interest, deliveries)
-      grouped = deliveries.group_by &:subscription
+      grouped = deliveries.group_by &:subscription_type
 
       url = interest_url interest
 
       content = ""
       
-      content << grouped.keys.map do |subscription|
-        "#{grouped[subscription].size} #{subscription.adapter.short_name grouped[subscription].size, subscription, interest}"
+      content << grouped.map do |subscription_type, subscription_deliveries|
+        number = subscription_deliveries.size
+        "#{number} #{Subscription.adapter_for(subscription_type).short_name number, interest}"
       end.join(", ")
 
-      content << " on "
-
       if interest.search?
-        content << "\"#{interest.in}\""
+        content << " on \"#{interest.in}\""
       elsif interest.item?
-        content << Subscription.adapter_for(item_types[interest.item_type]['adapter']).interest_name(interest)
+        content << " for #{Subscription.adapter_for(item_types[interest.item_type]['adapter']).interest_name(interest)}"
       elsif interest.feed?
-        content << "a feed"
+        content << " from a feed" # ?
       end
 
       [content, url]

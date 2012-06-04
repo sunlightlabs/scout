@@ -127,6 +127,37 @@ class Interest
     end
   end
 
+
+  # for search interests only - 
+  # any keys inside the 'data' field that match the adapter's filter keys
+  # Important: 'all' search subscriptions are assumed to have no filters
+  def filters
+    if @filters
+      @filters
+    else
+      # 'all' search types cannot filter
+      if search_type == "all"
+        @filters = {}
+      else
+        adapter = Subscription.adapter_for search_type
+        filter_fields = adapter.respond_to?(:filters) ? adapter.filters.keys : []
+        fields = data.dup
+        fields.keys.each {|key| fields.delete(key) unless filter_fields.include?(key)}
+        @filters = fields
+      end
+    end
+  end
+
+  def filter_name(field, value)
+    if search_type != "all"
+      adapter = Subscription.adapter_for search_type
+      if adapter.respond_to?(:filters)
+        adapter.filters[field.to_s][:name].call value
+      end
+    end
+  end
+
+
   # does the user have an interest with this criteria, and this data hash?
   def self.for(user, criteria, data = nil)
 

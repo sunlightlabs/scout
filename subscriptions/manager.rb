@@ -44,6 +44,9 @@ module Subscriptions
       # TODO: refactor so that these come in as the arguments
       interest = subscription.interest
       subscription_type = subscription.subscription_type
+
+      # any users' tag interests who are following a public tag that includes
+      following_interests = interest.followers
       
 
       # catch any items which suddenly appear, dated in the past, 
@@ -82,7 +85,13 @@ module Subscriptions
           if !test? and (item.date < 30.days.ago)
             backfills << item.attributes
           else
-            Deliveries::Manager.schedule_delivery! item, subscription
+            # deliver one copy for the user whose interest found it
+            Deliveries::Manager.schedule_delivery! item, interest, subscription_type
+
+            # deliver a copy to any users following this one
+            following_interests.each do |seen_through|
+              Deliveries::Manager.schedule_delivery! item, interest, subscription_type, seen_through
+            end
           end
         end
 

@@ -82,6 +82,10 @@ module TestHelper
       mock_response url, fixture
     end
 
+    # helper helpers
+    class Anonymous; extend Helpers::Routing; end
+    def routing; Anonymous; end
+
 
     # Sinatra helpers
 
