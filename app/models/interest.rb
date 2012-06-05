@@ -252,7 +252,7 @@ class Interest
     subscription_types = if interest.search?
       (interest.search_type == "all") ? search_types : [interest.search_type]
     elsif interest.item?
-      item_types[interest.item_type]['subscriptions']
+      item_types[interest.item_type]['subscriptions'] || []
     elsif interest.feed?
       ["feed"]
     elsif interest.tag?
