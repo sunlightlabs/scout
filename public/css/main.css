@@ -931,19 +931,23 @@ footer nav li{
 .feed_preview .loading span, .feed_preview .error span, .feed_preview.empty span,
 .entry .loading, .results .loading span, .results .error span, .results .empty span, .results .special span {
   color: #444; 
-  font-size: 125%;
+  font-size: 110%;
   display: block;
   padding-top: 20px; padding: 20px; padding-left: 50px;
+}
+
+.results .special span {
+    font-size: 110%;
 }
 
 .feed_preview .loading span, .results .loading span, .entry .loading span {
   background-position: left;
   background-image: url(/images/loader-32.gif);
   background-repeat: no-repeat;
-  background-size: 24px 24px;
+  background-size: 16px 16px;
   display: block;
   height: 20px;
-  padding-top: 20px;
+  padding-top: 30px;
   padding-bottom: 20px;
   padding-left: 40px;
   
