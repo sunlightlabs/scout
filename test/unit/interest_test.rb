@@ -20,7 +20,8 @@ class InterestTest < Test::Unit::TestCase
     assert_equal user, i1.user
     assert_equal query, i1.in
     assert_equal query, i1.data['query']
-    assert_equal ['query'], i1.data.keys
+    assert_equal 'simple', i1.data['query_type']
+    assert_equal ['query', 'query_type'], i1.data.keys
     assert_equal "search", i1.interest_type
     assert_equal "all", i1.search_type
     assert i1.save
@@ -41,7 +42,7 @@ class InterestTest < Test::Unit::TestCase
     i5 = Interest.for_search user, "speeches", query, {'state' => 'CA'}
     assert i5.new_record?
     assert_equal 'CA', i5.data['state']
-    assert_equal ['query', 'state'].sort, i5.data.keys.sort
+    assert_equal ['query', 'query_type', 'state'].sort, i5.data.keys.sort
     assert i5.save
 
     i6 = Interest.for_search user, "speeches", query, {'state' => 'CA', 'party' => 'R'}
@@ -53,6 +54,13 @@ class InterestTest < Test::Unit::TestCase
     i7 = Interest.for_search user, "speeches", query, {'state' => 'CA'}
     assert !i7.new_record?
     assert_equal i5.id, i7.id
+
+    i7a = Interest.for_search user, "speeches", query, {'state' => 'CA', 'query_type' => 'simple'}
+    assert !i7a.new_record?
+    assert_equal i5.id, i7a.id
+
+    i7b = Interest.for_search user, "speeches", query, {'state' => 'CA', 'query_type' => 'advanced'}
+    assert i7b.new_record?
 
     i8 = Interest.for_search user2, "speeches", query, {'state' => 'CA'}
     assert i8.new_record?

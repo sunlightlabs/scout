@@ -747,6 +747,16 @@ footer nav li{
     width: 460px;
 }
 
+.searchParameters h2.large {
+    font-size: 180%;
+}
+.searchParameters h2.medium {
+    font-size: 200%;
+}
+.searchParameters h2.smaller {
+    font-size: 280%; /* matches with main h2 */
+}
+
 .searchParameters .category{
     font-weight: bold;
 }

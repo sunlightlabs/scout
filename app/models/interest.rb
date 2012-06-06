@@ -199,6 +199,9 @@ class Interest
     # ensure query is present in the data
     data['query'] ||= query
 
+    # query_type defaults to simple (old/standard behavior)
+    data['query_type'] ||= 'simple'
+
     criteria = {
       'in' => query,
       'interest_type' => 'search',

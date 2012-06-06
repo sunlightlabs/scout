@@ -21,13 +21,27 @@ $(function() {
     if (query) query = $.trim(query);
     if (!query) return false;
 
+    var queryType = $(".query_type input[type=radio]:checked").val();
+
     // if we are on the search page itself, this search box integrates with the filters
     if (typeof(goToSearch) != "undefined") {
+      // These two values are cached in separate hidden fields, 
+      // and not read live from the search box.
+      // Editing the search query and switching from simple/advance
+      // should only take effect when the user explicitly hits the search button.
       $(".filters input.query").val(query);
+      $(".filters input.query_type").val(queryType);
       goToSearch();
-    } else {
-      window.location = "/search/all/" + encodeURIComponent(query);
+    } 
+
+    // we're on the home page, just do a bare search
+    else {
+      var url = "/search/all/" + encodeURIComponent(query);
+      if (queryType == "advanced")
+        url += "?query_type=" + queryType;
+      window.location = url;
     }
+
     return false;
   });
 

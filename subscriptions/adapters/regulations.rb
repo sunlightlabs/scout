@@ -39,7 +39,11 @@ module Subscriptions
         url << "&highlight_tags=,"
 
         # filters
-        url << "&query=#{query}"
+        if subscription.data['query_type'] == 'simple'
+          url << "&query=#{query}"
+        else
+          url << "&q=#{query}"
+        end
 
         ["agency", "stage"].each do |field|
           if subscription.data[field].present?

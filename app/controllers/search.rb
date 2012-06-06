@@ -111,6 +111,7 @@ helpers do
 
   def search_interest_for(query, search_type)
     data = params[search_type] || {}
+    data['query_type'] = query_type
     Interest.for_search current_user, search_type, query, data
   end
 
@@ -118,12 +119,23 @@ helpers do
     if logged_in?
       current_user.interests.where(
         :in => query, 
-        :interest_type => "search"
+        :interest_type => "search",
+        "data.query_type" => query_type
       )
     end
   end
 
+  def query_type
+    params[:query_type] || "simple"
+  end
+
   def stripped_query
-    params[:query] ? URI.decode(params[:query]).strip.gsub("\"", "") : nil
+    query = params[:query] ? URI.decode(params[:query]).strip : nil
+    
+    if query_type == "simple"
+      query = query.gsub "\"", ""
+    end
+
+    query
   end
 end

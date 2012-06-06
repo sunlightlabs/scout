@@ -33,7 +33,11 @@ module Subscriptions
 
         # filters
 
-        url << "&query=#{query}"
+        if subscription.data['query_type'] == 'simple'
+          url << "&query=#{query}"
+        else
+          url << "&q=#{query}"
+        end
 
         # search-only filters
         if function == :search

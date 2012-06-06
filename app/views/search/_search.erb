@@ -12,5 +12,13 @@
     <button type="submit">
         <span>Create Alert</span>
     </button>
+
     <div class="clear"></div>
+
+    <fieldset class="query_type">
+        <input id="query_type_simple" type="radio" name="query_type" value="simple" <%= "checked" if params[:query_type] != "advanced" %> />
+        <label id="query_type_simple">Simple phrase</label>
+        <input id="query_type_advanced" type="radio" name="query_type" value="advanced" <%= "checked" if params[:query_type] == "advanced" %>/>
+        <label id="query_type_advanced">Advanced</label>
+    </fieldset>
 </form>

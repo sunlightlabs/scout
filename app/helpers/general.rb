@@ -4,6 +4,16 @@ require 'rinku'
 module Helpers
   module General
 
+    def query_size(query)
+      if query.size < 30
+        "smaller"
+      elsif query.size < 80
+        "medium"
+      else
+        "large"
+      end
+    end
+
     # temporary
     def item_type_name(item_type)
       {

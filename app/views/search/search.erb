@@ -27,6 +27,7 @@
         <form>
 
     	    <%= hidden_field_tag :query, :class => "query" %>
+          <%= hidden_field_tag :query_type, :class => "query_type" %>
     	    <%= hidden_field_tag :subscription_type, :class => "subscription_type" %>
     	    
           <% search_types.each do |subscription_type| %>
@@ -79,7 +80,9 @@
 <div class="results contentArea right <%= interest.search_type == "all" ? "" : "single" %>">
 	<div class="pageTitle">
     <div class="searchParameters">
-      <h2>"<%= h query %>"</h2>
+      <h2 class="<%= query_size query %>">
+        <%= h query %>
+      </h2>
       in 
       <% if interest.search_type == "all" %>
         <span class="category">
@@ -190,31 +193,44 @@
 
 
   function initializeControls() {
-    // set up the filter events
-    $(".filters .filter_control").off("change").change(goToSearch);
+    // set up the filter events (only needs to happen once)
+    $(".filters .filter_control").change(goToSearch);
+
+    // initialize the search box and query type (only needs to happen once from here)
+    // the search button itself may re-set these
+    var initialQuery = $("#search_form input.query").val();
+    var initialQueryType = $(".query_type input[type=radio]:checked").val();
+    $(".filters input.query").val(initialQuery);
+    $(".filters input.query_type").val(initialQueryType);
   }
 
   function goToSearch() {
     var type = currentSubscriptionType();
+    var queryType = currentQueryType();
     var query = encodeURIComponent(currentQuery());
     var filters = currentFilters();
     
+    if (queryType == "advanced")
+      filters.query_type = queryType;
+
     // serialize the filters and preserve the brackets
     var filterString = $.param(filters).replace(/%5B/g, "[").replace(/%5D/g, "]");
     var url = "/search/" + type + "/" + query;
+
     if (filterString) url += "?" + filterString;
 
     Utils.pjax(url, "#center");
   }
 
   function initializeSubscriptions() {
-    // set the given query and subscription type as current
+    // set the query and subscription type as current
     // the subscription type can be "all"
-    $(".filters input.query").val("<%= escape_javascript query %>");
     $(".filters input.subscription_type").val("<%= h interest.search_type %>");
+
 
     var subscriptionType = currentSubscriptionType();
     var query = currentQuery();
+    var queryType = currentQueryType();
 
     // update the main filter links
     $("ul.categories li a").each(function(i, elem) {
@@ -301,6 +317,10 @@
     return $(".filters input.query").val();
   }
 
+  function currentQueryType() {
+    return $(".filters input.query_type").val();
+  }
+
   function currentSubscriptionType() {
     return $(".filters input.subscription_type").val();
   }
@@ -312,11 +332,13 @@
   function follow() {
     var subscription_type = currentSubscriptionType();
     var query = encodeURIComponent(currentQuery());
+    var queryType = currentQueryType();
     var filters = currentFilters();
 
     var subscription = $.extend(filters, {
       search_type: subscription_type,
-      query: query
+      query: query,
+      query_type: queryType
     });
 
     $("button.follow").hide();
@@ -337,11 +359,13 @@
   function unfollow() {
     var subscription_type = currentSubscriptionType();
     var query = encodeURIComponent(currentQuery());
+    var queryType = currentQueryType();
     var filters = currentFilters();
 
     var subscription = $.extend(filters, {
       search_type: subscription_type,
-      query: query
+      query: query,
+      query: queryType
     });
 
     $("button.follow").show();
@@ -365,6 +389,7 @@
     if (!searchOptions.page) searchOptions.page = 1;
 
     var query = encodeURIComponent(currentQuery());
+    var queryType = currentQueryType();
     var container = $(".results div.search[data-subscription=" + subscriptionType + "]");
 
     // reset elements inside tab
@@ -373,8 +398,11 @@
     // all search options (filters, pagination)
     var search = {};
     
-    // carry along the universal and subscription-specific filters
+    // carry along the filters
     $.extend(search, currentFilters());
+
+    // simple or advanced?
+    $.extend(search, {query_type: queryType});
 
     // any one-time search options (pagination)
     $.extend(search, searchOptions);
