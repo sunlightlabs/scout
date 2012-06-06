@@ -20,7 +20,7 @@ module Subscriptions
       def self.url_for(subscription, function, options = {})
         api_key = options[:api_key] || config[:subscriptions][:sunlight_api_key]
         
-        query = URI.escape subscription.interest_in
+        query = subscription.interest_in
         
         endpoint = "http://capitolwords.org/api"
         
@@ -30,9 +30,14 @@ module Subscriptions
         # keep it only to fields with a speaker (bioguide_id)
         url << "&bioguide_id=[''%20TO%20*]"
 
-        # filters
+
+        # speeches do not support advanced operators at this time
+        query = query.gsub "\"", ""
         
-        url << "&phrase=#{query}"
+        url << "&phrase=#{URI.escape query}"
+
+
+        # filters
 
         ["state", "party"].each do |field|
           if subscription.data[field].present?

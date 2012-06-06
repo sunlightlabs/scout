@@ -235,7 +235,10 @@
     // update the main filter links
     $("ul.categories li a").each(function(i, elem) {
       var type = $(elem).parent("li").data("subscription_type");
-      $(elem).attr("href", "/search/" + type + "/" + encodeURIComponent(query));
+      var url = "/search/" + type + "/" + encodeURIComponent(query);
+      if (queryType == "advanced")
+        url += "?query_type=" + queryType;
+      $(elem).attr("href", url);
     });
     
     // follow button

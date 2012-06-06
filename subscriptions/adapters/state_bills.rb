@@ -15,7 +15,6 @@ module Subscriptions
         api_key = options[:api_key] || config[:subscriptions][:sunlight_api_key]
 
         endpoint = "http://openstates.org/api/v1"
-        query = URI.escape "\"#{subscription.interest_in}\""
         
         fields = %w{ id bill_id subjects state chamber created_at updated_at title sources versions session %2Bshort_title }
         
@@ -24,10 +23,22 @@ module Subscriptions
         url << "&fields=#{fields.join ','}"
         url << "&search_window=all"
         
-        
-        # filters
 
-        url << "&q=#{query}"
+        # query
+
+        query = subscription.interest_in
+
+        # in simple mode, the query is auto-quoted (and any user-supplied quotes 
+        # have been stripped off in the controller before being sent here).
+
+        if subscription.data['query_type'] == 'simple'
+          query = "\"#{query}\""
+        end
+
+        url << "&q=#{URI.escape query}"
+
+
+        # filters
 
         if subscription.data['state'].present?
           url << "&state=#{subscription.data['state']}"

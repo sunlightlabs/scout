@@ -214,7 +214,7 @@ module Helpers
     end
 
     def excerpt_pattern(keyword)
-      /#{keyword.gsub(' ', '[\s\-]')}/i
+      /#{keyword.gsub('"', '').gsub(' ', '[\s\-]')}/i
     end
     
     # client-side truncation and highlighting
