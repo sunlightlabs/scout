@@ -5,6 +5,11 @@ module Subscriptions
   class Manager
 
     def self.search(subscription, options = {})
+      # speeches don't support query_type of advanced, views know this and will explain
+      if (subscription.subscription_type == "speeches") and (subscription.data['query_type'] == "advanced")
+        return nil
+      end
+      
       poll subscription, :search, options
     end
     

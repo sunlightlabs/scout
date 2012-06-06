@@ -136,13 +136,6 @@
           <!-- pages of data appended into here -->
         </ul>
 
-        <% unless subscription %>
-          <a href="<%= subscription_path s %>" class="viewMore" data-pjax="#center">
-            View more <span><%= s.search_name %></span>
-          </a>
-          <div class="clear"></div>
-        <% end %>
-
         <div class="loading">
           <span>Fetching <%= s.search_name.downcase %>...</span>
         </div>
@@ -154,6 +147,17 @@
         <div class="error">
           <span>There was an error while searching.</span>
         </div>
+
+        <div class="special">
+          <span><!-- filled in in special cases --></span>
+        </div>
+
+        <% unless subscription %>
+          <a href="<%= subscription_path s %>" class="viewMore" data-pjax="#center">
+            View more <span><%= s.search_name %></span>
+          </a>
+          <div class="clear"></div>
+        <% end %>
       </div>
 
     </div>
@@ -398,9 +402,14 @@
     var queryType = currentQueryType();
     var container = $(".results div.search[data-subscription=" + subscriptionType + "]");
 
-    // reset elements inside tab
-    container.find(".loading").show();
-    
+    // special case: speeches don't support advanced searches right now
+    if (subscriptionType == "speeches" && queryType == "advanced") {
+      container.find(".special span").html("Advanced searches over speeches in Congress aren't supported right now.");
+      container.find("a.viewMore").hide();
+      container.find(".special").show();
+      return;
+    }
+
     // all search options (filters, pagination)
     var search = {};
     
@@ -412,6 +421,9 @@
 
     // any one-time search options (pagination)
     $.extend(search, searchOptions);
+
+    // reset elements inside tab
+    container.find(".loading").show();
 
     $.get("/fetch/search/" + subscriptionType + "/" + query, search, function(data) {
       
