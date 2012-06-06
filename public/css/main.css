@@ -326,7 +326,7 @@ div.error {
 }
 
 header.contentWrapper{
-    
+    padding-bottom: 20px;
 }
 
 nav ul{
@@ -447,7 +447,7 @@ header h1{
 }
 
 #search_form .search_explanations {
-    height: 65px;
+    height: 45px;
 }
 
 .homeWrapper #search_form .search_explanations {
