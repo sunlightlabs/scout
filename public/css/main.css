@@ -321,8 +321,11 @@ div.error {
     position: relative;
     z-index: 10;
 }
-header.contentWrapper{
+.homeWrapper header.contentWrapper {
     margin-top: -4px;
+}
+
+header.contentWrapper{
     padding-bottom: 85px;
 }
 
