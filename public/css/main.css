@@ -326,7 +326,7 @@ div.error {
 }
 
 header.contentWrapper{
-    padding-bottom: 85px;
+    padding-bottom: 65px;
 }
 
 nav ul{
@@ -432,15 +432,17 @@ header h1{
     font-weight: normal;
 }
 
-#search_form .filter{
+#search_form .query_type {
     float: left;
 }
-#search_form .filter li{
-    margin-bottom: 4px;
+
+#search_form .query_type label {
+    font-weight: normal;
+    margin-right: 15px;
 }
 
-#search_form .filter.states {
-    display: none;
+.homeWrapper #search_form .query_type {
+    visibility: hidden; /* preserve space */
 }
 
 select.subscription_type {
@@ -938,6 +940,10 @@ footer nav li{
     margin-bottom: 5px;
     width: 550px;
 }
+.results.contentArea h4.smaller {
+    font-size: 110%;
+}
+
 .contentArea h4 a{
     text-decoration: none;
     color: #1c6979;

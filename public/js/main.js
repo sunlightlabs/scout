@@ -16,6 +16,10 @@ $(function() {
     return false;
   });
 
+  $(".homeWrapper #search_form input.query").focus(function() {
+    $("fieldset.query_type").css("visibility", "visible");
+  });
+
   $("form#search_form").submit(function() {
     var query = $(this).find("input.query").val();
     if (query) query = $.trim(query);
