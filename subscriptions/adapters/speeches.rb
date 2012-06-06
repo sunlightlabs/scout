@@ -31,10 +31,13 @@ module Subscriptions
         url << "&bioguide_id=[''%20TO%20*]"
 
 
-        # speeches do not support advanced operators at this time
-        query = query.gsub "\"", ""
         
-        url << "&phrase=#{URI.escape query}"
+        if subscription.data['query_type'] != 'advanced'
+          query = query.gsub "\"", ""
+          url << "&phrase=#{URI.escape query}"
+        else
+          url << "&q=#{URI.escape query}"
+        end
 
 
         # filters

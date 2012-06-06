@@ -148,10 +148,6 @@
           <span>There was an error while searching.</span>
         </div>
 
-        <div class="special">
-          <span><!-- filled in in special cases --></span>
-        </div>
-
         <% unless subscription %>
           <a href="<%= subscription_path s %>" class="viewMore" data-pjax="#center">
             View more <span><%= s.search_name %></span>
@@ -375,7 +371,7 @@
     var subscription = $.extend(filters, {
       search_type: subscription_type,
       query: query,
-      query: queryType
+      query_type: queryType
     });
 
     $("button.follow").show();
@@ -401,14 +397,6 @@
     var query = encodeURIComponent(currentQuery());
     var queryType = currentQueryType();
     var container = $(".results div.search[data-subscription=" + subscriptionType + "]");
-
-    // special case: speeches don't support advanced searches right now
-    if (subscriptionType == "speeches" && queryType == "advanced") {
-      container.find(".special span").html("Advanced searches over speeches in Congress aren't supported right now.");
-      container.find("a.viewMore").hide();
-      container.find(".special").show();
-      return;
-    }
 
     // all search options (filters, pagination)
     var search = {};

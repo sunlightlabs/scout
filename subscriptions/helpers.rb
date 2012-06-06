@@ -200,17 +200,9 @@ module Helpers
     def state_source_info?(bill)
       bill['sources'] and bill['sources'].any?
     end
-    
-    def speech_selection(speech, keyword)
-      first = speech['speaking'].select do |paragraph|
-        paragraph =~ excerpt_pattern(keyword)
-      end.first
-    end
 
     def speech_excerpt(speech, keyword, highlight = true)
-      if selection = speech_selection(speech, keyword)
-        excerpt selection, keyword, highlight
-      end
+      excerpt speech['speaking'].join("\n"), keyword, highlight
     end
 
     def excerpt_pattern(keyword)
