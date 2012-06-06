@@ -16,8 +16,21 @@ $(function() {
     return false;
   });
 
+  $("#search_form .query_type input[type=radio]").change(function() {
+    var queryType = $(".query_type input[type=radio]:checked").val();
+    $("ul.search_explain").hide();
+    $("ul.search_explain." + queryType).show();
+    
+    var placeholder = {
+      simple: "Search for a keyword or phrase...",
+      advanced: "Enter search terms..."
+    }[queryType];
+
+    $("#search_form input.query").attr("placeholder", placeholder);
+  });
+
   $(".homeWrapper #search_form input.query").focus(function() {
-    $("fieldset.query_type").css("visibility", "visible");
+    $("fieldset.query_type, .search_explanations").css("visibility", "visible");
   });
 
   $("form#search_form").submit(function() {

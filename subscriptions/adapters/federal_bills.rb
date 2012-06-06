@@ -13,7 +13,6 @@ module Subscriptions
 
       def self.url_for(subscription, function, options = {})
         api_key = options[:api_key] || config[:subscriptions][:sunlight_api_key]
-        query = URI.escape subscription.interest_in
         
         if config[:subscriptions][:rtc_endpoint].present?
           endpoint = config[:subscriptions][:rtc_endpoint]
@@ -33,10 +32,15 @@ module Subscriptions
 
         # filters
 
+        query = subscription.interest_in
+
+        # total hack stopgap, I oughta be ashamed of myself
+        query = query.gsub /\s(usc)\s/i, " U.S.C. "
+
         if subscription.data['query_type'] == 'simple'
-          url << "&query=#{query}"
+          url << "&query=#{URI.escape query}"
         else
-          url << "&q=#{query}"
+          url << "&q=#{URI.escape query}"
         end
 
         # search-only filters

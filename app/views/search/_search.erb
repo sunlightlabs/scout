@@ -2,7 +2,11 @@
     <fieldset class="searchField">
         <label for="query">Search</label>
         <input class="transparent query" name="query" type="search" 
-            placeholder="<%= searching? ? "Start a new search..." : "Search for a keyword or phrase..." %>" 
+            <% if params[:query_type] != "advanced" %>
+                placeholder="Search for a keyword or phrase..."
+            <% else %>
+                placeholder="Enter search terms..."
+            <% end %>
             value="<%= h params[:query] %>"
             />
     </fieldset>
@@ -21,4 +25,20 @@
         <input id="query_type_advanced" type="radio" name="query_type" value="advanced" <%= "checked" if params[:query_type] == "advanced" %>/>
         <label for="query_type_advanced">Advanced</label>
     </fieldset>
+
+    <div class="clear"></div>
+
+    <div class="search_explanations">
+        <ul class="search_explain simple"
+            <%= "style=\"display: none\"" if params[:query_type] == "advanced" %>
+            >
+            <li>e.g. crowdfunding, intellectual property, 5 U.S.C. 552</li>
+        </ul>
+        <ul class="search_explain advanced"
+            <%= "style=\"display: none\"" if params[:query_type] != "advanced" %>
+            >
+            <li>quotes around phrases, e.g. "open government"</li>
+            <li>minus sign excludes a term, e.g. -fire, -"fire sale"</li>
+        </ul>
+    </div>
 </form>

@@ -220,7 +220,7 @@ input[type="text"], input[type="password"], input[type="email"]{
     color: #5C5B60;
 }
 
-small, .small{
+small, .small, ul.search_explain li {
     font-size: 11px;
     font-style: italic;
     line-height: 1.5;
@@ -326,7 +326,7 @@ div.error {
 }
 
 header.contentWrapper{
-    padding-bottom: 65px;
+    
 }
 
 nav ul{
@@ -432,8 +432,9 @@ header h1{
     font-weight: normal;
 }
 
-#search_form .query_type {
+#search_form fieldset.query_type {
     float: left;
+    margin-bottom: 5px;
 }
 
 #search_form .query_type label {
@@ -443,6 +444,20 @@ header h1{
 
 .homeWrapper #search_form .query_type {
     visibility: hidden; /* preserve space */
+}
+
+#search_form .search_explanations {
+    height: 65px;
+}
+
+.homeWrapper #search_form .search_explanations {
+    visibility: hidden;
+}
+
+#search_form .search_explain li {
+    list-style-type: none;
+    margin-left: 25px;
+    
 }
 
 select.subscription_type {
