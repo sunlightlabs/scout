@@ -317,7 +317,10 @@
   }
 
   function currentQuery() {
-    return $(".filters input.query").val();
+    var query = $(".filters input.query").val();
+    if (currentQueryType() == "simple")
+      query = query.replace(/\"/g, '');
+    return query;
   }
 
   function currentQueryType() {
