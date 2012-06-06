@@ -31,7 +31,7 @@ module Subscriptions
         # in simple mode, the query is auto-quoted (and any user-supplied quotes 
         # have been stripped off in the controller before being sent here).
 
-        if subscription.data['query_type'] == 'simple'
+        if subscription.data['query_type'] != 'advanced'
           query = "\"#{query}\""
         end
 

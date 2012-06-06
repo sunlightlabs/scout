@@ -39,7 +39,7 @@ module Subscriptions
         url << "&highlight_tags=,"
 
         # filters
-        if subscription.data['query_type'] == 'simple'
+        if subscription.data['query_type'] != 'advanced'
           url << "&query=#{query}"
         else
           url << "&q=#{query}"

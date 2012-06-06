@@ -37,7 +37,7 @@ module Subscriptions
         # total hack stopgap, I oughta be ashamed of myself
         query = query.gsub /\s(usc)\s/i, " U.S.C. "
 
-        if subscription.data['query_type'] == 'simple'
+        if subscription.data['query_type'] != 'advanced'
           url << "&query=#{URI.escape query}"
         else
           url << "&q=#{URI.escape query}"
