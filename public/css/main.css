@@ -14,6 +14,14 @@ html, body{
     text-indent: -9999em;
 }
 
+label.placeholder {
+    display: none !important;
+}
+
+.ie label.placeholder {
+    display: inline-block !important;
+}
+
 .ie7 img { -ms-interpolation-mode: bicubic; }
 .ie7 .sidebar.left, .ie7 .sidebar.right {
     width: 249px;

@@ -68,7 +68,7 @@ var Utils = {
     log: function(msg) {
         console.log(msg);
     },
-
+    
     pjax: function(href, container) {
       if (!container)
         container = "#center";
