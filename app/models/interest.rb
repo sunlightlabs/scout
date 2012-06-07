@@ -164,7 +164,11 @@ class Interest
     # if no data given, then we don't care whether the data differs,
     # and we can do a much simpler lookup
     if data.nil?
-      return (user ? user.interests : Interest).find_or_initialize_by criteria
+      if user
+        return user.interests.find_or_initialize_by criteria
+      else
+        return Interest.new criteria
+      end
     end
 
     find_criteria = criteria.dup

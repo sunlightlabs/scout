@@ -62,6 +62,9 @@ class InterestTest < Test::Unit::TestCase
     i7b = Interest.for_search user, "speeches", query, {'state' => 'CA', 'query_type' => 'advanced'}
     assert i7b.new_record?
 
+    i7c = Interest.for_search nil, "speeches", query, {'state' => 'CA'}
+    assert i7c.new_record?
+
     i8 = Interest.for_search user2, "speeches", query, {'state' => 'CA'}
     assert i8.new_record?
     assert_equal user2, i8.user
@@ -127,6 +130,9 @@ class InterestTest < Test::Unit::TestCase
     assert !i5.new_record?
     assert_equal i1.id, i5.id
 
+    i5a = Interest.for_item nil, item_id, item_type
+    assert i5a.new_record?
+
     # add a piece of data to i1, it does not affect the lookup
     assert_nil i1.data['chamber']
     i1.data['chamber'] = "house"
@@ -166,6 +172,9 @@ class InterestTest < Test::Unit::TestCase
     i4 = Interest.for_feed user, url
     assert !i4.new_record?
     assert_equal i1.id, i4.id
+
+    i4a = Interest.for_feed nil, url
+    assert i4a.new_record?
 
 
     # add some extra data to i1, it does *not* change the lookup
