@@ -437,9 +437,14 @@ header h1{
     margin-bottom: 5px;
 }
 
+#search_form fieldset.query_type input[type="radio"] {
+    margin-right: 0;
+}
+
 #search_form .query_type label {
     font-weight: normal;
     margin-right: 15px;
+    padding-left: 5px;
 }
 
 .homeWrapper #search_form .query_type {
