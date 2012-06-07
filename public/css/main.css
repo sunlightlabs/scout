@@ -418,7 +418,7 @@ header h1{
     font-size: 110%;
     color: #5C5B60;
     line-height: 36px;
-    padding: 8px 0 8px 4px;
+    padding: 0px 0 0px 4px;
 }
 #search_form .field{
     float: left;
