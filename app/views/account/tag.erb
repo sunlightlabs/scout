@@ -1,15 +1,23 @@
 <% content_for :sidebar_right do %>
 
 	<% if !logged_in? %>
-	<!-- 	<div class="module tag">
+		<div class="module tag">
 			<p>
-				<%= user.display_name || user.username || "This user" %> is using Scout, a notification platform for government action.
+        <% if user.display_name || user.username %>
+          <strong><%= user.display_name || user.username %></strong>
+        <% else %>
+          This user
+        <% end %>
+        is using Scout, a notification platform for government action.
 			</p>
 
 			<p>
-
+        <strong>Follow</strong> this collection of alerts to be notified whenever anything new happens around this topic.
+      </p>
+      <p>
+        You can also click on any of the alerts to see what the recent results look like, or to subscribe to individual alerts.
 			</p>
-		</div> -->
+		</div>
 	<% end %>
 
 	<% if user == current_user %>
