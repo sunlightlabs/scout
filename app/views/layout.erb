@@ -67,14 +67,14 @@
                             <a href="/account/settings">Settings</a>
                         </li>
                         <li class="feedback">
-                            <a href="#" class="feedback">Feedback</a>
+                            <a href="mailto:scout+contact@sunlightfoundation.com" class="feedback">Contact</a>
                         </li>
                         <li>
                             <a href="/logout" class="logout">Log Out</a>
                         </li>
                     <% else %>
                         <li class="feedback">
-                            <a href="#" class="feedback">Feedback</a>
+                            <a href="mailto:scout+contact@sunlightfoundation.com" class="feedback">Contact</a>
                         </li>
                         <li>
                             <a href="/login" class="login">Login or Sign up</a>
@@ -161,22 +161,6 @@
         })();
 
     </script>
-
-    <script type="text/javascript" charset="utf-8">
-      Tender = {
-        widgetToggles: $("a.feedback"),
-        hideToggle: true,
-        hide_kb: true /* hide the knowledge base tab */
-      }
-
-      // make sure Tender toggle also jumps the screen up
-      Tender.widgetToggles.click(function() {
-        scrollTo(0,0);
-        return false;
-      });
-    </script>
-
-    <script src="https://scout.tenderapp.com/tender_widget.js" type="text/javascript"></script>
 
 </body>
 </html>
