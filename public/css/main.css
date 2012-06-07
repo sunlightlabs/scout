@@ -657,9 +657,7 @@ footer nav li{
 .splash{
     margin-top: -79px;
 }
-.homeWrapper{
-    background: url('/images/bg_homeWrapper.png') center 170px repeat-x;
-}
+
 .homeWrapper header.contentWrapper{
     background: url('/images/splash.png') center -13px repeat-x;
 }
