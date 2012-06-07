@@ -93,7 +93,7 @@ class Interest
     return [] if self.tag?
 
     # does the user owning this interest have it included in any of their public tags?
-    public_tag_ids = user.tags.public.where(name: {"$in" => self.tags}).map {|tag| tag.id.to_s}
+    public_tag_ids = user.tags.where(:public => true, name: {"$in" => self.tags}).map {|tag| tag.id.to_s}
     return [] unless public_tag_ids.any?
 
     # anyone's interests following any of those public tags

@@ -4,6 +4,12 @@ require 'rinku'
 module Helpers
   module General
 
+    def sadness
+      sads = %w{regrettably sadly unfortunately indubitably sadheartedly sorrowfully most-unpleasantly with-great-sadness}
+      sad = sads[rand sads.size]
+      sad.split('-').join(' ').capitalize
+    end
+
     def query_size(query)
       if query.size < 30
         "smaller"
