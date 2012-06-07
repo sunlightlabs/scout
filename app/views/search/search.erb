@@ -210,12 +210,12 @@
     var query = encodeURIComponent(currentQuery());
     var filters = currentFilters();
     
-    if (queryType == "advanced")
-      filters.query_type = queryType;
-
     // serialize the filters and preserve the brackets
     var filterString = $.param(filters).replace(/%5B/g, "[").replace(/%5D/g, "]");
     var url = "/search/" + type + "/" + query;
+
+    if (queryType == "advanced")
+      url += "/advanced";
 
     if (filterString) url += "?" + filterString;
 
@@ -235,9 +235,12 @@
     // update the main filter links
     $("ul.categories li a").each(function(i, elem) {
       var type = $(elem).parent("li").data("subscription_type");
+      
       var url = "/search/" + type + "/" + encodeURIComponent(query);
+      
       if (queryType == "advanced")
-        url += "?query_type=" + queryType;
+        url += "/advanced";
+
       $(elem).attr("href", url);
     });
     
@@ -404,16 +407,17 @@
     // carry along the filters
     $.extend(search, currentFilters());
 
-    // simple or advanced?
-    $.extend(search, {query_type: queryType});
-
     // any one-time search options (pagination)
     $.extend(search, searchOptions);
 
     // reset elements inside tab
     container.find(".loading").show();
 
-    $.get("/fetch/search/" + subscriptionType + "/" + query, search, function(data) {
+    var url = "/fetch/search/" + subscriptionType + "/" + query;
+    if (queryType == "advanced")
+      url += "/advanced";
+
+    $.get(url, search, function(data) {
       
       container.find(".loading").hide();
       container.find("ul.items").append(data.html).show();

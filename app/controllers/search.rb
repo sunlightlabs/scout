@@ -1,6 +1,6 @@
 # search results
 
-get '/search/:subscription_type/?:query?' do
+get '/search/:subscription_type/:query/?:query_type?' do
   halt 404 and return unless (search_types + ["all"]).include?(params[:subscription_type])
 
   query = stripped_query
@@ -19,7 +19,7 @@ get '/search/:subscription_type/?:query?' do
   }
 end
 
-get '/fetch/search/:subscription_type/?:query?' do
+get '/fetch/search/:subscription_type/:query/?:query_type?' do
   query = stripped_query
   subscription_type = params[:subscription_type]
 

@@ -18,23 +18,6 @@
 
   <% grouped = interests.group_by &:interest_type %>
 
-  <% if grouped['tag'] and grouped['tag'].any? %>
-    <div class="section tags">
-      <h2>Others' Collections</h2>
-      <div class="interest">
-
-        <div class="removeHeader">
-          <span>Remove</span>
-        </div>
-
-        <% grouped['tag'].each do |interest| %>
-          <%= partial "account/interest", :engine => "erb", :locals => {:interest => interest, :edit => true} %>
-        <% end %>
-
-      </div>
-    </div>
-  <% end %>
-  
   <% if grouped['search'] and grouped['search'].any? %>
     <div class="section keywords">
       <h2>Searches</h2>
@@ -43,7 +26,7 @@
       <% by_query.each do |query, query_interests| %>
         <div class="interest">
           
-          <h3 class="interestHeader">"<%= query %>"</h3>
+          <h3 class="interestHeader"><%= query %></h3>
 
           <div class="removeHeader">
             <span>Remove</span>
@@ -79,6 +62,23 @@
       </div>
     <% end %>
 
+  <% end %>
+
+  <% if grouped['tag'] and grouped['tag'].any? %>
+    <div class="section tags">
+      <h2>Others' Collections</h2>
+      <div class="interest">
+
+        <div class="removeHeader">
+          <span>Remove</span>
+        </div>
+
+        <% grouped['tag'].each do |interest| %>
+          <%= partial "account/interest", :engine => "erb", :locals => {:interest => interest, :edit => true} %>
+        <% end %>
+
+      </div>
+    </div>
   <% end %>
 
   <div class="section feeds">

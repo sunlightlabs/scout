@@ -87,11 +87,14 @@ module Helpers
     def subscription_path(subscription)
       base = "/search/#{subscription.subscription_type}"
       
-      base << "/#{URI.encode subscription.data['query']}" if subscription.data['query']
+      base << "/#{URI.encode subscription.data['query']}"
 
+      base << "/advanced" if subscription.data['query_type'] == 'advanced'
+      
       query_string = subscription.filters.map do |key, value| 
         "#{subscription.subscription_type}[#{key}]=#{URI.encode value}"
       end.join("&")
+
       base << "?#{query_string}" if query_string.present?
 
       base
