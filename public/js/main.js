@@ -66,9 +66,10 @@ $(function() {
 
 var Utils = {
     log: function(msg) {
+      if (typeof(console) != "undefined")
         console.log(msg);
     },
-    
+
     pjax: function(href, container) {
       if (!container)
         container = "#center";
