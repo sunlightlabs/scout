@@ -30,20 +30,30 @@ module Helpers
       }[short]
     end
     
-    def fulltext_highlight(item, keyword, priorities, highlight = true)
+
+    def preferred_field(item, priorities)
       highlighting = item.data['search']['highlight']
       valid_keys = priorities.keys & highlighting.keys
       return nil unless valid_keys.any?
-      field = valid_keys.sort_by {|k| priorities[k]}.first
-      excerpt highlighting[field].first, keyword, highlight
+      valid_keys.sort_by {|k| priorities[k]}.first
     end
 
     def bill_highlight(item, keyword, highlight = true)
-      fulltext_highlight item, keyword, bill_priorities, highlight
+      field = preferred_field item, bill_priorities
+      return nil unless field
+
+      text = item.data['search']['highlight'][field].first
+      
+      if field == "keywords"
+        text = "Official keyword: \"#{text}\""
+      end
+
+      excerpt text, keyword, highlight
     end
 
     def regulation_highlight(item, keyword, highlight = true)
-      fulltext_highlight item, keyword, regulation_priorities, highlight
+      field = preferred_field item, regulation_priorities
+      excerpt item.data['search']['highlight'][field].first, keyword, highlight
     end
 
     def agency_names(regulation)
@@ -104,7 +114,8 @@ module Helpers
     def bill_priorities
       {
         "summary" => 1,
-        "versions" => 2
+        "versions" => 2,
+        "keywords" => 3
       }
     end
 
