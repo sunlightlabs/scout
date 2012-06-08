@@ -14,6 +14,9 @@ class TagTest < Test::Unit::TestCase
     interest.new_tags = "a, b"
     assert_equal ["a", "b"], interest.tags
 
+    interest.new_tags = "  a .. , b "
+    assert_equal ["a", "b"], interest.tags
+
     interest.new_tags = "a big one   ,   with weird spaces and CAPITAL LETTERS ,"
     assert_equal ["a big one", "with weird spaces and capital letters"], interest.tags
 

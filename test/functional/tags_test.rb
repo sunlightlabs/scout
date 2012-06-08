@@ -183,12 +183,20 @@ class TagsTest < Test::Unit::TestCase
     new_tags = "one, after, another"
     serialized = ["one", "after", "another"]
     next_tags = "another,altogether"
+    new_tags_with_spaces = " one , after  , another "
 
     assert_equal [], interest.tags
     assert_equal 0, user.tags.count
 
 
     put "/interest/#{interest.id}", {:interest => {"tags" => new_tags}}, login(user)
+    assert_response 200
+
+    assert_equal serialized, interest.reload.tags
+    assert_equal serialized.sort, user.reload.tags.map(&:name).sort
+
+    # spaces affect nothing
+    put "/interest/#{interest.id}", {interest: {"tags" => new_tags_with_spaces}}, login(user)
     assert_response 200
 
     assert_equal serialized, interest.reload.tags

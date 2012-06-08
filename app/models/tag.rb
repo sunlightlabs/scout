@@ -32,7 +32,7 @@ class Tag
   end
 
   def self.normalize(name)
-    name.gsub(/[^\w\d\s]/, '').gsub(/\s{2,}/, ' ').downcase
+    name.gsub(/[^\w\d\s]/, '').gsub(/\s{2,}/, ' ').strip.downcase
   end
 
   def self.slugify(name)
