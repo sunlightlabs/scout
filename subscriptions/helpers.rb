@@ -238,12 +238,9 @@ module Helpers
       truncated = "..." + truncated if (range.begin > 0) || (text[0..0].upcase != text[0..0])
       truncated = truncated + "..." if range.end < length
 
-      if highlight
-        truncated.gsub(excerpt_pattern(keyword)) do |word|
-          "<em>#{word}</em>"
-        end
-      else
-        truncated
+      highlight_tags = highlight ? ["<em>", "</em>"] : ["", ""]
+      truncated.gsub(excerpt_pattern(keyword)) do |word|
+        "#{highlight_tags[0]}#{word}#{highlight_tags[1]}"
       end
     end
 
