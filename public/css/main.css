@@ -351,7 +351,7 @@ li.user{
 }
 
 header h1{
-    background: url('/images/logo_scout_beta.png') top left no-repeat;
+    background: url('/images/logo_scout.png') top left no-repeat;
     display: block;
     width: 207px;
     height: 58px;
@@ -703,13 +703,13 @@ footer nav li{
 }
 
 .home.modules{
-    margin-left: 235px;
+    
 }
 
 .home.modules .module{
     float: left;
     width: 280px;
-    padding: 33px 33px 33px 49px;
+    padding: 33px 20px 33px 20px;
     background: url('/images/tinyborder_andshadow_vertical.png') left top repeat-y;
 }
 

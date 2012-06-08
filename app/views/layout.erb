@@ -7,8 +7,8 @@
 <!--[if (gt IE 9)|!(IE)]><!-->
 <html lang="en"> <!--<![endif]-->
 <head>
-	<script type="text/javascript" src="http://use.typekit.com/bsl1eko.js"></script>
-	<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    <script type="text/javascript" src="https://use.typekit.com/bsl1eko.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
     
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -37,13 +37,13 @@
 <body>
 
     <div class="headerWrapper">
-		<div class="hatWrap">
-			<div class="contentWrapper">
-				<a class="productOf" href="http://www.sunlightfoundation.com">
-						a product of Sunlight Foundation
-				</a>
-			</div>
-		</div>
+        <div class="hatWrap">
+            <div class="contentWrapper">
+                <a class="productOf" href="http://www.sunlightfoundation.com">
+                        a product of Sunlight Foundation
+                </a>
+            </div>
+        </div>
 
         <% if home? %>
         <div class="homeWrapper">
@@ -87,12 +87,12 @@
             <a href="/">
                 <h1 class="textIndent">Scout</h1>
             </a>
-			<% if home? %>
-			<p class="splashtext">
-				Get alerts when congress or your state capitol talks about issues you care about
-			</p>
-			<% end %>
-			
+            <% if home? %>
+            <p class="splashtext">
+                Get alerts when congress or your state capitol talks about issues you care about
+            </p>
+            <% end %>
+            
             <%= partial "search/search", :engine => "erb", :locals => {} %>
 
             <div class="clear"></div>
@@ -102,42 +102,41 @@
         </div>
         <% end %>
     </div>
-	<div class="fauxBody">
-	    <div class="contentWrapper" id="content">
 
-	        
-        
-	        <% if left_bar = content_from(:sidebar_left) %>
-	            <div class="sidebar left">
-	                <%= left_bar %>
-	            </div>
-	        <% end %> 
+    <div class="fauxBody">
+        <div class="contentWrapper" id="content">
+
+            <% if left_bar = content_from(:sidebar_left) %>
+                <div class="sidebar left">
+                    <%= left_bar %>
+                </div>
+            <% end %> 
             
             <div id="center">
-	            <%= yield %>
+                <%= yield %>
             </div>
 
-	        <% if right_bar = content_from(:sidebar_right) %>
-	            <div class="sidebar right">
-	                <%= right_bar %>
-	            </div>
-	        <% end %>
-	    </div>
-	</div>
+            <% if right_bar = content_from(:sidebar_right) %>
+                <div class="sidebar right">
+                    <%= right_bar %>
+                </div>
+            <% end %>
+        </div>
+    </div>
 
     <div class="footerWrapper">
         <footer class="contentWrapper">
-			<a href="http://sunlightfoundation.com" class="sunlightFoundation textIndent">
+            <a href="http://sunlightfoundation.com" class="sunlightFoundation textIndent">
                 Sunlight Foundation
             </a>
 
             <div class="aboutSF">
-				<p>
-                Founded in 2006, the Sunlight Foundation is a non-partisan non-profit that uses cutting-edge technology and ideas to make government transparent and accountable.	</p>
-				<p>
-					Visit <a href="http://sunlightfoundation.com">SunlightFoundation.com</a> to learn more.
-				</p>
-			</div>
+                <p>
+                Founded in 2006, the Sunlight Foundation is a non-partisan non-profit that uses cutting-edge technology and ideas to make government transparent and accountable.   </p>
+                <p>
+                    Visit <a href="http://sunlightfoundation.com">SunlightFoundation.com</a> to learn more.
+                </p>
+            </div>
             
             <nav>
                 <a href="/about">About</a>
