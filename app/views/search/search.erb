@@ -422,7 +422,9 @@
       container.find("ul.items").append(data.html).show();
       
       <% if subscription %>
-        $(document).off("scroll").scroll(onScroll);
+        $(document).off("scroll");
+        if (data.count > 0)
+          $(document).scroll(onScroll);
       <% end %>
 
       $("ul.items").data("page", data.page);
