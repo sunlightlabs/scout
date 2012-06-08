@@ -35,10 +35,10 @@ class User
   validates_uniqueness_of :username, :allow_blank => true, :message => "has already been taken."
   validates_exclusion_of :username, :in => reserved_names, :message => "cannot be used."
 
-  has_many :interests, :dependent => :destroy
+  has_many :interests, dependent: :destroy
+  has_many :tags, dependent: :destroy
   has_many :subscriptions # interests will destroy their own subscriptions
-  has_many :deliveries, :dependent => :destroy
-  has_many :tags, :dependent => :destroy
+  has_many :deliveries # interests will destroy their own deliveries
 
 
   before_validation :slugify_username

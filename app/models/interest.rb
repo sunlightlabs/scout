@@ -3,8 +3,9 @@ class Interest
   include Mongoid::Timestamps
   
   belongs_to :user
-  has_many :subscriptions, :dependent => :destroy
-  has_many :seen_items # convenience, subscriptions will do the destroy on them
+  has_many :subscriptions, dependent: :destroy
+  has_many :seen_items, dependent: :destroy
+  has_many :deliveries, dependent: :destroy
 
   # a search string or item ID
   field :in
