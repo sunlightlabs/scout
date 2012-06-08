@@ -131,10 +131,15 @@ helpers do
 
   def stripped_query
     query = params[:query] ? URI.decode(params[:query]).strip : nil
+
+    # don't allow plain wildcards
+    query = query.gsub /^[^\w]*\*[^\w]*$/, ''
     
     if query_type == "simple"
       query = query.gsub "\"", ""
     end
+
+    halt 404 unless query.present?
 
     query
   end

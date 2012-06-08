@@ -35,7 +35,13 @@ $(function() {
 
   $("form#search_form").submit(function() {
     var query = $(this).find("input.query").val();
-    if (query) query = $.trim(query);
+    if (query) {
+      // no empty string
+      query = $.trim(query);
+
+      // also ban plain wildcard searches
+      query = query.replace(/^[^\w]*\*[^\w]*$/, '');
+    }
     if (!query) return false;
 
     var queryType = $(".query_type input[type=radio]:checked").val();
