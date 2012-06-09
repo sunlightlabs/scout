@@ -34,6 +34,19 @@
         <div class="module of2 <%= subscription.subscription_type %>"
           data-subscription_type="<%= subscription.subscription_type %>"
           >
+          <h4>
+            <%= subscription.adapter.search_name subscription %>
+          </h4>
+
+          <div class="loading">
+            <span>Fetching...</span>
+          </div>
+
+          <div class="error">
+            <span>Error loading information.</span>
+          </div>
+
+          <div class="results"></div>
         </div>
       <% end %>
       
@@ -99,9 +112,16 @@
 
   function fetchStream(subscription_type) {
     var url = "/fetch/item/" + item_type + "/" + item_id + "/" + subscription_type;
+
+    var container = $(".of2.module." + subscription_type);
+    container.show();
+
     $.get(url, {}, function(data) {
-      $(".of2.module." + subscription_type).html(data);
+      container.find(".loading").hide();
+      container.find(".results").html(data);
     }).error(function() {
+      container.find(".loading").hide();
+      container.find(".error").show();
       Utils.log("Error loading data for " + subscription_type);
     });
   }

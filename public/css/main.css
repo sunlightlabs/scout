@@ -1194,7 +1194,8 @@ button.follow, button.following {
     padding: 5px 0;
 }
 
-.details .module{
+.entry .details .module{
+    display: none;
     width: 45%;
     float: left;
     padding-right: 33px;
