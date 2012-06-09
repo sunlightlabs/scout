@@ -239,7 +239,7 @@
 <script type="text/javascript">
     $(function() {
 
-        <% if user.phone_confirmed? %>
+        <% if user.phone.present? and user.phone_confirmed? %>
             $(".phone_settings.confirmed").show();
         <% elsif user.phone.present? %>
             $(".phone_settings.unconfirmed").show();
