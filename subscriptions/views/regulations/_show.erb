@@ -2,43 +2,40 @@
 
 <div class="summary">
 
-    <div class="entryHeader">
-		<h2><%= regulation['title'] %></h2>
-		<div class="subtitle">
-            <%= agency_names regulation %>
-			<br/>
-            <%= regulation_stage regulation['stage'] %>, issued
-            <time class="item" datetime="<%= html_date item.date %>">
-                <%= just_date_year item.date %>
-            </time>
-		</div>
-	</div>
-
-    <div class="clear"></div>
-
-    <div class="resources">
-        <h5>Resources</h5>
-        <ul>
-            <li class="fedReg">
-				<a href="<%= regulation['federal_register_url'] %>">Federal Register</a>
-			</li>
-			<li class="source">
-				<% if regulation['federal_register'] and regulation['federal_register']['pdf_url'] %>
-			        <a href="<%= regulation['federal_register']['pdf_url'] %>">Original Text</a>
-			    <% end %>
-			</li>
-        </ul>
+  <div class="entryHeader">
+    <h2><%= regulation['title'] %></h2>
+    <div class="subtitle">
+      <%= agency_names regulation %>
+      <br/>
+      <%= regulation_stage regulation['stage'] %>, issued
+      <time class="item" datetime="<%= html_date item.date %>">
+          <%= just_date_year item.date %>
+      </time>
     </div>
+  </div>
+
+  <div class="clear"></div>
+
+  <div class="resources">
+    <h5>Resources</h5>
+    <ul>
+      <li class="fedReg">
+        <a href="<%= regulation['federal_register_url'] %>">Federal Register</a>
+      </li>
+
+      <li class="source">
+        <% if regulation['federal_register'] and regulation['federal_register']['pdf_url'] %>
+              <a href="<%= regulation['federal_register']['pdf_url'] %>">Original Text</a>
+          <% end %>
+      </li>
+      </ul>
+  </div>
     
+  <div class="clear"></div>
 
-
-    <div class="clear"></div>
-
-	<p>
-        <% if regulation['abstract'] %>
-            <%= truncate_more "regulation_abstract", regulation['abstract'], 400 %>
-        <% else %>
-            No abstract available.
-        <% end %>
-    </p>
+  <% if regulation['abstract'].present? %>
+    <%= regulation_abstract regulation %>
+  <% else %>
+    No abstract available.
+  <% end %>
 </div>

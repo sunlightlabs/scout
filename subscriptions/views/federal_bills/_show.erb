@@ -56,11 +56,12 @@
 
 
     <p>
-        <% if bill['summary'] %>
-            <%= truncate_more "bill_summary", bill['summary'], 400 %>
-        <% else %>
-            No summary available.
-        <% end %>
+      <% summary = bill_summary bill %>
+      <% if summary.present? %>
+        <%= summary %>
+      <% else %>
+        No summary available.
+      <% end %>
     </p>
 
     <div class="clear"></div>

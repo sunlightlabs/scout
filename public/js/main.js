@@ -4,7 +4,7 @@ $(function() {
   $("a.login, a.logout").attr("href", $("a.login, a.logout").attr("href") + "?redirect=" + Utils.currentPath());
 
   $("#content").on("click", "a.untruncate", function() {
-    var to_hide = $(this).parent(".truncated");
+    var to_hide = $(this).parents(".truncated");
     var tag = to_hide.data("tag");
     $(".untruncated[data-tag=" + tag + "]").show();
     to_hide.hide();

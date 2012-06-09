@@ -276,13 +276,37 @@ module Helpers
     end
 
     def bill_summary(bill)
+      return nil unless bill['summary'].present?
+
       summary = bill['summary'].dup
       summary.sub! /^\d+\/\d+\/\d+--.+?\.\s*/, ""
       summary.sub! /(\(This measure.+?\))\n*\s*/, ""
+
       if bill['short_title']
         summary.sub! /^#{bill['short_title']} - /, ""
       end
-      summary
+
+      post_truncate = lambda do |sum|
+        # try to split up into meaningful paragraphs if possible
+        sum.gsub(/\(Sec\.\s+\d+\)/) {|x| "\n\n<strong>#{x}</strong>"}
+      end
+
+      truncate_more_html "bill_summary", summary, 500, post_truncate
+    end
+
+    def state_bill_title(bill)
+      return nil unless bill['title'].present? # shouldn't happen
+
+      title = bill['title'].dup
+      title.gsub! ';', ";\n\n"
+
+      truncate_more_html "state_bill_title", title, 500
+    end
+
+    def regulation_abstract(regulation)
+      return nil unless regulation['abstract'].present? # also checked in view
+
+      truncate_more_html "regulation_abstract", regulation['abstract'], 1500
     end
 
     def legislator_image(legislator)
