@@ -32,9 +32,18 @@
     <script src="/js/main.js?<%= Time.now.to_i %>"></script>
 
     <script type="text/javascript" src="https://ws.sharethis.com/button/buttons.js"></script>
-    <script type="text/javascript">stLight.options({publisher: "ur-c0a7a4b8-1bc6-c7d2-89e0-1bc38acd59d2"}); </script>
+<script type="text/javascript">stLight.options({publisher: "ur-2c64ad5a-4352-423f-9b2f-d986cb834db1"}); </script>
 </head>
 <body>
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+        fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    </script>
 
     <div class="headerWrapper">
         <div class="hatWrap">

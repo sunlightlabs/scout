@@ -50,6 +50,10 @@
 
   	</div>
 
+    <div class="module sharing">
+      <%= partial "partials/share", :engine => :erb %>
+    </div>
+
     <% if show_data? %>
       <div class="module developer search json">
     		<h4>The Data</h4>
@@ -115,9 +119,9 @@
 	</div>
 
 	<span class="resultsIntro">
-		Create an alert to receive notifications of more results like these.
-		
-    <%= partial "partials/share", :engine => :erb %>
+		<p>
+      Create an alert to receive notifications of more results like these.
+    </p>
 	</span>
 
   

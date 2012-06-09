@@ -786,27 +786,31 @@ footer nav li{
     -webkit-box-shadow: inset 14px 0px 14px -7px #e2e3e0;
     -moz-box-shadow: inset 14px 0px 14px -7px #e2e3e0;
     box-shadow: inset 14px 0px 14px -7px #e2e3e0;
-    padding: 16px 10px 16px 33px;
+    padding: 16px 10px 10px 33px;
     border-top: 1px dashed #9D9B9B;
     display: block;
     color: #83858b;
     font-style: italic;
     margin-bottom: 54px;
-    display: block;
+    
 }
 .results.single .resultsIntro {
     margin-bottom: 0;
-    text-align: right;
 }
-.results .resultsIntro {
-    text-align: right;
+
+
+/** social media buttons **/
+
+
+.module.sharing iframe {
+    float: left; margin-right: 10px;
 }
-.share{
-    float: left;
-    width: 155px;
-    font-weight: bold;
-    font-style: normal;
-}
+
+iframe.twitter {display: inline; vertical-align: text-bottom;}
+
+iframe {margin: 0 0;}
+iframe.twitter-share-button {display: inline; vertical-align: text-bottom;}
+
 .st_facebook_button_custom{
 	background: url('/images/icons_share.png') no-repeat scroll right top transparent;
 	padding:0;
@@ -832,6 +836,7 @@ footer nav li{
 .st_twitter_button_custom:hover{
 	background-position: left bottom;
 }
+
 .pageTitle button{
     float: right;
     margin-top: 7px;
@@ -839,13 +844,14 @@ footer nav li{
 .module.controls{
     padding-left: 0;
     padding-right: 0;
+    padding-bottom: 0;
 }
 .module.controls form{
     padding-left: 16px;
     padding-right: 16px;
     background: url('/images/tinyborder.png') center bottom repeat-x;
     padding-bottom: 10px;
-    margin-bottom: 25px;
+    margin-top: 20px;
 }
 .module.controls h4{
     padding-left: 16px;
@@ -853,7 +859,7 @@ footer nav li{
 .module.controls .categories{
     background: url('/images/tinyborder.png') center bottom repeat-x;
     padding-bottom: 20px;
-    margin-bottom: 25px;
+    
 }
 .module.controls .categories li{
     padding: 8px 16px;
