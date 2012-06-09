@@ -309,6 +309,12 @@ module Helpers
       truncate_more_html "regulation_abstract", regulation['abstract'], 1500
     end
 
+    def speech_speaking(speech)
+      speaking = speech['speaking'].join("\n\n")
+
+      truncate_more_html "speech_speaking", speaking, 2000
+    end
+
     def legislator_image(legislator)
       "http://assets.sunlightfoundation.com/moc/40x50/#{legislator['bioguide_id']}.jpg"
     end
