@@ -101,6 +101,11 @@
         preview.find("fieldset.description textarea").html(data.description);
         preview.find("ul.items").html(data.html);
         preview.find(".header, .details, ul.items, button.create").show();
+
+        <% if logged_in? and (params[:follow] == "now") %>
+          createSubscription();
+        <% end %>
+
       }).error(function() {
         preview.find(".previewing").hide();
 
@@ -144,7 +149,7 @@
     <% if logged_in? %>
       $("button.create").click(createSubscription);
     <% else %>
-      $("button.create").click(function() {window.location = "/login?redirect=" + Utils.currentPath();});
+      $("button.create").click(function() {window.location = "/login?redirect=" + Utils.currentPath({follow: "now"});});
     <% end %>
 
     if ($("input.feed_url").val())
