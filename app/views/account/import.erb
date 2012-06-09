@@ -40,7 +40,7 @@
       </fieldset>
     </div>
 
-    <button class="create">
+    <button class="create hide_start">
       <span>Create Alert</span>
     </button>
     
@@ -100,7 +100,7 @@
         preview.find("input.title").val(data.title);
         preview.find("fieldset.description textarea").html(data.description);
         preview.find("ul.items").html(data.html);
-        preview.find(".header, .details, ul.items").show();
+        preview.find(".header, .details, ul.items, button.create").show();
       }).error(function() {
         preview.find(".previewing").hide();
 
