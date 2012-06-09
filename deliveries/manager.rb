@@ -10,8 +10,28 @@ module Deliveries
       dry_run = ENV["dry_run"] || false
 
       # all users with deliveries of the requested mechanism and email frequency
-      user_ids = Delivery.where(delivery_options).distinct :user_id
+      deliveries = Delivery.where delivery_options
+      deliveries_count = deliveries.count
+      user_ids = deliveries.distinct :user_id
+      interest_ids = deliveries.distinct :interest_id
+
       users = User.where(:_id => {"$in" => user_ids}).all
+
+      # if there's a suspiciously high amount of deliveries, 
+      # leave the deliveries there and notify the admin
+      if ENV['force'].blank?
+
+        # suspicious: if the deliveries are returning, on average,
+        # more than half of the max that they could be
+        
+        max_per_page = 40 # for now, anyway
+        threshold = 0.5
+
+        if deliveries_count > (interest_ids.size * max_per_page * threshold)
+          flood_check "Too many deliveries", deliveries_count, delivery_options, user_count: user_ids.size, interest_count: interest_ids.size
+          return
+        end
+      end
 
       users.each do |user|
         next unless user.confirmed? # last-minute check, shouldn't be needed
@@ -31,6 +51,16 @@ module Deliveries
       else
         puts "No notifications sent." unless Sinatra::Application.test?
       end
+    end
+
+    def self.flood_check(message, size, delivery_options, options = {})
+      Admin.report Report.warning("Flood Check", 
+        "High amount (#{size}) of deliveries, leaving in place and not delivering", 
+        {:delivery_count => size,
+        :message => message,
+        :subscription_types => Delivery.where(delivery_options).distinct(:subscription_type),
+        :delivery_options => delivery_options}.merge(options)
+        )
     end
 
 

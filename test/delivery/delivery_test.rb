@@ -44,24 +44,66 @@ class DeliveryTest < Test::Unit::TestCase
   end
 
   def test_deliver_multiple_interests_email_immediate
+    #TODO
   end
 
   def test_deliver_one_interest_email_daily
+    #TODO
   end
 
   def test_deliver_multiple_interests_email_daily
+    #TODO
   end
 
   def test_deliver_email_immediate_from_anothers_tag
+    #TODO
   end
 
   def test_deliver_email_daily_from_anothers_tag
+    #TODO
   end
 
   def test_deliver_sms
+    #TODO
   end
 
   def test_deliver_sms_from_anothers_tag
+    #TODO
+  end
+
+
+  # flood checking checking
+
+  def test_flood_check
+    query = "environment"
+    search_type = "federal_bills"
+
+    user = create :user, notifications: "email_immediate"
+    interest = search_interest! user, search_type, query
+    subscription = interest.subscriptions.first
+
+    mock_search subscription
+    items = subscription.search
+
+    # schedule 30 times the usual deliveries for each result
+    30.times do
+      items.each do |item|
+        Deliveries::Manager.schedule_delivery! item, interest, search_type
+      end
+    end
+
+    assert_equal (30 * items.size), Delivery.count
+
+    assert_equal 0, Receipt.count
+    Deliveries::Email.should_not_receive :deliver_for_user!
+    Deliveries::SMS.should_not_receive :deliver_for_user!
+
+    Deliveries::Manager.deliver! 'mechanism' => interest.mechanism, 'email_frequency' => interest.email_frequency
+
+    assert_equal 0, Receipt.count
+
+    report = Report.where(source: /flood/i).first
+    assert_not_nil report
   end
 
 

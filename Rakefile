@@ -217,7 +217,7 @@ namespace :test do
         end
 
         puts "Searching for #{subscription.subscription_type} results for #{interest.in}..."
-        items = subscription.search
+        items = subscription.search :per_page => max
         if items.nil? or items.empty?
           puts "\tNo results, nothing to deliver."
           next
