@@ -1671,6 +1671,22 @@ div.indicators span {
 .settings .phone_settings {
     display: none;
 }
+
+.settings .phone_settings small {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.settings .phone_settings span.unverified {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.settings .phone_settings button {
+    margin-bottom: 10px;
+}
+
 .settings.contentArea .module{
     background: url('/images/tinyborder.png') center bottom repeat-x;
     padding: 0;
@@ -1684,6 +1700,7 @@ div.indicators span {
     background: url('/images/splash.png') -170px -130px no-repeat;
     padding-left: 10px;
     padding-right: 10px;
+    clear: both;
 }
 
 .settings.contentArea .module.donate em {font-style: normal;}

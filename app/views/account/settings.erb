@@ -64,48 +64,54 @@
   <div class="module allNotifications">
     <div class="module notifications">
       <h3>Email Notifications</h3>
-      <% form_for user, "/account/settings", :method => "put" do |f| %>
-        <fieldset>
-          <legend>
-            We can email you about all the new things that you're following.
-            <small>You can also control this <a href="/account/subscriptions">per-subscription</a>.</small>
-          </legend>
-      
-          <ul>
-            <li>
-              <label for="user_delivery_email">
-                <%= f.radio_button :notifications, :value => "email_daily" %>
-                <span>Yes, once a day</span>
-              </label>
+      <% if user.email.present? %>
+        <% form_for user, "/account/settings", :method => "put" do |f| %>
+          <fieldset>
+            <legend>
+              We can email you about all the new things that you're following.
+              <small>You can also control this <a href="/account/subscriptions">per-subscription</a>.</small>
+            </legend>
+        
+            <ul>
+              <li>
+                <label for="user_delivery_email">
+                  <%= f.radio_button :notifications, :value => "email_daily" %>
+                  <span>Yes, once a day</span>
+                </label>
 
-              <label for="user_delivery_email">
-                <%= f.radio_button :notifications, :value => "email_immediate" %>
-                <span>Yes, immediately</span>
-              </label>
+                <label for="user_delivery_email">
+                  <%= f.radio_button :notifications, :value => "email_immediate" %>
+                  <span>Yes, immediately</span>
+                </label>
 
-              <label for="user_delivery_none">
-                <%= f.radio_button :notifications, :value => "none" %>
-                <span>No, thanks</span>
-              </label>
-            </li>
-          </ul>
-        </fieldset>
+                <label for="user_delivery_none">
+                  <%= f.radio_button :notifications, :value => "none" %>
+                  <span>No, thanks</span>
+                </label>
+              </li>
+            </ul>
+          </fieldset>
 
-        <fieldset>
-          <label for="user_announcements">
-            <%= f.check_box :announcements, :uncheck_value => 'false' %>
-            <span>Get updates about new Scout features</span>
-          </label>
-          <label for="sunlight_announcements">
-            <%= f.check_box :sunlight_announcements, :uncheck_value => 'false' %>
-            <span>Get updates about the Sunlight Foundation</span>
-          </label>
-        </fieldset>
+          <fieldset>
+            <label for="user_announcements">
+              <%= f.check_box :announcements, :uncheck_value => 'false' %>
+              <span>Get updates about new Scout features</span>
+            </label>
+            <label for="sunlight_announcements">
+              <%= f.check_box :sunlight_announcements, :uncheck_value => 'false' %>
+              <span>Get updates about the Sunlight Foundation</span>
+            </label>
+          </fieldset>
 
-        <button type="submit">
-          <span>Submit Changes</span>
-        </button>
+          <button type="submit">
+            <span>Submit Changes</span>
+          </button>
 
+        <% end %>
+      <% else %>
+        <p>
+          Enter an email address above to manage your email notification settings.
+        </p>
       <% end %>
     </div>
 
@@ -117,7 +123,7 @@
 
         <div class="confirmed phone_settings">
           <span>
-            <%= user.phone %> <strong>(Verified)</strong>
+            <strong><%= user.phone %></strong> (Verified)
           </span>
           <a href="#" class="dismiss phone">
             Change
@@ -125,8 +131,8 @@
         </div>
 
         <div class="unconfirmed phone_settings">
-          <span>
-            <%= user.phone %> (Unverified)
+          <span class="unverified">
+            <strong><%= user.phone %></strong> (Unverified)
           </span>
           <p>
             To confirm your phone number, Enter the verification code we sent you.
@@ -134,8 +140,8 @@
 
           <form class="phone verify" action="/account/phone/confirm" method="post">
             <%= text_field_tag "phone_verify_code" %>
-             <button type="submit">
-                <span>Verify</span>
+            <button type="submit">
+              <span>Verify</span>
             </button>
           </form>
 
