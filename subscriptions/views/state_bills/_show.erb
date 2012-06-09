@@ -40,12 +40,11 @@
       <% end %>
   </div>
 
-    <p>
-      <% if bill['+short_title'].present? %>
-        <%= bill['+short_title'] %>
-      <% else %>
-        <%= state_bill_title bill %>
-      <% end %>
-    </p>
+  <% if bill['+short_title'].present? %>
+    <p><%= bill['+short_title'] %></p>
+  <% else %>
+    <%= state_bill_title bill %>
+  <% end %>
+    
 
 </div>

@@ -31,38 +31,33 @@
     </div>
   </div>
 
-    <div class="resources">
-        <h5>Resources</h5>
-        <ul>
-          <li class="govTrack">
-            <a href="<%= govtrack_url item %>" title="GovTrack">GovTrack</a>
-          </li>
-          <li class="openCongress">
-            <a href="<%= opencongress_url item %>" title="OpenCongress">OpenCongress</a>
-          </li>
-          <li class="thomas">
-            <a href="<%= thomas_url item %>" title="THOMAS">THOMAS</a>
-          </li>
-          <li class="source">
-            <% if version['urls'] and version['urls']['xml'] %>
-              <a href="<%= version['urls']['xml'] %>">Original Text</a>
-            <% elsif version['urls'] and version['urls']['pdf'] %>
-              <a href="<%= version['urls']['pdf'] %>">Original Text</a>
-            <% end %>
-          </li>
-        </ul>
-    </div>
+  <div class="resources">
+      <h5>Resources</h5>
+      <ul>
+        <li class="govTrack">
+          <a href="<%= govtrack_url item %>" title="GovTrack">GovTrack</a>
+        </li>
+        <li class="openCongress">
+          <a href="<%= opencongress_url item %>" title="OpenCongress">OpenCongress</a>
+        </li>
+        <li class="thomas">
+          <a href="<%= thomas_url item %>" title="THOMAS">THOMAS</a>
+        </li>
+        <li class="source">
+          <% if version['urls'] and version['urls']['xml'] %>
+            <a href="<%= version['urls']['xml'] %>">Original Text</a>
+          <% elsif version['urls'] and version['urls']['pdf'] %>
+            <a href="<%= version['urls']['pdf'] %>">Original Text</a>
+          <% end %>
+        </li>
+      </ul>
+  </div>
 
+  <% if (summary = bill_summary(bill)).present? %>
+    <%= summary %>
+  <% else %>
+    <p>No summary available.</p>
+  <% end %>
 
-
-    <p>
-      <% summary = bill_summary bill %>
-      <% if summary.present? %>
-        <%= summary %>
-      <% else %>
-        No summary available.
-      <% end %>
-    </p>
-
-    <div class="clear"></div>
+  <div class="clear"></div>
 </div>

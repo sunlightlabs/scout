@@ -11,6 +11,14 @@ $(function() {
     return false;
   });
 
+  $("#content").on("click", "a.ununtruncate", function() {
+    var to_hide = $(this).parents(".untruncated");
+    var tag = to_hide.data("tag");
+    $(".truncated[data-tag=" + tag + "]").show();
+    to_hide.hide();
+    return false;
+  });
+
   $("#content").on("click", 'a[data-pjax]', function() {
     Utils.pjax($(this).attr("href"), $(this).data("pjax"));
     return false;

@@ -135,7 +135,10 @@ module Helpers
           #{truncated}
           <p><a href=\"#\" class=\"untruncate\">More</a></p>
         </div>
-        <div class=\"untruncated\" data-tag=\"#{tag}\">#{text}</div>"
+        <div class=\"untruncated\" data-tag=\"#{tag}\">
+          #{text}
+          <p><a href=\"#\" class=\"ununtruncate\">Less</a></p>
+        </div>"
       end
     end
 

@@ -81,10 +81,14 @@ input, select, textarea {
 }
 
 
+/** App-wide truncation helpers **/
 
-a.truncate {}
+a.untruncate {}
+a.ununtruncate {}
 .truncated {}
 .untruncated {display: none;}
+
+
 
 button, a.update.button {
     display: block;
