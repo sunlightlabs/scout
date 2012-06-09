@@ -137,7 +137,11 @@ module Helpers
     end
 
     def user_id(user)
-      user.username || user.id.to_s
+      if user.username.present?
+        user.username
+      else
+        user.id.to_s
+      end
     end
 
     def tag_path(user, tag)
