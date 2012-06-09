@@ -145,11 +145,10 @@ class User
   field :phone_confirmed, :type => Boolean, :default => false
 
   # only +, -, ., and digits allowed
-  validates_uniqueness_of :phone, :allow_blank => true
-  # validates_format_of :phone, :with => /^[\+\.\d\-]+$/, :allow_blank => true, :message => "Not a valid phone number."
+  validates_uniqueness_of :phone, :allow_blank => true, message: "has been taken"
 
-  validate :standardize_phone, :if => :has_phone?
-
+  before_validation :standardize_phone, :if => :has_phone?
+  
   def standardize_phone
     if Phoner::Phone.valid?(self.phone)
       self.phone = Phoner::Phone.parse(self.phone).to_s

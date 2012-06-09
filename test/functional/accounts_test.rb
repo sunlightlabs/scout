@@ -250,14 +250,12 @@ class AccountsTest < Test::Unit::TestCase
     SMS.should_receive(:deliver!).with("Verification Code", phone, anything)
 
     put '/account/phone', {:user => {:phone => phone}}, login(user)
+    assert_redirect '/account/settings'
 
     user.reload
     assert_equal phone, user.phone
     assert !user.phone_confirmed?
     assert_not_nil user.phone_verify_code
-
-    assert_equal 302, last_response.status
-    assert_equal '/account/settings', redirect_path
   end
 
   def test_add_phone_number_unconfirms_existing_number
@@ -269,15 +267,13 @@ class AccountsTest < Test::Unit::TestCase
     assert user.phone_confirmed?
     SMS.should_receive(:deliver!).with("Verification Code", phone2, anything)
 
-    put '/account/phone', {:user => {:phone => phone2}}, login(user)
+    put '/account/phone', {:user => {'phone' => phone2}}, login(user)
+    assert_redirect '/account/settings'
 
     user.reload
     assert_equal phone2, user.phone
     assert !user.phone_confirmed?
     assert_not_equal original_verify_code, user.phone_verify_code
-
-    assert_equal 302, last_response.status
-    assert_equal '/account/settings', redirect_path
   end
 
   def test_add_invalid_phone_number
@@ -288,15 +284,29 @@ class AccountsTest < Test::Unit::TestCase
     assert !user.phone_confirmed?
     assert_nil user.phone_verify_code
 
-    put '/account/phone', {:user => {:phone => invalid_phone}}, login(user)
+    put '/account/phone', {:user => {'phone' => invalid_phone}}, login(user)
+    assert_redirect '/account/settings'
 
     user.reload
     assert_nil user.phone
     assert !user.phone_confirmed?
     assert_nil user.phone_verify_code
+  end
 
-    assert_equal 302, last_response.status
-    assert_equal '/account/settings', redirect_path
+  def test_add_existing_phone_number
+    phone = "1234567890"
+    phone_user = create :phone_user, phone: phone
+
+    assert_equal "+11234567890", phone_user.phone
+
+    user = create :user
+    assert_nil user.phone
+
+    put '/account/phone', {user: {'phone' => phone}}, login(user)
+    assert_redirect '/account/settings'
+
+    user.reload
+    assert_nil user.phone
   end
 
   def test_resend_phone_verification_code

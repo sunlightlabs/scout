@@ -45,6 +45,7 @@ put '/account/phone' do
   requires_login
 
   current_user.phone = params[:user]['phone']
+   
   if current_user.valid?
     
     # manually set to false, in case the phone number was set and is changing
@@ -58,7 +59,7 @@ put '/account/phone' do
     flash[:phone] = "We've sent you a text with a verification code."
     redirect "/account/settings"
   else
-    flash[:phone] = "Invalid phone number."
+    flash[:phone] = "Phone number is invalid, or taken."
     redirect "/account/settings"
   end
 end
