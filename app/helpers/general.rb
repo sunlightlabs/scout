@@ -5,7 +5,7 @@ module Helpers
   module General
 
     def sadness
-      sads = %w{regrettably sadly unfortunately indubitably sadheartedly sorrowfully most-unpleasantly with-great-sadness}
+      sads = %w{regrettably sadly unfortunately inexplicably sadheartedly sorrowfully most-unpleasantly with-great-sadness}
       sad = sads[rand sads.size]
       sad.split('-').join(' ').capitalize
     end
@@ -110,9 +110,12 @@ module Helpers
       else
         "<span class=\"truncated\" data-tag=\"#{tag}\">
           #{truncated}
-          <a href=\"#\" class=\"untruncate\">More</a>
+          <a href=\"#\" class=\"untruncate text\">More</a>
         </span>
-        <span class=\"untruncated\" data-tag=\"#{tag}\">#{text}</span>"
+        <span class=\"untruncated\" data-tag=\"#{tag}\">
+          #{text}
+          <a href=\"#\" class=\"ununtruncate text\">Less</a>
+        </span>"
       end
     end
 
@@ -133,11 +136,11 @@ module Helpers
       else
         "<div class=\"truncated\" data-tag=\"#{tag}\">
           #{truncated}
-          <p><a href=\"#\" class=\"untruncate\">More</a></p>
+          <p><a href=\"#\" class=\"untruncate html\">More</a></p>
         </div>
         <div class=\"untruncated\" data-tag=\"#{tag}\">
           #{text}
-          <p><a href=\"#\" class=\"ununtruncate\">Less</a></p>
+          <p><a href=\"#\" class=\"ununtruncate html\">Less</a></p>
         </div>"
       end
     end

@@ -3,6 +3,14 @@
 module Helpers
   module Routing
 
+    def user_name(user)
+      if user.display_name.present?
+        user.display_name
+      elsif user.username.present?
+        user.username
+      end
+    end
+
     # for item interests
     def interest_adapter(interest)
       Subscription.adapter_for(item_types[interest.item_type]['adapter'])
@@ -16,12 +24,16 @@ module Helpers
       elsif interest.search?
         interest.in
       elsif interest.tag?
-        interest.tag.name
+        if (name = user_name(interest.tag_user)).present?
+          "#{name} &mdash; #{interest.tag.name.capitalize}"
+        else
+          interest.tag.name.capitalize
+        end
       end
     end
 
     def interest_description(interest)
-      if interest.search?
+      description = if interest.search?
         if interest.search_type == "all"
           interest.subscriptions.map(&:search_name).join(", ")
         elsif interest.subscriptions.first.filters.any?
@@ -29,12 +41,18 @@ module Helpers
         end
       elsif interest.item?
         if interest_adapter(interest).respond_to?(:interest_subtitle)
-          truncate interest_adapter(interest).interest_subtitle(interest), 75
+          interest_adapter(interest).interest_subtitle interest
         end
       elsif interest.feed?
-        truncate interest.data['description'], 75
+        interest.data['description']
       elsif interest.tag?
-        truncate interest.tag.description, 75
+        interest.tag.description
+      end
+
+      if description.present? 
+        truncate_more("interest-#{interest.id}", description, 70)
+      else
+        nil
       end
     end
 

@@ -85,6 +85,8 @@ input, select, textarea {
 
 a.untruncate {}
 a.ununtruncate {}
+a.ununtruncate.text, a.untruncate.text {text-decoration: underline;}
+
 .truncated {}
 .untruncated {display: none;}
 
@@ -1343,6 +1345,12 @@ h3.interestHeader, .add.rss{
     display: block;
     font-size: 13px;
 }
+
+.subscription h4 span.title {
+    display: block;
+    padding: 2px 0;
+}
+
 .subscription .notifications{
     clear: both;
 }
