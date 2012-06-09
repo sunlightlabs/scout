@@ -455,16 +455,8 @@ header h1{
     padding-left: 5px;
 }
 
-.homeWrapper #search_form .query_type {
-    visibility: hidden; /* preserve space */
-}
-
 #search_form .search_explanations {
     height: 45px;
-}
-
-.homeWrapper #search_form .search_explanations {
-    visibility: hidden;
 }
 
 #search_form .search_explain li {

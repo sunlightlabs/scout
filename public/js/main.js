@@ -29,10 +29,6 @@ $(function() {
     $("#search_form input.query").attr("placeholder", placeholder);
   });
 
-  $(".homeWrapper #search_form input.query").focus(function() {
-    $("fieldset.query_type, .search_explanations").css("visibility", "visible");
-  });
-
   $("form#search_form").submit(function() {
     var query = $(this).find("input.query").val();
     if (query) {
