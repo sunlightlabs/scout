@@ -82,7 +82,7 @@ module Subscriptions
 
           mark_as_seen! item
 
-          if !test? and (item.date < 30.days.ago)
+          if !test? and (item.date < 14.days.ago)
             backfills << item.attributes
           else
             # deliver one copy for the user whose interest found it
