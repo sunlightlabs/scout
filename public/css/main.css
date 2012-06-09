@@ -1124,6 +1124,7 @@ button.follow, button.following {
 .resources h5{
     float: left;
     margin-right: 10px;
+    margin-bottom: 5px;
 }
 .resources ul{
     display: block;
@@ -1204,7 +1205,7 @@ button.follow, button.following {
     box-sizing: border-box;
 }
 .entry .summary{
-    padding: 33px 0;
+    padding: 25px 0 33px 0;
 }
 .entry .summary p{
     margin-left: 10px;
@@ -1212,6 +1213,7 @@ button.follow, button.following {
 }
 
 .entry .summary.followable {
+    padding-top: 15px;
     border-bottom: 1px dashed #9d9b9b;
 }
 .entry .details h4{

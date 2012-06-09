@@ -2,54 +2,54 @@
 <% version = item.data['last_version'] %>
 
 <div class="followChanges">
-	<div class="trackSubscribe">
-		Subscribe to any <strong>official activity</strong> on this bill, including when it's <strong>coming to the floor</strong>.
-	</div>
+  <div class="trackSubscribe">
+    Subscribe to any <strong>official activity</strong> on this bill, including when it's <strong>coming to the floor</strong>.
+  </div>
 
   <%= follow_button item %>
-	
+  
   <div class="clear"></div>
 </div>
 
 <div class="summary followable">
-	
-	<div class="entryHeader">
+  
+  <div class="entryHeader">
     <% if bill['short_title'].present? %>
         <h2><%= bill['short_title'] %></h2>
     <% else %>
         <h2 class="official bill title"><%= bill['official_title'] %></h2>
     <% end %>
 
-		<div class="subtitle">
-			<%= bill_code bill['bill_type'], bill['number'] %>
-	    &mdash;
+    <div class="subtitle">
+      <%= bill_code bill['bill_type'], bill['number'] %>
+      &mdash;
       <%= bill_version version['version_code'] %>
       on
       <time class="item" datetime="<%= html_date item.date %>">
           <%= just_date_year item.date %>
       </time>
-		</div>
-	</div>
+    </div>
+  </div>
 
     <div class="resources">
         <h5>Resources</h5>
         <ul>
-            <li class="govTrack">
-				<a href="<%= govtrack_url item %>" title="GovTrack">GovTrack</a>
-			</li>
-            <li class="openCongress">
-				<a href="<%= opencongress_url item %>" title="OpenCongress">OpenCongress</a>
-			</li>
-            <li class="thomas">
-				<a href="<%= thomas_url item %>" title="THOMAS">THOMAS</a>
-			</li>
-			<li class="source">
-				<% if version['urls'] and version['urls']['xml'] %>
-			        <a href="<%= version['urls']['xml'] %>">Original Text</a>
-			    <% elsif version['urls'] and version['urls']['pdf'] %>
-			        <a href="<%= version['urls']['pdf'] %>">Original Text</a>
-			    <% end %>
-			</li>
+          <li class="govTrack">
+            <a href="<%= govtrack_url item %>" title="GovTrack">GovTrack</a>
+          </li>
+          <li class="openCongress">
+            <a href="<%= opencongress_url item %>" title="OpenCongress">OpenCongress</a>
+          </li>
+          <li class="thomas">
+            <a href="<%= thomas_url item %>" title="THOMAS">THOMAS</a>
+          </li>
+          <li class="source">
+            <% if version['urls'] and version['urls']['xml'] %>
+              <a href="<%= version['urls']['xml'] %>">Original Text</a>
+            <% elsif version['urls'] and version['urls']['pdf'] %>
+              <a href="<%= version['urls']['pdf'] %>">Original Text</a>
+            <% end %>
+          </li>
         </ul>
     </div>
 

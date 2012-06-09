@@ -24,7 +24,7 @@ module Subscriptions
       end
 
       def self.search_name(subscription)
-        "Coming to the Floor"
+        "On the Floor"
       end
 
       def self.short_name(number, interest)
