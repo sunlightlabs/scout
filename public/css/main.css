@@ -884,6 +884,8 @@ iframe.twitter-share-button {display: inline; vertical-align: text-bottom;}
     padding-right: 16px;
     font-size: 11px;
     display: none;
+    padding-top: 15px;
+    padding-bottom: 10px;
 }
 .subscriptions.related h5{
     margin-bottom: 12px;
