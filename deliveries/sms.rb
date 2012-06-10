@@ -85,7 +85,7 @@ module Deliveries
       elsif interest.item?
         content << " for #{Subscription.adapter_for(item_types[interest.item_type]['adapter']).interest_name(interest)}"
       elsif interest.feed?
-        content << " from a feed" # ?
+        content << " from" # ?
       end
 
       [content, url]

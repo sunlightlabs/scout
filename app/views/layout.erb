@@ -63,7 +63,7 @@
                 <ul id="userNav">
                     <% if logged_in? %>
                         <li class="user">
-                            <%= current_user.email %>
+                            <%= user_contact current_user %>
                         </li>
                         <li class="subscriptions">
                             <a href="/account/subscriptions">

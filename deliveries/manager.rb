@@ -41,7 +41,7 @@ module Deliveries
         elsif delivery_options['mechanism'] == 'sms'
           receipts += Deliveries::SMS.deliver_for_user! user, dry_run
         else
-          Admin.message "Unsure how to deliver to user #{user.email || user.phone}, no known delivery mechanism for #{delivery_options['mechanism']}"
+          Admin.message "Unsure how to deliver to user #{user_contact user}, no known delivery mechanism for #{delivery_options['mechanism']}"
         end
       end
       
@@ -89,7 +89,7 @@ module Deliveries
       mechanism ||= seen_through.mechanism
       email_frequency ||= seen_through.email_frequency
 
-      header = "[#{user.email || user.phone}][#{interest.in}][#{subscription_type}](#{item.item_id})"
+      header = "[#{user_contact user}][#{interest.in}][#{subscription_type}](#{item.item_id})"
       header << "{through_tag}" if seen_through.tag?
 
       if !["email", "sms"].include?(mechanism)
@@ -116,7 +116,7 @@ module Deliveries
       
       receipts.group_by(&:user_id).each do |user_id, user_receipts|
         user = User.find user_id
-        report << "[#{user.email || user.phone}]#{delivery_type} #{user_receipts.size} notifications"
+        report << "[#{user_contact user}]#{delivery_type} #{user_receipts.size} notifications"
 
         user_receipts.each do |receipt|
           receipt.deliveries.group_by {|d| [d['interest_id'], d['seen_through_id']]}.each do |interest_ids, interest_deliveries|

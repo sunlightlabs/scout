@@ -11,6 +11,14 @@ module Helpers
       end
     end
 
+    def user_contact(user)
+      if user.email.present?
+        user.email
+      else
+        user.phone
+      end
+    end
+
     # for item interests
     def interest_adapter(interest)
       Subscription.adapter_for(item_types[interest.item_type]['adapter'])
@@ -87,7 +95,11 @@ module Helpers
     end
 
     def interest_url(interest)
-      "http://#{config[:hostname]}#{interest_path interest}"
+      if interest.feed?
+        interest_path interest
+      else
+        "http://#{config[:hostname]}#{interest_path interest}"
+      end
     end
 
     def search_interest_path(interest)
