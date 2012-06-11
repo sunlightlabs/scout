@@ -1191,6 +1191,10 @@ button.follow, button.following {
     padding: 33px 0 33px 10px;
     margin-bottom: 155px;
 }
+.entry .details .results table {
+    float: left;
+}
+
 .entry .details table .time{
     width: 100px;
 }
