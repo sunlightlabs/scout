@@ -42,6 +42,14 @@ Dir.glob("./app/controllers/*.rb").each {|filename| load filename}
 before do
   # interest count is displayed in layout header for logged in users
   @interests = logged_in? ? current_user.interests.desc(:created_at).all.map {|k| [k, k.subscriptions]} : []
+
+  # lightweight server-side campaign conversion tracking 
+  [:utm_source, :utm_medium, :utm_content, :utm_campaign].each do |campaign|
+    if params[campaign].present?
+      session['campaign'] ||= {}
+      session['campaign'][campaign] = params[campaign]
+    end
+  end
 end
 
 

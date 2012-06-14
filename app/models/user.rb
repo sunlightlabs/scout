@@ -9,7 +9,7 @@ class User
 
   # accounts that sign up through the regular login process are auto-confirmed
   # accounts signed up through the remote API have a confirmation step
-  field :confirmed, :type => Boolean, :default => true
+  field :confirmed, type: Boolean, default: true
 
   # by default, accounts come from the web - we allow a remote API for limited use cases
   field :source, default: "web"

@@ -97,6 +97,9 @@ module TestHelper
       {"rack.session" => {'user_id' => user.id.to_s}}
     end
 
+    def session(hash = {})
+      {"rack.session" => hash}
+    end
 
     # custom helpers
 

@@ -130,6 +130,24 @@ class LoginTest < Test::Unit::TestCase
     assert user.confirmed?
   end
 
+  def test_create_user_saves_campaign_source
+    email = "fake@example.com"
+    assert_nil User.where(:email => email).first
+
+    campaign = {'campaign' => {'utm_source' => 'source', 'utm_medium' => 'banner', 'utm_content' => '640', 'utm_campaign' => 'campaign'}}
+
+    post '/account/new', {:user => {'email' => email, 'password' => "test", 'password_confirmation' => "test", 'announcements' => false, 'sunlight_announcements' => true}}, session(campaign)
+    assert_redirect '/account/settings'
+
+    user = User.where(:email => email).first
+    assert_not_nil user
+
+    assert user.source.is_a?(Hash), "User's source should be a Hash"
+    campaign['campaign'].each do |key, value|
+      assert_equal value, user.source[key]
+    end
+  end
+
   def test_create_user_redirects_back
     email = "fake@example.com"
     assert_nil User.where(:email => email).first

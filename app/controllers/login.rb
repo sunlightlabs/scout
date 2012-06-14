@@ -39,6 +39,11 @@ post '/account/new' do
     redirect "/login"
   end
 
+  # track campaign origin if possible
+  if session['campaign']
+    @new_user.source = session['campaign']
+  end
+
   if @new_user.save
     Admin.new_user @new_user
     log_in @new_user
