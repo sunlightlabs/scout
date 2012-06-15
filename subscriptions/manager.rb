@@ -48,7 +48,7 @@ module Subscriptions
       # if the subscription is orphaned, catch this, warn admin, and abort
       if interest.nil?
         Admin.report Report.warning("Check", "Orphaned subscription, not checking, moving on", subscription: subscription.attributes.dup)
-        return
+        return true
       end
 
       # any users' tag interests who are following a public tag that includes
@@ -74,12 +74,7 @@ module Subscriptions
       # 2) stores any items as yet unseen by this subscription in seen_ids
       # 3) stores any items as yet unseen by this subscription in the delivery queue
       unless results = Subscriptions::Manager.poll(subscription, :check)
-        Admin.report Report.warning(
-          "Check", "Error while checking a subscription, will check again next time.", 
-          interest: interest.attributes.dup, 
-          subscription_type: subscription_type
-          )
-        return nil
+        return false
       end
 
       results.each do |item|
@@ -113,6 +108,8 @@ module Subscriptions
       
       subscription.last_checked_at = Time.now
       subscription.save!
+
+      true
     end
     
     def self.mark_as_seen!(item)

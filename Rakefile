@@ -94,11 +94,22 @@ namespace :subscriptions do
       desc "Check for new #{subscription_type} items for initialized subscriptions"
       task subscription_type.to_sym => :environment do
         begin
+          errors = []
           Subscription.initialized.where(:subscription_type => subscription_type).each do |subscription|
             if subscription.user.confirmed?
-              Subscriptions::Manager.check! subscription
+              unless Subscriptions::Manager.check!(subscription)
+                errors << subscription
+              end
             end
           end
+
+          if errors.any?
+            Admin.report Report.warning(
+              "Check", "#{errors.size} errors while checking #{subscription_type}, will check again next time.", 
+              subscriptions: errors.map {|s| s.attributes.dup},
+              )
+          end
+
         rescue Exception => ex
           Admin.report Report.exception("Check", "Problem during 'rake subscriptions:check:#{subscription_type}'.", ex)
           puts "Error during subscription checking, emailed report."
