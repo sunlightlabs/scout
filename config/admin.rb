@@ -78,7 +78,8 @@ module Admin
 
   def self.deliver!(tag, subject, body)
     if admin?
-      Email.deliver!(tag, admin_emails, "[ADMIN] #{subject}", body)
+      # admin emails always use pony, even if postmark is on for the app in general
+      Email.with_pony!(tag, admin_emails, "[ADMIN] #{subject}", body)
     else
       puts "\n[#{tag}] #{subject}\n\n#{body}" unless Sinatra::Application.test?
     end

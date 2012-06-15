@@ -6,19 +6,20 @@ require 'mail'
 
 module Email
 
+  # used when you want the email to use whatever's in the settings
   def self.deliver!(tag, to, subject, body)
-    if email?
-      if config[:email][:via] == :pony
-        with_pony! tag, to, subject, body
-      elsif config[:email][:via] == :postmark
-        with_postmark! tag, to, subject, body
-      else
-        puts "[#{tag}][ERROR] No delivery method specified."
-        false
-      end
-    else 
+    unless email?
       sent_message "FAKE", tag, to, subject, body
-      true
+      return true
+    end
+
+    if config[:email][:via] == :pony
+      with_pony! tag, to, subject, body
+    elsif config[:email][:via] == :postmark
+      with_postmark! tag, to, subject, body
+    else
+      puts "[#{tag}][ERROR] No delivery method specified."
+      false
     end
     
   # Important that this method *not* raise any Exceptions, 
@@ -38,6 +39,11 @@ module Email
 
   # send using a plain SMTP client
   def self.with_pony!(tag, to, subject, body)
+    unless email?
+      sent_message "FAKE", tag, to, subject, body
+      return true
+    end
+
     options = config[:email][:pony].dup
     options[:from] = config[:email][:from]
     options[:reply_to] = config[:email][:reply_to]
@@ -54,6 +60,11 @@ module Email
 
   # send using the Postmark service
   def self.with_postmark!(tag, to, subject, body)
+    unless email?
+      sent_message "FAKE", tag, to, subject, body
+      return true
+    end
+
     message = Mail.new
 
     message.delivery_method Mail::Postmark, :api_key => config[:email][:postmark][:api_key]
