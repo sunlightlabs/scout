@@ -74,7 +74,11 @@ module Subscriptions
       # 2) stores any items as yet unseen by this subscription in seen_ids
       # 3) stores any items as yet unseen by this subscription in the delivery queue
       unless results = Subscriptions::Manager.poll(subscription, :check)
-        Admin.report Report.warning("Check", "Error while checking a subscription, will check again next time.", interest: interest.attributes.dup)
+        Admin.report Report.warning(
+          "Check", "Error while checking a subscription, will check again next time.", 
+          interest: interest.attributes.dup, 
+          subscription_type: subscription_type
+          )
         return nil
       end
 
