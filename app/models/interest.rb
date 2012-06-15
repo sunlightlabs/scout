@@ -24,10 +24,10 @@ class Interest
   #     (e.g. "query" => "copyright")
   #   item - metadata about the related item 
   #     (e.g. "chamber" => "house", "state" => "NY", "bill_id" => "hr2134-112")
-  field :data, :type => Hash, :default => {}
+  field :data, type: Hash, default: {}
 
   # tags the user has set on this interest
-  field :tags, :type => Array, :default => []
+  field :tags, type: Array, default: []
 
   # per-interest override of notification mechanism
   field :notifications
@@ -43,6 +43,7 @@ class Interest
   validates_presence_of :user_id
   validates_presence_of :in
   
+  scope :for_day, ->(day) {where(created_at: {"$gt" => Time.parse(day).midnight, "$lt" => Time.parse(day).midnight + 1.day})}
   
   def item?
     interest_type == "item"
