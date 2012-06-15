@@ -214,8 +214,8 @@ namespace :test do
       exit -1
     end
 
-    puts "Clearing all deliveries for #{user.email || user.phone}"
-    user.deliveries.delete_all
+    puts "Clearing ALL deliveries"
+    Delivery.delete_all
 
     user.interests.each do |interest|
       interest.subscriptions.each do |subscription|
