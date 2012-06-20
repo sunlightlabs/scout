@@ -45,6 +45,11 @@ class Interest
   
   scope :for_time, ->(start, ending) {where(created_at: {"$gt" => Time.parse(start).midnight, "$lt" => Time.parse(ending).midnight + 1.day})}
   
+  before_destroy :record_unsubscribe
+  def record_unsubscribe
+    Event.unsubscribe! self
+  end
+
   def item?
     interest_type == "item"
   end
