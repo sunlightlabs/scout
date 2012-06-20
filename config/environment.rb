@@ -64,6 +64,9 @@ configure do
       :auth_token => config[:twilio][:auth_token]
     )
   end
+
+  # if a consistent time zone is needed, use Eastern Time
+  Time.zone = ActiveSupport::TimeZone.find_tzinfo "America/New_York"
 end
 
 require 'mongoid/slug'
