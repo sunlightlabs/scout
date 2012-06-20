@@ -84,6 +84,7 @@ namespace :deploy do
     run "ln -nfs #{shared_path}/mongoid.yml #{release_path}/config/mongoid.yml"
     run "ln -nfs #{shared_path}/config.ru #{release_path}/config.ru"
     run "ln -nfs #{shared_path}/unicorn.rb #{release_path}/unicorn.rb"
+    run "ln -nfs #{shared_path}/stats.rb #{release_path}/stats.rb"
     
     # stupid capistrano boilerplate
     run "rm -rf #{File.join release_path, 'tmp'}"
