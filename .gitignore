@@ -13,3 +13,5 @@
 
 *.kate-swp
 .DS_Store
+
+/stats.rb
