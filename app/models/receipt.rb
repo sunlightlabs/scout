@@ -13,8 +13,6 @@ class Receipt
   field :subject
   field :content
   field :delivered_at, :type => Time
-
-  scope :for_time, ->(start, ending) {where(created_at: {"$gt" => Time.parse(start).midnight, "$lt" => Time.parse(ending).midnight + 1.day})}
   
   index :delivered_at
   index :user_id

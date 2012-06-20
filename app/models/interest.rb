@@ -43,7 +43,7 @@ class Interest
   validates_presence_of :user_id
   validates_presence_of :in
   
-  scope :for_time, ->(start, ending) {where(created_at: {"$gt" => Time.parse(start).midnight, "$lt" => Time.parse(ending).midnight + 1.day})}
+  scope :for_time, ->(start, ending) {where(created_at: {"$gt" => Time.zone.parse(start).midnight, "$lt" => Time.zone.parse(ending).midnight})}
   
   before_destroy :record_unsubscribe
   def record_unsubscribe

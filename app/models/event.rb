@@ -8,6 +8,8 @@ class Event
 
   index :type
 
+  scope :for_time, ->(start, ending) {where(created_at: {"$gt" => Time.zone.parse(start).midnight, "$lt" => Time.zone.parse(ending).midnight})}
+
   def self.unsubscribe!(interest)
     create!(
       type: "unsubscribe-alert", 

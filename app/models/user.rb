@@ -40,7 +40,7 @@ class User
   has_many :subscriptions # interests will destroy their own subscriptions
   has_many :deliveries # interests will destroy their own deliveries
 
-  scope :for_time, ->(start, ending) {where(created_at: {"$gt" => Time.parse(start).midnight, "$lt" => Time.parse(ending).midnight + 1.day})}
+  scope :for_time, ->(start, ending) {where(created_at: {"$gt" => Time.zone.parse(start).midnight, "$lt" => Time.zone.parse(ending).midnight})}
 
   before_validation :slugify_username
   def slugify_username
