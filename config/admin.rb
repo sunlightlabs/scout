@@ -46,6 +46,7 @@ module Admin
     })
 
     unless Email.with_pony!("Postmark Down", admin_emails, subject, body)
+      Event.email_failed! original_tag, original_to, original_subject, original_body
       puts "\n[ADMIN][#{Pony}] Failed to send email to admin that Postmark is down...oh well."
     end
   end

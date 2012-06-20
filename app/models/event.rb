@@ -17,4 +17,14 @@ class Event
       data: interest.attributes.dup
     )
   end
+
+  def self.email_failed!(tag, to, subject, body)
+    create!(
+      type: "email-failed",
+      description: "Postmark down, SMTP failed also",
+      data: {
+        tag: tag, to: to, subject: subject, body: body
+      }
+    )
+  end
 end
