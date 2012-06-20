@@ -15,6 +15,8 @@ class Tag
   
   default_scope desc(:created_at)
 
+  scope :for_time, ->(start, ending) {where(created_at: {"$gt" => Time.parse(start).midnight, "$lt" => Time.parse(ending).midnight + 1.day})}
+
   # not a formal relationship, depends on interests keeping their own tag array
   def interests
     user.interests.where :tags => name

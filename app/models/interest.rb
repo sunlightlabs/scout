@@ -43,7 +43,7 @@ class Interest
   validates_presence_of :user_id
   validates_presence_of :in
   
-  scope :for_day, ->(day) {where(created_at: {"$gt" => Time.parse(day).midnight, "$lt" => Time.parse(day).midnight + 1.day})}
+  scope :for_time, ->(start, ending) {where(created_at: {"$gt" => Time.parse(start).midnight, "$lt" => Time.parse(ending).midnight + 1.day})}
   
   def item?
     interest_type == "item"

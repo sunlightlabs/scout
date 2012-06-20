@@ -40,6 +40,7 @@ class User
   has_many :subscriptions # interests will destroy their own subscriptions
   has_many :deliveries # interests will destroy their own deliveries
 
+  scope :for_time, ->(start, ending) {where(created_at: {"$gt" => Time.parse(start).midnight, "$lt" => Time.parse(ending).midnight + 1.day})}
 
   before_validation :slugify_username
   def slugify_username
@@ -50,6 +51,13 @@ class User
     end
   end
 
+  def contact
+    if email.present?
+      email
+    else
+      phone
+    end
+  end
 
   after_save :find_api_key
 

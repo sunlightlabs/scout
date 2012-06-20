@@ -12,11 +12,7 @@ module Helpers
     end
 
     def user_contact(user)
-      if user.email.present?
-        user.email
-      else
-        user.phone
-      end
+      user.contact
     end
 
     # for item interests
