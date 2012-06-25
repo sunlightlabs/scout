@@ -1,5 +1,5 @@
 get '/logout' do
-  log_out if logged_in?
+  log_out
   redirect_back_or '/'
 end
 
