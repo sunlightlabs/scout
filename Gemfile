@@ -17,6 +17,8 @@ gem 'mongoid_slug', '0.10.0', :require => 'mongoid/slug'
 gem 'ruby-hmac', '0.4.0'
 gem 'bcrypt-ruby', '3.0.1'
 
+gem 'rack-ssl', '1.3.2'
+
 gem 'postmark', '0.9.10'
 gem 'mail', '2.4.4'
 gem 'pony', '1.4'
