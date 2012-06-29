@@ -63,7 +63,11 @@ module Subscriptions
         content = entry.content.present? ? entry.content : entry.summary
         data['content'] = strip_tags sanitize(content)
 
-        data['title'] = sanitize entry.title
+        if entry.title.present?
+          data['title'] = sanitize entry.title
+        else
+          data['title'] = "(Untitled)"
+        end
 
         SeenItem.new(
           :item_id => data['url'],
