@@ -88,7 +88,12 @@ module Subscriptions
           mark_as_seen! item
 
           if !test? and (item.date < 14.days.ago)
-            backfills << item.attributes
+            # this is getting out of hand - 
+            # don't deliver state bill backfills, but don't email me about them
+            # temporary until Open States allows sorting by last_action dates
+            if subscription_type != "state_bills"
+              backfills << item.attributes
+            end
           else
             # deliver one copy for the user whose interest found it
             Deliveries::Manager.schedule_delivery! item, interest, subscription_type
