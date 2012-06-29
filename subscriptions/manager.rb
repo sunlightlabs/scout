@@ -47,7 +47,9 @@ module Subscriptions
 
       # if the subscription is orphaned, catch this, warn admin, and abort
       if interest.nil?
-        Admin.report Report.warning("Check", "Orphaned subscription, not checking, moving on", subscription: subscription.attributes.dup)
+        subscription.seen_items.each {|i| i.destroy}
+        subscription.destroy
+        Admin.report Report.warning("Check", "Orphaned subscription, deleting, moving on", subscription: subscription.attributes.dup)
         return true
       end
 
