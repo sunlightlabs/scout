@@ -137,6 +137,8 @@ helpers do
     
     if query_type == "simple"
       query = query.gsub "\"", ""
+    elsif query_type == "advanced"
+      query = query.gsub ":", ""
     end
 
     halt 404 unless query.present?
