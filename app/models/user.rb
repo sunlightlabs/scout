@@ -39,6 +39,7 @@ class User
   has_many :tags, dependent: :destroy
   has_many :subscriptions # interests will destroy their own subscriptions
   has_many :deliveries # interests will destroy their own deliveries
+  has_many :receipts # never destroy receipts
 
   scope :for_time, ->(start, ending) {where(created_at: {"$gt" => Time.zone.parse(start).midnight, "$lt" => Time.zone.parse(ending).midnight})}
 

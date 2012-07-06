@@ -19,4 +19,7 @@ class Receipt
   
   validates_presence_of :delivered_at
   validates_presence_of :content
+
+  # if the user is still around, no harm if it's not
+  belongs_to :user
 end
