@@ -1,5 +1,5 @@
 <% regulation = item.data %>
-<%= regulation['title'] %> (<%= regulation_stage regulation['stage'] %>)
+<%= regulation_title regulation %> (<%= regulation_stage regulation['stage'] %><%= regulation['document_type'] == "public_inspection" ? ", Pre-release" : "" %>)
  <% if regulation['search']['highlight'] %>
 <%= regulation_highlight item, interest.in, false %>
  <% end %>

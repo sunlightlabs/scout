@@ -184,7 +184,7 @@ module Helpers
     end
     
     def just_date(date)
-      date.strftime "%b #{date.day}, %Y"
+      date.strftime "%B #{date.day}, %Y"
     end
 
     def just_date_year(date)

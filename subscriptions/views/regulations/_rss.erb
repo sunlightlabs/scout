@@ -1,7 +1,13 @@
 <% regulation = item.data %>
-<title><%= regulation['title'] %></title>
+<title><%= regulation_title regulation %></title>
 <description><![CDATA[
   <p>
+    <% if regulation['document_type'] == "public_inspection" %>
+      <strong class="public_inspection">
+        Pre-release
+      </strong>
+      &mdash;
+    <% end %>
     <%= regulation_stage regulation['stage'] %>
     <% if regulation['agency_names'].select(&:present?).any? %>
       &mdash;
@@ -9,9 +15,13 @@
     <% end %>
   </p>
 
-  <% if regulation['search']['highlight'] %>
-    <%= regulation_highlight item, item.interest_in %>
-  <% else %>
-    <%= regulation['abstract'] %>
-  <% end %>
+  <p>
+    <% if regulation['search']['highlight'] %>
+      <%= regulation_highlight item, item.interest_in %>
+    <% elsif regulation['abstract'].present? %>
+      <%= regulation['abstract'] %>
+    <% else %>
+      No excerpt or abstract available.
+    <% end %>
+  </p>
 ]]></description>

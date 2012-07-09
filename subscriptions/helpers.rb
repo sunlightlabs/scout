@@ -56,6 +56,10 @@ module Helpers
       excerpt item.data['search']['highlight'][field].first, keyword, highlight
     end
 
+    def regulation_title(regulation)
+      regulation['title'].present? ? regulation['title'] : "(No published title yet)"
+    end
+
     def agency_names(regulation)
       regulation['agency_names'].uniq.join ", "
     end

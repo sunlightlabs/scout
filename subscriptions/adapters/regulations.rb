@@ -26,7 +26,7 @@ module Subscriptions
           endpoint = "http://api.realtimecongress.org/api/v1"
         end
         
-        sections = %w{ stage title abstract document_number rins docket_ids published_at effective_at federal_register_url agency_names agency_ids }
+        sections = %w{ stage title abstract document_number document_type rins docket_ids published_at effective_at federal_register_url agency_names agency_ids publication_date }
         
         per_page = (function == :search) ? (options[:per_page] || 20) : 40
 
@@ -37,6 +37,7 @@ module Subscriptions
         url << "&highlight=true"
         url << "&highlight_size=500"
         url << "&highlight_tags=,"
+        # url << "&document_type=public_inspection" # debug
 
         # filters
         if subscription.data['query_type'] != 'advanced'
@@ -68,7 +69,7 @@ module Subscriptions
           endpoint = "http://api.realtimecongress.org/api/v1"
         end
         
-        sections = %w{ stage title abstract document_number rins docket_ids published_at effective_at federal_register_url agency_names agency_ids federal_register.pdf_url }
+        sections = %w{ stage title abstract document_number rins docket_ids published_at effective_at federal_register_url agency_names agency_ids pdf_url publication_date }
 
         url = "#{endpoint}/regulations.json?apikey=#{api_key}"
         url << "&document_number=#{item_id}"
@@ -112,6 +113,10 @@ module Subscriptions
       def self.item_for(regulation)
         return nil unless regulation
         
+        # not sure why I have to do this...
+        p regulation['publication_date']
+        regulation['publication_date'] = Time.parse regulation['publication_date']
+
         SeenItem.new(
           :item_id => regulation["document_number"],
           :date => regulation["published_at"],

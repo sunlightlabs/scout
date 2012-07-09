@@ -1,10 +1,16 @@
 <% regulation = item.data %>
 
 <a href="<%= item_path item %>">
-  <h4><%= regulation['title'] %></h4>
+  <h4><%= regulation_title regulation %></h4>
 </a>
 
 <div class="subtitle">
+  <% if regulation['document_type'] == "public_inspection" %>
+    <strong class="public_inspection">
+      Pre-release
+    </strong>
+    &mdash;
+  <% end %>
   <span class="stage"><%= regulation_stage regulation['stage'] %></span>
   &mdash;
   <% if regulation['agency_names'].any? %>
