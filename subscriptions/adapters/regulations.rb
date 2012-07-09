@@ -114,7 +114,7 @@ module Subscriptions
         return nil unless regulation
         
         # not sure why I have to do this...
-        regulation['publication_date'] = Time.parse regulation['publication_date']
+        # regulation['publication_date'] = Time.parse regulation['publication_date']
 
         SeenItem.new(
           :item_id => regulation["document_number"],

@@ -33,7 +33,7 @@
     
   <div class="clear"></div>
 
-  <% if regulation['document_type'] == 'article' %>
+  <% if regulation['document_type'] != 'public_inspection' %>
     <% if regulation['abstract'].present? %>
       <%= regulation_abstract regulation %>
     <% else %>
