@@ -97,7 +97,7 @@ module Subscriptions
       def self.items_for(response, function, options = {})
         return nil unless response['regulations']
         
-        response['regulations'].map do |regulation|
+        response['regulations'].select {|r| r['document_type'].nil? or (r['document_type'] == "article")}.map do |regulation|
           item_for regulation
         end
       end
@@ -114,7 +114,6 @@ module Subscriptions
         return nil unless regulation
         
         # not sure why I have to do this...
-        p regulation['publication_date']
         regulation['publication_date'] = Time.parse regulation['publication_date']
 
         SeenItem.new(
