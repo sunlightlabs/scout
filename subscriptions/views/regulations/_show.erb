@@ -7,7 +7,12 @@
     <div class="subtitle">
       <%= agency_names regulation %>
       <br/>
-      <%= regulation_stage regulation['stage'] %>, issued
+      <%= regulation_stage regulation['stage'] %>,
+      <% if regulation['document_type'] != "public_inspection" %>
+        issued on
+      <% else %>
+        filed for public inspection on
+      <% end %>
       <time class="item" datetime="<%= html_date item.date %>">
           <%= just_date_year item.date %>
       </time>
