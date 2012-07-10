@@ -46,13 +46,10 @@
     <% end %>
   <% else %>
     <p>
-      This is a <strong>pre-release</strong> version of this <%= regulation['stage'] %> rule, and many details may not yet be available.
+      This is a <strong>pre-release</strong> version of this <%= regulation['stage'] %> rule, some details may not yet be available.
     </p>
     <p>
       This <%= regulation['stage'] %> rule will be published on <strong><%= just_date regulation['publication_date'] %></strong>.
-    </p>
-    <p>
-      Read the <a href="<%= regulation['pdf_url'] %>">pre-release PDF</a> for more information.
     </p>
   <% end %>
 </div>
