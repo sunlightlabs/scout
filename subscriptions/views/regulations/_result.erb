@@ -23,7 +23,9 @@
 <p>
   <% if regulation['search']['highlight'] and (highlight = regulation_highlight item, interest) %>
     <%= highlight %>
-  <% else %>
+  <% elsif regulation['abstract'].present? %>
     <%= truncate regulation['abstract'], 500 %>
+  <% else %>
+    No excerpt or abstract available.
   <% end %>
 </p>

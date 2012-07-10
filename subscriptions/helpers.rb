@@ -53,6 +53,8 @@ module Helpers
 
     def regulation_highlight(item, keyword, highlight = true)
       field = preferred_field item, regulation_priorities
+      return nil unless field
+      
       excerpt item.data['search']['highlight'][field].first, keyword, highlight
     end
 
