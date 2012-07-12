@@ -1,3 +1,5 @@
+# Scout
+
 A government-wide search and notification system, called Scout.
 
 Sinatra is used for the web framework, MongoDB for the database, Postmark for email delivery, HTTParty for API consumption.
