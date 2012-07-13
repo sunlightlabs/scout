@@ -33,7 +33,7 @@ task :set_crontab => :environment do
   if system("cat #{current_path}/config/cron/#{environment}/crontab | crontab")
     puts "Successfully overwrote crontab."
   else
-    Admin.message "Crontab overwriting failed on deploy."
+    Admin.report Report.warning("Crontab", "Crontab overwriting failed on deploy.")
     puts "Unsuccessful in overwriting crontab, emailed report."
   end
 end
