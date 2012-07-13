@@ -39,6 +39,11 @@ get "/fetch/item/:item_type/:item_id/:subscription_type" do
 
   items = subscription.search
 
+  if items.is_a?(Hash)
+    puts "[#{params[:subscription_type]}][#{params[:item_id]}][search] ERROR while loading this:\n\n#{JSON.pretty_generate items}" unless test?
+    items = nil # frontend gets nil
+  end
+
   partial "show_results", :engine => :erb, :locals => {
     :interest => interest,
     :subscription => subscription,
