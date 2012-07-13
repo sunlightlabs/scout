@@ -101,8 +101,6 @@ namespace :subscriptions do
       end
     end
 
-    puts errors.inspect
-
     if errors.size > 0 # any? apparently returns false if the contents are just nils!
       Admin.report Report.warning(
         "Initialize", "#{errors.size} errors while re-initializing subscriptions, will try again later.", 
@@ -112,6 +110,8 @@ namespace :subscriptions do
 
     if count > 0
       Admin.report Report.success "Initialize", "Successfully initialized #{count} previously uninitialized subscriptions."
+    else
+      puts "Did not re-initialize any subscriptions."
     end
   end
   
