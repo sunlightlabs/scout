@@ -1,3 +1,7 @@
+######## Miscellaneous tasks ###########
+
+*/30 * * * /projects/alarms/current/config/cron/staging/rake.sh subscriptions:reinitialize
+
 
 ######## Delivery tasks ########
 

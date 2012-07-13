@@ -21,14 +21,10 @@ module Subscriptions
       # make initialization idempotent, remove any existing seen items first
       interest.seen_items.where(subscription_type: subscription_type).delete_all
 
-      unless results = Subscriptions::Manager.poll(subscription, :initialize)
-        Admin.report Report.failure("Initialization", 
-          "Error while initializing a subscription, subscription is remaining uninitialized.", 
-          interest: interest.attributes,
-          subscription_type: subscription_type
-          )
-        return nil
-      end
+      results = Subscriptions::Manager.poll(subscription, :initialize)
+
+      # caller can decide whether it cares about the error hash
+      return results unless results.is_a?(Array)
 
       results.each do |item|
         mark_as_seen! item
@@ -37,6 +33,8 @@ module Subscriptions
       subscription.initialized = true
       subscription.last_checked_at = Time.now
       subscription.save!
+
+      true
     end
     
     def self.check!(subscription)
@@ -75,9 +73,10 @@ module Subscriptions
       # 1) does a poll
       # 2) stores any items as yet unseen by this subscription in seen_ids
       # 3) stores any items as yet unseen by this subscription in the delivery queue
-      unless results = Subscriptions::Manager.poll(subscription, :check)
-        return false
-      end
+      results = Subscriptions::Manager.poll(subscription, :check)
+
+      # caller can decide whether it cares about the error hash
+      return results unless results.is_a?(Array)
 
       results.each do |item|
 
@@ -142,11 +141,11 @@ module Subscriptions
         begin
           response = adapter.url_to_response url
         rescue Timeout::Error, Errno::ECONNREFUSED, Errno::ETIMEDOUT => ex
-          return nil
+          return error_for "Timeout error polling feed", url, function, options, subscription, ex
         rescue Exception => ex
           report = Report.exception self, "Exception processing URL #{url}", ex, :subscription_type => subscription.subscription_type, :function => function, :interest_in => subscription.interest_in, :subscription_id => subscription.id
           puts report.to_s
-          return nil
+          return error_for "Unknown error polling feed", url, function, options, subscription, ex
         end
 
       # every other adapter is parsing a remote JSON feed
@@ -154,7 +153,7 @@ module Subscriptions
         begin
           response = HTTParty.get url
         rescue Timeout::Error, Errno::ECONNREFUSED, Errno::ETIMEDOUT => ex
-          return nil
+          return error_for "Timeout error", url, function, options, subscription, ex
         end
       end
       
@@ -167,8 +166,19 @@ module Subscriptions
           item
         end
       else
-        nil
+        error_for "Unknown, items_for returned nil", url, function, options, subscription, ex
       end
+    end
+
+    def self.error_for(message, url, function, options, subscription, exception = nil)
+      {
+        message: message,
+        url: url,
+        function: function,
+        options: options,
+        subscription: subscription.attributes.dup,
+        exception: (exception ? Report.exception_to_hash(exception) : nil)
+      }
     end
 
     # given a type of adapter, and an item ID, fetch the item and return a seen item

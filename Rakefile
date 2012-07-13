@@ -86,6 +86,34 @@ subscription_types = Dir.glob('subscriptions/adapters/*.rb').map do |file|
 end
 
 namespace :subscriptions do
+
+  desc "Try to initialize any uninitialized subscriptions"
+  task :reinitialize => :environment do
+    errors = []
+    count = 0
+
+    Subscription.uninitialized.each do |subscription|
+      result = subscription.initialize_self
+      if result.nil? or result.is_a?(Hash)
+        errors << result
+      else
+        count += 1
+      end
+    end
+
+    puts errors.inspect
+
+    if errors.size > 0 # any? apparently returns false if the contents are just nils!
+      Admin.report Report.warning(
+        "Initialize", "#{errors.size} errors while re-initializing subscriptions, will try again later.", 
+        errors: errors,
+        )
+    end
+
+    if count > 0
+      Admin.report Report.success "Initialize", "Successfully initialized #{count} previously uninitialized subscriptions."
+    end
+  end
   
   namespace :check do
 
@@ -97,8 +125,11 @@ namespace :subscriptions do
           errors = []
           Subscription.initialized.where(:subscription_type => subscription_type).each do |subscription|
             if subscription.user.confirmed?
-              unless Subscriptions::Manager.check!(subscription)
-                errors << subscription
+              
+              result = Subscriptions::Manager.check!(subscription)
+
+              if result.nil? or result.is_a?(Hash)
+                errors << result
               end
             end
           end
@@ -106,7 +137,7 @@ namespace :subscriptions do
           if errors.any?
             Admin.report Report.warning(
               "Check", "#{errors.size} errors while checking #{subscription_type}, will check again next time.", 
-              subscriptions: errors.map {|s| s.attributes.dup},
+              errors: errors,
               )
           end
 
@@ -231,6 +262,9 @@ namespace :test do
         items = subscription.search :per_page => max
         if items.nil? or items.empty?
           puts "\tNo results, nothing to deliver."
+          next
+        elsif items.is_a?(Hash)
+          puts "\tERROR searching:\n\n#{items.inspect}"
           next
         end
 

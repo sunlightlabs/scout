@@ -32,17 +32,22 @@ class Report
 
   def self.exception(source, message, exception, objects = {})
     file 'FAILURE', source, message, {
-      'exception' => {
-        'backtrace' => exception.backtrace, 
-        'message' => exception.message, 
-        'type' => exception.class.to_s
-    }.merge(objects)}
+      'exception' => exception_to_hash(exception)
+      }.merge(objects)
   end
   
   def to_s
     "[#{status}] #{source} | #{message}"
   end
-  
+
+  def self.exception_to_hash(exception)
+    {
+        'backtrace' => exception.backtrace, 
+        'message' => exception.message, 
+        'type' => exception.class.to_s
+    }
+  end
+
   def to_minutes(seconds)
     min = seconds / 60
     sec = seconds % 60

@@ -35,7 +35,10 @@ get '/fetch/search/:subscription_type/:query/?:query_type?' do
     
   # if results is nil, it usually indicates an error in one of the remote services
   if results.nil?
-    puts "[#{subscription_type}][#{query}][search] ERROR while loading this"
+    puts "[#{subscription_type}][#{query}][search] ERROR (unknown) while loading this"
+  elsif results.is_a?(Hash)
+    puts "[#{subscription_type}][#{query}][search] ERROR while loading this:\n\n#{JSON.pretty_generate results}"
+    results = nil # frontend gets nil
   end
   
   items = erb :"search/items", :layout => false, :locals => {

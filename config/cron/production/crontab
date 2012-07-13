@@ -1,3 +1,7 @@
+######## Miscellaneous tasks ###########
+
+*/30 * * * /projects/scout/current/config/cron/production/rake.sh subscriptions:reinitialize
+
 ######## Delivery tasks ########
 
 # email digests - once a day, in the morning
