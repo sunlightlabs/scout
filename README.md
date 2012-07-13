@@ -1,4 +1,6 @@
-A government-wide search and notification system, called Scout.
+# Scout
+
+A government-wide search and notification system. Currently deployed to [scout.sunlightfoundation.com](https://scout.sunlightfoundation.com/)
 
 Sinatra is used for the web framework, MongoDB for the database, Postmark for email delivery, HTTParty for API consumption.
 
