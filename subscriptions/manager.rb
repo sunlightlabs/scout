@@ -159,12 +159,14 @@ module Subscriptions
       
       items = adapter.items_for response, function, options
 
-      if items
+      if items.is_a?(Array)
         items.map do |item| 
           item.assign_to_subscription subscription
           item.search_url = url
           item
         end
+      elsif items.is_a?(String)
+        error_for items, url, function, options, subscription, ex
       else
         error_for "Unknown, items_for returned nil", url, function, options, subscription, ex
       end
