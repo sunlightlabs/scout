@@ -38,16 +38,9 @@ module Subscriptions
         query = query.gsub /\s(usc)\s/i, " U.S.C. "
 
         if subscription.data['query_type'] != 'advanced'
-          url << "&query=#{URI.escape query}"
+          url << "&query=#{CGI.escape query}"
         else
-          url << "&q=#{URI.escape query}"
-        end
-
-        # search-only filters
-        if function == :search
-          if subscription.data["session"].present?
-            url << "&session=#{URI.encode subscription.data["session"]}"
-          end
+          url << "&q=#{CGI.escape query}"
         end
 
         if subscription.data["stage"].present?

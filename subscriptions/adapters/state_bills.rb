@@ -35,7 +35,7 @@ module Subscriptions
           query = "\"#{query}\""
         end
 
-        url << "&q=#{URI.escape query}"
+        url << "&q=#{CGI.escape query}"
 
 
         # filters

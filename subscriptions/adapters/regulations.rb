@@ -18,7 +18,7 @@ module Subscriptions
       def self.url_for(subscription, function, options = {})
         api_key = options[:api_key] || config[:subscriptions][:sunlight_api_key]
         
-        query = URI.escape subscription.interest_in
+        query = CGI.escape subscription.interest_in
         
         if config[:subscriptions][:rtc_endpoint].present?
           endpoint = config[:subscriptions][:rtc_endpoint]
@@ -48,7 +48,7 @@ module Subscriptions
 
         ["agency", "stage"].each do |field|
           if subscription.data[field].present?
-            url << "&#{filters[field][:field] || field}=#{URI.encode subscription.data[field]}"
+            url << "&#{filters[field][:field] || field}=#{CGI.escape subscription.data[field]}"
           end
         end
 

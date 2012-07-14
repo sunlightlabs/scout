@@ -34,9 +34,9 @@ module Subscriptions
         
         if subscription.data['query_type'] != 'advanced'
           query = query.gsub "\"", ""
-          url << "&phrase=#{URI.escape query}"
+          url << "&phrase=#{CGI.escape query}"
         else
-          url << "&q=#{URI.escape query}"
+          url << "&q=#{CGI.escape query}"
         end
 
 
@@ -44,7 +44,7 @@ module Subscriptions
 
         ["state", "party"].each do |field|
           if subscription.data[field].present?
-            url << "&#{field}=#{URI.encode subscription.data[field]}"
+            url << "&#{field}=#{CGI.escape subscription.data[field]}"
           end
         end
 
