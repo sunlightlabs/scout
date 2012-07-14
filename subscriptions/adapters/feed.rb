@@ -42,7 +42,7 @@ module Subscriptions
       # go through each RSS item, exclude any invalid things
 
       def self.items_for(feed, function, options = {})
-        return nil unless feed
+        raise AdapterParseException.new("Passed items_for a nil response, can't process this") unless feed
 
         items = feed.entries.map do |entry|
           item_for entry
@@ -56,7 +56,7 @@ module Subscriptions
 
         data['published'] = entry.published
         data['url'] = entry.url
-
+        
         return nil unless data['published'] and data['url']
 
         # turn any HTML in the description into plain text
@@ -85,13 +85,15 @@ module Subscriptions
       def self.url_to_response(url)
         # first, verify the maximum size, so we don't choke
         xml = Feedzirra::Feed.fetch_raw url, :timeout => 5
-        return nil if xml.size > (1024 * 1024 * 1)
+        raise AdapterParseException.new("Feed is bigger than 1MB") if xml.size > (1024 * 1024 * 1)
 
         # re-fetch it to take advantage of Feedzirra's full pipeline 
         # (including proper logging of the final feed URL location)
         response = Feedzirra::Feed.fetch_and_parse url, :timeout => 5
 
-        response.is_a?(Fixnum) ? nil : response
+        raise AdapterParseException.new("Feed got invalid response code: #{response}") if response.is_a?(Fixnum)
+
+        response
       end
 
       # extract feed-level details

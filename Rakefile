@@ -261,10 +261,10 @@ namespace :test do
         puts "Searching for #{subscription.subscription_type} results for #{interest.in}..."
         items = subscription.search :per_page => max
         if items.nil? or items.empty?
-          puts "\tNo results, nothing to deliver."
+          puts "No results, nothing to deliver."
           next
         elsif items.is_a?(Hash)
-          puts "\tERROR searching:\n\n#{items.inspect}"
+          puts "ERROR searching:\n\n#{JSON.pretty_generate items}"
           next
         end
 

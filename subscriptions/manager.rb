@@ -142,7 +142,10 @@ module Subscriptions
           response = adapter.url_to_response url
         rescue Timeout::Error, Errno::ECONNREFUSED, Errno::ETIMEDOUT => ex
           return error_for "Timeout error polling feed", url, function, options, subscription, ex
+        rescue AdapterParseException => ex
+          return error_for "Error during initial processing of feed: #{ex.message}", url, function, options, subscription
         rescue Exception => ex
+          # don't allow caller to accumulate unexpected errors, email right away
           report = Report.exception self, "Exception processing URL #{url}", ex, :subscription_type => subscription.subscription_type, :function => function, :interest_in => subscription.interest_in, :subscription_id => subscription.id
           puts report.to_s
           return error_for "Unknown error polling feed", url, function, options, subscription, ex
@@ -157,7 +160,11 @@ module Subscriptions
         end
       end
       
-      items = adapter.items_for response, function, options
+      begin
+        items = adapter.items_for response, function, options
+      rescue AdapterParseException => ex
+        return error_for ex.message, url, function, options, subscription
+      end
 
       if items.is_a?(Array)
         items.map do |item| 
@@ -165,8 +172,6 @@ module Subscriptions
           item.search_url = url
           item
         end
-      elsif items.is_a?(String)
-        error_for items, url, function, options, subscription, ex
       else
         error_for "Unknown, items_for returned nil", url, function, options, subscription, ex
       end
@@ -214,5 +219,8 @@ module Subscriptions
     end
     
   end
+
+  # used by adapters to signal an error in parsing
+  class AdapterParseException < Exception; end
   
 end
