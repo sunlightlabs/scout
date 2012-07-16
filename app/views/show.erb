@@ -1,5 +1,4 @@
-<% content_for :sidebar_right do %>
-    
+<% content_for :sidebar_right do %>    
     <% if show_data? %>
         <div class="module developer json">
           <h4>The Data</h4>
@@ -115,6 +114,8 @@
 
     var container = $(".of2.module." + subscription_type);
     container.show();
+
+    container.find(".loading").show();
 
     $.get(url, {}, function(data) {
       container.find(".loading").hide();

@@ -182,9 +182,14 @@ module Helpers
     def short_date(time)
       time.strftime "%m-%d-%Y"
     end
+
+    def just_time(date)
+      hour = date.strftime("%I").gsub(/^0/, "")
+      "#{hour}#{date.strftime(":%M %p")}"
+    end
     
     def just_date(date)
-      date.strftime "%B #{date.day}, %Y"
+      date.strftime "%b #{date.day}, %Y"
     end
 
     def just_date_year(date)

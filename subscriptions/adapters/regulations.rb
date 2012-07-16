@@ -85,12 +85,6 @@ module Subscriptions
       def self.short_name(number, interest)
         "#{number > 1 ? "regulations" : "regulation"}"
       end
-
-      # def self.interest_name(interest)
-      #   stage = interest.data['stage']
-      #   number = interest.data['document_number']
-      #   "#{stage.capitalize} Rule #{number}"
-      # end
       
       # takes parsed response and returns an array where each item is 
       # a hash containing the id, title, and post date of each item found

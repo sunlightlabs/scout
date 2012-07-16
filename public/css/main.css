@@ -1187,10 +1187,27 @@ button.follow, button.following {
     margin-right: 33px;
 }
 
+.entry .summary {
+    padding: 25px 0 33px 0;
+}
+.entry .summary p {
+    margin-left: 10px;
+    margin-right: 33px;
+}
+
+.entry .summary.followable {
+    padding-top: 15px;
+    border-bottom: 1px dashed #9d9b9b;
+}
+
+
+/** item subscription modules **/
+
 .entry .details{
     padding: 33px 0 33px 10px;
     margin-bottom: 155px;
 }
+
 .entry .details .results table {
     float: left;
 }
@@ -1199,10 +1216,14 @@ button.follow, button.following {
     width: 100px;
 }
 .entry .details table p{
-    font-size: 100%;
+    font-size: 100%; padding: 5px 0;
 }
 .entry .details td{
     padding: 5px 0;
+}
+
+.entry .details time {
+    display: block; margin-top: 5px;
 }
 
 .entry .details .module{
@@ -1214,18 +1235,7 @@ button.follow, button.following {
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
 }
-.entry .summary{
-    padding: 25px 0 33px 0;
-}
-.entry .summary p{
-    margin-left: 10px;
-    margin-right: 33px;
-}
 
-.entry .summary.followable {
-    padding-top: 15px;
-    border-bottom: 1px dashed #9d9b9b;
-}
 .entry .details h4{
     font-weight: bold;
     font-size: 130%;
@@ -1233,6 +1243,8 @@ button.follow, button.following {
     margin-bottom: 5px;
     width: 550px;
 }
+
+
 .sidebar .module.explanation{
     background: none;
 }

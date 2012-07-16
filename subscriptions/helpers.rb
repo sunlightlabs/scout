@@ -360,5 +360,13 @@ module Helpers
       "#{type}#{vote['type'].capitalize}"
     end
 
+    def hearing_url(hearing)
+      if hearing['chamber'] == 'senate'
+        "http://www.senate.gov/pagelayout/committees/b_three_sections_with_teasers/committee_hearings.htm"
+      else
+        hearing['hearing_url']
+      end
+    end
+
   end
 end

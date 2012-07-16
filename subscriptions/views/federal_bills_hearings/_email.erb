@@ -1,0 +1,6 @@
+<% hearing = item.data %>
+Hearing: <%= hearing['committee']['name'] %>
+<%= just_date hearing['occurs_at'] %>, <%= just_time hearing['occurs_at'] %>
+
+
+<%= truncate hearing['description'], 500 %>
