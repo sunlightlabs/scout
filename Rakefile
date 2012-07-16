@@ -90,6 +90,7 @@ namespace :subscriptions do
   desc "Try to initialize any uninitialized subscriptions"
   task :reinitialize => :environment do
     errors = []
+    successes = []
     count = 0
 
     Subscription.uninitialized.each do |subscription|
@@ -97,7 +98,7 @@ namespace :subscriptions do
       if result.nil? or result.is_a?(Hash)
         errors << result
       else
-        count += 1
+        successes << subscription
       end
     end
 
@@ -108,8 +109,8 @@ namespace :subscriptions do
         )
     end
 
-    if count > 0
-      Admin.report Report.success "Initialize", "Successfully initialized #{count} previously uninitialized subscriptions."
+    if successes.size > 0
+      Admin.report Report.success "Initialize", "Successfully initialized #{successes.size} previously uninitialized subscriptions.", subscriptions: successes.map {|s| s.attributes.dup}
     else
       puts "Did not re-initialize any subscriptions."
     end
