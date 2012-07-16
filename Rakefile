@@ -89,8 +89,10 @@ namespace :subscriptions do
 
   # don't run this from the command line - modify for individual tasks
   task :generate => :environment do
-    item_type = ENV['item_type'] || "bill"
-    subscription_type = ENV['subscription_type'] || "federal_bills_hearings"
+    item_type = ENV['item_type']
+    subscription_type = ENV['subscription_type']
+
+    return unless item_type.present? and subscription_type.present?
 
     Interest.where(item_type: item_type).each do |interest|
       # force a new subscription to be returned even if the interest is a saved record
