@@ -271,7 +271,7 @@ namespace :test do
         end
 
         puts "Searching for #{subscription.subscription_type} results for #{interest.in}..."
-        items = subscription.search :per_page => max
+        items = Subscriptions::Manager.poll subscription, :check, per_page: max
         if items.nil? or items.empty?
           puts "No results, nothing to deliver."
           next
