@@ -278,12 +278,14 @@ class Interest
 
   # look up or generate a single subscription for this interest
   # assumes an interest can have at most one subscription of a particular type
-  def self.subscription_for(interest, subscription_type)
+  def self.subscription_for(interest, subscription_type, force = false)
     if !interest.new_record?
-      return interest.subscriptions.where(:subscription_type => subscription_type).first
+      unless force
+        return interest.subscriptions.where(:subscription_type => subscription_type).first
+      end
     end
 
-    subscription = interest.subscriptions.new :subscription_type => subscription_type
+    subscription = interest.subscriptions.find_or_initialize_by subscription_type: subscription_type
 
     # TODO: refactor these all away, make the subscription worth only its type
     subscription.interest_in = interest.in

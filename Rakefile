@@ -87,6 +87,17 @@ end
 
 namespace :subscriptions do
 
+  # don't run this from the command line - modify for individual tasks
+  task :generate => :environment do
+    item_type = ENV['item_type'] || "bill"
+    subscription_type = ENV['subscription_type'] || "federal_bills_hearings"
+
+    Interest.where(item_type: item_type).each do |interest|
+      # force a new subscription to be returned even if the interest is a saved record
+      Interest.subscription_for(interest, subscription_type, true).save!
+    end
+  end
+
   desc "Try to initialize any uninitialized subscriptions"
   task :reinitialize => :environment do
     errors = []
