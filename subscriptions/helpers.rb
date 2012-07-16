@@ -368,5 +368,24 @@ module Helpers
       end
     end
 
+    def vote_breakdown(vote)
+      numbers = []
+      total = vote['vote_breakdown']['total']
+      numbers << total['Yea']
+      numbers << total['Nay']
+      # numbers << total['Present'] if total['Present']
+      # numbers << total['Not Voting'] if total['Not Voting']
+      numbers.join " - "
+    end
+
+    def vote_url(vote)
+      if vote['chamber'] == "house"
+        "http://clerk.house.gov/evs/#{vote['year']}/roll#{vote['number']}.xml"
+      elsif vote['chamber'] == "senate"
+        subsession = {0 => 2, 1 => 1}[vote['year'].to_i % 2]
+        "http://www.senate.gov/legislative/LIS/roll_call_lists/roll_call_vote_cfm.cfm?congress=#{vote['session']}&session=#{subsession}&vote=#{zero_prefix_five vote['number']}"
+      end
+    end
+
   end
 end

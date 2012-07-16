@@ -12,6 +12,7 @@ item_adapters:
   federal_bills_activity: bill
   federal_bills_upcoming_floor: bill
   federal_bills_hearings: bill
+  federal_bills_votes: bill
   state_bills_votes: state_bill
   state_bills_activity: state_bill
 

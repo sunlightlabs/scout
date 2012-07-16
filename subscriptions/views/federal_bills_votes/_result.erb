@@ -1,0 +1,19 @@
+<% vote = item.data %>
+<td class="time">
+  <time datetime="<%= html_date vote['voted_at'] %>"><%= just_date vote['voted_at'] %></time>
+  <time datetime="<%= html_date vote['voted_at'] %>"><%= just_time vote['voted_at'] %></time>
+</td>
+<td>
+  <span>
+    <%= vote['roll_type'] %>
+  </span>
+  <h5>
+    <%= vote['result'] %>
+  </h5>
+  <span>
+    <%= vote_breakdown vote %>
+  </span>
+  <p>
+    <a href="<%= vote_url vote %>">Roll call no. <%= vote['number'] %></a>
+  </p>
+</td>

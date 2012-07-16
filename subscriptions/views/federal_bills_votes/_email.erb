@@ -1,0 +1,5 @@
+<% vote = item.data %>
+<%= just_time vote['voted_at'] %> - <%= vote['chamber'].capitalize %> Vote #<%= vote['number'] %>
+
+
+<%= vote['roll_type'] %>: <%= vote['result'] %>, <%= vote_breakdown vote %>

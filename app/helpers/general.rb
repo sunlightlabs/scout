@@ -184,8 +184,9 @@ module Helpers
     end
 
     def just_time(date)
-      hour = date.strftime("%I").gsub(/^0/, "")
-      "#{hour}#{date.strftime(":%M %p")}"
+      local = date.localtime
+      hour = local.strftime("%I").gsub(/^0/, "")
+      "#{hour}#{local.strftime(":%M %p")}"
     end
     
     def just_date(date)
@@ -202,6 +203,21 @@ module Helpers
     
     def zero_prefix(number)
       number.to_i < 10 ? "0#{number}" : number.to_s
+    end
+
+    def zero_prefix_five(number)
+      n = number.to_i
+      if n < 10
+        "0000#{number}"
+      elsif n < 100
+        "000#{number}"
+      elsif n < 1000
+        "00#{number}"
+      elsif n < 10000
+        "0#{number}"
+      else
+        number.to_s
+      end
     end
 
     def light_format(string)
