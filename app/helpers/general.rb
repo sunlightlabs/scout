@@ -175,22 +175,25 @@ module Helpers
       URI.decode(string.to_s).gsub "\"", "\\\""
     end
     
-    def long_date(time)
-      time.strftime "%B #{time.day}, %Y" # remove 0-prefix
+    def long_date(date)
+      local = date.in_time_zone
+      local.strftime "%B #{local.day}, %Y" # remove 0-prefix
     end
 
-    def short_date(time)
-      time.strftime "%m-%d-%Y"
+    def short_date(date)
+      local = date.in_time_zone
+      local.strftime "%m-%d-%Y"
     end
 
     def just_time(date)
-      local = date.localtime
+      local = date.in_time_zone
       hour = local.strftime("%I").gsub(/^0/, "")
       "#{hour}#{local.strftime(":%M %p")}"
     end
     
     def just_date(date)
-      date.strftime "%b #{date.day}, %Y"
+      local = date.in_time_zone
+      local.strftime "%b #{local.day}, %Y"
     end
 
     def just_date_year(date)
@@ -198,7 +201,8 @@ module Helpers
     end
     
     def very_short_date(time)
-      time.strftime "%m/%d"
+      local = time.in_time_zone
+      local.strftime "%m/%d"
     end
     
     def zero_prefix(number)
