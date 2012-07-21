@@ -25,9 +25,9 @@ module Subscriptions
         # may be nil or blank!
         query = subscription.data['query']
 
-        url = ""
+        url = "#{endpoint}"
         if query.present?
-          url << "#{endpoint}/search/bills.json?"
+          url << "/search/bills.json?"
           url << "&highlight=true"
           url << "&highlight_size=500"
           url << "&highlight_tags=,"
@@ -38,10 +38,12 @@ module Subscriptions
           end
 
         elsif subscription.data['citation_type'] == 'usc'
-          url << "#{endpoint}/bills.json?"
+          url << "/bills.json?"
           url << "&citation=#{subscription.data['citation_id']}"
           url << "&citation_details=true"
-        
+
+        else
+          return nil # choke!
         end
 
         url << "&order=last_version_on"

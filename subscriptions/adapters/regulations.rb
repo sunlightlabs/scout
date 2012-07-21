@@ -27,24 +27,38 @@ module Subscriptions
         end
         
         sections = %w{ stage title abstract document_number document_type rins docket_ids published_at effective_at federal_register_url agency_names agency_ids publication_date }
-        
-        per_page = (function == :search) ? (options[:per_page] || 20) : 40
 
-        url = "#{endpoint}/search/regulations.json?apikey=#{api_key}"
-        url << "&per_page=#{per_page}"
+        # may be nil or blank!
+        query = subscription.data['query']
+
+        url = "#{endpoint}"
+
+        if query.present?
+          url << "/search/regulations.json?"
+          url << "&highlight=true"
+          url << "&highlight_size=500"
+          url << "&highlight_tags=,"
+
+          if subscription.data['query_type'] != 'advanced'
+            url << "&query=#{query}"
+          else
+            url << "&q=#{query}"
+          end
+
+        elsif subscription.data['citation_type'] == 'usc'
+          url << "/regulations.json?"
+          url << "&citation=#{subscription.data['citation_id']}"
+          url << "&citation_details=true"
+
+        else
+          return nil # choke!
+        end
+
         url << "&order=published_at"
         url << "&sections=#{sections.join ','}"
-        url << "&highlight=true"
-        url << "&highlight_size=500"
-        url << "&highlight_tags=,"
-        # url << "&document_type=public_inspection" # debug
+        url << "&apikey=#{api_key}"
 
         # filters
-        if subscription.data['query_type'] != 'advanced'
-          url << "&query=#{query}"
-        else
-          url << "&q=#{query}"
-        end
 
         ["agency", "stage"].each do |field|
           if subscription.data[field].present?
@@ -53,9 +67,9 @@ module Subscriptions
         end
 
 
-        if options[:page]
-          url << "&page=#{options[:page]}"
-        end
+        url << "&page=#{options[:page]}" if options[:page]
+        per_page = (function == :search) ? (options[:per_page] || 20) : 40
+        url << "&per_page=#{per_page}"
 
         url
       end

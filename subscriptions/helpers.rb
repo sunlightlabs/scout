@@ -57,10 +57,15 @@ module Helpers
     end
 
     def regulation_highlight(item, keyword, highlight = true)
-      field = preferred_field item, regulation_priorities
-      return nil unless field
-      
-      excerpt item.data['search']['highlight'][field].first, keyword, highlight
+      if item.data['search'] and item.data['search']['highlight']
+        field = preferred_field item, regulation_priorities
+        return nil unless field
+        
+        excerpt item.data['search']['highlight'][field].first, keyword, highlight
+      elsif item.data['citations'] and item.data['citations'].any?
+        cite = item.data['citations'].first
+        excerpt cite['context'], cite['match'], highlight, ellipses: true
+      end
     end
 
     def regulation_title(regulation)

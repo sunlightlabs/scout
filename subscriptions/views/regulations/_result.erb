@@ -21,7 +21,7 @@
 </div>
 
 <p>
-  <% if regulation['search']['highlight'] and (highlight = regulation_highlight item, interest) %>
+  <% if highlight = regulation_highlight(item, interest) %>
     <%= highlight %>
   <% elsif regulation['abstract'].present? %>
     <%= truncate regulation['abstract'], 500 %>
