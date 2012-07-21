@@ -115,6 +115,15 @@ helpers do
   def search_interest_for(query, search_type)
     data = params[search_type] || {}
     data['query_type'] = query_type
+
+    if query_type == "simple"
+      if citation_id = Search.check_usc(query)
+        data['citation_type'] = 'usc'
+        data['citation_id'] = citation_id
+        data['query'] = nil # don't need to do full text search anymore
+      end
+    end
+
     Interest.for_search current_user, search_type, query, data
   end
 
@@ -148,4 +157,5 @@ helpers do
 
     query
   end
+
 end

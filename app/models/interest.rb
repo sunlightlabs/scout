@@ -208,7 +208,7 @@ class Interest
   def self.for_search(user, search_type, query, data = {})
     
     # ensure query is present in the data
-    data['query'] ||= query
+    data['query'] = query if !data.has_key?('query')
 
     # query_type defaults to simple (old/standard behavior)
     data['query_type'] ||= 'simple'
@@ -264,7 +264,11 @@ class Interest
     end
 
     subscription_types = if interest.search?
-      (interest.search_type == "all") ? search_types : [interest.search_type]
+      if interest.search_type == "all"
+        search_types_for interest
+      else
+        [interest.search_type]
+      end
     elsif interest.item?
       item_types[interest.item_type]['subscriptions'] || []
     elsif interest.feed?
@@ -295,6 +299,16 @@ class Interest
     subscription 
   end
 
+  # given a search interest, what other search types are appropriate for it
+  # (right now: is this a text search, or a citation search)
+  def self.search_types_for(interest)
+    # limit default "all" search for US Code searches to 
+    if interest.data['citation_type'] == 'usc'
+      ['federal_bills', 'regulations']
+    else
+      search_types
+    end
+  end
 
   # before create, wipe any subscriptions that have been initialized away,
   # regenerate them, and save them

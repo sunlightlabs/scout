@@ -21,10 +21,35 @@ class InterestTest < Test::Unit::TestCase
     assert_equal query, i1.in
     assert_equal query, i1.data['query']
     assert_equal 'simple', i1.data['query_type']
-    assert_equal ['query', 'query_type'], i1.data.keys
+    assert_equal ['query', 'query_type'].sort, i1.data.keys.sort
     assert_equal "search", i1.interest_type
     assert_equal "all", i1.search_type
     assert i1.save
+
+    # can override query and make it different than 'in'
+    i1a = Interest.for_search user, "all", query, {'query' => query2}
+    assert_equal "all", i1a.search_type
+    assert_equal query, i1a.in
+    assert_equal query2, i1a.data['query']
+    assert i1a.new_record?
+    assert i1a.save, i1a.errors.inspect
+
+    # override query with nil
+    i1b = Interest.for_search user, "all", query, {'query' => nil}
+    assert_equal "all", i1b.search_type
+    assert_equal query, i1b.in
+    assert_equal nil, i1b.data['query']
+    assert i1b.new_record?
+    assert i1b.save, i1b.errors.inspect
+
+    # but don't allow nil in's
+    i1c = Interest.for_search user, "all", nil, {'query' => query}
+    assert_equal "all", i1c.search_type
+    assert_equal nil, i1c.in
+    assert_equal query, i1c.data['query']
+    assert i1c.new_record?
+    assert !i1c.save
+    assert i1c.errors['in']
 
     i2 = Interest.for_search user, "federal_bills", query
     assert_equal "federal_bills", i2.search_type

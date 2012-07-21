@@ -22,26 +22,34 @@ module Subscriptions
         
         sections = %w{ bill_id bill_type number short_title summary last_version_on latest_upcoming official_title introduced_at last_action_at last_action session last_version }
 
-        url = "#{endpoint}/search/bills.json?apikey=#{api_key}"
+        # may be nil or blank!
+        query = subscription.data['query']
+
+        url = ""
+        if query.present?
+          url << "#{endpoint}/search/bills.json?"
+          url << "&highlight=true"
+          url << "&highlight_size=500"
+          url << "&highlight_tags=,"
+          if subscription.data['query_type'] != 'advanced'
+            url << "&query=#{CGI.escape query}"
+          else
+            url << "&q=#{CGI.escape query}"
+          end
+
+        elsif subscription.data['citation_type'] == 'usc'
+          url << "#{endpoint}/bills.json?"
+          url << "&citation=#{subscription.data['citation_id']}"
+          url << "&citation_details=true"
+        
+        end
+
         url << "&order=last_version_on"
         url << "&sections=#{sections.join ','}"
-        url << "&highlight=true"
-        url << "&highlight_size=500"
-        url << "&highlight_tags=,"
+        url << "&apikey=#{api_key}"
 
 
         # filters
-
-        query = subscription.interest_in
-
-        # total hack stopgap, I oughta be ashamed of myself
-        query = query.gsub /\s(usc)\s/i, " U.S.C. "
-
-        if subscription.data['query_type'] != 'advanced'
-          url << "&query=#{CGI.escape query}"
-        else
-          url << "&q=#{CGI.escape query}"
-        end
 
         if subscription.data["stage"].present?
           stage = subscription.data["stage"]

@@ -39,16 +39,21 @@ module Helpers
     end
 
     def bill_highlight(item, keyword, highlight = true)
-      field = preferred_field item, bill_priorities
-      return nil unless field
+      if item.data['search'] and item.data['search']['highlight']
+        field = preferred_field item, bill_priorities
+        return nil unless field
 
-      text = item.data['search']['highlight'][field].first
-      
-      if field == "keywords"
-        text = "Official keyword: \"#{text}\""
+        text = item.data['search']['highlight'][field].first
+        
+        if field == "keywords"
+          text = "Official keyword: \"#{text}\""
+        end
+
+        excerpt text, keyword, highlight
+      elsif item.data['citations'] and item.data['citations'].any?
+        cite = item.data['citations'].first
+        excerpt cite['context'], cite['match'], highlight, ellipses: true
       end
-
-      excerpt text, keyword, highlight
     end
 
     def regulation_highlight(item, keyword, highlight = true)
@@ -223,11 +228,11 @@ module Helpers
     end
 
     def excerpt_pattern(keyword)
-      /#{keyword.gsub('"', '').gsub(' ', '[\s\-]')}/i
+      /#{keyword.gsub('"', '').gsub(' ', '[\s\-]').gsub('(', '\(').gsub(')', '\)')}/i
     end
     
     # client-side truncation and highlighting
-    def excerpt(text, keyword, highlight = true)
+    def excerpt(text, keyword, highlight = true, options = {})
 
       text = text.strip
       word = keyword.size
@@ -252,12 +257,15 @@ module Helpers
       end
 
       truncated = text[range]
-      truncated = "..." + truncated if (range.begin > 0) || (text[0..0].upcase != text[0..0])
-      truncated = truncated + "..." if range.end < length
+      truncated = "..." + truncated if options[:ellipses] || (range.begin > 0) || (text[0..0].upcase != text[0..0])
+      truncated = truncated + "..." if options[:ellipses] || range.end < length
 
-      highlight_tags = highlight ? ["<em>", "</em>"] : ["", ""]
-      truncated.gsub(excerpt_pattern(keyword)) do |word|
-        "#{highlight_tags[0]}#{word}#{highlight_tags[1]}"
+      if highlight
+        truncated.gsub(excerpt_pattern(keyword)) do |word|
+          "<em>#{word}</em>"
+        end
+      else
+        truncated
       end
     end
 

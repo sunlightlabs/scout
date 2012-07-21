@@ -101,7 +101,7 @@ module Helpers
     def search_interest_path(interest)
       if interest.search_type == "all"
         base = "/search/all"
-        base << "/#{URI.encode interest.data['query']}" if interest.data['query']
+        base << "/#{URI.encode interest.in}" if interest.in
         base
       else
         subscription_path interest.subscriptions.first
@@ -113,7 +113,7 @@ module Helpers
     def subscription_path(subscription)
       base = "/search/#{subscription.subscription_type}"
       
-      base << "/#{URI.encode subscription.data['query']}"
+      base << "/#{URI.encode subscription.interest_in}"
 
       base << "/advanced" if subscription.data['query_type'] == 'advanced'
       

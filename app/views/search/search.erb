@@ -11,7 +11,7 @@
             Everything
           </a>
         </li>
-	      <% search_types.each do |subscription_type| %>
+	      <% Interest.search_types_for(interest).each do |subscription_type| %>
 	        <li 
             class="<%= subscription_type %> <%= subscription_type == interest.search_type ? "current" : "" %>"
             data-subscription_type="<%= subscription_type %>"
@@ -152,6 +152,8 @@
         </div>
 
         <% unless subscription %>
+          <% p s.attributes %>
+          <% p interest.attributes %>
           <a href="<%= subscription_path s %>" class="viewMore" data-pjax="#center">
             View more <span><%= s.search_name %></span>
           </a>
