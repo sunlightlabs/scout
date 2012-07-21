@@ -134,3 +134,14 @@ def item_types
     @item_types
   end
 end
+
+
+# not used right now, but effort to keep a log of what data fields are 'special'
+# and shouldn't be used for filters
+def forbidden_filters
+  %w{ 
+    query query_type
+    citation_type citation_id citation 
+    url title description site_url original_url original_title original_description
+  }
+end
