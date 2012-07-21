@@ -57,9 +57,11 @@ task :create_indexes => :environment do
 
     raise Exception.new("What? No models") if models.empty?
 
-    models.each do |model| 
-      model.create_indexes 
-      puts "Created indexes for #{model}"
+    models.each do |model|
+      if model.respond_to?(:create_indexes) 
+        model.create_indexes
+        puts "Created indexes for #{model}"
+      end
     end
     
   rescue Exception => ex
