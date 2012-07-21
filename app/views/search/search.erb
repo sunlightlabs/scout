@@ -84,8 +84,9 @@
 <div class="results contentArea right <%= interest.search_type == "all" ? "" : "single" %>">
 	<div class="pageTitle">
     <div class="searchParameters">
-      <h2 class="<%= query_size query %>">
-        <%= h query %>
+      <% name = interest_name interest %>
+      <h2 class="<%= query_size name %>">
+        <%= h name %>
       </h2>
       in 
       <% if interest.search_type == "all" %>

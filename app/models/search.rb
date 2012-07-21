@@ -15,7 +15,7 @@ class Search
   # Checks the string to see if it *is* (not contains) a US Code citation.
   # If yes, returns the citation ID.
   # If not, returns nil.
-  def self.check_usc(string)
+  def self.usc_check(string)
     string = string.strip # for good measure
     section = subsections = title = nil
 
@@ -32,6 +32,13 @@ class Search
     end
 
     [title, "usc", section, subsections].flatten.join "_"
+  end
+
+  def self.usc_standard(citation_id)
+    title, usc, section, *subsections = citation_id.split "_"
+    base = "#{title} USC § #{section}"
+    base << "(#{subsections.join(")(")})" if subsections.any?
+    base
   end
 
 end

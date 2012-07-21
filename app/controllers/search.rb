@@ -117,7 +117,7 @@ helpers do
     data['query_type'] = query_type
 
     if query_type == "simple"
-      if citation_id = Search.check_usc(query)
+      if citation_id = Search.usc_check(query)
         data['citation_type'] = 'usc'
         data['citation_id'] = citation_id
         data['query'] = nil # don't need to do full text search anymore
