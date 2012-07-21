@@ -1103,8 +1103,10 @@ button.follow, button.following {
 
 .followChanges .trackSubscribe{
     float: left;
-    margin-top: 16px;
+    margin-top: 8px;
     font-style: italic;
+    width: 500px;
+    line-height: 20px;
 }
 
 .entry .summary, .entry .details {
