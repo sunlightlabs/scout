@@ -57,9 +57,11 @@ task :create_indexes => :environment do
 
     raise Exception.new("What? No models") if models.empty?
 
-    models.each do |model| 
-      model.create_indexes 
-      puts "Created indexes for #{model}"
+    models.each do |model|
+      if model.respond_to?(:create_indexes) 
+        model.create_indexes
+        puts "Created indexes for #{model}"
+      end
     end
     
   rescue Exception => ex
@@ -238,6 +240,7 @@ namespace :test do
     max = (ENV['max'] || ENV['limit'] || 2).to_i
     only = (ENV['only'] || "").split(",")
     interest_in = (ENV['interest_in'] || "").split(",")
+    citation = ENV['citation']
 
     mechanism = ENV['by'] || (phone.present? ? 'sms' : 'email')
     email_frequency = ENV['frequency'] || 'immediate'
@@ -268,6 +271,10 @@ namespace :test do
           next unless only.include?(subscription.subscription_type)
         end
 
+        if citation
+          next unless subscription.data['citation_id'] == citation
+        end
+        
         if interest_in.any?
           next unless interest_in.include?(subscription.interest_in)
         end

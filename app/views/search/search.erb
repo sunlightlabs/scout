@@ -11,10 +11,12 @@
             Everything
           </a>
         </li>
+
 	      <% search_types.each do |subscription_type| %>
 	        <li 
             class="<%= subscription_type %> <%= subscription_type == interest.search_type ? "current" : "" %>"
             data-subscription_type="<%= subscription_type %>"
+            style="display: none"
             >
 	          <a data-pjax="#center" href="#">
 	            <%= Subscription.adapter_for(subscription_type).search_name nil %>
@@ -82,10 +84,16 @@
 <% end %>
 
 <div class="results contentArea right <%= interest.search_type == "all" ? "" : "single" %>">
+  <% if interest.data['citation_type'] == 'usc' %>
+    <div class="searchHeader">
+      We've detected that you're searching for a reference to the <strong>US Code</strong>.
+    </div>
+  <% end %>
 	<div class="pageTitle">
     <div class="searchParameters">
-      <h2 class="<%= query_size query %>">
-        <%= h query %>
+      <% name = interest_name interest %>
+      <h2 class="<%= query_size name %>">
+        <%= h name %>
       </h2>
       in 
       <% if interest.search_type == "all" %>
@@ -118,11 +126,13 @@
     <div class="clear"></div>
 	</div>
 
-	<span class="resultsIntro">
-		<p>
-      Create an alert to receive notifications of more results like these.
-    </p>
-	</span>
+	<% if interest.new_record? %>
+    <span class="resultsIntro">
+      <p>
+        Create an alert to receive notifications of more results like these.
+      </p>
+    </span>
+  <% end %>
 
   
   <% subscriptions.each do |s| %>
@@ -152,6 +162,8 @@
         </div>
 
         <% unless subscription %>
+          <% p s.attributes %>
+          <% p interest.attributes %>
           <a href="<%= subscription_path s %>" class="viewMore" data-pjax="#center">
             View more <span><%= s.search_name %></span>
           </a>
@@ -170,8 +182,9 @@
 <% if logged_in? and related_interests and related_interests.any? %>
   <div class="template subscriptions related">
     <%= partial "search/related_interests", :engine => :erb, :locals => {
-      :related_interests => related_interests, :current_interest => interest,
-      :query => query
+      related_interests: related_interests, 
+      current_interest: interest,
+      interest_in: interest.in
     } %>
   </div>
 <% end %>
@@ -246,6 +259,13 @@
 
       $(elem).attr("href", url);
     });
+
+    // hide category types not appropriate for this kind of search
+    $("ul.categories li").hide();
+    $("ul.categories li.all").show();
+    <% Interest.search_types_for(interest.data['citation_type']).each do |subscription_type| %>
+      $("ul.categories li[data-subscription_type='<%= subscription_type %>']").show()
+    <% end %>
     
     // follow button
     $("button.follow, button.following").hide();

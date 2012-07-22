@@ -14,7 +14,7 @@ get '/search/:subscription_type/:query/?:query_type?' do
     :subscriptions => subscriptions,
     :subscription => (subscriptions.size == 1 ? subscriptions.first : nil),
 
-    :related_interests => related_interests(query),
+    :related_interests => related_interests(interest.in),
     :query => query
   }
 end
@@ -68,19 +68,19 @@ post '/interests/search' do
   
   if interest.save
     interest_pane = partial "search/related_interests", :engine => :erb, :locals => {
-      :related_interests => related_interests(query), 
-      :current_interest => interest,
-      :query => query
+      related_interests: related_interests(interest.in), 
+      current_interest: interest,
+      interest_in: interest.in
     }
 
     json 200, {
-      :interest_pane => interest_pane
+      interest_pane: interest_pane
     }
   else
     json 500, {
-      :errors => {
-        :interest => interest.errors.full_messages,
-        :subscription => subscriptions.first.errors.full_messages
+      errors: {
+        interest: interest.errors.full_messages,
+        subscription: subscriptions.first.errors.full_messages
       }
     }
   end
@@ -98,13 +98,13 @@ delete '/interests/search' do
   interest.destroy
 
   interest_pane = partial "search/related_interests", :engine => :erb, :locals => {
-    :related_interests => related_interests(query), 
-    :current_interest => nil,
-    :query => query
+    related_interests: related_interests(interest.in), 
+    current_interest: nil,
+    interest_in: interest.in
   }
 
   json 200, {
-    :interest_pane => interest_pane
+    interest_pane: interest_pane
   }
 end
 
@@ -113,15 +113,44 @@ end
 helpers do
 
   def search_interest_for(query, search_type)
-    data = params[search_type] || {}
+    data = {}
     data['query_type'] = query_type
-    Interest.for_search current_user, search_type, query, data
+
+    # default query field to original query, may change in post-processing
+    data['query'] = query
+
+    # default interest's 'in' field to original query, before post-processing.
+    # returned interest may have a different 'in' field, 
+    # if the normalized interest already existed under a different original search
+    interest_in = query
+    original_in = query
+
+
+    if query_type == "simple"
+      if citation_id = Search.usc_check(query)
+        data['citation_type'] = 'usc'
+        data['citation_id'] = citation_id
+        data['query'] = nil # don't need to do full text search anymore
+        interest_in = Search.usc_standard citation_id
+
+        # if this is coming in as an invalid search_type 
+        # for this kind of citation, switch it to 'all'
+        if !Interest.search_types_for(data['citation_type']).include?(search_type)
+          search_type = "all"
+        end
+      end
+    end
+
+    # merge in filters
+    data.merge!(params[search_type] || {})
+
+    Interest.for_search current_user, search_type, interest_in, original_in, data
   end
 
-  def related_interests(query)
+  def related_interests(interest_in)
     if logged_in?
       current_user.interests.where(
-        :in => query, 
+        :in => interest_in, 
         :interest_type => "search",
         "data.query_type" => query_type
       )
@@ -148,4 +177,5 @@ helpers do
 
     query
   end
+
 end

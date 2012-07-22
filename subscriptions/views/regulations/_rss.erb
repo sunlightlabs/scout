@@ -16,8 +16,10 @@
   </p>
 
   <p>
-    <% if regulation['search']['highlight'] %>
-      <%= regulation_highlight item, item.interest_in %>
+    <% if (highlight = regulation_highlight(item, item.interest_in)) %>
+      <% p highlight if regulation['document_number'] == "2012-16967" %>
+      <% highlight = highlight.gsub("\f", "") %>
+      <%= highlight %>
     <% elsif regulation['abstract'].present? %>
       <%= regulation['abstract'] %>
     <% else %>

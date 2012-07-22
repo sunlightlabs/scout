@@ -15,7 +15,7 @@
 </div>
 
 <p>
-  <% if item.data['search']['highlight'] and (highlight = bill_highlight item, interest) %>
+  <% if highlight = bill_highlight(item, interest) %>
     <%= highlight %>
   <% elsif bill['summary'] %>
     <%= truncate bill['summary'], 500 %>
