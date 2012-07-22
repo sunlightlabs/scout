@@ -24,7 +24,7 @@ module Subscriptions
           endpoint = "http://api.realtimecongress.org/api/v1"
         end
         
-        sections = %w{ stage title abstract document_number document_type rins docket_ids published_at effective_at federal_register_url agency_names agency_ids publication_date }
+        sections = %w{ stage title abstract document_number document_type published_at federal_register_url agency_names agency_ids publication_date }
 
         # may be nil or blank!
         query = subscription.data['query']
@@ -81,7 +81,7 @@ module Subscriptions
           endpoint = "http://api.realtimecongress.org/api/v1"
         end
         
-        sections = %w{ stage title abstract document_number document_type rins docket_ids published_at effective_at federal_register_url agency_names agency_ids pdf_url publication_date }
+        sections = %w{ stage title abstract document_number document_type published_at federal_register_url agency_names agency_ids pdf_url publication_date }
 
         url = "#{endpoint}/regulations.json?apikey=#{api_key}"
         url << "&document_number=#{item_id}"
