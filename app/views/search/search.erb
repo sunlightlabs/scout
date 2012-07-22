@@ -84,56 +84,57 @@
 <% end %>
 
 <div class="results contentArea right <%= interest.search_type == "all" ? "" : "single" %>">
-  <% if interest.data['citation_type'] == 'usc' %>
-    <div class="searchHeader">
-      We've detected that you're searching for a reference to the <strong>US Code</strong>.
-    </div>
-  <% end %>
-	<div class="pageTitle">
-    <div class="searchParameters">
-      <% name = interest_name interest %>
-      <h2 class="<%= query_size name %>">
-        <%= h name %>
-      </h2>
-      in 
-      <% if interest.search_type == "all" %>
-        <span class="category">
-          Everything
-        </span>
-      <% else %>
-        <span class="category">
-          <%= subscription.search_name %>
-        </span> 
-      
-        <% if subscription.filters.any? %>
-			    <div class="filters">
-            <%= subscription.filters.map do |field, value|
-              "<span>#{subscription.filter_name field, value}</span>"
-            end.join(", ") %>
-          </div>
+  <div class="resultsHeader">
+    <% if interest.data['citation_type'] == 'usc' %>
+      <div class="searchHeader">
+        We've detected that you're searching for a reference to the <strong>US Code</strong>.
+      </div>
+    <% end %>
+  	<div class="pageTitle">
+      <div class="searchParameters">
+        <% name = interest_name interest %>
+        <h2 class="<%= query_size name %>">
+          <%= h name %>
+        </h2>
+        in 
+        <% if interest.search_type == "all" %>
+          <span class="category">
+            Everything
+          </span>
+        <% else %>
+          <span class="category">
+            <%= subscription.search_name %>
+          </span> 
+        
+          <% if subscription.filters.any? %>
+  			    <div class="filters">
+              <%= subscription.filters.map do |field, value|
+                "<span>#{subscription.filter_name field, value}</span>"
+              end.join(", ") %>
+            </div>
+          <% end %>
         <% end %>
-      <% end %>
-    </div>
+      </div>
 
-    <button class="follow search">
-      <span>Create Alert</span>
-    </button>
+      <button class="follow search">
+        <span>Create Alert</span>
+      </button>
 
-    <button class="following search">
-      <span>Remove Alert</span>
-    </button>
+      <button class="following search">
+        <span>Remove Alert</span>
+      </button>
 
-    <div class="clear"></div>
-	</div>
+      <div class="clear"></div>
+  	</div>
 
-	<% if interest.new_record? %>
-    <span class="resultsIntro">
-      <p>
-        Create an alert to receive notifications of more results like these.
-      </p>
-    </span>
-  <% end %>
-
+  	<% if interest.new_record? %>
+      <span class="resultsIntro">
+        <p>
+          Create an alert to receive notifications of more results like these.
+        </p>
+      </span>
+    <% end %>
+  </div>
   
   <% subscriptions.each do |s| %>
     <div class="search" id="<%= s.subscription_type %>" data-subscription="<%= s.subscription_type %>">

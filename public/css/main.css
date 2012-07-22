@@ -802,10 +802,12 @@ footer nav li{
     display: block;
     color: #83858b;
     font-style: italic;
-    margin-bottom: 54px;
-    
 }
-.results.single .resultsIntro {
+
+.results .resultsHeader {
+    margin-bottom: 54px; 
+}
+.results.single .resultsHeader {
     margin-bottom: 0;
 }
 
