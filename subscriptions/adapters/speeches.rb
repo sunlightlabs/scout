@@ -20,7 +20,9 @@ module Subscriptions
       def self.url_for(subscription, function, options = {})
         api_key = options[:api_key] || config[:subscriptions][:sunlight_api_key]
         
-        query = subscription.interest_in
+        query = subscription.data['query']
+        
+        return nil unless query.present? # choke!
         
         endpoint = "http://capitolwords.org/api"
         

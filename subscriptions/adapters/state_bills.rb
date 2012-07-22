@@ -22,12 +22,13 @@ module Subscriptions
         
         url << "&fields=#{fields.join ','}"
         url << "&search_window=all"
+
+
+        query = subscription.data['query']
         
+        return nil unless query.present? # choke!
 
-        # query
-
-        query = subscription.interest_in
-
+        
         # in simple mode, the query is auto-quoted (and any user-supplied quotes 
         # have been stripped off in the controller before being sent here).
 
