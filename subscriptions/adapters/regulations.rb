@@ -18,8 +18,6 @@ module Subscriptions
       def self.url_for(subscription, function, options = {})
         api_key = options[:api_key] || config[:subscriptions][:sunlight_api_key]
         
-        query = CGI.escape subscription.interest_in
-        
         if config[:subscriptions][:rtc_endpoint].present?
           endpoint = config[:subscriptions][:rtc_endpoint]
         else
@@ -40,9 +38,9 @@ module Subscriptions
           url << "&highlight_tags=,"
 
           if subscription.data['query_type'] != 'advanced'
-            url << "&query=#{query}"
+            url << "&query=#{CGI.escape query}"
           else
-            url << "&q=#{query}"
+            url << "&q=#{CGI.escape query}"
           end
 
         elsif subscription.data['citation_type'] == 'usc'
