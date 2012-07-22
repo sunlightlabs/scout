@@ -173,8 +173,9 @@
 <% if logged_in? and related_interests and related_interests.any? %>
   <div class="template subscriptions related">
     <%= partial "search/related_interests", :engine => :erb, :locals => {
-      :related_interests => related_interests, :current_interest => interest,
-      :query => query
+      related_interests: related_interests, 
+      current_interest: interest,
+      interest_in: interest.in
     } %>
   </div>
 <% end %>

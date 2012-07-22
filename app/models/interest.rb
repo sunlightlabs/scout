@@ -7,7 +7,7 @@ class Interest
   has_many :seen_items, dependent: :destroy
   has_many :deliveries, dependent: :destroy
 
-  # a search string or item ID
+  # a search string, item ID, or other normalized ID
   field :in
 
   # 'search', or 'item'
@@ -33,6 +33,10 @@ class Interest
   field :notifications
   validates_inclusion_of :notifications, :in => ["none", "email_daily", "email_immediate", "sms"], :allow_blank => true
   
+
+  # logged by search interests, the original query, pre-post-processing
+  field :original_in
+
   index :in
   index :user_id
   index :interest_type
@@ -166,16 +170,22 @@ class Interest
 
 
   # does the user have an interest with this criteria, and this data hash?
-  def self.for(user, criteria, data = nil)
+  # optional: a 'populate' hash for attributes to be set on new records,
+  #           but which should not be used to constrain lookup of existing records
+  def self.for(user, criteria, data = nil, populate = nil)
 
     # if no data given, then we don't care whether the data differs,
     # and we can do a much simpler lookup
     if data.nil?
-      if user
-        return user.interests.find_or_initialize_by criteria
+      interest = if user
+        user.interests.find_or_initialize_by criteria
       else
-        return Interest.new criteria
+        Interest.new criteria
       end
+      
+      interest.attributes = populate
+
+      return interest
     end
 
     find_criteria = criteria.dup
@@ -183,7 +193,7 @@ class Interest
     criteria['data'] = data
     data.each {|key, value| find_criteria["data.#{key}"] = value}
 
-    if user
+    interest = if user
       # we use dot notation for the criteria instead of passing in a hash, because
       # apparently hash key order is important in matching on the subdocument, 
       # which is ridiculous.
@@ -201,25 +211,33 @@ class Interest
     else
       Interest.new criteria
     end
+
+    interest.attributes = populate if interest.new_record?
+
+    interest
   end
 
   # does the user have a search interest for this query, of this 
   # search type ("all" or an individual type), and this set of filters?
-  def self.for_search(user, search_type, query, data = {})
+  def self.for_search(user, search_type, interest_in, original_in, data = {})
     
-    # ensure query is present in the data
-    data['query'] = query if !data.has_key?('query')
-
-    # query_type defaults to simple (old/standard behavior)
-    data['query_type'] ||= 'simple'
+    # choke unless original_in, interest_in, query, query_type are all present
+    return nil unless original_in.present? and interest_in.present? and data.has_key?('query') and data.has_key?('query_type')
 
     criteria = {
-      'in' => query,
       'interest_type' => 'search',
       'search_type' => search_type,
     }
+
+    # don't use 'in' or 'original_in' to determine uniqueness.
+    # some queries can be normalized to be the same thing (e.g. citations) - for them,
+    # 'in' is a displayable form, and 'original_in' is the original search query
+    populate = {
+      'in' => interest_in,
+      'original_in' => original_in
+    }
     
-    self.for user, criteria, data
+    self.for user, criteria, data, populate
   end
 
   # if this is used to make a new item, the caller will have to 
