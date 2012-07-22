@@ -11,10 +11,12 @@
             Everything
           </a>
         </li>
-	      <% Interest.search_types_for(interest).each do |subscription_type| %>
+
+	      <% search_types.each do |subscription_type| %>
 	        <li 
             class="<%= subscription_type %> <%= subscription_type == interest.search_type ? "current" : "" %>"
             data-subscription_type="<%= subscription_type %>"
+            style="display: none"
             >
 	          <a data-pjax="#center" href="#">
 	            <%= Subscription.adapter_for(subscription_type).search_name nil %>
@@ -257,6 +259,13 @@
 
       $(elem).attr("href", url);
     });
+
+    // hide category types not appropriate for this kind of search
+    $("ul.categories li").hide();
+    $("ul.categories li.all").show();
+    <% Interest.search_types_for(interest.data['citation_type']).each do |subscription_type| %>
+      $("ul.categories li[data-subscription_type='<%= subscription_type %>']").show()
+    <% end %>
     
     // follow button
     $("button.follow, button.following").hide();

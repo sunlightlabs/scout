@@ -283,7 +283,11 @@ class Interest
 
     subscription_types = if interest.search?
       if interest.search_type == "all"
-        search_types_for interest
+        if interest.data['citation_type']
+          search_types_for interest.data['citation_type']
+        else
+          search_types
+        end
       else
         [interest.search_type]
       end
@@ -319,9 +323,9 @@ class Interest
 
   # given a search interest, what other search types are appropriate for it
   # (right now: is this a text search, or a citation search)
-  def self.search_types_for(interest)
+  def self.search_types_for(citation_type)
     # limit default "all" search for US Code searches to 
-    if interest.data['citation_type'] == 'usc'
+    if citation_type == 'usc'
       ['federal_bills', 'regulations']
     else
       search_types

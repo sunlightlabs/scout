@@ -113,7 +113,7 @@ end
 helpers do
 
   def search_interest_for(query, search_type)
-    data = params[search_type] || {}
+    data = {}
     data['query_type'] = query_type
 
     # default query field to original query, may change in post-processing
@@ -132,8 +132,17 @@ helpers do
         data['citation_id'] = citation_id
         data['query'] = nil # don't need to do full text search anymore
         interest_in = Search.usc_standard citation_id
+
+        # if this is coming in as an invalid search_type 
+        # for this kind of citation, switch it to 'all'
+        if !Interest.search_types_for(data['citation_type']).include?(search_type)
+          search_type = "all"
+        end
       end
     end
+
+    # merge in filters
+    data.merge!(params[search_type] || {})
 
     Interest.for_search current_user, search_type, interest_in, original_in, data
   end
