@@ -265,6 +265,9 @@ module Helpers
       truncated = "..." + truncated if options[:ellipses] || (range.begin > 0) || (text[0..0].upcase != text[0..0])
       truncated = truncated + "..." if options[:ellipses] || range.end < length
 
+      # I have seen these, and do not know why
+      truncated = truncated.gsub "\f", ""
+
       if highlight
         truncated.gsub(excerpt_pattern(keyword)) do |word|
           "<em>#{word}</em>"
