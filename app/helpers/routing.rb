@@ -26,13 +26,7 @@ module Helpers
       elsif interest.feed?
         interest.data['title']
       elsif interest.search?
-        if interest.data['citation_type'] == 'usc'
-          Search.usc_standard interest.data['citation_id']
-        elsif interest.data['query']
-          interest.data['query']
-        else
-          interest.in
-        end
+        interest.in
       elsif interest.tag?
         if (name = user_name(interest.tag_user)).present?
           "#{name} &mdash; #{interest.tag.name.capitalize}"

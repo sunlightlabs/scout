@@ -82,6 +82,11 @@
 <% end %>
 
 <div class="results contentArea right <%= interest.search_type == "all" ? "" : "single" %>">
+  <% if interest.data['citation_type'] == 'usc' %>
+    <div class="searchHeader">
+      We've detected that you're searching for a reference to the <strong>US Code</strong>.
+    </div>
+  <% end %>
 	<div class="pageTitle">
     <div class="searchParameters">
       <% name = interest_name interest %>
@@ -119,11 +124,13 @@
     <div class="clear"></div>
 	</div>
 
-	<span class="resultsIntro">
-		<p>
-      Create an alert to receive notifications of more results like these.
-    </p>
-	</span>
+	<% if interest.new_record? %>
+    <span class="resultsIntro">
+      <p>
+        Create an alert to receive notifications of more results like these.
+      </p>
+    </span>
+  <% end %>
 
   
   <% subscriptions.each do |s| %>
