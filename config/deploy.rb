@@ -7,7 +7,7 @@ if environment == 'production'
 else
   set :user, 'alarms'
   set :domain, 'ec2-50-16-84-118.compute-1.amazonaws.com'
-  set :branch, 'master'
+  set :branch, 'sharing'
 end
 
 
