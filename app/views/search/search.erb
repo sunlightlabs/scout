@@ -53,7 +53,7 @@
   	</div>
 
     <div class="module sharing">
-      <%= partial "partials/share", :engine => :erb %>
+      
     </div>
 
     <% if show_data? %>
@@ -127,14 +127,17 @@
       <div class="clear"></div>
   	</div>
 
-  	<% if interest.new_record? %>
-      <span class="resultsIntro">
+    <% if interest.new_record? %>
+      <div class="resultsIntro">
         <p>
           Create an alert to receive notifications of more results like these.
         </p>
-      </span>
+        <%= partial "partials/share", engine: :erb, locals: {interest: interest} %>
+      </div>
     <% end %>
   </div>
+
+  <div class="ckear">
   
   <% subscriptions.each do |s| %>
     <div class="search" id="<%= s.subscription_type %>" data-subscription="<%= s.subscription_type %>">

@@ -1,13 +1,37 @@
-<span class="share">
-  <a href="https://twitter.com/share" class="twitter-share-button" 
-    data-via="sunfoundation" 
-    data-dnt="true"
-    data-count="none"
-    >
-    <!-- no text -->
-  </a>
 
-  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-
-  <div class="fb-like" data-send="false" data-layout="button_count" data-width="90" data-show-faces="false"></div>
-</span>
+<div id="share-buttons"></div>
+<script src="http://cdn.gigya.com/js/socialize.js?apiKey=3_BLRB_2LlQJZDUW1wb9_ZOps-sOnnzA_e6xxNSwJBBGoB-SavmPAKHkaVVZPE5Kx8"></script>
+<script>
+  $(document).ready(function() {
+      var ua = new gigya.socialize.UserAction();
+      
+      /*
+       * Set these values as you would with Open Graph tags on the page.
+       * Delete what you don't need.
+       */
+      // ua.setLinkBack("http://sunlightfoundation.com/blog/2012/07/09/2day-in-opengov-792012/");
+      ua.setTitle("Scout - &quot;<%= escape_javascript(interest_name(interest).gsub("\"", "&quot;")) %>&quot;");
+      ua.setDescription("Search and notifications on what Congress, the White House, and your state legislature are doing.");
+      ua.addMediaItem({
+          type: 'image',
+          href: '<%= escape_javascript request.url %>',
+          src: 'https://scout.sunlightfoundation.com/images/logo_scout.png'
+      });
+      
+      /*
+       * parameter docs at:
+       * http://developers.gigya.com/020_Client_API/020_Methods/socialize.showShareBarUI
+       */
+      var params = {
+          containerID: 'share-buttons',
+          iconsOnly: true,
+          layout: 'horizontal',
+          noButtonBorders: true,
+          shareButtons: 'twitter-tweet,facebook',
+          shortURLs: 'never',
+          showCounts: 'none',
+          userAction: ua
+      };
+      gigya.socialize.showShareBarUI(params);
+  });
+</script>

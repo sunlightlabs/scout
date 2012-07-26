@@ -814,6 +814,9 @@ footer nav li{
 
 /** social media buttons **/
 
+.resultsIntro {position: relative; height: 30px;}
+.resultsIntro p {position: absolute; left: 30px;}
+.resultsIntro div#share-buttons {position: absolute; right: 20px;}
 
 .module.sharing iframe {
     float: left; margin-right: 10px;
