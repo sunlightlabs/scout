@@ -10,7 +10,9 @@
        * Delete what you don't need.
        */
       // ua.setLinkBack("http://sunlightfoundation.com/blog/2012/07/09/2day-in-opengov-792012/");
-      ua.setTitle("Scout - &quot;<%= escape_javascript(interest_name(interest).gsub("\"", "&quot;")) %>&quot;");
+      var title = "Scout - &quot;<%= escape_javascript(interest_name(interest).gsub("\"", "&quot;")) %>&quot;"
+      ua.setTitle(title);
+      ua.setUserMessage(title);
       ua.setDescription("Search and notifications on what Congress, the White House, and your state legislature are doing.");
       ua.addMediaItem({
           type: 'image',
