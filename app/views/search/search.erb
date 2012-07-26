@@ -52,10 +52,6 @@
 
   	</div>
 
-    <div class="module sharing">
-      
-    </div>
-
     <% if show_data? %>
       <div class="module developer search json">
     		<h4>The Data</h4>
@@ -137,7 +133,7 @@
     <% end %>
   </div>
 
-  <div class="ckear">
+  <div class="clear"></div>
   
   <% subscriptions.each do |s| %>
     <div class="search" id="<%= s.subscription_type %>" data-subscription="<%= s.subscription_type %>">
