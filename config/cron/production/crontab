@@ -22,7 +22,7 @@
 0 8,14 * * *  /projects/scout/current/config/cron/production/check.sh federal_bills
 
 # bills in the states - once an hour, Open States scrapers running throughout the day, but no need to be real time
-0 * * * *     /projects/scout/current/config/cron/production/check.sh state_bills
+0 11,15 * * *     /projects/scout/current/config/cron/production/check.sh state_bills
 
 # speeches in Congress - daily, bounded by GPO
 0 8,14 * * *  /projects/scout/current/config/cron/production/check.sh speeches
