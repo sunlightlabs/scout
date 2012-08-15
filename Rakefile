@@ -143,6 +143,7 @@ namespace :subscriptions do
             if subscription.user.confirmed?
               
               result = Subscriptions::Manager.check!(subscription)
+              sleep 0.1 # rate limit just a little bit!
 
               if result.nil? or result.is_a?(Hash)
                 errors << result
