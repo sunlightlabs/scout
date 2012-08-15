@@ -127,8 +127,10 @@ module Subscriptions
       def self.item_for(bill)
         # manually parse all of the dates - so lame, not sure why HTTParty is so bad at the format OpenStates uses
 
-        # updated_at is UTC, take it directly as such
-        bill['updated_at'] = bill['updated_at'] ? bill['updated_at'].to_time : nil
+        # created_at and updated_at are UTC, take them directly as such
+        ['updated_at', 'created_at'].each do |field|
+          bill[field] = bill[field] ? bill[field].to_time : nil
+        end
 
         if bill['actions']
           bill['actions'].each do |action|
