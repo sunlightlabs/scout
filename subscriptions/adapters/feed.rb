@@ -61,7 +61,9 @@ module Subscriptions
 
         # turn any HTML in the description into plain text
         content = entry.content.present? ? entry.content : entry.summary
-        data['content'] = strip_tags sanitize(content)
+        content = strip_tags(sanitize(content)) if content.present?
+
+        data['content'] = content
 
         if entry.title.present?
           data['title'] = sanitize entry.title
@@ -123,6 +125,7 @@ module Subscriptions
       # strip out unsafe HTML
 
       def self.sanitize(string)
+        return nil unless string
         Loofah.scrub_fragment(string.encode(Encoding::UTF_8), :prune).to_s.strip
       end
 
