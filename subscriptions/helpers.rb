@@ -352,16 +352,17 @@ module Helpers
       }[stage.to_sym] || "Rule"
     end
 
-    def opengovernment_url(bill)
+    def openstates_url(bill)
       state = bill['state'].to_s.downcase
-      bill_id = bill['bill_id'].downcase.gsub(' ', '-')
+      bill_id = bill['bill_id'].tr(' ', '')
       session = bill['session']
       
-      "http://#{state}.opengovernment.org/sessions/#{session}/bills/#{bill_id}"
+      "http://openstates.org/#{state}/bills/#{session}/#{bill_id}"
     end
 
-    def state_in_og?(code)
-      ["CA", "LA", "MD", "MN", "TX"].include? code.to_s.upcase
+    def state_in_openstates?(code)
+      states = %W{ AK AZ CA DC DE FL HI ID IL LA MD MN MT NC NH NJ OH TX UT WI }
+      states.include? code.to_s.upcase
     end
 
     def state_vote_count(vote)
