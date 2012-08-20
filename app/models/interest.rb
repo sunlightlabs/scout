@@ -276,9 +276,11 @@ class Interest
 
   # find or initialize all the subscriptions an interest should have,
   # inferrable from the interest's type and subject
-  def self.subscriptions_for(interest)
+  def self.subscriptions_for(interest, regenerate = false)
     if !interest.new_record?
-      return interest.subscriptions.all
+      unless regenerate
+        return interest.subscriptions.all
+      end
     end
 
     subscription_types = if interest.search?
@@ -299,14 +301,14 @@ class Interest
       [] # no subscriptions, others' handle it
     end
 
-    subscription_types.map {|type| subscription_for interest, type}
+    subscription_types.map {|type| subscription_for interest, type, regenerate}
   end
 
   # look up or generate a single subscription for this interest
   # assumes an interest can have at most one subscription of a particular type
-  def self.subscription_for(interest, subscription_type, force = false)
+  def self.subscription_for(interest, subscription_type, regenerate = false)
     if !interest.new_record?
-      unless force
+      unless regenerate
         return interest.subscriptions.where(:subscription_type => subscription_type).first
       end
     end
