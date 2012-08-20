@@ -24,11 +24,15 @@ get "/fetch/item/:item_type/:item_id" do
 
   interest = item_interest
 
-  erb :"subscriptions/#{subscription_type}/_show", :layout => false, :locals => {
+  share = partial "partials/share", engine: :erb
+
+  results = erb :"subscriptions/#{subscription_type}/_show", :layout => false, :locals => {
     :item => item,
     :interest => interest,
     :item_type => item_type
   }
+
+  json 200, {share: share, results: results}
 end
 
 get "/fetch/item/:item_type/:item_id/:subscription_type" do
@@ -44,10 +48,10 @@ get "/fetch/item/:item_type/:item_id/:subscription_type" do
     items = nil # frontend gets nil
   end
 
-  partial "show_results", :engine => :erb, :locals => {
-    :interest => interest,
-    :subscription => subscription,
-    :items => items
+  partial "show_results", engine: :erb, locals: {
+    interest: interest,
+    subscription: subscription,
+    items: items
   }
 end
 

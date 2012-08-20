@@ -38,9 +38,9 @@ put '/interest/:id' do
 
     pane = partial "account/tags", :engine => :erb, :locals => {:tags => current_user.tags}
     json 200, {
-      :interest_tags => interest.tags,
-      :notifications => interest.notifications,
-      :tags_pane => pane
+      interest_tags: interest.tags,
+      notifications: interest.notifications,
+      tags_pane: pane
     }
   else
     halt 500

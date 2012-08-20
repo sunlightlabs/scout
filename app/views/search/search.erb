@@ -128,7 +128,9 @@
         <p>
           Create an alert to receive notifications of more results like these.
         </p>
-        <%= partial "partials/share", engine: :erb, locals: {interest: interest} %>
+        <%= partial "partials/share", engine: :erb, locals: {
+          title: interest_name(interest)
+        } %>
       </div>
     <% end %>
   </div>

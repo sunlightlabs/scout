@@ -1,15 +1,18 @@
-<% content_for :sidebar_right do %>    
-    <% if show_data? %>
-      <div class="module developer json">
-        <h4>The Data</h4>
-        See the <a href="<%= developer_find_url item_type, item_id %>">underlying data</a>.
-      </div>
-    <% end %>
+<% content_for :sidebar_right do %>
+  <div class="module sharing" style="display: none">
+  </div>
 
-    <div class="module data explanation">
-	  <h4>Source</h4>
-      <%= partial "subscriptions/#{item_types[item_type]['adapter']}/data", :engine => "erb" %>
+  <% if show_data? %>
+    <div class="module developer json">
+      <h4>The Data</h4>
+      See the <a href="<%= developer_find_url item_type, item_id %>">underlying data</a>.
     </div>
+  <% end %>
+
+  <div class="module data explanation">
+    <h4>Source</h4>
+    <%= partial "subscriptions/#{item_types[item_type]['adapter']}/data", :engine => "erb" %>
+  </div>
 <% end %>
 
 <div class="entry contentArea left <%= item_type %>">
@@ -70,14 +73,17 @@
         container.find(".content").hide();
 
         $.get("/fetch" + window.location.pathname, {}, function(data) {
+          window.data = data;
             container.find(".loading").hide();
-            container.find(".content").show().html(data);
+            container.find(".content").show().html(data.results);
 
             initializeControls();
 
             <% if logged_in? and interest.new_record? and (params[:follow] == "now") %>
               follow();
             <% end %>
+
+            $(".module.sharing").show().html(data.share);
 
             $(".details .module.of2").each(function(i, elem) {
               fetchStream($(elem).data("subscription_type"));
