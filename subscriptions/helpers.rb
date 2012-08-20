@@ -229,7 +229,7 @@ module Helpers
     end
 
     def speech_excerpt(speech, keyword, highlight = true)
-      excerpt speech['speaking'].join("\n"), keyword, highlight
+      excerpt speech['speaking'].join("\n\n"), keyword, highlight
     end
 
     def excerpt_pattern(keyword)
