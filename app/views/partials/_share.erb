@@ -12,10 +12,9 @@
       ua.setTitle(title);
       ua.setUserMessage(title);
       ua.setDescription("Search and notifications on what Congress, the White House, and your state legislature are doing.");
-      ua.addMediaItem({
-          type: 'image',
-          href: '<%= escape_javascript request.url %>',
-          src: 'https://scout.sunlightfoundation.com/images/logo_scout.png'
+      ua.addActionLink({
+          title: title,
+          href: '<%= escape_javascript request.url %>'
       });
       
       /*
