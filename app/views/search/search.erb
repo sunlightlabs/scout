@@ -222,24 +222,6 @@
     $(".filters input.query_type").val(initialQueryType);
   }
 
-  function goToSearch() {
-    var type = currentSubscriptionType();
-    var queryType = currentQueryType();
-    var query = encodeURIComponent(currentQuery());
-    var filters = currentFilters();
-    
-    // serialize the filters and preserve the brackets
-    var filterString = $.param(filters).replace(/%5B/g, "[").replace(/%5D/g, "]");
-    var url = "/search/" + type + "/" + query;
-
-    if (queryType == "advanced")
-      url += "/advanced";
-
-    if (filterString) url += "?" + filterString;
-
-    Utils.pjax(url, "#center");
-  }
-
   function initializeSubscriptions() {
     // set the query and subscription type as current
     // the subscription type can be "all"
@@ -328,6 +310,24 @@
         $(".developer a").attr("href", "<%= developer_search_url subscription %>");
       <% end %>
     <% end %>
+  }
+
+  function goToSearch() {
+    var type = currentSubscriptionType();
+    var queryType = currentQueryType();
+    var query = encodeURIComponent(currentQuery());
+    var filters = currentFilters();
+    
+    // serialize the filters and preserve the brackets
+    var filterString = $.param(filters).replace(/%5B/g, "[").replace(/%5D/g, "]");
+    var url = "/search/" + type + "/" + query;
+
+    if (queryType == "advanced")
+      url += "/advanced";
+
+    if (filterString) url += "?" + filterString;
+
+    Utils.pjax(url, "#center");
   }
 
   function currentFilters() {
