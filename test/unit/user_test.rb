@@ -10,12 +10,15 @@ class UserTest < Test::Unit::TestCase
 
     not_email = "not@example.com"
     not_api_key = "notapikey"
+
+    assert user.confirmed?
     assert_not_equal not_email, user.email
     assert_not_equal not_api_key, user.api_key
 
     user.attributes = {
         email: not_email,
-        api_key: not_api_key
+        api_key: not_api_key,
+        confirmed: false
     }
 
     user.save!
@@ -23,6 +26,7 @@ class UserTest < Test::Unit::TestCase
 
     assert_equal not_email, user.email
     assert_not_equal not_api_key, user.api_key
+    assert user.confirmed?
   end
 
   def test_phone_standardization
