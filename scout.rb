@@ -11,8 +11,6 @@ set :public_folder, 'public'
 
 # disable sessions in test environment so it can be manually set
 unless test?
-  # set :sessions, !test?
-  # set :session_secret, config[:session_secret]
   use Rack::Session::Cookie, :key => 'rack.session',
     :path => '/',
     :expire_after => (60 * 60 * 24 * 30), # 30 days
