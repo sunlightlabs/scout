@@ -10,6 +10,7 @@ get "/interest/:interest_id.:format" do
   if params[:format] == 'rss'
     rss_for "interest", items, :interest => interest
   else
+    halt 403 unless api_key?
     json_for items
   end
 end
@@ -28,11 +29,16 @@ get "/user/:user_id/:tag.:format" do
   if params[:format] == 'rss'
     rss_for "tag", items, :tag => tag
   else
+    halt 403 unless api_key?
     json_for items
   end
 end
 
 helpers do
+
+  def api_key?
+    ApiKey.allowed?(params[:apikey] || request.env['HTTP_X_APIKEY'])
+  end
 
   def feed_only
     halt 404 unless ['rss', 'json'].include?(params[:format])

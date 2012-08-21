@@ -44,4 +44,8 @@ class ApiKey
     end
   end
 
+  def self.allowed?(key)
+    !ApiKey.where(:key => key, :status => 'A').first.nil?
+  end
+
 end
