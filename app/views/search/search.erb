@@ -216,21 +216,30 @@
 
     // initialize the search box and query type (only needs to happen once from here)
     // the search button itself may re-set these
-    var initialQuery = $("#search_form input.query").val();
-    var initialQueryType = $(".query_type input[type=radio]:checked").val();
-    $(".filters input.query").val(initialQuery);
-    $(".filters input.query_type").val(initialQueryType);
+    // var initialQuery = $("#search_form input.query").val();
+    // var initialQueryType = $(".query_type input[type=radio]:checked").val();
+    // $(".filters input.query").val(initialQuery);
+    // $(".filters input.query_type").val(initialQueryType);
   }
 
   function initializeSubscriptions() {
-    // set the query and subscription type as current
-    // the subscription type can be "all"
+    var initialQuery = "<%= h query %>";
+    var initialQueryType = "<%= h params[:query_type] || "simple" %>";
+    $(".filters input.query").val(initialQuery);
+    $(".filters input.query_type").val(initialQueryType);
     $(".filters input.subscription_type").val("<%= h interest.search_type %>");
+
+    // update search form
+    $("#search_form input.query").val(initialQuery);
+    $(".query_type input[type=radio][name=query_type][value=" + initialQueryType + "]").attr("checked", true);
 
 
     var subscriptionType = currentSubscriptionType();
     var query = currentQuery();
     var queryType = currentQueryType();
+
+    // Utils.log("query_type: " + initialQueryType);
+    // Utils.log("query: " + query)
 
     // update the main filter links
     $("ul.categories li a").each(function(i, elem) {
