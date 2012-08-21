@@ -15,7 +15,7 @@
   &mdash;
   <% if regulation['agency_names'].any? %>
     <span class="agencies">
-      <%= regulation['agency_names'].join ', ' %>
+      <%= agency_names regulation %>
     </span>
   <% end %>
 </div>
