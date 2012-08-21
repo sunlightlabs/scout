@@ -50,14 +50,16 @@ post "/remote/subscribe/sms" do
     new_record = false
   else
     user = User.new(
-      confirmed: false,
       phone: params[:phone],
-      phone_confirmed: false,
-      source: source,
       announcements: false,
       sunlight_announcements: false,
       notifications: "none"
     )
+
+    # most fields are protected from mass assignment
+    user.confirmed = false
+    user.phone_confirmed = false
+    user.source = source
     
     # this password is made but never seen by the user, it will be re-reset on confirmation
     user.reset_password
