@@ -86,7 +86,9 @@ class User
   # user authentication stuff
 
   attr_accessor         :password, :password_confirmation
-  attr_protected        :password_hash
+
+  attr_accessible :email, :username, :display_name, :phone,
+    :notifications, :announcements, :sunlight_announcements
   
   field :password_hash, :type => String # type needs to be specified, otherwise it'd be a BCrypt::Password
   

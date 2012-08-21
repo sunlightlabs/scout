@@ -5,6 +5,26 @@ class UserTest < Test::Unit::TestCase
   include TestHelper::Methods
   include FactoryGirl::Syntax::Methods
 
+  def test_mass_assignment
+    user = create :user
+
+    not_email = "not@example.com"
+    not_api_key = "notapikey"
+    assert_not_equal not_email, user.email
+    assert_not_equal not_api_key, user.api_key
+
+    user.attributes = {
+        email: not_email,
+        api_key: not_api_key
+    }
+
+    user.save!
+    user.reload
+
+    assert_equal not_email, user.email
+    assert_not_equal not_api_key, user.api_key
+  end
+
   def test_phone_standardization
     user = build :user
     assert user.valid?
