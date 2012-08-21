@@ -94,7 +94,7 @@ module Helpers
       if interest.feed?
         interest_path interest
       else
-        "http://#{config[:hostname]}#{interest_path interest}"
+        "#{config[:hostname]}#{interest_path interest}"
       end
     end
 
@@ -140,7 +140,7 @@ module Helpers
       if item.subscription_type == "feed"
         item.data['url']
       else
-        "http://#{config[:hostname]}#{item_path item}"
+        "#{config[:hostname]}#{item_path item}"
       end
     end
 

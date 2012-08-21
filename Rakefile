@@ -329,7 +329,7 @@ namespace :test do
       item_id = ENV['item_id'] || 'hr1234-112'
       hostname = ENV['host'] || config[:hostname]
 
-      url = "http://#{hostname}/remote/subscribe/sms"
+      url = "#{hostname}/remote/subscribe/sms"
 
       response = HTTParty.post url, {body: {phone: phone, interest_type: "item", item_type: item_type, item_id: item_id}}
       puts "Status: #{response.code}"
@@ -347,7 +347,7 @@ namespace :test do
       end
       hostname = ENV['host'] || config[:hostname]
 
-      url = "http://#{hostname}/remote/subscribe/sms"
+      url = "#{hostname}/remote/subscribe/sms"
     end
   end
 
