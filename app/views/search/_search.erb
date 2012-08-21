@@ -2,6 +2,7 @@
     <fieldset class="searchField">
         <label for="query">Search</label>
         <input class="transparent query" name="query" type="search" 
+            maxlength="300"
             <% if params[:query_type] != "advanced" %>
                 placeholder="Search for a keyword or phrase..."
             <% else %>

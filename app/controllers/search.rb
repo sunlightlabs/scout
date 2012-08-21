@@ -174,6 +174,7 @@ helpers do
     end
 
     halt 404 unless query.present?
+    halt 404 if query.size > 300 # sanity
 
     query
   end
