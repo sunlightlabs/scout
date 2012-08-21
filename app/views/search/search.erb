@@ -1,4 +1,6 @@
 <% unless pjax? %>
+  <% content_for :title do %><%= title %><% end %>
+
   <% content_for :sidebar_left do %>
    	<div class="module controls">
   		<h4>Filter search results</h4>
@@ -223,11 +225,13 @@
   }
 
   function initializeSubscriptions() {
-    var initialQuery = "<%= h query %>";
-    var initialQueryType = "<%= h params[:query_type] || "simple" %>";
+    var initialQuery = "<%= escape_javascript query %>";
+    var initialQueryType = "<%= escape_javascript(params[:query_type] || "simple") %>";
     $(".filters input.query").val(initialQuery);
     $(".filters input.query_type").val(initialQueryType);
     $(".filters input.subscription_type").val("<%= h interest.search_type %>");
+
+    $("title").text("<%= escape_javascript title %>");
 
     // update search form
     $("#search_form input.query").val(initialQuery);

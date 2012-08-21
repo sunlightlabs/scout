@@ -8,14 +8,15 @@ get '/search/:subscription_type/:query/?:query_type?' do
   interest = search_interest_for query, params[:subscription_type]
   subscriptions = Interest.subscriptions_for interest
 
-  erb :"search/search", :layout => !pjax?, :locals => {
-    :interest => interest,
+  erb :"search/search", layout: !pjax?, locals: {
+    interest: interest,
 
-    :subscriptions => subscriptions,
-    :subscription => (subscriptions.size == 1 ? subscriptions.first : nil),
+    subscriptions: subscriptions,
+    subscription: (subscriptions.size == 1 ? subscriptions.first : nil),
 
-    :related_interests => related_interests(interest.in),
-    :query => query
+    related_interests: related_interests(interest.in),
+    query: query,
+    title: page_title(interest)
   }
 end
 

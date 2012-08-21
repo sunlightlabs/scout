@@ -10,6 +10,15 @@ module Helpers
       sad.split('-').join(' ').capitalize
     end
 
+    def page_title(interest)
+      type = if interest.search_type == "all"
+        "Everything "
+      else
+        Subscription.adapter_for(interest.search_type).search_name nil
+      end
+      "#{type} about \"#{interest.in}\""
+    end
+
     def query_size(query)
       if query.size < 30
         "smaller"

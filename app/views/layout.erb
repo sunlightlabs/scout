@@ -15,7 +15,11 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
+    <% if title = content_from(:title) %>
+    <title>Scout - <%= title %></title>
+    <% else %>
     <title>Scout</title>
+    <% end %>
 
     <link rel="stylesheet" href="/css/html5-reset.css" />
     <link rel="stylesheet" href="/css/main.css?<%= Time.now.to_i %>" />
