@@ -111,7 +111,10 @@ end
 
 helpers do
   def redirect_back_or(path)
-    redirect(params[:redirect].present? ? params[:redirect] : path)
+    # security vulnerability until some older browsers update
+    if params[:redirect] !~ /^data\:/
+      redirect(params[:redirect].present? ? params[:redirect] : path)
+    end
   end
   
   def log_in(user)
