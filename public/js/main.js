@@ -1,7 +1,10 @@
 $(function() {
 
   // login link should always point to redirect back
-  $("a.login, a.logout").attr("href", $("a.login, a.logout").attr("href") + "?redirect=" + Utils.currentPath());
+  $("a.login, a.logout").click(function() {
+    var current = $(this).attr("href");
+    $(this).attr("href", current + "?redirect=" + Utils.currentPath());
+  });
 
   $("#content").on("click", "a.untruncate", function() {
     var to_hide = $(this).parents(".truncated");
