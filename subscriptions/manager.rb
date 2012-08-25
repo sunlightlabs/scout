@@ -140,7 +140,7 @@ module Subscriptions
       if adapter.respond_to?(:url_to_response)
         begin
           response = adapter.url_to_response url
-        rescue Timeout::Error, Errno::ECONNREFUSED, Errno::ETIMEDOUT => ex
+        rescue Timeout::Error, Errno::ECONNREFUSED, EOFError, Errno::ETIMEDOUT => ex
           return error_for "Timeout error polling feed", url, function, options, subscription, ex
         rescue AdapterParseException => ex
           return error_for "Error during initial processing of feed: #{ex.message}", url, function, options, subscription
@@ -155,7 +155,7 @@ module Subscriptions
       else
         begin
           response = HTTParty.get url
-        rescue Timeout::Error, Errno::ECONNREFUSED, Errno::ETIMEDOUT => ex
+        rescue Timeout::Error, Errno::ECONNREFUSED, EOFError, Errno::ETIMEDOUT => ex
           return error_for "Timeout error", url, function, options, subscription, ex
         end
       end
