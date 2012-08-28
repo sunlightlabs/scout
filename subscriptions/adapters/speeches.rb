@@ -80,7 +80,7 @@ module Subscriptions
       # takes parsed response and returns an array where each item is 
       # a hash containing the id, title, and post date of each item found
       def self.items_for(response, function, options = {})
-        return nil unless response['results']
+        raise AdapterParseException.new("Response didn't include 'results' field: #{response.inspect}") unless response['results']
         
         #TODO: hopefully get the API changed to allow filtering on only spoken results
         response['results'].map do |result|
