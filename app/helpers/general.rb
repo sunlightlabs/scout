@@ -72,6 +72,7 @@ module Helpers
     # don't give me empty strings
     def content_from(symbol)
       content = yield_content symbol
+      content.force_encoding("UTF-8") # not sure why yield_content returns US-ASCII
       content.present? ? content : nil
     end
 
