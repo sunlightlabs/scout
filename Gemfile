@@ -1,6 +1,7 @@
 source 'http://rubygems.org'
 
 gem 'json', '1.6.6'
+gem 'multi_json', '1.3.6'
 
 gem 'sinatra', '1.3.2'
 gem 'sinatra-contrib', '1.3.1'

@@ -17,9 +17,6 @@
 # will return 500 if remote item is not actually found
 # will return 500 if credentials fail (todo)
 #
-# user requirements must be relaxed to allow no email address
-# user will be texted a random password to log in with
-# 
 # user will be produced with:
 #   source: "remote"
 #   confirmed: false
@@ -117,4 +114,12 @@ post "/remote/twilio/receive" do
   end
 
   status 200
+end
+
+
+# Postmark bounce report receiving endpoint
+post "/remote/postmark/bounce" do
+  body = request.body.read.to_s
+  doc = MultiJson.load body
+  Event.postmark_bounce! doc['Email'], doc['Type'], doc
 end

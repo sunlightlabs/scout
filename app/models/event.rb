@@ -27,4 +27,12 @@ class Event
       }
     )
   end
+
+  def self.postmark_bounce!(email, bounce_type, details)
+    create!(
+      type: "postmark-bounce",
+      description: "#{bounce_type} for #{email}",
+      data: details
+    )
+  end
 end
