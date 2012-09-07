@@ -5,6 +5,51 @@ class AccountsTest < Test::Unit::TestCase
   include TestHelper::Methods
   include FactoryGirl::Syntax::Methods
 
+  def test_unsubscribe_actual
+    user = create :user, sunlight_announcements: true
+
+    assert_equal 'email_immediate', user.notifications
+    assert_equal true, user.announcements
+    assert_equal true, user.sunlight_announcements
+
+    post '/account/unsubscribe/actually', {}, login(user)
+    assert_redirect "/account/unsubscribe"
+
+    user.reload
+
+    assert_equal 'none', user.notifications
+    assert_equal false, user.announcements
+    assert_equal false, user.sunlight_announcements
+  end
+
+  def test_unsubscribe_actual_not_logged_in
+    post '/account/unsubscribe/actually', {}
+    assert_redirect "/"
+  end
+
+  # doesn't actually do the unsubscribe
+  def test_unsubscribe_landing
+    user = create :user, sunlight_announcements: true
+
+    assert_equal 'email_immediate', user.notifications
+    assert_equal true, user.announcements
+    assert_equal true, user.sunlight_announcements
+
+    get '/account/unsubscribe', {}, login(user)
+    assert_response 200
+
+    user.reload
+
+    assert_equal 'email_immediate', user.notifications
+    assert_equal true, user.announcements
+    assert_equal true, user.sunlight_announcements
+  end
+
+  def test_unsubscribe_landing_not_logged_in
+    get '/account/unsubscribe', {}
+    assert_redirect "/login?redirect=/account/unsubscribe"
+  end
+
   def test_update_account_settings
     user = create :user
 

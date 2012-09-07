@@ -82,8 +82,8 @@ helpers do
     @current_user ||= (session['user_id'] ? User.find(session['user_id']) : nil)
   end
 
-  def requires_login
-    redirect '/' unless logged_in?
+  def requires_login(path = '/')
+    redirect path unless logged_in?
   end
 
   # done as the end of an endpoint

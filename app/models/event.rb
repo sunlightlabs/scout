@@ -10,11 +10,19 @@ class Event
 
   scope :for_time, ->(start, ending) {where(created_at: {"$gt" => Time.zone.parse(start).midnight, "$lt" => Time.zone.parse(ending).midnight})}
 
-  def self.unsubscribe!(interest)
+  def self.remove_alert!(interest)
     create!(
-      type: "unsubscribe-alert", 
+      type: "remove-alert", 
       description: "#{interest.user.contact} from #{interest.in}", 
       data: interest.attributes.dup
+    )
+  end
+
+  def self.unsubscribe!(user, old_info)
+    create!(
+      type: "unsubscribe",
+      description: "One-click unsubscribe from #{user.contact}",
+      data: old_info
     )
   end
 

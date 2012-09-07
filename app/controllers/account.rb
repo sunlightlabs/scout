@@ -7,6 +7,31 @@ get '/account/subscriptions' do
   }
 end
 
+get '/account/unsubscribe' do
+  requires_login "/login?redirect=/account/unsubscribe"
+
+  erb :"account/unsubscribe"
+end
+
+post '/account/unsubscribe/actually' do
+  requires_login
+
+  old_info = {
+    notifications: current_user.notifications,
+    announcements: current_user.announcements,
+    sunlight_announcements: current_user.sunlight_announcements
+  }
+
+  current_user.notifications = "none"
+  current_user.announcements = false
+  current_user.sunlight_announcements = false
+  current_user.save!
+
+  Event.unsubscribe! current_user, old_info
+
+  redirect "/account/unsubscribe"
+end
+
 get '/account/settings' do
   requires_login
 

@@ -51,7 +51,7 @@ class Interest
   
   before_destroy :record_unsubscribe
   def record_unsubscribe
-    Event.unsubscribe! self
+    Event.remove_alert! self
   end
 
   def item?
