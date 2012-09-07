@@ -15,6 +15,10 @@ module Admin
     deliver! "Email Bounce", "Bounce: #{description}", JSON.pretty_generate(data)
   end
 
+  def self.user_unsubscribe(user, data)
+    deliver! "Unsubscribe", "Unsubscribe: #{user.contact}", JSON.pretty_generate(data)
+  end
+
   def self.new_feed(interest)
     title = interest.data['title']
     url = interest.data['url']
