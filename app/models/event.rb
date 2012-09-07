@@ -29,10 +29,24 @@ class Event
   end
 
   def self.postmark_bounce!(email, bounce_type, details)
+    user = User.where(email: email).first
+
+    stop = %w{ SpamComplaint SpamNotification BadEmailAddress Blocked }
+    stop_type = false
+    if stop.include?(bounce_type)
+      stop_type = true
+      if user
+        user.notifications = "none"
+        user.save!
+      end
+    end
+
     create!(
       type: "postmark-bounce",
       description: "#{bounce_type} for #{email}",
-      data: details
+      data: details,
+      user_id: user ? user.id : nil,
+      stop_type: stop_type
     )
   end
 end
