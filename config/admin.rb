@@ -12,7 +12,7 @@ module Admin
   end
 
   def self.bounce_report(description, data)
-    deliver! "Email Bounce", description, JSON.pretty_generate(data)
+    deliver! "Email Bounce", "Bounce: #{description}, JSON.pretty_generate(data)
   end
 
   def self.new_feed(interest)
