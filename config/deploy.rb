@@ -6,7 +6,7 @@ if environment == 'production'
   set :branch, 'master'
 else
   set :user, 'alarms'
-  set :domain, 'ec2-50-16-84-118.compute-1.amazonaws.com'
+  set :domain, 'ec2-107-22-9-27.compute-1.amazonaws.com'
   set :branch, 'master'
 end
 
