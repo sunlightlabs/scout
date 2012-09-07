@@ -157,9 +157,10 @@ module Deliveries
     end
 
     def self.render_final(content)
-      content << "----------------\nManage your subscriptions on the web at #{config[:hostname]}."
+      content << "----------------\nManage your subscriptions on the web at #{config[:hostname]}/account/settings."
       content << "\n\nThese notifications are powered by the nonpartisan Sunlight Foundation (sunlightfoundation.com), a nonprofit that uses cutting-edge technology and ideas to make government transparent and accountable."
       content << "\n\nReply to this email to send feedback, bug reports, or effusive praise our way."
+      content << "\n\nTo unsubscribe from all emails: #{config[:hostname]}/account/unsubscribe"
       content
     end
 
