@@ -32,21 +32,24 @@ class Event
     user = User.where(email: email).first
 
     stop = %w{ SpamComplaint SpamNotification BadEmailAddress Blocked }
-    stop_type = false
+    unsubscribed = false
     if stop.include?(bounce_type)
-      stop_type = true
+      unsubscribed = true
       if user
         user.notifications = "none"
         user.save!
       end
     end
 
-    create!(
+    event = create!(
       type: "postmark-bounce",
       description: "#{bounce_type} for #{email}",
       data: details,
       user_id: user ? user.id : nil,
-      stop_type: stop_type
+      unsubscribed: unsubscribed
     )
+
+    # email admin
+    Admin.bounce_report event.description, event.attributes.dup
   end
 end

@@ -11,6 +11,10 @@ module Admin
     deliver! "User", "New user: #{user.email || user.phone}", JSON.pretty_generate(user_attributes)
   end
 
+  def self.bounce_report(description, data)
+    deliver! "Email Bounce", description, JSON.pretty_generate(data)
+  end
+
   def self.new_feed(interest)
     title = interest.data['title']
     url = interest.data['url']
