@@ -43,17 +43,17 @@ module Admin
   # special case - a notice that Postmark itself is down, and email defaulted to Pony.
   # this email itself should be forced to be sent over Pony.
   # this isn't ideal, since it's bypassing some of the wrapper code around mail sending.
-  def self.postmark_down(original_tag, original_to, original_subject, original_body)
-    subject = "[ADMIN] Postmark failed to send email, fell back to Pony"
-    body = JSON.pretty_generate({
-      :tag => original_tag, :to => original_to, :subject => original_subject, :body => original_body
-    })
+  # def self.postmark_down(original_tag, original_to, original_subject, original_body)
+  #   subject = "[ADMIN] Postmark failed to send email, fell back to Pony"
+  #   body = JSON.pretty_generate({
+  #     :tag => original_tag, :to => original_to, :subject => original_subject, :body => original_body
+  #   })
 
-    unless Email.with_pony!("Postmark Down", admin_emails, subject, body)
-      Event.email_failed! original_tag, original_to, original_subject, original_body
-      puts "\n[ADMIN][#{Pony}] Failed to send email to admin that Postmark is down...oh well."
-    end
-  end
+  #   unless Email.with_pony!("Postmark Down", admin_emails, subject, body)
+  #     Event.email_failed! original_tag, original_to, original_subject, original_body
+  #     puts "\n[ADMIN][#{Pony}] Failed to send email to admin that Postmark is down...oh well."
+  #   end
+  # end
 
   def self.report(report)
     subject = "[#{report.status}] #{report.source} | #{report.message}"

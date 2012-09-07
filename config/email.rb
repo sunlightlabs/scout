@@ -84,14 +84,21 @@ module Email
       sent_message "Postmark", tag, to, subject, body
       true
     rescue Exception => e
+      # email admin with details of Postmark exception
+      Admin.report(
+        Report.exception "Postmark Exception", "Failed to email #{to}, exception attached", e,
+          tag: tag, to: to, subject: subject, body: body
+      )
+      
       puts "\n[#{tag}][Postmark] Couldn't send message to Postmark. Trying Pony as a backup."
 
       # backup, try to use Pony to send the message
       if with_pony!(tag, to, subject, body)
-        Admin.postmark_down tag, to, subject, body
+        Event.postmark_failed! tag, to, subject, body
         true
       else
         puts "\n[#{tag}][Pony] Nope, failed to send via Pony too. Oh well!"
+        Event.email_failed! tag, to, subject, body
         false
       end
     end

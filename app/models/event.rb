@@ -18,6 +18,16 @@ class Event
     )
   end
 
+  def self.postmark_failed!(tag, to, subject, body)
+    create!(
+      type: "postmark-failed",
+      description: "Postmark down, SMTP succeeded",
+      data: {
+        tag: tag, to: to, subject: subject, body: body
+      }
+    )
+  end
+
   def self.email_failed!(tag, to, subject, body)
     create!(
       type: "email-failed",
