@@ -84,22 +84,39 @@ module Email
       sent_message "Postmark", tag, to, subject, body
       true
     rescue Exception => e
-      # email admin with details of Postmark exception
-      Admin.report(
-        Report.exception "Postmark Exception", "Failed to email #{to}, exception attached", e,
-          tag: tag, to: to, subject: subject, body: body
-      )
-      
-      puts "\n[#{tag}][Postmark] Couldn't send message to Postmark. Trying Pony as a backup."
+      # if it's a hard bounce to a valid user, unsubscribe that user from future emails
+      if e.is_a?(Postmark::InvalidMessageError) and e.message["hard bounce or a spam complaint"]
+        if user = User.where(email: to).first
+          user.unsubscribe!
+          Admin.report(
+            Report.exception "Postmark Exception", "Bad email: #{to}, user unsubscribed", e,
+              tag: tag, to: to, subject: subject, body: body
+          )
+        else
+          Admin.report(
+            Report.exception "Postmark Exception", "Weird: Bad email: #{to}, but no user found by that email!", e,
+              tag: tag, to: to, subject: subject, body: body
+          )
+        end
 
-      # backup, try to use Pony to send the message
-      if with_pony!(tag, to, subject, body)
-        Event.postmark_failed! tag, to, subject, body
-        true
       else
-        puts "\n[#{tag}][Pony] Nope, failed to send via Pony too. Oh well!"
-        Event.email_failed! tag, to, subject, body
-        false
+        # email admin with details of Postmark exception, but try to deliver with Pony
+        Admin.report(
+          Report.exception "Postmark Exception", "Failed to email #{to}, trying to deliver via SMTP", e,
+            tag: tag, to: to, subject: subject, body: body
+        )
+        
+        puts "\n[#{tag}][Postmark] Couldn't send message to Postmark. Trying Pony as a backup."
+
+        # backup, try to use Pony to send the message
+        if with_pony!(tag, to, subject, body)
+          Event.postmark_failed! tag, to, subject, body
+          true
+        else
+          puts "\n[#{tag}][Pony] Nope, failed to send via Pony too. Oh well!"
+          Event.email_failed! tag, to, subject, body
+          false
+        end
       end
     end
   end
