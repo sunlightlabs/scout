@@ -16,18 +16,7 @@ end
 post '/account/unsubscribe/actually' do
   requires_login
 
-  old_info = {
-    notifications: current_user.notifications,
-    announcements: current_user.announcements,
-    sunlight_announcements: current_user.sunlight_announcements
-  }
-
-  current_user.notifications = "none"
-  current_user.announcements = false
-  current_user.sunlight_announcements = false
-  current_user.save!
-
-  Event.unsubscribe! current_user, old_info
+  current_user.unsubscribe!
 
   redirect "/account/unsubscribe"
 end
