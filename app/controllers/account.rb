@@ -16,7 +16,8 @@ end
 post '/account/unsubscribe/actually' do
   requires_login
 
-  current_user.unsubscribe!
+  event = current_user.unsubscribe!
+  Admin.user_unsubscribe current_user, event['data']
 
   redirect "/account/unsubscribe"
 end

@@ -24,8 +24,6 @@ class Event
       description: "One-click unsubscribe from #{user.contact}",
       data: old_info
     )
-
-    Admin.user_unsubscribe user, old_info
   end
 
   def self.postmark_failed!(tag, to, subject, body)
