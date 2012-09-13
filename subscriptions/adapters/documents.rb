@@ -87,7 +87,7 @@ module Subscriptions
 
         url = "#{endpoint}/documents.json?apikey=#{api_key}"
         url << "&document_id=#{item_id}"
-        url << "&field=#{sections.join ','}"
+        url << "&fields=#{sections.join ','}"
 
         url
       end

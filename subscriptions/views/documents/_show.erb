@@ -1,0 +1,59 @@
+<% document = item.data %>
+
+<div class="summary">
+
+  <div class="entryHeader">
+    <h2><%= document['title'] %></h2>
+    <div class="subtitle">
+      <%= document['document_type_name'] %>
+      released on
+      <time class="item" datetime="<%= html_date item.date %>">
+        <%= just_date_year item.date %>
+      </time>
+    </div>
+  </div>
+
+  <div class="clear"></div>
+
+  <div class="resources">
+    <h5>Resources</h5>
+    <ul>
+      <li class="documents <%= document['document_type'] %>">
+        <a href="<%= document['url'] %>">
+          <% if document['document_type'] == "gao_report" %>
+            GAO
+          <% else %>
+            More Information
+          <% end %>
+        </a>
+      </li>
+
+      <li class="source">
+        <% if document['source_url'] %>
+          <a href="<%= document['source_url'] %>">
+            <% if document['document_type'] == "gao_report" %>
+              Original Report
+            <% else %>
+              Source
+            <% end %>
+            <% if document['source_url'] =~ /\.pdf$/ %>
+              (PDF)
+            <% end %>
+          </a>
+        <% end %>
+      </li>
+      </ul>
+  </div>
+    
+  <div class="clear"></div>
+
+  <% if document['description'].present? %>
+    <p class="explanation">
+      The below text is an official summary of the report, <strong>not the full report</strong>. Visit the resources above to read the full report.
+    </p>
+
+    <%= document_description document %>
+  <% else %>
+    <p>No description available.</p>
+  <% end %>
+</div>

@@ -1219,6 +1219,11 @@ button.follow, button.following {
     border-bottom: 1px dashed #9d9b9b;
 }
 
+.entry .explanation {
+    font-style: italic;
+    color: #444;
+    padding-bottom: 10px;
+}
 
 /** item subscription modules **/
 

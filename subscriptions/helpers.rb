@@ -351,6 +351,19 @@ module Helpers
       truncate_more_html "speech_speaking", speaking, 2000
     end
 
+    def document_description(document)
+      return nil unless document['description'] # shouldn't happen
+
+      description = document['description']
+      if document['document_type'] == "gao_report"
+        ["What GAO Found", "Why GAO Did This Study"].each do |header|
+          description = description.gsub /(#{header})/, '<strong>\1</strong>'
+        end
+      end
+
+      truncate_more_html "document_description", description, 1500
+    end
+
     def legislator_image(legislator)
       "http://assets.sunlightfoundation.com/moc/40x50/#{legislator['bioguide_id']}.jpg"
     end
