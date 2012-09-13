@@ -18,32 +18,32 @@
 
 # keyword search subscriptions
 
-# bills in Congress - daily, bounded by THOMAS/GPO/GovTrack
+# bills in Congress - twice daily, bounded by THOMAS/GPO
 0 8,14 * * *  /projects/scout/current/config/cron/production/check.sh federal_bills
 
-# bills in the states - once an hour, Open States scrapers running throughout the day, but no need to be real time
+# bills in the states - twice daily, Open States scrapers running throughout the day, but no need to be real time
 0 11,15 * * *     /projects/scout/current/config/cron/production/check.sh state_bills
 
-# speeches in Congress - daily, bounded by GPO
+# speeches in Congress - twice daily, bounded by GPO
 0 8,14 * * *  /projects/scout/current/config/cron/production/check.sh speeches
 
-# regulations - once an hour, FederalRegister.gov updates at unknown intervals
-0 * * * *     /projects/scout/current/config/cron/production/check.sh regulations
+# regulations - once every 2 hours, FederalRegister.gov updates at unknown intervals
+0 */2 * * *     /projects/scout/current/config/cron/production/check.sh regulations
 
 
 # item-specific subscriptions
 
-# activity on bills in Congress - daily, bounded by THOMAS/GovTrack
+# activity on bills in Congress - daily, bounded by THOMAS
 0 8,14 * * *  /projects/scout/current/config/cron/production/check.sh federal_bills_activity
 
-# upcoming notices for bills in Congress - every 5 minutes, bounded by party leadership
-*/5 * * * *   /projects/scout/current/config/cron/production/check.sh federal_bills_upcoming_floor
+# upcoming notices for bills in Congress - every 10 minutes, bounded by party leadership
+*/10 * * * *   /projects/scout/current/config/cron/production/check.sh federal_bills_upcoming_floor
 
-# upcoming hearings for bills in Congress - every 5 minutes, updated throughout the day
-*/5 * * * *   /projects/scout/current/config/cron/production/check.sh federal_bills_hearings
+# upcoming hearings for bills in Congress - every 10 minutes, updated throughout the day
+*/10 * * * *   /projects/scout/current/config/cron/production/check.sh federal_bills_hearings
 
 # vote results for bills in Congress - every 5 minutes, updated by House/Senate throughout the day
-*/5 * * * *   /projects/scout/current/config/cron/production/check.sh federal_bills_votes
+*/10 * * * *   /projects/scout/current/config/cron/production/check.sh federal_bills_votes
 
 # activity on bills in the States - once an hour, who knows when these will be updated
 0 * * * * /projects/scout/current/config/cron/production/check.sh state_bills_activity
