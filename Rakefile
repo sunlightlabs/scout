@@ -94,11 +94,18 @@ namespace :subscriptions do
     item_type = ENV['item_type']
     subscription_type = ENV['subscription_type']
 
-    return unless item_type.present? and subscription_type.present?
+    return unless subscription_type.present?
 
-    Interest.where(item_type: item_type).each do |interest|
-      # force a new subscription to be returned even if the interest is a saved record
-      Interest.subscription_for(interest, subscription_type, true).save!
+    if item_type.present?
+      Interest.where(item_type: item_type).each do |interest|
+        # force a new subscription to be returned even if the interest is a saved record
+        Interest.subscription_for(interest, subscription_type, true).save!
+      end
+    else # assume this is a search type
+      Interest.where(search_type: "all").each do |interest|
+        # force a new subscription to be returned even if the interest is a saved record
+        Interest.subscription_for(interest, subscription_type, true).save!
+      end
     end
   end
 
