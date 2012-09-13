@@ -1,0 +1,19 @@
+<% document = item.data %>
+
+<a href="<%= item_path item %>">
+  <h4><%= document['title'] %></h4>
+</a>
+
+<div class="subtitle">
+  <%= document['document_type_name'] %>
+</div>
+
+<p>
+  <% if highlight = document_highlight(item, interest) %>
+    <%= highlight %>
+  <% elsif document['description'].present? %>
+    <%= truncate document['description'], 500 %>
+  <% else %>
+    No excerpt or abstract available.
+  <% end %>
+</p>

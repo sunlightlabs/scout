@@ -53,7 +53,7 @@ module Subscriptions
         end
 
         url << "&order=published_at"
-        url << "&sections=#{sections.join ','}"
+        url << "&fields=#{sections.join ','}"
         url << "&apikey=#{api_key}"
 
         # filters
@@ -85,7 +85,7 @@ module Subscriptions
 
         url = "#{endpoint}/regulations.json?apikey=#{api_key}"
         url << "&document_number=#{item_id}"
-        url << "&sections=#{sections.join ','}"
+        url << "&fields=#{sections.join ','}"
 
         url
       end

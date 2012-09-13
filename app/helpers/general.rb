@@ -106,7 +106,7 @@ module Helpers
 
     def truncate(string, length)
       string ||= ""
-      if string.size > (length + 3)
+      if string.size > length
         string[0...length] + "..."
       else
         string

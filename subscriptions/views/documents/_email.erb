@@ -1,0 +1,8 @@
+<% document = item.data %>
+<%= document['title'] %> 
+ <% if highlight = document_highlight(item, interest.in, false) %>
+<%= highlight %>
+ <% elsif document['description'].present? %>
+<%= truncate document['description'], 500 %>
+ <% else %>
+No excerpt or description available.<% end %>

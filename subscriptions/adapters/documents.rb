@@ -1,0 +1,138 @@
+module Subscriptions  
+  module Adapters
+
+    class Documents
+
+      def self.filters
+        {
+          # todo: document_type, once more than one is present
+        }
+      end
+      
+      def self.url_for(subscription, function, options = {})
+        api_key = options[:api_key] || config[:subscriptions][:sunlight_api_key]
+        
+        if config[:subscriptions][:rtc_endpoint].present?
+          endpoint = config[:subscriptions][:rtc_endpoint]
+        else
+          endpoint = "http://api.realtimecongress.org/api/v1"
+        end
+        
+        sections = %w{ 
+          document_id document_type document_type_name title url posted_at
+          source_url gao_id categories description
+        }
+
+        # may be nil or blank!
+        query = subscription.data['query']
+
+        url = "#{endpoint}"
+
+        if query.present?
+          url << "/search/documents.json?"
+          url << "&highlight=true"
+          url << "&highlight_size=500"
+          url << "&highlight_tags=,"
+
+          url << "&document_type=gao_report"
+
+          if subscription.data['query_type'] != 'advanced'
+            url << "&query=#{CGI.escape query}"
+          else
+            url << "&q=#{CGI.escape query}"
+          end
+
+        # elsif subscription.data['citation_type'] == 'usc'
+        #   url << "/documents.json?"
+        #   url << "&citation=#{subscription.data['citation_id']}"
+        #   url << "&citation_details=true"
+
+        else
+          return nil # choke!
+        end
+
+        url << "&order=posted_at"
+        url << "&fields=#{sections.join ','}"
+        url << "&apikey=#{api_key}"
+
+        # # filters
+
+        # ["agency", "stage"].each do |field|
+        #   if subscription.data[field].present?
+        #     url << "&#{filters[field][:field] || field}=#{CGI.escape subscription.data[field]}"
+        #   end
+        # end
+
+
+        url << "&page=#{options[:page]}" if options[:page]
+        per_page = (function == :search) ? (options[:per_page] || 20) : 40
+        url << "&per_page=#{per_page}"
+
+        url
+      end
+
+      def self.url_for_detail(item_id, options = {})
+        api_key = options[:api_key] || config[:subscriptions][:sunlight_api_key]
+
+        if config[:subscriptions][:rtc_endpoint].present?
+          endpoint = config[:subscriptions][:rtc_endpoint]
+        else
+          endpoint = "http://api.realtimecongress.org/api/v1"
+        end
+        
+        sections = %w{ 
+          document_type document_type_name title url posted_at
+          source_url gao_id categories description
+        }
+
+        url = "#{endpoint}/documents.json?apikey=#{api_key}"
+        url << "&document_id=#{item_id}"
+        url << "&field=#{sections.join ','}"
+
+        url
+      end
+
+      def self.search_name(subscription)
+        "Documents & Reports"
+      end
+
+      def self.short_name(number, interest)
+        "#{number > 1 ? "documents" : "document"}"
+      end
+      
+      # takes parsed response and returns an array where each item is 
+      # a hash containing the id, title, and post date of each item found
+      def self.items_for(response, function, options = {})
+        raise AdapterParseException.new("Response didn't include documents field: #{response.inspect}") unless response['documents']
+        
+        response['documents'].map do |document|
+          item_for document
+        end
+      end
+
+      def self.item_detail_for(response)
+        item_for response['documents'][0]
+      end
+      
+      
+      
+      # internal
+      
+      def self.item_for(document)
+        return nil unless document
+        
+        # not sure why I have to do this...
+        if document['posted_at'].is_a?(String)
+          document['posted_at'] = Time.parse document['posted_at']
+        end
+
+        SeenItem.new(
+          item_id: document["document_id"],
+          date: document["posted_at"],
+          data: document
+        )
+      end
+
+    end
+  end
+end

@@ -68,6 +68,24 @@ module Helpers
       end
     end
 
+    def document_highlight(item, keyword, highlight = true)
+      if item.data['search'] and item.data['search']['highlight']
+        field = preferred_field item, document_priorities
+        return nil unless field
+
+        text = item.data['search']['highlight'][field].first
+        
+        if field == "categories"
+          text = "Official category: \"#{text}\""
+        end
+
+        excerpt text, keyword, highlight
+      # elsif item.data['citations'] and item.data['citations'].any?
+      #   cite = item.data['citations'].first
+      #   excerpt cite['context'], cite['match'], highlight, ellipses: true
+      end
+    end
+
     def regulation_title(regulation)
       regulation['title'].present? ? regulation['title'] : "(No published title yet)"
     end
@@ -114,18 +132,6 @@ module Helpers
       id = "#{bill['session']}#{thomas_type bill['bill_type']}#{bill['number']}"
       "http://hdl.loc.gov/loc.uscongress/legislation.#{id}"
     end
-
-    # unused    
-    def highlight_field(field)
-      {
-        "versions" => "the full text",
-        "summary" => "the CRS summary",
-        "official_title" => "the official title",
-        "short_title" => "the shorthand title",
-        "popular_title" => "the common parlance",
-        "keywords" => "the tagged subjects"
-      }[field]
-    end
     
     def bill_priorities
       {
@@ -139,6 +145,14 @@ module Helpers
       {
         'abstract' => 1,
         'full_text' => 2
+      }
+    end
+
+    def document_priorities
+      {
+        "description" => 1,
+        "text" => 2,
+        "categories" => 3
       }
     end
     
