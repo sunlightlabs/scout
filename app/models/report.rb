@@ -5,6 +5,7 @@ class Report
   field :status
   field :source
   field :message
+  field :elapsed_time, type: Float
   field :attached, :type => Hash, :default => {}
   
   index :status
@@ -13,8 +14,8 @@ class Report
   
   def self.file(status, source, message, attached = {})
     report = Report.create!(:source => source.to_s, :status => status, :message => message, :attached => attached)
-    # stdout, but don't bother stdout-ing reports that will be emailed
-    puts "\n#{report}" unless Sinatra::Application.test? or ['FAILURE', 'WARNING'].include?(status)
+    # stdout, but don't bother stdout-ing reports COMPLETE reports, or reports that will be emailed
+    puts "\n#{report}" unless Sinatra::Application.test? or ['FAILURE', 'WARNING', 'COMPLETE'].include?(status)
     report
   end
   
@@ -28,6 +29,10 @@ class Report
   
   def self.success(source, message, objects = {})
     file 'SUCCESS', source, message, objects
+  end
+
+  def self.complete(source, message, objects = {})
+    file 'COMPLETE', source, message, objects
   end
 
   def self.exception(source, message, exception, objects = {})
@@ -46,11 +51,5 @@ class Report
         'message' => exception.message, 
         'type' => exception.class.to_s
     }
-  end
-
-  def to_minutes(seconds)
-    min = seconds / 60
-    sec = seconds % 60
-    "#{min > 0 ? "#{min}m," : ""}#{sec}s"
   end
 end

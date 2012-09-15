@@ -146,6 +146,8 @@ namespace :subscriptions do
       task subscription_type.to_sym => :environment do
         begin
           errors = []
+          start = Time.now
+
           Subscription.initialized.where(:subscription_type => subscription_type).each do |subscription|
             if subscription.user.confirmed?
               
@@ -160,13 +162,17 @@ namespace :subscriptions do
 
           if errors.any?
             Admin.report Report.warning(
-              "Check", "#{errors.size} errors while checking #{subscription_type}, will check again next time.", 
+              "check:#{subscription_type}", "#{errors.size} errors while checking #{subscription_type}, will check again next time.", 
               errors: errors,
               )
           end
 
+          Report.complete(
+            "check:#{subscription_type}", "Completed checking #{subscription_type}", elapsed_time: (Time.now - start)
+          )
+
         rescue Exception => ex
-          Admin.report Report.exception("Check", "Problem during 'rake subscriptions:check:#{subscription_type}'.", ex)
+          Admin.report Report.exception("check:#{subscription_type}", "Problem during 'rake subscriptions:check:#{subscription_type}'.", ex)
           puts "Error during subscription checking, emailed report."
         end
       end
