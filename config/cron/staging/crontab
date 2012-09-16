@@ -19,38 +19,38 @@
 
 # keyword search subscriptions
 
-# bills in Congress - daily, bounded by THOMAS/GPO/GovTrack
-0 8,14 * * *  /projects/alarms/current/config/cron/staging/check.sh federal_bills
+# bills in Congress - daily, bounded by THOMAS/GPO
+45 6 * * *  /projects/alarms/current/config/cron/staging/check.sh federal_bills
 
-# bills in the states - once an hour, Open States scrapers running throughout the day, but no need to be real time
-0 * * * *     /projects/alarms/current/config/cron/staging/check.sh state_bills
+# bills in the states - Open States 
+0 12 * * *     /projects/alarms/current/config/cron/staging/check.sh state_bills
 
 # speeches in Congress - daily, bounded by GPO
-0 8,14 * * *  /projects/alarms/current/config/cron/staging/check.sh speeches
+0 9 * * *  /projects/alarms/current/config/cron/staging/check.sh speeches
 
-# regulations - once an hour, FederalRegister.gov updates at unknown intervals
-0 * * * *     /projects/alarms/current/config/cron/staging/check.sh regulations
+# regulations - FederalRegister.gov updates at unknown intervals
+45 11 * * *     /projects/alarms/current/config/cron/staging/check.sh regulations
 
 
 # item-specific subscriptions
 
-# activity on bills in Congress - daily, bounded by THOMAS/GovTrack
-0 8,14 * * *  /projects/alarms/current/config/cron/staging/check.sh federal_bills_activity
+# activity on bills in Congress - daily, bounded by THOMAS
+45 12 * * *  /projects/alarms/current/config/cron/staging/check.sh federal_bills_activity
 
-# upcoming notices for bills in congress - every 5 minutes, bounded by party leadership
-*/5 * * * *   /projects/alarms/current/config/cron/staging/check.sh federal_bills_upcoming_floor
+# upcoming notices for bills in congress - bounded by party leadership
+45 * * * *   /projects/alarms/current/config/cron/staging/check.sh federal_bills_upcoming_floor
 
-# upcoming hearings for bills in Congress - every 5 minutes, updated throughout the day
-*/5 * * * *   /projects/alarms/current/config/cron/staging/check.sh federal_bills_hearings
+# upcoming hearings for bills in Congress - updated throughout the day
+30 * * * *   /projects/alarms/current/config/cron/staging/check.sh federal_bills_hearings
 
-# vote results for bills in Congress - every 5 minutes, updated by House/Senate throughout the day
-*/5 * * * *   /projects/alarms/current/config/cron/staging/check.sh federal_bills_votes
+# vote results for bills in Congress - updated by House/Senate throughout the day
+0 * * * *   /projects/alarms/current/config/cron/staging/check.sh federal_bills_votes
 
 # activity on bills in the States - once an hour, who knows when these will be updated
 0 * * * * /projects/alarms/current/config/cron/staging/check.sh state_bills_activity
 
 # activity on bills in the States - once an hour, who knows when these will be updated
-0 * * * * /projects/alarms/current/config/cron/staging/check.sh state_bills_votes
+30 * * * * /projects/alarms/current/config/cron/staging/check.sh state_bills_votes
 
 
 # external feed subscriptions, once an hour

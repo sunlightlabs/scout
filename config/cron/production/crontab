@@ -27,8 +27,8 @@
 # speeches in Congress - twice daily, bounded by GPO
 0 8,14 * * *  /projects/scout/current/config/cron/production/check.sh speeches
 
-# regulations - once every 2 hours, FederalRegister.gov updates at unknown intervals
-0 */2 * * *     /projects/scout/current/config/cron/production/check.sh regulations
+# regulations - twice a day, FederalRegister.gov updates at unknown intervals
+0 11,17 * * *     /projects/scout/current/config/cron/production/check.sh regulations
 
 
 # item-specific subscriptions
