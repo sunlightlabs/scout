@@ -145,6 +145,8 @@ namespace :subscriptions do
       desc "Check for new #{subscription_type} items for initialized subscriptions"
       task subscription_type.to_sym => :environment do
         begin
+          rate_limit = ENV['rate_limit'].present? ? ENV['rate_limit'].to_f : 0.1
+
           count = 0
           errors = []
           start = Time.now
@@ -155,7 +157,8 @@ namespace :subscriptions do
               result = Subscriptions::Manager.check!(subscription)
               count +=1 
 
-              sleep 0.1 # rate limit just a little bit!
+              sleep rate_limit
+              puts "sleeping for #{rate_limit}"
 
               if result.nil? or result.is_a?(Hash)
                 errors << result
