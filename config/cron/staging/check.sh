@@ -3,4 +3,6 @@
 . /projects/alarms/.bashrc
 cd /projects/alarms/current
 
-rake subscriptions:check:$1 > /projects/alarms/shared/cron/check/$1.last 2>&1
+FIRST=$1
+shift
+rake subscriptions:check:$FIRST $@ > /projects/alarms/shared/cron/check/$FIRST.last 2>&1

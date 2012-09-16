@@ -3,4 +3,6 @@
 . /projects/scout/.bashrc
 cd /projects/scout/current
 
-rake subscriptions:check:$1 > /projects/scout/shared/cron/check/$1.last 2>&1
+FIRST=$1
+shift
+rake subscriptions:check:$FIRST $@ > /projects/scout/shared/cron/check/$FIRST.last 2>&1
