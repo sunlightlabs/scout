@@ -145,13 +145,16 @@ namespace :subscriptions do
       desc "Check for new #{subscription_type} items for initialized subscriptions"
       task subscription_type.to_sym => :environment do
         begin
+          count = 0
           errors = []
           start = Time.now
 
-          Subscription.initialized.where(:subscription_type => subscription_type).each do |subscription|
+          Subscription.initialized.where(subscription_type: subscription_type).each do |subscription|
             if subscription.user.confirmed?
               
               result = Subscriptions::Manager.check!(subscription)
+              count +=1 
+
               sleep 0.1 # rate limit just a little bit!
 
               if result.nil? or result.is_a?(Hash)
@@ -164,11 +167,11 @@ namespace :subscriptions do
             Admin.report Report.warning(
               "check:#{subscription_type}", "#{errors.size} errors while checking #{subscription_type}, will check again next time.", 
               errors: errors,
-              )
+            )
           end
 
           Report.complete(
-            "check:#{subscription_type}", "Completed checking #{subscription_type}", elapsed_time: (Time.now - start)
+            "check:#{subscription_type}", "Completed checking #{count} #{subscription_type} subscriptions", elapsed_time: (Time.now - start)
           )
 
         rescue Exception => ex
