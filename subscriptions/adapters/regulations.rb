@@ -118,14 +118,14 @@ module Subscriptions
       
       def self.item_for(regulation)
         return nil unless regulation
-        
-        # not sure why I have to do this...
-        regulation['publication_date'] = Time.parse regulation['publication_date']
+        Subscriptions::Manager.clean_score regulation
+
+        regulation['publication_date'] = Time.parse(regulation['publication_date']).utc
 
         SeenItem.new(
-          :item_id => regulation["document_number"],
-          :date => regulation["published_at"],
-          :data => regulation
+          item_id: regulation["document_number"],
+          date: regulation["published_at"],
+          data: regulation
         )
           
       end

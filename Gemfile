@@ -1,7 +1,8 @@
 source 'http://rubygems.org'
 
-gem 'json', '1.6.6'
+gem 'oj', '1.3.0'
 gem 'multi_json', '1.3.6'
+gem 'curb', '0.8.1'
 
 gem 'sinatra', '1.3.2'
 gem 'sinatra-contrib', '1.3.1'
@@ -39,9 +40,6 @@ group :test do
   gem 'rspec-mocks', '2.9.0'
   gem 'factory_girl'
 end
-
-# most subscription parsing
-gem 'httparty', '0.8.3'
 
 # feed parsing
 gem 'feedzirra', '0.2.0.rc1'

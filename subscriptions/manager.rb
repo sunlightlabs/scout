@@ -1,4 +1,4 @@
-require 'httparty'
+require 'oj'
 
 module Subscriptions
 
@@ -153,17 +153,21 @@ module Subscriptions
 
       # every other adapter is parsing a remote JSON feed
       else
-        begin
-          response = HTTParty.get url
+        items = begin
+          curl = Curl::Easy.new url
+          curl.perform
+
+          body = curl.body_str
+          response = ::Oj.load body, mode: :compat
+
+          adapter.items_for response, function, options
         rescue Timeout::Error, Errno::ECONNREFUSED, EOFError, Errno::ETIMEDOUT => ex
           return error_for "Timeout error", url, function, options, subscription, ex
+        rescue SyntaxError => ex
+          return error_for "JSON parser error", url, function, options, subscription, ex
+        rescue AdapterParseException => ex
+          return error_for ex.message, url, function, options, subscription
         end
-      end
-      
-      begin
-        items = adapter.items_for response, function, options
-      rescue AdapterParseException => ex
-        return error_for ex.message, url, function, options, subscription
       end
 
       if items.is_a?(Array)
@@ -195,11 +199,17 @@ module Subscriptions
       
       puts "\n[#{adapter}][find][#{item_id}] #{url}\n\n" if !test? and config[:debug][:output_urls]
       
-      begin
-        response = HTTParty.get url
+      response = begin
+        curl = Curl::Easy.new url
+        curl.perform
+
+        body = curl.body_str
+        ::Oj.load body, mode: :compat
       rescue Timeout::Error, Errno::ECONNREFUSED, Errno::ETIMEDOUT => ex
-        Admin.report Report.warning("Find", "[#{adapter_type}][find][#{item_id}] find timeout, returned nil")
+        Admin.report Report.warning("find:#{adapter_type}", "[#{adapter_type}][find][#{item_id}] find timeout, returned nil")
         return nil
+      rescue SyntaxError => ex
+        Admin.report Report.exception("find:#{adapter_type}", "[#{adapter_type}][find][#{item_id}] JSON parse error, returned nil", ex)
       end
       
       item = adapter.item_detail_for response
@@ -217,7 +227,13 @@ module Subscriptions
       return nil unless date
       date.to_time.midnight + 12.hours
     end
-    
+
+    # geez, I hate this, hopefully this is fixed when I upgrade to Mongoid 3.x
+    def self.clean_score(item)
+      if item['search'] and item['search']['score']
+        item['search']['score'] = item['search']['score'].to_f
+      end
+    end
   end
 
   # used by adapters to signal an error in parsing

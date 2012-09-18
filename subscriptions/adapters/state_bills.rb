@@ -151,11 +151,6 @@ module Subscriptions
           :data => bill
         )
       end
-
-      # cast dates with an unknown time zone to noon UTC, to make sure at least the day is always correct
-      def self.noon_utc_for(date)
-        date.to_time.midnight + 12.hours
-      end
       
       # utilities, useful across the app
 

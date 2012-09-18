@@ -120,6 +120,7 @@ module Subscriptions
       
       def self.item_for(document)
         return nil unless document
+        Subscriptions::Manager.clean_score document
         
         # not sure why I have to do this...
         if document['posted_at'].is_a?(String)

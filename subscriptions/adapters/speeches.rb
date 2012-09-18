@@ -96,7 +96,9 @@ module Subscriptions
       # internal
       
       def self.item_for(result)
-        result['date'] = noon_utc_for result['date']
+        return nil unless result
+
+        result['date'] = Subscriptions::Manager.noon_utc_for result['date']
         result['date_year'] = result['date'].year
         result['date_month']= result['date'].month
         result['date_day'] = result['date'].day
@@ -114,12 +116,6 @@ module Subscriptions
           
       end
       
-      # helper function to straighten dates into UTC times (necessary for serializing to BSON, sigh)
-      def self.noon_utc_for(date)
-        time = date.to_time
-        time.getutc + (12-time.getutc.hour).hours
-      end
-
       def self.party_map
         @party_map ||= {
           "R" => "Republican",

@@ -144,13 +144,13 @@ module Subscriptions
 
       def self.item_for(bill)
         return nil unless bill
+        Subscriptions::Manager.clean_score bill
 
         bill['last_version_on'] = Subscriptions::Manager.noon_utc_for bill['last_version_on']
 
         if bill['last_version']
           bill['last_version']['issued_on'] = Subscriptions::Manager.noon_utc_for bill['last_version']['issued_on']
         end
-
         
         SeenItem.new(
           :item_id => bill["bill_id"],
