@@ -28,7 +28,7 @@
 0 8,14 * * *  /projects/scout/current/config/cron/production/check.sh speeches
 
 # regulations - twice a day, FederalRegister.gov updates at unknown intervals
-0 11,17 * * *     /projects/scout/current/config/cron/production/check.sh regulations
+0 12,17 * * *     /projects/scout/current/config/cron/production/check.sh regulations
 
 
 # item-specific subscriptions
