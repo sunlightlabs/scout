@@ -164,7 +164,7 @@ module Subscriptions
         rescue Timeout::Error, Errno::ECONNREFUSED, EOFError, Errno::ETIMEDOUT => ex
           return error_for "Timeout error", url, function, options, subscription, ex
         rescue SyntaxError => ex
-          return error_for "JSON parser error", url, function, options, subscription, ex
+          return error_for "JSON parser error, body was:\n\n#{body}", url, function, options, subscription, ex
         rescue AdapterParseException => ex
           return error_for ex.message, url, function, options, subscription
         end
@@ -209,7 +209,7 @@ module Subscriptions
         Admin.report Report.warning("find:#{adapter_type}", "[#{adapter_type}][find][#{item_id}] find timeout, returned nil")
         return nil
       rescue SyntaxError => ex
-        Admin.report Report.exception("find:#{adapter_type}", "[#{adapter_type}][find][#{item_id}] JSON parse error, returned nil", ex)
+        Admin.report Report.exception("find:#{adapter_type}", "[#{adapter_type}][find][#{item_id}] JSON parse error, returned nil, body was:\n\n#{body}", ex)
       end
       
       item = adapter.item_detail_for response
