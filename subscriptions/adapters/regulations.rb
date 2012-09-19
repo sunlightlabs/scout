@@ -20,6 +20,8 @@ module Subscriptions
         
         if config[:subscriptions][:rtc_endpoint].present?
           endpoint = config[:subscriptions][:rtc_endpoint]
+        elsif config[:subscriptions][:endpoints][function] and config[:subscriptions][:endpoints][function][subscription.subscription_type].present?
+          endpoint = config[:subscriptions][:endpoints][function][subscription.subscription_type]
         else
           endpoint = "http://api.realtimecongress.org/api/v1"
         end
