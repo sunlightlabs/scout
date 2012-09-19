@@ -7,7 +7,7 @@ if environment == 'production'
 else
   set :user, 'alarms'
   set :domain, 'ec2-107-22-9-27.compute-1.amazonaws.com'
-  set :branch, 'documents'
+  set :branch, 'master'
 end
 
 
