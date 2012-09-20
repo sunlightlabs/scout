@@ -153,10 +153,7 @@ module Subscriptions
       # every other adapter is parsing a remote JSON feed
       else
         items = begin
-          curl = Curl::Easy.new url
-          curl.perform
-
-          body = curl.body_str
+          body = download url
           response = ::Oj.load body, mode: :compat
 
           adapter.items_for response, function, options
@@ -199,16 +196,14 @@ module Subscriptions
       puts "\n[#{adapter}][find][#{item_id}] #{url}\n\n" if !test? and config[:debug][:output_urls]
       
       response = begin
-        curl = Curl::Easy.new url
-        curl.perform
-
-        body = curl.body_str
+        body = download(url)
         ::Oj.load body, mode: :compat
       rescue Timeout::Error, Errno::ECONNREFUSED, Errno::ETIMEDOUT => ex
         Admin.report Report.warning("find:#{adapter_type}", "[#{adapter_type}][find][#{item_id}] find timeout, returned nil")
         return nil
       rescue SyntaxError => ex
         Admin.report Report.exception("find:#{adapter_type}", "[#{adapter_type}][find][#{item_id}] JSON parse error, returned nil, body was:\n\n#{body}", ex)
+        return nil
       end
       
       item = adapter.item_detail_for response
@@ -219,6 +214,13 @@ module Subscriptions
       else
         nil
       end
+    end
+
+    # extracted basically just for easy mocking
+    def self.download(url)
+      curl = Curl::Easy.new url
+      curl.perform
+      curl.body_str
     end
 
     # helper function to straighten dates into UTC times (necessary for serializing to BSON, sigh)

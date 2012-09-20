@@ -22,7 +22,7 @@ module TestHelper
     def setup
       RSpec::Mocks.setup(self)
 
-      HTTParty.stub(:get).and_return({})
+      Subscriptions::Manager.stub(:download).and_return("{}")
       Feedbag.stub(:find).and_return([])
     end
 
@@ -64,14 +64,11 @@ module TestHelper
 
     def mock_response(url, fixture)
       file = "test/fixtures/#{fixture}.json"
-      
       if File.exists?(file)
-        response = MultiJson.load(open file)
+        Subscriptions::Manager.should_receive(:download).with(url).and_return File.read(file)
       else
-        response = nil
+        Subscriptions::Manager.should_receive(:download).with(url).and_raise Errno::ECONNREFUSED.new
       end
-
-      HTTParty.should_receive(:get).with(url).and_return response
     end
 
     def mock_search(subscription, function = :search)
