@@ -16,8 +16,6 @@ module Subscriptions
         
         if config[:subscriptions][:rtc_endpoint].present?
           endpoint = config[:subscriptions][:rtc_endpoint]
-        elsif config[:subscriptions][:endpoints][function] and config[:subscriptions][:endpoints][function][subscription.subscription_type].present?
-          endpoint = config[:subscriptions][:endpoints][function][subscription.subscription_type]
         else
           endpoint = "http://api.realtimecongress.org/api/v1"
         end
@@ -68,6 +66,11 @@ module Subscriptions
           elsif stage == "awaiting_signature"
             url << "&awaiting_signature=true"
           end
+        end
+
+        # if it's background checking, filter to just the last month for speed
+        if function == :check
+          url << "&last_version_on__gte=#{1.month.ago.strftime "%Y-%m-%d"}"
         end
 
         if options[:page]

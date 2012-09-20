@@ -39,8 +39,8 @@
 # subscription-specific stuff
 :subscriptions:
   :sunlight_api_key: 
-  :rtc_endpoint: # only override if you know what you're doing and have a fake RTC endpoint
-
+  :rtc_endpoint:
+  
 # set of emails to receive admin notices
 :admin:
   - 
