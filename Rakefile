@@ -157,8 +157,10 @@ namespace :subscriptions do
               result = Subscriptions::Manager.check!(subscription)
               count +=1 
 
-              sleep rate_limit
-              puts "sleeping for #{rate_limit}"
+              if rate_limit > 0
+                sleep rate_limit
+                puts "sleeping for #{rate_limit}"
+              end
 
               if result.nil? or result.is_a?(Hash)
                 errors << result
