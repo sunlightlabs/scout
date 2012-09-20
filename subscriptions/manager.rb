@@ -193,7 +193,7 @@ module Subscriptions
       adapter = Subscription.adapter_for adapter_type
       url = adapter.url_for_detail item_id, options
       
-      puts "\n[#{adapter}][find][#{item_id}] #{url}\n\n" if !test? and config[:debug][:output_urls]
+      puts "\n[#{adapter_type}][find][#{item_id}] #{url}\n\n" if !test? and config[:debug][:output_urls]
       
       response = begin
         body = download(url)
