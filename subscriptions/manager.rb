@@ -134,12 +134,11 @@ module Subscriptions
       
       puts "\n[#{subscription.subscription_type}][#{function}][#{subscription.interest_in}][#{subscription.id}] #{url}\n\n" if !test? and config[:debug][:output_urls]
 
-      response = nil
-
       # this override is only used by the external feed parser, which is parsing some kind of XML feed
       if adapter.respond_to?(:url_to_response)
         begin
           response = adapter.url_to_response url
+          items = adapter.items_for response, function, options
         rescue Timeout::Error, Errno::ECONNREFUSED, EOFError, Errno::ETIMEDOUT => ex
           return error_for "Timeout error polling feed", url, function, options, subscription, ex
         rescue AdapterParseException => ex
