@@ -12,7 +12,7 @@ module Helpers
 
     def page_title(interest)
       type = if interest.search_type == "all"
-        "Everything "
+        "Everything"
       else
         Subscription.adapter_for(interest.search_type).search_name nil
       end

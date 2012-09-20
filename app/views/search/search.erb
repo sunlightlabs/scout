@@ -1,5 +1,9 @@
 <% unless pjax? %>
   <% content_for :title do %><%= title %><% end %>
+  <% content_for :meta do %>
+    <meta property="og:title" content="<%= form_escape title %>" />
+    <meta property="og:description" content="<%= form_escape title %>" />
+  <% end %>
 
   <% content_for :sidebar_left do %>
    	<div class="module controls">
