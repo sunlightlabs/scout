@@ -6,7 +6,7 @@ search_adapters:
   - speeches: speech
   - state_bills: state_bill
   - regulations: regulation
-  # - documents: document
+  - documents: document
 
 # names of adapters that follow particular kinds of items
 item_adapters:

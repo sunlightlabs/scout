@@ -91,7 +91,7 @@ module Subscriptions
       end
 
       def self.search_name(subscription)
-        "Documents & Reports"
+        "GAO Reports"
       end
 
       def self.short_name(number, interest)
