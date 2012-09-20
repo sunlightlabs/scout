@@ -882,12 +882,13 @@ iframe.twitter-share-button {display: inline; vertical-align: text-bottom;}
 .module.controls .categories{
     background: url('/images/tinyborder.png') center bottom repeat-x;
     padding-bottom: 20px;
-    
 }
+
 .module.controls .categories li{
     padding: 8px 16px;
     margin-bottom: 0;
 }
+
 .module.controls .categories a{
     text-decoration: none;
 }
@@ -1209,9 +1210,11 @@ button.follow, button.following {
 .entry .summary {
     padding: 25px 0 33px 0;
 }
+
 .entry .summary p {
     margin-left: 10px;
     margin-right: 33px;
+
 }
 
 .entry .summary.followable {
