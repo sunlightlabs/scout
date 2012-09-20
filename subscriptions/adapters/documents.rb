@@ -42,10 +42,10 @@ module Subscriptions
             url << "&q=#{CGI.escape query}"
           end
 
-        # elsif subscription.data['citation_type'] == 'usc'
-        #   url << "/documents.json?"
-        #   url << "&citation=#{subscription.data['citation_id']}"
-        #   url << "&citation_details=true"
+        elsif subscription.data['citation_type'] == 'usc'
+          url << "/documents.json?"
+          url << "&citation=#{subscription.data['citation_id']}"
+          url << "&citation_details=true"
 
         else
           return nil # choke!
@@ -55,13 +55,11 @@ module Subscriptions
         url << "&fields=#{sections.join ','}"
         url << "&apikey=#{api_key}"
 
-        # # filters
 
-        # ["agency", "stage"].each do |field|
-        #   if subscription.data[field].present?
-        #     url << "&#{filters[field][:field] || field}=#{CGI.escape subscription.data[field]}"
-        #   end
-        # end
+        # if it's background checking, filter to just the last month for speed
+        if function == :check
+          url << "&posted_at__gte=#{1.month.ago.strftime "%Y-%m-%d"}"
+        end
 
 
         url << "&page=#{options[:page]}" if options[:page]
