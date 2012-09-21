@@ -1,6 +1,10 @@
 # encoding: utf-8
 
+
+# collection of methods for processing search queries
+
 class Search
+
 
   # Reads in a term and returns a US code citation ID compliant with citation.js
   # 
@@ -39,6 +43,42 @@ class Search
     base = "#{title} USC § #{section}"
     base << "(#{subsections.join(")(")})" if subsections.any?
     base
+  end
+
+
+  # Advanced search query string parsing, using a Lucene query string parser library
+
+  def self.parse_advanced(query)
+    begin
+      parsed = LuceneQueryParser::Parser.new.parse query
+
+    # if we can't parse it, it has to be okay, we can still pass the search on
+    # so just return nil and let the caller decide how to handle it
+    rescue Parslet::UnconsumedInput => e
+      puts "Parse issue: #{e.message}"
+      return nil
+    rescue Exception => e
+      puts "Unknown exception: #{e.type} - #{e.message}"
+      return nil
+    end
+
+    parsed = [parsed] unless parsed.is_a?(Array)
+
+    included = []
+    excluded = []
+
+    parsed.each do |piece|
+      if phrase = (piece[:term] or piece[:word] or piece[:phrase])
+        term = {'phrase' => phrase.to_s}
+        if piece[:prohibited] or (piece[:op] =~ /NOT/i)
+          excluded << term
+        else
+          included << term
+        end
+      end
+    end
+
+    {'included' => included, 'excluded' => excluded}
   end
 
 end

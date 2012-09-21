@@ -47,3 +47,6 @@ gem 'feedbag', '0.9.1'
 
 # phone number standardization - thrilling
 gem 'phone', '1.1'
+
+# advanced query string parsing
+gem 'lucene_query_parser', git: 'git://github.com/sunlightlabs/lucene_query_parser.git'

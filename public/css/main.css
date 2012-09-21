@@ -795,6 +795,24 @@ footer nav li{
     font-size: 280%; /* matches with main h2 */
 }
 
+.searchParameters .advanced h2 {
+    font-size: 170%;
+    display: inline-block;
+    color: #dcc51f;
+}
+
+.searchParameters .advanced:last-of-type {
+    margin-bottom: 5px;
+}
+
+.searchParameters .advanced span {
+    font-size: 170%;
+    text-transform: uppercase;
+    display: inline-block;
+    color: #666;
+    font-family: "alternate-gothic-no-3-d", arial, 'helvetica Neue', sans-serif;
+}
+
 .searchParameters .category{
     font-weight: bold;
 }

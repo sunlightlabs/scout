@@ -128,18 +128,27 @@ helpers do
 
 
     if query_type == "simple"
+
       if citation_id = Search.usc_check(query)
+        # USC citation search
         data['citation_type'] = 'usc'
         data['citation_id'] = citation_id
-        data['query'] = nil # don't need to do full text search anymore
+        
+        # don't need to do full text search anymore, but do need to set the field
+        data['query'] = nil 
+
+        # interest_in is currently the normalized displayable form
         interest_in = Search.usc_standard citation_id
 
-        # if this is coming in as an invalid search_type 
-        # for this kind of citation, switch it to 'all'
+        # if this is coming in as an invalid search_type for this kind
+        # of citation, switch it to 'all'
         if !Interest.search_types_for(data['citation_type']).include?(search_type)
           search_type = "all"
         end
       end
+
+    elsif query_type == "advanced"
+      data['query_parsed'] = Search.parse_advanced query
     end
 
     # merge in filters

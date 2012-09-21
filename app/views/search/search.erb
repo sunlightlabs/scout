@@ -94,10 +94,43 @@
     <% end %>
   	<div class="pageTitle">
       <div class="searchParameters">
-        <% name = interest_name interest %>
-        <h2 class="<%= query_size name %>">
-          <%= h name %>
-        </h2>
+        <% if interest.data['query_type'] == "simple" %>
+          <% name = interest_name interest %>
+          <h2 class="<%= query_size name %>">
+            <%= h name %>
+          </h2>
+        <% elsif interest.data['query_type'] == "advanced" %>
+          <% if interest.data['query_parsed'] %>
+            <% included = interest.data['query_parsed']['included'] %>
+            <% excluded = interest.data['query_parsed']['excluded'] %>
+            
+            <% if included.any? %>
+              <div class="advanced included">
+                <h2>Containing:</h2>
+                <span>
+                  <%= included.map {|term| term['phrase']}.join ", " %>
+                </span>
+              </div>
+            <% end %>
+
+            <% if excluded.any? %>
+              <div class="advanced excluded">
+                <h2>Excluding:</h2>
+                <span>
+                  <%= excluded.map {|term| term['phrase']}.join ", " %>
+                </span>
+              </div>
+            <% end %>
+          
+          <% else %>
+            <div class="advanced">
+              <h2>Search For:</h2>
+              <span>
+                <%= interest_name interest %>
+              </span>
+            </div>
+          <% end %>
+        <% end %>
         in 
         <% if interest.search_type == "all" %>
           <span class="category">

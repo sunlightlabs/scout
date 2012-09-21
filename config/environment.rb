@@ -4,6 +4,7 @@ require 'tzinfo'
 require 'twilio-rb'
 require 'feedbag'
 require 'phone'
+require 'lucene_query_parser'
 
 def config
   @config ||= YAML.load_file File.join(File.dirname(__FILE__), "config.yml")
