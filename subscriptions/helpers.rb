@@ -49,10 +49,10 @@ module Helpers
           text = "Official keyword: \"#{text}\""
         end
 
-        excerpt text, keyword, highlight
+        excerpt text, keyword, highlight: highlight
       elsif item.data['citations'] and item.data['citations'].any?
         cite = item.data['citations'].first
-        excerpt cite['context'], cite['match'], highlight, ellipses: true
+        excerpt cite['context'], cite['match'], highlight: highlight
       end
     end
 
@@ -61,10 +61,10 @@ module Helpers
         field = preferred_field item, regulation_priorities
         return nil unless field
         
-        excerpt item.data['search']['highlight'][field].first, keyword, highlight
+        excerpt item.data['search']['highlight'][field].first, keyword, highlight: highlight
       elsif item.data['citations'] and item.data['citations'].any?
         cite = item.data['citations'].first
-        excerpt cite['context'], cite['match'], highlight, ellipses: true
+        excerpt cite['context'], cite['match'], highlight: highlight
       end
     end
 
@@ -79,10 +79,10 @@ module Helpers
           text = "Official category: \"#{text}\""
         end
 
-        excerpt text, keyword, highlight
+        excerpt text, keyword, highlight: highlight
       # elsif item.data['citations'] and item.data['citations'].any?
       #   cite = item.data['citations'].first
-      #   excerpt cite['context'], cite['match'], highlight, ellipses: true
+      #   excerpt cite['context'], cite['match'], highlight: highlight
       end
     end
 
@@ -251,13 +251,14 @@ module Helpers
     end
     
     # client-side truncation and highlighting
-    def excerpt(text, keyword, highlight = true, options = {})
+    def excerpt(text, keyword, options = {})
+      options[:highlight] = true unless options.has_key?(:highlight)
 
       text = text.strip
       word = keyword.size
       length = text.size
       
-      index = text =~ excerpt_pattern(keyword) || 0
+      index = (text =~ excerpt_pattern(keyword)) || 0
       max = 500
       buffer = 100
 
@@ -276,13 +277,13 @@ module Helpers
       end
 
       truncated = text[range]
-      truncated = "..." + truncated if options[:ellipses] || (range.begin > 0) || (text[0..0].upcase != text[0..0])
-      truncated = truncated + "..." if options[:ellipses] || range.end < length
+      truncated = "..." + truncated # if options[:ellipses] || (range.begin > 0) || (text[0..0].upcase != text[0..0])
+      truncated = truncated + "..." # if options[:ellipses] || range.end < length
 
       # I have seen these, and do not know why
       truncated = truncated.gsub "\f", ""
 
-      if highlight
+      if options[:highlight]
         truncated.gsub(excerpt_pattern(keyword)) do |word|
           "<em>#{word}</em>"
         end
