@@ -61,7 +61,7 @@ module Helpers
 
       elsif item.data['citations'] and item.data['citations'].any?
         cite = item.data['citations'].first
-        excerpt cite['context'], cite['match'], highlight: highlight
+        excerpt cite['context'], cite['match'], options
       end
     end
 
@@ -75,7 +75,7 @@ module Helpers
 
       elsif item.data['citations'] and item.data['citations'].any?
         cite = item.data['citations'].first
-        excerpt cite['context'], cite['match'], highlight: highlight
+        excerpt cite['context'], cite['match'], options
       end
     end
 
@@ -91,9 +91,9 @@ module Helpers
 
         smart_excerpt text, interest, options
 
-      # elsif item.data['citations'] and item.data['citations'].any?
-      #   cite = item.data['citations'].first
-      #   excerpt cite['context'], cite['match'], highlight: highlight
+      elsif item.data['citations'] and item.data['citations'].any?
+        cite = item.data['citations'].first
+        excerpt cite['context'], cite['match'], options
       end
     end
 

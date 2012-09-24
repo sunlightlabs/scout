@@ -348,7 +348,7 @@ class Interest
   def self.search_types_for(citation_type)
     # limit default "all" search for US Code searches to 
     if citation_type == 'usc'
-      ['federal_bills', 'regulations']
+      ['federal_bills', 'regulations', 'documents']
     else
       search_types
     end
