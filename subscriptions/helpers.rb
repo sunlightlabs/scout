@@ -99,12 +99,14 @@ module Helpers
 
     def state_bill_highlight(item, interest, options = {})
       title = item.data['+short_title'] || item.data['title']
-      smart_excerpt title, interest, options
+      excerpt = smart_excerpt title, interest, options
+      excerpt || title
     end
 
     def speech_excerpt(speech, interest, options = {})
       text = speech['speaking'].join("\n\n")
-      smart_excerpt text, interest, options
+      excerpt = smart_excerpt text, interest, options
+      excerpt || truncate(text, 500)
     end
 
 
