@@ -5,6 +5,8 @@ get "/interest/:interest_id.:format" do
     halt 404 and return
   end
 
+  interest.extra!
+
   items = SeenItem.where(:interest_id => interest.id).desc :date
 
   if params[:format] == 'rss'
@@ -27,7 +29,7 @@ get "/user/:user_id/:tag.:format" do
   items = SeenItem.where(:interest_id => {"$in" => interest_ids}).desc :date
 
   if params[:format] == 'rss'
-    rss_for "tag", items, tag: tag, interest: interest
+    rss_for "tag", items, tag: tag
   else
     halt 403 unless api_key?
     json_for items

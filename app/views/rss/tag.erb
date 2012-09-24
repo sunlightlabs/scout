@@ -9,6 +9,6 @@
     <language>en-us</language>
     <atom:link href="<%= url %>" rel="self" type="application/rss+xml" />
     
-    <%= partial "rss/items", engine: :erb, locals: {items: items, interest: interest} %>
+    <%= partial "rss/items", engine: :erb, locals: {items: items} %>
   </channel>
 </rss>

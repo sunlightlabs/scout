@@ -178,7 +178,7 @@ class Interest
   # run processing on the interest to extract additional data useful for display and logic
   # does not need to be stored with the interest, or used for de-duping, but helpful
   # idempotent, clears itself, can be run over and over
-  def processed!
+  def extra!
     self.extra = {}
 
     if data['query_type'] == "advanced"
@@ -233,7 +233,7 @@ class Interest
 
     end
 
-    interest.processed!
+    interest.extra!
   end
 
   # does the user have a search interest for this query, of this 

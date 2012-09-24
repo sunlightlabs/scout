@@ -1,7 +1,7 @@
 <% items.each do |item| %>
   <item>
 
-    <%= partial "subscriptions/#{item.subscription_type}/rss", engine: "erb", locals: {item: item, interest: interest} %>
+    <%= partial "subscriptions/#{item.subscription_type}/rss", engine: "erb", locals: {item: item, interest: (defined?(interest) ? interest : item.interest.extra!)} %>
 
     <link><%= item_url item %></link>
     <guid><%= item_guid item %></guid>
