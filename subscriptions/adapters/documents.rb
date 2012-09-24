@@ -95,7 +95,7 @@ module Subscriptions
       end
 
       def self.short_name(number, interest)
-        "#{number > 1 ? "documents" : "document"}"
+        "#{number > 1 ? "GAO reports" : "GAO report"}"
       end
       
       # takes parsed response and returns an array where each item is 
