@@ -16,8 +16,7 @@
   </p>
 
   <p>
-    <% if (highlight = regulation_highlight(item, item.interest_in)) %>
-      <% p highlight if regulation['document_number'] == "2012-16967" %>
+    <% if (highlight = regulation_highlight(item, interest)) %>
       <% highlight = highlight.gsub("\f", "") %>
       <%= highlight %>
     <% elsif regulation['abstract'].present? %>

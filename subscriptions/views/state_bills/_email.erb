@@ -1,2 +1,2 @@
 <% bill = item.data %>
-[<%= state_name bill['state'] %>] <%= excerpt bill['title'], interest.in, highlight: false %>
+[<%= state_name bill['state'] %>] <%= state_bill_highlight item, interest, highlight: false %>

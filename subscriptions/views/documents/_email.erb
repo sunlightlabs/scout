@@ -1,6 +1,6 @@
 <% document = item.data %>
 <%= document['title'] %> 
- <% if highlight = document_highlight(item, interest.in, false) %>
+ <% if highlight = document_highlight(item, interest, highlight: false) %>
 <%= highlight %>
  <% elsif document['description'].present? %>
 <%= truncate document['description'], 500 %>

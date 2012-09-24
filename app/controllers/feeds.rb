@@ -8,7 +8,7 @@ get "/interest/:interest_id.:format" do
   items = SeenItem.where(:interest_id => interest.id).desc :date
 
   if params[:format] == 'rss'
-    rss_for "interest", items, :interest => interest
+    rss_for "interest", items, interest: interest
   else
     halt 403 unless api_key?
     json_for items
@@ -27,7 +27,7 @@ get "/user/:user_id/:tag.:format" do
   items = SeenItem.where(:interest_id => {"$in" => interest_ids}).desc :date
 
   if params[:format] == 'rss'
-    rss_for "tag", items, :tag => tag
+    rss_for "tag", items, tag: tag, interest: interest
   else
     halt 403 unless api_key?
     json_for items
@@ -52,9 +52,9 @@ helpers do
     items = items.skip(per_page * (page - 1)).limit(per_page)
 
     headers["Content-Type"] = "application/rss+xml"
-    erb :"rss/#{view}", :layout => false, :locals => {
-      :items => items,
-      :url => request.url
+    erb :"rss/#{view}", layout: false, locals: {
+      items: items,
+      url: request.url
     }.merge(locals)
   end
   

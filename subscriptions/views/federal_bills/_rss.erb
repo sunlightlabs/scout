@@ -1,6 +1,6 @@
 <% bill = item.data %>
 <title><%= bill['short_title'].present? ? bill['short_title'] : bill['official_title'] %></title>
-<% if highlight = bill_highlight(item, item.interest_in) %>
+<% if highlight = bill_highlight(item, interest) %>
     <description><![CDATA[
       <%= highlight %>
     ]]></description>

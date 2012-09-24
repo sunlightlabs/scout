@@ -30,6 +30,13 @@ module Helpers
       }[short]
     end
     
+    def regulation_title(regulation)
+      regulation['title'].present? ? regulation['title'] : "(No published title yet)"
+    end
+
+    def agency_names(regulation)
+      regulation['agency_names'].uniq.join ", "
+    end
 
     def preferred_field(item, priorities)
       highlighting = item.data['search']['highlight']
@@ -38,62 +45,191 @@ module Helpers
       valid_keys.sort_by {|k| priorities[k]}.first
     end
 
-    def bill_highlight(item, keyword, highlight = true)
+
+    def bill_highlight(item, interest, options = {})
       if item.data['search'] and item.data['search']['highlight']
         field = preferred_field item, bill_priorities
         return nil unless field
 
         text = item.data['search']['highlight'][field].first
-        
+
         if field == "keywords"
           text = "Official keyword: \"#{text}\""
         end
+        
+        smart_excerpt text, interest, options
 
-        excerpt text, keyword, highlight: highlight
       elsif item.data['citations'] and item.data['citations'].any?
         cite = item.data['citations'].first
         excerpt cite['context'], cite['match'], highlight: highlight
       end
     end
 
-    def regulation_highlight(item, keyword, highlight = true)
+    def regulation_highlight(item, interest, options = {})
       if item.data['search'] and item.data['search']['highlight']
         field = preferred_field item, regulation_priorities
         return nil unless field
+        text = item.data['search']['highlight'][field].first
         
-        excerpt item.data['search']['highlight'][field].first, keyword, highlight: highlight
+        smart_excerpt text, interest, options
+
       elsif item.data['citations'] and item.data['citations'].any?
         cite = item.data['citations'].first
         excerpt cite['context'], cite['match'], highlight: highlight
       end
     end
 
-    def document_highlight(item, keyword, highlight = true)
+    def document_highlight(item, interest, options = {})
       if item.data['search'] and item.data['search']['highlight']
         field = preferred_field item, document_priorities
         return nil unless field
-
         text = item.data['search']['highlight'][field].first
         
         if field == "categories"
           text = "Official category: \"#{text}\""
         end
 
-        excerpt text, keyword, highlight: highlight
+        smart_excerpt text, interest, options
+
       # elsif item.data['citations'] and item.data['citations'].any?
       #   cite = item.data['citations'].first
       #   excerpt cite['context'], cite['match'], highlight: highlight
       end
     end
 
-    def regulation_title(regulation)
-      regulation['title'].present? ? regulation['title'] : "(No published title yet)"
+    def state_bill_highlight(item, interest, options = {})
+      title = item.data['+short_title'] || item.data['title']
+      smart_excerpt title, interest, options
     end
 
-    def agency_names(regulation)
-      regulation['agency_names'].uniq.join ", "
+    def speech_excerpt(speech, interest, options = {})
+      text = speech['speaking'].join("\n\n")
+      smart_excerpt text, interest, options
+    end
+
+
+    # can be given one or more terms to match
+    def excerpt_pattern(keywords)
+      keywords = [keywords] unless keywords.is_a?(Array)
+      patterns = keywords.map {|keyword| keyword.gsub('"', '').gsub(' ', '[\s\-]').gsub('(', '\(').gsub(')', '\)')}
+      /(#{patterns.join "|"})/i
+    end
+
+    # for excerpting advanced searches with multiple terms,
+    # try to produce excerpts that show each term used at least once
+    # 
+    # texts: array of excerpts
+    # terms: array of term hashes as returned from the Search model
+    # options: options hash to be passed directly to underlying excerpt function
+    # def excerpt_advanced(texts, terms, options = {})
+    #   term_strings = terms.map do |term|
+    #     # todo: this is where we could strip asterisks off of fuzzy terms
+    #     term['phrase'].to_s
+    #   end
+    #   matched_strings = []
+    #   results = []
+
+    #   # go over each excerpt until we've got at least one context for each term
+    #   texts.each do |text|
+    #     next if (term_strings - matched_strings).empty?
+
+    #     term_strings.each do |keyword|
+    #       next if matched_strings.include?(keyword) # only need one match
+
+    #       if result = excerpt(text, keyword, options.merge(require_match: true))
+    #         results << result
+    #         matched_strings << keyword
+    #       end
+    #     end
+    #   end
+
+    #   if results.any?
+    #     results
+    #   else
+    #     truncate texts.first, (options[:max] || 500)
+    #   end
+    # end
+
+    # thin layer over the excerpt function that adds extra smartness for advanced queries
+    def smart_excerpt(text, interest, options = {})
+      if interest.data['query_type'] == "simple"
+        keywords = interest.data['query']
+
+      elsif interest.extra['advanced'] and interest.extra['advanced']['included'].any?
+        keywords = interest.extra['advanced']['included'].map do |term|
+          # todo: this is where we could strip asterisks off of fuzzy terms
+          term['phrase'].to_s
+        end
+
+      else # unparsed advanced search
+        return nil
+      end
+
+      excerpt text, keywords, options
     end
     
+    # client-side truncation and highlighting
+    def excerpt(text, keywords, options = {})
+      options[:highlight] = true unless options.has_key?(:highlight)
+
+      keywords = [keywords] unless keywords.is_a?(Array) # wrap single string in an array
+
+      text = text.strip
+      text.gsub! "\f", "" # I have seen these, and do not know why
+
+      # find the first mention of a term in the excerpt, center the excerpting around it
+      matched_keyword = nil
+      index = 0
+      keywords.each do |keyword|
+        if match = (text =~ excerpt_pattern(keyword))
+          index = match
+          matched_keyword = keyword
+          break
+        end
+      end
+      
+      # maximum size of the excerpt
+      max = options[:max] || 500
+
+      # minimum room to leave after the term
+      buffer = 100 
+
+      word = matched_keyword ? matched_keyword.size : 0
+      length = text.size
+
+      range = nil
+      if (length < max) || ((index + word) < (max - buffer))
+        range = 0..max
+      else
+        finish = nil
+        if (index + word + buffer) < length
+          finish = index + word + buffer
+        else
+          finish = length
+        end
+        start = finish - max
+        range = start..finish
+      end
+
+      truncated = text[range]
+      truncated = "..." + truncated if options[:ellipses] || (range.begin > 0) || (text[0..0].upcase != text[0..0])
+      truncated = truncated + "..." if options[:ellipses] || range.end < length
+
+      if options[:highlight]
+        if options[:highlight_tags]
+          tag1, tag2 = options[:highlight_tags]
+        else
+          tag1, tag2 = ["<em>", "</em>"]
+        end
+
+        truncated.gsub(excerpt_pattern(keywords)) do |word|
+          "#{tag1}#{word}#{tag2}"
+        end
+      else
+        truncated
+      end
+    end
+
     def govtrack_type(bill_type)
       {
         "hr" => "h",
@@ -240,56 +376,6 @@ module Helpers
     
     def state_source_info?(bill)
       bill['sources'] and bill['sources'].any?
-    end
-
-    def speech_excerpt(speech, keyword, highlight = true)
-      excerpt speech['speaking'].join("\n\n"), keyword, highlight
-    end
-
-    def excerpt_pattern(keyword)
-      /#{keyword.gsub('"', '').gsub(' ', '[\s\-]').gsub('(', '\(').gsub(')', '\)')}/i
-    end
-    
-    # client-side truncation and highlighting
-    def excerpt(text, keyword, options = {})
-      options[:highlight] = true unless options.has_key?(:highlight)
-
-      text = text.strip
-      word = keyword.size
-      length = text.size
-      
-      index = (text =~ excerpt_pattern(keyword)) || 0
-      max = 500
-      buffer = 100
-
-      range = nil
-      if (length < max) || ((index + word) < (max - buffer))
-        range = 0..max
-      else
-        finish = nil
-        if (index + word + buffer) < length
-          finish = index + word + buffer
-        else
-          finish = length
-        end
-        start = finish - max
-        range = start..finish
-      end
-
-      truncated = text[range]
-      truncated = "..." + truncated # if options[:ellipses] || (range.begin > 0) || (text[0..0].upcase != text[0..0])
-      truncated = truncated + "..." # if options[:ellipses] || range.end < length
-
-      # I have seen these, and do not know why
-      truncated = truncated.gsub "\f", ""
-
-      if options[:highlight]
-        truncated.gsub(excerpt_pattern(keyword)) do |word|
-          "<em>#{word}</em>"
-        end
-      else
-        truncated
-      end
     end
 
     def speaker_name(speech)

@@ -168,7 +168,7 @@ module Deliveries
     def self.render_delivery(delivery, interest, subscription_type)
       item = Deliveries::SeenItemProxy.new(SeenItem.new(delivery.item))
       template = Tilt::ERBTemplate.new "app/views/subscriptions/#{subscription_type}/_email.erb"
-      rendered = template.render item, :item => item, :interest => interest, :trim => false
+      rendered = template.render item, item: item, interest: interest, trim: false
       rendered.force_encoding "utf-8"
       rendered << "\n\n#{item_url item}"
     end

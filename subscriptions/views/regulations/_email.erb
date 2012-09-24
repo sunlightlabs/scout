@@ -1,6 +1,6 @@
 <% regulation = item.data %>
 <%= regulation_title regulation %> (<%= regulation_stage regulation['stage'] %>)
- <% if highlight = regulation_highlight(item, interest.in, false) %>
+ <% if highlight = regulation_highlight(item, interest, highlight: false) %>
 <%= highlight %>
  <% elsif regulation['abstract'].present? %>
 <%= truncate regulation['abstract'], 500 %>

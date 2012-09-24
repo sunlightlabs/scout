@@ -3,5 +3,5 @@
   <%= bill['bill_id'] %> (<%= bill['state'].upcase %>)
 </title>
 <description><![CDATA[
-  <%= excerpt bill['title'], item.interest_in %>
+  <%= state_bill_highlight item, interest %>
 ]]></description>

@@ -1,5 +1,5 @@
 <% if items %>
-    <% items.each do |item| %>
-        <%= partial "search/item", :engine => "erb", :locals => {:item => item, :query => query} %>
-    <% end %>
+  <% items.each do |item| %>
+    <%= partial "search/item", engine: "erb", locals: {item: item, query: query, interest: interest} %>
+  <% end %>
 <% end %>

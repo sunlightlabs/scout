@@ -255,13 +255,14 @@ namespace :test do
   end
 
   desc "Forces emails or SMSes to be sent for the first X results of every subscription a user has"
-  task :send_user => :environment do
+  task send_user: :environment do
     email = ENV['email'] || config[:admin].first
     phone = ENV['phone']
 
     max = (ENV['max'] || ENV['limit'] || 2).to_i
     only = (ENV['only'] || "").split(",")
     interest_in = (ENV['interest_in'] || "").split(",")
+
     citation = ENV['citation']
 
     mechanism = ENV['by'] || (phone.present? ? 'sms' : 'email')

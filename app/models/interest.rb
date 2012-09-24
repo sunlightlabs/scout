@@ -26,6 +26,13 @@ class Interest
   #     (e.g. "chamber" => "house", "state" => "NY", "bill_id" => "hr2134-112")
   field :data, type: Hash, default: {}
 
+  # extra data about a subscription, usually extracted or processed from the query/data.
+  # stored for ease of transport during the request cycle, and reporting, 
+  # but should be regenerated on demand for any real use.
+  #
+  # e.g. re-parse advanced query strings each time you need to display them.
+  field :extra, type: Hash, default: {}
+
   # tags the user has set on this interest
   field :tags, type: Array, default: []
 
@@ -168,6 +175,18 @@ class Interest
     end
   end
 
+  # run processing on the interest to extract additional data useful for display and logic
+  # does not need to be stored with the interest, or used for de-duping, but helpful
+  # idempotent, clears itself, can be run over and over
+  def processed!
+    self.extra = {}
+
+    if data['query_type'] == "advanced"
+      self.extra['advanced'] = Search.parse_advanced data['query']
+    end
+
+    self
+  end
 
   # does the user have an interest with this criteria, and this data hash?
   # optional: a 'populate' hash for attributes to be set on new records,
@@ -185,36 +204,36 @@ class Interest
       
       interest.attributes = populate
 
-      return interest
-    end
-
-    find_criteria = criteria.dup
-
-    criteria['data'] = data
-    data.each {|key, value| find_criteria["data.#{key}"] = value}
-
-    interest = if user
-      # we use dot notation for the criteria instead of passing in a hash, because
-      # apparently hash key order is important in matching on the subdocument, 
-      # which is ridiculous.
-      # 
-      # however, the approach of finding with dot notation means that we could find results
-      # that have fields we didn't ask for, which would not be right.
-      # 
-      # the only approach I've found so far is to find all candidates using dot notation,
-      # then filter the too-broad ones client-side. 
-      interest = user.interests.where(find_criteria).detect do |interest|
-        interest.data.keys.select {|key| !data.keys.include?(key)}.empty?
-      end
-      
-      interest || user.interests.new(criteria)
     else
-      Interest.new criteria
+      find_criteria = criteria.dup
+
+      criteria['data'] = data
+      data.each {|key, value| find_criteria["data.#{key}"] = value}
+
+      interest = if user
+        # we use dot notation for the criteria instead of passing in a hash, because
+        # apparently hash key order is important in matching on the subdocument, 
+        # which is ridiculous.
+        # 
+        # however, the approach of finding with dot notation means that we could find results
+        # that have fields we didn't ask for, which would not be right.
+        # 
+        # the only approach I've found so far is to find all candidates using dot notation,
+        # then filter the too-broad ones client-side. 
+        interest = user.interests.where(find_criteria).detect do |interest|
+          interest.data.keys.select {|key| !data.keys.include?(key)}.empty?
+        end
+        
+        interest || user.interests.new(criteria)
+      else
+        Interest.new criteria
+      end
+
+      interest.attributes = populate if interest.new_record?
+
     end
 
-    interest.attributes = populate if interest.new_record?
-
-    interest
+    interest.processed!
   end
 
   # does the user have a search interest for this query, of this 
@@ -319,6 +338,7 @@ class Interest
     subscription.interest_in = interest.in
     subscription.user = interest.user
     subscription.data = interest.data.dup
+    subscription.extra = interest.extra.dup
 
     subscription 
   end

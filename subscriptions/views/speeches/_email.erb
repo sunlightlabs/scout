@@ -3,4 +3,6 @@
 <%= just_date item.date %> - <%= speaker_name speech %> said:
 <% end %>
 
-"<%= speech_excerpt speech, interest.in, false %>"
+<%= speech['title'] %> 
+
+"<%= speech_excerpt speech, interest, highlight: false %>"

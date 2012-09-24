@@ -42,20 +42,21 @@ get '/fetch/search/:subscription_type/:query/?:query_type?' do
     results = nil # frontend gets nil
   end
   
-  items = erb :"search/items", :layout => false, :locals => {
-    :items => results, 
-    :subscription => subscription,
-    :query => query,
-    :sole => (per_page.to_i > 5),
-    :page => page
+  items = erb :"search/items", layout: false, locals: {
+    items: results, 
+    subscription: subscription,
+    interest: interest,
+    query: query,
+    sole: (per_page.to_i > 5),
+    page: page
   }
 
   headers["Content-Type"] = "application/json"
   {
-    :html => items,
-    :count => (results ? results.size : -1),
-    :sole => (per_page.to_i > 5),
-    :page => page
+    html: items,
+    count: (results ? results.size : -1),
+    sole: (per_page.to_i > 5),
+    page: page
   }.to_json
 end
 
@@ -146,9 +147,6 @@ helpers do
           search_type = "all"
         end
       end
-
-    elsif query_type == "advanced"
-      data['query_parsed'] = Search.parse_advanced query
     end
 
     # merge in filters

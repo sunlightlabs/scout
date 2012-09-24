@@ -1,10 +1,10 @@
 <% document = item.data %>
 <title><%= document['title'] %></title>
 <description><![CDATA[
-  <% if (highlight = document_highlight(item, item.interest_in)) %>
+  <% if (highlight = document_highlight(item, interest)) %>
     <%= highlight %>
   <% elsif document['description'].present? %>
-    <%= document['description'] %>
+    <%= truncate document['description'], 500 %>
   <% else %>
     No excerpt or description available.
   <% end %>

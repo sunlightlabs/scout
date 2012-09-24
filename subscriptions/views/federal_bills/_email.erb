@@ -5,7 +5,7 @@
 <%= bill['official_title'] %>
 <% end %>
 
- <% if highlight = bill_highlight(item, interest.in, false) %>
+ <% if highlight = bill_highlight(item, interest, highlight: false) %>
 <%= highlight %>
  <% elsif bill['summary'] %>
 <%= truncate bill['summary'], 500 %>

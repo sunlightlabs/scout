@@ -100,9 +100,9 @@
             <%= h name %>
           </h2>
         <% elsif interest.data['query_type'] == "advanced" %>
-          <% if interest.data['query_parsed'] %>
-            <% included = interest.data['query_parsed']['included'] %>
-            <% excluded = interest.data['query_parsed']['excluded'] %>
+          <% if interest.extra['advanced'] %>
+            <% included = interest.extra['advanced']['included'] %>
+            <% excluded = interest.extra['advanced']['excluded'] %>
             
             <% if included.any? %>
               <div class="advanced included">
@@ -191,7 +191,7 @@
         </ul>
 
         <div class="loading">
-          <span>Fetching <%= s.search_name.downcase %>...</span>
+          <span>Fetching <%= s.search_name %>...</span>
         </div>
 
         <div class="empty">
