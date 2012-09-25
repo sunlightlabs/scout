@@ -32,10 +32,11 @@
         <% if document['source_url'] %>
           <a href="<%= document['source_url'] %>">
             <% if document['document_type'] == "gao_report" %>
-              Original Report
+              Full Report
             <% else %>
               Source
             <% end %>
+            
             <% if document['source_url'] =~ /\.pdf$/ %>
               (PDF)
             <% end %>
