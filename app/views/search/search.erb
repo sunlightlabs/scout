@@ -93,7 +93,7 @@
       </div>
     <% end %>
   	<div class="pageTitle">
-      <div class="searchParameters">
+      <div class="searchParameters <%= interest.data['query_type'] %>">
         <% if interest.data['query_type'] == "simple" %>
           <% name = interest_name interest %>
           <h2 class="<%= query_size name %>">
@@ -102,23 +102,44 @@
         <% elsif interest.data['query_type'] == "advanced" %>
           <% if interest.extra['advanced'] %>
             <% included = interest.extra['advanced']['included'] %>
+            <% distance = interest.extra['advanced']['distance'] %>
             <% excluded = interest.extra['advanced']['excluded'] %>
             
             <% if included.any? %>
               <div class="advanced included">
-                <h2>Containing:</h2>
-                <span>
-                  <%= included.map {|term| term['phrase']}.join ", " %>
-                </span>
+                <h2>With Terms:</h2>
+                <div class="container">
+                  <span>
+                    <%= included.map {|term| term['phrase']}.join ", " %>
+                  </span>
+                </div> 
+              </div>
+            <% end %>
+
+            <% if distance.any? %>
+              <div class="advanced distance">
+                <h2>With Nearby Terms:</h2>
+                <% distance.map do |distance| %>
+                  <div class="container">
+                    <span class="terms">
+                      <%= distance['terms'].join(", ") %>
+                    </span>
+                    <span class="n">
+                      within <%= distance['distance'] %> words
+                    </span>
+                  </div>
+                <% end %>
               </div>
             <% end %>
 
             <% if excluded.any? %>
               <div class="advanced excluded">
-                <h2>Excluding:</h2>
+                <h2>Excluding Terms:</h2>
+                <div class="container">
                 <span>
                   <%= excluded.map {|term| term['phrase']}.join ", " %>
                 </span>
+              </div>
               </div>
             <% end %>
           

@@ -160,7 +160,7 @@ module Helpers
       elsif interest.extra['advanced'] and interest.extra['advanced']['included'].any?
         keywords = interest.extra['advanced']['included'].map do |term|
           # todo: this is where we could strip asterisks off of fuzzy terms
-          term['phrase'].to_s
+          term['phrase'].to_s.tr("*", "")
         end
 
       else # unparsed advanced search
