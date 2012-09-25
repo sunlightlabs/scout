@@ -30,6 +30,9 @@
 # regulations - twice a day, FederalRegister.gov updates at unknown intervals
 0 12,17 * * *     /projects/scout/current/config/cron/production/check.sh regulations rate_limit=0
 
+# documents - varies by source
+30 10,14 * * *     /projects/scout/current/config/cron/production/check.sh documents rate_limit=0
+
 
 # item-specific subscriptions
 

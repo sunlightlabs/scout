@@ -31,6 +31,8 @@
 # regulations - FederalRegister.gov updates at unknown intervals
 45 11 * * *     /projects/alarms/current/config/cron/staging/check.sh regulations
 
+# documents - varies by source
+0 10 * * *     /projects/alarms/current/config/cron/staging/check.sh documents
 
 # item-specific subscriptions
 
