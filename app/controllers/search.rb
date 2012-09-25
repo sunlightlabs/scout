@@ -176,9 +176,9 @@ helpers do
     query = query.gsub /^[^\w]*\*[^\w]*$/, ''
     
     if query_type == "simple"
-      query = query.gsub "\"", ""
+      query = query.tr "\"", ""
     elsif query_type == "advanced"
-      query = query.gsub ":", ""
+      query = query.tr ",:", ""
     end
 
     halt 404 unless query.present?
