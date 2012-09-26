@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/sunlightlabs/lucene_query_parser.git
-  revision: 470c770c4a8b96e3580b0f4276400932c1bc42ae
+  revision: 8807aee6a74438f89d7396b21f52382b90edfca4
   specs:
     lucene_query_parser (0.0.1)
       parslet
