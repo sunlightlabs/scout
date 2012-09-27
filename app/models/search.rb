@@ -131,7 +131,9 @@ class Search
     details['advanced'] = {
       'included' => included, 'excluded' => excluded, 'distance' => distance
     }
-    # details['query'] = reserialize details['advanced']
+
+    # reconstruct the query from the parsed advanced search
+    details['query'] = reserialize details['advanced']
 
     details
   end
@@ -140,6 +142,22 @@ class Search
   # turn it into a query string suitable for lucene
   # order should be deterministic no matter order of components
   def self.reserialize(advanced)
+    quotify = -> str {str[" "] ? "\"#{str}\"" : str}
+
+    query = ""
+    query << " " + advanced['included'].map do |term| 
+      quotify.call term['term']
+    end.sort.join(" ")
+
+    query << " " + advanced['distance'].map do |term|
+      "\"#{term['words'].sort.join " "}\"~#{term['distance']}"
+    end.sort.join(" ")
+    
+    query << " " + advanced['excluded'].map do |term|
+      "-#{quotify.call term['term']}"
+    end.sort.join(" ")
+
+    query.strip
   end
 
   # produce a normalized string useful for deduping

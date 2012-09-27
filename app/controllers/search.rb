@@ -14,7 +14,7 @@ get '/search/:subscription_type/:query/?:query_type?' do
     subscriptions: subscriptions,
     subscription: (subscriptions.size == 1 ? subscriptions.first : nil),
 
-    related_interests: related_interests(interest.in),
+    related_interests: related_interests(interest),
     query: query,
     title: page_title(interest)
   }
@@ -70,7 +70,7 @@ post '/interests/search' do
   
   if interest.save
     interest_pane = partial "search/related_interests", :engine => :erb, :locals => {
-      related_interests: related_interests(interest.in), 
+      related_interests: related_interests(interest), 
       current_interest: interest,
       interest_in: interest.in
     }
@@ -100,7 +100,7 @@ delete '/interests/search' do
   interest.destroy
 
   interest_pane = partial "search/related_interests", :engine => :erb, :locals => {
-    related_interests: related_interests(interest.in), 
+    related_interests: related_interests(interest), 
     current_interest: nil,
     interest_in: interest.in
   }
@@ -118,10 +118,10 @@ helpers do
     Interest.for_search current_user, search_type, query, query_type, params[search_type]
   end
 
-  def related_interests(interest_in)
+  def related_interests(interest)
     if logged_in?
       current_user.interests.where(
-        :in => interest_in, 
+        :in_normal => interest.in_normal, 
         :interest_type => "search",
         :query_type => query_type
       )
