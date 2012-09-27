@@ -28,7 +28,7 @@ module Helpers
       elsif interest.search?
         # if it's a simple citation search, format it
         # otherwise, just display the query
-        if interest.data['query_type'] == 'simple'
+        if interest.query_type == 'simple'
           if interest.query['citations'].any?
             Search.usc_standard interest.query['citations'].first['citation_id']
           else
@@ -125,7 +125,7 @@ module Helpers
       
       base << "/#{URI.encode subscription.interest_in}"
 
-      base << "/advanced" if subscription.data['query_type'] == 'advanced'
+      base << "/advanced" if subscription.query_type == 'advanced'
       
       query_string = subscription.filters.map do |key, value| 
         "#{subscription.subscription_type}[#{key}]=#{URI.encode value}"

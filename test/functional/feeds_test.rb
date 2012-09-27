@@ -8,7 +8,7 @@ class FeedsTest < Test::Unit::TestCase
   def test_interest_feed
     user = create :user
     query = "transparency accountability"
-    interest = search_interest! user, "all", query, query_type: "advanced"
+    interest = search_interest! user, "all", query, "advanced"
 
     get "/interest/#{interest.id}.rss"
     assert_response 200

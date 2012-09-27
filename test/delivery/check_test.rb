@@ -9,7 +9,7 @@ class CheckTest < Test::Unit::TestCase
   def test_poll_subscription
     query = "environment"
     user = create :user
-    interest = search_interest! user, "federal_bills", query
+    interest = search_interest! user, "federal_bills", query, "simple"
     subscription = interest.subscriptions.first
 
     mock_search subscription
@@ -31,7 +31,7 @@ class CheckTest < Test::Unit::TestCase
     search_type = "federal_bills"
 
     user = create :user, notifications: "email_immediate"
-    interest = search_interest! user, search_type, query
+    interest = search_interest! user, search_type, query, "simple"
     
     # should initialize subscription to an empty array, need to refactor this to allow 
     # mocking more easily before this step, and remove this
@@ -68,7 +68,7 @@ class CheckTest < Test::Unit::TestCase
 
     sharing = create :user, notifications: "email_immediate"
     tag = create :public_tag, user: sharing
-    shared_interest = search_interest! sharing, search_type, query, {}, tags: [tag.name]
+    shared_interest = search_interest! sharing, search_type, query, "simple", {}, tags: [tag.name]
     
     # should initialize subscription to an empty array, need to refactor this to allow 
     # mocking more easily before this step, and remove this

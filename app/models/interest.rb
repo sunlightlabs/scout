@@ -13,15 +13,17 @@ class Interest
   # 'search', or 'item'
   field :interest_type
 
-  # if interest_type is a "search", can be "all" or the subscription_type in question
+  # if interest_type is "search", can be "all" or the subscription_type in question
   field :search_type 
+  # if interest_type is "search", can be "simple" or "advanced"
+  field :query_type
 
-  # if interest_type is an "item", the item type (e.g. 'bill')
+  # if interest_type is "item", the item type (e.g. 'bill')
   field :item_type
 
   # arbitrary metadata
-  #   search query - metadata about the search query
-  #     (e.g. "query_type" => "simple")
+  #   search query - search filters
+  #     (e.g. "stage" => "passed_house")
   #   item - metadata about the related item 
   #     (e.g. "chamber" => "house", "state" => "NY", "bill_id" => "hr2134-112")
   field :data, type: Hash, default: {}
@@ -175,7 +177,7 @@ class Interest
   def query!
     query = {}
     
-    if self.data['query_type'] == "advanced"
+    if self.query_type == "advanced"
       query.merge! Search.parse_advanced(self.in)
     else
       query.merge! Search.parse_simple(self.in)
@@ -230,18 +232,20 @@ class Interest
 
   # does the user have a search interest for this query, of this 
   # search type ("all" or an individual type), and this set of filters?
-  def self.for_search(user, search_type, interest_in, data = {})
-    
+  def self.for_search(user, search_type, interest_in, query_type, filters = {})
     # choke unless interest_in and query_type are present
-    return nil unless interest_in.present? and data.has_key?('query_type')
+    return nil unless interest_in.present? and query_type.present?
+
+    filters ||= {} # in case nil is passed in
 
     criteria = {
       'interest_type' => 'search',
       'search_type' => search_type,
+      'query_type' => query_type,
       'in' => interest_in
     }
     
-    self.for user, criteria, data
+    self.for user, criteria, filters
   end
 
   # if this is used to make a new item, the caller will have to 
@@ -320,6 +324,7 @@ class Interest
     subscription.user = interest.user
     subscription.data = interest.data.dup
     subscription.query = interest.query.dup # not persisted data
+    subscription.query_type = interest.query_type # man, get rid of this stuff
 
     subscription
   end

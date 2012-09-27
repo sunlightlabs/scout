@@ -11,7 +11,7 @@ class DeliveryTest < Test::Unit::TestCase
     search_type = "federal_bills"
 
     user = create :user, notifications: "email_immediate"
-    interest = search_interest! user, search_type, query
+    interest = search_interest! user, search_type, query, "simple"
     subscription = interest.subscriptions.first
 
     mock_search subscription
@@ -79,7 +79,7 @@ class DeliveryTest < Test::Unit::TestCase
     search_type = "federal_bills"
 
     user = create :user, notifications: "email_immediate"
-    interest = search_interest! user, search_type, query
+    interest = search_interest! user, search_type, query, "simple"
     subscription = interest.subscriptions.first
 
     mock_search subscription
@@ -113,7 +113,7 @@ class DeliveryTest < Test::Unit::TestCase
     query = "environment"
     search_type = "federal_bills"
     user = create :user, confirmed: false
-    interest = search_interest! user, search_type, query
+    interest = search_interest! user, search_type, query, "simple"
     subscription = interest.subscriptions.first
 
     mock_search subscription
@@ -135,7 +135,7 @@ class DeliveryTest < Test::Unit::TestCase
     query = "environment"
     search_type = "federal_bills"
     user = create :user, phone_confirmed: true
-    interest = search_interest! user, search_type, query, {}, notifications: "sms"
+    interest = search_interest! user, search_type, query, "simple", {}, notifications: "sms"
     subscription = interest.subscriptions.first
 
     mock_search subscription
@@ -161,7 +161,7 @@ class DeliveryTest < Test::Unit::TestCase
     search_type = "federal_bills"
     phone = "+15555551212"
     user = create :user, phone: phone, phone_confirmed: false
-    interest = search_interest! user, search_type, query, {}, notifications: "sms"
+    interest = search_interest! user, search_type, query, "simple", {}, notifications: "sms"
     subscription = interest.subscriptions.first
 
     mock_search subscription

@@ -161,8 +161,8 @@ class SearchTest < Test::Unit::TestCase
     user = create :user
     query1 = "environment"
     query2 = "guns"
-    i1 = search_interest! user, "state_bills", query1
-    i2 = search_interest! user, "state_bills", query2, {"query" => query2, 'state' => "CA"}
+    i1 = search_interest! user, "state_bills", query1, "simple"
+    i2 = search_interest! user, "state_bills", query2, "simple", {'state' => "CA"}
 
     delete "/interests/search", {:search_type => i1.search_type, :query => i1.in}, login(user)
     assert_response 200
@@ -183,7 +183,7 @@ class SearchTest < Test::Unit::TestCase
   def test_unsubscribe_to_type_of_all
     user = create :user
     query = "environment"
-    interest = search_interest! user, "all", query
+    interest = search_interest! user, "all", query, "simple"
     
     delete "/interests/search", {:search_type => "all", :query => interest.in}, login(user)
     assert_response 200

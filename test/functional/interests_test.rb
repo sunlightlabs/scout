@@ -12,7 +12,7 @@ class InterestsTest < Test::Unit::TestCase
     user = create :user
     query = "environment"
 
-    interest = search_interest! user, "federal_bills", query
+    interest = search_interest! user, "federal_bills", query, "simple"
 
     assert_equal 1, Interest.count
     assert_equal 1, Subscription.count
@@ -28,7 +28,7 @@ class InterestsTest < Test::Unit::TestCase
     user = create :user
     query = "environment"
     
-    interest = search_interest! user, "federal_bills", query
+    interest = search_interest! user, "federal_bills", query, "simple"
 
     user2 = create :user, :email => user.email.succ
 
@@ -45,7 +45,7 @@ class InterestsTest < Test::Unit::TestCase
   def test_destroy_interest_not_logged_in
     user = create :user
     query = "environment"
-    interest = search_interest! user, "federal_bills", query
+    interest = search_interest! user, "federal_bills", query, "simple"
 
     user2 = create :user, :email => user.email.succ
 
@@ -62,7 +62,7 @@ class InterestsTest < Test::Unit::TestCase
   def test_update_interest_delivery_type_from_nothing_to_email
     user = create :user
     query = "environment"
-    interest = search_interest! user, "federal_bills", query
+    interest = search_interest! user, "federal_bills", query, "simple"
 
     assert_equal "email_immediate", user.notifications
     assert_nil interest.notifications
@@ -87,7 +87,7 @@ class InterestsTest < Test::Unit::TestCase
     user = create :user
     query = "environment"
 
-    interest = search_interest! user, "federal_bills", query, {}, :notifications => "email_daily"
+    interest = search_interest! user, "federal_bills", query, "simple", {}, :notifications => "email_daily"
 
     assert_equal "email_immediate", user.notifications
     assert_equal "email_daily", interest.notifications
@@ -112,7 +112,7 @@ class InterestsTest < Test::Unit::TestCase
     user = create :user
     query = "environment"
 
-    interest = search_interest! user, "federal_bills", query, {}, :notifications => "email_daily"
+    interest = search_interest! user, "federal_bills", query, "simple", {}, :notifications => "email_daily"
 
     assert_equal "email_immediate", user.notifications
     assert_equal "email_daily", interest.notifications
@@ -138,7 +138,7 @@ class InterestsTest < Test::Unit::TestCase
     user2 = create :user, :email => user.email.succ
     query = "environment"
 
-    interest = search_interest! user, "federal_bills", query, {}, :notifications => "email_daily"
+    interest = search_interest! user, "federal_bills", query, "simple", {}, :notifications => "email_daily"
 
     assert_equal "email_immediate", user.notifications
     assert_equal "email_daily", interest.notifications
@@ -163,7 +163,7 @@ class InterestsTest < Test::Unit::TestCase
     user = create :user
     query = "environment"
     
-    interest = search_interest! user, "federal_bills", query, {}, :notifications => "email_daily"
+    interest = search_interest! user, "federal_bills", query, "simple", {}, :notifications => "email_daily"
 
     assert_equal "email_immediate", user.notifications
     assert_equal "email_daily", interest.notifications

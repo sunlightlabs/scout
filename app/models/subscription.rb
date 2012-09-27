@@ -10,6 +10,7 @@ class Subscription
 
   # arbitrary set of parameters that may refine or alter the subscription (e.g. "state" => "NY")
   field :data, type: Hash, default: {}
+  field :query_type # can't wait to ditch this
 
   # duplicated from interest
   def query; interest ? interest.query : @query; end

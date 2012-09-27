@@ -93,13 +93,13 @@
       </div>
     <% end %>
   	<div class="pageTitle">
-      <div class="searchParameters <%= interest.data['query_type'] %>">
-        <% if interest.data['query_type'] == "simple" %>
+      <div class="searchParameters <%= interest.query_type %>">
+        <% if interest.query_type == "simple" %>
           <% name = interest_name interest %>
           <h2 class="<%= query_size name %>">
             <%= h name %>
           </h2>
-        <% elsif interest.data['query_type'] == "advanced" %>
+        <% elsif interest.query_type == "advanced" %>
           <% if interest.query['advanced'] %>
             <% included = interest.query['advanced']['included'] %>
             <% distance = interest.query['advanced']['distance'] %>
@@ -136,19 +136,21 @@
               <div class="advanced excluded">
                 <h2>Excluding Terms:</h2>
                 <div class="container">
-                <span>
-                  <%= excluded.map {|term| term['term']}.join ", " %>
-                </span>
-              </div>
+                  <span>
+                    <%= excluded.map {|term| term['term']}.join ", " %>
+                  </span>
+                </div>
               </div>
             <% end %>
           
           <% else %>
             <div class="advanced">
               <h2>Search For:</h2>
-              <span>
-                <%= interest_name interest %>
-              </span>
+              <div class="container">
+                <span>
+                  <%= interest_name interest %>
+                </span>
+              </div>
             </div>
           <% end %>
         <% end %>

@@ -1,6 +1,6 @@
 <% if current_interest %>
   <h5>
-    <% if current_interest.data['query_type'] == 'simple' %>
+    <% if current_interest.query_type == 'simple' %>
       Your "<%= interest_name current_interest %>" subscriptions
     <% else %>
       Your related subscriptions

@@ -2,19 +2,16 @@
 # 1) reload prod db on dev
 
 # 2) update all citation search interests
-Interest.where(interest_type: "search", "data.citation_type" => {"$exists" => true}).each do |interest|
-  interest_in = interest['original_in']
-
-  # get rid of the citation garbage and original_in
-  interest.in = interest_in
-  interest.data.delete "citation_type"
-  interest.data.delete "citation_id"
-  interest.data['query'] = interest_in
+Interest.where(interest_type: "search").each do |interest|
+  
+  if interest['original_in'].present?
+    interest.in = interest['original_in']
+  end
+  interest.query_type = interest.data['query_type']
   interest.save!
 
   
   # regenerate subscriptions
-
   interest.subscriptions.destroy_all
   interest.seen_items.destroy_all
   interest.deliveries.delete_all
@@ -28,3 +25,7 @@ end
 
 db.interests.update({}, {"$unset": {"extra": 1}}, false, true)
 db.interests.update({}, {"$unset": {"original_in": 1}}, false, true)
+db.interests.update({}, {"$unset": {"data.query_type": 1}}, false, true)
+db.interests.update({}, {"$unset": {"data.query": 1}}, false, true)
+db.interests.update({}, {"$unset": {"data.citation_id": 1}}, false, true)
+db.interests.update({}, {"$unset": {"data.citation_type": 1}}, false, true)

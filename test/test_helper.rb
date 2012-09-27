@@ -47,12 +47,8 @@ module TestHelper
 
     # factory for interests
 
-    def search_interest!(user, search_type = "all", interest_in = "foia", data = {}, attributes = {})
-      # have to be explicit about these things now
-      data['query'] ||= interest_in
-      data['query_type'] ||= 'simple'
-      
-      interest = Interest.for_search user, search_type, interest_in, data
+    def search_interest!(user, search_type = "all", interest_in = "foia", query_type = "simple", filters = {}, attributes = {})
+      interest = Interest.for_search user, search_type, interest_in, query_type, filters
       interest.attributes = attributes
       interest.save!
       interest

@@ -451,15 +451,15 @@ class TagsTest < Test::Unit::TestCase
     tag4 = create :tag, :user => user1, :name => name4
     tag5 = create :tag, :user => user1, :name => name5
 
-    interest1 = search_interest! user1, "all", "a", {}, :tags => [name1, name2]
-    interest2 = search_interest! user1, "all", "b", {}, :tags => [name3]
-    interest3 = search_interest! user1, "all", "c", {}, :tags => [name3, name4, name5]
+    interest1 = search_interest! user1, "all", "a", "simple", {}, :tags => [name1, name2]
+    interest2 = search_interest! user1, "all", "b", "simple", {}, :tags => [name3]
+    interest3 = search_interest! user1, "all", "c", "simple", {}, :tags => [name3, name4, name5]
 
     user2 = create :user
     tag4 = create :tag, :user => user2, :name => name1
     tag5 = create :tag, :user => user2, :name => name3
     tag6 = create :tag, :user => user2, :name => name5
-    interest4 = search_interest! user2, "all", "d", {}, :tags => [name1, name3, name5]
+    interest4 = search_interest! user2, "all", "d", "simple", {}, :tags => [name1, name3, name5]
 
     assert_equal 8, Tag.count
     assert_equal 5, user1.tags.count

@@ -15,110 +15,76 @@ class InterestTest < Test::Unit::TestCase
 
     # create a bunch of interests of different types,
     # ensure that at each step we didn't look up an existing one
-    i1 = Interest.for_search user, "all", query, 
-      {'query' => query, 'query_type' => 'simple'}
+    i1 = Interest.for_search user, "all", query, "simple"
     assert i1.new_record?
     assert_equal user, i1.user
     assert_equal query, i1.in
-    assert_equal query, i1.data['query']
-    assert_equal 'simple', i1.data['query_type']
-    assert_equal ['query', 'query_type'].sort, i1.data.keys.sort
+    assert_equal 'simple', i1.query_type
+    assert i1.data.empty?
     assert_equal "search", i1.interest_type
     assert_equal "all", i1.search_type
     assert i1.save
 
-    # can override query and make it different than 'in'
-    i1a = Interest.for_search user, "all", query, 
-      {'query' => query2, 'query_type' => 'simple'}
-    assert_equal "all", i1a.search_type
-    assert_equal query, i1a.in
-    assert_equal query2, i1a.data['query']
-    assert i1a.new_record?
-    assert i1a.save, i1a.errors.inspect
-
-    # can even override query with nil, that's fine
-    i1b = Interest.for_search user, "all", query, 
-      {'query' => nil, 'query_type' => 'simple'}
-    assert_equal "all", i1b.search_type
-    assert_equal query, i1b.in
-    assert_equal nil, i1b.data['query']
-    assert i1b.new_record?
-    assert i1b.save, i1b.errors.inspect
-
-    # but don't allow nil in's
-    i1c = Interest.for_search user, "all", nil, 
-      {'query' => query, 'query_type' => 'simple'}
+    # don't allow missing "in" or query_type
+    i1c = Interest.for_search user, "all", nil, "simple"
     assert_nil i1c
 
-    # don't allow missing query or query_type fields
-    i1d = Interest.for_search user, "all", query,
-      {'query_type' => 'simple'}
+    i1d = Interest.for_search user, "all", query, nil
     assert_nil i1d
-
-    i1e = Interest.for_search user, "all", query, 
-      {'query' => query}
-    assert_nil i1e
     
-    i2 = Interest.for_search user, "federal_bills", query, 
-      {'query' => query, 'query_type' => 'simple'}
+
+    i2 = Interest.for_search user, "federal_bills", query, "simple"
     assert_equal "federal_bills", i2.search_type
     assert i2.new_record?
     assert i2.save
 
-    i3 = Interest.for_search user, "federal_bills", query2, 
-      {'query' => query2, 'query_type' => 'simple'}
+    i3 = Interest.for_search user, "federal_bills", query2, "simple"
     assert i3.new_record?
     assert i3.save
 
-    i4 = Interest.for_search user2, "federal_bills", query2, 
-      {'query' => query2, 'query_type' => 'simple'}
+    i4 = Interest.for_search user2, "federal_bills", query2, "simple"
     assert i4.new_record?
     assert i4.save
 
-    i5 = Interest.for_search user, "speeches", query, 
-      {'query' => query, 'query_type' => 'simple', 'state' => 'CA'}
+    i5 = Interest.for_search user, "speeches", query, "simple", 
+        {'state' => 'CA'}
     assert i5.new_record?
     assert_equal 'CA', i5.data['state']
-    assert_equal ['query', 'query_type', 'state'].sort, i5.data.keys.sort
+    assert_equal ['state'], i5.data.keys
     assert i5.save
 
-    i6 = Interest.for_search user, "speeches", query, 
-      {'query' => query, 'query_type' => 'simple', 'state' => 'CA', 'party' => 'R'}
+    i6 = Interest.for_search user, "speeches", query, "simple",
+      {'state' => 'CA', 'party' => 'R'}
     assert i6.new_record?
     assert i6.save
 
 
     # now, test that the lookup works okay and matches correctly
-    i7 = Interest.for_search user, "speeches", query, 
-      {'query' => query, 'query_type' => 'simple', 'state' => 'CA'}
+    i7 = Interest.for_search user, "speeches", query, "simple",
+      {'state' => 'CA'}
     assert !i7.new_record?
     assert_equal i5.id, i7.id
 
-    i7a = Interest.for_search user, "speeches", query, 
-      {'query' => query, 'query_type' => 'simple', 'state' => 'CA', 'query_type' => 'simple'}
-    assert !i7a.new_record?
-    assert_equal i5.id, i7a.id
+    i7a = Interest.for_search nil, "speeches", query, "simple",
+      {'state' => 'CA'}
+    assert i7a.new_record?
 
-    i7b = Interest.for_search user, "speeches", query, 
-      {'query' => query, 'query_type' => 'advanced', 'state' => 'CA'}
+    i7b = Interest.for_search user, "speeches", query, "advanced",
+      {'state' => 'CA'}
     assert i7b.new_record?
 
-    i7c = Interest.for_search nil, "speeches", query, 
-      {'query' => query, 'query_type' => 'simple', 'state' => 'CA'}
-    assert i7c.new_record?
 
-    i8 = Interest.for_search user2, "speeches", query, 
-      {'query' => query, 'query_type' => 'simple', 'state' => 'CA'}
+    i8 = Interest.for_search user2, "speeches", query, "simple",
+      {'state' => 'CA'}
     assert i8.new_record?
     assert_equal user2, i8.user
 
-    i9 = Interest.for_search user, "federal_bills", query2, 
-      {'query' => query2, 'query_type' => 'simple'}
+    i9 = Interest.for_search user, "federal_bills", query2, "simple"
     assert !i9.new_record?
     assert_equal i3.id, i9.id
 
-    i10 = Interest.for_search user, "speeches", query, 
-      {'query' => query, 'query_type' => 'simple', 'state' => 'CA', 'party' => 'R'}
+    i10 = Interest.for_search user, "speeches", query, "simple",
+      {'state' => 'CA', 'party' => 'R'}
     assert !i10.new_record?
     assert_equal i6.id, i10.id
 
@@ -130,8 +96,8 @@ class InterestTest < Test::Unit::TestCase
     assert_equal "house", i6.reload.data['chamber']
 
 
-    i11 = Interest.for_search user, "speeches", query, 
-      {'query' => query, 'query_type' => 'simple', 'state' => 'CA', 'party' => 'R'}
+    i11 = Interest.for_search user, "speeches", query, "simple",
+      {'state' => 'CA', 'party' => 'R'}
     assert i11.new_record?
 
 

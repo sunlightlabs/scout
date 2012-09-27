@@ -115,12 +115,7 @@ end
 helpers do
 
   def search_interest_for(query, search_type)
-    data = {'query_type' => query_type}
-
-    # merge in filters
-    data.merge!(params[search_type] || {})
-
-    Interest.for_search current_user, search_type, query, data
+    Interest.for_search current_user, search_type, query, query_type, params[search_type]
   end
 
   def related_interests(interest_in)
@@ -128,7 +123,7 @@ helpers do
       current_user.interests.where(
         :in => interest_in, 
         :interest_type => "search",
-        "data.query_type" => query_type
+        :query_type => query_type
       )
     end
   end
