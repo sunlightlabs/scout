@@ -4,6 +4,7 @@
 # 2) update all citation search interests
 Interest.where(interest_type: "search").each do |interest|
   
+  # in_normal will get set on save
   if interest['original_in'].present?
     interest.in = interest['original_in']
   end

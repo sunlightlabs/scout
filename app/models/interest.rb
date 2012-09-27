@@ -10,6 +10,10 @@ class Interest
   # a search string, item ID, or other normalized ID
   field :in
 
+  # normalized query useful for de-duping - only needed for search interests whose
+  # query strings can go through post-processing
+  field :in_normal
+
   # 'search', or 'item'
   field :interest_type
 
@@ -56,6 +60,13 @@ class Interest
   def record_unsubscribe
     Event.remove_alert! self
   end
+
+  # when a search interest is saved, flash a normalized version of the query for use in de-duping
+  before_save :normalize_query, :if => :search?
+  def normalize_query
+    self.in_normal = Search.normalize self
+  end
+
 
   def item?
     interest_type == "item"

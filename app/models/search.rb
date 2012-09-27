@@ -136,4 +136,27 @@ class Search
     details
   end
 
+  # take a parsed advanced query (with citations removed) and
+  # turn it into a query string suitable for lucene
+  # order should be deterministic no matter order of components
+  def self.reserialize(advanced)
+  end
+
+  # produce a normalized string useful for deduping
+  def self.normalize(interest)
+    string = ""
+    if interest.query['citations'].any?
+      # start with sorted citations, if any
+      string << interest.query['citations'].map do |cite|
+        "#{cite['citation_type']}:#{cite['citation_id']}"
+      end.sort.join(" ")
+    end
+
+    if interest.query['query'].present?
+      string << " " + interest.query['query']
+    end
+
+    string
+  end
+
 end
