@@ -116,6 +116,10 @@ namespace :subscriptions do
     successes = []
     count = 0
 
+    timer = (ENV['minutes'] || 25).to_i
+
+    start = Time.now
+
     Subscription.uninitialized.each do |subscription|
       result = Subscriptions::Manager.initialize! subscription
       if result.nil? or result.is_a?(Hash)
@@ -123,6 +127,9 @@ namespace :subscriptions do
       else
         successes << subscription
       end
+
+      # no more than 25 (default) minutes' worth
+      next if (Time.now - start) > timer.minutes
     end
 
     if errors.size > 0 # any? apparently returns false if the contents are just nils!
