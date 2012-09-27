@@ -112,6 +112,7 @@ module Helpers
       if interest.search_type == "all"
         base = "/search/all"
         base << "/#{URI.encode interest.in}" if interest.in
+        base << "/advanced" if interest.query_type == 'advanced'
         base
       else
         subscription_path interest.subscriptions.first
