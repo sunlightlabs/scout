@@ -129,7 +129,7 @@ namespace :subscriptions do
       end
 
       # no more than 25 (default) minutes' worth
-      next if (Time.now - start) > timer.minutes
+      break if (Time.now - start) > timer.minutes
     end
 
     if errors.size > 0 # any? apparently returns false if the contents are just nils!
