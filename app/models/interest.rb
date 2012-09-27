@@ -364,8 +364,11 @@ class Interest
   end
 
   after_create :create_subscriptions
-  def create_subscriptions
-    self.subscriptions.each &:save!
+  def create_subscriptions(init = true)
+    self.subscriptions.each do |subscription|
+      subscription.save!
+      Subscriptions::Manager.initialize!(subscription) if init
+    end
   end
 
 end
