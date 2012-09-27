@@ -117,55 +117,26 @@ module Helpers
       /(#{patterns.join "|"})/i
     end
 
-    # for excerpting advanced searches with multiple terms,
-    # try to produce excerpts that show each term used at least once
-    # 
-    # texts: array of excerpts
-    # terms: array of term hashes as returned from the Search model
-    # options: options hash to be passed directly to underlying excerpt function
-    # def excerpt_advanced(texts, terms, options = {})
-    #   term_strings = terms.map do |term|
-    #     # todo: this is where we could strip asterisks off of fuzzy terms
-    #     term['phrase'].to_s
-    #   end
-    #   matched_strings = []
-    #   results = []
-
-    #   # go over each excerpt until we've got at least one context for each term
-    #   texts.each do |text|
-    #     next if (term_strings - matched_strings).empty?
-
-    #     term_strings.each do |keyword|
-    #       next if matched_strings.include?(keyword) # only need one match
-
-    #       if result = excerpt(text, keyword, options.merge(require_match: true))
-    #         results << result
-    #         matched_strings << keyword
-    #       end
-    #     end
-    #   end
-
-    #   if results.any?
-    #     results
-    #   else
-    #     truncate texts.first, (options[:max] || 500)
-    #   end
-    # end
-
     # thin layer over the excerpt function that adds extra smartness for advanced queries
     def smart_excerpt(text, interest, options = {})
       if interest.data['query_type'] == "simple"
         keywords = interest.data['query']
 
-      elsif interest.extra['advanced'] and interest.extra['advanced']['included'].any?
-        keywords = interest.extra['advanced']['included'].map do |term|
-          # todo: this is where we could strip asterisks off of fuzzy terms
-          term['phrase'].to_s.tr("*", "")
+      elsif interest.extra['advanced']
+        keywords = []
+        
+        interest.extra['advanced']['included'].each do |term|
+          keywords << term['phrase'].to_s.tr("*", "")
         end
 
+        interest.extra['advanced']['distance'].each do |distance|
+          keywords += distance['terms']
+        end
       else # unparsed advanced search
         return nil
       end
+
+      p keywords
 
       excerpt text, keywords, options
     end
@@ -231,6 +202,41 @@ module Helpers
         truncated
       end
     end
+
+    # for excerpting advanced searches with multiple terms,
+    # try to produce excerpts that show each term used at least once
+    # 
+    # texts: array of excerpts
+    # terms: array of term hashes as returned from the Search model
+    # options: options hash to be passed directly to underlying excerpt function
+    # def excerpt_advanced(texts, terms, options = {})
+    #   term_strings = terms.map do |term|
+    #     # todo: this is where we could strip asterisks off of fuzzy terms
+    #     term['phrase'].to_s
+    #   end
+    #   matched_strings = []
+    #   results = []
+
+    #   # go over each excerpt until we've got at least one context for each term
+    #   texts.each do |text|
+    #     next if (term_strings - matched_strings).empty?
+
+    #     term_strings.each do |keyword|
+    #       next if matched_strings.include?(keyword) # only need one match
+
+    #       if result = excerpt(text, keyword, options.merge(require_match: true))
+    #         results << result
+    #         matched_strings << keyword
+    #       end
+    #     end
+    #   end
+
+    #   if results.any?
+    #     results
+    #   else
+    #     truncate texts.first, (options[:max] || 500)
+    #   end
+    # end
 
     def govtrack_type(bill_type)
       {
