@@ -72,20 +72,20 @@ class Search
       if phrase = (piece[:term] or piece[:word] or piece[:phrase])
         phrase = phrase.to_s
         
-        if piece[:prohibited] or (piece[:op] == "NOT")
-          excluded << {'phrase' => phrase}
+        if piece[:prohibited]
+          excluded << {'term' => phrase}
 
         elsif piece[:distance] and piece[:distance].to_s.to_i > 0
           # split phrase into words
           # (doesn't support distance between multi-word phrases)
           # (doesn't support citations)
           distance << {
-            'terms' => phrase.split(" "),
+            'words' => phrase.split(" "),
             'distance' => piece[:distance]
           }
 
         else
-          included << {'phrase' => phrase}
+          included << {'term' => phrase}
         end
 
       end

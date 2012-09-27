@@ -126,11 +126,11 @@ module Helpers
         keywords = []
 
         interest.extra['advanced']['included'].each do |term|
-          keywords << term['phrase'].to_s.tr("*", "")
+          keywords << term['term'].to_s.tr("*", "")
         end
 
         interest.extra['advanced']['distance'].each do |distance|
-          keywords += distance['terms']
+          keywords += distance['words'] # just words, not phrases or citations
         end
       else # unparsed advanced search
         return nil

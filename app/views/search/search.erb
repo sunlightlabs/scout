@@ -110,7 +110,7 @@
                 <h2>With Terms:</h2>
                 <div class="container">
                   <span>
-                    <%= included.map {|term| term['phrase']}.join ", " %>
+                    <%= included.map {|term| term['term']}.join ", " %>
                   </span>
                 </div> 
               </div>
@@ -122,7 +122,7 @@
                 <% distance.map do |distance| %>
                   <div class="container">
                     <span class="terms">
-                      <%= distance['terms'].join(", ") %>
+                      <%= distance['words'].join(", ") %>
                     </span>
                     <span class="n">
                       within <%= distance['distance'] %> words
@@ -137,7 +137,7 @@
                 <h2>Excluding Terms:</h2>
                 <div class="container">
                 <span>
-                  <%= excluded.map {|term| term['phrase']}.join ", " %>
+                  <%= excluded.map {|term| term['term']}.join ", " %>
                 </span>
               </div>
               </div>
