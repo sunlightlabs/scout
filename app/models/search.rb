@@ -85,10 +85,10 @@ class Search
     # if we can't parse it, it has to be okay, we can still pass the search on
     # so just return nil and let the caller decide how to handle it
     rescue Parslet::UnconsumedInput => e
-      puts "Parse issue: #{e.message}"
+      puts "Parse issue for [#{query}]: #{e.message}"
       return details
     rescue Exception => e
-      puts "Unknown exception: #{e.type} - #{e.message}"
+      puts "Unknown exception while parsing [#{query}]: #{e.class} - #{e.message}"
       return details
     end
 
