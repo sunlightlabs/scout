@@ -124,7 +124,7 @@ module Helpers
 
       elsif interest.extra['advanced']
         keywords = []
-        
+
         interest.extra['advanced']['included'].each do |term|
           keywords << term['phrase'].to_s.tr("*", "")
         end
@@ -135,8 +135,6 @@ module Helpers
       else # unparsed advanced search
         return nil
       end
-
-      p keywords
 
       excerpt text, keywords, options
     end
