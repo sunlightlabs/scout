@@ -52,11 +52,6 @@ class Subscription
   def search(options = {})
     Subscriptions::Manager.search self, options
   end
-  
-  after_create :initialize_self
-  def initialize_self
-    Subscriptions::Manager.initialize! self
-  end
 
   def search_name
     adapter.search_name self

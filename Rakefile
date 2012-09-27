@@ -117,7 +117,7 @@ namespace :subscriptions do
     count = 0
 
     Subscription.uninitialized.each do |subscription|
-      result = subscription.initialize_self
+      result = Subscriptions::Manager.initialize! subscription
       if result.nil? or result.is_a?(Hash)
         errors << result
       else
