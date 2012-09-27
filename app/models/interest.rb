@@ -64,7 +64,7 @@ class Interest
   # when a search interest is saved, flash a normalized version of the query for use in de-duping
   before_save :normalize_query, :if => :search?
   def normalize_query
-    self.in_normal = Search.normalize self
+    self.in_normal = Search.normalize self.query
   end
 
 
@@ -249,14 +249,26 @@ class Interest
 
     filters ||= {} # in case nil is passed in
 
+    # match on normalized interest (post-processing)
+    if query_type == "simple"
+      query = Search.parse_simple interest_in
+    else
+      query = Search.parse_advanced interest_in
+    end
+    in_normal = Search.normalize query
+
     criteria = {
       'interest_type' => 'search',
       'search_type' => search_type,
       'query_type' => query_type,
-      'in' => interest_in
+      'in_normal' => in_normal
     }
     
-    self.for user, criteria, filters
+    # assign original interest_in, even though it's not used to look up the query
+    interest = self.for user, criteria, filters
+    interest.in = interest_in
+
+    interest
   end
 
   # if this is used to make a new item, the caller will have to 

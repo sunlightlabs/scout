@@ -143,20 +143,21 @@ class Search
   end
 
   # produce a normalized string useful for deduping
-  def self.normalize(interest)
+  # takes in an interest's query hash as produced by parse_simple or parse_advanced
+  def self.normalize(query)
     string = ""
-    if interest.query['citations'].any?
+    if query['citations'].any?
       # start with sorted citations, if any
-      string << interest.query['citations'].map do |cite|
+      string << query['citations'].map do |cite|
         "#{cite['citation_type']}:#{cite['citation_id']}"
       end.sort.join(" ")
     end
 
-    if interest.query['query'].present?
-      string << " " + interest.query['query']
+    if query['query'].present?
+      string << " " + query['query']
     end
 
-    string
+    string.downcase.strip
   end
 
 end
