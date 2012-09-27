@@ -82,7 +82,7 @@ post '/interests/search' do
     json 500, {
       errors: {
         interest: interest.errors.full_messages,
-        subscription: subscriptions.first.errors.full_messages
+        subscription: (interest.subscriptions.any? ? interest.subscriptions.first.errors.full_messages : nil)
       }
     }
   end
