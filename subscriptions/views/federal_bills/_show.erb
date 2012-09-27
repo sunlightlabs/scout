@@ -34,14 +34,14 @@
   <div class="resources">
       <h5>Resources</h5>
       <ul>
+        <li class="congressGov">
+          <a href="<%= congress_gov_url item %>" title="Congress.gov">Congress.gov</a>
+        </li>
         <li class="govTrack">
           <a href="<%= govtrack_url item %>" title="GovTrack">GovTrack</a>
         </li>
         <li class="openCongress">
           <a href="<%= opencongress_url item %>" title="OpenCongress">OpenCongress</a>
-        </li>
-        <li class="thomas">
-          <a href="<%= thomas_url item %>" title="THOMAS">THOMAS</a>
         </li>
         <li class="source">
           <% if version['urls'] and version['urls']['xml'] %>

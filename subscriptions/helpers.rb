@@ -256,6 +256,19 @@ module Helpers
         "scres" => "sconres"
       }[bill_type] || bill_type
     end
+
+    def congress_gov_type(bill_type)
+      {
+        "hr" => "house-bill",
+        "hres" => "house-resolution",
+        "hcres" => "house-concurrent-resolution",
+        "hjres" => "house-joint-resolution",
+        "s" => "senate-bill",
+        "sres" => "senate-resolution",
+        "scres" => "senate-concurrent-resolution",
+        "sjres" => "senate-joint-resolution"
+      }[bill_type]
+    end
     
     def opencongress_url(item)
       bill = item.data
@@ -273,6 +286,13 @@ module Helpers
       bill = item.data
       id = "#{bill['session']}#{thomas_type bill['bill_type']}#{bill['number']}"
       "http://hdl.loc.gov/loc.uscongress/legislation.#{id}"
+    end
+
+    def congress_gov_url(item)
+      bill = item.data
+      type = congress_gov_type bill['bill_type']
+      # todo: when they expand to earlier (or later) congresses, 'th' is not a universal ordinal
+      "http://beta.congress.gov/bill/#{bill['session']}th/#{type}/#{bill['number']}"
     end
     
     def bill_priorities
