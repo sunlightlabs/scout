@@ -271,13 +271,6 @@
   function initializeControls() {
     // set up the filter events (only needs to happen once)
     $(".filters .filter_control").change(goToSearch);
-
-    // initialize the search box and query type (only needs to happen once from here)
-    // the search button itself may re-set these
-    // var initialQuery = $("#search_form input.query").val();
-    // var initialQueryType = $(".query_type input[type=radio]:checked").val();
-    // $(".filters input.query").val(initialQuery);
-    // $(".filters input.query_type").val(initialQueryType);
   }
 
   function initializeSubscriptions() {
@@ -297,10 +290,7 @@
     var subscriptionType = currentSubscriptionType();
     var query = currentQuery();
     var queryType = currentQueryType();
-
-    // Utils.log("query_type: " + initialQueryType);
-    // Utils.log("query: " + query)
-
+    
     // update the main filter links
     $("ul.categories li a").each(function(i, elem) {
       var type = $(elem).parent("li").data("subscription_type");

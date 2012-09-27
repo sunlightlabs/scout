@@ -21,7 +21,7 @@ class Interest
 
   # arbitrary metadata
   #   search query - metadata about the search query
-  #     (e.g. "query" => "copyright")
+  #     (e.g. "query_type" => "simple")
   #   item - metadata about the related item 
   #     (e.g. "chamber" => "house", "state" => "NY", "bill_id" => "hr2134-112")
   field :data, type: Hash, default: {}
@@ -232,8 +232,8 @@ class Interest
   # search type ("all" or an individual type), and this set of filters?
   def self.for_search(user, search_type, interest_in, data = {})
     
-    # choke unless interest_in, query, query_type are all present
-    return nil unless interest_in.present? and data.has_key?('query') and data.has_key?('query_type')
+    # choke unless interest_in and query_type are present
+    return nil unless interest_in.present? and data.has_key?('query_type')
 
     criteria = {
       'interest_type' => 'search',
@@ -319,7 +319,7 @@ class Interest
     subscription.interest_in = interest.in
     subscription.user = interest.user
     subscription.data = interest.data.dup
-    subscription.query = interest.query.dup
+    subscription.query = interest.query.dup # not persisted data
 
     subscription
   end

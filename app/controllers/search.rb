@@ -115,10 +115,7 @@ end
 helpers do
 
   def search_interest_for(query, search_type)
-    data = {
-      'query_type' => query_type,
-      'query' => query
-    }
+    data = {'query_type' => query_type}
 
     # merge in filters
     data.merge!(params[search_type] || {})

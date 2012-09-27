@@ -65,7 +65,7 @@ class Subscription
     adapter.url_for self, :search, options
   end
 
-  # convenience method - the 'data' field, but minus the 'query' field
+  # convenience method - the 'data' field, but only keys where the adapter supports them
   def filters
     if @filters
       @filters

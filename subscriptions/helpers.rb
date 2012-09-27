@@ -120,7 +120,7 @@ module Helpers
     # thin layer over the excerpt function that adds smartness for advanced queries
     def smart_excerpt(text, interest, options = {})
       if interest.data['query_type'] == "simple"
-        keywords = interest.data['query']
+        keywords = interest.in
 
       elsif interest.query['advanced']
         keywords = []
