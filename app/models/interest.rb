@@ -26,9 +26,10 @@ class Interest
   #     (e.g. "chamber" => "house", "state" => "NY", "bill_id" => "hr2134-112")
   field :data, type: Hash, default: {}
 
-  # other arbitrary metadata, but not persisted.
-  # usually citations or operators extracted from the query/data.
-  def extra; @extra ||= extra!; @extra; end
+  # query metadata, not persisted.
+  # citations, operators extracted from the query, 
+  # and the revised query string after post-processing.
+  def query; @query ||= query!; @query; end
 
   # tags the user has set on this interest
   field :tags, type: Array, default: []
@@ -39,6 +40,7 @@ class Interest
   
 
   # logged by search interests, the original query, pre-post-processing
+  # TODO: death
   field :original_in
 
   index :in
@@ -175,14 +177,14 @@ class Interest
   # run processing on the interest to extract additional data useful for display and logic
   # does not need to be stored with the interest, or used for de-duping, but helpful
   # idempotent, clears itself, can be run over and over
-  def extra!
-    extra = {}
+  def query!
+    query = {}
     
-    if data['query_type'] == "advanced"
-      extra['advanced'] = Search.parse_advanced data['query']
+    if self.data['query_type'] == "advanced"
+      query.merge! Search.parse_advanced(self.in)
     end
 
-    extra
+    query
   end
 
   # does the user have an interest with this criteria, and this data hash?
@@ -335,7 +337,7 @@ class Interest
     subscription.interest_in = interest.in
     subscription.user = interest.user
     subscription.data = interest.data.dup
-    subscription.extra = interest.extra.dup
+    subscription.query = interest.query.dup
 
     subscription
   end

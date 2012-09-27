@@ -11,12 +11,8 @@ class Subscription
   # arbitrary set of parameters that may refine or alter the subscription (e.g. "state" => "NY")
   field :data, type: Hash, default: {}
 
-  # extra data about a subscription, usually extracted or processed from the query/data.
-  # stored for ease of transport during the request cycle, and reporting, 
-  # but should be regenerated on demand for any real use.
-  #
-  # e.g. re-parse advanced query strings each time you need to display them.
-  field :extra, type: Hash, default: {}
+  # duplicated from interest
+  attr_accessor :query
 
   index :subscription_type
   index :initialized

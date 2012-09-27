@@ -45,10 +45,21 @@ class Search
     base
   end
 
+  # run the word through a gauntlet of checks for citations and the like
+  # def self.check_term(term)
+  #   if citation_id = usc_check(phrase)
+  #     {'string' => phrase,
 
-  # Advanced search query string parsing, using a Lucene query string parser library
 
+  # Advanced search query string parsing
+  # 1) uses a Lucene query string parser library -
+  # 2) yanks out any included terms which are citations, yanks out
+  # 3) reserializes query string from parsed results
   def self.parse_advanced(query)
+    
+    # default to returning original query
+    details = {'query' => query}
+
     begin
       parsed = LuceneQueryParser::Parser.new.parse query
 
@@ -56,42 +67,49 @@ class Search
     # so just return nil and let the caller decide how to handle it
     rescue Parslet::UnconsumedInput => e
       puts "Parse issue: #{e.message}"
-      return nil
+      return details
     rescue Exception => e
       puts "Unknown exception: #{e.type} - #{e.message}"
-      return nil
+      return details
     end
 
     parsed = [parsed] unless parsed.is_a?(Array)
+    
+    citations = []
 
     included = []
     excluded = []
     distance = []
-    
+
     parsed.each do |piece|
-      if phrase = (piece[:term] or piece[:word] or piece[:phrase])
-        phrase = phrase.to_s
+      if term = (piece[:term] or piece[:word] or piece[:phrase])
+        term = term.to_s
         
         if piece[:prohibited]
-          excluded << {'term' => phrase}
+          excluded << {'term' => term}
 
         elsif piece[:distance] and piece[:distance].to_s.to_i > 0
-          # split phrase into words
+          # split term into words
           # (doesn't support distance between multi-word phrases)
           # (doesn't support citations)
           distance << {
-            'words' => phrase.split(" "),
+            'words' => term.split(" "),
             'distance' => piece[:distance]
           }
 
         else
-          included << {'term' => phrase}
+          included << {'term' => term}
         end
 
       end
     end
 
-    {'included' => included, 'excluded' => excluded, 'distance' => distance}
+    details['citations'] = citations
+    details['advanced'] = {
+      'included' => included, 'excluded' => excluded, 'distance' => distance
+    }
+
+    details
   end
 
 end

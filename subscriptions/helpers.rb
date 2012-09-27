@@ -117,19 +117,19 @@ module Helpers
       /(#{patterns.join "|"})/i
     end
 
-    # thin layer over the excerpt function that adds extra smartness for advanced queries
+    # thin layer over the excerpt function that adds smartness for advanced queries
     def smart_excerpt(text, interest, options = {})
       if interest.data['query_type'] == "simple"
         keywords = interest.data['query']
 
-      elsif interest.extra['advanced']
+      elsif interest.query['advanced']
         keywords = []
 
-        interest.extra['advanced']['included'].each do |term|
+        interest.query['advanced']['included'].each do |term|
           keywords << term['term'].to_s.tr("*", "")
         end
 
-        interest.extra['advanced']['distance'].each do |distance|
+        interest.query['advanced']['distance'].each do |distance|
           keywords += distance['words'] # just words, not phrases or citations
         end
       else # unparsed advanced search

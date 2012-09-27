@@ -100,10 +100,10 @@
             <%= h name %>
           </h2>
         <% elsif interest.data['query_type'] == "advanced" %>
-          <% if interest.extra['advanced'] %>
-            <% included = interest.extra['advanced']['included'] %>
-            <% distance = interest.extra['advanced']['distance'] %>
-            <% excluded = interest.extra['advanced']['excluded'] %>
+          <% if interest.query['advanced'] %>
+            <% included = interest.query['advanced']['included'] %>
+            <% distance = interest.query['advanced']['distance'] %>
+            <% excluded = interest.query['advanced']['excluded'] %>
             
             <% if included.any? %>
               <div class="advanced included">
