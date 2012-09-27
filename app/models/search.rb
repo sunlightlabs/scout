@@ -67,19 +67,23 @@ class Search
     included = []
     excluded = []
     distance = []
-
+    
     parsed.each do |piece|
       if phrase = (piece[:term] or piece[:word] or piece[:phrase])
         phrase = phrase.to_s
         
-        if piece[:prohibited] or (piece[:op] =~ /NOT/i)
+        if piece[:prohibited] or (piece[:op] == "NOT")
           excluded << {'phrase' => phrase}
+
         elsif piece[:distance] and piece[:distance].to_s.to_i > 0
-          # split phrase into words (doesn't support distance between multi-word phrases)
+          # split phrase into words
+          # (doesn't support distance between multi-word phrases)
+          # (doesn't support citations)
           distance << {
             'terms' => phrase.split(" "),
             'distance' => piece[:distance]
           }
+
         else
           included << {'phrase' => phrase}
         end
