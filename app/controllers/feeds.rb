@@ -5,8 +5,6 @@ get "/interest/:interest_id.:format" do
     halt 404 and return
   end
 
-  interest.extra!
-
   items = SeenItem.where(:interest_id => interest.id).desc :date
 
   if params[:format] == 'rss'

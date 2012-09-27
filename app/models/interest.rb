@@ -26,12 +26,9 @@ class Interest
   #     (e.g. "chamber" => "house", "state" => "NY", "bill_id" => "hr2134-112")
   field :data, type: Hash, default: {}
 
-  # extra data about a subscription, usually extracted or processed from the query/data.
-  # stored for ease of transport during the request cycle, and reporting, 
-  # but should be regenerated on demand for any real use.
-  #
-  # e.g. re-parse advanced query strings each time you need to display them.
-  field :extra, type: Hash, default: {}
+  # other arbitrary metadata, but not persisted.
+  # usually citations or operators extracted from the query/data.
+  def extra; @extra ||= extra!; @extra; end
 
   # tags the user has set on this interest
   field :tags, type: Array, default: []
@@ -179,13 +176,13 @@ class Interest
   # does not need to be stored with the interest, or used for de-duping, but helpful
   # idempotent, clears itself, can be run over and over
   def extra!
-    self.extra = {}
-
+    extra = {}
+    
     if data['query_type'] == "advanced"
-      self.extra['advanced'] = Search.parse_advanced data['query']
+      extra['advanced'] = Search.parse_advanced data['query']
     end
 
-    self
+    extra
   end
 
   # does the user have an interest with this criteria, and this data hash?
@@ -233,7 +230,7 @@ class Interest
 
     end
 
-    interest.extra!
+    interest
   end
 
   # does the user have a search interest for this query, of this 
@@ -340,7 +337,7 @@ class Interest
     subscription.data = interest.data.dup
     subscription.extra = interest.extra.dup
 
-    subscription 
+    subscription
   end
 
   # given a search interest, what other search types are appropriate for it

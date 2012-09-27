@@ -21,7 +21,6 @@ module Deliveries
       if frequency == 'immediate'
 
         interest_deliveries.each do |interest, deliveries|          
-          interest.extra! # man, got to move this into after_find
           content = render_interest interest, deliveries
           content = render_final content
 

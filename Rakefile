@@ -265,6 +265,8 @@ namespace :test do
 
     citation = ENV['citation']
 
+    function = (ENV['function'] || :check).to_sym
+
     mechanism = ENV['by'] || (phone.present? ? 'sms' : 'email')
     email_frequency = ENV['frequency'] || 'immediate'
 
@@ -303,7 +305,7 @@ namespace :test do
         end
 
         puts "Searching for #{subscription.subscription_type} results for #{interest.in}..."
-        items = Subscriptions::Manager.poll subscription, :check, per_page: max
+        items = Subscriptions::Manager.poll subscription, function, per_page: max
         if items.nil? or items.empty?
           puts "No results, nothing to deliver."
           next
