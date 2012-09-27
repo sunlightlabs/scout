@@ -812,6 +812,10 @@ footer nav li{
     font-size: 190%;
 }
 
+.searchParameters.advanced .advanced.excluded span {
+    color: #848480;
+}
+
 .searchParameters.advanced .advanced.distance div.container {
     display: block;
 
