@@ -5,6 +5,14 @@
 
 class Search
 
+  # run term through a gauntlet of citation checks
+  def self.citation_for(term)
+    if citation_id = usc_check(term)
+      {'citation_id' => citation_id, 'citation_type' => 'usc'}
+    else
+      nil
+    end
+  end
 
   # Reads in a term and returns a US code citation ID compliant with citation.js
   # 
@@ -45,11 +53,22 @@ class Search
     base
   end
 
-  # run the word through a gauntlet of checks for citations and the like
-  # def self.check_term(term)
-  #   if citation_id = usc_check(phrase)
-  #     {'string' => phrase,
 
+  # Simple search phrase parsing
+  # 1) checks if phrase is a citation
+  # 2) returns (0- or 1-element) array with found citations
+  # 3) returns quoted phrase, or nil if phrase was citation
+  def self.parse_simple(phrase)
+    query = "\"#{phrase}\""
+    if citation = citation_for(phrase)
+      {
+        'citations' => [citation], 
+        'original_query' => query # for adapters not supporting citations
+      }
+    else
+      {'query' => query, 'citations' => []}
+    end
+  end
 
   # Advanced search query string parsing
   # 1) uses a Lucene query string parser library -
@@ -58,7 +77,7 @@ class Search
   def self.parse_advanced(query)
     
     # default to returning original query
-    details = {'query' => query}
+    details = {'query' => query, 'citations' => []}
 
     begin
       parsed = LuceneQueryParser::Parser.new.parse query
@@ -98,7 +117,11 @@ class Search
           }
 
         else
-          included << {'term' => term}
+          # if citation = citation_for(term)
+          #   citations << citation
+          # else
+            included << {'term' => term}
+          # end
         end
 
       end
@@ -108,6 +131,7 @@ class Search
     details['advanced'] = {
       'included' => included, 'excluded' => excluded, 'distance' => distance
     }
+    # details['query'] = reserialize details['advanced']
 
     details
   end

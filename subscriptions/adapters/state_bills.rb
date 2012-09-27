@@ -24,20 +24,11 @@ module Subscriptions
         url << "&search_window=all"
 
 
-        query = subscription.data['query']
-        
-        return nil unless query.present? # choke!
-
-        
-        # in simple mode, the query is auto-quoted (and any user-supplied quotes 
-        # have been stripped off in the controller before being sent here).
-
-        if subscription.data['query_type'] != 'advanced'
-          query = "\"#{query}\""
-        end
+        # state_bills doesn't support citations
+        query = subscription.query['query'] || subscription.query['original_query']
+        return nil unless query.present?
 
         url << "&q=#{CGI.escape query}"
-
 
         # filters
 

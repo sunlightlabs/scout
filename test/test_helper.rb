@@ -51,9 +51,8 @@ module TestHelper
       # have to be explicit about these things now
       data['query'] ||= interest_in
       data['query_type'] ||= 'simple'
-      original_in = interest_in
-
-      interest = Interest.for_search user, search_type, interest_in, original_in, data
+      
+      interest = Interest.for_search user, search_type, interest_in, data
       interest.attributes = attributes
       interest.save!
       interest

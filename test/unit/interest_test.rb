@@ -15,7 +15,7 @@ class InterestTest < Test::Unit::TestCase
 
     # create a bunch of interests of different types,
     # ensure that at each step we didn't look up an existing one
-    i1 = Interest.for_search user, "all", query, query, 
+    i1 = Interest.for_search user, "all", query, 
       {'query' => query, 'query_type' => 'simple'}
     assert i1.new_record?
     assert_equal user, i1.user
@@ -28,7 +28,7 @@ class InterestTest < Test::Unit::TestCase
     assert i1.save
 
     # can override query and make it different than 'in'
-    i1a = Interest.for_search user, "all", query, query, 
+    i1a = Interest.for_search user, "all", query, 
       {'query' => query2, 'query_type' => 'simple'}
     assert_equal "all", i1a.search_type
     assert_equal query, i1a.in
@@ -37,7 +37,7 @@ class InterestTest < Test::Unit::TestCase
     assert i1a.save, i1a.errors.inspect
 
     # can even override query with nil, that's fine
-    i1b = Interest.for_search user, "all", query, query, 
+    i1b = Interest.for_search user, "all", query, 
       {'query' => nil, 'query_type' => 'simple'}
     assert_equal "all", i1b.search_type
     assert_equal query, i1b.in
@@ -45,83 +45,79 @@ class InterestTest < Test::Unit::TestCase
     assert i1b.new_record?
     assert i1b.save, i1b.errors.inspect
 
-    # but don't allow nil in's or original_in's
-    i1c = Interest.for_search user, "all", nil, query, 
+    # but don't allow nil in's
+    i1c = Interest.for_search user, "all", nil, 
       {'query' => query, 'query_type' => 'simple'}
     assert_nil i1c
 
-    i1d = Interest.for_search user, "all", query, nil,
-      {'query' => query, 'query_type' => 'simple'}
+    # don't allow missing query or query_type fields
+    i1d = Interest.for_search user, "all", query,
+      {'query_type' => 'simple'}
     assert_nil i1d
 
-    # don't allow missing query or query_type fields
-    i1e = Interest.for_search user, "all", query, query,
-      {'query_type' => 'simple'}
-    assert_nil i1e
-
-    i1f = Interest.for_search user, "all", query, query, 
+    i1e = Interest.for_search user, "all", query, 
       {'query' => query}
-    assert_nil i1f
+    assert_nil i1e
     
-    i2 = Interest.for_search user, "federal_bills", query, query, 
+    i2 = Interest.for_search user, "federal_bills", query, 
       {'query' => query, 'query_type' => 'simple'}
     assert_equal "federal_bills", i2.search_type
     assert i2.new_record?
     assert i2.save
 
-    i3 = Interest.for_search user, "federal_bills", query2, query2, 
+    i3 = Interest.for_search user, "federal_bills", query2, 
       {'query' => query2, 'query_type' => 'simple'}
     assert i3.new_record?
     assert i3.save
 
-    i4 = Interest.for_search user2, "federal_bills", query2, query2, 
+    i4 = Interest.for_search user2, "federal_bills", query2, 
       {'query' => query2, 'query_type' => 'simple'}
     assert i4.new_record?
     assert i4.save
 
-    i5 = Interest.for_search user, "speeches", query, query, 
+    i5 = Interest.for_search user, "speeches", query, 
       {'query' => query, 'query_type' => 'simple', 'state' => 'CA'}
     assert i5.new_record?
     assert_equal 'CA', i5.data['state']
     assert_equal ['query', 'query_type', 'state'].sort, i5.data.keys.sort
     assert i5.save
 
-    i6 = Interest.for_search user, "speeches", query, query, 
+    i6 = Interest.for_search user, "speeches", query, 
       {'query' => query, 'query_type' => 'simple', 'state' => 'CA', 'party' => 'R'}
     assert i6.new_record?
     assert i6.save
 
 
     # now, test that the lookup works okay and matches correctly
-    i7 = Interest.for_search user, "speeches", query, query, 
+    i7 = Interest.for_search user, "speeches", query, 
       {'query' => query, 'query_type' => 'simple', 'state' => 'CA'}
     assert !i7.new_record?
     assert_equal i5.id, i7.id
 
-    i7a = Interest.for_search user, "speeches", query, query, 
+    i7a = Interest.for_search user, "speeches", query, 
       {'query' => query, 'query_type' => 'simple', 'state' => 'CA', 'query_type' => 'simple'}
     assert !i7a.new_record?
     assert_equal i5.id, i7a.id
 
-    i7b = Interest.for_search user, "speeches", query, query, 
+    i7b = Interest.for_search user, "speeches", query, 
       {'query' => query, 'query_type' => 'advanced', 'state' => 'CA'}
     assert i7b.new_record?
 
-    i7c = Interest.for_search nil, "speeches", query, query, 
+    i7c = Interest.for_search nil, "speeches", query, 
       {'query' => query, 'query_type' => 'simple', 'state' => 'CA'}
     assert i7c.new_record?
 
-    i8 = Interest.for_search user2, "speeches", query, query, 
+    i8 = Interest.for_search user2, "speeches", query, 
       {'query' => query, 'query_type' => 'simple', 'state' => 'CA'}
     assert i8.new_record?
     assert_equal user2, i8.user
 
-    i9 = Interest.for_search user, "federal_bills", query2, query2,
+    i9 = Interest.for_search user, "federal_bills", query2, 
       {'query' => query2, 'query_type' => 'simple'}
     assert !i9.new_record?
     assert_equal i3.id, i9.id
 
-    i10 = Interest.for_search user, "speeches", query, query, 
+    i10 = Interest.for_search user, "speeches", query, 
       {'query' => query, 'query_type' => 'simple', 'state' => 'CA', 'party' => 'R'}
     assert !i10.new_record?
     assert_equal i6.id, i10.id
@@ -134,65 +130,60 @@ class InterestTest < Test::Unit::TestCase
     assert_equal "house", i6.reload.data['chamber']
 
 
-    i11 = Interest.for_search user, "speeches", query, query, 
+    i11 = Interest.for_search user, "speeches", query, 
       {'query' => query, 'query_type' => 'simple', 'state' => 'CA', 'party' => 'R'}
     assert i11.new_record?
 
 
     # testing that uniqueness constraint ignores 'in' for search results
-    cite1 = "5 usc 552"
-    cite2 = "section 552 of title 5"
-    citation_id = "5_usc_552"
+    # cite1 = "5 usc 552"
+    # cite2 = "section 552 of title 5"
+    # citation_id = "5_usc_552"
     
-    c1 = Interest.for_search user, "all", citation_id, cite1,
-      {'query' => nil, 'query_type' => 'simple', 
-       'citation_id' => citation_id, 'citation_type' => 'usc'}
-    assert c1.new_record?
-    assert_equal citation_id, c1.in
-    assert_equal cite1, c1.original_in
-    assert_equal citation_id, c1.data['citation_id']
-    assert c1.data.has_key?('query')
-    assert_nil c1.data['query']
-    assert c1.save
+    # c1 = Interest.for_search user, "all", cite1,
+    #   {'query' => nil, 'query_type' => 'simple', 
+    #    'citation_id' => citation_id, 'citation_type' => 'usc'}
+    # assert c1.new_record?
+    # assert_equal citation_id, c1.in
+    # assert_equal citation_id, c1.data['citation_id']
+    # assert c1.data.has_key?('query')
+    # assert_nil c1.data['query']
+    # assert c1.save
 
     # user has an interest for the same citation under a different search string
-    c2 = Interest.for_search user, "all", citation_id, cite2,
-      {'query' => nil, 'query_type' => 'simple', 
-       'citation_id' => citation_id, 'citation_type' => 'usc'}
+    # c2 = Interest.for_search user, "all", cite2,
+    #   {'query' => nil, 'query_type' => 'simple', 
+    #    'citation_id' => citation_id, 'citation_type' => 'usc'}
 
-    # it should have located c1, with c1's citation
-    assert !c2.new_record?
-    assert_equal citation_id, c2.in
-    assert_equal cite1, c2.original_in
-    assert_equal citation_id, c2.data['citation_id']
-    assert c2.data.has_key?('query')
-    assert_nil c2.data['query']
+    # # it should have located c1, with c1's citation
+    # assert !c2.new_record?
+    # assert_equal citation_id, c2.in
+    # assert_equal citation_id, c2.data['citation_id']
+    # assert c2.data.has_key?('query')
+    # assert_nil c2.data['query']
 
     # data hash is same as c1, but the interest.in didn't resolve to the same thing,
-    # nor is the original_in the same.
     # should still look up c1, we are not using interest.in to resolve 
-    c2a = Interest.for_search user, "all", citation_id.succ, cite2,
-      {'query' => nil, 'query_type' => 'simple', 
-       'citation_id' => citation_id, 'citation_type' => 'usc'}
+    # c2a = Interest.for_search user, "all", cite2,
+    #   {'query' => nil, 'query_type' => 'simple', 
+    #    'citation_id' => citation_id, 'citation_type' => 'usc'}
 
-    # it should have located c1, with c1's in and original_in
-    assert !c2a.new_record?
-    assert_equal citation_id, c2a.in
-    assert_equal cite1, c2a.original_in
-    assert_equal citation_id, c2a.data['citation_id']
-    assert c2a.data.has_key?('query')
-    assert_nil c2a.data['query']
+    # # it should have located c1, with c1's in
+    # assert !c2a.new_record?
+    # assert_equal citation_id, c2a.in
+    # assert_equal citation_id, c2a.data['citation_id']
+    # assert c2a.data.has_key?('query')
+    # assert_nil c2a.data['query']
     
-    c3 = Interest.for_search nil, "all", citation_id, cite1, 
-      {'query' => nil, 'query_type' => 'simple', 
-       'citation_id' => citation_id, 'citation_type' => 'usc'}
+    # c3 = Interest.for_search nil, "all", cite1, 
+    #   {'query' => nil, 'query_type' => 'simple', 
+    #    'citation_id' => citation_id, 'citation_type' => 'usc'}
 
-    assert c3.new_record?
-    assert_equal citation_id, c3.in
-    assert_equal cite1, c3.original_in
-    assert_equal citation_id, c3.data['citation_id']
-    assert c3.data.has_key?('query')
-    assert_nil c3.data['query']
+    # assert c3.new_record?
+    # assert_equal citation_id, c3.in
+    # assert_equal citation_id, c3.data['citation_id']
+    # assert c3.data.has_key?('query')
+    # assert_nil c3.data['query']
   end
 
   def test_item_interest_deserialization

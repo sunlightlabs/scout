@@ -1,6 +1,12 @@
-<h5>
-  Your "<%= interest_in %>" subscriptions
-</h5>
+<% if current_interest %>
+  <h5>
+    <% if current_interest.data['query_type'] == 'simple' %>
+      Your "<%= interest_name current_interest %>" subscriptions
+    <% else %>
+      Your related subscriptions
+    <% end %>
+  </h5>
+<% end %>
 
 <% grouped = related_interests.to_a.group_by(&:search_type) %>
 <% (["all"] + search_types).each do |search_type| %>

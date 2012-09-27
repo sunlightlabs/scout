@@ -26,30 +26,24 @@ module Subscriptions
         
         sections = %w{ stage title abstract document_number document_type published_at federal_register_url agency_names agency_ids publication_date }
 
-        # may be nil or blank!
-        query = subscription.data['query']
+        url = endpoint
 
-        url = "#{endpoint}"
-
+        query = subscription.query['query']
         if query.present?
           url << "/search/regulations.json?"
+          url << "&q=#{CGI.escape query}"
+
           url << "&highlight=true"
           url << "&highlight_size=500"
           url << "&highlight_tags=,"
-
-          if subscription.data['query_type'] != 'advanced'
-            url << "&query=#{CGI.escape query}"
-          else
-            url << "&q=#{CGI.escape query}"
-          end
-
-        elsif subscription.data['citation_type'] == 'usc'
-          url << "/regulations.json?"
-          url << "&citation=#{subscription.data['citation_id']}"
-          url << "&citation_details=true"
-
         else
-          return nil # choke!
+          url << "/regulations.json?"
+        end
+
+        if subscription.query['citations'].any?
+          citation = subscription.query['citations'].first
+          url << "&citation=#{citation['citation_id']}"
+          url << "&citation_details=true"
         end
 
         url << "&order=published_at"

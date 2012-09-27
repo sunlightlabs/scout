@@ -37,11 +37,6 @@ class Interest
   # per-interest override of notification mechanism
   field :notifications
   validates_inclusion_of :notifications, :in => ["none", "email_daily", "email_immediate", "sms"], :allow_blank => true
-  
-
-  # logged by search interests, the original query, pre-post-processing
-  # TODO: death
-  field :original_in
 
   index :in
   index :user_id
@@ -182,6 +177,8 @@ class Interest
     
     if self.data['query_type'] == "advanced"
       query.merge! Search.parse_advanced(self.in)
+    else
+      query.merge! Search.parse_simple(self.in)
     end
 
     query
@@ -190,7 +187,7 @@ class Interest
   # does the user have an interest with this criteria, and this data hash?
   # optional: a 'populate' hash for attributes to be set on new records,
   #           but which should not be used to constrain lookup of existing records
-  def self.for(user, criteria, data = nil, populate = nil)
+  def self.for(user, criteria, data = nil)
 
     # if no data given, then we don't care whether the data differs,
     # and we can do a much simpler lookup
@@ -200,8 +197,6 @@ class Interest
       else
         Interest.new criteria
       end
-      
-      interest.attributes = populate
 
     else
       find_criteria = criteria.dup
@@ -228,8 +223,6 @@ class Interest
         Interest.new criteria
       end
 
-      interest.attributes = populate if interest.new_record?
-
     end
 
     interest
@@ -237,25 +230,18 @@ class Interest
 
   # does the user have a search interest for this query, of this 
   # search type ("all" or an individual type), and this set of filters?
-  def self.for_search(user, search_type, interest_in, original_in, data = {})
+  def self.for_search(user, search_type, interest_in, data = {})
     
-    # choke unless original_in, interest_in, query, query_type are all present
-    return nil unless original_in.present? and interest_in.present? and data.has_key?('query') and data.has_key?('query_type')
+    # choke unless interest_in, query, query_type are all present
+    return nil unless interest_in.present? and data.has_key?('query') and data.has_key?('query_type')
 
     criteria = {
       'interest_type' => 'search',
       'search_type' => search_type,
-    }
-
-    # don't use 'in' or 'original_in' to determine uniqueness.
-    # some queries can be normalized to be the same thing (e.g. citations) - for them,
-    # 'in' is a displayable form, and 'original_in' is the original search query
-    populate = {
-      'in' => interest_in,
-      'original_in' => original_in
+      'in' => interest_in
     }
     
-    self.for user, criteria, data, populate
+    self.for user, criteria, data
   end
 
   # if this is used to make a new item, the caller will have to 
@@ -303,11 +289,7 @@ class Interest
 
     subscription_types = if interest.search?
       if interest.search_type == "all"
-        if interest.data['citation_type']
-          search_types_for interest.data['citation_type']
-        else
-          search_types
-        end
+        search_types
       else
         [interest.search_type]
       end
@@ -342,20 +324,9 @@ class Interest
     subscription
   end
 
-  # given a search interest, what other search types are appropriate for it
-  # (right now: is this a text search, or a citation search)
-  def self.search_types_for(citation_type)
-    # limit default "all" search for US Code searches to 
-    if citation_type == 'usc'
-      ['federal_bills', 'regulations', 'documents']
-    else
-      search_types
-    end
-  end
 
   # before create, wipe any subscriptions that have been initialized away,
   # regenerate them, and save them
-
 
   # split up before and after create because the subscriptions_for method
   # (currently) will just look up existing subscriptions if the interest has an id

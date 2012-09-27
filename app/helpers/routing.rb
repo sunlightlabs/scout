@@ -26,7 +26,17 @@ module Helpers
       elsif interest.feed?
         interest.data['title']
       elsif interest.search?
-        interest.in
+        # if it's a simple citation search, format it
+        # otherwise, just display the query
+        if interest.data['query_type'] == 'simple'
+          if interest.query['citations'].any?
+            Search.usc_standard interest.query['citations'].first['citation_id']
+          else
+            interest.in
+          end
+        else
+          interest.in
+        end
       elsif interest.tag?
         if (name = user_name(interest.tag_user)).present?
           "#{name} &mdash; #{interest.tag.name.capitalize}"

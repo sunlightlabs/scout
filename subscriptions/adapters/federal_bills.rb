@@ -22,28 +22,24 @@ module Subscriptions
         
         sections = %w{ bill_id bill_type number short_title summary last_version_on latest_upcoming official_title introduced_at last_action_at last_action session last_version }
 
-        # may be nil or blank!
-        query = subscription.data['query']
+        url = endpoint
 
-        url = "#{endpoint}"
+        query = subscription.query['query']
         if query.present?
           url << "/search/bills.json?"
+          url << "&q=#{CGI.escape query}"
+
           url << "&highlight=true"
           url << "&highlight_size=500"
           url << "&highlight_tags=,"
-          if subscription.data['query_type'] != 'advanced'
-            url << "&query=#{CGI.escape query}"
-          else
-            url << "&q=#{CGI.escape query}"
-          end
-
-        elsif subscription.data['citation_type'] == 'usc'
-          url << "/bills.json?"
-          url << "&citation=#{subscription.data['citation_id']}"
-          url << "&citation_details=true"
-
         else
-          return nil # choke!
+          url << "/bills.json?"
+        end
+
+        if subscription.query['citations'].any?
+          citation = subscription.query['citations'].first
+          url << "&citation=#{citation['citation_id']}"
+          url << "&citation_details=true"
         end
 
         url << "&order=last_version_on"

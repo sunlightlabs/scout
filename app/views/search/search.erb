@@ -87,7 +87,7 @@
 
 <div class="results contentArea right <%= interest.search_type == "all" ? "" : "single" %>">
   <div class="resultsHeader">
-    <% if interest.data['citation_type'] == 'usc' %>
+    <% if interest.query['citations'].any? %>
       <div class="searchHeader">
         We've detected that you're searching for a reference to the <strong>US Code</strong>.
       </div>
@@ -316,7 +316,7 @@
     // hide category types not appropriate for this kind of search
     $("ul.categories li").hide();
     $("ul.categories li.all").show();
-    <% Interest.search_types_for(interest.data['citation_type']).each do |subscription_type| %>
+    <% search_types.each do |subscription_type| %>
       $("ul.categories li[data-subscription_type='<%= subscription_type %>']").show()
     <% end %>
     

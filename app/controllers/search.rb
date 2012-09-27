@@ -115,44 +115,15 @@ end
 helpers do
 
   def search_interest_for(query, search_type)
-    data = {}
-    data['query_type'] = query_type
-
-    # default query field to original query, may change in post-processing
-    data['query'] = query
-
-    # default interest's 'in' field to original query, before post-processing.
-    # returned interest may have a different 'in' field, 
-    # if the normalized interest already existed under a different original search
-    interest_in = query
-    original_in = query
-
-
-    if query_type == "simple"
-
-      if citation_id = Search.usc_check(query)
-        # USC citation search
-        data['citation_type'] = 'usc'
-        data['citation_id'] = citation_id
-        
-        # don't need to do full text search anymore, but do need to set the field
-        data['query'] = nil 
-
-        # interest_in is currently the normalized displayable form
-        interest_in = Search.usc_standard citation_id
-
-        # if this is coming in as an invalid search_type for this kind
-        # of citation, switch it to 'all'
-        if !Interest.search_types_for(data['citation_type']).include?(search_type)
-          search_type = "all"
-        end
-      end
-    end
+    data = {
+      'query_type' => query_type,
+      'query' => query
+    }
 
     # merge in filters
     data.merge!(params[search_type] || {})
 
-    Interest.for_search current_user, search_type, interest_in, original_in, data
+    Interest.for_search current_user, search_type, query, data
   end
 
   def related_interests(interest_in)

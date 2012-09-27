@@ -23,34 +23,27 @@ module Subscriptions
           source_url gao_id categories description
         }
 
-        # may be nil or blank!
-        query = subscription.data['query']
+        url = endpoint
 
-        url = "#{endpoint}"
-
+        query = subscription.query['query']
         if query.present?
           url << "/search/documents.json?"
+          url << "&q=#{CGI.escape query}"
+
           url << "&highlight=true"
           url << "&highlight_size=500"
           url << "&highlight_tags=,"
-
-          url << "&document_type=gao_report"
-
-          if subscription.data['query_type'] != 'advanced'
-            url << "&query=#{CGI.escape query}"
-          else
-            url << "&q=#{CGI.escape query}"
-          end
-
-        elsif subscription.data['citation_type'] == 'usc'
-          url << "/documents.json?"
-          url << "&citation=#{subscription.data['citation_id']}"
-          url << "&citation_details=true"
-
         else
-          return nil # choke!
+          url << "/documents.json?"
         end
 
+        if subscription.query['citations'].any?
+          citation = subscription.query['citations'].first
+          url << "&citation=#{citation['citation_id']}"
+          url << "&citation_details=true"
+        end
+
+        url << "&document_type=gao_report"
         url << "&order=posted_at"
         url << "&fields=#{sections.join ','}"
         url << "&apikey=#{api_key}"

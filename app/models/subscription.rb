@@ -12,7 +12,8 @@ class Subscription
   field :data, type: Hash, default: {}
 
   # duplicated from interest
-  attr_accessor :query
+  def query; interest ? interest.query : @query; end
+  def query=(obj); @query = obj; end
 
   index :subscription_type
   index :initialized

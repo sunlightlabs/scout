@@ -20,27 +20,18 @@ module Subscriptions
       def self.url_for(subscription, function, options = {})
         api_key = options[:api_key] || config[:subscriptions][:sunlight_api_key]
         
-        query = subscription.data['query']
-        
-        return nil unless query.present? # choke!
-        
         endpoint = "http://capitolwords.org/api"
+
+        # speeches don't support citations
+        query = subscription.query['query'] || subscription.query['original_query']
+        return nil unless query.present?
+
         
         url = "#{endpoint}/text.json?apikey=#{api_key}"
-        url << "&sort=date%20desc"
+        url << "&q=#{CGI.escape query}"
 
         # keep it only to fields with a speaker (bioguide_id)
         url << "&bioguide_id=[''%20TO%20*]"
-
-
-        
-        if subscription.data['query_type'] != 'advanced'
-          query = query.gsub "\"", ""
-          url << "&phrase=#{CGI.escape query}"
-        else
-          url << "&q=#{CGI.escape query}"
-        end
-
 
         # filters
 
@@ -54,6 +45,8 @@ module Subscriptions
 
         url << "&page=#{options[:page].to_i - 1}" if options[:page]
         url << "&per_page=#{options[:per_page]}" if options[:per_page]
+
+        url << "&sort=date%20desc"
         
         url
       end
