@@ -87,12 +87,8 @@
 
 <div class="results contentArea right <%= interest.search_type == "all" ? "" : "single" %>">
   <div class="resultsHeader">
-    <% if interest.query['citations'].any? %>
-      <div class="searchHeader">
-        We've detected that you're searching for a reference to the <strong>US Code</strong>.
-      </div>
-    <% end %>
-  	<div class="pageTitle">
+    
+    <div class="pageTitle">
       <div class="searchParameters <%= interest.query_type %>">
         <% if interest.query_type == "simple" %>
           <% name = interest_name interest %>
@@ -101,10 +97,22 @@
           </h2>
         <% elsif interest.query_type == "advanced" %>
           <% if interest.query['advanced'] %>
+            <% citations = interest.query['citations'] %>
             <% included = interest.query['advanced']['included'] %>
             <% distance = interest.query['advanced']['distance'] %>
             <% excluded = interest.query['advanced']['excluded'] %>
             
+            <% if citations.any? %>
+              <div class="advanced citations">
+                <h2>Citing:</h2>
+                <div class="container">
+                  <span>
+                    <%= citations.map {|cite| Search.usc_standard cite['citation_id']}.join ", " %>
+                  </span>
+                </div>
+              </div>
+            <% end %>
+
             <% if included.any? %>
               <div class="advanced included">
                 <h2>With Terms:</h2>
