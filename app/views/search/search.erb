@@ -91,10 +91,17 @@
     <div class="pageTitle">
       <div class="searchParameters <%= interest.query_type %>">
         <% if interest.query_type == "simple" %>
-          <% name = interest_name interest %>
-          <h2 class="<%= query_size name %>">
-            <%= h name %>
-          </h2>
+          <% if interest.query['citations'].any? %>
+            <h2 class="smaller">
+              <span class="citing">citing:</span>
+              <%= Search.usc_standard interest.query['citations'].first['citation_id'] %>
+            </h2>
+          <% else %>
+            <% name = interest_name interest %>
+            <h2 class="<%= query_size name %>">
+              <%= h name %>
+            </h2>
+          <% end %>
         <% elsif interest.query_type == "advanced" %>
           <% if interest.query['advanced'] %>
             <% citations = interest.query['citations'] %>

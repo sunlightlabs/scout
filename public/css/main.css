@@ -795,6 +795,10 @@ footer nav li{
     font-size: 280%; /* matches with main h2 */
 }
 
+.searchParameters.simple span.citing {
+    color: #aaa;
+}
+
 .searchParameters.advanced .advanced {
     margin: 8px 0;
 }
