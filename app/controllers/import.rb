@@ -9,15 +9,20 @@ get "/import/feed/preview" do
   url = params[:url] ? params[:url].strip : ""
 
 
-  unless feed = Subscriptions::Adapters::Feed.url_to_response(url)
+  begin
+    unless feed = Subscriptions::Adapters::Feed.url_to_response(url)
 
-    # give a try at autodiscovery
-    urls = Timeout::timeout(5) {Feedbag.find url}
-    url = urls.first
+      # give a try at autodiscovery
+      urls = Timeout::timeout(5) {Feedbag.find url}
+      url = urls.first
 
-    unless url and (feed = Subscriptions::Adapters::Feed.url_to_response(url))
-      halt 500 and return
+      unless url and (feed = Subscriptions::Adapters::Feed.url_to_response(url))
+        halt 500 and return
+      end
     end
+  rescue Subscriptions::AdapterParseException => ex
+    puts "Error: #{ex.message}"
+    halt 500 and return
   end
 
   feed_details = Subscriptions::Adapters::Feed.feed_details feed
@@ -31,21 +36,22 @@ get "/import/feed/preview" do
   end
 
   items = erb :"search/items", :layout => false, :locals => {
-    :items => results.first(3), 
-    :subscription => subscription,
+    items: results.first(3), 
+    subscription: subscription,
+    interest: interest,
 
     # could be removed if the partials were refactored not to necessarily expect these
-    :query => nil,
-    :sole => true
+    query: nil,
+    sole: true
   }
 
   headers["Content-Type"] = "application/json"
   {
-    :title => feed_details['title'],
-    :description => feed_details['description'],
-    :feed_url => feed_url,
-    :size => items.size,
-    :html => items
+    title: feed_details['title'],
+    description: feed_details['description'],
+    feed_url: feed_url,
+    size: items.size,
+    html: items
   }.to_json
 end
 
