@@ -47,7 +47,13 @@ module Helpers
 
 
     def bill_highlight(item, interest, options = {})
-      if item.data['search'] and item.data['search']['highlight']
+      keywords = keywords_from interest
+
+      if item.data['citations'] and item.data['citations'].any?
+        matches = item.data['citations'].map {|c| c['match']}
+        cite = item.data['citations'].first
+        excerpt cite['context'], (keywords + matches), options
+      elsif item.data['search'] and item.data['search']['highlight']
         field = preferred_field item, bill_priorities
         return nil unless field
 
@@ -57,30 +63,34 @@ module Helpers
           text = "Official keyword: \"#{text}\""
         end
         
-        smart_excerpt text, interest, options
-
-      elsif item.data['citations'] and item.data['citations'].any?
-        cite = item.data['citations'].first
-        excerpt cite['context'], cite['match'], options
+        excerpt text, keywords, options
       end
     end
 
     def regulation_highlight(item, interest, options = {})
-      if item.data['search'] and item.data['search']['highlight']
+      keywords = keywords_from interest
+
+      if item.data['citations'] and item.data['citations'].any?
+        matches = item.data['citations'].map {|c| c['match']}
+        cite = item.data['citations'].first
+        excerpt cite['context'], (keywords + matches), options
+      elsif item.data['search'] and item.data['search']['highlight']
         field = preferred_field item, regulation_priorities
         return nil unless field
         text = item.data['search']['highlight'][field].first
         
-        smart_excerpt text, interest, options
-
-      elsif item.data['citations'] and item.data['citations'].any?
-        cite = item.data['citations'].first
-        excerpt cite['context'], cite['match'], options
+        excerpt text, keywords, options
       end
     end
 
     def document_highlight(item, interest, options = {})
-      if item.data['search'] and item.data['search']['highlight']
+      keywords = keywords_from interest
+
+      if item.data['citations'] and item.data['citations'].any?
+        matches = item.data['citations'].map {|c| c['match']}
+        cite = item.data['citations'].first
+        excerpt cite['context'], (keywords + matches), options
+      elsif item.data['search'] and item.data['search']['highlight']
         field = preferred_field item, document_priorities
         return nil unless field
         text = item.data['search']['highlight'][field].first
@@ -89,23 +99,21 @@ module Helpers
           text = "Official category: \"#{text}\""
         end
 
-        smart_excerpt text, interest, options
-
-      elsif item.data['citations'] and item.data['citations'].any?
-        cite = item.data['citations'].first
-        excerpt cite['context'], cite['match'], options
+        excerpt text, keywords, options
       end
     end
 
     def state_bill_highlight(item, interest, options = {})
+      keywords = keywords_from interest
       title = item.data['+short_title'] || item.data['title']
-      excerpt = smart_excerpt title, interest, options
+      excerpt = excerpt title, keywords, options
       excerpt || title
     end
 
     def speech_excerpt(speech, interest, options = {})
+      keywords = keywords_from interest
       text = speech['speaking'].join("\n\n")
-      excerpt = smart_excerpt text, interest, options
+      excerpt = excerpt text, keywords, options
       excerpt || truncate(text, 500)
     end
 
@@ -117,8 +125,7 @@ module Helpers
       /(#{patterns.join "|"})/i
     end
 
-    # thin layer over the excerpt function that adds smartness for advanced queries
-    def smart_excerpt(text, interest, options = {})
+    def keywords_from(interest)
       if interest.query['advanced']
         keywords = []
 
@@ -129,11 +136,11 @@ module Helpers
         interest.query['advanced']['distance'].each do |distance|
           keywords += distance['words'] # just words, not phrases or citations
         end
-      else # simple search, or unparsed advanced search
-        keywords = interest.in
-      end
 
-      excerpt text, keywords, options
+        keywords
+      else # simple search, or unparsed advanced search
+        [interest.in]
+      end
     end
     
     # client-side truncation and highlighting

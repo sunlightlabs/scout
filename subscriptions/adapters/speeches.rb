@@ -23,7 +23,12 @@ module Subscriptions
         endpoint = "http://capitolwords.org/api"
 
         # speeches don't support citations
-        query = subscription.query['query'] || subscription.query['original_query']
+        if subscription.query['citations'].any?
+          query = subscription.interest_in
+        else
+          query = subscription.query['query']
+        end
+        
         return nil unless query.present?
 
         

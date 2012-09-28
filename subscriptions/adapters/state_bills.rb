@@ -24,8 +24,13 @@ module Subscriptions
         url << "&search_window=all"
 
 
-        # state_bills doesn't support citations
-        query = subscription.query['query'] || subscription.query['original_query']
+        # state_bills don't support citations
+        if subscription.query['citations'].any?
+          query = subscription.interest_in
+        else
+          query = subscription.query['query']
+        end
+
         return nil unless query.present?
 
         url << "&q=#{CGI.escape query}"

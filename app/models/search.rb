@@ -8,7 +8,11 @@ class Search
   # run term through a gauntlet of citation checks
   def self.citation_for(term)
     if citation_id = usc_check(term)
-      {'citation_id' => citation_id, 'citation_type' => 'usc'}
+      {
+        'citation_id' => citation_id, 
+        'citation_type' => 'usc',
+        'original' => term # for adapters not supporting citations
+      }
     else
       nil
     end
@@ -61,10 +65,7 @@ class Search
   def self.parse_simple(phrase)
     query = "\"#{phrase}\""
     if citation = citation_for(phrase)
-      {
-        'citations' => [citation], 
-        'original_query' => query # for adapters not supporting citations
-      }
+      {'citations' => [citation]}
     else
       {'query' => query, 'citations' => []}
     end
