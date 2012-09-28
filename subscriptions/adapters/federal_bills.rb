@@ -37,8 +37,8 @@ module Subscriptions
         end
 
         if subscription.query['citations'].any?
-          citation = subscription.query['citations'].first
-          url << "&citation=#{citation['citation_id']}"
+          citations = subscription.query['citations'].map {|c| c['citation_id']}
+          url << "&citation=#{citations.join "|"}"
           url << "&citation_details=true"
         end
 

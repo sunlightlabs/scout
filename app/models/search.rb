@@ -117,11 +117,11 @@ class Search
           }
 
         else
-          # if citation = citation_for(term)
-          #   citations << citation
-          # else
+          if citation = citation_for(term)
+            citations << citation
+          else
             included << {'term' => term}
-          # end
+          end
         end
 
       end
