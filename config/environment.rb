@@ -99,6 +99,11 @@ def search_types
   @search_types ||= subscription_map['search_adapters'].map {|h| h.keys.first}
 end
 
+# hardcoded for now
+def cite_types
+  ["federal_bills", "regulations", "documents"]
+end
+
 def item_types
   if @item_types
     @item_types

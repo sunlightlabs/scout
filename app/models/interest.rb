@@ -316,7 +316,11 @@ class Interest
 
     subscription_types = if interest.search?
       if interest.search_type == "all"
-        search_types
+        if interest.query['citations'].any?
+          cite_types
+        else
+          search_types
+        end
       else
         [interest.search_type]
       end

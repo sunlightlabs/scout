@@ -323,7 +323,7 @@
     // hide category types not appropriate for this kind of search
     $("ul.categories li").hide();
     $("ul.categories li.all").show();
-    <% search_types.each do |subscription_type| %>
+    <% (interest.query['citations'].any? ? cite_types : search_types).each do |subscription_type| %>
       $("ul.categories li[data-subscription_type='<%= subscription_type %>']").show()
     <% end %>
     
