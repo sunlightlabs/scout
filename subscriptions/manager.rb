@@ -88,7 +88,7 @@ module Subscriptions
 
           mark_as_seen! item
 
-          if !test? and (item.date < 14.days.ago)
+          if !test? and (item.date < 30.days.ago)
             # this is getting out of hand - 
             # don't deliver state bill backfills, but don't email me about them
             # temporary until Open States allows sorting by last_action dates
