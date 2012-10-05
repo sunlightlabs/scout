@@ -5,7 +5,7 @@
 ######## Delivery tasks ########
 
 # email digests - once a day, in the morning
-0 10 * * * /projects/scout/current/config/cron/production/deliver.sh email_daily
+30 14 * * * /projects/scout/current/config/cron/production/deliver.sh email_daily
 
 # immediate emails - throughout the day, every 10 minutes
 */10 * * * *  /projects/scout/current/config/cron/production/deliver.sh email_immediate
