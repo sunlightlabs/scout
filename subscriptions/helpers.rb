@@ -52,7 +52,7 @@ module Helpers
       if item.data['citations'] and item.data['citations'].any?
         matches = item.data['citations'].map {|c| c['match']}
         cite = item.data['citations'].first
-        excerpt cite['context'], (keywords + matches), options
+        excerpt(cite['context'] || cite['excerpt'], (keywords + matches), options)
       elsif item.data['search'] and item.data['search']['highlight']
         field = preferred_field item, bill_priorities
         return nil unless field
@@ -73,7 +73,7 @@ module Helpers
       if item.data['citations'] and item.data['citations'].any?
         matches = item.data['citations'].map {|c| c['match']}
         cite = item.data['citations'].first
-        excerpt cite['context'], (keywords + matches), options
+        excerpt(cite['context'] || cite['excerpt'], (keywords + matches), options)
       elsif item.data['search'] and item.data['search']['highlight']
         field = preferred_field item, regulation_priorities
         return nil unless field
@@ -89,7 +89,7 @@ module Helpers
       if item.data['citations'] and item.data['citations'].any?
         matches = item.data['citations'].map {|c| c['match']}
         cite = item.data['citations'].first
-        excerpt cite['context'], (keywords + matches), options
+        excerpt(cite['context'] || cite['excerpt'], (keywords + matches), options)
       elsif item.data['search'] and item.data['search']['highlight']
         field = preferred_field item, document_priorities
         return nil unless field
@@ -219,7 +219,7 @@ module Helpers
     #   matched_strings = []
     #   results = []
 
-    #   # go over each excerpt until we've got at least one context for each term
+    #   # go over each excerpt until we've got at least one excerpt for each term
     #   texts.each do |text|
     #     next if (term_strings - matched_strings).empty?
 
