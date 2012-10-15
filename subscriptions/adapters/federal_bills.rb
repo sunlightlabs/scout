@@ -15,7 +15,7 @@ module Subscriptions
         api_key = options[:api_key] || config[:subscriptions][:sunlight_api_key]
         
         if config[:subscriptions][:rtc_endpoint].present?
-          endpoint = config[:subscriptions][:rtc_endpoint]
+          endpoint = config[:subscriptions][:rtc_endpoint].dup
         else
           endpoint = "http://api.realtimecongress.org/api/v1"
         end
