@@ -22,9 +22,15 @@ $(function() {
     return false;
   });
 
-  $("#content").on("click", 'a[data-pjax]', function() {
-    Utils.pjax($(this).attr("href"), $(this).data("pjax"));
-    return false;
+  // $("#content").on("click", 'a[data-pjax]', function() {
+  //   Utils.pjax($(this).attr("href"), $(this).data("pjax"));
+  //   return false;
+  // });
+
+  $("#content").pjax("a[data-pjax]", {
+    timeout: 5000
+  }).on("pjax:error", function(e, xhr, err) {
+    Utils.log("Error PJAX loading: " + e.target.baseURI);
   });
 
   $("#search_form .query_type input[type=radio]").change(function() {
@@ -88,12 +94,11 @@ var Utils = {
         container = "#center";
 
       $.pjax({
-          url: href,
-          container: container,
-          error: function() {
-            Utils.log("Error asking for: " + href);
-          }, 
-          timeout: 5000
+        url: href,
+        container: container,
+        timeout: 5000
+      }).on('pjax:error', function() {
+        Utils.log("Error asking for: " + href);
       });
     },
 
