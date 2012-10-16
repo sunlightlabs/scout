@@ -27,8 +27,9 @@ $(function() {
   //   return false;
   // });
 
-  $("#content").pjax("a[data-pjax]", {
-    timeout: 5000
+  $(document).pjax("a[data-pjax]", {
+    timeout: 5000,
+    container: "#center"
   }).on("pjax:error", function(e, xhr, err) {
     Utils.log("Error PJAX loading: " + e.target.baseURI);
   });
@@ -96,9 +97,10 @@ var Utils = {
       $.pjax({
         url: href,
         container: container,
-        timeout: 5000
-      }).on('pjax:error', function() {
-        Utils.log("Error asking for: " + href);
+        timeout: 5000,
+        error: function() {
+          Utils.log("Error on PJAX: " + href);
+        }
       });
     },
 
