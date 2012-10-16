@@ -297,7 +297,7 @@
     $(".filters input.query_type").val(initialQueryType);
     $(".filters input.subscription_type").val("<%= h interest.search_type %>");
 
-    $("title").text("<%= escape_javascript title %>");
+    document.title = "<%= escape_javascript title %>";
 
     // update search form
     $("#search_form input.query").val(initialQuery);
