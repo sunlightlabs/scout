@@ -13,6 +13,12 @@ class Search
         'citation_type' => 'usc',
         'original' => term # for adapters not supporting citations
       }
+    elsif citation_id = law_check(term)
+      {
+        'citation_id' => citation_id,
+        'citation_type' => 'law',
+        'original' => term
+      }
     else
       nil
     end
@@ -25,7 +31,7 @@ class Search
   # also, citation.js (will eventually) use a whole lot more kinds of patterns and processing
   # strategies than are necessary for looking at search terms in Scout.
   # 
-  # If this gets more complicated, we can have this call out to a citation-api 
+  # If this gets more complicated, we can have this call out to a Citation server 
   # instance in the future.
 
   # Checks the string to see if it *is* (not contains) a US Code citation.
@@ -50,11 +56,30 @@ class Search
     [title, "usc", section, subsections].flatten.join "_"
   end
 
-  def self.usc_standard(citation_id)
-    title, usc, section, *subsections = citation_id.split "_"
-    base = "#{title} USC § #{section}"
-    base << "(#{subsections.join(")(")})" if subsections.any?
-    base
+  def self.law_check(string)
+    string = string.strip
+    if parts = string.scan(/(pub(?:lic)?|priv(?:ate)?)\.? +l(?:aw)?\.?(?: +No\.?)? +(\d+)[-–]+(\d+)/i).first 
+      type, congress, number = parts
+      type = type.match(/^priv/i) ? "private" : "public"
+      [type, "law", congress, number].join "_"
+    else
+      nil
+    end
+  end
+
+  def self.cite_standard(citation)
+    citation_id = citation['citation_id']
+    
+    if citation['citation_type'] == 'usc'
+      title, usc, section, *subsections = citation_id.split "_"
+      base = "#{title} USC § #{section}"
+      base << "(#{subsections.join(")(")})" if subsections.any?
+      base
+    elsif citation['citation_type'] == 'law'
+      # subsections not supported
+      type, law, congress, number = citation_id.split "_"
+      "#{type.capitalize} Law #{congress}-#{number}"
+    end
   end
 
 

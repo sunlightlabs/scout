@@ -52,7 +52,7 @@ module Helpers
       if item.data['citations'] and item.data['citations'].any?
         matches = item.data['citations'].map {|c| c['match']}
         cite = item.data['citations'].first
-        excerpt(cite['context'] || cite['excerpt'], (keywords + matches), options)
+        excerpt cite['excerpt'], (keywords + matches), options
       elsif item.data['search'] and item.data['search']['highlight']
         field = preferred_field item, bill_priorities
         return nil unless field
@@ -73,7 +73,7 @@ module Helpers
       if item.data['citations'] and item.data['citations'].any?
         matches = item.data['citations'].map {|c| c['match']}
         cite = item.data['citations'].first
-        excerpt(cite['context'] || cite['excerpt'], (keywords + matches), options)
+        excerpt cite['excerpt'], (keywords + matches), options
       elsif item.data['search'] and item.data['search']['highlight']
         field = preferred_field item, regulation_priorities
         return nil unless field
@@ -89,7 +89,7 @@ module Helpers
       if item.data['citations'] and item.data['citations'].any?
         matches = item.data['citations'].map {|c| c['match']}
         cite = item.data['citations'].first
-        excerpt(cite['context'] || cite['excerpt'], (keywords + matches), options)
+        excerpt cite['excerpt'], (keywords + matches), options
       elsif item.data['search'] and item.data['search']['highlight']
         field = preferred_field item, document_priorities
         return nil unless field

@@ -94,7 +94,7 @@
           <% if interest.query['citations'].any? %>
             <h2 class="smaller">
               <span class="citing">citing:</span>
-              <%= Search.usc_standard interest.query['citations'].first['citation_id'] %>
+              <%= Search.cite_standard interest.query['citations'].first %>
             </h2>
           <% else %>
             <% name = interest_name interest %>
@@ -114,7 +114,7 @@
                 <h2>Citing:</h2>
                 <div class="container">
                   <span>
-                    <%= citations.map {|cite| Search.usc_standard cite['citation_id']}.join ", " %>
+                    <%= citations.map {|cite| Search.cite_standard cite}.join ", " %>
                   </span>
                 </div>
               </div>
