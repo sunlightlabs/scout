@@ -1,8 +1,17 @@
 <% document = item.data %>
-<%= document['title'] %> 
- <% if highlight = document_highlight(item, interest, highlight: false) %>
-<%= highlight %>
- <% elsif document['description'].present? %>
-<%= truncate document['description'], 500 %>
- <% else %>
-No excerpt or description available.<% end %>
+
+<%= email_header document['title'], item_url(item) %>
+
+<%= email_subheader_div %>
+  <%= document['document_type_name'] %>
+</div>
+
+<%= email_content_p %>
+  <% if highlight = document_highlight(item, interest, inline: true) %>
+    <%= highlight %>
+  <% elsif document['description'].present? %>
+    <%= truncate document['description'], 500 %>
+  <% else %>
+    No excerpt or abstract available.
+  <% end %>
+</p>

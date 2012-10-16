@@ -22,7 +22,7 @@ module Deliveries
 
         interest_deliveries.each do |interest, deliveries|          
           content = render_interest interest, deliveries
-          content = render_final content
+          content << render_footer
 
           subject = render_subject interest, deliveries
 
@@ -36,7 +36,7 @@ module Deliveries
               deliveries.each &:delete 
               successes << save_receipt!(frequency, user, serialized, subject, content)
             else
-              failures << {:frequency => frequency, :email => email, :subject => subject, :content => content, :interest_id => interest.id.to_s}
+              failures << {frequency: frequency, email: email, subject: subject, content: content, interest_id: interest.id.to_s}
             end
           end
         end
@@ -50,8 +50,10 @@ module Deliveries
           interest_deliveries.each do |interest, deliveries|
             content << render_interest(interest, deliveries)
           end
-          
-          content = render_final content
+
+          # content = content.join interest_barrier
+          content << render_footer
+
           subject = "Daily digest - #{matching_deliveries.size} new #{matching_deliveries.size > 1 ? "results" : "result"}"
 
           if dry_run
@@ -105,9 +107,10 @@ module Deliveries
     def self.render_interest(interest, deliveries)
       grouped = deliveries.group_by &:subscription_type
 
-      content = ""
+      content = []
 
       grouped.each do |subscription_type, group|
+        one_content = ""
         description = "#{group.size} #{Subscription.adapter_for(subscription_type).short_name group.size, interest}"
 
         if interest.filters.any? 
@@ -117,17 +120,16 @@ module Deliveries
           description << " (#{filters})"
         end
 
-        content << "- #{Deliveries::Manager.interest_name interest} - #{description}\n\n\n"
+        one_content << interest_header(Deliveries::Manager.interest_name(interest), description)
 
         group.each do |delivery|
-          content << render_delivery(delivery, interest, subscription_type)
-          content << "\n\n\n"
+          one_content << render_delivery(delivery, interest, subscription_type)
         end
 
-        content << "\n"
+        content << one_content
       end
 
-      content
+      content.join interest_barrier
     end
 
     # subject line for per-interest emails
@@ -156,12 +158,23 @@ module Deliveries
       subject
     end
 
-    def self.render_final(content)
-      content << "----------------\nManage your subscriptions on the web at #{config[:hostname]}/account/subscriptions."
-      content << "\n\nThese notifications are powered by the nonpartisan Sunlight Foundation (sunlightfoundation.com), a nonprofit that uses cutting-edge technology and ideas to make government transparent and accountable."
-      content << "\n\nReply to this email to send feedback, bug reports, or effusive praise our way."
-      content << "\n\nTo unsubscribe from all emails: #{config[:hostname]}/account/unsubscribe"
-      content
+    def self.interest_header(name, description)
+      "<div style=\"margin: 0; padding: 0; margin-top: 10px; font-size: 150%\">
+        <span style=\"color: #111\">
+          #{name}
+        </span>
+        <span style=\"color: #666;\">
+          (#{description})
+        </span>
+      </div>"
+    end
+
+    def self.interest_barrier
+      "<hr style=\"padding: 0; margin: 0; margin-top: 20px; margin-bottom: 20px\"/>"
+    end
+
+    def self.render_footer
+      Tilt::ERBTemplate.new("app/views/subscriptions/footer.erb").render trim: false
     end
 
     # render a Delivery into its email content
@@ -170,12 +183,12 @@ module Deliveries
       template = Tilt::ERBTemplate.new "app/views/subscriptions/#{subscription_type}/_email.erb"
       rendered = template.render item, item: item, interest: interest, trim: false
       rendered.force_encoding "utf-8"
-      rendered << "\n\n#{item_url item}"
+      rendered
     end
 
     # the actual mechanics of sending the email
     def self.email_user(email, subject, content)
-      ::Email.deliver! "User", email, subject, content
+      ::Email.deliver! "User Alert", email, subject, content
     end
 
   end

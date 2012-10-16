@@ -244,6 +244,32 @@ module Helpers
       string = simple_format string
       Rinku.auto_link string, :all, "rel='nofollow'"
     end
+
     
+    # email-related
+    
+    def email_header(text, url)
+      "<h3 style=\"padding: 0; margin: 0; margin-top: 30px;\">
+        <a href=\"#{url}\">
+          #{text}
+        </a>
+      </h3>"
+    end
+
+    def email_header_small(text, url)
+      "<h3 style=\"padding: 0; margin: 0; margin-top: 30px\">
+        <a href=\"#{url}\">
+          #{text}
+        </a>
+      </h3>"
+    end
+
+    def email_subheader_div(space = 5)
+      "<div style=\"padding: 0; margin: 0; margin-top: #{space}px; color: #83858B; font-style: italic\">"
+    end
+
+    def email_content_p(space = 10)
+      "<p style=\"padding: 0; margin: 0; margin-top: #{space}px\">"
+    end
   end
 end

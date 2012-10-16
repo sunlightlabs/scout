@@ -1,13 +1,28 @@
 <% bill = item.data %>
-<%= bill_code bill['bill_type'], bill['number'] %> - <% if bill['short_title'].present? %>
-<%= bill['short_title'] %>
+<% version = item.data['last_version'] %>
+
+<% if bill['short_title'].present? %>
+  <%= email_header bill['short_title'], item_url(item) %>
 <% else %>
-<%= bill['official_title'] %>
+  <%= email_header_small bill['official_title'], item_url(item) %>
 <% end %>
 
- <% if highlight = bill_highlight(item, interest, highlight: false) %>
-<%= highlight %>
- <% elsif bill['summary'] %>
-<%= truncate bill['summary'], 500 %>
- <% else %>
-No excerpt or summary available.<% end %>
+<%= email_subheader_div %>
+  <span class="code">
+    <%= bill_code bill['bill_type'], bill['number'] %>
+  </span>
+  &mdash;
+  <span class="version">
+    <%= bill_version version['version_code'] %>
+  </span>
+</div>
+
+<%= email_content_p %>
+  <% if highlight = bill_highlight(item, interest, inline: true) %>
+    <%= highlight %>
+  <% elsif bill['summary'] %>
+    <%= truncate bill['summary'], 500 %>
+  <% else %>
+    No excerpt or summary available.
+  <% end %>
+</p>

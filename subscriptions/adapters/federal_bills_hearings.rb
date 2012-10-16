@@ -20,7 +20,12 @@ module Subscriptions
         url << "&bill_ids=#{bill_id}"
         url << "&dc=true"
         url << "&committee__exists=true"
-        url << "&occurs_at__gte=#{Time.now.utc.xmlschema}"
+
+        # re-initialize after making this change
+        # if function == :search 
+          url << "&occurs_at__gte=#{Time.now.utc.xmlschema}"
+        # end
+        
         url << "&sections=#{sections.join ','}"
         
         url

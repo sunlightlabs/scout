@@ -1,2 +1,8 @@
+<% bill = interest.data %>
 <% upcoming = item.data %>
-<%= just_date upcoming['legislative_day'] %> - Coming up on the <%= upcoming['chamber'].capitalize %> Floor
+
+<%= email_header just_date(upcoming['legislative_day']), item_url(item) %>
+
+<%= email_content_p %>
+  Coming up on the <%= upcoming['chamber'].capitalize %> Floor
+</p>

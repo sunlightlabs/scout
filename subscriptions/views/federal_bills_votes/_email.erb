@@ -1,5 +1,11 @@
 <% vote = item.data %>
-<%= just_time vote['voted_at'] %> - <%= vote['chamber'].capitalize %> Vote #<%= vote['number'] %>
 
+<%= email_header "#{vote['chamber'].capitalize} Vote ##{vote['number']}", item_url(item) %>
 
-<%= vote['roll_type'] %>: <%= vote['result'] %>, <%= vote_breakdown vote %>
+<%= email_subheader_div %>
+  <%= just_date vote['voted_at'] %>
+</div>
+
+<%= email_content_p %>
+  <%= vote['roll_type'] %>: <%= vote['result'] %>, <%= vote_breakdown vote %>
+</p>

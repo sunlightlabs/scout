@@ -193,6 +193,8 @@ module Helpers
       if options[:highlight]
         if options[:highlight_tags]
           tag1, tag2 = options[:highlight_tags]
+        elsif options[:inline]
+          tag1, tag2 = ["<em style=\"font-weight: bold; font-style: normal; color: #13B326\">", "</em>"]
         else
           tag1, tag2 = ["<em>", "</em>"]
         end
@@ -326,14 +328,14 @@ module Helpers
     def bill_version(code)
       {
         'ash' => "Additional Sponsors House",
-        'ath' => "Agreed to House",
-        'ats' => "Agreed to Senate",
+        'ath' => "Agreed to in House",
+        'ats' => "Agreed to in Senate",
         'cdh' => "Committee Discharged House",
         'cds' => "Committee Discharged Senate",
         'cph' => "Considered and Passed House",
         'cps' => "Considered and Passed Senate",
-        'eah' => "Engrossed Amendment House",
-        'eas' => "Engrossed Amendment Senate",
+        'eah' => "Engrossed Amendment in House",
+        'eas' => "Engrossed Amendment in Senate",
         'eh' => "Engrossed in House",
         'ehr' => "Engrossed in House-Reprint",
         'eh_s' => "Engrossed in House (No.) Star Print [*]",
@@ -341,10 +343,10 @@ module Helpers
         'es' => "Engrossed in Senate",
         'esr' => "Engrossed in Senate-Reprint",
         'es_s' => "Engrossed in Senate (No.) Star Print",
-        'fah' => "Failed Amendment House",
-        'fps' => "Failed Passage Senate",
-        'hdh' => "Held at Desk House",
-        'hds' => "Held at Desk Senate",
+        'fah' => "Failed Amendment in House",
+        'fps' => "Failed Passage in Senate",
+        'hdh' => "Held at Desk in House",
+        'hds' => "Held at Desk in Senate",
         'ih' => "Introduced in House",
         'ihr' => "Introduced in House-Reprint",
         'ih_s' => "Introduced in House (No.) Star Print",
@@ -355,21 +357,21 @@ module Helpers
         'is_s' => "Introduced in Senate (No.) Star Print",
         'lth' => "Laid on Table in House",
         'lts' => "Laid on Table in Senate",
-        'oph' => "Ordered to be Printed House",
-        'ops' => "Ordered to be Printed Senate",
+        'oph' => "Ordered to be Printed in House",
+        'ops' => "Ordered to be Printed in Senate",
         'pch' => "Placed on House Calendar", # original: "Placed on Calendar House"
         'pcs' => "Placed on Senate Calendar", # original: "Placed on SenateHouse"
         'pp' => "Public Print",
-        'rah' => "Referred w/Amendments House",
-        'ras' => "Referred w/Amendments Senate",
-        'rch' => "Reference Change House",
-        'rcs' => "Reference Change Senate",
+        'rah' => "Referred w/Amendments in House",
+        'ras' => "Referred w/Amendments in Senate",
+        'rch' => "Reference Change in House",
+        'rcs' => "Reference Change in Senate",
         'rdh' => "Received in House",
         'rds' => "Received in Senate",
         're' => "Reprint of an Amendment",
-        'reah' => "Re-engrossed Amendment House",
+        'reah' => "Re-engrossed Amendment in House",
         'renr' => "Re-enrolled",
-        'res' => "Re-engrossed Amendment Senate",
+        'res' => "Re-engrossed Amendment in Senate",
         'rfh' => "Referred in House",
         'rfhr' => "Referred in House-Reprint",
         'rfh_s' => "Referred in House (No.) Star Print",
@@ -379,15 +381,15 @@ module Helpers
         'rh' => "Reported in House",
         'rhr' => "Reported in House-Reprint",
         'rh_s' => "Reported in House (No.) Star Print",
-        'rih' => "Referral Instructions House",
-        'ris' => "Referral Instructions Senate",
+        'rih' => "Referral Instructions in House",
+        'ris' => "Referral Instructions in Senate",
         'rs' => "Reported in Senate",
         'rsr' => "Reported in Senate-Reprint",
         'rs_s' => "Reported in Senate (No.) Star Print",
-        'rth' => "Referred to Committee House",
-        'rts' => "Referred to Committee Senate",
-        'sas' => "Additional Sponsors Senate",
-        'sc' => "Sponsor Change House",
+        'rth' => "Referred to Committee in House",
+        'rts' => "Referred to Committee in Senate",
+        'sas' => "Additional Sponsors in Senate",
+        'sc' => "Sponsor Change in House",
         's_p' => "Star (No.) Print of an Amendment"
       }[code]
     end

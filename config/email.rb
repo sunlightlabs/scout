@@ -49,7 +49,12 @@ module Email
     options[:reply_to] = config[:email][:reply_to]
 
     begin
-      Pony.mail options.merge(:subject => subject, :body => body, :to => to)
+      if tag == "User Alert" # html emails
+        Pony.mail options.merge(subject: subject, html_body: body, to: to)
+      else
+        Pony.mail options.merge(subject: subject, body: body, to: to)
+      end
+
       sent_message "Pony", tag, to, subject, body
       true
     rescue Errno::ECONNREFUSED
@@ -69,7 +74,12 @@ module Email
 
     message.delivery_method Mail::Postmark, :api_key => config[:email][:postmark][:api_key]
 
-    message.content_type = "text/plain"
+    if tag == "User Alert"
+      message.content_type = "text/html"
+    else
+      message.content_type = "text/plain"
+    end
+    
     message.tag = tag
 
     message.from = config[:email][:from]

@@ -1,8 +1,15 @@
 <% speech = item.data %>
+
 <% if speech['bioguide_id'] %>
-<%= just_date item.date %> - <%= speaker_name speech %> said:
+  <%= email_header speaker_name(speech), item_url(item) %>
+<% else %>
+  <%= email_header long_date(speech['date']), item_url(item) %>
 <% end %>
 
-<%= speech['title'] %> 
+<%= email_subheader_div %>
+  <%= speech['title'] %> 
+</div>
 
-"<%= speech_excerpt speech, interest, highlight: false %>"
+<%= email_content_p %>
+  "<%= speech_excerpt speech, interest, inline: true %>"
+</p>

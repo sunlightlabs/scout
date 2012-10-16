@@ -147,7 +147,8 @@ module Deliveries
 
   end
 
-  # dummy proxy class to provide a context with helper modules included so that ERB can render properly
+  # dummy proxy class to provide a context with helper modules
+  # included so that ERB can render with their assistance
   class SeenItemProxy
     include Helpers::General
     include Helpers::Routing

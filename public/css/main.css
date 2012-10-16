@@ -1091,7 +1091,7 @@ time.item, .entry time, .time {
 .contentArea em{
     color: #cdb81f;
 }
-.contentArea.right h3{
+.contentArea.right h3 {
     background: url('/images/bg_sectionHeader.png') top right no-repeat;
     display: inline;
     height: 38px;

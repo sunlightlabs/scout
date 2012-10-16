@@ -1,3 +1,8 @@
 <% bill = interest.data %>
 <% action = item.data %>
-<%= just_date item.date %> - <%= action['text'] %>
+
+<%= email_header just_date(item.date), item_url(item) %>
+
+<%= email_content_p %>
+  <%= action['text'] %>
+</p>
