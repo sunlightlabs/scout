@@ -45,13 +45,13 @@ module Deliveries
         
         if matching_deliveries.any? # not sure why this would be the case, but, just in case
 
-          content = ""
+          content = []
 
           interest_deliveries.each do |interest, deliveries|
             content << render_interest(interest, deliveries)
           end
 
-          # content = content.join interest_barrier
+          content = content.join interest_barrier
           content << render_footer
 
           subject = "Daily digest - #{matching_deliveries.size} new #{matching_deliveries.size > 1 ? "results" : "result"}"
