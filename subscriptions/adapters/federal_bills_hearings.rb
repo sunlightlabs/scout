@@ -23,7 +23,7 @@ module Subscriptions
 
         # re-initialize after making this change
         # if function == :search 
-          url << "&occurs_at__gte=#{Time.now.utc.xmlschema}"
+          url << "&occurs_at__gte=#{Time.now.midnight.utc.xmlschema}"
         # end
         
         url << "&sections=#{sections.join ','}"

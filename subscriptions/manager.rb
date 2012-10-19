@@ -125,6 +125,10 @@ module Subscriptions
     def self.test?
       Sinatra::Application.test?
     end
+
+    def self.development?
+      Sinatra::Application.development?
+    end
     
     # function is one of [:search, :initialize, :check]
     # options hash can contain epheremal modifiers for search (right now just a 'page' parameter)
@@ -153,14 +157,30 @@ module Subscriptions
       # every other adapter is parsing a remote JSON feed
       else
         items = begin
-          body = download url
-          response = ::Oj.load body, mode: :compat
+          # searches use a caching layer
+          if (function == :search) and (body = cache_for(url, subscription.subscription_type))
+            # should be guaranteed to work
+            response = ::Oj.load body, mode: :compat
+          else
+            body = download url
+            response = ::Oj.load body, mode: :compat
+
+            # wait for JSON parse, so as not to cache errors
+            if function == :search
+              cache! url, subscription, body
+            end
+          end
 
           adapter.items_for response, function, options
         rescue Timeout::Error, Errno::ECONNREFUSED, EOFError, Errno::ETIMEDOUT => ex
           return error_for "Timeout error", url, function, options, subscription, ex
         rescue SyntaxError => ex
-          return error_for "JSON parser error, body was:\n\n#{body}", url, function, options, subscription, ex
+          message = if body =~ /504 Gateway Time-out/
+            "Timeout (504)"
+          else
+            "JSON parser error, body was:\n\n#{body}"
+          end
+          return error_for message, url, function, options, subscription, ex
         rescue AdapterParseException => ex
           return error_for ex.message, url, function, options, subscription
         end
@@ -216,8 +236,30 @@ module Subscriptions
       end
     end
 
-    # extracted basically just for easy mocking
-    def self.download(url)
+    def self.cache_for(url, subscription_type)
+      if result = Cache.where(url: url, subscription_type: subscription_type).first
+        puts "USE CACHE: #{url}\n\n" if development?
+        result.content
+      end
+    end
+
+    def self.cache!(url, subscription, content)
+      puts "\nCACHE: #{url}\n\n" if development?
+      Cache.create!(
+        url: url, 
+        subscription_type: subscription.subscription_type, 
+        interest_in: subscription.interest_in, 
+        content: content
+      )
+    end
+
+    # clear the cache for a subscription_type
+    def self.uncache!(subscription_type)
+      Cache.where(subscription_type: subscription_type).delete_all
+    end
+
+    # download content at the given URL
+    def self.download(url, cache = {})
       curl = Curl::Easy.new url
       curl.perform
       curl.body_str
@@ -227,13 +269,6 @@ module Subscriptions
     def self.noon_utc_for(date)
       return nil unless date
       date.to_time.midnight + 12.hours
-    end
-
-    # geez, I hate this, hopefully this is fixed when I upgrade to Mongoid 3.x
-    def self.clean_score(item)
-      if item['search'] and item['search']['score']
-        item['search']['score'] = item['search']['score'].to_f
-      end
     end
   end
 

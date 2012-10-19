@@ -1,4 +1,9 @@
 <% if items %>
+  <%# client-side pagination is just that %>
+  <% if defined?(per_page) %>
+    <% items = items.first per_page %>
+  <% end %>
+
   <% items.each do |item| %>
     <%= partial "search/item", engine: "erb", locals: {item: item, query: query, interest: interest} %>
   <% end %>

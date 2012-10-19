@@ -117,7 +117,6 @@ module Subscriptions
       
       def self.item_for(regulation)
         return nil unless regulation
-        Subscriptions::Manager.clean_score regulation
 
         regulation['publication_date'] = Time.parse(regulation['publication_date']).utc
 

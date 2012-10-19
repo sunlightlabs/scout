@@ -31,14 +31,20 @@ module TestHelper
     end
 
     def teardown
-      User.destroy_all
-      ApiKey.destroy_all
-      
-      Interest.destroy_all
-      Subscription.destroy_all
-      
-      Delivery.destroy_all
-      Receipt.destroy_all
+      User.delete_all
+      Interest.delete_all
+      Subscription.delete_all
+      SeenItem.delete_all
+      Tag.delete_all
+
+      Delivery.delete_all
+      Receipt.delete_all
+      Report.delete_all
+
+      ApiKey.delete_all
+      Event.delete_all
+
+      Cache.delete_all
 
       # remove rspec mocks
       RSpec::Mocks.space.reset_all

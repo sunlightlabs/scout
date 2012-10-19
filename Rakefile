@@ -159,6 +159,9 @@ namespace :subscriptions do
           errors = []
           start = Time.now
 
+          puts "Clearing the cache for #{subscription_type}..."
+          Subscriptions::Manager.uncache! subscription_type
+
           Subscription.initialized.where(subscription_type: subscription_type).each do |subscription|
             if subscription.user.confirmed?
               

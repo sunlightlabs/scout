@@ -29,10 +29,12 @@ get '/fetch/search/:subscription_type/:query/?:query_type?' do
   subscription = Interest.subscriptions_for(interest).first
   
   page = params[:page].present? ? params[:page].to_i : 1
+
+  # only used to decide how many to display
   per_page = params[:per_page].present? ? params[:per_page].to_i : nil
 
-  # perform the remote search, pass along pagination preferences
-  results = subscription.search :page => page, :per_page => per_page
+  # perform the remote search, pass along page number and default per_page of 20
+  results = subscription.search page: page, per_page: 20
     
   # if results is nil, it usually indicates an error in one of the remote services
   if results.nil?
@@ -48,7 +50,8 @@ get '/fetch/search/:subscription_type/:query/?:query_type?' do
     interest: interest,
     query: query,
     sole: (per_page.to_i > 5),
-    page: page
+    page: page,
+    per_page: per_page
   }
 
   headers["Content-Type"] = "application/json"
@@ -56,7 +59,8 @@ get '/fetch/search/:subscription_type/:query/?:query_type?' do
     html: items,
     count: (results ? results.size : -1),
     sole: (per_page.to_i > 5),
-    page: page
+    page: page,
+    per_page: per_page
   }.to_json
 end
 
