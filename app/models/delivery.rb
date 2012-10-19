@@ -27,13 +27,13 @@ class Delivery
   # item details
   field :item, :type => Hash, :default => {}
   
-  index :subscription_type
-  index :user_email
-  index "item.date"
-  index "item.item_id"
-  index :interest_id
-  index :user_id
-  index :seen_through_id
+  index subscription_type: 1
+  index user_email: 1
+  index "item.date" => 1
+  index "item.item_id" => 1
+  index interest_id: 1
+  index user_id: 1
+  index seen_through_id: 1
   
   validates_presence_of :interest_id
   validates_presence_of :subscription_type

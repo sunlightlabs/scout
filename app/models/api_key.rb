@@ -12,9 +12,9 @@ class ApiKey
   validates_uniqueness_of :key
   validates_uniqueness_of :email
   
-  index :key
-  index :email
-  index :status
+  index key: 1
+  index email: 1
+  index status: 1
 
   after_save :mark_user
 

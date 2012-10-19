@@ -6,7 +6,7 @@ class Event
   field :description
   field :data, type: Hash
 
-  index :type
+  index type: 1
 
   scope :for_time, ->(start, ending) {where(created_at: {"$gt" => Time.zone.parse(start).midnight, "$lt" => Time.zone.parse(ending).midnight})}
 

@@ -1,17 +1,17 @@
 development:
-  host: localhost
-  database: scout
-  raise_not_found_error: false
-  logger: false
+  sessions:
+    default:
+      database: scout
+      hosts: 
+        - "localhost:27017"
+  options:
+    raise_not_found_error: false
 
 test:
-  host: localhost
-  database: scout_test
-  raise_not_found_error: false
-  logger: false
-
-production:
-  host: localhost
-  database: scout
-  raise_not_found_error: false
-  logger: false
+  sessions:
+    default:
+      database: scout_test
+      hosts: 
+        - "localhost:27017"
+  options:
+    raise_not_found_error: false

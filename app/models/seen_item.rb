@@ -27,15 +27,12 @@ class SeenItem
   field :search_url # search URL that originally produced this item
   field :find_url # if this came from a find request, produce that URL
 
-  index [
-    [:subscription_id, Mongo::ASCENDING],
-    [:item_id, Mongo::ASCENDING]
-  ]
+  index({subscription_id: 1, item_id: 1})
 
-  index :subscription_type
-  index :interest_id
-  index :user_id
-  index :seen_by_id
+  index subscription_type: 1
+  index interest_id: 1
+  index user_id: 1
+  index seen_by_id: 1
 
   validates_presence_of :subscription_id
   validates_presence_of :item_id

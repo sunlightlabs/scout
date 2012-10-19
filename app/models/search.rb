@@ -1,8 +1,9 @@
 # encoding: utf-8
 
+require 'lucene_query_parser'
+
 
 # collection of methods for processing search queries
-
 class Search
 
   # run term through a gauntlet of citation checks

@@ -32,6 +32,8 @@ class User
   field :username
   field :display_name
 
+  index username: 1
+
   validates_uniqueness_of :username, :allow_blank => true, :message => "has already been taken."
   validates_exclusion_of :username, :in => reserved_names, :message => "cannot be used."
 

@@ -44,12 +44,12 @@ class Interest
   field :notifications
   validates_inclusion_of :notifications, :in => ["none", "email_daily", "email_immediate", "sms"], :allow_blank => true
 
-  index :in
-  index :user_id
-  index :interest_type
-  index :search_type
-  index :item_type
-  index :tags
+  index :in => 1
+  index user_id: 1
+  index interest_type: 1
+  index search_type: 1
+  index item_type: 1
+  index tags: 1
   
   validates_presence_of :user_id
   validates_presence_of :in

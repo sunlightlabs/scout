@@ -8,8 +8,8 @@ class Tag
   field :public, type: Boolean, default: false
   field :description
 
-  index :name
-  index :public
+  index name: 1
+  index :public => 1
 
   validates_uniqueness_of :name, :scope => :user_id
   

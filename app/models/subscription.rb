@@ -16,11 +16,11 @@ class Subscription
   def query; interest ? interest.query : @query; end
   def query=(obj); @query = obj; end
 
-  index :subscription_type
-  index :initialized
-  index :user_id
-  index :interest_in
-  index :last_checked_at
+  index subscription_type: 1
+  index initialized: 1
+  index user_id: 1
+  index interest_in: 1
+  index last_checked_at: 1
   
   has_many :seen_items
   has_many :deliveries
@@ -37,8 +37,8 @@ class Subscription
     end
   end
   
-  scope :initialized, :where => {:initialized => true}
-  scope :uninitialized, :where => {:initialized => false}
+  scope :initialized, where(initialized: true)
+  scope :uninitialized, where(initialized: false)
   
   # adapter class associated with a particular subscription
   def adapter

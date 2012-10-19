@@ -344,7 +344,7 @@ namespace :test do
   task :delivery => :environment do
     id = ENV['id']
     if delivery = Delivery.find(id)
-      Deliveries::Manager.deliver! '_id' => BSON::ObjectId(id), 'mechanism' => delivery.mechanism, 'email_frequency' => delivery.email_frequency
+      Deliveries::Manager.deliver! '_id' => id, 'mechanism' => delivery.mechanism, 'email_frequency' => delivery.email_frequency
     else
       puts "Couldn't locate delivery by provided ID"
     end

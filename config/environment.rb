@@ -1,10 +1,11 @@
 require 'sinatra'
 require 'mongoid'
+
 require 'tzinfo'
 require 'twilio-rb'
 require 'feedbag'
 require 'phone'
-require 'lucene_query_parser'
+
 
 def config
   @config ||= YAML.load_file File.join(File.dirname(__FILE__), "config.yml")
@@ -51,7 +52,7 @@ configure do
   Time.zone = ActiveSupport::TimeZone.find_tzinfo "America/New_York"
 end
 
-require 'mongoid/slug'
+# models
 Dir.glob('app/models/*.rb').each {|filename| load filename}
 
 # helpers
@@ -120,15 +121,4 @@ def item_types
     end
     @item_types
   end
-end
-
-
-# not used right now, but effort to keep a log of what data fields are 'special'
-# and shouldn't be used for filters
-def forbidden_filters
-  %w{ 
-    query query_type
-    citation_type citation_id citation 
-    url title description site_url original_url original_title original_description
-  }
 end

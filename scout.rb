@@ -95,12 +95,10 @@ helpers do
 
   def load_user
     user_id = params[:user_id].strip
-    if user = User.where(:username => user_id).first
+    if user = User.where(username: user_id).first
       user
-    elsif BSON::ObjectId.legal?(user_id)
+    else # can be nil
       User.find user_id
-    else
-      nil
     end
   end
 
