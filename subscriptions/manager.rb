@@ -166,7 +166,7 @@ module Subscriptions
             response = ::Oj.load body, mode: :compat
 
             # wait for JSON parse, so as not to cache errors
-            if function == :search
+            if function == :search and !config[:no_cache]
               cache! url, subscription, body
             end
           end
@@ -237,6 +237,7 @@ module Subscriptions
     end
 
     def self.cache_for(url, subscription_type)
+      return if config[:no_cache]
       if result = Cache.where(url: url, subscription_type: subscription_type).first
         puts "USE CACHE: #{url}\n\n" if development?
         result.content

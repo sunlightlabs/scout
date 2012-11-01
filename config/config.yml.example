@@ -7,6 +7,9 @@
 # that will be used in links to data URLs that require one, if data demo mode is on
 :demo_key: 
 
+# set to true to turn off caching of remote content (useful for development)
+:no_cache: 
+
 :services:
   :shared_secret:
   :api_name: scout
