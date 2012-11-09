@@ -2,7 +2,7 @@ set :environment, (ENV['target'] || 'staging')
 
 if environment == 'production'
   set :user, 'scout'
-  set :domain, 'ec2-184-73-3-156.compute-1.amazonaws.com'
+  set :domain, 'ec2-107-20-61-236.compute-1.amazonaws.com'
   set :branch, 'master'
 else
   set :user, 'alarms'
