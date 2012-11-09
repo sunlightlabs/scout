@@ -23,7 +23,7 @@ module Subscriptions
       end
 
       def self.short_name(number, interest)
-        "#{number > 1 ? "votes" : "vote"}"
+        number > 1 ? "votes" : "vote"
       end
       
       def self.items_for(response, function, options = {})
