@@ -283,7 +283,8 @@ namespace :test do
       exit -1
     end
 
-    unless item = Subscriptions::Manager.find(item_types[item_type]['adapter'], item_id)
+    adapter = item_types[item_type] ? item_types[item_type]['adapter'] : item_type.pluralize
+    unless item = Subscriptions::Manager.find(adapter, item_id)
       puts "Couldn't find remote information about the item."
       exit -1
     end
