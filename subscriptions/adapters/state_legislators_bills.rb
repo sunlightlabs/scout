@@ -8,8 +8,8 @@ module Subscriptions
       def self.url_for(subscription, function, options = {})
         api_key = options[:api_key] || config[:subscriptions][:sunlight_api_key]
         endpoint = "http://openstates.org/api/v1"
-        query = subscription.query['query']
-        url = "#{endpoint}/bills/?sponsor_id=#{URI.encode query}&apikey=#{api_key}"
+        leg_id = subscription.interest_in
+        url = "#{endpoint}/bills/?sponsor_id=#{URI.encode leg_id}&apikey=#{api_key}"
         # Currently, we only really care about bills that this person
         # sponsored. No need to get too fancy yet
         url

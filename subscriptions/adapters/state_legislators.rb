@@ -12,6 +12,10 @@ module Subscriptions
         url
       end
 
+      def self.interest_name(interest)
+        "#{interest.data['full_name']}'s Bills"
+      end
+
       def self.item_for(legislator)
         # created_at and updated_at are UTC, take them directly as such
         ['updated_at', 'created_at'].each do |field|

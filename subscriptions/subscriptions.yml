@@ -5,6 +5,7 @@ search_adapters:
   - federal_bills: bill
   - speeches: speech
   - state_bills: state_bill
+  - state_legislators: state_legislator
   - regulations: regulation
   - documents: document
 
