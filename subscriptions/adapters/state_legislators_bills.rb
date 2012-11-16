@@ -5,10 +5,11 @@ module Subscriptions
   module Adapters
 
     class StateLegislatorsBills
-      def self.url_for_detail(legislator_id, options = {})
+      def self.url_for(subscription, function, options = {})
         api_key = options[:api_key] || config[:subscriptions][:sunlight_api_key]
         endpoint = "http://openstates.org/api/v1"
-        url = "#{endpoint}/bills/?sponsor_id=#{URI.encode legislator_id}&apikey=#{api_key}"
+        query = subscription.query['query']
+        url = "#{endpoint}/bills/?sponsor_id=#{URI.encode query}&apikey=#{api_key}"
         # Currently, we only really care about bills that this person
         # sponsored. No need to get too fancy yet
         url
