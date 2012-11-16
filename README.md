@@ -1,14 +1,35 @@
 # Scout
 
-A government-wide search and notification system. Currently deployed to [scout.sunlightfoundation.com](https://scout.sunlightfoundation.com/)
+A government-wide search and notification system. Currently deployed to [scout.sunlightfoundation.com](https://scout.sunlightfoundation.com/). [![Build Status](https://secure.travis-ci.org/sunlightlabs/scout.png)](http://travis-ci.org/sunlightlabs/scout)
 
-Sinatra is used for the web framework, MongoDB for the database, Postmark for email delivery, HTTParty for API consumption.
+## Setting Up
 
-The architecture is conceived of as a series of tubes that receive search result data from remote APIs that users can subscribe to for updates. Each type of data that comes into the system (bills in Congress, federal regulations, etc.) is defined a set of small adapters to consume that data and display it in a variety of places.
+Scout depends on Ruby 1.9. **Recommended**: use [rvm](https://rvm.io/) to install Ruby 1.9.X and create a virtual environment for the project.
 
-[![Build Status](https://secure.travis-ci.org/sunlightlabs/scout.png)](http://travis-ci.org/sunlightlabs/scout)
+Install included dependencies with:
 
-### Re-use
+```bash
+bundle install --local
+```
+
+Create configuration files:
+
+```bash
+cp config.ru.example config.ru
+cp config/config.yml.example config/config.yml
+cp config/mongoid.yml.example config/mongoid.yml
+```
+
+Change anything in `config.yml` or `mongoid.yml` that needs to be changed. You will need to add your own Sunlight API key.
+
+Then run the app on port 8080 with:
+
+```
+bundle exec unicorn
+```
+
+
+## Re-use
 
 We'd really love it if others used the Scout codebase to set up their own alert system. To that end, Scout's architecture is fairly well decoupled from the specific data sources that Sunlight's implementation currently uses. 
 
