@@ -1,3 +1,5 @@
+# vim: tabstop=2 expandtab shiftwidth=2 softtabstop=2
+
 module Subscriptions
   module Adapters
 
@@ -13,5 +15,6 @@ module Subscriptions
         return nil unless legislator
         item_for legislator.to_hash
       end
+    end
   end
 end
