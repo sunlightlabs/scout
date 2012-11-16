@@ -1,0 +1,12 @@
+<% bill = item.data %>
+<%= email_header bill['bill_id'], item_url(item) %>
+
+<%= email_subheader_div %>
+  <%= state_name bill['state'] %>
+  &mdash;
+  <%= just_date item.date %>
+</div>
+
+<%= email_content_p %>
+  <%= state_bill_highlight item, interest, inline: true %>
+</p>
