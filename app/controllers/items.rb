@@ -64,7 +64,12 @@ post '/item/:item_type/:item_id/follow' do
   interest = item_interest
   halt 200 and return unless interest.new_record?
 
-  adapter = item_types[item_type] ? item_types[item_type]['adapter'] : item_type.pluralize
+  adapter = if item_types[item_type] and item_types[item_type]['adapter']
+    item_types[item_type]['adapter']
+  else
+    item_type.pluralize
+  end
+  
   unless item = Subscriptions::Manager.find(adapter, item_id)
     halt 404 and return
   end
