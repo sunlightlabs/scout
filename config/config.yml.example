@@ -1,19 +1,17 @@
+:subscriptions:
+  # fill in with your own Sunlight API key
+  :sunlight_api_key: 
+
+# used to generate full URLs in emails
 :hostname: "http://localhost:8080"
 
-:log_file: /dev/null
-:session_secret: # fill in with something unique per-deployment
-
-# a Sunlight API key, separate from the key used to do most searches/polling,
-# that will be used in links to data URLs that require one, if data demo mode is on
-:demo_key: 
+# fill in with some unique string per-deployment
+:session_secret: change-this-to-something-else
 
 # set to true to turn off caching of remote content (useful for development)
-:no_cache: 
+:no_cache: true
 
-:services:
-  :shared_secret:
-  :api_name: scout
-
+# email details
 :email:
   :via: :smtp
   :from:
@@ -34,19 +32,20 @@
   :postmark:
     :api_key: 
 
+# SMS details
 :twilio:
   :account_sid:
   :auth_token: 
   :from: # phone number
 
-# subscription-specific stuff
-:subscriptions:
-  :sunlight_api_key: 
-  :rtc_endpoint:
+# outputs polled URLs to STDOUT
+:debug:
+  :output_urls: true 
+
+# a Sunlight API key, separate from the key used to do most searches/polling,
+# that will be used in links to data URLs that require one, if data demo mode is on
+:demo_key: 
   
 # set of emails to receive admin notices
 :admin:
   - 
-
-:debug:
-  :output_urls: false # outputs polled URLs to STDOUT
