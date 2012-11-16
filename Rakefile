@@ -265,6 +265,35 @@ namespace :test do
     ::SMS.deliver! "Test", number, message
   end
 
+  desc "Creates an item subscription for a user"
+  task follow_item: :environment do
+    unless (item_id = ENV['item_id']).present? and (item_type = ENV['item_type']).present?
+      puts "Provide an item_type and item_id"
+      exit -1
+    end
+
+    unless user = User.where(email: (ENV['email'] || config[:admin].first)).first
+      puts "Provide an email of a registered user."
+      exit -1
+    end
+
+    interest = Interest.for_item user, item_id, item_type
+    unless interest.new_record?
+      puts "User already subscribed to that item."
+      exit -1
+    end
+
+    unless item = Subscriptions::Manager.find(item_types[item_type]['adapter'], item_id)
+      puts "Couldn't find remote information about the item."
+      exit -1
+    end
+
+    interest.data = item.data
+    interest.save!
+
+    puts "User subscribed to #{item_type} with ID: #{item_id}"
+  end
+
   desc "Forces emails or SMSes to be sent for the first X results of every subscription a user has"
   task send_user: :environment do
     email = ENV['email'] || config[:admin].first
