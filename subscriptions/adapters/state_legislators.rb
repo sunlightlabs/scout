@@ -1,4 +1,5 @@
-# vim: tabstop=2 expandtab shiftwidth=2 softtabstop=2
+# Copyright (c) 2012, Sunlight Labs, under the terms of the Scout project's
+# licensing.
 
 module Subscriptions
   module Adapters
@@ -11,6 +12,18 @@ module Subscriptions
         url
       end
 
+      def self.item_for(legislator)
+        # created_at and updated_at are UTC, take them directly as such
+        ['updated_at', 'created_at'].each do |field|
+          legislator[field] = legislator[field] ? legislator[field].to_time : nil
+        end
+        SeenItem.new(
+          :item_id => legislator['id'],
+          :date => legislator["created_at"],
+          :data => legislator
+        )
+      end
+
       def self.item_detail_for(legislator)
         return nil unless legislator
         item_for legislator.to_hash
@@ -18,3 +31,5 @@ module Subscriptions
     end
   end
 end
+
+# vim: tabstop=2 expandtab shiftwidth=2 softtabstop=2
