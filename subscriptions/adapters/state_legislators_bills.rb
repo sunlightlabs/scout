@@ -16,7 +16,7 @@ module Subscriptions
       end
 
       def self.search_name(subscription)
-        "Legislator's Bills"
+        "Legislator's Sponsored Bills"
       end
 
       def self.short_name(number, interest)
