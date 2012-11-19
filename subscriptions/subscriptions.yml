@@ -5,6 +5,7 @@ search_adapters:
   - federal_bills: bill
   - speeches: speech
   - state_bills: state_bill
+  - state_legislators: state_legislator
   - regulations: regulation
   - documents: document
 
@@ -16,5 +17,6 @@ item_adapters:
   federal_bills_votes: bill
   state_bills_votes: state_bill
   state_bills_activity: state_bill
+  state_legislators_bills: state_legislator
 
 # external feed subscriptions/items are taken care of separately, they are their own beast

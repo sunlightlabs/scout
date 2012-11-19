@@ -1,0 +1,15 @@
+<% bill = item.data %>
+<a href="<%= item_path item %>">
+  <h4>
+    <span><%= bill['bill_id'] %></span>
+  </h4>
+</a>
+
+<div class="subtitle">
+    <span class="state"><%= state_name bill['state'] %></span>
+    &mdash;
+    <%= bill['title'] %>
+</div>
+
+<p>
+</p>

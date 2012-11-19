@@ -1,0 +1,35 @@
+<% legislator = item.data %>
+
+<div class="followChanges">
+  <div class="trackSubscribe" style="margin-top: 16px">
+      Subscribe to bills sponsored by <%= legislator['full_name'] %>.
+  </div>
+
+    <%= follow_button item %>
+
+    <div class="clear"></div>
+</div>
+
+<div class="summary followable">
+
+  <div class="entryHeader">
+    <h2><%= legislator['full_name'] %></h2>
+
+    <div class="subtitle">
+        <%= legislator['full_name'] %> represents District
+        <%= legislator['district'] %> in
+        <%= state_name legislator['state'] %>
+        <%# XXX: Add in state to this subtitle %>
+    </div>
+  </div>
+
+    <div class="clear"></div>
+    <div class="resources">
+      <h5>Resources</h5>
+        <ul>
+          <li>
+            <a href="http://openstates.org/<%= legislator['state'] %>/legislators/<%= legislator['id'] %>/" >OpenStates Page</a>
+          </li>
+        </ul>
+  </div>
+</div>
