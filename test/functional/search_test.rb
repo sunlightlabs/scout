@@ -99,12 +99,12 @@ class SearchTest < Test::Unit::TestCase
     post "/interests/search", {:search_type => "all", :query => query}, login(user)
     assert_response 200
 
-    assert_equal search_types.keys.size, user.subscriptions.count
+    assert_equal search_types.size, user.subscriptions.count
     assert_equal 1, user.interests.count
 
     interest1 = user.interests.where(:in => query).first
     assert_not_nil interest1
-    assert_equal search_adapters.keys.size, interest1.subscriptions.count
+    assert_equal search_types.size, interest1.subscriptions.count
 
     interest1.subscriptions.each do |subscription|
         assert_equal query, subscription.interest_in
@@ -114,18 +114,18 @@ class SearchTest < Test::Unit::TestCase
     post "/interests/search", {:search_type => "all", :query => query2}, login(user)
     assert_response 200
 
-    assert_equal search_adapters.keys.size * 2, user.subscriptions.count
+    assert_equal search_types.size * 2, user.subscriptions.count
     assert_equal 2, user.interests.count
 
     interest2 = user.interests.where(:in => query2).first
     assert_not_nil interest2
-    assert_equal search_adapters.keys.size, interest2.subscriptions.count
+    assert_equal search_types.size, interest2.subscriptions.count
     
 
     post "/interests/search", {:search_type => "all", :query => query2}, login(user)
     assert_response 200
 
-    assert_equal search_adapters.keys.size * 2, user.subscriptions.count
+    assert_equal search_types.size * 2, user.subscriptions.count
     assert_equal 2, user.interests.count
   end
 
