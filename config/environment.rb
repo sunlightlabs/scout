@@ -85,40 +85,44 @@ def search_adapters
     @search_adapters
   else 
     @search_adapters = {}
-    subscription_map['search_adapters'].map {|h| [h.keys.first, h.values.first]}.each do |adapter, item_type|
-      @search_adapters[adapter] = item_type
+    
+    item_types.each do |item_type, info|
+      if search_adapter = info['adapter']
+        @search_adapters[search_adapter] = item_type
+      end
     end
+
     @search_adapters
   end
 end
 
 def item_adapters
-  @item_adapters ||= subscription_map['item_adapters']
-end
-
-def search_types
-  @search_types ||= subscription_map['search_adapters'].map {|h| h.keys.first}
-end
-
-# hardcoded for now
-def cite_types
-  ["federal_bills", "regulations", "documents"]
+  if @item_adapters
+    @item_adapters
+  else 
+    @item_adapters = {}
+    
+    item_types.each do |item_type, info|
+      if subscriptions = info['subscriptions']
+        subscriptions.each do |subscription_type|
+          @item_adapters[subscription_type] = item_type
+        end
+      end
+    end
+    
+    @item_adapters
+  end
 end
 
 def item_types
-  if @item_types
-    @item_types
-  else
-    @item_types = {}
-    search_adapters.each do |adapter, item_type|
-      @item_types[item_type] ||= {}
-      @item_types[item_type]['adapter'] = adapter
-    end
-    item_adapters.each do |adapter, item_type|
-      @item_types[item_type] ||= {}
-      @item_types[item_type]['subscriptions'] ||= []
-      @item_types[item_type]['subscriptions'] << adapter
-    end
-    @item_types
-  end
+  @item_types ||= subscription_map['item_types']
+end
+
+# hardcoded for now
+def search_types
+  ["federal_bills", "speeches", "state_bills", "regulations", "documents"]
+end
+
+def cite_types
+  ["federal_bills", "regulations", "documents"]
 end

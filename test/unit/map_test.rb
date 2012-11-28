@@ -30,15 +30,9 @@ class MapTest < Test::Unit::TestCase
   # mapping from a given item type to the adapter that searches over it
   def test_item_types_to_search_adapter
     assert item_types.is_a?(Hash)
-    ['bill', 'state_bill', 'speech', 'regulation'].each do |item_type|
+    ['bill', 'state_bill', 'speech', 'regulation', 'document', 'state_legislator'].each do |item_type|
       assert_equal item_types[item_type]['adapter'], search_adapters.keys.find {|adapter| search_adapters[adapter] == item_type}
     end
-  end
-
-  def test_search_types_display_order
-    assert search_types.is_a?(Array)
-    # don't verify the order's right, too brittle, just verify that it contains the right values
-    assert_equal search_adapters.keys.sort, search_types.sort
   end
 
 end

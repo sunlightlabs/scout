@@ -1,22 +1,26 @@
-# names of adapters that are for searches, 
-# pointing to the name of the kind of item they search over
-# ordered in the way they should display on the website
-search_adapters:
-  - federal_bills: bill
-  - speeches: speech
-  - state_bills: state_bill
-  - state_legislators: state_legislator
-  - regulations: regulation
-  - documents: document
-
-# names of adapters that follow particular kinds of items
-item_adapters:
-  federal_bills_activity: bill
-  federal_bills_upcoming_floor: bill
-  federal_bills_hearings: bill
-  federal_bills_votes: bill
-  state_bills_votes: state_bill
-  state_bills_activity: state_bill
-  state_legislators_bills: state_legislator
+# ugh, I've really messed this up that this is also necessary
+item_types:
+  bill: 
+    adapter: federal_bills
+    subscriptions:
+      - federal_bills_activity
+      - federal_bills_upcoming_floor
+      - federal_bills_hearings
+      - federal_bills_votes
+  state_bill: 
+    adapter: state_bills
+    subscriptions:
+      - state_bills_activity
+      - state_bills_votes
+  regulation: 
+    adapter: regulations
+  speech: 
+    adapter: speeches
+  document:
+    adapter: documents
+  state_legislator: 
+    adapter: state_legislators
+    subscriptions: 
+      - state_legislators_bills
 
 # external feed subscriptions/items are taken care of separately, they are their own beast
