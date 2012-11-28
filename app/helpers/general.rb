@@ -33,7 +33,8 @@ module Helpers
     def item_type_name(item_type)
       {
         'state_bill' => 'State Bills',
-        'bill' => 'Bills in Congress'
+        'bill' => 'Bills in Congress',
+        'state_legislator' => 'State Legislators'
       }[item_type]
     end
 

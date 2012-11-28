@@ -71,20 +71,20 @@ class SeenItem
     
     self.attributes = {
       # core fields
-      :subscription_type => subscription.subscription_type,
-      :item_type => item_type,
-      :interest_type => interest_type,
-      :interest_in => subscription.interest_in,
+      subscription_type: subscription.subscription_type,
+      item_type: item_type,
+      interest_type: interest_type,
+      interest_in: subscription.interest_in,
 
       # the interest and user may not exist yet on the subscription
       # TODO: refactor so that the interest is passed in and is always
       # guaranteed to exist (user still may not be)
-      :interest_id => subscription.interest_id,
+      interest_id: subscription.interest_id,
 
       # TODO: refactor this out
-      :subscription => subscription,
+      subscription: subscription,
 
-      :user_id => subscription.user_id
+      user_id: subscription.user_id
     }
   end
 
