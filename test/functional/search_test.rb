@@ -99,7 +99,7 @@ class SearchTest < Test::Unit::TestCase
     post "/interests/search", {:search_type => "all", :query => query}, login(user)
     assert_response 200
 
-    assert_equal search_adapters.keys.size, user.subscriptions.count
+    assert_equal search_types.keys.size, user.subscriptions.count
     assert_equal 1, user.interests.count
 
     interest1 = user.interests.where(:in => query).first
