@@ -1,5 +1,5 @@
-# Copyright (c) 2012, Sunlight Labs, under the terms of the Scout project's
-# licensing.
+# Copyright (c) 2012, Sunlight Foundation, under the terms of the Scout 
+# project's licensing.
 
 module Subscriptions
   module Adapters
@@ -21,10 +21,11 @@ module Subscriptions
         ['updated_at', 'created_at'].each do |field|
           legislator[field] = legislator[field] ? legislator[field].to_time : nil
         end
+
         SeenItem.new(
-          :item_id => legislator['id'],
-          :date => legislator["created_at"],
-          :data => legislator
+          item_id: legislator['id'],
+          date: legislator["created_at"],
+          data: legislator
         )
       end
 
