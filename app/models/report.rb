@@ -6,14 +6,14 @@ class Report
   field :source
   field :message
   field :elapsed_time, type: Float
-  field :attached, :type => Hash, :default => {}
+  field :attached, type: Hash, :default => {}
   
   index status: 1
   index source: 1
   index created_at: 1
   
   def self.file(status, source, message, attached = {})
-    report = Report.create!(:source => source.to_s, :status => status, :message => message, :attached => attached)
+    report = Report.create!(source: source.to_s, status: status, message: message, attached: attached)
     # stdout, but don't bother stdout-ing reports COMPLETE reports, or reports that will be emailed
     puts "\n#{report}" unless Sinatra::Application.test? or ['FAILURE', 'WARNING', 'COMPLETE'].include?(status)
     report
@@ -47,9 +47,9 @@ class Report
 
   def self.exception_to_hash(exception)
     {
-        'backtrace' => exception.backtrace, 
-        'message' => exception.message, 
-        'type' => exception.class.to_s
+      'backtrace' => exception.backtrace,
+      'message' => exception.message,
+      'type' => exception.class.to_s
     }
   end
 end
