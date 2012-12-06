@@ -18,36 +18,41 @@ module Subscriptions
       def self.url_for(subscription, function, options = {})
         api_key = options[:api_key] || config[:subscriptions][:sunlight_api_key]
         
-        if config[:subscriptions][:rtc_endpoint].present?
-          endpoint = config[:subscriptions][:rtc_endpoint].dup
+        if config[:subscriptions][:congress_endpoint].present?
+          endpoint = config[:subscriptions][:congress_endpoint].dup
         else
-          endpoint = "http://api.realtimecongress.org/api/v1"
+          endpoint = "http://congress.api.sunlightfoundation.com"
         end
         
-        sections = %w{ stage title abstract document_number document_type published_at federal_register_url agency_names agency_ids publication_date }
+        fields = %w{ 
+          document_number document_type
+          stage title abstract 
+          posted_at publication_date
+          url agency_names agency_ids 
+        }
 
         url = endpoint
 
         query = subscription.query['query']
         if query.present?
-          url << "/search/regulations.json?"
-          url << "&q=#{CGI.escape query}"
+          url << "/search/regulations?"
+          url << "&query=#{CGI.escape query}"
 
           url << "&highlight=true"
-          url << "&highlight_size=500"
-          url << "&highlight_tags=,"
+          url << "&highlight.size=500"
+          url << "&highlight.tags=,"
         else
-          url << "/regulations.json?"
+          url << "/regulations?"
         end
 
         if subscription.query['citations'].any?
           citations = subscription.query['citations'].map {|c| c['citation_id']}
-          url << "&citation=#{citations.join "|"}"
-          url << "&citation_details=true"
+          url << "&citing=#{citations.join "|"}"
+          url << "&citing.details=true"
         end
 
-        url << "&order=published_at"
-        url << "&fields=#{sections.join ','}"
+        url << "&order=posted_at"
+        url << "&fields=#{fields.join ','}"
         url << "&apikey=#{api_key}"
 
         # filters
@@ -60,7 +65,7 @@ module Subscriptions
 
         # if it's background checking, filter to just the last month for speed
         if function == :check
-          url << "&published_at__gte=#{1.month.ago.strftime "%Y-%m-%d"}"
+          url << "&posted_at__gte=#{1.month.ago.strftime "%Y-%m-%d"}"
         end
 
 
@@ -74,17 +79,23 @@ module Subscriptions
       def self.url_for_detail(item_id, options = {})
         api_key = options[:api_key] || config[:subscriptions][:sunlight_api_key]
 
-        if config[:subscriptions][:rtc_endpoint].present?
-          endpoint = config[:subscriptions][:rtc_endpoint]
+        if config[:subscriptions][:congress_endpoint].present?
+          endpoint = config[:subscriptions][:congress_endpoint].dup
         else
-          endpoint = "http://api.realtimecongress.org/api/v1"
+          endpoint = "http://congress.api.sunlightfoundation.com"
         end
         
-        sections = %w{ stage title abstract document_number document_type published_at federal_register_url agency_names agency_ids pdf_url publication_date }
+        fields = %w{ 
+          stage title abstract 
+          document_number document_type 
+          posted_at publication_date 
+          url pdf_url 
+          agency_names agency_ids
+        }
 
-        url = "#{endpoint}/regulations.json?apikey=#{api_key}"
+        url = "#{endpoint}/regulations?apikey=#{api_key}"
         url << "&document_number=#{item_id}"
-        url << "&fields=#{sections.join ','}"
+        url << "&fields=#{fields.join ','}"
 
         url
       end
@@ -100,15 +111,15 @@ module Subscriptions
       # takes parsed response and returns an array where each item is 
       # a hash containing the id, title, and post date of each item found
       def self.items_for(response, function, options = {})
-        raise AdapterParseException.new("Response didn't include regulations field: #{response.inspect}") unless response['regulations']
+        raise AdapterParseException.new("Response didn't include results field: #{response.inspect}") unless response['results']
         
-        response['regulations'].map do |regulation|
+        response['results'].map do |regulation|
           item_for regulation
         end
       end
 
       def self.item_detail_for(response)
-        item_for response['regulations'][0]
+        item_for response['results'][0]
       end
       
       
@@ -118,11 +129,9 @@ module Subscriptions
       def self.item_for(regulation)
         return nil unless regulation
 
-        regulation['publication_date'] = Time.parse(regulation['publication_date']).utc
-
         SeenItem.new(
           item_id: regulation["document_number"],
-          date: regulation["published_at"],
+          date: regulation["posted_at"],
           data: regulation
         )
           

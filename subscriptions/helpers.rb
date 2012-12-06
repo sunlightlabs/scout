@@ -22,11 +22,11 @@ module Helpers
         "hr" => "H.R.",
         "hres" => "H.Res.",
         "hjres" => "H.J.Res.",
-        "hcres" => "H.Con.Res.",
+        "hconres" => "H.Con.Res.",
         "s" => "S.",
         "sres" => "S.Res.",
         "sjres" => "S.J.Res.",
-        "scres" => "S.Con.Res."
+        "sconres" => "S.Con.Res."
       }[short]
     end
     
@@ -242,69 +242,11 @@ module Helpers
     #   end
     # end
 
-    def govtrack_type(bill_type)
-      {
-        "hr" => "h",
-        "hres" => "hr",
-        "hjres" => "hj",
-        "hcres" => "hc",
-        "s" => "s",
-        "sres" => "sr",
-        "sjres" => "sj",
-        "scres" => "sc"
-      }[bill_type]
-    end
-    
-    # most are fine, just alter the con res's
-    def thomas_type(bill_type)
-      {
-        "hcres" => "hconres",
-        "scres" => "sconres"
-      }[bill_type] || bill_type
-    end
-
-    def congress_gov_type(bill_type)
-      {
-        "hr" => "house-bill",
-        "hres" => "house-resolution",
-        "hcres" => "house-concurrent-resolution",
-        "hjres" => "house-joint-resolution",
-        "s" => "senate-bill",
-        "sres" => "senate-resolution",
-        "scres" => "senate-concurrent-resolution",
-        "sjres" => "senate-joint-resolution"
-      }[bill_type]
-    end
-    
-    def opencongress_url(item)
-      bill = item.data
-      id = "#{bill['session']}-#{govtrack_type bill['bill_type']}#{bill['number']}"
-      "http://www.opencongress.org/bill/#{id}/show"
-    end
-    
-    def govtrack_url(item)
-      bill = item.data
-      id = "#{govtrack_type bill['bill_type']}#{bill['session']}-#{bill['number']}"
-      "http://www.govtrack.us/congress/bill.xpd?bill=#{id}"
-    end
-    
-    def thomas_url(item)
-      bill = item.data
-      id = "#{bill['session']}#{thomas_type bill['bill_type']}#{bill['number']}"
-      "http://hdl.loc.gov/loc.uscongress/legislation.#{id}"
-    end
-
-    def congress_gov_url(item)
-      bill = item.data
-      type = congress_gov_type bill['bill_type']
-      # todo: when they expand to earlier (or later) congresses, 'th' is not a universal ordinal
-      "http://beta.congress.gov/bill/#{bill['session']}th/#{type}/#{bill['number']}"
-    end
     
     def bill_priorities
       {
         "summary" => 1,
-        "versions" => 2,
+        "text" => 2,
         "keywords" => 3
       }
     end
@@ -312,7 +254,7 @@ module Helpers
     def regulation_priorities
       {
         'abstract' => 1,
-        'full_text' => 2
+        'text' => 2
       }
     end
 
@@ -471,9 +413,9 @@ module Helpers
     end
 
     def document_description(document)
-      return nil unless document['description'] # shouldn't happen
+      return nil unless document['gao_report']['description'] # shouldn't happen
 
-      description = document['description']
+      description = document['gao_report']['description']
       if document['document_type'] == "gao_report"
         ["What GAO Found", "Why GAO Did This Study"].each do |header|
           description = description.gsub /(#{header})/, '<strong>\1</strong>'
@@ -493,8 +435,8 @@ module Helpers
 
     def regulation_stage(stage)
       {
-        :proposed => "Proposed Rule",
-        :final => "Final Rule"
+        proposed: "Proposed Rule",
+        final: "Final Rule"
       }[stage.to_sym] || "Rule"
     end
 
@@ -530,17 +472,17 @@ module Helpers
       if hearing['chamber'] == 'senate'
         "http://www.senate.gov/pagelayout/committees/b_three_sections_with_teasers/committee_hearings.htm"
       else
-        hearing['hearing_url']
+        hearing['url']
       end
     end
 
     def vote_breakdown(vote)
       numbers = []
-      total = vote['vote_breakdown']['total']
-      numbers << total['Yea']
-      numbers << total['Nay']
-      # numbers << total['Present'] if total['Present']
-      # numbers << total['Not Voting'] if total['Not Voting']
+      total = vote['breakdown']['total']
+
+      numbers << total.find {|kind| kind['vote'] == "Yea"}['number']
+      numbers << total.find {|kind| kind['vote'] == "Nay"}['number']
+      
       numbers.join " - "
     end
 

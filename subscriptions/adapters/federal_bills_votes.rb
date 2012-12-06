@@ -6,21 +6,23 @@ module Subscriptions
       def self.url_for(subscription, function, options = {})
         api_key = config[:subscriptions][:sunlight_api_key]
         
-        if config[:subscriptions][:rtc_endpoint].present?
-          endpoint = config[:subscriptions][:rtc_endpoint].dup
+        if config[:subscriptions][:congress_endpoint].present?
+          endpoint = config[:subscriptions][:congress_endpoint].dup
         else
-          endpoint = "http://api.realtimecongress.org/api/v1"
+          endpoint = "http://congress.api.sunlightfoundation.com"
         end
         
-        sections = %w{ chamber session year number roll_id roll_type question result required voted_at vote_type how vote_breakdown.total }
+        fields = %w{ 
+          roll_id chamber congress year number 
+          roll_type question result vote_type
+          required voted_at breakdown.total 
+        }
 
         bill_id = subscription.interest_in
         
-        url = "#{endpoint}/votes.json?apikey=#{api_key}"
-        url << "&sections=#{sections.join ','}"
-
+        url = "#{endpoint}/votes?apikey=#{api_key}"
+        url << "&fields=#{fields.join ','}"
         url << "&bill_id=#{bill_id}"
-        url << "&how=roll"
         
         url
       end
@@ -36,9 +38,9 @@ module Subscriptions
       # takes parsed response and returns an array where each item is 
       # a hash containing the id, title, and post date of each item found
       def self.items_for(response, function, options = {})
-        return nil unless response['votes']
+        return nil unless response['results']
         
-        response['votes'].map do |vote|
+        response['results'].map do |vote|
           item_for vote
         end
       end
@@ -47,12 +49,10 @@ module Subscriptions
       def self.item_for(vote)
         return nil unless vote
 
-        vote['voted_at'] = Time.zone.parse(vote['voted_at']).utc
-
         SeenItem.new(
-          :item_id => vote['roll_id'],
-          :date => vote['voted_at'],
-          :data => vote
+          item_id: vote['roll_id'],
+          date: vote['voted_at'],
+          data: vote
         )
       end
       

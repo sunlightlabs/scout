@@ -3,8 +3,8 @@
 <description><![CDATA[
   <% if (highlight = document_highlight(item, interest)) %>
     <%= highlight %>
-  <% elsif document['description'].present? %>
-    <%= truncate document['description'], 500 %>
+  <% elsif document['gao_report']['description'].present? %>
+    <%= truncate document['gao_report']['description'], 500 %>
   <% else %>
     No excerpt or description available.
   <% end %>

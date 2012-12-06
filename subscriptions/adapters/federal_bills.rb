@@ -14,36 +14,39 @@ module Subscriptions
       def self.url_for(subscription, function, options = {})
         api_key = options[:api_key] || config[:subscriptions][:sunlight_api_key]
         
-        if config[:subscriptions][:rtc_endpoint].present?
-          endpoint = config[:subscriptions][:rtc_endpoint].dup
+        if config[:subscriptions][:congress_endpoint].present?
+          endpoint = config[:subscriptions][:congress_endpoint].dup
         else
-          endpoint = "http://api.realtimecongress.org/api/v1"
+          endpoint = "http://congress.api.sunlightfoundation.com"
         end
         
-        sections = %w{ bill_id bill_type number short_title summary last_version_on latest_upcoming official_title introduced_at last_action_at last_action session last_version }
+        fields = %w{ bill_id bill_type number congress
+          short_title official_title summary
+          introduced_on last_version last_version_on
+        }
 
         url = endpoint
 
         query = subscription.query['query']
         if query.present?
-          url << "/search/bills.json?"
-          url << "&q=#{CGI.escape query}"
+          url << "/search/bills?"
+          url << "&query=#{CGI.escape query}"
 
           url << "&highlight=true"
-          url << "&highlight_size=500"
-          url << "&highlight_tags=,"
+          url << "&highlight.size=500"
+          url << "&highlight.tags=,"
         else
-          url << "/bills.json?"
+          url << "/bills?"
         end
 
         if subscription.query['citations'].any?
           citations = subscription.query['citations'].map {|c| c['citation_id']}
-          url << "&citation=#{citations.join "|"}"
-          url << "&citation_details=true"
+          url << "&citing=#{citations.join "|"}"
+          url << "&citing.details=true"
         end
 
         url << "&order=last_version_on"
-        url << "&sections=#{sections.join ','}"
+        url << "&fields=#{fields.join ','}"
         url << "&apikey=#{api_key}"
 
 
@@ -52,15 +55,15 @@ module Subscriptions
         if subscription.data["stage"].present?
           stage = subscription.data["stage"]
           if stage == "enacted"
-            url << "&enacted=true"
+            url << "&history.enacted=true"
           elsif stage == "passed_house"
-            url << "&house_passage_result=pass"
+            url << "&history.house_passage_result=pass"
           elsif stage == "passed_senate"
-            url << "&senate_passage_result=pass"
+            url << "&history.senate_passage_result=pass"
           elsif stage == "vetoed"
-            url << "&vetoed=true"
+            url << "&history.vetoed=true"
           elsif stage == "awaiting_signature"
-            url << "&awaiting_signature=true"
+            url << "&history.awaiting_signature=true"
           end
         end
 
@@ -82,19 +85,22 @@ module Subscriptions
       def self.url_for_detail(item_id, options = {})
         api_key = options[:api_key] || config[:subscriptions][:sunlight_api_key]
 
-        if config[:subscriptions][:rtc_endpoint].present?
-          endpoint = config[:subscriptions][:rtc_endpoint]
+        if config[:subscriptions][:congress_endpoint].present?
+          endpoint = config[:subscriptions][:congress_endpoint].dup
         else
-          endpoint = "http://api.realtimecongress.org/api/v1"
+          endpoint = "http://congress.api.sunlightfoundation.com"
         end
         
-        sections = %w{ bill_id bill_type number session short_title official_title introduced_at last_action_at last_action last_version 
-          summary sponsor cosponsors_count latest_upcoming actions last_version_on
-          }
+        fields = %w{ 
+          bill_id bill_type number congress
+          sponsor urls
+          short_title official_title summary
+          introduced_on last_action_at last_version last_version_on
+        }
 
-        url = "#{endpoint}/bills.json?apikey=#{api_key}"
+        url = "#{endpoint}/bills?apikey=#{api_key}"
         url << "&bill_id=#{item_id}"
-        url << "&sections=#{sections.join ','}"
+        url << "&fields=#{fields.join ','}"
 
         url
       end
@@ -112,11 +118,11 @@ module Subscriptions
           "hr" => "H.R.",
           "hres" => "H.Res.",
           "hjres" => "H.J.Res.",
-          "hcres" => "H.Con.Res.",
+          "hconres" => "H.Con.Res.",
           "s" => "S.",
           "sres" => "S.Res.",
           "sjres" => "S.J.Res.",
-          "scres" => "S.Con.Res."
+          "sconres" => "S.Con.Res."
         }[interest.data['bill_type']]
         "#{code} #{interest.data['number']}"
       end
@@ -128,34 +134,26 @@ module Subscriptions
       # takes parsed response and returns an array where each item is 
       # a hash containing the id, title, and post date of each item found
       def self.items_for(response, function, options = {})
-        raise AdapterParseException.new("Response didn't include bills field: #{response.inspect}") unless response['bills']
+        raise AdapterParseException.new("Response didn't include results field: #{response.inspect}") unless response['results']
         
-        response['bills'].map do |bv|
+        response['results'].map do |bv|
           item_for bv
         end
       end
 
-      # parse response when asking for a single bill - RTC still returns an array of one
+      # parse response when asking for a single bill - Congress API returns an array of one
       def self.item_detail_for(response)
         return nil unless response
-        item_for response['bills'][0]
+        item_for response['results'][0]
       end
       
-      # internal
-
       def self.item_for(bill)
         return nil unless bill
 
-        bill['last_version_on'] = Subscriptions::Manager.noon_utc_for bill['last_version_on']
-
-        if bill['last_version']
-          bill['last_version']['issued_on'] = Subscriptions::Manager.noon_utc_for bill['last_version']['issued_on']
-        end
-        
         SeenItem.new(
-          :item_id => bill["bill_id"],
-          :date => bill['last_version_on'], # order by the last version published
-          :data => bill
+          item_id: bill["bill_id"],
+          date: bill['last_version_on'],
+          data: bill
         )
       end
       

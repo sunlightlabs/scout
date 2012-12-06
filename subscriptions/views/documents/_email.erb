@@ -9,8 +9,8 @@
 <%= email_content_p %>
   <% if highlight = document_highlight(item, interest, inline: true) %>
     <%= highlight %>
-  <% elsif document['description'].present? %>
-    <%= truncate document['description'], 500 %>
+  <% elsif document['gao_report']['description'].present? %>
+    <%= truncate document['gao_report']['description'], 500 %>
   <% else %>
     No excerpt or abstract available.
   <% end %>

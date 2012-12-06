@@ -175,7 +175,11 @@ module Helpers
     end
 
     def html_date(time)
-      time.strftime "%Y-%m-%d"
+      if time.is_a?(String)
+        time
+      else
+        time.strftime "%Y-%m-%d"
+      end
     end
     
     def h(text)
@@ -191,31 +195,37 @@ module Helpers
     end
     
     def long_date(date)
+      date = Time.zone.parse(date) if date.is_a?(String)
       local = date.in_time_zone
       local.strftime "%B #{local.day}, %Y" # remove 0-prefix
     end
 
     def short_date(date)
+      date = Time.zone.parse(date) if date.is_a?(String)
       local = date.in_time_zone
       local.strftime "%m-%d-%Y"
     end
 
     def just_time(date)
+      date = Time.zone.parse(date) if date.is_a?(String)
       local = date.in_time_zone
       hour = local.strftime("%I").gsub(/^0/, "")
       "#{hour}#{local.strftime(":%M %p")}"
     end
     
     def just_date(date)
+      date = Time.zone.parse(date) if date.is_a?(String)
       local = date.in_time_zone
       local.strftime "%b #{local.day}, %Y"
     end
 
     def just_date_year(date)
+      date = Time.zone.parse(date) if date.is_a?(String)
       just_date date
     end
     
     def very_short_date(time)
+      date = Time.zone.parse(date) if date.is_a?(String)
       local = time.in_time_zone
       local.strftime "%m/%d"
     end

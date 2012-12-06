@@ -6,19 +6,19 @@ module Subscriptions
       def self.url_for(subscription, function, options = {})
         api_key = config[:subscriptions][:sunlight_api_key]
         
-        if config[:subscriptions][:rtc_endpoint].present?
-          endpoint = config[:subscriptions][:rtc_endpoint].dup
+        if config[:subscriptions][:congress_endpoint].present?
+          endpoint = config[:subscriptions][:congress_endpoint].dup
         else
-          endpoint = "http://api.realtimecongress.org/api/v1"
+          endpoint = "http://congress.api.sunlightfoundation.com"
         end
         
-        sections = %w{ bill_id actions last_action_at }
+        fields = %w{ bill_id actions last_action_at }
 
         bill_id = subscription.interest_in
         
-        url = "#{endpoint}/bills.json?apikey=#{api_key}"
+        url = "#{endpoint}/bills?apikey=#{api_key}"
         url << "&bill_id=#{bill_id}"
-        url << "&sections=#{sections.join ','}"
+        url << "&fields=#{fields.join ','}"
         
         url
       end
@@ -34,12 +34,12 @@ module Subscriptions
       # takes parsed response and returns an array where each item is 
       # a hash containing the id, title, and post date of each item found
       def self.items_for(response, function, options = {})
-        return nil unless response['bills'] and response['bills'].first and response['bills'].first['actions']
+        return nil unless response['results'] and response['results'].first and response['results'].first['actions']
         
-        bill_id = response['bills'].first['bill_id']
+        bill_id = response['results'].first['bill_id']
 
         actions = []
-        response['bills'].first['actions'].each do |action|
+        response['results'].first['actions'].each do |action|
           # don't alert on vote actions, they are handled separately, by the votes adapter
           # but do show them on the front-end, weird to pretend it's not there
           next if (action['type'] == "vote") and (function != :search)
@@ -51,17 +51,13 @@ module Subscriptions
       end
       
 
-      # private
-      
       def self.item_for(bill_id, action)
         return nil unless action
 
-        action['acted_at'] = Subscriptions::Manager.noon_utc_for action['acted_at']
-        
         SeenItem.new(
-          :item_id => "#{bill_id}-action-#{action['acted_at'].to_i}",
-          :date => action['acted_at'],
-          :data => action
+          item_id: "#{bill_id}-action-#{action['acted_at'].to_i}",
+          date: action['acted_at'],
+          data: action
         )
       end
       

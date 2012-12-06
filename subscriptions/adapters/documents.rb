@@ -12,40 +12,42 @@ module Subscriptions
       def self.url_for(subscription, function, options = {})
         api_key = options[:api_key] || config[:subscriptions][:sunlight_api_key]
         
-        if config[:subscriptions][:rtc_endpoint].present?
-          endpoint = config[:subscriptions][:rtc_endpoint].dup
+        if config[:subscriptions][:congress_endpoint].present?
+          endpoint = config[:subscriptions][:congress_endpoint].dup
         else
-          endpoint = "http://api.realtimecongress.org/api/v1"
+          endpoint = "http://congress.api.sunlightfoundation.com"
         end
         
-        sections = %w{ 
-          document_id document_type document_type_name title url posted_at
-          source_url gao_id categories description
+        fields = %w{ 
+          document_id document_type document_type_name 
+          title categories posted_at
+          url source_url 
+          gao_report.gao_id gao_report.description
         }
 
         url = endpoint
 
         query = subscription.query['query']
         if query.present?
-          url << "/search/documents.json?"
-          url << "&q=#{CGI.escape query}"
+          url << "/search/documents?"
+          url << "&query=#{CGI.escape query}"
 
           url << "&highlight=true"
-          url << "&highlight_size=500"
-          url << "&highlight_tags=,"
+          url << "&highlight.size=500"
+          url << "&highlight.tags=,"
         else
-          url << "/documents.json?"
+          url << "/documents?"
         end
 
         if subscription.query['citations'].any?
           citations = subscription.query['citations'].map {|c| c['citation_id']}
-          url << "&citation=#{citations.join "|"}"
-          url << "&citation_details=true"
+          url << "&citing=#{citations.join "|"}"
+          url << "&citing.details=true"
         end
 
         url << "&document_type=gao_report"
         url << "&order=posted_at"
-        url << "&fields=#{sections.join ','}"
+        url << "&fields=#{fields.join ','}"
         url << "&apikey=#{api_key}"
 
 
@@ -65,20 +67,22 @@ module Subscriptions
       def self.url_for_detail(item_id, options = {})
         api_key = options[:api_key] || config[:subscriptions][:sunlight_api_key]
 
-        if config[:subscriptions][:rtc_endpoint].present?
-          endpoint = config[:subscriptions][:rtc_endpoint]
+        if config[:subscriptions][:congress_endpoint].present?
+          endpoint = config[:subscriptions][:congress_endpoint].dup
         else
-          endpoint = "http://api.realtimecongress.org/api/v1"
+          endpoint = "http://congress.api.sunlightfoundation.com"
         end
         
-        sections = %w{ 
-          document_type document_type_name title url posted_at
-          source_url gao_id categories description
+        fields = %w{ 
+          document_id document_type document_type_name 
+          title categories posted_at
+          url source_url 
+          gao_report.gao_id gao_report.description
         }
 
-        url = "#{endpoint}/documents.json?apikey=#{api_key}"
+        url = "#{endpoint}/documents?apikey=#{api_key}"
         url << "&document_id=#{item_id}"
-        url << "&fields=#{sections.join ','}"
+        url << "&fields=#{fields.join ','}"
 
         url
       end
@@ -94,29 +98,21 @@ module Subscriptions
       # takes parsed response and returns an array where each item is 
       # a hash containing the id, title, and post date of each item found
       def self.items_for(response, function, options = {})
-        raise AdapterParseException.new("Response didn't include documents field: #{response.inspect}") unless response['documents']
+        raise AdapterParseException.new("Response didn't include results field: #{response.inspect}") unless response['results']
         
-        response['documents'].map do |document|
+        response['results'].map do |document|
           item_for document
         end
       end
 
       def self.item_detail_for(response)
-        item_for response['documents'][0]
+        item_for response['results'][0]
       end
       
-      
-      
-      # internal
       
       def self.item_for(document)
         return nil unless document
         
-        # not sure why I have to do this...
-        if document['posted_at'].is_a?(String)
-          document['posted_at'] = Time.parse document['posted_at']
-        end
-
         SeenItem.new(
           item_id: document["document_id"],
           date: document["posted_at"],

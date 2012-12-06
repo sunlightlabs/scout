@@ -6,27 +6,27 @@ module Subscriptions
       def self.url_for(subscription, function, options = {})
         api_key = config[:subscriptions][:sunlight_api_key]
         
-        if config[:subscriptions][:rtc_endpoint].present?
-          endpoint = config[:subscriptions][:rtc_endpoint].dup
+        if config[:subscriptions][:congress_endpoint].present?
+          endpoint = config[:subscriptions][:congress_endpoint].dup
         else
-          endpoint = "http://api.realtimecongress.org/api/v1"
+          endpoint = "http://congress.api.sunlightfoundation.com"
         end
         
-        sections = %w{ chamber session committee occurs_at description room hearing_url hearing_type subcommittee_name }
+        fields = %w{ 
+          chamber congress 
+          occurs_at hearing_type 
+          committee subcommittee
+          description room url 
+        }
 
         bill_id = subscription.interest_in
         
-        url = "#{endpoint}/committee_hearings.json?apikey=#{api_key}"
+        url = "#{endpoint}/hearings?apikey=#{api_key}"
         url << "&bill_ids=#{bill_id}"
         url << "&dc=true"
         url << "&committee__exists=true"
-
-        # re-initialize after making this change
-        # if function == :search 
-          url << "&occurs_at__gte=#{Time.now.midnight.utc.xmlschema}"
-        # end
         
-        url << "&sections=#{sections.join ','}"
+        url << "&fields=#{fields.join ','}"
         
         url
       end
@@ -42,9 +42,9 @@ module Subscriptions
       # takes parsed response and returns an array where each item is 
       # a hash containing the id, title, and post date of each item found
       def self.items_for(response, function, options = {})
-        return nil unless response['committee_hearings']
+        return nil unless response['results']
         
-        response['committee_hearings'].map do |hearing|
+        response['results'].map do |hearing|
           item_for hearing
         end
       end
@@ -53,12 +53,10 @@ module Subscriptions
       def self.item_for(hearing)
         return nil unless hearing
 
-        hearing['occurs_at'] = Time.zone.parse(hearing['occurs_at']).utc
-
         SeenItem.new(
-          :item_id => "#{hearing['chamber']}-#{hearing['occurs_at'].to_i}",
-          :date => hearing['occurs_at'],
-          :data => hearing
+          item_id: "#{hearing['chamber']}-#{hearing['occurs_at'].to_i}",
+          date: hearing['occurs_at'],
+          data: hearing
         )
       end
       
