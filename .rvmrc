@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-environment_id="ruby-1.9.3-p327@scout"
+environment_id="ruby-1.9.3-p194@scout"
 
 # First we attempt to load the desired environment directly from the environment
 # file. This is very fast and efficient compared to running through the entire

@@ -27,8 +27,8 @@ gem 'rack', '1.4.1'
 gem 'rake', '0.9.2.2'
 
 group :development do
-  gem 'wirble'
-  gem 'brice'
+  gem 'wirb'
+  gem 'paint'
   gem 'unicorn'
 end
 
