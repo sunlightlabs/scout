@@ -46,7 +46,7 @@ module Subscriptions
         return nil unless upcoming
 
         SeenItem.new(
-          item_id: "#{upcoming['legislative_day'].strftime "%Y%m%d"}-#{upcoming['chamber']}",
+          item_id: "#{upcoming['legislative_day']}-#{upcoming['chamber']}",
           date: upcoming['legislative_day'],
           data: upcoming
         )
