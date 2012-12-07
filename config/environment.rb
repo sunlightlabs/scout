@@ -43,8 +43,8 @@ configure do
   
   if config[:twilio]
     Twilio::Config.setup(
-      :account_sid => config[:twilio][:account_sid],
-      :auth_token => config[:twilio][:auth_token]
+      account_sid: config[:twilio][:account_sid],
+      auth_token: config[:twilio][:auth_token]
     )
   end
 
