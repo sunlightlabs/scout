@@ -92,7 +92,7 @@ class CheckTest < Test::Unit::TestCase
 
     # check for new items (fixture has 2)
     subscription = shared_interest.subscriptions.first
-    bill_id = "s3241-112" # is in fixtures
+    bill_id = "hres727-112" # is in fixtures
     mock_search subscription, :check
 
     Subscriptions::Manager.check! subscription

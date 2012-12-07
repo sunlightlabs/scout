@@ -1,47 +1,35 @@
-{
-    "bills": [ 
-        {
-            "bill_id": "hr5326-112", 
-            "bill_type": "hr", 
-            "introduced_at": "2012-05-02T12:00:00Z", 
-            "last_action": {
-                "acted_at": "2012-05-14T12:00:00Z", 
-                "text": "Received in the Senate. Read twice. Placed on Senate Legislative Calendar under General Orders. Calendar No. 397.", 
-                "type": "calendar"
-            }, 
-            "last_action_at": "2012-05-14T12:00:00Z", 
-            "last_version": {
-                "bill_version_id": "hr5326-112-pcs", 
-                "issued_on": "2012-05-14", 
-                "urls": {
-                    "html": "http://www.gpo.gov/fdsys/pkg/BILLS-112hr5326pcs/html/BILLS-112hr5326pcs.htm", 
-                    "pdf": "http://www.gpo.gov/fdsys/pkg/BILLS-112hr5326pcs/pdf/BILLS-112hr5326pcs.pdf", 
-                    "xml": "http://www.gpo.gov/fdsys/pkg/BILLS-112hr5326pcs/xml/BILLS-112hr5326pcs.xml"
-                }, 
-                "version_code": "pcs", 
-                "version_name": "Placed on Calendar Senate"
-            }, 
-            "last_version_on": "2012-05-14", 
-            "number": 5326, 
-            "official_title": "Making appropriations for the Departments of Commerce and Justice, Science, and Related Agencies for the fiscal year ending September 30, 2013, and for other purposes.", 
-            "search": {
-                "highlight": {
-                    "versions": [
-                        " under which the use or occupancy of the space is authorized, up to $200,000, shall be credited to the appropriation or fund which initially bears the costs of such services. Sec. 107. Nothing in this title shall be construed to prevent a grant recipient from deterring child pornography, copyright infringement, or any other unlawful activity over its networks. Sec. 108. The Administrator of the National Oceanic and Atmospheric Administration is authorized to use, with their consent"
-                    ]
-                }, 
-                "query": "copyright", 
-                "score": 0.03373859
-            }, 
-            "session": 112, 
-            "short_title": "Commerce, Justice, Science, and Related Agencies Appropriations Act, 2013", 
-            "summary": "5/2/2012--Introduced.\nCommerce, Justice, Science, and Related Agencies Appropriations Act, 2013 - Makes appropriations for FY2013 for the Departments of Commerce and Justice (DOJ), science-related programs, and related agencies. Department of Commerce Appropriations Act, 2013 - Makes appropriations for 2013 for the Department of Commerce for various agencies and programs, including transfers of funds. Department of Justice Appropriations Act, 2013 - Makes appropriations for FY2013 for DOJ for various agencies and programs, including transfers of funds. Makes appropriations for FY2013 for: (1) the Office of Science and Technology Policy; (2) the National Aeronautics and Space Administration (NASA), including for the Office of Inspector General; and (3) the National Science Foundation (NSF), including for the Office of the National Science Board and the Office of Inspector General. Makes appropriations for FY2013 for: (1) the Commission on Civil Rights, (2) the Equal Employment Opportunity Commission (EEOC), (3) the International Trade Commission (ITC), (4) the Legal Services Corporation, (5) the Marine Mammal Commission, (6) the Office of the United States Trade Representative, and (7) the State Justice Institute. Specifies certain uses and limits on or prohibitions against the use of funds appropriated by this Act. Rescinds certain unobligated balances."
-        }
-    ], 
-    "count": 114, 
-    "page": {
-        "count": 1, 
-        "page": 1, 
-        "per_page": 2
-    }
+{ "count" : 49,
+  "page" : { "count" : 1,
+      "page" : 1,
+      "per_page" : 1
+    },
+  "results" : [ { "bill_id" : "hr5882-112",
+        "bill_type" : "hr",
+        "congress" : 112,
+        "introduced_on" : "2012-06-01",
+        "last_version" : { "bill_version_id" : "hr5882-112-rfs",
+            "issued_on" : "2012-06-11",
+            "urls" : { "html" : "http://www.gpo.gov/fdsys/pkg/BILLS-112hr5882rfs/html/BILLS-112hr5882rfs.htm",
+                "pdf" : "http://www.gpo.gov/fdsys/pkg/BILLS-112hr5882rfs/pdf/BILLS-112hr5882rfs.pdf",
+                "xml" : "http://www.gpo.gov/fdsys/pkg/BILLS-112hr5882rfs/xml/BILLS-112hr5882rfs.xml"
+              },
+            "version_code" : "rfs",
+            "version_name" : "Referred in Senate"
+          },
+        "last_version_on" : "2012-06-11",
+        "number" : 5882,
+        "official_title" : "Making appropriations for the Legislative Branch for the fiscal year ending September 30, 2013, and for other purposes.",
+        "search" : { "highlight" : { "summary" : [ "expenses, the Copyright Office, the Congressional Research Service (CRS), and Books for the Blind and Physically Handicapped; (2) the GPO for congressional printing and binding (including transfer of funds); (3) the GPO for the Office of Superintendent of Documents (including transfer of funds); (4) the GPO Revolving Fund; (5) GAO for salaries and expenses; and (6) the Open World Leadership Center Trust Fund. (Sec. 1401) Establishes an upper limit of $178.958 million for the FY2013 obligational authority" ],
+                "text" : [ "\"International Copyright Institute\" in the Copyright Office of the Library of Congress for the purpose of training nationals of developing countries in intellectual property laws and policies: Provided further, That not more than $4,250 may be expended, on the certification of the Librarian of Congress, in connection with official representation and reception expenses for activities of the International Copyright Institute and for copyright delegations, visitors, and seminars: Provided further, That notwithstanding",
+                    "program. Copyright Office salaries and expenses For all necessary expenses of the Copyright Office, $52,136,000, of which not more than $28,029,000, to remain available until expended, shall be derived from collections credited to this appropriation during fiscal year 2013 under section 708(d) of title 17, United States Code: Provided, That the Copyright Office may not obligate or expend any funds derived from collections under such section, in excess of the amount authorized for obligation or expenditure",
+                    "by the Copyright Office pursuant to sections 111, 119, and chapter 10 of such title may be used for the costs incurred in the administration of the Copyright Royalty Judges program, with the exception of the costs of salaries and benefits for the Copyright Royalty Judges and staff under section 802(e). Congressional Research Service salaries and expenses For necessary expenses to carry out the provisions of section 203 of the Legislative Reorganization Act of 1946 (2 U.S.C. 166) and to revise and"
+                  ]
+              },
+            "score" : 0.17853007000000001,
+            "type" : "bill"
+          },
+        "short_title" : "Legislative Branch Appropriations Act, 2013",
+        "summary" : "Legislative Branch Appropriations Act, 2013 - Title I: Legislative Branch - Makes appropriations to the House of Representatives for FY2013 for: (1) salaries and/or expenses of the House leadership offices, committees (including the Committee on Appropriations), officers and employees; and (2) Members' representational allowances. (Sec. 101) Requires deposit in the Treasury of any amounts of a Member's representational allowance remaining after all payments are made, to be used for federal deficit reduction, or, if there is no deficit, federal debt reduction. (Sec. 102) Amends the Legislative Branch Appropriations Act, 1998 to require reimbursement to the Secretary of Labor for unemployment compensation payments to former House employees out of the House account for making payments to the Employees' Compensation Fund. (Sec. 103) Amends the Legislative Branch Appropriations Act, 1993 to provide for the transfer of amounts appropriated for any fiscal year among the headings of: (1) \"Joint Items\" (to the extent that such amounts to the joint committee are disbursed by the House Chief Administrative Officer); (2) \"Office of the Attending Physician\"; as well as currently (3) \"House Leadership Offices\"; (4) \"Members' Representational Allowances\"; (5) \"Committee Employees\"; (6) \"Salaries, Officers and Employees\"; and (7) \"Allowances and Expenses.\" (Sec. 104) Requires the House Office of the Inspector General (IG) to: (1) provide the House Committee on Appropriations with a copy of each produced IG audit and investigative report, and (2) consult regularly with the Committee with respect to the Office's operations. Makes FY2013 appropriations for salaries and/or expenses of: (1) the Joint Economic Committee and the Joint Committee on Taxation; (2) the Office of the Attending Physician; (3) the Office of Congressional Accessibility Services; (4) the Capitol Police; (5) the Office of Compliance; (6) the Congressional Budget Office (CBO); and (7) the Architect of the Capitol (AOC), including for the care and operation of Capitol buildings and grounds, House office buildings, the Capitol power plant, the Library of Congress buildings and grounds, the Capitol Police buildings, grounds, and security, the Botanic Garden, and the Capitol Visitor Center. (Sec. 1002) Makes balances of expired U.S. Capitol Police appropriations available to the Capitol Police for deposit to the credit of the mandatory Employees' Compensation Fund. Amends the Legislative Branch Appropriations Act, 2003 to eliminate the separate Capitol Police account for making worker's compensation payments to Capitol Police employees. (Sec. 1101) Amends the Congressional Accountability Act of 1995 to make appropriations (currently appropriations are only authorized) to the account of federal Offices (except the Government Accountability Office [GAO], the Government Printing Office [GPO], or the Library of Congress) in the Treasury for the payment of awards and settlements under the Act. (Sec. 1201) Authorizes CBO to accept voluntary student services, except that: (1) any student who provides such voluntary service shall be considered a CBO employee for purposes of the Congressional Budget Act of 1974 (relating to the level of confidentiality of budget data), and (2) the authority granted to the Office of Personnel Management (OPM) over such services shall be exercised by the Director of CBO. (Sec. 1301) Makes balances of expired AOC appropriations available to the AOC to make the mandatory deposit to the credit of the Employees' Compensation Fund. Appropriates FY2013 funds to: (1) the Library of Congress for salaries and expenses, the Copyright Office, the Congressional Research Service (CRS), and Books for the Blind and Physically Handicapped; (2) the GPO for congressional printing and binding (including transfer of funds); (3) the GPO for the Office of Superintendent of Documents (including transfer of funds); (4) the GPO Revolving Fund; (5) GAO for salaries and expenses; and (6) the Open World Leadership Center Trust Fund. (Sec. 1401) Establishes an upper limit of $178.958 million for the FY2013 obligational authority of the Library of Congress with regard to certain reimbursable and revolving fund activities. (Sec. 1402) Authorizes the transfer of FY2013 Library of Congress appropriations between any \"Library of Congress\" categories of appropriations provided under law, up to 10% per category, upon the approval of the congressional appropriations committees. (Sec. 1501) Makes balances of expired GAO appropriations available to GAO to make the mandatory deposit to the credit of the Employees' Compensation Fund. Title II: General Provisions - Specifies authorized and prohibited uses of funds appropriated by this Act identical or similar to corresponding provisions of the Legislative Branch Appropriations Act, 2012. (Sec. 206) Authorizes the AOC to maintain and improve the landscape features, excluding streets, in specified grassy areas of Washington, DC, SW. (Sec. 208) Prohibits the use of funds made available to the AOC in this Act to eliminate or restrict guided tours of the U.S. Capitol led by congressional employees and interns. Allows temporary suspension or restriction of such tours for security or related reasons to the same extent as guided tours of the U.S. Capitol led by the AOC. (Sec. 209) Prohibits the use of funds made available in this Act to deliver a printed copy of a bill, joint resolution, or resolution to the office of a Member of the House of Representatives unless the Member requests a copy. (Sec. 210) Prohibits the use of funds made available in this Act to deliver a printed copy of any version of the Congressional Record to the office of a Member. (Sec. 211) Prohibits the use of funds made available in this Act by the Chief Administrative Officer of the House to make any payments from any Members' Representational Allowance for the leasing of a vehicle (except mobile district offices) in an aggregate amount that exceeds $1,000 for the vehicle in any month. (Sec. 212) Authorizes the Chief of the U.S. Capitol Police to: (1) issue a permit authorizing a person to engage in commercial activity in Union Square if such activity is similar to the types of commercial activity permitted in Union Square before its transfer of jurisdiction and control to the AOC under the Legislative Branch Appropriations Act, 2012; and (2) require such individual, under the terms and conditions of such a permit, to pay a fee to cover any AOC costs resulting from its issuance, if the fees are similar to those collected by the Director of the National Park Service (NPS) for such commercial activity. Establishes a Capitol Trust Account in the Treasury consisting of all such fees, to be made available, without fiscal year limitations, for appropriate maintenance, improvements, and projects for Union Square, subject to approval of the congressional appropriations committees. (Sec. 213) Establishes a spending reduction account consisting of the amount by which each applicable allocation of new budget authority made by the Committee on Appropriations of the House, excluding Senate items, exceeds the amount of proposed new budget authority. Makes such amount $0 (increased by $1,235,000) (increased by $878,000) (increased by $1,000,000). (Sec. 214) Prohibits the use of funds made available by this Act to provide more than 50 printed copies of any edition of the U.S. Code to all House offices."
+      }
+    ]
 }
