@@ -29,7 +29,7 @@ module Subscriptions
 
         query = subscription.query['query']
         if query.present?
-          url << "/search/bills?"
+          url << "/bills/search?"
           url << "&query=#{CGI.escape query}"
 
           url << "&highlight=true"
