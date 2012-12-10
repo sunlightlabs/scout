@@ -80,7 +80,7 @@ module Subscriptions
 
       results.each do |item|
 
-        unless SeenItem.where(:interest_id => interest.id, :item_id => item.item_id).first
+        unless SeenItem.where(interest_id: interest.id, item_id: item.item_id).first
           unless item.item_id
             Admin.report Report.warning("Check", "[#{interest.id}][#{subscription_type}][#{interest.in}] item with an empty ID")
             next

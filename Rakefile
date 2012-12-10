@@ -166,7 +166,7 @@ namespace :subscriptions do
             if subscription.user.confirmed?
               
               result = Subscriptions::Manager.check!(subscription)
-              count +=1 
+              count += 1
 
               if rate_limit > 0
                 sleep rate_limit
