@@ -54,6 +54,9 @@ module Subscriptions
       def self.item_for(bill_id, action)
         return nil unless action
 
+        # can be either a date or timestamp
+        action['acted_at'] = Time.zone.parse action['acted_at']
+
         SeenItem.new(
           item_id: "#{bill_id}-action-#{action['acted_at'].to_i}",
           date: action['acted_at'],
