@@ -122,28 +122,44 @@ class RemoteTest < Test::Unit::TestCase
     # tear the first down, add the second one back
     interest1['active'] = false
     interest2['active'] = true
-
     mock_item interest2['item_id'], interest2['item_type']
+
+    # add in a search interest
+    interest3 = {
+      'active' => true,
+      'changed_at' => Time.now,
+
+      'interest_type' => 'search',
+      'search_type' => 'state_bills',
+      'in' => 'health',
+      'query_type' => 'advanced',
+      'filters' => {'state' => 'DE'}
+    }
+
 
     post "/remote/service/sync", {
       email: email,
       service: service,
       secret_key: key,
       notifications: notifications,
-      interests: [interest1, interest2]
+      interests: [interest1, interest2, interest3]
     }
     assert_response 201
 
-    assert_match /added: 1/i, last_response.body
+    assert_match /added: 2/i, last_response.body
     assert_match /removed: 1/i, last_response.body
 
     user.reload
 
     assert_equal count + 1, User.count
-    assert_equal interest_count + 1, Interest.count
+    assert_equal interest_count + 2, Interest.count
 
-    assert_equal 1, user.interests.count
-    assert_equal interest2['item_id'], user.interests.last.in
+    assert_equal 2, user.interests.count
+    assert_equal interest2['item_id'], user.interests.first.in
+    
+    search_interest = user.interests.last
+    assert_equal interest3['in'], search_interest.in
+    assert_equal 'DE', search_interest.data['state']
   end
 
   def test_service_sync_dont_remove_newly_updated_interest

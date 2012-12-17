@@ -27,7 +27,7 @@ class SearchTest < Test::Unit::TestCase
     assert_equal "federal_bills", subscription1.subscription_type
 
 
-    post "/interests/search", {:search_type => "state_bills", :query => query}, login(user)
+    post "/interests/search", {search_type: "state_bills", query: query}, login(user)
     assert_response 200
 
     criteria = user.subscriptions.where(:subscription_type => "state_bills", :interest_in => query)
