@@ -14,6 +14,9 @@ class User
   # by default, accounts come from the web - we allow a remote API for limited use cases
   field :source, default: "web"
 
+  # whether the account belongs to another service whose alerts Scout is powering
+  field :service, default: nil
+
   # will get assigned automatically by the API key syncing service
   # if a user has one, we turn on various features in the site
   field :api_key

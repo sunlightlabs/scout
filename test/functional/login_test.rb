@@ -50,14 +50,26 @@ class LoginTest < Test::Unit::TestCase
   def test_login_does_not_reset_should_change_password
     email = "test@example.com"
     password = "test"
-    user = create :user, :email => email, :password => password, :password_confirmation => password, :should_change_password => true
+    user = create :user, email: email, password: password, password_confirmation: password, should_change_password: true
 
     assert user.should_change_password
 
-    post '/login', :login => email, :password => password
+    post '/login', login: email, password: password
     assert_redirect '/'
 
     assert user.reload.should_change_password
+  end
+
+  # don't let users log in who have signed up through a whitelabeled service
+  def test_login_with_remote_service_fails
+    email = "test@example.com"
+    password = "test"
+    user = create :service_user, email: email, password: password, password_confirmation: password
+
+    post '/login', login: email, password: password
+    assert_response 200
+
+    assert_match /separate service/i, last_response.body
   end
 
   def test_login_with_phone_number
@@ -195,6 +207,16 @@ class LoginTest < Test::Unit::TestCase
     assert_nil User.where(:email => email).first
   end
 
+  def test_create_user_already_exists_fails
+    email = "fake@example.com"
+    user = create :user, email: email
+    assert_not_nil User.where(email: email).first
+    count = User.count
+
+    post "/account/new", {user: {email: email, password: "test", password_confirmation: "test"}}
+    assert_response 200
+    assert_equal count, User.count
+  end
 
   # password management
 

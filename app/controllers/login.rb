@@ -15,12 +15,15 @@ post '/login' do
   @new_user = User.new
 
   if (user = User.where(email: login).first || User.by_phone(login)) and User.authenticate(user, params[:password])
-    if user.confirmed?
-      log_in user
-      redirect_back_or '/'
-    else
+    if user.service.present?
+      flash.now[:login] = "This email is registered through a separate service. To use Scout, register an account under a separate email address."
+      erb :"account/login"
+    elsif !user.confirmed?
       flash.now[:login] = "Your account has not been confirmed."
       erb :"account/login"
+    else
+      log_in user
+      redirect_back_or '/'
     end
   else
     flash.now[:login] = "Invalid login or password."
