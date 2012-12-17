@@ -19,6 +19,15 @@ FactoryGirl.define do
       announcements false
       sunlight_announcements false
     end
+
+    factory :service_user do
+      service "open_states"
+      confirmed true
+      notifications "email_daily"
+      should_change_password false
+      announcements false
+      sunlight_announcements false
+    end
   end
 
   factory :tag do

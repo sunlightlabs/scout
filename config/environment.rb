@@ -11,6 +11,12 @@ def config
   @config ||= YAML.load_file File.join(File.dirname(__FILE__), "config.yml")
 end
 
+class Environment
+  def self.services
+    @services ||= YAML.load_file File.join(File.dirname(__FILE__), "services.yml")
+  end
+end
+
 def subscription_map
   @subscription_map ||= YAML.load_file File.join(File.dirname(__FILE__), "../subscriptions/subscriptions.yml")
 end

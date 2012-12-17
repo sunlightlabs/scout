@@ -1,3 +1,134 @@
+# endpoint for syncing alerts with other services, 
+# for which Scout will serve as a whitelabeled alert system.
+# 
+# Receive POSTs, with a secret key, with an array of active and inactive interests.
+#
+# If the service is invalid, 403.
+# If the secret key is wrong for that service, 403.
+#
+# If the user account does exist, but has a different service, 500.
+# 
+# If the user account does not exist, create it:
+#   with the provided 'service' field
+#   with the provided 'notifications' field
+#   with the provided email address
+#   confirmed=true
+#   announcements and sunlight_announcements as false
+#   random password (unsynced with other service)
+#
+# If the user account is invalid somehow, 400.
+#
+# For active interests:
+#   if it exists, do nothing
+#   if it doesn't exist, create it and save it
+#
+# For inactive interests:
+#   if it doesn't exist, do nothing
+#   if it does exist, delete it *unless* it has an updated_at timestamp that is newer than the timestamp provided for that interest
+#
+# Check validity of each new interest, and only save/delete interests if
+# all new item interests successfully 'found' their referenced item. 
+# If they did not, 500 without any changes to the user's account or interests.
+
+post "/remote/service/sync" do
+  unless service = Environment.services[params[:service]]
+    halt 403, "Not a supported service."
+  end
+
+  unless params[:secret_key] and (service['secret_key'] == params[:secret_key])
+    halt 403, "Not a supported service."
+  end
+
+  if (user = User.where(email: params[:email]).first)
+    unless user.service == params[:service]
+      halt 403, "Wrong service for this user."
+    end
+  else
+    user = User.new(
+      email: params[:email],
+      notifications: params[:notifications],
+      
+      announcements: false,
+      sunlight_announcements: false
+    )
+
+    user.confirmed = true
+    user.should_change_password = false
+    user.service = params[:service]
+    user.source = params[:service]
+    
+    unless user.valid?
+      halt 403, "Invalid new user."
+    end
+  end
+
+  unless params[:interests] and params[:interests].any?
+    halt 403, "Nothing to sync."
+  end
+
+  # figure out which interests should be added and removed
+  to_remove = []
+  to_add = []
+
+  params[:interests].each do |change|
+    # whether it's add or remove, load any interest we may have already
+
+    # item subscriptions need to fetch remote details
+    if change['interest_type'] == 'item'
+      interest = Interest.for_item user, change['item_id'], change['item_type']
+
+      # yes, this should go in the model
+      if interest.new_record?
+        unless item = Subscriptions::Manager.find(item_types[change['item_type']]['adapter'], change['item_id'])
+          halt 403, "Couldn't fetch item details; bad ID, or data source is down."
+        end
+        interest.data = item.data
+      end
+
+    # search subscriptions
+    elsif change['interest_type'] == 'search'
+      interest = Interest.for_search user, change['search_type'], change['in'], change['query_type'], change['filters']
+    else
+      halt 403, "Unrecognized interest type."
+    end
+
+    if [true, "true"].include?(change['active'])
+      if interest.new_record?
+        to_add << interest
+      else
+        # pass: we're done, it exists
+      end
+
+    # removed subscription
+    elsif [false, "false"].include?(change['active'])
+      if interest.new_record?
+        # pass: we're done, it doesn't exist
+      else
+        changed_at = Time.zone.parse(change['changed_at'])
+        if changed_at > interest.updated_at
+          to_remove << interest
+        else
+          # pass: the user has updated it here more recently, somehow
+        end
+      end
+    end
+  end
+
+  # make sure the user, and any new interests, are all valid
+  # then save and delete everything, trusting it will all work out okay in the end
+  bad_interests = to_add.select {|i| !i.valid?}
+  if bad_interests.empty?
+    user.save!
+    to_add.each {|interest| interest.save!}
+    to_remove.each {|interest| interest.destroy}
+    halt 201, "Updated interests for user. Added: #{to_add.size}, Removed: #{to_remove.size}"
+  else
+    halt 403, "Some interests were invalid: #{bad_interests.inspect}"
+  end
+
+end
+
+
 # endpoint for accepting subscriptions from Twilio for SMS subscribers
 # auto-signs up a user by phone number alone, adds subscription for a given bill
 # 

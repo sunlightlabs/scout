@@ -3,6 +3,7 @@
 /unicorn.pid
 /config/config.yml
 /config/mongoid.yml
+/config/services.yml
 /vendor/gems
 /.bundle
 
@@ -17,3 +18,4 @@
 /stats.rb
 /dump
 /migration.rb
+/*.txt

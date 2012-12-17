@@ -1,0 +1,5 @@
+# services Scout will deliver alerts for
+
+# service_name:
+#   name: Open States
+#   secret_key: 
