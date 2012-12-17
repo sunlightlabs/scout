@@ -37,7 +37,7 @@ class RemoteTest < Test::Unit::TestCase
       secret_key: key,
       notifications: notifications,
       interests: [interest1]
-    }
+    }.to_json
     assert_response 201
     assert_match /added: 1/i, last_response.body
     assert_match /removed: 0/i, last_response.body
@@ -77,7 +77,7 @@ class RemoteTest < Test::Unit::TestCase
       secret_key: key,
       notifications: notifications,
       interests: [interest1, interest2]
-    }
+    }.to_json
     assert_response 201
     assert_match /added: 1/i, last_response.body
     assert_match /removed: 0/i, last_response.body
@@ -104,7 +104,7 @@ class RemoteTest < Test::Unit::TestCase
       secret_key: key,
       notifications: notifications,
       interests: [interest2]
-    }
+    }.to_json
     assert_response 201
 
     assert_match /added: 0/i, last_response.body
@@ -143,7 +143,7 @@ class RemoteTest < Test::Unit::TestCase
       secret_key: key,
       notifications: notifications,
       interests: [interest1, interest2, interest3]
-    }
+    }.to_json
     assert_response 201
 
     assert_match /added: 2/i, last_response.body
@@ -160,10 +160,31 @@ class RemoteTest < Test::Unit::TestCase
     search_interest = user.interests.last
     assert_equal interest3['in'], search_interest.in
     assert_equal 'DE', search_interest.data['state']
-  end
 
-  def test_service_sync_dont_remove_newly_updated_interest
-    throw Exception.new "not done"
+    # finally, try (and fail) to remove an interest that has been
+    # updated since after the change time
+    interest3['active'] = false
+    interest3['changed_at'] = 2.days.ago
+
+    post "/remote/service/sync", {
+      email: email,
+      service: service,
+      secret_key: key,
+      notifications: notifications,
+      interests: [interest3]
+    }.to_json
+
+    assert_response 201
+
+    assert_match /added: 0/i, last_response.body
+    assert_match /removed: 0/i, last_response.body
+
+    user.reload
+
+    assert_equal count + 1, User.count
+    assert_equal interest_count + 2, Interest.count
+
+    assert_equal 2, user.interests.count
   end
 
   # no key, bunk key, valid key for wrong service
@@ -178,10 +199,24 @@ class RemoteTest < Test::Unit::TestCase
       email: email,
       service: service,
       secret_key: key
-    }
+    }.to_json
 
     assert_response 403
     assert_match /not a supported service/i, last_response.body
+  end
+
+  def test_service_sync_invalid_json
+    service = Environment.services.keys.first
+    email = "test@example.com"
+    user = create :service_user, email: email
+
+    post "/remote/service/sync", {
+      email: email,
+      service: service,
+      secret_key: Environment.services[service]['secret_key']
+    }
+    assert_response 500
+    assert_match /parsing json/i, last_response.body
   end
 
   # user account exists, but has different service
@@ -194,18 +229,50 @@ class RemoteTest < Test::Unit::TestCase
       email: email,
       service: service,
       secret_key: "anything"
-    }
+    }.to_json
+
     assert_response 403
     assert_match /not a supported service/i, last_response.body
   end
 
   # bad email, let's say
   def test_service_sync_invalid_user
-    throw Exception.new "not done"
-  end
+    service = "service1"
+    key = Environment.services["service1"]['secret_key']
+    email = "invalid.email"
+    notifications = "email_daily"
 
-  def test_service_sync_invalid_item
-    throw Exception.new "not done"
+    # user not created yet
+    assert_nil User.where(email: email).first
+    count = User.count
+
+    # new item subscription
+    item_id = "hr4192-112"
+    item_type = "bill"
+    mock_item item_id, item_type
+
+    interest1 = {
+      'active' => true,
+      'changed_at' => Time.now,
+
+      'interest_type' => "item",
+      'item_type' => item_type,
+      'item_id' => item_id
+    }
+
+    post "/remote/service/sync", {
+      email: email,
+      service: service,
+      secret_key: key,
+      notifications: notifications,
+      interests: [interest1]
+    }.to_json
+
+    assert_response 403
+    assert_match /invalid new user/i, last_response.body
+
+    assert_equal count, User.count
+    assert_nil User.where(email: email).first
   end
 
   def test_subscribe_by_sms

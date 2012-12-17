@@ -31,22 +31,32 @@
 # If they did not, 500 without any changes to the user's account or interests.
 
 post "/remote/service/sync" do
-  unless service = Environment.services[params[:service]]
+  # post body is JSON 
+  request.body.rewind # in case someone already read it
+  body = request.body.read
+  
+  begin
+    data = Oj.load body
+  rescue SyntaxError => ex
+    halt 500, "Error parsing JSON body."
+  end
+
+  unless service = Environment.services[data['service']]
     halt 403, "Not a supported service."
   end
 
-  unless params[:secret_key] and (service['secret_key'] == params[:secret_key])
+  unless data['secret_key'] and (service['secret_key'] == data['secret_key'])
     halt 403, "Not a supported service."
   end
 
-  if (user = User.where(email: params[:email]).first)
-    unless user.service == params[:service]
+  if (user = User.where(email: data['email']).first)
+    unless user.service == data['service']
       halt 403, "Wrong service for this user."
     end
   else
     user = User.new(
-      email: params[:email],
-      notifications: params[:notifications],
+      email: data['email'],
+      notifications: data['notifications'],
       
       announcements: false,
       sunlight_announcements: false
@@ -54,15 +64,15 @@ post "/remote/service/sync" do
 
     user.confirmed = true
     user.should_change_password = false
-    user.service = params[:service]
-    user.source = params[:service]
+    user.service = data['service']
+    user.source = data['service']
     
     unless user.valid?
       halt 403, "Invalid new user."
     end
   end
 
-  unless params[:interests] and params[:interests].any?
+  unless data['interests'] and data['interests'].any?
     halt 403, "Nothing to sync."
   end
 
@@ -70,7 +80,7 @@ post "/remote/service/sync" do
   to_remove = []
   to_add = []
 
-  params[:interests].each do |change|
+  data['interests'].each do |change|
     # whether it's add or remove, load any interest we may have already
 
     # item subscriptions need to fetch remote details
