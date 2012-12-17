@@ -85,18 +85,18 @@ module Deliveries
 
     def self.save_receipt!(frequency, user, deliveries, subject, content)
       Receipt.create!(
-        :email_frequency => frequency,
-        :mechanism => "email",
+        email_frequency: frequency,
+        mechanism: "email",
 
-        :deliveries => deliveries,
+        deliveries: deliveries,
 
-        :user_id => user.id,
-        :user_email => user.email,
-        :user_notifications => user.notifications,
+        user_id: user.id,
+        user_email: user.email,
+        user_notifications: user.notifications,
 
-        :subject => subject,
-        :content => content,
-        :delivered_at => Time.now
+        subject: subject,
+        content: content,
+        delivered_at: Time.now
       )
     end
 
