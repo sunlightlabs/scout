@@ -39,8 +39,9 @@ class RemoteTest < Test::Unit::TestCase
       interests: [interest1]
     }.to_json
     assert_response 201
-    assert_match /added: 1/i, last_response.body
-    assert_match /removed: 0/i, last_response.body
+
+    assert_equal 1, json_response['actions']['added']
+    assert_equal 0, json_response['actions']['removed']
 
     user = User.where(email: email).first
     assert_not_nil user
@@ -79,8 +80,9 @@ class RemoteTest < Test::Unit::TestCase
       interests: [interest1, interest2]
     }.to_json
     assert_response 201
-    assert_match /added: 1/i, last_response.body
-    assert_match /removed: 0/i, last_response.body
+
+    assert_equal 1, json_response['actions']['added']
+    assert_equal 0, json_response['actions']['removed']
 
     user.reload
 
@@ -107,8 +109,8 @@ class RemoteTest < Test::Unit::TestCase
     }.to_json
     assert_response 201
 
-    assert_match /added: 0/i, last_response.body
-    assert_match /removed: 1/i, last_response.body
+    assert_equal 0, json_response['actions']['added']
+    assert_equal 1, json_response['actions']['removed']
 
     user.reload
 
@@ -146,8 +148,8 @@ class RemoteTest < Test::Unit::TestCase
     }.to_json
     assert_response 201
 
-    assert_match /added: 2/i, last_response.body
-    assert_match /removed: 1/i, last_response.body
+    assert_equal 2, json_response['actions']['added']
+    assert_equal 1, json_response['actions']['removed']
 
     user.reload
 
@@ -176,8 +178,8 @@ class RemoteTest < Test::Unit::TestCase
 
     assert_response 201
 
-    assert_match /added: 0/i, last_response.body
-    assert_match /removed: 0/i, last_response.body
+    assert_equal 0, json_response['actions']['added']
+    assert_equal 0, json_response['actions']['removed']
 
     user.reload
 

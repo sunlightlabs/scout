@@ -375,4 +375,17 @@ class Interest
     end
   end
 
+  # minimal representation to remote services
+  def to_remote
+    details = {_id: _id.to_s, interest_type: interest_type, updated_at: updated_at, created_at: created_at}
+
+    if interest_type == "item"
+      details.merge!("in" => self.in, item_type: item_type)
+    elsif interest_type == "search"
+      details.merge!("in" => self.in, query_type: query_type, filters: filters)
+    end
+
+    details
+  end
+
 end

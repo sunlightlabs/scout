@@ -128,10 +128,27 @@ post "/remote/service/sync" do
   # then save and delete everything, trusting it will all work out okay in the end
   bad_interests = to_add.select {|i| !i.valid?}
   if bad_interests.empty?
+    
+    # commit everything
     user.save!
     to_add.each {|interest| interest.save!}
     to_remove.each {|interest| interest.destroy}
-    halt 201, "Updated interests for user. Added: #{to_add.size}, Removed: #{to_remove.size}"
+    user.reload
+
+    halt 201, {
+      actions: {
+        added: to_add.size, 
+        removed: to_remove.size,
+      },
+
+      user: {
+        email: user.email,
+        _id: user.id.to_s,
+        notifications: user.notifications,
+        interests: user.interests.map(&:to_remote)
+      }
+    }.to_json
+
   else
     halt 403, "Some interests were invalid: #{bad_interests.inspect}"
   end
