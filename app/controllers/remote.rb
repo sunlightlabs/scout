@@ -36,8 +36,8 @@ post "/remote/service/sync" do
   body = request.body.read
   
   begin
-    data = Oj.load body
-  rescue SyntaxError => ex
+    data = JSON.load body
+  rescue JSON::ParserError => ex
     halt 500, "Error parsing JSON body."
   end
 
