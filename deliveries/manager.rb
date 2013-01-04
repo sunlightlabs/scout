@@ -122,7 +122,16 @@ module Deliveries
           receipt.deliveries.group_by {|d| [d['interest_id'], d['seen_through_id']]}.each do |interest_ids, interest_deliveries|
             interest_id, seen_through_id = interest_ids
             
-            interest = Interest.find interest_id
+            # there's a chance the interest has been deleted by the time the report is generated,
+            # like if someone gets an email and then immediately unsubscribes from it,
+            # before the report is generated at the conclusion of sending all those emails.
+            # (I did this once myself.)
+            # If this happens, replace the interest_name with "[deleted - #{id}]" and move on.
+            if interest = Interest.find(interest_id)
+              name = interest_name interest
+            else
+              name = "[deleted - #{interest_id}]"
+            end
 
             report << "\n\t#{interest_name interest} - #{interest_deliveries.size} things"
             

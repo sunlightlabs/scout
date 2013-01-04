@@ -19,6 +19,7 @@ class Receipt
   index user_id: 1
   index user_email: 1
   index mechanism: 1
+  index created_at: 1
   
   validates_presence_of :delivered_at
   validates_presence_of :content
