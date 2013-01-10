@@ -66,7 +66,7 @@
             <% allowable = current_user.allowable_notifications %>
             <% preference = interest.notifications || current_user.notifications %>
             <% default = types.delete current_user.notifications %>
-
+            
             <li>
               <%= notification_radio_for default, preference == default, allowable.include?(default) %>
             </li>

@@ -17,7 +17,6 @@
   <% end %>
 
   <% grouped = interests.group_by &:interest_type %>
-
   <% if grouped['search'] and grouped['search'].any? %>
     <div class="section keywords">
       <h2>Searches</h2>
@@ -31,11 +30,9 @@
           <div class="removeHeader">
             <span>Remove</span>
           </div>
-
           <% query_interests.each do |interest| %>
-            <%= partial "account/interest", :engine => "erb", :locals => {:interest => interest, :edit => true} %>
+            <%= partial "account/interest", :engine => "erb", :locals => {interest: interest, :edit => true} %>
           <% end %>
-
         </div>
 
       <% end %>
@@ -43,7 +40,6 @@
   <% end %>
 
   <% if grouped['item'] and grouped['item'].any? %>
-
     <% by_item_type = grouped['item'].group_by &:item_type %>
     <% by_item_type.each do |item_type, item_interests| %>
       <div class="section items <%= item_type %>">
@@ -106,7 +102,7 @@
         </div>
 
         <% grouped['feed'].each do |interest| %>
-          <%= partial "account/interest", :engine => "erb", :locals => {:interest => interest, :edit => true} %>
+          <%= partial "account/interest", engine: "erb", locals: {interest: interest, edit: true} %>
         <% end %>
       <% end %>
 
@@ -114,7 +110,6 @@
   </div>
 
 </div>
-
 
 <script type="text/javascript">
 
