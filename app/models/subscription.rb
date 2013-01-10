@@ -21,6 +21,8 @@ class Subscription
   index user_id: 1
   index interest_in: 1
   index last_checked_at: 1
+  index interest_id: 1
+  index user_id: 1
   
   has_many :seen_items
   has_many :deliveries
