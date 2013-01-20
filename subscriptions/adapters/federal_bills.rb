@@ -49,6 +49,8 @@ module Subscriptions
         url << "&fields=#{fields.join ','}"
         url << "&apikey=#{api_key}"
 
+        # restrict results to those GPO has published text for
+        url << "&last_version_on__exists=true"
 
         # filters
 
@@ -99,6 +101,10 @@ module Subscriptions
         }
 
         url = "#{endpoint}/bills?apikey=#{api_key}"
+
+        # restrict results to those GPO has published text for
+        url << "&last_version_on__exists=true"
+        
         url << "&bill_id=#{item_id}"
         url << "&fields=#{fields.join ','}"
 
