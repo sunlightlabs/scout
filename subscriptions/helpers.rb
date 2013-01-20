@@ -495,5 +495,19 @@ module Helpers
       end
     end
 
+    # date, possibly a range, for upcoming bill schedulings
+    def upcoming_date(upcoming)
+      if upcoming['legislative_day']
+        date = just_date_no_year(upcoming['legislative_day'])
+        if upcoming['range'] == 'week'
+          date = "Week of #{date}"
+        end
+      else
+        date = "Soon"
+      end
+
+      date
+    end
+
   end
 end

@@ -219,6 +219,12 @@ module Helpers
       local.strftime "%b #{local.day}, %Y"
     end
 
+    def just_date_no_year(date)
+      date = Time.zone.parse(date) if date.is_a?(String)
+      local = date.in_time_zone
+      local.strftime "%b #{local.day}"
+    end
+
     def just_date_year(date)
       date = Time.zone.parse(date) if date.is_a?(String)
       just_date date

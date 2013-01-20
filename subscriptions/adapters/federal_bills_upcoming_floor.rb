@@ -12,7 +12,7 @@ module Subscriptions
           endpoint = "http://congress.api.sunlightfoundation.com"
         end
         
-        fields = %w{ source_type bill_id chamber url legislative_day }
+        fields = %w{ source_type bill_id chamber url legislative_day range }
 
         bill_id = subscription.interest_in
         
