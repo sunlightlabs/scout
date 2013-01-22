@@ -479,9 +479,11 @@ module Helpers
     def vote_breakdown(vote)
       numbers = []
       total = vote['breakdown']['total']
-
-      numbers << total.find {|kind| kind['vote'] == "Yea"}['number']
-      numbers << total.find {|kind| kind['vote'] == "Nay"}['number']
+            
+      numbers << total['Yea']
+      numbers << total['Nay']
+      # numbers << total['Present'] if total['Present']
+      # numbers << total['Not Voting'] if total['Not Voting']
       
       numbers.join " - "
     end
