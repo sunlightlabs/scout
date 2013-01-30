@@ -154,7 +154,7 @@ namespace :subscriptions do
       task subscription_type.to_sym => :environment do
         begin
           rate_limit = ENV['rate_limit'].present? ? ENV['rate_limit'].to_f : 0.1
-
+          
           count = 0
           errors = []
           start = Time.now
@@ -162,7 +162,19 @@ namespace :subscriptions do
           puts "Clearing the cache for #{subscription_type}..."
           Subscriptions::Manager.uncache! subscription_type
 
-          Subscription.initialized.where(subscription_type: subscription_type).each do |subscription|
+
+          criteria = {subscription_type: subscription_type}
+
+          if ENV['email'] 
+            if user = User.where(email: ENV['email']).first
+              criteria[:user_id] = user.id
+            else
+              puts "Not a valid email, ignoring."
+              return
+            end
+          end
+
+          Subscription.initialized.where(criteria).each do |subscription|
             if subscription.user.confirmed?
               
               result = Subscriptions::Manager.check!(subscription)
