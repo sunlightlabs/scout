@@ -219,8 +219,14 @@ end
 namespace :deliver do
   desc "Deliveries for a single daily email digest"
   task :email_daily => :environment do
+    delivery_options = {"mechanism" => "email", "email_frequency" => "daily"}
+    
+    if ENV['email']
+      delivery_options["user_email"] = ENV['email'].strip
+    end
+
     begin
-      Deliveries::Manager.deliver! "mechanism" => "email", "email_frequency" => "daily"
+      Deliveries::Manager.deliver! delivery_options
     rescue Exception => ex
       Admin.report Report.exception("Delivery", "Problem during deliver:email_daily.", ex)
       puts "Error during delivery, emailed report."
@@ -229,8 +235,14 @@ namespace :deliver do
 
   desc "Deliveries of emails for whenever, per-interest"
   task :email_immediate => :environment do
+    delivery_options = {"mechanism" => "email", "email_frequency" => "immediate"}
+    
+    if ENV['email']
+      delivery_options["user_email"] = ENV['email'].strip
+    end
+
     begin
-      Deliveries::Manager.deliver! "mechanism" => "email", "email_frequency" => "immediate"
+      Deliveries::Manager.deliver! delivery_options
     rescue Exception => ex
       Admin.report Report.exception("Delivery", "Problem during deliver:email_immediate.", ex)
       puts "Error during delivery, emailed report."
