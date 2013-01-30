@@ -46,8 +46,11 @@ module Subscriptions
 
         if function == :search or function == :initialize
           url << "&sort=created_at"
+        
         elsif function == :check
-          updated_since = subscription.last_checked_at.strftime("%Y-%m-%dT%H:%M:%S")
+          # for speed's sake, limit check to bills updated in last 2 months
+          updated_since = (subscription.last_checked_at - 2.months).strftime("%Y-%m-%dT%H:%M:%S")
+
           url << "&updated_since=#{updated_since}"
         end
 
@@ -142,9 +145,9 @@ module Subscriptions
 
         # save the item ID as a piece of the URL we can plug back into the OS API later
         SeenItem.new(
-          :item_id => bill['id'],
-          :date => bill["created_at"],
-          :data => bill
+          item_id: bill['id'],
+          date: bill["created_at"],
+          data: bill
         )
       end
       
