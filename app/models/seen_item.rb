@@ -28,7 +28,7 @@ class SeenItem
   field :find_url # if this came from a find request, produce that URL
 
   index({subscription_id: 1, item_id: 1})
-
+  index item_id: 1
   index subscription_type: 1
   index interest_id: 1
   index user_id: 1
