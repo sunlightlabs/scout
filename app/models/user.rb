@@ -216,7 +216,7 @@ class User
 
   # turn off the user's email notifications, and any announcement subscriptions
   # log the user's unsubscription in the events table, and what the user's settings were
-  def unsubscribe!
+  def unsubscribe!(description = nil)
     old_info = {
       notifications: self.notifications,
       announcements: self.announcements,
@@ -228,6 +228,6 @@ class User
     self.sunlight_announcements = false
     self.save!
 
-    Event.unsubscribe! self, old_info
+    Event.unsubscribe! self, old_info, description
   end
 end

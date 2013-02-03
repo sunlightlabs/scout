@@ -18,10 +18,11 @@ class Event
     )
   end
 
-  def self.unsubscribe!(user, old_info)
+  def self.unsubscribe!(user, old_info, description = nil)
     create!(
       type: "unsubscribe",
-      description: "One-click unsubscribe from #{user.contact}",
+      contact: user.contact,
+      description: (description || "One-click unsubscribe from #{user.contact}"),
       data: old_info
     )
   end
