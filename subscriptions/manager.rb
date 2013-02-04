@@ -38,13 +38,15 @@ module Subscriptions
     end
     
     def self.check!(subscription)
-      
+      # support rake task command line dry run flag
+      dry_run = ENV["dry_run"] || false
+
       # TODO: refactor so that these come in as the arguments
       interest = subscription.interest
       subscription_type = subscription.subscription_type
 
       # if the subscription is orphaned, catch this, warn admin, and abort
-      if interest.nil?
+      if interest.nil? and !dry_run
         subscription.seen_items.each {|i| i.destroy}
         subscription.destroy
         Admin.report Report.warning("Check", "Orphaned subscription, deleting, moving on", subscription: subscription.attributes.dup)
@@ -86,7 +88,7 @@ module Subscriptions
             next
           end
 
-          mark_as_seen! item
+          mark_as_seen! item unless dry_run
 
           if !test? and (item.date < 30.days.ago)
             # this is getting out of hand - 
@@ -96,12 +98,14 @@ module Subscriptions
               backfills << item.attributes
             # end
           else
-            # deliver one copy for the user whose interest found it
-            Deliveries::Manager.schedule_delivery! item, interest, subscription_type
+            unless dry_run
+              # deliver one copy for the user whose interest found it
+              Deliveries::Manager.schedule_delivery! item, interest, subscription_type
 
-            # deliver a copy to any users following this one
-            following_interests.each do |seen_through|
-              Deliveries::Manager.schedule_delivery! item, interest, subscription_type, seen_through
+              # deliver a copy to any users following this one
+              following_interests.each do |seen_through|
+                Deliveries::Manager.schedule_delivery! item, interest, subscription_type, seen_through
+              end
             end
           end
         end
@@ -112,8 +116,10 @@ module Subscriptions
         Admin.report Report.warning("Check", "[#{subscription.subscription_type}][#{subscription.interest_in}] #{backfills.size} backfills not delivered, attached", :backfills => backfills)
       end
       
-      subscription.last_checked_at = Time.now
-      subscription.save!
+      unless dry_run
+        subscription.last_checked_at = Time.now
+        subscription.save!
+      end
 
       true
     end

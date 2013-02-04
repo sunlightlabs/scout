@@ -101,7 +101,6 @@ module Deliveries
       else
         puts "#{header} Scheduling delivery" unless Sinatra::Application.test?
 
-        # finally schedule the actual delivery
         Delivery.schedule! item, interest, subscription_type, seen_through, user, mechanism, email_frequency
       end
     end
