@@ -16,7 +16,11 @@ module Subscriptions
 
         endpoint = "http://openstates.org/api/v1"
         
-        fields = %w{ id bill_id subjects state chamber created_at updated_at title sources versions session %2Bshort_title }
+        fields = %w{ 
+          id bill_id subjects state chamber created_at updated_at 
+          title sources versions session %2Bshort_title 
+          action_dates
+        }
         
         url = "#{endpoint}/bills/?apikey=#{api_key}"
         
@@ -44,13 +48,13 @@ module Subscriptions
         
         # order
 
-        if function == :search or function == :initialize
-          url << "&sort=created_at"
-        
-        elsif function == :check
-          # for speed's sake, limit check to bills updated in last 2 months
-          updated_since = (subscription.last_checked_at - 2.months).strftime("%Y-%m-%dT%H:%M:%S")
+        url << "&sort=last_action"
 
+
+        # for speed's sake, limit check to bills updated in last 2 months
+
+        if function == :check
+          updated_since = (2.months.ago).strftime("%Y-%m-%dT%H:%M:%S")
           url << "&updated_since=#{updated_since}"
         end
 
@@ -90,7 +94,11 @@ module Subscriptions
         
         endpoint = "http://openstates.org/api/v1"
         
-        fields = %w{ id bill_id state chamber created_at updated_at title sources actions votes session versions %2Bshort_title }
+        fields = %w{ 
+          id bill_id state chamber created_at updated_at 
+          title sources actions votes session versions %2Bshort_title 
+          action_dates
+        }
         
         # item_id is of the form ":state/:session/:chamber/:bill_id" (URI encoded already)
         url = "#{endpoint}/bills/#{URI.encode item_id.gsub('__', '/').gsub('_', ' ')}/?apikey=#{api_key}"
@@ -133,20 +141,31 @@ module Subscriptions
 
         if bill['actions']
           bill['actions'].each do |action|
-            action['date'] = Time.parse(action['date']) if action['date']
+            action['date'] = Time.zone.parse(action['date']) if action['date']
           end
         end
 
         if bill['votes']
           bill['votes'].each do |vote|
-            vote['date'] = Time.parse(vote['date']) if vote['date']
+            vote['date'] = Time.zone.parse(vote['date']) if vote['date']
           end
         end
 
-        # save the item ID as a piece of the URL we can plug back into the OS API later
+        if bill['action_dates']
+          bill['action_dates'].keys.each do |key|
+            bill['action_dates'][key] = Time.zone.parse(bill['action_dates'][key]) if bill['action_dates'][key]
+          end
+        end
+
+        if bill['action_dates'] and bill['action_dates']['last']
+          date = bill['action_dates']['last']
+        else
+          date = bill['created_at']
+        end
+
         SeenItem.new(
           item_id: bill['id'],
-          date: bill["created_at"],
+          date: date,
           data: bill
         )
       end

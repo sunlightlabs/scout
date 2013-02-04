@@ -42,12 +42,12 @@ module Subscriptions
       def self.item_for(bill_id, action)
         return nil unless action
 
-        action['date'] = action['date'].to_time
+        action['date'] = Time.zone.parse action['date']
 
         SeenItem.new(
-          :item_id => "#{bill_id}-action-#{action['date'].to_i}",
-          :date => action['date'],
-          :data => action
+          item_id: "#{bill_id}-action-#{action['date'].to_i}",
+          date: action['date'],
+          data: action
         )
       end
       

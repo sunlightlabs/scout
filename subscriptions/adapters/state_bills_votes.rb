@@ -42,12 +42,12 @@ module Subscriptions
       def self.item_for(bill_id, vote)
         return nil unless vote
 
-        vote['date'] = vote['date'].to_time
+        vote['date'] = Time.zone.parse vote['date']
 
         SeenItem.new(
-          :item_id => "#{bill_id}-vote-#{vote['date'].to_i}",
-          :date => vote['date'],
-          :data => vote
+          item_id: "#{bill_id}-vote-#{vote['date'].to_i}",
+          date: vote['date'],
+          data: vote
         )
       end
       

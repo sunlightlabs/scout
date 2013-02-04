@@ -18,9 +18,15 @@
     <div class="subtitle">
       <%= state_name bill['state'] %>
       &mdash;
-      Information first discovered on
-      <time class="item" datetime="<%= html_date item.date %>">
-          <%= just_date_year item.date %>
+      <% if bill['action_dates'] and bill['action_dates']['last'] %>
+        <% date = bill['action_dates']['last'] %>
+        Last activity on
+      <% else %>
+        <% date = bill['created_at'] %>
+        Information first discovered on
+      <% end %>
+      <time class="item" datetime="<%= html_date date %>">
+        <%= just_date_year date %>
       </time>
     </div>
   </div>
