@@ -4,7 +4,7 @@ module Subscriptions
     class StateBillsActivity
       
       def self.url_for(subscription, function, options = {})
-        endpoint = "http://openstates.org/api/v1"
+        endpoint = "http://staging.openstates.org/api/v1"
         api_key = config[:subscriptions][:sunlight_api_key]
         
         fields = %w{ id bill_id state chamber session actions }
