@@ -1,39 +1,22 @@
-<div id="share-buttons"></div>
+<div class="share-buttons" id="share-buttons"
+  data-socialite="ready"
+  data-services="twitter-tweet,facebook"
+
+  ></div>
 
 <script>
   $(document).ready(function() {
-    if (gigya && gigya.socialize) {
-      var ua = new gigya.socialize.UserAction();
-      
-      <% if defined?(title) %>
-        var title = "Scout - &quot;<%= escape_javascript(title.gsub("\"", "&quot;")) %>&quot;"
-      <% else %>
-        var title = "Scout - " + $(".entryHeader h2").text();
-      <% end %>
-      ua.setTitle(title);
-      ua.setUserMessage(title);
-      ua.setDescription("Search and notifications on what Congress, the White House, and your state legislature are doing.");
-      ua.addMediaItem({
-          type: 'image',
-          href: '<%= escape_javascript request.url %>',
-          src: 'https://scout.sunlightfoundation.com/images/logo_scout.png'
-      });
-      
-      /*
-       * parameter docs at:
-       * http://developers.gigya.com/020_Client_API/020_Methods/socialize.showShareBarUI
-       */
-      var params = {
-          containerID: 'share-buttons',
-          iconsOnly: true,
-          layout: 'horizontal',
-          noButtonBorders: true,
-          shareButtons: 'twitter-tweet,facebook-send',
-          shortURLs: 'never',
-          showCounts: 'none',
-          userAction: ua
-      };
-      gigya.socialize.showShareBarUI(params);
-    }
+    <% if defined?(title) %>
+      var title = "Scout - \"<%= escape_javascript(title) %>\"";
+    <% else %>
+      var title = "Scout - " + $(".entryHeader h2").text();
+    <% end %>
+
+    $(".share-buttons")
+      .attr("data-options", "title=" + encodeURIComponent(title))
+      .attr("data-twitter-tweet-options", "count=none");
+
+    $(".share-buttons").trigger("register").trigger("ready");
+    console.log("Loaded sharing options.")
   });
 </script>

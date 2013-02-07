@@ -48,6 +48,6 @@ q:before, q:after {
 table {
     border-collapse: collapse;
     border-spacing: 0;
-    width: 100%;
+    xwidth: 100%;
     margin-bottom: 20px;
 }

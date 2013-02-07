@@ -871,42 +871,11 @@ footer nav li{
 
 .resultsIntro {position: relative; height: 30px;}
 .resultsIntro p {position: absolute; left: 30px;}
+
 .resultsIntro div#share-buttons {position: absolute; right: 20px;}
+div.share-buttons td {padding-right: 5px;}
+.sidebar .module.sharing {padding-bottom: 10px;}
 
-.module.sharing iframe {
-    float: left; margin-right: 10px;
-}
-
-iframe.twitter {display: inline; vertical-align: text-bottom;}
-
-iframe {margin: 0 0;}
-iframe.twitter-share-button {display: inline; vertical-align: text-bottom;}
-
-.st_facebook_button_custom{
-	background: url('/images/icons_share.png') no-repeat scroll right top transparent;
-	padding:0;
-	width: 23px;
-	height: 23px;
-	float: right;
-	margin-left: 10px;
-	margin-top: -4px;
-}
-.st_twitter_button_custom{
-	background: url('/images/icons_share.png') no-repeat scroll left top transparent;
-	padding:0;
-	width: 23px;
-	height: 23px;
-	float: right;
-	margin-left: 10px;
-	margin-top: -4px;
-}
-.st_facebook_button_custom:hover{
-	background-position: right bottom;
-
-}
-.st_twitter_button_custom:hover{
-	background-position: left bottom;
-}
 
 .pageTitle button{
     float: right;
@@ -1918,10 +1887,6 @@ div.indicators span {
     margin-top: 10px;
 }
 
-.module.sharing button {
-    margin: 20px 0;
-}
-
 
 /*-- Tag Grouping Topic Styling --*/
 
@@ -2114,4 +2079,3 @@ a.ignore{
 .about h3{
     margin-top: 25px;
 }
-
