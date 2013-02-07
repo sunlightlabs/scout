@@ -150,10 +150,13 @@
 
         <div class="none phone_settings">
           <p>
-            If you provide a phone number, you can turn on SMS notifications for your subscriptions. We'll send you a text message to confirm.
+            Enter a phone number below to turn on SMS notifications.
+          </p>
+          <p>
+            We'll send you a text message to confirm.
           </p>
 
-          <% form_for user, "/account/phone", :method => "put" do |f| %>
+          <% form_for user, "/account/phone", method: "put" do |f| %>
             <%= f.label :phone %>
             <%= f.text_field :phone %>
 

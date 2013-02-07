@@ -61,7 +61,7 @@ put '/account/phone' do
 
   current_user.phone = params[:user]['phone']
    
-  if current_user.valid?
+  if Phoner::Phone.valid?(current_user.phone) and current_user.valid?
     
     # manually set to false, in case the phone number was set and is changing
     current_user.phone_confirmed = false
