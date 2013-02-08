@@ -1,0 +1,191 @@
+[
+   {
+      "subjects" : [],
+      "chamber" : "lower",
+      "state" : "oh",
+      "versions" : [
+         {
+            "name" : "As Enrolled",
+            "doc_id" : "OHD00002361",
+            "url" : "http://www.legislature.state.oh.us/BillText129/129_HB_143_EN_N.pdf",
+            "mimetype" : "application/pdf"
+         },
+         {
+            "name" : "As Passed by Senate",
+            "doc_id" : "OHD00002362",
+            "url" : "http://www.legislature.state.oh.us/BillText129/129_HB_143_PS_Y.html",
+            "mimetype" : "text/html"
+         },
+         {
+            "name" : "As Reported by Senate Committee",
+            "doc_id" : "OHD00002363",
+            "url" : "http://www.legislature.state.oh.us/BillText129/129_HB_143_RS_Y.html",
+            "mimetype" : "text/html"
+         },
+         {
+            "name" : "As Passed by House",
+            "doc_id" : "OHD00002152",
+            "url" : "http://www.legislature.state.oh.us/BillText129/129_HB_143_PH_Y.html",
+            "mimetype" : "text/html"
+         },
+         {
+            "name" : "As Reported by House Committee",
+            "doc_id" : "OHD00002122",
+            "url" : "http://www.legislature.state.oh.us/BillText129/129_HB_143_RH_Y.html",
+            "mimetype" : "text/html"
+         },
+         {
+            "name" : "As Introduced",
+            "doc_id" : "OHD00000112",
+            "url" : "http://www.legislature.state.oh.us/BillText129/129_HB_143_I_Y.html",
+            "mimetype" : "text/html"
+         }
+      ],
+      "created_at" : "2011-03-12 00:25:13",
+      "sources" : [
+         {
+            "url" : "http://www.lsc.state.oh.us/status129/hb.xls"
+         }
+      ],
+      "action_dates" : {
+         "signed" : "2012-12-20 00:00:00",
+         "first" : "2011-03-08 00:00:00",
+         "passed_lower" : "2012-06-13 00:00:00",
+         "last" : "2013-03-27 00:00:00",
+         "passed_upper" : "2012-12-04 00:00:00"
+      },
+      "bill_id" : "HB 143",
+      "updated_at" : "2013-01-31 21:41:31",
+      "session" : "129",
+      "title" : "Youth sports-head injuries/concussions",
+      "id" : "OHB00000277"
+   },
+   {
+      "subjects" : [],
+      "chamber" : "lower",
+      "state" : "oh",
+      "versions" : [
+         {
+            "name" : "As Enrolled",
+            "doc_id" : "OHD00002395",
+            "url" : "http://www.legislature.state.oh.us/BillText129/129_HB_284_EN_N.pdf",
+            "mimetype" : "application/pdf"
+         },
+         {
+            "name" : "As Passed by Senate",
+            "doc_id" : "OHD00002396",
+            "url" : "http://www.legislature.state.oh.us/BillText129/129_HB_284_PS_Y.html",
+            "mimetype" : "text/html"
+         },
+         {
+            "name" : "As Reported by Senate Committee",
+            "doc_id" : "OHD00002397",
+            "url" : "http://www.legislature.state.oh.us/BillText129/129_HB_284_RS_Y.html",
+            "mimetype" : "text/html"
+         },
+         {
+            "name" : "As Passed by House",
+            "doc_id" : "OHD00002398",
+            "url" : "http://www.legislature.state.oh.us/BillText129/129_HB_284_PH_Y.html",
+            "mimetype" : "text/html"
+         },
+         {
+            "name" : "As Re-reported by House Committee",
+            "doc_id" : "OHD00002399",
+            "url" : "http://www.legislature.state.oh.us/BillText129/129_HB_284_RRH_Y.html",
+            "mimetype" : "text/html"
+         },
+         {
+            "name" : "As Reported by House Committee",
+            "doc_id" : "OHD00000425",
+            "url" : "http://www.legislature.state.oh.us/BillText129/129_HB_284_RH_Y.html",
+            "mimetype" : "text/html"
+         },
+         {
+            "name" : "As Introduced",
+            "doc_id" : "OHD00000426",
+            "url" : "http://www.legislature.state.oh.us/BillText129/129_HB_284_I_Y.html",
+            "mimetype" : "text/html"
+         }
+      ],
+      "created_at" : "2011-07-02 02:58:39",
+      "sources" : [
+         {
+            "url" : "http://www.lsc.state.oh.us/status129/hb.xls"
+         }
+      ],
+      "action_dates" : {
+         "signed" : "2012-12-20 00:00:00",
+         "first" : "2011-06-28 00:00:00",
+         "passed_lower" : "2012-11-28 00:00:00",
+         "last" : "2013-03-22 00:00:00",
+         "passed_upper" : "2012-12-12 00:00:00"
+      },
+      "bill_id" : "HB 284",
+      "updated_at" : "2013-01-31 21:41:33",
+      "session" : "129",
+      "title" : "Physician assistants-modify law governing",
+      "id" : "OHB00000514"
+   },
+   {
+      "subjects" : [],
+      "chamber" : "lower",
+      "state" : "oh",
+      "versions" : [
+         {
+            "name" : "As Enrolled",
+            "doc_id" : "OHD00002448",
+            "url" : "http://www.legislature.state.oh.us/BillText129/129_HB_461_EN_N.pdf",
+            "mimetype" : "application/pdf"
+         },
+         {
+            "name" : "As Passed by Senate",
+            "doc_id" : "OHD00002449",
+            "url" : "http://www.legislature.state.oh.us/BillText129/129_HB_461_PS_Y.html",
+            "mimetype" : "text/html"
+         },
+         {
+            "name" : "As Reported by Senate Committee",
+            "doc_id" : "OHD00002450",
+            "url" : "http://www.legislature.state.oh.us/BillText129/129_HB_461_RS_Y.html",
+            "mimetype" : "text/html"
+         },
+         {
+            "name" : "As Passed by House",
+            "doc_id" : "OHD00002088",
+            "url" : "http://www.legislature.state.oh.us/BillText129/129_HB_461_PH_Y.html",
+            "mimetype" : "text/html"
+         },
+         {
+            "name" : "As Reported by House Committee",
+            "doc_id" : "OHD00002021",
+            "url" : "http://www.legislature.state.oh.us/BillText129/129_HB_461_RH_Y.html",
+            "mimetype" : "text/html"
+         },
+         {
+            "name" : "As Introduced",
+            "doc_id" : "OHD00001619",
+            "url" : "http://www.legislature.state.oh.us/BillText129/129_HB_461_I_Y.html",
+            "mimetype" : "text/html"
+         }
+      ],
+      "created_at" : "2012-03-24 01:38:54",
+      "sources" : [
+         {
+            "url" : "http://www.lsc.state.oh.us/status129/hb.xls"
+         }
+      ],
+      "action_dates" : {
+         "signed" : "2012-12-20 00:00:00",
+         "first" : "2012-02-22 00:00:00",
+         "passed_lower" : "2012-05-24 00:00:00",
+         "last" : "2013-03-22 00:00:00",
+         "passed_upper" : "2012-11-28 00:00:00"
+      },
+      "bill_id" : "HB 461",
+      "updated_at" : "2013-01-31 21:41:35",
+      "session" : "129",
+      "title" : "Family law disputes-collaborative family process to resolve",
+      "id" : "OHB00000848"
+   }
+]

@@ -44,21 +44,21 @@ class Delivery
 
   # user and delivery mechanism decided in advance
   def self.schedule!(item, interest, subscription_type, seen_through, user, mechanism, email_frequency)
-    create! :user_id => user.id,
-      :user_email => user.email,
-      :user_phone => user.phone,
+    create! user_id: user.id,
+      user_email: user.email,
+      user_phone: user.phone,
       
-      :subscription_type => subscription_type,
+      subscription_type: subscription_type,
       
-      :interest_in => interest.in,
-      :interest => interest,
+      interest_in: interest.in,
+      interest: interest,
 
-      :seen_through => seen_through,
+      seen_through: seen_through,
 
-      :mechanism => mechanism,
-      :email_frequency => email_frequency,
+      mechanism: mechanism,
+      email_frequency: email_frequency,
       
       # drop the item into the delivery wholesale
-      :item => item.attributes.dup
+      item: item.attributes.dup
   end
 end

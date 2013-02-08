@@ -217,6 +217,7 @@ namespace :subscriptions do
 end
   
 namespace :deliver do
+
   desc "Deliveries for a single daily email digest"
   task :email_daily => :environment do
     delivery_options = {"mechanism" => "email", "email_frequency" => "daily"}
