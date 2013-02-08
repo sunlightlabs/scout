@@ -1,0 +1,119 @@
+[
+   {
+      "subjects" : [],
+      "chamber" : "upper",
+      "state" : "dc",
+      "versions" : [
+         {
+            "name" : "Introduction",
+            "doc_id" : "DCD00003157",
+            "url" : "http://dcclims1.dccouncil.us/images/00001/20120521162219.pdf",
+            "mimetype" : "application/pdf"
+         },
+         {
+            "name" : "Committee Report",
+            "doc_id" : "DCD00004661",
+            "url" : "http://dcclims1.dccouncil.us/images/00001/20121128165214.pdf",
+            "mimetype" : "application/pdf"
+         },
+         {
+            "name" : "Engrossment",
+            "doc_id" : "DCD00003903",
+            "url" : "http://dcclims1.dccouncil.us/images/00001/20120808162241.pdf",
+            "mimetype" : "application/pdf"
+         },
+         {
+            "name" : "Enrollment",
+            "doc_id" : "DCD00004552",
+            "url" : "http://dcclims1.dccouncil.us/images/00001/20121025115110.pdf",
+            "mimetype" : "application/pdf"
+         }
+      ],
+      "created_at" : "2012-05-16 02:47:22",
+      "sources" : [
+         {
+            "url" : "http://dcclims1.dccouncil.us/lims/legislation.aspx?LegNo=B19-0777"
+         }
+      ],
+      "action_dates" : {
+         "signed" : "2012-10-24 00:00:00",
+         "first" : "2012-05-11 00:00:00",
+         "passed_lower" : null,
+         "last" : "2012-10-26 00:00:00",
+         "passed_upper" : null
+      },
+      "bill_id" : "B 19-0777",
+      "updated_at" : "2012-12-07 20:31:55",
+      "session" : "19",
+      "title" : "\"COMPREHENSIVE IMPAIRED DRIVING AND ALCOHOL TESTING PROGRAM AMENDMENT ACT OF 2012\".",
+      "id" : "DCB00002019"
+   },
+   {
+      "subjects" : [],
+      "chamber" : "upper",
+      "state" : "dc",
+      "versions" : [
+         {
+            "name" : "Introduction",
+            "doc_id" : "DCD00004312",
+            "url" : "http://dcclims1.dccouncil.us/images/00001/20121004151723.pdf",
+            "mimetype" : "application/pdf"
+         },
+         {
+            "name" : "Enrollment",
+            "doc_id" : "DCD00004389",
+            "url" : "http://dcclims1.dccouncil.us/images/00001/20121012123725.pdf",
+            "mimetype" : "application/pdf"
+         }
+      ],
+      "created_at" : "2012-10-05 03:48:20",
+      "sources" : [
+         {
+            "url" : "http://dcclims1.dccouncil.us/lims/legislation.aspx?LegNo=B19-0981"
+         }
+      ],
+      "action_dates" : {
+         "signed" : "2012-10-26 00:00:00",
+         "first" : "2012-10-02 00:00:00",
+         "passed_lower" : null,
+         "last" : "2012-10-26 00:00:00",
+         "passed_upper" : null
+      },
+      "bill_id" : "B 19-0981",
+      "updated_at" : "2012-10-27 03:42:45",
+      "session" : "19",
+      "title" : "\"COMPREHENSIVE IMPAIRED DRIVING AND ALCOHOL TESTING PROGRAM CONGRESSIONAL REVIEW EMERGENCY AMENDMENT ACT OF 2012\".",
+      "id" : "DCB00002768"
+   },
+   {
+      "subjects" : [],
+      "chamber" : "upper",
+      "state" : "dc",
+      "versions" : [
+         {
+            "name" : "Introduction",
+            "doc_id" : "DCD00004444",
+            "url" : "http://dcclims1.dccouncil.us/images/00001/20121017171651.pdf",
+            "mimetype" : "application/pdf"
+         }
+      ],
+      "created_at" : "2012-10-18 03:33:04",
+      "sources" : [
+         {
+            "url" : "http://dcclims1.dccouncil.us/lims/legislation.aspx?LegNo=B19-1016"
+         }
+      ],
+      "action_dates" : {
+         "signed" : null,
+         "first" : "2012-10-16 00:00:00",
+         "passed_lower" : null,
+         "last" : "2012-10-16 00:00:00",
+         "passed_upper" : null
+      },
+      "bill_id" : "B 19-1016",
+      "updated_at" : "2012-10-18 03:33:04",
+      "session" : "19",
+      "title" : "\"WARD 5 INDUSTRIAL LAND TRANSFORMATION TASK FORCE ACT OF 2012\".",
+      "id" : "DCB00002820"
+   }
+]
