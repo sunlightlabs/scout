@@ -44,6 +44,7 @@ class User
   has_many :interests, dependent: :destroy
   has_many :tags, dependent: :destroy
   has_many :subscriptions # interests will destroy their own subscriptions
+  has_many :seen_items # interests will destroy their own seen_items
   has_many :deliveries # interests will destroy their own deliveries
   has_many :receipts # never destroy receipts
 
