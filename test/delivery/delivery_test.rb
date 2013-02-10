@@ -10,15 +10,14 @@ class DeliveryTest < Test::Unit::TestCase
     
     # one fixture, one email
 
-    interest = search_interest! user, "federal_bills", "environment", "simple"
-    subscription = interest.subscriptions.first
-    mock_search subscription
-    items = subscription.search
+    interest = search_interest! user, "state_bills", "science_transition", "simple"
+    assert_equal 3, interest.seen_items.count
 
-    # schedule a delivery for each result
-    items.each do |item|
-      Deliveries::Manager.schedule_delivery! item, interest, interest.search_type
-    end
+    Subscriptions::Manager.check! interest.subscriptions.first
+    assert_equal 6, interest.seen_items.count
+
+    # 3 items in check that weren't present on initialize
+    items = interest.seen_items.asc(:_id).to_a[3..-1]
     assert_equal items.size, Delivery.count
 
     assert_equal 0, Receipt.count
@@ -35,7 +34,7 @@ class DeliveryTest < Test::Unit::TestCase
     assert_equal user.email, receipt.user_email
     
     assert_equal items.size, receipt.deliveries.size
-    assert_equal items.map(&:item_id), receipt.deliveries.map {|d| d['item']['item_id']}
+    assert_equal items.map(&:item_id).sort, receipt.deliveries.map {|d| d['item']['item_id']}.sort
 
     assert_match /#{items.size}/, receipt.subject
     assert_not_match /Daily digest/i, receipt.subject
@@ -49,15 +48,14 @@ class DeliveryTest < Test::Unit::TestCase
     
     # one fixture, one email
 
-    interest = search_interest! user, "federal_bills", "environment", "simple"
-    subscription = interest.subscriptions.first
-    mock_search subscription
-    items = subscription.search
+    interest = search_interest! user, "state_bills", "science_transition", "simple"
+    assert_equal 3, interest.seen_items.count
 
-    # schedule a delivery for each result
-    items.each do |item|
-      Deliveries::Manager.schedule_delivery! item, interest, interest.search_type
-    end
+    Subscriptions::Manager.check! interest.subscriptions.first
+    assert_equal 6, interest.seen_items.count
+
+    # 3 items in check that weren't present on initialize
+    items = interest.seen_items.asc(:_id).to_a[3..-1]
     assert_equal items.size, Delivery.count
 
     assert_equal 0, Receipt.count
@@ -74,7 +72,7 @@ class DeliveryTest < Test::Unit::TestCase
     assert_equal user.email, receipt.user_email
     
     assert_equal items.size, receipt.deliveries.size
-    assert_equal items.map(&:item_id), receipt.deliveries.map {|d| d['item']['item_id']}
+    assert_equal items.map(&:item_id).sort, receipt.deliveries.map {|d| d['item']['item_id']}.sort
 
     assert_match /#{items.size}/, receipt.subject
     assert_match /Daily digest/i, receipt.subject
@@ -89,21 +87,19 @@ class DeliveryTest < Test::Unit::TestCase
     # 3 different fixture'd searches
     # should be sent in 3 separate emails
 
+    # 1 new one
     i1 = search_interest! user, "federal_bills", "environment", "simple"
-    i2 = search_interest! user, "state_bills", "environment", "simple"
+
+    # 3 new ones each
+    i2 = search_interest! user, "state_bills", "conscience", "simple"
     i3 = search_interest! user, "state_bills", "science", "simple"
     
     all_items = {}
     # schedule a delivery for every result from every one
     [i1, i2, i3].each do |interest|
-      subscription = interest.subscriptions.first
-      mock_search subscription
-      all_items[interest.id] = subscription.search
-
-      all_items[interest.id].each do |item|
-        Deliveries::Manager.schedule_delivery! item, interest, interest.search_type
-      end
-
+      initial = interest.seen_items.count
+      Subscriptions::Manager.check! interest.subscriptions.first
+      all_items[interest.id] = interest.seen_items.asc(:_id).to_a[initial..-1]
       assert_equal all_items[interest.id].size, interest.deliveries.count
     end
 
@@ -124,7 +120,7 @@ class DeliveryTest < Test::Unit::TestCase
       assert_equal user.email, receipt.user_email
 
       assert_equal items.size, receipt.deliveries.size
-      assert_equal items.map(&:item_id), receipt.deliveries.map {|d| d['item']['item_id']}
+      assert_equal items.map(&:item_id).sort, receipt.deliveries.map {|d| d['item']['item_id']}.sort
 
       assert_match /#{items.size}/, receipt.subject
       items.each do |item|
@@ -139,21 +135,19 @@ class DeliveryTest < Test::Unit::TestCase
     # 3 different fixture'd searches
     # should be sent in 1 digest emails
 
+    # 1 new one
     i1 = search_interest! user, "federal_bills", "environment", "simple"
-    i2 = search_interest! user, "state_bills", "environment", "simple"
+
+    # 3 new ones each
+    i2 = search_interest! user, "state_bills", "conscience", "simple"
     i3 = search_interest! user, "state_bills", "science", "simple"
     
     all_items = {}
     # schedule a delivery for every result from every one
     [i1, i2, i3].each do |interest|
-      subscription = interest.subscriptions.first
-      mock_search subscription
-      all_items[interest.id] = subscription.search
-
-      all_items[interest.id].each do |item|
-        Deliveries::Manager.schedule_delivery! item, interest, interest.search_type
-      end
-
+      initial = interest.seen_items.count
+      Subscriptions::Manager.check! interest.subscriptions.first
+      all_items[interest.id] = interest.seen_items.asc(:_id).to_a[initial..-1]
       assert_equal all_items[interest.id].size, interest.deliveries.count
     end
 
@@ -179,6 +173,20 @@ class DeliveryTest < Test::Unit::TestCase
     items.each do |item|
       assert_not_nil receipt.content[routing.item_url item]
     end
+  end
+
+  def test_deliver_custom_digest_to_multiple_users
+    # 3 users: one is immediate, one is daily, one is daily but has immediate overrides
+    user1 = create :user, notifications: "email_immediate"
+    user2 = create :user, notifications: "email_daily"
+    user3 = create :user, notifications: "email_daily"
+
+    # all 3 users should receive one custom email for all new deliveries,
+    # with a specific subject and specific header
+
+    i1a = search_interest! user1, "federal_bills", "environment", "simple"
+    i1b = search_interest! user1, "state_bills", "environment", "simple"
+    i1c = search_interest! user1, "state_bills", "science", "simple"
   end
 
   def test_deliver_email_immediate_from_anothers_tag

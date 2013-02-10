@@ -33,6 +33,7 @@ module TestHelper
       RSpec::Mocks.space.verify_all
     end
 
+    # clearly should be replaced with something automatic
     def teardown
       User.delete_all
       Interest.delete_all
@@ -59,6 +60,15 @@ module TestHelper
     def search_interest!(user, search_type = "all", interest_in = "foia", query_type = "simple", filters = {}, attributes = {})
       interest = Interest.for_search user, search_type, interest_in, query_type, filters
       interest.attributes = attributes
+      
+      # will be harmless if fixture doesn't exist
+      interest.ensure_subscriptions
+      interest.subscriptions.size.times do |i|
+        [:initialize, :check, :search].each do |function|
+          mock_search interest.subscriptions[i], function
+        end
+      end
+
       interest.save!
       interest
     end
@@ -70,8 +80,6 @@ module TestHelper
       file = "test/fixtures/#{fixture}.json"
       if File.exists?(file)
         Subscriptions::Manager.should_receive(:download).with(url).and_return File.read(file)
-      else
-        Subscriptions::Manager.should_receive(:download).with(url).and_raise Errno::ECONNREFUSED.new
       end
     end
 

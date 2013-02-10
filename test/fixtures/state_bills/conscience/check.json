@@ -1,0 +1,137 @@
+[
+   {
+      "subjects" : [],
+      "chamber" : "lower",
+      "state" : "oh",
+      "versions" : [
+         {
+            "name" : "As Enrolled",
+            "doc_id" : "OHD00002470",
+            "url" : "http://www.legislature.state.oh.us/BillText129/129_HB_510_EN_N.pdf",
+            "mimetype" : "application/pdf"
+         },
+         {
+            "name" : "As Passed by Senate",
+            "doc_id" : "OHD00002471",
+            "url" : "http://www.legislature.state.oh.us/BillText129/129_HB_510_PS_Y.html",
+            "mimetype" : "text/html"
+         },
+         {
+            "name" : "As Reported by Senate Committee",
+            "doc_id" : "OHD00002472",
+            "url" : "http://www.legislature.state.oh.us/BillText129/129_HB_510_RS_Y.html",
+            "mimetype" : "text/html"
+         },
+         {
+            "name" : "As Passed by House",
+            "doc_id" : "OHD00001955",
+            "url" : "http://www.legislature.state.oh.us/BillText129/129_HB_510_PH_Y.html",
+            "mimetype" : "text/html"
+         },
+         {
+            "name" : "As Reported by House Committee",
+            "doc_id" : "OHD00001956",
+            "url" : "http://www.legislature.state.oh.us/BillText129/129_HB_510_RH_Y.html",
+            "mimetype" : "text/html"
+         },
+         {
+            "name" : "As Pending in House Committee",
+            "doc_id" : "OHD00001889",
+            "url" : "http://www.legislature.state.oh.us/BillText129/129_HB_510_PHC_Y.html",
+            "mimetype" : "text/html"
+         },
+         {
+            "name" : "As Introduced",
+            "doc_id" : "OHD00001738",
+            "url" : "http://www.legislature.state.oh.us/BillText129/129_HB_510_I_Y.html",
+            "mimetype" : "text/html"
+         }
+      ],
+      "created_at" : "2012-04-17 01:38:01",
+      "sources" : [
+         {
+            "url" : "http://www.lsc.state.oh.us/status129/hb.xls"
+         }
+      ],
+      "action_dates" : {
+         "signed" : "2012-12-20 00:00:00",
+         "first" : "2012-04-12 00:00:00",
+         "passed_lower" : "2012-05-16 00:00:00",
+         "last" : "2013-03-27 00:00:00",
+         "passed_upper" : "2012-12-05 00:00:00"
+      },
+      "bill_id" : "HB 510",
+      "updated_at" : "2013-01-31 21:41:35",
+      "session" : "129",
+      "title" : "Financial institutions tax",
+      "id" : "OHB00000915"
+   },
+   {
+      "subjects" : [
+         "Public Services"
+      ],
+      "chamber" : "lower",
+      "state" : "wa",
+      "versions" : [
+         {
+            "name" : "HB 1484",
+            "doc_id" : "WAD00005141",
+            "url" : "http://www.leg.wa.gov/pub/billinfo/2013-14/Htm/Bills/House Bills/1484.htm",
+            "mimetype" : "text/html"
+         }
+      ],
+      "created_at" : "2013-01-30 02:27:51",
+      "sources" : [
+         {
+            "url" : "http://apps.leg.wa.gov/billinfo/summary.aspx?bill=1484&year=2013"
+         }
+      ],
+      "action_dates" : {
+         "signed" : null,
+         "first" : "2013-01-29 00:00:00",
+         "passed_lower" : null,
+         "last" : "2013-02-15 00:00:00",
+         "passed_upper" : null
+      },
+      "bill_id" : "HB 1484",
+      "updated_at" : "2013-02-07 03:25:07",
+      "session" : "2013-2014",
+      "title" : "Concerning the public works board.",
+      "id" : "WAB00005048"
+   },
+   {
+      "subjects" : [
+         "Environmental",
+         "Health",
+         "Transportation"
+      ],
+      "chamber" : "lower",
+      "state" : "wa",
+      "versions" : [
+         {
+            "name" : "HB 1233",
+            "doc_id" : "WAD00004563",
+            "url" : "http://www.leg.wa.gov/pub/billinfo/2013-14/Htm/Bills/House Bills/1233.htm",
+            "mimetype" : "text/html"
+         }
+      ],
+      "created_at" : "2013-01-22 01:25:53",
+      "sources" : [
+         {
+            "url" : "http://apps.leg.wa.gov/billinfo/summary.aspx?bill=1233&year=2013"
+         }
+      ],
+      "action_dates" : {
+         "signed" : null,
+         "first" : "2013-01-21 00:00:00",
+         "passed_lower" : null,
+         "last" : "2013-02-14 00:00:00",
+         "passed_upper" : null
+      },
+      "bill_id" : "HB 1233",
+      "updated_at" : "2013-02-07 03:24:10",
+      "session" : "2013-2014",
+      "title" : "Including health in the state transportation system policy goals.",
+      "id" : "WAB00004470"
+   }
+]
