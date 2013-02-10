@@ -32,24 +32,19 @@ class CheckTest < Test::Unit::TestCase
 
     user = create :user, notifications: "email_immediate"
     interest = search_interest! user, search_type, query, "simple"
+    assert_equal 1, interest.seen_items.count
     
-    # should initialize subscription to an empty array, need to refactor this to allow 
-    # mocking more easily before this step, and remove this
-    assert_equal 0, interest.seen_items.count
-
-
-    # check for new items (fixture has 2)
+    # check for new items (fixture has 1 new one on check)
     subscription = interest.subscriptions.first
     bill_id = "s3241-112" # is in fixtures
-    mock_search subscription, :check
-
+    
     count = Delivery.count
 
     Subscriptions::Manager.check! subscription
 
     assert_equal 2, interest.seen_items.count
-    assert_equal 2, Delivery.count
-    assert_equal 2, user.deliveries.where(interest_id: interest.id).count
+    assert_equal 1, Delivery.count
+    assert_equal 1, user.deliveries.where(interest_id: interest.id).count
     assert_not_nil user.deliveries.where(interest_id: interest.id, "item.item_id" => bill_id)
 
     user.deliveries.where(interest_id: interest.id).each do |delivery|
@@ -72,7 +67,7 @@ class CheckTest < Test::Unit::TestCase
     
     # should initialize subscription to an empty array, need to refactor this to allow 
     # mocking more easily before this step, and remove this
-    assert_equal 0, shared_interest.seen_items.count
+    assert_equal 1, shared_interest.seen_items.count
 
     user = create :user, notifications: "email_daily"
     tag_interest = Interest.for_tag(user, sharing, tag)
@@ -93,8 +88,7 @@ class CheckTest < Test::Unit::TestCase
     # check for new items (fixture has 2)
     subscription = shared_interest.subscriptions.first
     bill_id = "hres727-112" # is in fixtures
-    mock_search subscription, :check
-
+    
     Subscriptions::Manager.check! subscription
 
     assert_equal 2, shared_interest.seen_items.count
@@ -103,8 +97,8 @@ class CheckTest < Test::Unit::TestCase
 
     # now see that the deliveries were duplicated
 
-    assert_equal 2, sharing.deliveries.count
-    assert_equal 2, user.deliveries.count
+    assert_equal 1, sharing.deliveries.count
+    assert_equal 1, user.deliveries.count
 
     original_delivery = sharing.deliveries.where("item.item_id" => bill_id).first
     tag_delivery = user.deliveries.where("item.item_id" => bill_id).first

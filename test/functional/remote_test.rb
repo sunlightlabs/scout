@@ -425,7 +425,7 @@ class RemoteTest < Test::Unit::TestCase
 
     mock_item item_id, item_type # should mock it to return nil
 
-    assert_nil User.where(:phone => phone).first
+    assert_nil User.where(phone: phone).first
     interest_count = Interest.count
     subscriptions_count = Subscription.count
 
@@ -434,6 +434,8 @@ class RemoteTest < Test::Unit::TestCase
       :source => "testing"
     }
     assert_response 500
+    
+    assert_nil User.where(phone: phone).first
   end
 
   def test_subscribe_by_sms_with_invalid_credentials_fails

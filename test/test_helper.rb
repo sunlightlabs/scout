@@ -63,9 +63,12 @@ module TestHelper
       
       # will be harmless if fixture doesn't exist
       interest.ensure_subscriptions
-      interest.subscriptions.size.times do |i|
+      interest.subscriptions.each do |subscription|
         [:initialize, :check, :search].each do |function|
-          mock_search interest.subscriptions[i], function
+          path = fixture_path subscription, function
+          if File.exists?("test/fixtures/#{path}.json")
+            mock_search subscription, function
+          end
         end
       end
 
@@ -80,11 +83,17 @@ module TestHelper
       file = "test/fixtures/#{fixture}.json"
       if File.exists?(file)
         Subscriptions::Manager.should_receive(:download).with(url).and_return File.read(file)
+      else
+        Subscriptions::Manager.should_receive(:download).with(url).and_raise Errno::ECONNREFUSED.new
       end
     end
 
+    def fixture_path(subscription, function = :search)
+      "#{subscription.subscription_type}/#{subscription.interest_in}/#{function}"
+    end
+
     def mock_search(subscription, function = :search)
-      fixture = "#{subscription.subscription_type}/#{subscription.interest_in}/#{function}"
+      fixture = fixture_path subscription, function
       url = subscription.adapter.url_for subscription, function, {}
       mock_response url, fixture
     end
