@@ -4,6 +4,8 @@ development:
       database: scout
       hosts: 
         - "localhost:27017"
+      options:
+        safe: true
   options:
     raise_not_found_error: false
 
@@ -13,5 +15,7 @@ test:
       database: scout_test
       hosts: 
         - "localhost:27017"
+      options:
+        safe: true
   options:
     raise_not_found_error: false
