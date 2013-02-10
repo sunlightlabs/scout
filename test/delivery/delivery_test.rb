@@ -174,9 +174,6 @@ class DeliveryTest < Test::Unit::TestCase
     end
   end
 
-  def test_deliver_custom_digest_to_multiple_users
-  end
-
   def test_normal_complicated_situation
     # 3 users: one is immediate, one is daily, one is daily but has immediate overrides
     user1 = create :user, notifications: "email_immediate"
@@ -235,6 +232,7 @@ class DeliveryTest < Test::Unit::TestCase
 
     # deliver all 7 of user1's things (3 interests), and 4 of user3's things (2 interests)
     Deliveries::Manager.deliver! 'mechanism' => "email", 'email_frequency' => "immediate"
+    assert_equal 0, Delivery.count
     assert_equal 7, Receipt.count # 5 more
 
     user1.receipts.each do |receipt|
@@ -244,13 +242,129 @@ class DeliveryTest < Test::Unit::TestCase
       assert_equal items.map(&:item_id).sort, receipt.deliveries.map {|d| d['item']['item_id']}.sort
     end
 
-    receipt = user3.receipts.where(frequency: "immediate").each do |receipt|
+    receipt = user3.receipts.where(email_frequency: "immediate").each do |receipt|
       item = receipt.deliveries.first['item']
       interest = Interest.find item['interest_id']
       items = all_items[interest.id]
       assert_equal items.size, receipt.deliveries.size
       assert_equal items.map(&:item_id).sort, receipt.deliveries.map {|d| d['item']['item_id']}.sort
     end
+  end
+
+  def test_custom_complicated_situation
+    # 3 users: one is immediate, one is daily, one is daily but has immediate overrides
+    user1 = create :user, notifications: "email_immediate"
+    user2 = create :user, notifications: "email_daily"
+    user3 = create :user, notifications: "email_daily"
+
+    # all 3 users should receive one custom email for all new deliveries,
+    # with a specific subject and specific header
+
+    # a = 1 old, 1 new thing, b and c = 3 old things, 3 new things each
+
+    i1a = search_interest! user1, "federal_bills", "environment", "simple"
+    i1b = search_interest! user1, "state_bills", "environment_transition", "simple"
+    i1c = search_interest! user1, "state_bills", "science_transition", "simple"
+
+    i2a = search_interest! user2, "federal_bills", "environment", "simple"
+    i2b = search_interest! user2, "state_bills", "environment_transition", "simple"
+    i2c = search_interest! user2, "state_bills", "science_transition", "simple"
+
+    i3a = search_interest! user3, "federal_bills", "environment", "simple", {}, {notifications: "email_immediate"}
+    i3b = search_interest! user3, "state_bills", "environment_transition", "simple", {}, {notifications: "email_immediate"}
+    i3c = search_interest! user3, "state_bills", "science_transition", "simple"
+
+    [user1, user2, user3].each do |u|
+      assert_equal 7, u.seen_items.count
+      assert_equal 0, u.deliveries.count
+    end
+
+    all_items = {}
+    [i1a, i1b, i1c, i2a, i2b, i2c, i3a, i3b, i3c].each do |i| 
+      initial = i.seen_items.count
+      Subscriptions::Manager.check! i.subscriptions.first
+      all_items[i.id] = i.seen_items.asc(:_id).to_a[initial..-1]
+      # puts [all_items[i.id].size, initial, i.seen_items.count].join ", "
+    end
+
+    [user1, user2, user3].each do |u|
+      assert_equal 14, u.seen_items.count
+      assert_equal 7, u.deliveries.count
+    end
+
+    count = Delivery.count # 21
+    assert_equal 0, Receipt.count
+
+    # deliver all state_bills at once with a custom subject and header
+    # this is 6 items delivered for each user
+    Deliveries::Manager.custom_email!(
+      "custom subject abcdefgh",
+      "custom header 1234567",
+      {
+        "interest_type" => "search", 
+        "search_type" => "state_bills"
+      }
+    )
+
+    assert_equal count - 18, Delivery.count # 3
+    assert_equal 3, Receipt.count
+
+    [user1, user2, user3].each do |user|
+      receipt = user.receipts.first
+      assert_equal "email", receipt.mechanism
+      assert_equal "custom", receipt.email_frequency
+      
+      # same for every user
+      items = all_items[i1b.id] + all_items[i1c.id]
+      assert_equal items.map(&:item_id).sort, receipt.deliveries.map {|d| d['item']['item_id']}.sort
+
+      assert_match /abcdefgh/i, receipt.subject
+      assert_not_match /Daily digest/i, receipt.subject
+
+      assert_match /1234567/, receipt.content
+
+      items.each do |item|
+        assert_not_nil receipt.content[routing.item_url item]
+      end
+    end
+
+    # there's now 3 normal deliveries left to go, one federal_bill each
+    # 2 to go immediately, 1 to go daily
+
+    # deliver user2's remaining delivery
+    Deliveries::Manager.deliver! 'mechanism' => "email", 'email_frequency' => "daily"
+    assert_equal count - 19, Delivery.count # 2
+    assert_equal 4, Receipt.count # 1 more
+
+    receipt = user2.receipts.where(email_frequency: "daily").first
+    items = all_items[i2a.id]
+    assert_equal items.map(&:item_id).sort, receipt.deliveries.map {|d| d['item']['item_id']}.sort
+    assert_match /Daily digest/i, receipt.subject
+    assert_match /#{items.size}/i, receipt.subject
+    assert_not_match /abcdefgh/i, receipt.subject
+    assert_not_match /1234567/i, receipt.content
+
+
+    # deliver user1's last delivery, and user3's last delivery
+    Deliveries::Manager.deliver! 'mechanism' => "email", 'email_frequency' => "immediate"
+    assert_equal 0, Delivery.count
+    assert_equal 6, Receipt.count # 2 more
+
+    receipt = user1.receipts.where(email_frequency: "immediate").first
+    items = all_items[i1a.id]
+    assert_equal items.map(&:item_id).sort, receipt.deliveries.map {|d| d['item']['item_id']}.sort
+    assert_match /#{items.size}/i, receipt.subject
+    assert_not_match /Daily digest/i, receipt.subject
+    assert_not_match /abcdefgh/i, receipt.subject
+    assert_not_match /1234567/i, receipt.content
+
+    receipt = user3.receipts.where(email_frequency: "immediate").first
+    items = all_items[i3a.id]
+    assert_equal items.map(&:item_id).sort, receipt.deliveries.map {|d| d['item']['item_id']}.sort
+    assert_match /#{items.size}/i, receipt.subject
+    assert_not_match /Daily digest/i, receipt.subject
+    assert_not_match /abcdefgh/i, receipt.subject
+    assert_not_match /1234567/i, receipt.content
   end
 
   def test_deliver_email_immediate_from_anothers_tag

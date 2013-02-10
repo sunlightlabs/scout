@@ -8,13 +8,72 @@ module Deliveries
     # give these methods at the class level, since all the methods in here are class methods
     extend Helpers::Routing
 
-    def self.deliver_for_user!(user, frequency, dry_run = false)
+    def self.deliver_custom!(user, interests, options = {})
+      dry_run = options['dry_run'] || false
+
+      failures = []
+      successes = []
+
+      email = user.email
+      frequency = "custom"
+
+      # provided interests already match the appropriate filter
+      matching_deliveries = interests.map do |interest|
+        interest.deliveries.desc("item.date").all
+      end.flatten
+
+      # re-group by interest
+      interest_deliveries = matching_deliveries.group_by &:interest
+
+
+      if matching_deliveries.any?
+        content = []
+
+        interest_deliveries.each do |interest, deliveries|
+          content << render_interest(interest, deliveries)
+        end
+
+        content = content.join interest_barrier
+        content << render_footer
+
+        # prepend custom header if present
+        if options['header']
+          content = [options['header'], content].join "\n\n"
+        end
+
+        if options['subject']
+          subject = options['subject']
+        else
+          subject = "Daily digest - #{matching_deliveries.size} new #{matching_deliveries.size > 1 ? "results" : "result"}"
+        end
+
+        if dry_run
+          ::Email.sent_message("DRY RUN", "User", email, subject, content)
+        else
+          if email_user(email, subject, content)
+            # delete first, save receipt after, in case an error in
+            # saving the receipt leaves the delivery around to be re-delivered
+            serialized = serialize_deliveries matching_deliveries
+            matching_deliveries.each &:delete
+            successes << save_receipt!(frequency, user, serialized, subject, content)
+          else
+            failures << {frequency: frequency, email: email, subject: subject, content: content, interest_id: interest.id.to_s}
+          end
+        end
+      end
+
+    end
+
+    def self.deliver_for_user!(user, frequency, options = {})
+      dry_run = options['dry_run'] || false
+
       failures = []
       successes = []
 
       email = user.email
 
-      matching_deliveries = user.deliveries.where(:mechanism => "email", :email_frequency => frequency).desc("item.date").all
+      conditions = {mechanism: "email", email_frequency: frequency}
+      matching_deliveries = user.deliveries.where(conditions).desc("item.date").all
       interest_deliveries = matching_deliveries.group_by &:interest
 
       # if sending whenever, then send one email per-interest

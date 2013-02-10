@@ -5,40 +5,51 @@ module Deliveries
     extend Helpers::Routing
 
     # to be called directly, not hooked into tasks
-    # def self.custom_deliver!
-    #   receipts = []
+    def self.custom_email!(subject, header, interest_conditions)
+      receipts = []
 
-    #   dry_run = ENV["dry_run"] || false
+      dry_run = ENV["dry_run"] || false
+      limit = ENV["limit"] || nil
+      email = ENV["email"] || nil
 
+      # all users with interests of the specified type
+      interests = Interest.where interest_conditions
+      user_ids = interests.distinct :user_id
+      conditions = {:_id => {"$in" => user_ids}}
 
-    #   # all users with deliveries of the requested mechanism and email frequency
-    #   deliveries = Delivery.where delivery_options
-    #   deliveries_count = deliveries.count
-    #   user_ids = deliveries.distinct :user_id
-    #   interest_ids = deliveries.distinct :interest_id
+      if email
+        conditions[:email] = email
+      end
 
-    #   users = User.where(:_id => {"$in" => user_ids}).all
+      users = User.where(conditions).all
 
+      if limit
+        users = users[0..limit]
+      end
 
-    #   users.each do |user|
-    #     next unless user.confirmed? # last-minute check, shouldn't be needed
+      users.each do |user|
+        next unless user.confirmed? # last-minute check, shouldn't be needed
 
-    #     if delivery_options['mechanism'] == 'email'
-    #       receipts += Deliveries::Email.deliver_for_user! user, delivery_options['email_frequency'], dry_run
-    #     elsif delivery_options['mechanism'] == 'sms'
-    #       receipts += Deliveries::SMS.deliver_for_user! user, dry_run
-    #     else
-    #       Admin.message "Unsure how to deliver to user #{user_contact user}, no known delivery mechanism for #{delivery_options['mechanism']}"
-    #     end
-    #   end
+        interests = user.interests.where(interest_conditions).all
+        if interests.any?
+          receipts += Deliveries::Email.deliver_custom!(
+            user, interests, {
+              'subject' => subject, 
+              'header' => header,
+              'dry_run' => dry_run
+            }
+          )
+        end
+      end
       
-    #   # Let admin know when emails go out
-    #   if receipts.any?
-    #     Admin.message "Sent #{receipts.size} notifications", report_for(receipts, delivery_options)
-    #   else
-    #     puts "No notifications sent." unless Sinatra::Application.test?
-    #   end
-    # end
+      # Let admin know when emails go out
+      if receipts.any?
+        delivery_options = {"mechanism" => "email", "email_frequency" => "custom"}
+        Admin.message "Sent #{receipts.size} notifications", report_for(receipts, delivery_options)
+      else
+        puts "No notifications sent." unless Sinatra::Application.test?
+      end
+    end
 
 
     def self.deliver!(delivery_options)
@@ -74,9 +85,9 @@ module Deliveries
         next unless user.confirmed? # last-minute check, shouldn't be needed
 
         if delivery_options['mechanism'] == 'email'
-          receipts += Deliveries::Email.deliver_for_user! user, delivery_options['email_frequency'], dry_run
+          receipts += Deliveries::Email.deliver_for_user! user, delivery_options['email_frequency'], {"dry_run" => dry_run}
         elsif delivery_options['mechanism'] == 'sms'
-          receipts += Deliveries::SMS.deliver_for_user! user, dry_run
+          receipts += Deliveries::SMS.deliver_for_user! user, {"dry_run" => dry_run}
         else
           Admin.message "Unsure how to deliver to user #{user_contact user}, no known delivery mechanism for #{delivery_options['mechanism']}"
         end
