@@ -165,7 +165,6 @@ class DeliveryTest < Test::Unit::TestCase
     assert_equal user.email, receipt.user_email
 
     items = all_items.values.flatten
-    assert_equal items.size, receipt.deliveries.size
     assert_equal items.map(&:item_id).sort, receipt.deliveries.map {|d| d['item']['item_id']}.sort
 
     assert_match /#{items.size}/, receipt.subject
@@ -176,6 +175,9 @@ class DeliveryTest < Test::Unit::TestCase
   end
 
   def test_deliver_custom_digest_to_multiple_users
+  end
+
+  def test_normal_complicated_situation
     # 3 users: one is immediate, one is daily, one is daily but has immediate overrides
     user1 = create :user, notifications: "email_immediate"
     user2 = create :user, notifications: "email_daily"
@@ -184,9 +186,71 @@ class DeliveryTest < Test::Unit::TestCase
     # all 3 users should receive one custom email for all new deliveries,
     # with a specific subject and specific header
 
+    # a = 1 old, 1 new thing, b and c = 3 old things, 3 new things each
+
     i1a = search_interest! user1, "federal_bills", "environment", "simple"
-    i1b = search_interest! user1, "state_bills", "environment", "simple"
-    i1c = search_interest! user1, "state_bills", "science", "simple"
+    i1b = search_interest! user1, "state_bills", "environment_transition", "simple"
+    i1c = search_interest! user1, "state_bills", "science_transition", "simple"
+
+    i2a = search_interest! user2, "federal_bills", "environment", "simple"
+    i2b = search_interest! user2, "state_bills", "environment_transition", "simple"
+    i2c = search_interest! user2, "state_bills", "science_transition", "simple"
+
+    i3a = search_interest! user3, "federal_bills", "environment", "simple", {}, {notifications: "email_immediate"}
+    i3b = search_interest! user3, "state_bills", "environment_transition", "simple", {}, {notifications: "email_immediate"}
+    i3c = search_interest! user3, "state_bills", "science_transition", "simple"
+
+    [user1, user2, user3].each do |u|
+      assert_equal 7, u.seen_items.count
+      assert_equal 0, u.deliveries.count
+    end
+
+    all_items = {}
+    [i1a, i1b, i1c, i2a, i2b, i2c, i3a, i3b, i3c].each do |i| 
+      initial = i.seen_items.count
+      Subscriptions::Manager.check! i.subscriptions.first
+      all_items[i.id] = i.seen_items.asc(:_id).to_a[initial..-1]
+    end
+
+    [user1, user2, user3].each do |u|
+      assert_equal 14, u.seen_items.to_a.size
+      assert_equal 7, u.deliveries.count
+    end
+
+    count = Delivery.count
+
+    # deliver all 7 of user2's things, and 3 of user3's things
+    assert_equal 0, Receipt.count
+    Deliveries::Manager.deliver! 'mechanism' => "email", 'email_frequency' => "daily"
+    assert_equal count - 10, Delivery.count
+    assert_equal 2, Receipt.count
+
+    receipt = user2.receipts.first
+    items = all_items[i2a.id] + all_items[i2b.id] + all_items[i2c.id]
+    assert_equal items.map(&:item_id).sort, receipt.deliveries.map {|d| d['item']['item_id']}.sort
+
+    receipt = user3.receipts.first
+    items = all_items[i3c.id]
+    assert_equal items.map(&:item_id).sort, receipt.deliveries.map {|d| d['item']['item_id']}.sort
+
+    # deliver all 7 of user1's things (3 interests), and 4 of user3's things (2 interests)
+    Deliveries::Manager.deliver! 'mechanism' => "email", 'email_frequency' => "immediate"
+    assert_equal 7, Receipt.count # 5 more
+
+    user1.receipts.each do |receipt|
+      item = receipt.deliveries.first['item']
+      interest = Interest.find item['interest_id']
+      items = all_items[interest.id]
+      assert_equal items.map(&:item_id).sort, receipt.deliveries.map {|d| d['item']['item_id']}.sort
+    end
+
+    receipt = user3.receipts.where(frequency: "immediate").each do |receipt|
+      item = receipt.deliveries.first['item']
+      interest = Interest.find item['interest_id']
+      items = all_items[interest.id]
+      assert_equal items.size, receipt.deliveries.size
+      assert_equal items.map(&:item_id).sort, receipt.deliveries.map {|d| d['item']['item_id']}.sort
+    end
   end
 
   def test_deliver_email_immediate_from_anothers_tag
