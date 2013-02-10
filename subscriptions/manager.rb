@@ -70,6 +70,11 @@ module Subscriptions
       # disabled in test mode (for now, this is obviously not ideal)
 
       backfills = []
+      if ENV['only_since']
+        backfill_date = Time.zone.parse ENV['only_since']
+      else
+        backfill_date = 30.days.ago
+      end
 
 
       # 1) does a poll
@@ -90,7 +95,7 @@ module Subscriptions
 
           mark_as_seen! item unless dry_run
 
-          if !test? and (item.date < 30.days.ago)
+          if !test? and (item.date < backfill_date)
             # this is getting out of hand - 
             # don't deliver state bill backfills, but don't email me about them
             # temporary until Open States allows sorting by last_action dates
