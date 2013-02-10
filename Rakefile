@@ -194,7 +194,7 @@ namespace :subscriptions do
           if errors.any?
             Admin.report Report.warning(
               "check:#{subscription_type}", "#{errors.size} errors while checking #{subscription_type}, will check again next time.", 
-              errors: errors,
+              errors: errors[0..2],
             )
           end
 
