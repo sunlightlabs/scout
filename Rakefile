@@ -218,6 +218,22 @@ end
   
 namespace :deliver do
 
+  desc "Custom delivery task"
+  task :custom => :environment do
+    interest_options = {
+      "interest_type" => "search",
+      "search_type" => "state_bills"
+    }
+
+    subject = "State bill alerts for 2013 so far"
+    header = File.read("misc/header.htm")
+
+    Deliveries::Manager.custom_email!(
+      subject, header,
+      interest_options
+    )
+  end
+
   desc "Deliveries for a single daily email digest"
   task :email_daily => :environment do
     delivery_options = {"mechanism" => "email", "email_frequency" => "daily"}

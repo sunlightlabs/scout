@@ -38,7 +38,7 @@ module Deliveries
 
         # prepend custom header if present
         if options['header']
-          content = [options['header'], content].join "\n\n"
+          content = [options['header'], content].join "\n\n<hr/>\n\n"
         end
 
         if options['subject']
@@ -62,6 +62,15 @@ module Deliveries
         end
       end
 
+      if failures.size > 0
+        Admin.report Report.failure("Delivery", "Failed to deliver #{failures.size} emails to #{email}", :failures => failures)
+      end
+
+      if successes.any?
+        Report.success("Delivery", "Delivered #{successes.size} emails to #{email}")
+      end
+
+      successes
     end
 
     def self.deliver_for_user!(user, frequency, options = {})
