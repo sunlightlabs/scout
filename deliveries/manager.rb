@@ -4,6 +4,43 @@ module Deliveries
 
     extend Helpers::Routing
 
+    # to be called directly, not hooked into tasks
+    # def self.custom_deliver!
+    #   receipts = []
+
+    #   dry_run = ENV["dry_run"] || false
+
+
+    #   # all users with deliveries of the requested mechanism and email frequency
+    #   deliveries = Delivery.where delivery_options
+    #   deliveries_count = deliveries.count
+    #   user_ids = deliveries.distinct :user_id
+    #   interest_ids = deliveries.distinct :interest_id
+
+    #   users = User.where(:_id => {"$in" => user_ids}).all
+
+
+    #   users.each do |user|
+    #     next unless user.confirmed? # last-minute check, shouldn't be needed
+
+    #     if delivery_options['mechanism'] == 'email'
+    #       receipts += Deliveries::Email.deliver_for_user! user, delivery_options['email_frequency'], dry_run
+    #     elsif delivery_options['mechanism'] == 'sms'
+    #       receipts += Deliveries::SMS.deliver_for_user! user, dry_run
+    #     else
+    #       Admin.message "Unsure how to deliver to user #{user_contact user}, no known delivery mechanism for #{delivery_options['mechanism']}"
+    #     end
+    #   end
+      
+    #   # Let admin know when emails go out
+    #   if receipts.any?
+    #     Admin.message "Sent #{receipts.size} notifications", report_for(receipts, delivery_options)
+    #   else
+    #     puts "No notifications sent." unless Sinatra::Application.test?
+    #   end
+    # end
+
+
     def self.deliver!(delivery_options)
       receipts = []
 
