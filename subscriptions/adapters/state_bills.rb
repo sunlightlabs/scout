@@ -65,7 +65,7 @@ module Subscriptions
           url << "&page=#{options[:page]}"
         end
 
-        per_page = (function == :search) ? (options[:per_page] || 20) : 40
+        per_page = (function == :search) ? (options[:per_page] || 20) : 50
         url << "&per_page=#{per_page}"
 
 
