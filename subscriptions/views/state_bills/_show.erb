@@ -20,7 +20,11 @@
       &mdash;
       <% if bill['action_dates'] and bill['action_dates']['last'] %>
         <% date = bill['action_dates']['last'] %>
-        Last activity on
+        <% if date < Time.zone.now %>
+          Last activity on
+        <% else %>
+          Upcoming activity on
+        <% end %>
       <% else %>
         <% date = bill['created_at'] %>
         Information first discovered on

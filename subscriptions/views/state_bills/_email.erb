@@ -4,6 +4,17 @@
 <%= email_subheader_div %>
   <%= state_name bill['state'] %>
   &mdash;
+  <% if bill['action_dates'] and bill['action_dates']['last'] %>
+    <% date = bill['action_dates']['last'] %>
+    <% if date < Time.zone.now %>
+      Last activity on
+    <% else %>
+      Upcoming activity on
+    <% end %>
+  <% else %>
+    <% date = bill['created_at'] %>
+    Information first discovered on
+  <% end %>
   <%= just_date item.date %>
 </div>
 
