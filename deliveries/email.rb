@@ -19,7 +19,7 @@ module Deliveries
 
       # provided interests already match the appropriate filter
       matching_deliveries = interests.map do |interest|
-        interest.deliveries.desc("item.date").all
+        interest.deliveries.where(subscription_type: "state_bills").desc("item.date").all
       end.flatten
 
       # re-group by interest

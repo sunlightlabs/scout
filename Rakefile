@@ -222,7 +222,7 @@ namespace :deliver do
   task :custom => :environment do
     interest_options = {
       "interest_type" => "search",
-      "search_type" => "state_bills"
+      "search_type" => {"$in" => ["all", "state_bills"]}
     }
 
     subject = "State bill alerts for 2013 so far"
