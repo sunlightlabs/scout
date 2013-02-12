@@ -154,7 +154,9 @@ module Subscriptions
         begin
           response = adapter.url_to_response url
           items = adapter.items_for response, function, options
-        rescue Curl::Err::HostResolutionError, Timeout::Error, Errno::ECONNREFUSED, EOFError, Errno::ETIMEDOUT => ex
+        rescue Curl::Err::ConnectionFailedError, Curl::Err::PartialFileError, 
+          Curl::Err::RecvError, Curl::Err::HostResolutionError, 
+          Timeout::Error, Errno::ECONNREFUSED, EOFError, Errno::ETIMEDOUT => ex
           return error_for "Timeout error polling feed", url, function, options, subscription, ex
         rescue AdapterParseException => ex
           return error_for "Error during initial processing of feed: #{ex.message}", url, function, options, subscription
@@ -229,7 +231,9 @@ module Subscriptions
       response = begin
         body = download(url)
         ::Oj.load body, mode: :compat
-      rescue Curl::Err::HostResolutionError, Timeout::Error, Errno::ECONNREFUSED, Errno::ETIMEDOUT => ex
+      rescue Curl::Err::ConnectionFailedError, Curl::Err::PartialFileError, 
+          Curl::Err::RecvError, Curl::Err::HostResolutionError, 
+          Timeout::Error, Errno::ECONNREFUSED, EOFError, Errno::ETIMEDOUT => ex
         Admin.report Report.warning("find:#{adapter_type}", "[#{adapter_type}][find][#{item_id}] find timeout, returned nil")
         return nil
       rescue SyntaxError => ex
