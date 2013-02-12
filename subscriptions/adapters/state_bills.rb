@@ -25,8 +25,7 @@ module Subscriptions
         url = "#{endpoint}/bills/?apikey=#{api_key}"
         
         url << "&fields=#{fields.join ','}"
-        url << "&search_window=all"
-
+        
 
         # state_bills don't support citations
         if subscription.query['citations'].any?
@@ -39,12 +38,49 @@ module Subscriptions
 
         url << "&q=#{CGI.escape query}"
 
+
         # filters
 
+        # ignored parameters: 'q', and 'session'
+
+        # state - single string, e.g. "NY"
         if subscription.data['state'].present?
           url << "&state=#{subscription.data['state']}"
         end
 
+        # search_window - single string, e.g. "session:26"
+        if subscription.data['search_window'].present?
+          url << "&search_window=#{subscription.data['search_window']}"
+
+        # default to an explicit search_window of 'all'
+        else
+          url << "&search_window=all"
+        end
+
+        # chamber - single string, e.g. "upper"
+        if subscription.data['chamber'].present?
+          url << "&chamber=#{subscription.data['chamber']}"
+        end
+
+        # subjects - array of strings, e.g. ["Agriculture and Food", "Public Services"]
+        if subscription.data['subjects'].present? and subscription.data['subjects'].any?
+          url << subscription.data['subjects'].map {|s| "&subjects=#{s}"}.join("")
+        end
+
+        # sponsor_id - single string, e.g. "AKL000023"
+        if subscription.data['sponsor_id'].present?
+          url << "&sponsor_id=#{subscription.data['sponsor_id']}"
+        end
+
+        # type - single string, e.g. "concurrent_resolution"
+        if subscription.data['type'].present?
+          url << "&type=#{subscription.data['type']}"
+        end
+
+        # status - array of strings, e.g. ["passed_upper", "passed_lower"]
+        if subscription.data['status'].present? and subscription.data['status'].any?
+          url << subscription.data['status'].map {|s| "&status=#{s}"}.join("")
+        end
         
         # order
 
