@@ -147,6 +147,8 @@ module Helpers
           openstates_url item.data
         elsif interest.item? and interest.item_type == "state_bill"
           openstates_url interest.data
+        elsif interest.item? and interest.item_type == "state_legislator"
+          openstates_legislator_url interest.data
         end
       else
         "#{config[:hostname]}#{item_path item}"

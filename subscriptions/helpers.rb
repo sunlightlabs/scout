@@ -445,7 +445,14 @@ module Helpers
       bill_id = bill['bill_id'].tr(' ', '')
       session = bill['session']
       
-      "http://openstates.org/#{state}/bills/#{session}/#{bill_id}"
+      "http://openstates.org/#{state}/bills/#{session}/#{bill_id}/"
+    end
+
+    def openstates_legislator_url(legislator)
+      state = legislator['state'].downcase
+      id = legislator['id']
+      
+      "http://openstates.org/#{state}/legislators/#{id}/"
     end
 
     def state_in_openstates?(code)
