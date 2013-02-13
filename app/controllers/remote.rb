@@ -114,7 +114,12 @@ post "/remote/service/sync" do
       if interest.new_record?
         # pass: we're done, it doesn't exist
       else
-        changed_at = Time.zone.parse(change['changed_at'])
+        if change['changed_at'].is_a?(Float) or change['changed_at'].is_a?(Fixnum)
+          changed_at = Time.at change['changed_at']
+        else
+          changed_at = Time.zone.parse(change['changed_at'])
+        end
+        
         if changed_at > interest.updated_at
           to_remove << interest
         else

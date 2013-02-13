@@ -64,7 +64,7 @@ class RemoteTest < Test::Unit::TestCase
     # add this item on, keep old item, should be idempotent
     interest2 = {
       'active' => true,
-      'changed_at' => Time.now,
+      'changed_at' => Time.now.to_i, # test out using a posix time
 
       'interest_type' => "item",
       'item_type' => item_type,
