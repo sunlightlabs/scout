@@ -6,7 +6,7 @@ module Subscriptions
       def self.filters
         {
           "state" => {
-            name: -> code {state_map[code]}
+            name: -> code {state_map[code.upcase]}
           }
         }
       end
