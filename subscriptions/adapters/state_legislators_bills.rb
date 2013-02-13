@@ -7,11 +7,43 @@ module Subscriptions
     class StateLegislatorsBills
       def self.url_for(subscription, function, options = {})
         api_key = options[:api_key] || config[:subscriptions][:sunlight_api_key]
-        endpoint = "http://openstates.org/api/v1"
-        leg_id = subscription.interest_in
-        url = "#{endpoint}/bills/?sponsor_id=#{URI.encode leg_id}&apikey=#{api_key}"
-        # Currently, we only really care about bills that this person
-        # sponsored. No need to get too fancy yet
+        
+        endpoint = "http://staging.openstates.org/api/v1"
+
+        fields = %w{ 
+          id bill_id subjects state chamber created_at updated_at 
+          title sources versions session %2Bshort_title 
+          action_dates
+        }
+        
+        legislator_id = subscription.interest_in
+
+        url = "#{endpoint}/bills/?apikey=#{api_key}"
+        url << "&fields=#{fields.join ','}"
+
+        url << "&sponsor_id=#{URI.encode legislator_id}"
+        url << "&search_window=all"
+
+        # this should still alert on every newly introduced bill, except under very weird circumstances
+        # would be better to sort on introduced date, but I believe this it not always guaranteed
+        url << "&sort=first"
+
+        # for speed's sake, limit check to bills updated in last 2 months
+        if function == :check
+          updated_since = (2.months.ago).strftime("%Y-%m-%dT%H:%M:%S")
+          url << "&updated_since=#{updated_since}"
+        end
+
+        # pagination
+
+        if options[:page]
+          url << "&page=#{options[:page]}"
+        end
+
+        per_page = (function == :search) ? (options[:per_page] || 20) : 50
+        url << "&per_page=#{per_page}"
+
+
         url
       end
 
@@ -35,10 +67,36 @@ module Subscriptions
           bill[field] = bill[field] ? bill[field].to_time : nil
         end
 
+        if bill['actions']
+          bill['actions'].each do |action|
+            action['date'] = Time.zone.parse(action['date']) if action['date']
+          end
+        end
+
+        if bill['votes']
+          bill['votes'].each do |vote|
+            vote['date'] = Time.zone.parse(vote['date']) if vote['date']
+          end
+        end
+
+        if bill['action_dates']
+          bill['action_dates'].keys.each do |key|
+            bill['action_dates'][key] = Time.zone.parse(bill['action_dates'][key]) if bill['action_dates'][key]
+          end
+        end
+
+        # use first action (introduction date) for a sponsored bills feed
+        # first action should always be present, but just in case, default to created date
+        if bill['action_dates'] and bill['action_dates']['first']
+          date = bill['action_dates']['first']
+        else
+          date = bill['created_at']
+        end
+
         SeenItem.new(
-          :item_id => bill['id'],
-          :date => bill["created_at"],
-          :data => bill
+          item_id: bill['id'],
+          date: date,
+          data: bill
         )
       end
     end
