@@ -16,7 +16,7 @@ module Subscriptions
       end
 
       def self.interest_name(interest)
-        "Bills co-sponsored by #{interest.data['full_name']}"
+        "Bills sponsored by #{interest.data['full_name']}"
       end
 
       def self.item_for(legislator)
