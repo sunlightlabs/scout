@@ -155,7 +155,9 @@ post "/remote/service/sync" do
     }.to_json
 
   else
-    halt 403, "Some interests were invalid: #{bad_interests.inspect}"
+    message = "Some interests were invalid: #{bad_interests.inspect}"
+    Admin.message message
+    halt 403, message
   end
 
 end
