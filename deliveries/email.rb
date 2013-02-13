@@ -26,7 +26,7 @@ module Deliveries
       if frequency == 'immediate'
 
         interest_deliveries.each do |interest, deliveries|          
-          content = render_interest interest, deliveries
+          content = render_interest user, interest, deliveries
           content << footer
 
           subject = render_subject interest, deliveries
@@ -53,7 +53,7 @@ module Deliveries
           content = []
 
           interest_deliveries.each do |interest, deliveries|
-            content << render_interest(interest, deliveries)
+            content << render_interest(user, interest, deliveries)
           end
 
           content = content.join interest_barrier
@@ -111,7 +111,7 @@ module Deliveries
         content = []
 
         interest_deliveries.each do |interest, deliveries|
-          content << render_interest(interest, deliveries)
+          content << render_interest(user, interest, deliveries)
         end
 
         content = content.join interest_barrier
@@ -176,7 +176,7 @@ module Deliveries
       deliveries.map {|delivery| delivery.attributes.dup}
     end
 
-    def self.render_interest(interest, deliveries)
+    def self.render_interest(user, interest, deliveries)
       grouped = deliveries.group_by &:subscription_type
 
       content = []
@@ -195,7 +195,7 @@ module Deliveries
         one_content << interest_header(Deliveries::Manager.interest_name(interest), description)
 
         group.each do |delivery|
-          one_content << render_delivery(delivery, interest, subscription_type)
+          one_content << render_delivery(user, delivery, interest, subscription_type)
         end
 
         content << one_content
@@ -269,10 +269,10 @@ module Deliveries
     end
 
     # render a Delivery into its email content
-    def self.render_delivery(delivery, interest, subscription_type)
+    def self.render_delivery(user, delivery, interest, subscription_type)
       item = Deliveries::SeenItemProxy.new(SeenItem.new(delivery.item))
       template = Tilt::ERBTemplate.new "app/views/subscriptions/#{subscription_type}/_email.erb"
-      rendered = template.render item, item: item, interest: interest, trim: false
+      rendered = template.render item, user: user, item: item, interest: interest, trim: false
       rendered.force_encoding "utf-8"
       rendered
     end
