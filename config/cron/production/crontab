@@ -2,10 +2,11 @@
 
 */30 * * * * /projects/scout/current/config/cron/production/rake.sh subscriptions:reinitialize
 
+
 ######## Delivery tasks ########
 
-# email digests - once a day, in the morning
-30 14 * * * /projects/scout/current/config/cron/production/deliver.sh email_daily
+# email digests - once a day, in the morning, 8am/9am EST/EDT
+0 13 * * * /projects/scout/current/config/cron/production/deliver.sh email_daily
 
 # immediate emails - throughout the day, every 10 minutes
 */10 * * * *  /projects/scout/current/config/cron/production/deliver.sh email_immediate
@@ -16,22 +17,24 @@
 
 ######## Polling tasks  #########
 
-# keyword search subscriptions
+
+### keyword search subscriptions
 
 # bills in Congress - twice daily, bounded by THOMAS/GPO
 0 11,18 * * *  /projects/scout/current/config/cron/production/check.sh federal_bills rate_limit=0
 
-# bills in the states - twice daily, Open States scrapers running throughout the day, but no need to be real time
-30 11,15 * * *     /projects/scout/current/config/cron/production/check.sh state_bills rate_limit=0.3
+# bills in the states - 7am (Open States done scraping by 6:30am)
+0 12 * * *     /projects/scout/current/config/cron/production/check.sh state_bills
+0 12 * * *     /projects/scout/current/config/cron/production/check.sh state_legislators_bills
 
 # speeches in Congress - twice daily, bounded by GPO
-0 8,14 * * *  /projects/scout/current/config/cron/production/check.sh speeches
+30 11,14 * * *  /projects/scout/current/config/cron/production/check.sh speeches
 
-# regulations - twice a day, FederalRegister.gov updates at unknown intervals
-0 12,17 * * *     /projects/scout/current/config/cron/production/check.sh regulations rate_limit=0
+# regulations - FederalRegister.gov updates over the course of the morning
+0 10,17 * * *     /projects/scout/current/config/cron/production/check.sh regulations rate_limit=0
 
 # documents - varies by source
-30 10,14,19 * * *     /projects/scout/current/config/cron/production/check.sh documents rate_limit=0
+30 11,15,19 * * *     /projects/scout/current/config/cron/production/check.sh documents rate_limit=0
 
 
 # item-specific subscriptions
@@ -48,11 +51,9 @@
 # vote results for bills in Congress - every 5 minutes, updated by House/Senate throughout the day
 */10 * * * *   /projects/scout/current/config/cron/production/check.sh federal_bills_votes
 
-# activity on bills in the States - once an hour, who knows when these will be updated
-0 * * * * /projects/scout/current/config/cron/production/check.sh state_bills_activity
-
-# activity on bills in the States - once an hour, who knows when these will be updated
-0 * * * * /projects/scout/current/config/cron/production/check.sh state_bills_votes
+# activity on bills in the States - 8am (Open States done scraping by 6:30am)
+0 13 * * * /projects/scout/current/config/cron/production/check.sh state_bills_activity
+0 13 * * * /projects/scout/current/config/cron/production/check.sh state_bills_votes
 
 # external feed subscriptions, once an hour
 0 * * * * /projects/scout/current/config/cron/production/check.sh feed
