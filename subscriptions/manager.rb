@@ -157,7 +157,7 @@ module Subscriptions
         rescue Curl::Err::ConnectionFailedError, Curl::Err::PartialFileError, 
           Curl::Err::RecvError, Curl::Err::HostResolutionError, 
           Timeout::Error, Errno::ECONNREFUSED, EOFError, Errno::ETIMEDOUT => ex
-          return error_for "Timeout error polling feed", url, function, options, subscription, ex
+          return error_for "Network or timeout error while polling feed", url, function, options, subscription, ex
         rescue AdapterParseException => ex
           return error_for "Error during initial processing of feed: #{ex.message}", url, function, options, subscription
         rescue Exception => ex
@@ -185,8 +185,10 @@ module Subscriptions
           end
 
           adapter.items_for response, function, options
-        rescue Timeout::Error, Errno::ECONNREFUSED, EOFError, Errno::ETIMEDOUT => ex
-          return error_for "Timeout error", url, function, options, subscription, ex
+        rescue Curl::Err::ConnectionFailedError, Curl::Err::PartialFileError, 
+          Curl::Err::RecvError, Curl::Err::HostResolutionError, 
+          Timeout::Error, Errno::ECONNREFUSED, EOFError, Errno::ETIMEDOUT => ex
+          return error_for "Network or timeout error", url, function, options, subscription, ex
         rescue SyntaxError => ex
           message = if body =~ /504 Gateway Time-out/
             "Timeout (504)"

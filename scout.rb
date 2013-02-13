@@ -68,7 +68,10 @@ not_found do
 end
 
 error do
-  Admin.report Report.exception("Exception Notifier", "Uncaught exception", env['sinatra.error'])
+  exception = env['sinatra.error']
+  name = exception.class.name
+  message = exception.message
+  Admin.report Report.exception("Exception Notifier", "#{name}: #{message}", exception)
   erb :"500"
 end
 
