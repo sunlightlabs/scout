@@ -5,8 +5,8 @@
 
 ######## Delivery tasks ########
 
-# email digests - once a day, in the morning
-0 10 * * * /projects/alarms/current/config/cron/staging/deliver.sh email_daily
+# email digests - once a day, in the morning, 8am/9am EST/EDT
+0 13 * * * /projects/alarms/current/config/cron/staging/deliver.sh email_daily
 
 # immediate emails - throughout the day, every 10 minutes
 */10 * * * *  /projects/alarms/current/config/cron/staging/deliver.sh email_immediate
@@ -17,13 +17,15 @@
 
 ######## Polling tasks  #########
 
-# keyword search subscriptions
+
+### keyword search subscriptions
 
 # bills in Congress - daily, bounded by THOMAS/GPO
-45 6 * * *  /projects/alarms/current/config/cron/staging/check.sh federal_bills
+45 10 * * *  /projects/alarms/current/config/cron/staging/check.sh federal_bills
 
 # bills in the states - Open States 
 0 12 * * *     /projects/alarms/current/config/cron/staging/check.sh state_bills
+0 12 * * *     /projects/alarms/current/config/cron/staging/check.sh state_legislators_bills
 
 # speeches in Congress - daily, bounded by GPO
 0 9 * * *  /projects/alarms/current/config/cron/staging/check.sh speeches
@@ -34,10 +36,11 @@
 # documents - varies by source
 0 10 * * *     /projects/alarms/current/config/cron/staging/check.sh documents
 
-# item-specific subscriptions
+
+### item-specific subscriptions
 
 # activity on bills in Congress - daily, bounded by THOMAS
-45 12 * * *  /projects/alarms/current/config/cron/staging/check.sh federal_bills_activity
+0 12 * * *  /projects/alarms/current/config/cron/staging/check.sh federal_bills_activity
 
 # upcoming notices for bills in congress - bounded by party leadership
 45 * * * *   /projects/alarms/current/config/cron/staging/check.sh federal_bills_upcoming_floor
@@ -48,11 +51,9 @@
 # vote results for bills in Congress - updated by House/Senate throughout the day
 0 * * * *   /projects/alarms/current/config/cron/staging/check.sh federal_bills_votes
 
-# activity on bills in the States - once an hour, who knows when these will be updated
-0 * * * * /projects/alarms/current/config/cron/staging/check.sh state_bills_activity
-
-# activity on bills in the States - once an hour, who knows when these will be updated
-30 * * * * /projects/alarms/current/config/cron/staging/check.sh state_bills_votes
+# activity on bills in the States - 7am (Open States done scraping by 6:30am)
+0 12 * * * /projects/alarms/current/config/cron/staging/check.sh state_bills_activity
+0 12 * * * /projects/alarms/current/config/cron/staging/check.sh state_bills_votes
 
 
 # external feed subscriptions, once an hour
