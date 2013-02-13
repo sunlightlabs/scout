@@ -59,7 +59,7 @@ module Deliveries
           content = content.join interest_barrier
           content << footer
 
-          subject = "Daily digest - #{matching_deliveries.size} new #{matching_deliveries.size > 1 ? "results" : "result"}"
+          subject = daily_subject_for matching_deliveries.size, user
 
           if dry_run
             ::Email.sent_message("DRY RUN", "User", email, subject, content, from)
@@ -255,6 +255,17 @@ module Deliveries
       else
         nil # will default to value in config.yml
       end
+    end
+
+    def self.daily_subject_for(number, user)
+      if user.service == "open_states"
+        prefix = "Your Open States alerts"
+      else
+        prefix = "Scout daily digest"
+      end
+      suffix = "#{number} new #{number > 1 ? "results" : "result"}"
+
+      "#{prefix} - #{suffix}"
     end
 
     # render a Delivery into its email content
