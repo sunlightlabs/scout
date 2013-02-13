@@ -14,7 +14,7 @@ module Subscriptions
       def self.url_for(subscription, function, options = {})
         api_key = options[:api_key] || config[:subscriptions][:sunlight_api_key]
 
-        endpoint = "http://staging.openstates.org/api/v1"
+        endpoint = "http://openstates.org/api/v1"
         
         fields = %w{ 
           id bill_id subjects state chamber created_at updated_at 
@@ -128,7 +128,7 @@ module Subscriptions
       def self.url_for_detail(item_id, options = {})
         api_key = options[:api_key] || config[:subscriptions][:sunlight_api_key]
         
-        endpoint = "http://staging.openstates.org/api/v1"
+        endpoint = "http://openstates.org/api/v1"
         
         fields = %w{ 
           id bill_id state chamber created_at updated_at 
