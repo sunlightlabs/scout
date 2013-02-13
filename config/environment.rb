@@ -32,7 +32,7 @@ def reserved_names
       sms admin login logout session signup signout request response
       server client rss feed atom json xml search api api_key import 
       export download upload favicon index about privacy_policy privacy 
-      terms legal contact username slug name 
+      terms legal contact username slug name error exception tos terms_of_service
       
       bill state_bill regulation speech document hearing update floor_update
       rule uscode cfr report
