@@ -59,11 +59,16 @@ get '/about' do
   erb :about
 end
 
+get '/error' do
+  raise Exception.new("KABOOM.")
+end
+
 not_found do
   erb :"404"
 end
 
 error do
+  Admin.report Report.exception("Exception Notifier", "Uncaught exception", env['sinatra.error'])
   erb :"500"
 end
 
