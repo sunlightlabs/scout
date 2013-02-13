@@ -1,5 +1,5 @@
 <% bill = item.data %>
-<%= email_header bill['bill_id'], item_url(item) %>
+<%= email_header bill['bill_id'], item_url(item, interest, user) %>
 
 <%= email_subheader_div %>
   <%= state_name bill['state'] %>

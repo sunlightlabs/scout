@@ -1,7 +1,7 @@
 <% bill = interest.data %>
 <% vote = item.data %>
 
-<%= email_header vote['motion'], item_url(item) %>
+<%= email_header vote['motion'], item_url(item, interest, user) %>
 
 <%= email_subheader_div %>
   <%= just_date(item.date) %>

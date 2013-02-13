@@ -137,14 +137,17 @@ module Helpers
       end
     end
 
-    def item_url(item, service = nil)
+    def item_url(item, interest = nil, user = nil)
       if item.subscription_type == "feed"
         item.data['url']
 
       # special case: Open States users get direct links
-      elsif service == "open_states"
-        openstates_url item.data
-        
+      elsif interest and user and (user.service == "open_states")
+        if interest.search? and interest.search_type == "state_bills"
+          openstates_url item.data
+        elsif interest.item? and interest.item_type == "state_bill"
+          openstates_url interest.data
+        end
       else
         "#{config[:hostname]}#{item_path item}"
       end
