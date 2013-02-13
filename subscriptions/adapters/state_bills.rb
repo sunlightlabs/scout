@@ -84,7 +84,7 @@ module Subscriptions
         
         # order
 
-        url << "&sort=last_action"
+        url << "&sort=last"
 
 
         # for speed's sake, limit check to bills updated in last 2 months
@@ -193,6 +193,7 @@ module Subscriptions
           end
         end
 
+        # use most recent action for the date, if present (which it should always be)
         if bill['action_dates'] and bill['action_dates']['last']
           date = bill['action_dates']['last']
         else
