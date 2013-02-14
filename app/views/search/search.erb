@@ -205,9 +205,8 @@
         <p>
           Create an alert to receive notifications of more results like these.
         </p>
-        <%= partial "partials/share", engine: :erb, locals: {
-          title: interest_name(interest)
-        } %>
+        <span style="display: none" id="share-title"><%= interest_name(interest) %></span>
+        <%= partial "partials/share", engine: :erb %>
       </div>
     <% end %>
   </div>
