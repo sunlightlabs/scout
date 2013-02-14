@@ -229,6 +229,12 @@ class User
     self.sunlight_announcements = false
     self.save!
 
+    # unsubscribe individual interests
+    self.interests.each do |interest|
+      interest.notifications = nil
+      interest.save!
+    end
+
     Event.unsubscribe! self, old_info, description
   end
 end
