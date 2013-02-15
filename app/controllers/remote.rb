@@ -135,7 +135,13 @@ post "/remote/service/sync" do
   if bad_interests.empty?
     
     # commit everything
-    user.save!
+    if user.new_record?
+      user.save!
+      Admin.new_user user
+    else
+      user.save!
+    end
+
     to_add.each {|interest| interest.save!}
     to_remove.each {|interest| interest.destroy}
     user.reload

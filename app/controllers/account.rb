@@ -25,7 +25,7 @@ end
 get '/account/settings' do
   requires_login
 
-  erb :"account/settings", :locals => {:user => current_user}
+  erb :"account/settings", locals: {user: current_user}
 end
 
 put '/account/settings' do

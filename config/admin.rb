@@ -8,7 +8,13 @@ module Admin
     # it's just a salted hash, but still
     user_attributes.delete "password_hash"
 
-    deliver! "New User", "New user: #{user.email || user.phone}", JSON.pretty_generate(user_attributes)
+    message = "New user: #{user.email || user.phone}"
+
+    if user.service
+      message = "[#{user.service}] #{message}"
+    end
+
+    deliver! "New User", message, JSON.pretty_generate(user_attributes)
   end
 
   def self.bounce_report(description, data)
