@@ -221,7 +221,8 @@ class User
     old_info = {
       notifications: self.notifications,
       announcements: self.announcements,
-      sunlight_announcements: self.sunlight_announcements
+      sunlight_announcements: self.sunlight_announcements,
+      service: self.service # context
     }
 
     self.notifications = "none"
