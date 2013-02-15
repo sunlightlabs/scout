@@ -94,14 +94,17 @@ var Utils = {
       if (!container)
         container = "#center";
 
-      $.pjax({
-        url: href,
-        container: container,
-        timeout: 5000,
-        error: function() {
-          Utils.log("Error on PJAX: " + href);
-        }
-      });
+      if ($.support.pjax) {
+        $.pjax({
+          url: href,
+          container: container,
+          timeout: 5000,
+          error: function() {
+            Utils.log("Error on PJAX: " + href);
+          }
+        });
+      } else
+        window.location = href;
     },
 
     // returns a path string suitable for redirects back to this location
