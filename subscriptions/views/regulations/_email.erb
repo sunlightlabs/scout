@@ -4,6 +4,10 @@
 <%= email_header regulation_title(regulation), item_url(item) %>
 
 <%= email_subheader_div %>
+  <span class="date">
+    <%= just_date item.date %>
+  </span>
+  &mdash;
   <% if regulation['document_type'] == "public_inspection" %>
     <strong class="public_inspection">
       Pre-release
