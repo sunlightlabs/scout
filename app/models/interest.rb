@@ -340,7 +340,7 @@ class Interest
   def self.subscription_for(interest, subscription_type, regenerate = false)
     if !interest.new_record?
       unless regenerate
-        return interest.subscriptions.where(:subscription_type => subscription_type).first
+        return interest.subscriptions.where(subscription_type: subscription_type).first
       end
     end
 
