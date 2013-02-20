@@ -3,6 +3,10 @@
 <%= email_header document['title'], item_url(item) %>
 
 <%= email_subheader_div %>
+  <span class="date">
+    <%= just_date item.date %>
+  </span>
+  &mdash;
   <%= document['document_type_name'] %>
 </div>
 
