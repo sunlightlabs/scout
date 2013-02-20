@@ -12,7 +12,13 @@
 <div class="subtitle">
   <span class="code"><%= bill_code bill['bill_type'], bill['number'] %></span>
   &mdash;
-  <span class="version"><%= bill_version version['version_code'] %></span>
+  <span class="version">
+    <% if version %>
+      <%= bill_version version['version_code'] %>
+    <% else %>
+      Introduced
+    <% end %>
+  </span>
 </div>
 
 <p>

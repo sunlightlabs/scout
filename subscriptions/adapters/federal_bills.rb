@@ -49,7 +49,7 @@ module Subscriptions
         url << "&fields=#{fields.join ','}"
         url << "&apikey=#{api_key}"
 
-        # restrict results to those GPO has published text for
+        # should be unnecessary, we set last_version_on to introduced_on if GPO hasn't published yet
         url << "&last_version_on__exists=true"
 
         # filters
@@ -102,7 +102,7 @@ module Subscriptions
 
         url = "#{endpoint}/bills?apikey=#{api_key}"
 
-        # restrict results to those GPO has published text for
+        # should be unnecessary, we set last_version_on to introduced_on if GPO hasn't published yet
         url << "&last_version_on__exists=true"
         
         url << "&bill_id=#{item_id}"

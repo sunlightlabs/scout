@@ -9,11 +9,16 @@
 
 <%= email_subheader_div %>
   <span class="code">
+    <%= just_date item.date %>, 
     <%= bill_code bill['bill_type'], bill['number'] %>
   </span>
   &mdash;
   <span class="version">
-    <%= bill_version version['version_code'] %>
+    <% if version %>
+      <%= bill_version version['version_code'] %>
+    <% else %>
+      Introduced
+    <% end %>
   </span>
 </div>
 

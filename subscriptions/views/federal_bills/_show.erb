@@ -23,10 +23,14 @@
     <div class="subtitle">
       <%= bill_code bill['bill_type'], bill['number'] %>
       &mdash;
-      <%= bill_version version['version_code'] %>
+      <% if version %>
+        <%= bill_version version['version_code'] %>
+      <% else %>
+        Introduced
+      <% end %>
       on
       <time class="item" datetime="<%= html_date item.date %>">
-          <%= just_date_year item.date %>
+        <%= just_date_year item.date %>
       </time>
     </div>
   </div>
@@ -44,10 +48,14 @@
           <a href="<%= bill['urls']['opencongress'] %>" title="OpenCongress">OpenCongress</a>
         </li>
         <li class="source">
-          <% if version['urls'] and version['urls']['xml'] %>
-            <a href="<%= version['urls']['xml'] %>">Original Text</a>
-          <% elsif version['urls'] and version['urls']['pdf'] %>
-            <a href="<%= version['urls']['pdf'] %>">Original Text</a>
+          <% if version %>
+            <% if version['urls'] and version['urls']['xml'] %>
+              <a href="<%= version['urls']['xml'] %>">Original Text</a>
+            <% elsif version['urls'] and version['urls']['pdf'] %>
+              <a href="<%= version['urls']['pdf'] %>">Original Text</a>
+            <% end %>
+          <% else %>
+            (Text not yet published)
           <% end %>
         </li>
       </ul>
