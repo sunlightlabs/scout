@@ -52,8 +52,8 @@
 */10 * * * *   /projects/scout/current/config/cron/production/check.sh federal_bills_votes
 
 # activity on bills in the States - 8am (Open States done scraping by 6:30am)
-0 13 * * * /projects/scout/current/config/cron/production/check.sh state_bills_activity
-0 13 * * * /projects/scout/current/config/cron/production/check.sh state_bills_votes
+0 13 * * * /projects/scout/current/config/cron/production/check.sh state_bills_activity rate_limit=0.3
+0 13 * * * /projects/scout/current/config/cron/production/check.sh state_bills_votes rate_limit=0.3
 
 # external feed subscriptions, once an hour
 0 * * * * /projects/scout/current/config/cron/production/check.sh feed
