@@ -17,6 +17,7 @@ module Deliveries
       email = user.email
       footer = render_footer user
       from = from_for user
+      reply_to = reply_to_for user
 
       conditions = {mechanism: "email", email_frequency: frequency}
       matching_deliveries = user.deliveries.where(conditions).desc("item.date").all
@@ -32,9 +33,9 @@ module Deliveries
           subject = render_subject interest, deliveries
 
           if dry_run
-            ::Email.sent_message("DRY RUN", "User", email, subject, content, from)
+            ::Email.sent_message("DRY RUN", "User", email, subject, content, from, reply_to)
           else
-            if email_user(email, subject, content, from)
+            if email_user(email, subject, content, from, reply_to)
               # delete first, save receipt after, in case an error in
               # saving the receipt leaves the delivery around to be re-delivered
               serialized = serialize_deliveries deliveries
@@ -62,9 +63,9 @@ module Deliveries
           subject = daily_subject_for matching_deliveries.size, user
 
           if dry_run
-            ::Email.sent_message("DRY RUN", "User", email, subject, content, from)
+            ::Email.sent_message("DRY RUN", "User", email, subject, content, from, reply_to)
           else
-            if email_user(email, subject, content, from)
+            if email_user(email, subject, content, from, reply_to)
               # delete first, save receipt after, in case an error in
               # saving the receipt leaves the delivery around to be re-delivered
               serialized = serialize_deliveries matching_deliveries
@@ -96,6 +97,7 @@ module Deliveries
 
       email = user.email
       from = from_for user
+      reply_to = reply_to_for user
       frequency = "custom"
 
       # provided interests already match the appropriate filter
@@ -131,7 +133,7 @@ module Deliveries
         if dry_run
           ::Email.sent_message("DRY RUN", "User", email, subject, content)
         else
-          if email_user(email, subject, content, from)
+          if email_user(email, subject, content, from, reply_to)
             # delete first, save receipt after, in case an error in
             # saving the receipt leaves the delivery around to be re-delivered
             serialized = serialize_deliveries matching_deliveries
@@ -257,6 +259,14 @@ module Deliveries
       end
     end
 
+    def self.reply_to_for(user)
+      if user.service == "open_states"
+        "Open States <openstates-alerts+yesreply@sunlightfoundation.com>"
+      else
+        nil # will default to value in config.yml
+      end
+    end
+
     def self.daily_subject_for(number, user)
       if user.service == "open_states"
         prefix = "Your Open States alerts"
@@ -278,8 +288,8 @@ module Deliveries
     end
 
     # the actual mechanics of sending the email
-    def self.email_user(email, subject, content, from = nil)
-      ::Email.deliver! "User Alert", email, subject, content, from
+    def self.email_user(email, subject, content, from = nil, reply_to = nil)
+      ::Email.deliver! "User Alert", email, subject, content, from, reply_to
     end
 
   end

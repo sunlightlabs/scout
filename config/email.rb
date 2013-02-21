@@ -7,16 +7,16 @@ require 'mail'
 module Email
 
   # used when you want the email to use whatever's in the settings
-  def self.deliver!(tag, to, subject, body, from = nil)
+  def self.deliver!(tag, to, subject, body, from = nil, reply_to = nil)
     unless email?
-      sent_message "FAKE", tag, to, subject, body, from
+      sent_message "FAKE", tag, to, subject, body, from, reply_to
       return true
     end
 
     if config[:email][:via] == :pony
-      with_pony! tag, to, subject, body, from
+      with_pony! tag, to, subject, body, from, reply_to
     elsif config[:email][:via] == :postmark
-      with_postmark! tag, to, subject, body, from
+      with_postmark! tag, to, subject, body, from, reply_to
     else
       puts "[#{tag}][ERROR] No delivery method specified."
       false
@@ -38,15 +38,15 @@ module Email
   end
 
   # send using a plain SMTP client
-  def self.with_pony!(tag, to, subject, body, from = nil)
+  def self.with_pony!(tag, to, subject, body, from = nil, reply_to = nil)
     unless email?
-      sent_message "FAKE", tag, to, subject, body, from
+      sent_message "FAKE", tag, to, subject, body, from, reply_to
       return true
     end
 
     options = config[:email][:pony].dup
     options[:from] = from || config[:email][:from]
-    options[:reply_to] = config[:email][:reply_to]
+    options[:reply_to] = reply_to || config[:email][:reply_to]
 
     begin
       if tag == "User Alert" # html emails
@@ -55,7 +55,7 @@ module Email
         Pony.mail options.merge(subject: subject, body: body, to: to)
       end
 
-      sent_message "Pony", tag, to, subject, body, from
+      sent_message "Pony", tag, to, subject, body, from, reply_to
       true
     rescue Errno::ECONNREFUSED
       puts "\n[#{tag}][Pony] Couldn't email message, connection refused! Check email settings."
@@ -64,9 +64,9 @@ module Email
   end
 
   # send using the Postmark service
-  def self.with_postmark!(tag, to, subject, body, from = nil)
+  def self.with_postmark!(tag, to, subject, body, from = nil, reply_to = nil)
     unless email?
-      sent_message "FAKE", tag, to, subject, body, from
+      sent_message "FAKE", tag, to, subject, body, from, reply_to
       return true
     end
 
@@ -83,7 +83,7 @@ module Email
     message.tag = tag
 
     message.from = from || config[:email][:from]
-    message.reply_to = config[:email][:reply_to]
+    message.reply_to = reply_to || config[:email][:reply_to]
 
     message.to = to
     message.subject = subject
@@ -91,7 +91,7 @@ module Email
 
     begin
       message.deliver!
-      sent_message "Postmark", tag, to, subject, body, from
+      sent_message "Postmark", tag, to, subject, body, from, reply_to
       true
     rescue Exception => e
       # if it's a hard bounce to a valid user, unsubscribe that user from future emails
@@ -100,12 +100,12 @@ module Email
           user.unsubscribe!
           Admin.report(
             Report.exception "Postmark Exception", "Bad email: #{to}, user unsubscribed", e,
-              tag: tag, to: to, subject: subject, body: body, from: from
+              tag: tag, to: to, subject: subject, body: body, from: from, reply_to: reply_to
           )
         else
           Admin.report(
             Report.exception "Postmark Exception", "Weird: Bad email: #{to}, but no user found by that email!", e,
-              tag: tag, to: to, subject: subject, body: body, from: from
+              tag: tag, to: to, subject: subject, body: body, from: from, reply_to: reply_to
           )
         end
 
@@ -113,7 +113,7 @@ module Email
         # email admin with details of Postmark exception, but try to deliver with Pony
         Admin.report(
           Report.exception "Postmark Exception", "Failed to email #{to}, trying to deliver via SMTP", e,
-            tag: tag, to: to, subject: subject, body: body, from: from
+            tag: tag, to: to, subject: subject, body: body, from: from, reply_to: reply_to
         )
         
         puts "\n[#{tag}][Postmark] Couldn't send message to Postmark. Trying Pony as a backup."
@@ -137,7 +137,7 @@ module Email
     !Sinatra::Application.test? and config[:email][:from].present?
   end
 
-  def self.sent_message(method, tag, to, subject, body, from = nil)
+  def self.sent_message(method, tag, to, subject, body, from = nil, reply_to = nil)
     return if Sinatra::Application.test?
     
     puts
