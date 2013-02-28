@@ -1,18 +1,24 @@
 def topline
   msg = ""
 
-  total_users = User.count
-  active_users = User.all.select {|u| u.interests.count > 0}
-  active_outside = active_users.reject {|u| u.email =~ /sunlightfoundation\.com/}
+  [nil, "open_states"].each do |service|
+    msg << "[#{service || "scout"}]\n"
+    msg << "\n"
 
-  msg << "Total users: #{total_users}\n"
-  msg << "Active users (at least 1 alert): #{active_users.size}\n"
-  msg << "Active outside users (at least 1 alert, excluding sunlightfoundation.com emails): #{active_outside.size}\n"
-  msg << "\n"
+    total_users = User.where(service: service).count
+    active_users = User.where(service: service).select {|u| u.interests.count > 0}
+    active_outside = active_users.reject {|u| u.email =~ /sunlightfoundation\.com/}
 
-  active_outside_alerts = active_outside.map {|u| u.interests.count}.sum
-  msg << "Alerts by active outside users: #{active_outside_alerts}\n"
-  msg << "\n"
+    msg << "Total users: #{total_users}\n"
+    msg << "Active users (at least 1 alert): #{active_users.size}\n"
+    msg << "Active outside users (at least 1 alert, excluding sunlightfoundation.com emails): #{active_outside.size}\n"
+    msg << "\n"
+
+    active_outside_alerts = active_outside.map {|u| u.interests.count}.sum
+    msg << "Alerts by active outside users: #{active_outside_alerts}\n"
+    msg << "\n"
+    msg << "\n"
+  end
 
   Admin.message "Scout User Stats", msg
 end

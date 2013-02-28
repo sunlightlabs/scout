@@ -49,6 +49,8 @@ class User
   has_many :receipts # never destroy receipts
 
   scope :for_time, ->(start, ending) {where(created_at: {"$gt" => Time.zone.parse(start).midnight, "$lt" => Time.zone.parse(ending).midnight})}
+  scope :open_states, where(service: "open_states")
+  scope :scout, where(service: nil)
 
   before_validation :slugify_username
   def slugify_username
