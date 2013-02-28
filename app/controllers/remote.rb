@@ -63,9 +63,12 @@ post "/remote/service/sync" do
     )
 
     user.confirmed = true
-    user.should_change_password = false
     user.service = data['service']
     user.source = data['service']
+
+    # set to a random password; for now we are not syncing passwords across services
+    user.reset_password
+    user.should_change_password = false # must come after the reset
     
     unless user.valid?
       halt 403, "Invalid new user."

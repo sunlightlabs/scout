@@ -49,6 +49,7 @@ class RemoteTest < Test::Unit::TestCase
     assert_equal interest_count + 1, Interest.count
 
     assert user.confirmed?
+    assert_not_nil user.password_hash
     assert !user.should_change_password?
     assert !user.announcements?
     assert !user.sunlight_announcements?
