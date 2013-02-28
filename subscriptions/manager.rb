@@ -156,6 +156,7 @@ module Subscriptions
           items = adapter.items_for response, function, options
         rescue Curl::Err::ConnectionFailedError, Curl::Err::PartialFileError, 
           Curl::Err::RecvError, Curl::Err::HostResolutionError, 
+          Curl::Err::GotNothingError,
           Timeout::Error, Errno::ECONNREFUSED, EOFError, Errno::ETIMEDOUT => ex
           return error_for "Network or timeout error while polling feed", url, function, options, subscription, ex
         rescue AdapterParseException => ex
@@ -187,6 +188,7 @@ module Subscriptions
           adapter.items_for response, function, options
         rescue Curl::Err::ConnectionFailedError, Curl::Err::PartialFileError, 
           Curl::Err::RecvError, Curl::Err::HostResolutionError, 
+          Curl::Err::GotNothingError,
           Timeout::Error, Errno::ECONNREFUSED, EOFError, Errno::ETIMEDOUT => ex
           return error_for "Network or timeout error", url, function, options, subscription, ex
         rescue SyntaxError => ex
