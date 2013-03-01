@@ -455,14 +455,6 @@ module Helpers
       "http://openstates.org/#{state}/legislators/#{id}/"
     end
 
-    def state_in_openstates?(code)
-      states = %W{ 
-        AK AZ CA DC DE FL HI ID IL LA MD MN MT NC NH NJ OH TX UT WI 
-        AR CO IN IA KY MA MI NE NM OR PA PR RI TN VT VA
-      }
-      states.include? code.to_s.upcase
-    end
-
     def state_vote_count(vote)
       "#{vote['passed'] ? "Passed" : "Not Passed"}, #{vote['yes_count']}-#{vote['no_count']}-#{vote['other_count']}"
     end

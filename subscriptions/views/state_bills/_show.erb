@@ -38,14 +38,12 @@
     <div class="clear"></div>
     <div class="resources">
         <h5>Resources</h5>
-        <% if state_in_openstates?(bill['state']) %>
-          <li class="openstates">
-            <a href="<%= openstates_url bill %>" title="Open States">
-              Open States
-            </a>
-          </li>
-        <% end %>
-
+        <li class="openstates">
+          <a href="<%= openstates_url bill %>" title="Open States">
+            Open States
+          </a>
+        </li>
+        
         <% if bill['versions'] and bill['versions'].any? %>
           <a class="source" href="<%= bill['versions'].last['url'] %>">
             Original Text
