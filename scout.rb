@@ -71,7 +71,13 @@ error do
   exception = env['sinatra.error']
   name = exception.class.name
   message = exception.message
-  Admin.report Report.exception("Exception Notifier", "#{name}: #{message}", exception)
+  request = {method: env['REQUEST_METHOD'], url: env['REQUEST_URI']}
+  
+  if current_user
+    request[:user] = current_user.id.to_s
+  end
+
+  Admin.report Report.exception("Exception Notifier", "#{name}: #{message}", exception, request: request)
   erb :"500"
 end
 

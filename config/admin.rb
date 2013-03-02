@@ -73,7 +73,7 @@ module Admin
     body += "\n\n#{report['message']}" if report['message'].present?
 
     if report[:attached]['exception']
-      body += "\n\n#{exception_message(report)}"
+      body += "\n\n#{exception_message report}"
     end
     
     attrs = report.attributes.dup
