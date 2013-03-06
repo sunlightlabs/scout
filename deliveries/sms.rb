@@ -5,7 +5,9 @@ module Deliveries
 
     extend Helpers::Routing
 
-    def self.deliver_for_user!(user, dry_run = false)
+    def self.deliver_for_user!(user, options = {})
+      dry_run = options['dry_run'] || false
+      
       unless user.phone.present? and user.phone_confirmed?
         Admin.report Report.failure("Delivery", "#{user.id} is signed up for SMS alerts but has no confirmed phone", :id => user.id.to_s, :email => user.email, :phone => user.phone, :phone_confirmed => user.phone_confirmed)
         return []
