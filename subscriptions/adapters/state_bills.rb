@@ -90,8 +90,8 @@ module Subscriptions
         # for speed's sake, limit check to bills updated in last 2 months
 
         if function == :check
-          updated_since = (2.months.ago).strftime("%Y-%m-%dT%H:%M:%S")
-          url << "&updated_since=#{updated_since}"
+          last_action_since = (2.months.ago).strftime("%Y-%m-%dT%H:%M:%S")
+          url << "&last_action_since=#{last_action_since}"
         end
 
         
