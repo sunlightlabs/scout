@@ -336,6 +336,11 @@ namespace :test do
     end
 
     interest.data = item.data
+
+    if ENV['tags'].present?
+      interest.tags = ENV['tags'].split ","
+    end
+
     interest.save!
 
     puts "User subscribed to #{item_type} with ID: #{item_id}"
