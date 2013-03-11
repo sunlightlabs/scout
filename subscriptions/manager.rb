@@ -163,7 +163,7 @@ module Subscriptions
           return error_for "Error during initial processing of feed: #{ex.message}", url, function, options, subscription
         rescue Exception => ex
           # don't allow caller to accumulate unexpected errors, email right away
-          report = Report.exception self, "Exception processing URL #{url}", ex, :subscription_type => subscription.subscription_type, :function => function, :interest_in => subscription.interest_in, :subscription_id => subscription.id
+          report = Report.exception self, "Exception processing URL #{url}", ex, subscription_type: subscription.subscription_type, function: function, interest_in: subscription.interest_in, subscription_id: subscription.id
           puts report.to_s
           return error_for "Unknown error polling feed", url, function, options, subscription, ex
         end

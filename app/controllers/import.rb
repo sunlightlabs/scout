@@ -65,9 +65,13 @@ post "/import/feed/create" do
   description = params[:description].present? ? params[:description].strip : nil
 
   # for creating, a valid feed URL and title need to be prepared already
-  unless url.present? and title.present? and 
-    (feed = Subscriptions::Adapters::Feed.url_to_response(url)) and
-    (feed_details = Subscriptions::Adapters::Feed.feed_details(feed))
+  begin
+    unless url.present? and title.present? and 
+      (feed = Subscriptions::Adapters::Feed.url_to_response(url)) and
+      (feed_details = Subscriptions::Adapters::Feed.feed_details(feed))
+      halt 500 and return
+    end
+  rescue Subscriptions::AdapterParseException => ex
     halt 500 and return
   end
 

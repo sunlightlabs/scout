@@ -71,9 +71,9 @@ module Subscriptions
         end
 
         SeenItem.new(
-          :item_id => data['url'],
-          :date => data['published'],
-          :data => data
+          item_id: data['url'],
+          date: data['published'],
+          data: data
         )
       end
 
