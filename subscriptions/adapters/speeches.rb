@@ -46,6 +46,11 @@ module Subscriptions
           end
         end
 
+        if function == :check
+          since = (1.month.ago).strftime("%Y-%m-%d")
+          url << "&start_date=#{since}"
+        end
+
         # pagination
 
         url << "&page=#{options[:page].to_i - 1}" if options[:page]
