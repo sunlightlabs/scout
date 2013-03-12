@@ -8,8 +8,8 @@ before /^\/services\// do
   unless SunlightServices.verify params, config[:services][:shared_secret], config[:services][:api_name]
     Admin.report Report.failure(
       "API Key Signature Check", "Bad signature", 
-      :key => params[:key], :email => params[:email], :status => params[:status],
-      :ip => request.ip
+      key: params[:key], email: params[:email], status: params[:status],
+      ip: request.ip
     )
     halt 403, 'Bad signature' 
   end
@@ -19,16 +19,34 @@ end
 
 # API key management endpoints
 
+post '/services/replicate_key/:key/' do
+  unless params[:key].present? and params[:status].present? and params[:email].present?
+    Admin.report Report.failure(
+      "Replicate Key", "Could not replicate key, not enough information", 
+      key: params[:key], email: params[:email], status: params[:status],
+      ip: request.ip
+    )
+
+    halt 403, "Missing a key, email, and/or status: #{params.inspect}"
+  end
+
+  key = ApiKey.find_or_create_by key: params[:key]
+  key.email = params[:email]
+  key.status = params[:status]
+  key.save!
+end
+
+
 post '/services/create_key/' do
   begin
-    ApiKey.create! :key => params[:key],
-        :email => params[:email],
-        :status => params[:status]
+    ApiKey.create! key: params[:key],
+        email: params[:email],
+        status: params[:status]
   rescue
     Admin.report Report.failure(
       "Create Key", "Could not create key, duplicate key or email", 
-      :key => params[:key], :email => params[:email], :status => params[:status],
-      :ip => request.ip
+      key: params[:key], email: params[:email], status: params[:status],
+      ip: request.ip
     )
     halt 403, "Could not create key, duplicate key or email"
   end
@@ -42,16 +60,16 @@ post '/services/update_key/' do
     rescue
       Admin.report Report.failure(
         "Update Key", "Could not update key, errors: #{key.errors.full_messages.join ', '}",
-        :key => params[:key], :email => params[:email], :status => params[:status],
-        :ip => request.ip
+        key: params[:key], email: params[:email], status: params[:status],
+        ip: request.ip
       )
       halt 403, "Could not update key, errors: #{key.errors.full_messages.join ', '}"
     end
   else
     Admin.report Report.failure(
       "Update Key", 'Could not locate API key by the given key',
-      :key => params[:key], :email => params[:email], :status => params[:status],
-      :ip => request.ip
+      key: params[:key], email: params[:email], status: params[:status],
+      ip: request.ip
     )
     halt 404, 'Could not locate API key by the given key'
   end
@@ -65,16 +83,16 @@ post '/services/update_key_by_email/' do
     rescue
       Admin.report Report.failure(
         "Update Key by Email", "Could not update key, errors: #{key.errors.full_messages.join ', '}",
-        :key => params[:key], :email => params[:email], :status => params[:status],
-        :ip => request.ip
+        key: params[:key], email: params[:email], status: params[:status],
+        ip: request.ip
       )
       halt 403, "Could not update key, errors: #{key.errors.full_messages.join ', '}"
     end
   else
     Admin.report Report.failure(
       "Update Key by Email", 'Could not locate API key by the given key',
-      :key => params[:key], :email => params[:email], :status => params[:status],
-      :ip => request.ip
+      key: params[:key], email: params[:email], status: params[:status],
+      ip: request.ip
     )
     halt 404, 'Could not locate API key by the given email'
   end
