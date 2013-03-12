@@ -35,7 +35,13 @@ get "/import/feed/preview" do
     halt 500 and return
   end
 
-  items = erb :"search/items", :layout => false, :locals => {
+  # error_for returns this
+  if results.is_a?(Hash)
+    puts "Bad feed: #{results.inspect}"
+    halt 500 and return
+  end
+
+  items = erb :"search/items", layout: false, locals: {
     items: results.first(3), 
     subscription: subscription,
     interest: interest,
