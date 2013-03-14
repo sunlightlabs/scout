@@ -16,20 +16,21 @@ class User
 
   # whether the account belongs to another service whose alerts Scout is powering
   field :service, default: nil
+  field :synced_at, type: Time
 
   # will get assigned automatically by the API key syncing service
   # if a user has one, we turn on various features in the site
   field :api_key
 
   # whether and how the user will receive notifications
-  field :notifications, :default => "email_immediate"
+  field :notifications, default: "email_immediate"
   validates_inclusion_of :notifications, :in => ["none", "email_daily", "email_immediate"] # sms not valid at the user level
   validates_presence_of :notifications
 
   # boolean as to whether users wish to receive announcements about Scout features
   # defaults to true (opt-out)
-  field :announcements, :type => Boolean, :default => true
-  field :sunlight_announcements, :type => Boolean, :default => false
+  field :announcements, type: Boolean, default: true
+  field :sunlight_announcements, type: Boolean, default: false
 
   # used for sharing things
   field :username
@@ -38,8 +39,8 @@ class User
   index username: 1
   index user_id: 1
 
-  validates_uniqueness_of :username, :allow_blank => true, :message => "has already been taken."
-  validates_exclusion_of :username, :in => reserved_names, :message => "cannot be used."
+  validates_uniqueness_of :username, allow_blank: true, message: "has already been taken."
+  validates_exclusion_of :username, :in => reserved_names, message: "cannot be used."
 
   has_many :interests, dependent: :destroy
   has_many :tags, dependent: :destroy

@@ -136,6 +136,9 @@ post "/remote/service/sync" do
   # then save and delete everything, trusting it will all work out okay in the end
   bad_interests = to_add.select {|i| !i.valid?}
   if bad_interests.empty?
+
+    # always update the last time a user was synced
+    user.synced_at = Time.now
     
     # commit everything
     if user.new_record?

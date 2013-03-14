@@ -54,6 +54,8 @@ class RemoteTest < Test::Unit::TestCase
     assert !user.announcements?
     assert !user.sunlight_announcements?
 
+    assert_not_nil user.synced_at
+
     assert_equal 1, user.interests.count
     assert_equal item_id, user.interests.first.in
 
