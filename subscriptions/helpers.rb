@@ -434,13 +434,13 @@ module Helpers
     end
 
     def regulation_type(regulation)
-      if regulation['article_type'] == "regulation"
+      if regulation['article_type'].nil? or (regulation['article_type'] == "regulation")
         {
           proposed: "Proposed Rule",
           final: "Final Rule"
         }[regulation['stage'].to_sym] || "Rule"
       else
-        (regulation['article_type'] || "regulation").capitalize
+        regulation['article_type'].capitalize
       end
     end
 
