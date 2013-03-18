@@ -11,7 +11,9 @@
     </strong>
     &mdash;
   <% end %>
-  <span class="stage"><%= regulation_stage regulation['stage'] %></span>
+  <span class="stage">
+    <%= regulation_type regulation %>
+  </span>
   &mdash;
   <% if regulation['agency_names'].any? %>
     <span class="agencies">

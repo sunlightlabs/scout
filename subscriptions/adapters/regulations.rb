@@ -25,7 +25,7 @@ module Subscriptions
         end
         
         fields = %w{ 
-          document_number document_type
+          document_number document_type article_type
           stage title abstract 
           posted_at publication_date
           url agency_names agency_ids 
@@ -86,7 +86,7 @@ module Subscriptions
         end
         
         fields = %w{ 
-          stage title abstract 
+          stage title abstract article_type
           document_number document_type 
           posted_at publication_date 
           url pdf_url 

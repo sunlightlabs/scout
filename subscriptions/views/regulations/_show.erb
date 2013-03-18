@@ -7,7 +7,9 @@
     <div class="subtitle">
       <%= agency_names regulation %>
       <br/>
-      <%= regulation_stage regulation['stage'] %>,
+      
+      <%= regulation_type regulation %>
+
       <% if regulation['document_type'] != "public_inspection" %>
         issued on
       <% else %>
@@ -46,7 +48,7 @@
     <% end %>
   <% else %>
     <p>
-      This is a <strong>pre-release</strong> version of this <%= regulation['stage'] %> rule. It will be formally published on <strong><%= just_date regulation['publication_date'] %></strong> in the Federal Register.
+      This is a <strong>pre-release</strong> version of this <%= regulation_type(regulation) %>. It will be formally published on <strong><%= just_date regulation['publication_date'] %></strong> in the Federal Register.
     </p>
     <p>
       Though it is an official document, it can theoretically be withdrawn before formal publication, and some details may not yet be available. <a href="https://www.federalregister.gov/learn/public-inspection-desk-2">Read more about pre-release documents.</a>

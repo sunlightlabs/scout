@@ -8,7 +8,9 @@
       </strong>
       &mdash;
     <% end %>
-    <%= regulation_stage regulation['stage'] %>
+
+    <%= regulation_type regulation %>
+
     <% if regulation['agency_names'].select(&:present?).any? %>
       &mdash;
       <%= regulation['agency_names'].select(&:present?).join ', ' %>

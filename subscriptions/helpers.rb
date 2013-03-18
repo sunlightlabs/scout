@@ -433,11 +433,15 @@ module Helpers
       "http://capitolwords.org/legislator/#{speech['bioguide_id']}"
     end
 
-    def regulation_stage(stage)
-      {
-        proposed: "Proposed Rule",
-        final: "Final Rule"
-      }[stage.to_sym] || "Rule"
+    def regulation_type(regulation)
+      if regulation['article_type'] == "regulation"
+        {
+          proposed: "Proposed Rule",
+          final: "Final Rule"
+        }[regulation['stage'].to_sym] || "Rule"
+      else
+        regulation['article_type'].capitalize
+      end
     end
 
     def openstates_url(bill)

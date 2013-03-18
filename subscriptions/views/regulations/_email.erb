@@ -1,6 +1,5 @@
 <% regulation = item.data %>
 
-<% title = "#{regulation_title regulation} (#{regulation_stage regulation['stage']})" %>
 <%= email_header regulation_title(regulation), item_url(item) %>
 
 <%= email_subheader_div %>
@@ -14,7 +13,11 @@
     </strong>
     &mdash;
   <% end %>
-  <span class="stage"><%= regulation_stage regulation['stage'] %></span>
+  
+  <span class="stage">
+    <%= regulation_type regulation %>
+  </span>
+
   &mdash;
   <% if regulation['agency_names'].any? %>
     <span class="agencies">
