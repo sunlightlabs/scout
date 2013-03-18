@@ -30,8 +30,8 @@
 # speeches in Congress - twice daily, bounded by GPO
 30 11,14 * * *  /projects/scout/current/config/cron/production/check.sh speeches
 
-# regulations - FederalRegister.gov updates over the course of the morning
-0 10,17 * * *     /projects/scout/current/config/cron/production/check.sh regulations rate_limit=0
+# regulations - FederalRegister.gov updates over the course of the day
+0 10,17,21 * * *     /projects/scout/current/config/cron/production/check.sh regulations rate_limit=0
 
 # documents - varies by source
 30 11,15,19 * * *     /projects/scout/current/config/cron/production/check.sh documents rate_limit=0
