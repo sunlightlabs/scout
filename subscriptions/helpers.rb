@@ -440,7 +440,7 @@ module Helpers
           final: "Final Rule"
         }[regulation['stage'].to_sym] || "Rule"
       else
-        regulation['article_type'].capitalize
+        (regulation['article_type'] || "regulation").capitalize
       end
     end
 
