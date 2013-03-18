@@ -436,9 +436,9 @@ module Helpers
     def regulation_type(regulation)
       if regulation['article_type'].nil? or (regulation['article_type'] == "regulation")
         {
-          proposed: "Proposed Rule",
-          final: "Final Rule"
-        }[regulation['stage'].to_sym] || "Rule"
+          "proposed" => "Proposed Rule",
+          "final" => "Final Rule"
+        }[regulation['stage']] || "Article"
       else
         regulation['article_type'].capitalize
       end
