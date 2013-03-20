@@ -6,7 +6,10 @@
 # If the service is invalid, 403.
 # If the secret key is wrong for that service, 403.
 #
-# If the user account does exist, but has a different service, 500.
+# If the user account does exist, but has a different service,
+# add it to their account like anything else. The service syncing this to us
+# should understand that these new interests won't be whitelabeled. We whitelabel per-user,
+# not per-interest, at this time.
 # 
 # If the user account does not exist, create it:
 #   with the provided 'service' field
@@ -50,9 +53,9 @@ post "/remote/service/sync" do
   end
 
   if (user = User.where(email: data['email']).first)
-    unless user.service == data['service']
-      halt 403, "Wrong service for this user."
-    end
+    # unless user.service == data['service']
+    #   halt 403, "Wrong service for this user."
+    # end
   else
     user = User.new(
       email: data['email'],

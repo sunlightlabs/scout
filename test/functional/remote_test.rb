@@ -226,18 +226,62 @@ class RemoteTest < Test::Unit::TestCase
 
   # user account exists, but has different service
   def test_service_sync_wrong_service
-    service = "serviceX"
+    # a native Scout user
     email = "test@example.com"
-    user = create :service_user, email: email
+    user = create :user, email: email
+    
+    # one existing item subscription, native to Scout
+    item_id = "hr4192-112"
+    item_type = "bill"
+    mock_item item_id, item_type
+
+    interest1 = Interest.for_item user, item_id, item_type
+    interest1.save!
+
+    count = User.count
+    assert_equal 1, user.interests.count
+
+
+    # now this user joins a remote service, and makes an interest there
+
+    service = Environment.services.keys.first
+    notifications = "email_daily"
+
+    item_id = "hr4193-112"
+    item_type = "bill"
+    mock_item item_id, item_type
+
+    interest2 = {
+      'active' => true,
+      'changed_at' => Time.now,
+
+      'interest_type' => "item",
+      'item_type' => item_type,
+      'item_id' => item_id
+    }
 
     post "/remote/service/sync", {
       email: email,
       service: service,
-      secret_key: "anything"
+      secret_key: Environment.services[service]['secret_key'],
+      notifications: notifications,
+      interests: [interest2]
     }.to_json
 
-    assert_response 403
-    assert_match /not a supported service/i, last_response.body
+    assert_response 201
+
+    assert_equal 1, json_response['actions']['added']
+    assert_equal 0, json_response['actions']['removed']
+
+    user = User.where(email: email).first
+    
+    assert_not_nil user
+    assert_equal count, User.count
+    assert_equal 2, user.interests.count
+
+    created = user.interests.asc(:_id).last
+    assert_equal created.in, item_id
+    assert_equal created.item_type, item_type
   end
 
   # bad email, let's say
