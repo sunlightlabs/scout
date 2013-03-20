@@ -53,9 +53,9 @@ post "/remote/service/sync" do
   end
 
   if (user = User.where(email: data['email']).first)
-    # unless user.service == data['service']
-    #   halt 403, "Wrong service for this user."
-    # end
+    unless user.service == data['service']
+      halt 403, "Wrong service for this user."
+    end
   else
     user = User.new(
       email: data['email'],
