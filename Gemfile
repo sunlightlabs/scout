@@ -4,7 +4,7 @@ gem 'oj', '1.3.0'
 gem 'multi_json', '1.3.6'
 gem 'curb', '0.8.1'
 
-gem 'sinatra', '1.3.2'
+gem 'sinatra', '1.3.3'
 gem 'sinatra-contrib', '1.3.1'
 gem 'sinatra-flash', '0.3.0'
 
