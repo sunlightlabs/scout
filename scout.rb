@@ -63,6 +63,10 @@ get '/error' do
   raise Exception.new("KABOOM.")
 end
 
+post '/error' do
+  raise Exception.new("KABOOM.")
+end
+
 not_found do
   erb :"404"
 end
@@ -71,7 +75,12 @@ error do
   exception = env['sinatra.error']
   name = exception.class.name
   message = exception.message
-  request = {method: env['REQUEST_METHOD'], url: env['REQUEST_URI']}
+
+  request = {
+    method: env['REQUEST_METHOD'], 
+    url: env['REQUEST_URI'],
+    params: params.inspect
+  }
   
   if current_user
     request[:user] = current_user.id.to_s
