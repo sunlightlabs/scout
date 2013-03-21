@@ -172,7 +172,7 @@ module Subscriptions
       else
         items = begin
           # searches use a caching layer
-          if (function == :search) and (body = cache_for(url, subscription.subscription_type))
+          if (function == :search) and (body = cache_for(url, :search, subscription.subscription_type))
             # should be guaranteed to work
             response = ::Oj.load body, mode: :compat
           else
@@ -181,7 +181,7 @@ module Subscriptions
 
             # wait for JSON parse, so as not to cache errors
             if function == :search and !config[:no_cache]
-              cache! url, subscription, body
+              cache! url, :search, subscription.subscription_type, body
             end
           end
 
@@ -226,15 +226,28 @@ module Subscriptions
     end
 
     # given a type of adapter, and an item ID, fetch the item and return a seen item
+
+    # options:
+      # cache_only: return nil if the object is not present, do not hit the network
+
     def self.find(adapter_type, item_id, options = {})
       adapter = Subscription.adapter_for adapter_type
       url = adapter.url_for_detail item_id, options
       
       puts "\n[#{adapter_type}][find][#{item_id}] #{url}\n\n" if !test? and config[:debug][:output_urls]
       
-      response = begin
-        body = download(url)
-        ::Oj.load body, mode: :compat
+      begin
+        if body = cache_for(url, :find, adapter_type)
+          response = ::Oj.load body, mode: :compat
+        else
+          body = download(url)
+          response = ::Oj.load body, mode: :compat
+
+          # wait for JSON parse, so as not to cache errors
+          if !config[:no_cache]
+            cache! url, :find, adapter_type, body
+          end
+        end
       rescue Curl::Err::ConnectionFailedError, Curl::Err::PartialFileError, 
           Curl::Err::RecvError, Curl::Err::HostResolutionError, 
           Timeout::Error, Errno::ECONNREFUSED, EOFError, Errno::ETIMEDOUT => ex
@@ -255,25 +268,26 @@ module Subscriptions
       end
     end
 
-    def self.cache_for(url, subscription_type)
+    def self.cache_for(url, function, subscription_type)
       return if config[:no_cache]
-      if result = Cache.where(url: url, subscription_type: subscription_type).first
-        puts "USE CACHE: #{url}\n\n" if development?
+
+      if result = Cache.where(url: url, function: function, subscription_type: subscription_type).first
+        puts "USE CACHE: [#{function}] #{url}\n\n" if development?
         result.content
       end
     end
 
-    def self.cache!(url, subscription, content)
-      puts "\nCACHE: #{url}\n\n" if development?
+    def self.cache!(url, function, subscription_type, content)
+      puts "\nCACHE: [#{function}] #{url}\n\n" if development?
       Cache.create!(
         url: url, 
-        subscription_type: subscription.subscription_type, 
-        interest_in: subscription.interest_in, 
+        subscription_type: subscription_type, 
+        function: function,
         content: content
       )
     end
 
-    # clear the cache for a subscription_type
+    # clear the cache for a subscription_type (everything related to one adapter)
     def self.uncache!(subscription_type)
       Cache.where(subscription_type: subscription_type).delete_all
     end

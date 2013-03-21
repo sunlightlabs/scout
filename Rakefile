@@ -159,7 +159,7 @@ namespace :subscriptions do
           errors = []
           start = Time.now
 
-          puts "Clearing the cache for #{subscription_type}..."
+          puts "Clearing all caches for #{subscription_type}..."
           Subscriptions::Manager.uncache! subscription_type
 
 
@@ -467,4 +467,10 @@ namespace :test do
     end
   end
 
+end
+
+desc "Clear all cached content."
+task :clear_cache => :environment do
+  Cache.delete_all
+  puts "Cleared cache."
 end

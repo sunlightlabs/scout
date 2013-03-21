@@ -77,6 +77,11 @@ namespace :deploy do
   task :disable_crontab, :roles => :app, :except => {:no_release => true} do
     run "cd #{current_path} && rake disable_crontab"
   end
+
+  desc "Clear cache"
+  task :clear_cache, :roles => :app, :except => {:no_release => true} do
+    run "cd #{current_path} && rake clear_cache"
+  end
   
   desc "Get shared files into position"
   task :shared_links, :roles => [:web, :app] do

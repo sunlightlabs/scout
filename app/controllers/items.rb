@@ -3,11 +3,12 @@
 get "/item/:item_type/:item_id" do
   interest = item_interest
   
-  erb :show, :layout => !pjax?, :locals => {
-    :interest => interest,
-    :subscriptions => Interest.subscriptions_for(interest),
-    :item_type => params[:item_type],
-    :item_id => params[:item_id]
+  erb :show, layout: !pjax?, locals: {
+    inline: false,
+    interest: interest,
+    subscriptions: Interest.subscriptions_for(interest),
+    item_type: params[:item_type],
+    item_id: params[:item_id]
   }
 end
 
@@ -26,10 +27,10 @@ get "/fetch/item/:item_type/:item_id" do
 
   share = partial "partials/share", engine: :erb
 
-  results = erb :"subscriptions/#{subscription_type}/_show", :layout => false, :locals => {
-    :item => item,
-    :interest => interest,
-    :item_type => item_type
+  results = erb :"subscriptions/#{subscription_type}/_show", layout: false, locals: {
+    item: item,
+    interest: interest,
+    item_type: item_type
   }
 
   json 200, {share: share, results: results}
