@@ -225,7 +225,7 @@ class RemoteTest < Test::Unit::TestCase
   end
 
   # user account exists, but has different service
-  def test_service_sync_wrong_service
+  def test_service_sync_service_for_native_user
     # a native Scout user
     email = "test@example.com"
     user = create :user, email: email
@@ -282,6 +282,71 @@ class RemoteTest < Test::Unit::TestCase
     created = user.interests.asc(:_id).last
     assert_equal created.in, item_id
     assert_equal created.item_type, item_type
+
+    
+    # pretend an hour has passed
+
+    user.interests.each do |interest|
+      interest.update_attribute :updated_at, 1.hour.ago
+    end
+
+    
+    # now remove the first interest
+
+    remove_interest2 = {
+      'active' => false,
+      'changed_at' => Time.now,
+
+      'interest_type' => "item",
+      'item_type' => item_type,
+      'item_id' => item_id
+    }
+
+    post "/remote/service/sync", {
+      email: email,
+      service: service,
+      secret_key: Environment.services[service]['secret_key'],
+      notifications: notifications,
+      interests: [remove_interest2]
+    }.to_json
+
+    assert_response 201
+
+    assert_equal 0, json_response['actions']['added']
+    assert_equal 1, json_response['actions']['removed']
+
+    user = User.where(email: email).first
+    assert_equal 1, user.interests.count
+    assert_equal interest1.in, user.interests.first.in
+
+    
+    # now, remove the *original* native interest, through the sync endpoint
+    # this is going to be possible for now.
+
+    remove_interest1 = {
+      'active' => false,
+      'changed_at' => Time.now,
+
+      'interest_type' => "item",
+      'item_type' => interest1.item_type,
+      'item_id' => interest1.in
+    }
+
+    post "/remote/service/sync", {
+      email: email,
+      service: service,
+      secret_key: Environment.services[service]['secret_key'],
+      notifications: notifications,
+      interests: [remove_interest1]
+    }.to_json
+
+    assert_response 201
+
+    assert_equal 0, json_response['actions']['added']
+    assert_equal 1, json_response['actions']['removed']
+
+    user = User.where(email: email).first
+    assert_equal 0, user.interests.count    
   end
 
   # bad email, let's say
