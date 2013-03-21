@@ -19,7 +19,7 @@ class ApiKey
   after_save :mark_user
 
   def self.sync_with_user!(key, user)
-    old_user = User.where(:api_key => key.key).first
+    old_user = User.where(api_key: key.key).first
 
     # if the key changed hands for some reason, strip the old user of their key
     if old_user and (user != old_user)
