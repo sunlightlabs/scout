@@ -62,7 +62,9 @@ get "/fetch/item/:item_type/:item_id/:subscription_type" do
   valid_item
 
   interest = item_interest
-  subscription = Interest.subscription_for interest, params[:subscription_type]
+
+  # pass regenerate=true flag because we don't need the saved subscription, even if there is one
+  subscription = Interest.subscription_for interest, params[:subscription_type], true
 
   # todo: this comes back nil as a race condition when occurring in parallel with a follow action
   items = subscription.search
