@@ -239,6 +239,8 @@ module Subscriptions
       begin
         if body = cache_for(url, :find, adapter_type)
           response = ::Oj.load body, mode: :compat
+        elsif options[:cache_only]
+          return nil
         else
           body = download(url)
           response = ::Oj.load body, mode: :compat

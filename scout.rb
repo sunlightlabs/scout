@@ -100,6 +100,16 @@ helpers do
   def logged_in?
     !current_user.nil?
   end
+
+  def crawler?
+    ["googlebot", "twitterbot", "facebookexternalhit", "msnbot"].each do |agent|
+      if request.env['HTTP_USER_AGENT'] =~ /#{agent}/i
+        return true
+      end
+    end
+
+    false
+  end
   
   def current_user
     @current_user ||= (session['user_id'] ? User.find(session['user_id']) : nil)

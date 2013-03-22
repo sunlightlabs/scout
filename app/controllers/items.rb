@@ -2,9 +2,31 @@
 
 get "/item/:item_type/:item_id" do
   interest = item_interest
-  
+
+  item_type = params[:item_type].strip
+  item_id = params[:item_id].strip
+  subscription_type = item_types[item_type]['adapter']
+
+  if item = Subscriptions::Manager.find(subscription_type, item_id, {cache_only: !crawler?})
+    interest = item_interest
+
+    content = erb :"subscriptions/#{subscription_type}/_show", layout: false, locals: {
+      item: item,
+      interest: interest,
+      item_type: item_type
+    }
+    
+    share = partial "partials/share", engine: :erb
+  else
+    content = nil
+    share = nil
+  end
+
   erb :show, layout: !pjax?, locals: {
-    inline: false,
+    # if blank, will be ajaxed in later at the /fetch endpoint
+    content: content, 
+    share: share,
+
     interest: interest,
     subscriptions: Interest.subscriptions_for(interest),
     item_type: params[:item_type],

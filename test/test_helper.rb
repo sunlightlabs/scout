@@ -105,6 +105,18 @@ module TestHelper
       mock_response url, fixture
     end
 
+    def cache_item(item_id, item_type)
+      subscription_type = item_types[item_type]['adapter']
+      
+      fixture = "#{subscription_type}/item/#{item_id}"
+      file = "test/fixtures/#{fixture}.json"
+      content = File.read file
+
+      url = Subscription.adapter_for(subscription_type).url_for_detail item_id
+
+      Subscriptions::Manager.cache! url, :find, subscription_type, content
+    end
+
     # helper helpers
     class Anonymous; extend Helpers::Routing; end
     def routing; Anonymous; end

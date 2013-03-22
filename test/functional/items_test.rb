@@ -5,6 +5,44 @@ class ItemsTest < Test::Unit::TestCase
   include TestHelper::Methods
   include FactoryGirl::Syntax::Methods
 
+  def test_show_normally_fetches_nothing
+    item_id = "hr4192-112"
+    item_type = "bill"
+
+    mock_item item_id, item_type
+    assert_equal 0, Cache.count
+
+    get "/item/#{item_type}/#{item_id}"
+    assert_response 200
+
+    assert_not_match /Due Process/, last_response.body
+  end
+
+  def test_show_when_cached_renders_directly
+    item_id = "hr4192-112"
+    item_type = "bill"
+
+    cache_item item_id, item_type
+    assert_equal 1, Cache.where(subscription_type: "federal_bills").count
+
+    get "/item/#{item_type}/#{item_id}"
+    assert_response 200
+
+    assert_match /Due Process/, last_response.body
+  end
+
+  def test_show_with_bot_fetches_and_renders_directly
+    item_id = "hr4192-112"
+    item_type = "bill"
+
+    mock_item item_id, item_type
+    assert_equal 0, Cache.count
+
+    get "/item/#{item_type}/#{item_id}", {}, {"HTTP_USER_AGENT" => "Googlebot"}
+    assert_response 200
+
+    assert_match /Due Process/, last_response.body
+  end
 
   def test_fetch_item_adapter_contents
     item_id = "hr4192-112"

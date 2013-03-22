@@ -1,5 +1,8 @@
 <% content_for :sidebar_right do %>
-  <div class="module sharing" style="display: none">
+  <div class="module sharing">
+    <% if share.present? %>
+      <%= share %>
+    <% end %>
   </div>
 
   <% if show_data? %>
@@ -17,6 +20,8 @@
 
 <div class="entry contentArea left <%= item_type %>">
 
+  <%# hidden by default %>
+
   <div class="loading">
       <span>Fetching...</span>
   </div>
@@ -25,8 +30,12 @@
       Error loading information.
   </div>
 
+
+  <%# shown by default %>
   <div class="content">
-      <!-- load in content -->
+    <% if content.present? %>
+      <%= content %>
+    <% end %>
   </div>
 
   <% if subscriptions.any? %>
@@ -62,37 +71,43 @@
 
 <script type="text/javascript">
 
-    var item_type = "<%= h item_type %>";
-    var item_id = "<%= h item_id %>";
+  var item_type = "<%= h item_type %>";
+  var item_id = "<%= h item_id %>";
 
-    $(function() {
-        var container = $(".entry.contentArea");
+  var inline = <%= content.present? ? "true" : "false" %>;
 
-        container.find(".loading").show();
-        container.find(".error").hide();
-        container.find(".content").hide();
+  $(inline ? fetchRelated : fetchEverything);
 
-        $.get("/fetch" + window.location.pathname, {}, function(data) {
-          window.data = data;
-            container.find(".loading").hide();
-            container.find(".content").show().html(data.results);
+  function fetchEverything() {
+    var container = $(".entry.contentArea");
+    container.find(".loading").show();
+    container.find(".content").hide();
 
-            initializeControls();
+    $.get("/fetch" + window.location.pathname, {}, function(data) {
+      window.data = data;
+      container.find(".loading").hide();
+      container.find(".content").show().html(data.results);
 
-            <% if logged_in? and interest.new_record? and (params[:follow] == "now") %>
-              follow();
-            <% end %>
+      initializeControls();
 
-            $(".module.sharing").show().html(data.share);
+      <% if logged_in? and interest.new_record? and (params[:follow] == "now") %>
+        follow();
+      <% end %>
 
-            $(".details .module.of2").each(function(i, elem) {
-              fetchStream($(elem).data("subscription_type"));
-            });
-        }).error(function() {
-            container.find(".loading").hide();
-            container.find(".error").show();
-        });
+      $(".module.sharing").show().html(data.share);
+
+      fetchRelated();
+    }).error(function() {
+      container.find(".loading").hide();
+      container.find(".error").show();
     });
+  }
+
+  function fetchRelated() {
+    $(".details .module.of2").each(function(i, elem) {
+      fetchStream($(elem).data("subscription_type"));
+    });
+  }
 
   function initializeControls() {
     $("button.follow").hide();

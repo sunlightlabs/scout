@@ -312,6 +312,7 @@ strong {
 
 div.error {
     color: #C13445; padding: 10px 0;
+    display: none;
 }
 
 
@@ -981,7 +982,7 @@ div.share-buttons td {padding-right: 5px;}
 }
 
 .feed_preview .loading span, .feed_preview .error span, .feed_preview.empty span,
-.entry .loading, .results .loading span, .results .error span, .results .empty span, .results .special span {
+.entry .loading span, .results .loading span, .results .error span, .results .empty span, .results .special span {
   color: #444; 
   font-size: 110%;
   display: block;
