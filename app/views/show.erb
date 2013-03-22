@@ -76,9 +76,9 @@
 
   var inline = <%= content.present? ? "true" : "false" %>;
 
-  $(inline ? fetchRelated : fetchEverything);
+  $(inline ? onLoadContent : loadContent);
 
-  function fetchEverything() {
+  function loadContent() {
     var container = $(".entry.contentArea");
     container.find(".loading").show();
     container.find(".content").hide();
@@ -87,23 +87,22 @@
       window.data = data;
       container.find(".loading").hide();
       container.find(".content").show().html(data.results);
+      $(".module.sharing").html(data.share);
 
-      initializeControls();
-
-      <% if logged_in? and interest.new_record? and (params[:follow] == "now") %>
-        follow();
-      <% end %>
-
-      $(".module.sharing").show().html(data.share);
-
-      fetchRelated();
+      onLoadContent();
     }).error(function() {
       container.find(".loading").hide();
       container.find(".error").show();
     });
   }
 
-  function fetchRelated() {
+  function onLoadContent() {
+    initializeControls();
+
+    <% if logged_in? and interest.new_record? and (params[:follow] == "now") %>
+      follow();
+    <% end %>
+
     $(".details .module.of2").each(function(i, elem) {
       fetchStream($(elem).data("subscription_type"));
     });

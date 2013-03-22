@@ -64,6 +64,7 @@ get "/fetch/item/:item_type/:item_id/:subscription_type" do
   interest = item_interest
   subscription = Interest.subscription_for interest, params[:subscription_type]
 
+  # todo: this comes back nil as a race condition when occurring in parallel with a follow action
   items = subscription.search
 
   if items.is_a?(Hash)
