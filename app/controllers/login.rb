@@ -63,7 +63,7 @@ get '/account/password/forgot' do
 end
 
 post '/account/password/forgot' do
-  unless params[:email] and user = User.where(:email => params[:email].strip).first
+  unless params[:email] and user = User.where(email: params[:email].strip).first and user.email.present?
     flash[:forgot] = "No account found by that email."
     redirect "/login" and return
   end
@@ -73,7 +73,7 @@ post '/account/password/forgot' do
 
   # email the user with a link including the token
   subject = "Request to reset your password"
-  body = erb :"account/mail/reset_password", :layout => false, :locals => {:user => user}
+  body = erb :"account/mail/reset_password", layout: false, locals: {user: user}
 
   unless user.save and Email.deliver!("Password Reset Request", user.email, subject, body)
     flash[:forgot] = "Your account was found, but there was an error actually sending the reset password email. Try again later, or write us and we can try to figure out what happened."
