@@ -120,7 +120,7 @@ module Subscriptions
         "#{state_map[interest.data['state'].upcase]} - #{interest.data['bill_id']}"
       end
 
-      def self.interest_subtitle(interest)
+      def self.interest_title(interest)
         interest.data['+short_title'] || interest.data['title']
       end
 

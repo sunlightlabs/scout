@@ -9,6 +9,7 @@ get "/item/:item_type/:item_id" do
 
   if item = Subscriptions::Manager.find(subscription_type, item_id, {cache_only: !crawler?})
     interest = item_interest
+    interest.data = item.data # required for the interest to know its own title
 
     content = erb :"subscriptions/#{subscription_type}/_show", layout: false, locals: {
       item: item,
@@ -17,15 +18,20 @@ get "/item/:item_type/:item_id" do
     }
     
     share = partial "partials/share", engine: :erb
+    title = interest.title
   else
     content = nil
     share = nil
+    title = nil
   end
 
   erb :show, layout: !pjax?, locals: {
     # if blank, will be ajaxed in later at the /fetch endpoint
     content: content, 
     share: share,
+
+    # only used if it's cached or for a spider
+    title: title,
 
     interest: interest,
     subscriptions: Interest.subscriptions_for(interest),

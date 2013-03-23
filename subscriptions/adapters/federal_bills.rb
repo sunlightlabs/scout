@@ -133,7 +133,7 @@ module Subscriptions
         "#{code} #{interest.data['number']}"
       end
 
-      def self.interest_subtitle(interest)
+      def self.interest_title(interest)
         interest.data['short_title'] || interest.data['official_title']
       end
       

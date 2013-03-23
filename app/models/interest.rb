@@ -67,6 +67,9 @@ class Interest
     self.in_normal = Search.normalize self.query
   end
 
+  def title
+    Subscription.adapter_for(item_types[self.item_type]['adapter']).interest_title self
+  end
 
   def item?
     interest_type == "item"

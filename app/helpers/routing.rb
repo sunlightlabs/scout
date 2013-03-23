@@ -44,8 +44,8 @@ module Helpers
           filters_short interest.subscriptions.first
         end
       elsif interest.item?
-        if interest_adapter(interest).respond_to?(:interest_subtitle)
-          interest_adapter(interest).interest_subtitle interest
+        if interest_adapter(interest).respond_to?(:interest_title)
+          interest_adapter(interest).interest_title interest
         end
       elsif interest.feed?
         interest.data['description']
