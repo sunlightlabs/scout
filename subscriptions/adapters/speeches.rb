@@ -72,6 +72,10 @@ module Subscriptions
         url
       end
 
+      def self.interest_title(interest)
+        interest.data['title']
+      end
+
       def self.search_name(subscription)
         "Speeches in Congress"
       end
