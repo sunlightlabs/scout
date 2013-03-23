@@ -143,6 +143,8 @@ module Subscriptions
     
     # function is one of [:search, :initialize, :check]
     # options hash can contain epheremal modifiers for search (right now just a 'page' parameter)
+    # 
+      # cache_only: return nil if the object is not present, do not hit the network
     def self.poll(subscription, function = :search, options = {})
       adapter = subscription.adapter
       url = adapter.url_for subscription, function, options
@@ -175,6 +177,12 @@ module Subscriptions
           if (function == :search) and (body = cache_for(url, :search, subscription.subscription_type))
             # should be guaranteed to work
             response = ::Oj.load body, mode: :compat
+
+          # if the requestor does not want to hit the network, stop here
+          elsif options[:cache_only]
+            puts "NO CACHE, returning nothing" if !test?
+            return nil
+
           else
             body = download url
             response = ::Oj.load body, mode: :compat

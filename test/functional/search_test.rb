@@ -5,6 +5,67 @@ class SearchTest < Test::Unit::TestCase
   include TestHelper::Methods
   include FactoryGirl::Syntax::Methods
 
+  def test_search_page_normally_shows_nothing
+    query = "environment"
+    search_type = "federal_bills"
+
+    interest = Interest.for_search nil, search_type, query, "simple"
+    interest.ensure_subscriptions
+
+    interest.subscriptions.each do |subscription|
+      # don't mock
+      # don't cache
+    end
+    
+    get "/search/#{search_type}/#{query}"
+    assert_response 200
+
+    assert_not_match /Congressional Research Service/i, last_response.body
+  end
+
+  def test_search_when_cached_renders_directly
+    query = "environment"
+    search_type = "federal_bills"
+
+    interest = Interest.for_search nil, search_type, query, "simple"
+    interest.ensure_subscriptions
+
+    interest.subscriptions.each do |subscription|
+      # mock_search subscription, :search, page: 1, per_page: 20
+      # cache, no need to mock
+      cache_search subscription
+    end
+
+    get "/search/#{search_type}/#{query}"
+    assert_response 200
+
+    # title of bill in federal_bills search
+    assert_match /Congressional Research Service/i, last_response.body
+
+    # I'd like to test on "all", but this test would have to be updated 
+    # every time new info was added, which is silly
+  end
+
+  def test_search_with_bot_fetches_and_renders_directly
+    query = "environment"
+    search_type = "federal_bills"
+
+    interest = Interest.for_search nil, search_type, query, "simple"
+    interest.ensure_subscriptions
+
+    interest.subscriptions.each do |subscription|
+      mock_search subscription, :search, page: 1, per_page: 20
+      # not cached, but mocked because we will pretend to be googlebot and force it to fetch from network
+    end
+
+
+    get "/search/#{search_type}/#{query}", {}, {"HTTP_USER_AGENT" => "Googlebot"}
+    assert_response 200
+
+    # title of bill in federal_bills search
+    assert_match /Congressional Research Service/i, last_response.body
+  end
+
   def test_subscribe_to_searches_by_plain_keyword
     user = create :user
     query = "environment"

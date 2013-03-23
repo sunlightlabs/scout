@@ -76,7 +76,6 @@ module TestHelper
       interest
     end
 
-
     # mock helpers for faking remote content
 
     def mock_response(url, fixture)
@@ -92,10 +91,19 @@ module TestHelper
       "#{subscription.subscription_type}/#{subscription.interest_in}/#{function}"
     end
 
-    def mock_search(subscription, function = :search)
+    def mock_search(subscription, function = :search, options = {})
       fixture = fixture_path subscription, function
-      url = subscription.adapter.url_for subscription, function, {}
+      url = subscription.adapter.url_for subscription, function, options
       mock_response url, fixture
+    end
+
+    def cache_search(subscription, function = :search)
+      fixture = fixture_path subscription, function
+      file = "test/fixtures/#{fixture}.json"
+      content = File.read file
+
+      url = subscription.adapter.url_for subscription, function, {page: 1, per_page: 20}
+      Subscriptions::Manager.cache! url, :search, subscription.subscription_type, content
     end
 
     def mock_item(item_id, item_type)

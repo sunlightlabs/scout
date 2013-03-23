@@ -225,6 +225,10 @@
         <!-- page parameter gets stored as data on ul.items -->
         <ul class="items <%= s.subscription_type %>">
           <!-- pages of data appended into here -->
+
+          <% if cached[s.subscription_type].present? %>
+            <%= cached[s.subscription_type] %>
+          <% end %>
         </ul>
 
         <div class="loading">
@@ -267,6 +271,13 @@
 
 <script type="text/javascript">
   
+  var cached = {
+    <% keys = cached.keys %>
+    <% keys.each do |key| %>
+      "<%= key %>": <%= cached[key].present? ? "true" : "false" %><%= "," unless key == keys.last %>
+    <% end %>
+  };
+
   $(function() {
     <% if !pjax? %> // run only once
       initializeControls();
@@ -278,8 +289,14 @@
       follow();
     <% end %>
 
+    // only use cached content on page initialization.
+    // if filters are added or changed, ignore the cached keys
     <% subscriptions.each do |subscription| %>
-      search("<%= h subscription.subscription_type %>");
+      var subscription_type = "<%= h subscription.subscription_type %>";
+      if (cached[subscription_type])
+        cachedSearch(subscription_type);
+      else
+        search(subscription_type);
     <% end %>
   });
 
@@ -511,6 +528,9 @@
     $.extend(search, searchOptions);
 
     // reset elements inside tab
+    // if (searchOptions.page == 1)
+      // container.find("ul.items").hide();
+
     container.find(".loading").show();
 
     var url = "/fetch/search/" + subscriptionType + "/" + query;
@@ -520,26 +540,36 @@
     $.get(url, search, function(data) {
       
       container.find(".loading").hide();
-      container.find("ul.items").append(data.html).show();
+      container.find("ul.items").append(data.html);
       
-      <% if subscription %>
-        $(document).off("scroll");
-        if (data.count > 0)
-          $(document).scroll(onScroll);
-      <% end %>
-
       $("ul.items").data("page", data.page);
 
       if (data.count == 0)
         container.find(".empty").show();
-      else if (data.count < 0) {
-        container.find(".loading").hide();
+      else if (data.count < 0)
         container.find(".error").show();
-      }
+
+      onSearch(subscriptionType);
     }).error(function() {
       container.find(".loading").hide();
       container.find(".error").show();
     });
+  }
+
+  // can happen only once, for page 1, on initialization
+  function cachedSearch(subscriptionType) {
+    $("ul.items").data("page", 1);
+    onSearch(subscriptionType);
+  }
+
+  function onSearch(subscriptionType) {
+    <% if subscription %>
+      // if there's only one search, allow infinite scroll
+      $(document).off("scroll");
+      var count = $("ul.items li").size();
+      if (count > 0)
+        $(document).scroll(onScroll);
+    <% end %>
   }
 
   // set/re-set after a page of results come back

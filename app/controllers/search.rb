@@ -8,11 +8,32 @@ get '/search/:subscription_type/:query/?:query_type?' do
   interest = search_interest_for query, params[:subscription_type]
   subscriptions = Interest.subscriptions_for interest
 
+
+  # see if we have cached content for any of these
+  cached = {}
+
+  subscriptions.each do |subscription|
+    type = subscription.subscription_type
+    if results = subscription.search(page: 1, per_page: 20, cache_only: !crawler?)
+      cached[type] = erb :"search/items", layout: false, locals: {
+        items: results, 
+        subscription: subscription,
+        interest: interest,
+        query: query,
+        sole: (subscriptions.size  == 1),
+        page: 1,
+        per_page: (subscriptions.size == 1) ? 20 : 2 # per_page cutoff at the client level
+      }
+    end
+  end
+
   erb :"search/search", layout: !pjax?, locals: {
     interest: interest,
 
     subscriptions: subscriptions,
     subscription: (subscriptions.size == 1 ? subscriptions.first : nil),
+
+    cached: cached,
 
     related_interests: related_interests(interest),
     query: query,
