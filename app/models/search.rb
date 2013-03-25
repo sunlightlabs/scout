@@ -76,6 +76,9 @@ class Search
     string = string.strip
     string = string.gsub "\"", "" # can be used later, after quoting
 
+    # strip out dots before match
+    string = string.gsub "\.", ""
+
     # this was provided by Open States in January of 2013
     # occasionally prefixes get added, so it could merit updating, 
     # but probably good enough to start
@@ -91,6 +94,11 @@ class Search
     else
       nil
     end
+  end
+
+  def self.federal_bill_for(string)
+    string = string.strip
+    string = string.gsub "\"", "" # can be used later, after quoting
   end
 
   def self.cite_standard(citation)
