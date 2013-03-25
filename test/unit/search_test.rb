@@ -41,4 +41,9 @@ class SearchTest < Test::Unit::TestCase
     assert_equal "50_usc_404o-1_a", Search.usc_check("section 404o-1(a) of title 50")
   end
 
+  def test_state_bill_detect
+    assert_equal "SB 112", Search.state_bill_for("SB 112")
+    assert_equal "SB 112", Search.state_bill_for(" SB   112   ")
+  end
+
 end

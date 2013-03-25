@@ -30,13 +30,20 @@ module Subscriptions
         # state_bills don't support citations
         if subscription.query['citations'].any?
           query = subscription.interest_in
+          return nil unless query.present?
+          url << "&q=#{CGI.escape query}"
+
         else
           query = subscription.query['query']
+          return nil unless query.present?
+
+          # if there's a state bill code, extract it and apply the specific bill_ids__in filter
+          if state_bill = Search.state_bill_for(query)
+            url << "&bill_id__in=#{state_bill}"
+          else
+            url << "&q=#{CGI.escape query}"
+          end
         end
-
-        return nil unless query.present?
-
-        url << "&q=#{CGI.escape query}"
 
 
         # filters

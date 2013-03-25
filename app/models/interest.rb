@@ -197,6 +197,9 @@ class Interest
       query.merge! Search.parse_simple(self.in)
     end
 
+    # citations should at least be an empty array (could remove this req)
+    query['citations'] ||= []
+    
     query
   end
 

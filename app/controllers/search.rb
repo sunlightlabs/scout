@@ -146,9 +146,9 @@ helpers do
   def related_interests(interest)
     if logged_in?
       current_user.interests.where(
-        :in_normal => interest.in_normal, 
-        :interest_type => "search",
-        :query_type => query_type
+        in_normal: interest.in_normal, 
+        interest_type: "search",
+        query_type: query_type
       )
     end
   end

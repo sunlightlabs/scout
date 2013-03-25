@@ -7,12 +7,16 @@ require 'lucene_query_parser'
 class Search
 
   # run term through a gauntlet of citation checks
+  # 'citation_id' is the slug for a cite as defined by github.com/unitedstates/citation
+  # 'citation_type' is the slug for a cite format as defined by github.com/unitedstates/citation
+  # 'original' returned for adapters not supporting citations
   def self.citation_for(term)
+
     if citation_id = usc_check(term)
       {
         'citation_id' => citation_id, 
         'citation_type' => 'usc',
-        'original' => term # for adapters not supporting citations
+        'original' => term 
       }
     elsif citation_id = law_check(term)
       {
@@ -68,6 +72,27 @@ class Search
     end
   end
 
+  def self.state_bill_for(string)
+    string = string.strip
+    string = string.gsub "\"", "" # can be used later, after quoting
+
+    # this was provided by Open States in January of 2013
+    # occasionally prefixes get added, so it could merit updating, 
+    # but probably good enough to start
+    bill_prefixes = %w{
+      A ACA HR HP SMR JR RCS HJ ACR B RC HM HB HC MIS HF RCC SCM PS LB 
+      PC SCA HMR CAS LR CER JSR HJRCA K CA SCR HCR PR HCMR AB E CACR SJR 
+      H AJR J AM L SC S AR RKS SJM RS HCO PET HCM SJRCA HJR SR SP JRH SJ 
+      R JRS SN SM HJM SB RKC SF
+    }
+
+    if parts = string.scan(/^(#{bill_prefixes.join "|"})\s*([\d\-]+)$/i).first
+      [parts[0], parts[1]].join(" ").upcase
+    else
+      nil
+    end
+  end
+
   def self.cite_standard(citation)
     citation_id = citation['citation_id']
     
@@ -83,17 +108,15 @@ class Search
     end
   end
 
-
   # Simple search phrase parsing
   # 1) checks if phrase is a citation
-  # 2) returns (0- or 1-element) array with found citations
-  # 3) returns quoted phrase, or nil if phrase was citation
+  #   a) if so, returns 1-element array with citation
+  # 2) else, returns quoted phrase, or nil if phrase was citation
   def self.parse_simple(phrase)
-    query = "\"#{phrase}\""
     if citation = citation_for(phrase)
       {'citations' => [citation]}
     else
-      {'query' => query, 'citations' => []}
+      {'query' => "\"#{phrase}\""}
     end
   end
 
@@ -191,7 +214,8 @@ class Search
   # takes in an interest's query hash as produced by parse_simple or parse_advanced
   def self.normalize(query)
     string = ""
-    if query['citations'].any?
+
+    if query['citations'] and query['citations'].any?
       # start with sorted citations, if any
       string << query['citations'].map do |cite|
         "#{cite['citation_type']}:#{cite['citation_id']}"
@@ -200,6 +224,10 @@ class Search
 
     if query['query'].present?
       string << " " + query['query']
+    end
+
+    if query['state_bill'].present?
+      string << " " + query['state_bill']
     end
 
     string.downcase.strip
