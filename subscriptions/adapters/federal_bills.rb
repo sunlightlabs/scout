@@ -28,7 +28,10 @@ module Subscriptions
         url = endpoint
 
         query = subscription.query['query']
-        if query.present?
+        federal_bill = Search.federal_bill_for(query)
+
+        # if it's a bill filter, will filter on bill_type and number
+        if query.present? and federal_bill.blank?
           url << "/bills/search?"
           url << "&query=#{CGI.escape query}"
 
@@ -37,6 +40,11 @@ module Subscriptions
           url << "&highlight.tags=,"
         else
           url << "/bills?"
+
+          if federal_bill.present?
+            url << "&bill_type=#{federal_bill[0]}"
+            url << "&number=#{federal_bill[1]}"
+          end
         end
 
         if subscription.query['citations'].any?

@@ -44,6 +44,20 @@ class SearchTest < Test::Unit::TestCase
   def test_state_bill_detect
     assert_equal "SB 112", Search.state_bill_for("SB 112")
     assert_equal "SB 112", Search.state_bill_for(" SB   112   ")
+    assert_equal "SB 112", Search.state_bill_for("S.B. 112")
+    assert_equal "SB 112", Search.state_bill_for("S.B 112")
+    assert_equal "SB 112", Search.state_bill_for("SB. 112")
+    assert_equal "HB 13-1043", Search.state_bill_for("HB. 13-1043")
+  end
+
+  def test_federal_bill_detect
+    assert_equal ["hr", "3590"], Search.federal_bill_for("H.R. 3590")
+    assert_equal ["hr", "3590"], Search.federal_bill_for("HR 3590")
+    assert_equal ["hr", "3590"], Search.federal_bill_for("hr3590")
+    assert_equal ["hres", "49"], Search.federal_bill_for("  H.res 49   ")
+    assert_equal ["sconres", "1"], Search.federal_bill_for("sconres 1")
+    assert_equal ["sconres", "1"], Search.federal_bill_for("scres1")
+    assert_equal ["s", "74"], Search.federal_bill_for("s 74")
   end
 
 end

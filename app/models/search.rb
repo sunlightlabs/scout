@@ -76,8 +76,9 @@ class Search
     string = string.strip
     string = string.gsub "\"", "" # can be used later, after quoting
 
-    # strip out dots before match
+    # strip out spaces and dots before match
     string = string.gsub "\.", ""
+    string = string.gsub " ", ""
 
     # this was provided by Open States in January of 2013
     # occasionally prefixes get added, so it could merit updating, 
@@ -89,7 +90,7 @@ class Search
       R JRS SN SM HJM SB RKC SF
     }
 
-    if parts = string.scan(/^(#{bill_prefixes.join "|"})\s*([\d\-]+)$/i).first
+    if parts = string.scan(/^(#{bill_prefixes.join "|"})([\d\-]+)$/i).first
       [parts[0], parts[1]].join(" ").upcase
     else
       nil
@@ -99,6 +100,22 @@ class Search
   def self.federal_bill_for(string)
     string = string.strip
     string = string.gsub "\"", "" # can be used later, after quoting
+
+    # strip out spaces and dots before match
+    string = string.gsub "\.", ""
+    string = string.gsub " ", ""
+
+    bill_prefixes = %w{
+      hr hres hcres hconres hjres s sres scres sconres sjres
+    }
+
+    if parts = string.scan(/^(#{bill_prefixes.join "|"})\s*(\d+)$/i).first
+      bill_type = parts[0].downcase.gsub "cres", "conres"
+      number = parts[1]
+      [bill_type, number]
+    else
+      nil
+    end
   end
 
   def self.cite_standard(citation)
