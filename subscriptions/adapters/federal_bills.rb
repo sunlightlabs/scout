@@ -28,10 +28,10 @@ module Subscriptions
         url = endpoint
 
         query = subscription.query['query']
-        federal_bill = Search.federal_bill_for(query)
+        federal_bill = Search.federal_bill_for(query) if query
 
         # if it's a bill filter, will filter on bill_type and number
-        if query.present? and federal_bill.blank?
+        if query.present?
           url << "/bills/search?"
           url << "&query=#{CGI.escape query}"
 
