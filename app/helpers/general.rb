@@ -16,7 +16,7 @@ module Helpers
       else
         Subscription.adapter_for(interest.search_type).search_name nil
       end
-      "Scout - #{type} about \"#{interest.in}\""
+      "#{type} about \"#{interest.in}\" | Scout"
     end
 
     def query_size(query)
