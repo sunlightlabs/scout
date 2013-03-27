@@ -94,7 +94,7 @@ class SeenItem
     self.interest
 
     SeenItem.clean_document(self, SeenItem.public_json_fields).merge(
-      :interest => SeenItem.clean_document(self.interest, Interest.public_json_fields)
+      interest: SeenItem.clean_document(self.interest, Interest.public_json_fields)
     )
   end
 
