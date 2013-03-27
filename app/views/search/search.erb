@@ -1,6 +1,6 @@
 <% unless pjax? %>
   <% content_for :title do %><%= title %><% end %>
-  <% content_for :meta do %>
+  <% content_for :head do %>
     <meta property="og:title" content="<%= form_escape title %>" />
     <meta property="og:description" content="<%= form_escape title %>" />
   <% end %>
