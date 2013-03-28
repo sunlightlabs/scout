@@ -63,15 +63,15 @@
       function displayDocument(url) {
         if (isFirefox)
           $("iframe").attr("src", url);
-        else if (isChrome) {
+        else if (!isIE) {
           // cache-buster for CORS - without this, if someone were to have accessed this PDF first
           // from some other domain, Chrome caches the CORS headers that S3 returned for that other domain,
           // which are invalid for this one. S3's implementation of CORS returns an origin domain header
           // of the specific requesting domain, even if you've configured your bucket to support *.
           url += "?origin=" + window.location.hostname;
-          
+
           $("iframe").attr("src", "/document?filename=" + encodeURIComponent(url));
-        } else
+        } else // IE, just hide it
           $("iframe").hide();
       }
 
