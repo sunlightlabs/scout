@@ -2084,7 +2084,7 @@ a.ignore{
 /** document viewing **/
 
 iframe.document {
-  width: 650px; height: 800px;
+  width: 650px; height: 830px;
   margin: 30px auto;
   display: block;
 }
