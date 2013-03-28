@@ -19,6 +19,10 @@ module Subscriptions
         "Bills sponsored by #{interest.data['full_name']}"
       end
 
+      def self.interest_title(interest)
+        interest.data['full_name']
+      end
+
       def self.item_for(legislator)
         # created_at and updated_at are UTC, take them directly as such
         ['updated_at', 'created_at'].each do |field|
