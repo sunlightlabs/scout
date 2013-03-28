@@ -63,8 +63,10 @@
       function displayDocument(url) {
         if (isFirefox)
           $("iframe").attr("src", url);
-        else if (isChrome)
-          $("iframe").attr("src", "/document?filename=" + encodeURIComponent(url));
+        // else if (isChrome)
+        //   $("iframe").attr("src", "/document?filename=" + encodeURIComponent(url));
+        else
+          $("iframe").hide();
       }
 
       var url = $("a.pdf").attr("href");
