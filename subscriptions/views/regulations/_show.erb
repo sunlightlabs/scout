@@ -64,8 +64,8 @@
         if (isFirefox)
           $("iframe").attr("src", "/document?filename=" + encodeURIComponent(url));
           // $("iframe").attr("src", url);
-        // else if (isChrome)
-        //   $("iframe").attr("src", "/document?filename=" + encodeURIComponent(url));
+        else if (isChrome)
+          $("iframe").attr("src", "/document?filename=" + encodeURIComponent(url));
         else
           $("iframe").hide();
       }
