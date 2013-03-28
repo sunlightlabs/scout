@@ -32,7 +32,9 @@
 
       <li class="source">
         <% if regulation['pdf_url'] %>
-          <a href="<%= regulation['pdf_url'] %>">Original Text (PDF)</a>
+          <a class="pdf" href="<%= regulation['pdf_url'] %>">
+            Original Text (PDF)
+          </a>
         <% end %>
       </li>
       </ul>
@@ -53,5 +55,21 @@
     <p>
       Though it is an official document, it can theoretically be withdrawn before formal publication, and some details may not yet be available. <a href="https://www.federalregister.gov/learn/public-inspection-desk-2">Read more about pre-release documents.</a>
     </p>
+
+    <iframe class="document"></iframe>
+
+    <script type="text/javascript">
+
+      function displayDocument(url) {
+        if (isFirefox)
+          $("iframe").attr("src", url);
+        else if (isChrome)
+          $("iframe").attr("src", "/document?filename=" + encodeURIComponent(url));
+      }
+
+      var url = $("a.pdf").attr("href");
+      if (url) displayDocument(url);
+
+    </script>
   <% end %>
 </div>

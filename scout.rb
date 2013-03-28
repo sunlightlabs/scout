@@ -67,6 +67,10 @@ post '/error' do
   raise Exception.new("KABOOM.")
 end
 
+get '/document' do
+  erb :"documents/viewer", layout: false
+end
+
 not_found do
   erb :"404"
 end

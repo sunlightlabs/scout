@@ -26,11 +26,21 @@
     <link rel="stylesheet" href="/css/html5-reset.css" />
     <link rel="stylesheet" href="/css/main.css?<%= Time.now.to_i %>" />
   
-    <script> var isOldIE = false; </script>
+    <script>
+      var isOldIE = false;
+      var isIE = false;
+      var isChrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+      var isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+    </script>
+
+    <!--[if IE]>
+    <script>isIE = true;</script>
+    <![endif]-->
+
     <!--[if lt IE 9]>
     <script src="/js/html5.js"></script>
     <script src="https://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
-    <script> var isOldIE = true; </script>
+    <script>isOldIE = true;</script>
     <![endif]-->
 
     <link rel="shortcut icon" href="/favicon.ico">

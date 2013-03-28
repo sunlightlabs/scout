@@ -2079,3 +2079,12 @@ a.ignore{
 .about h3{
     margin-top: 25px;
 }
+
+
+/** document viewing **/
+
+iframe.document {
+  width: 650px; height: 800px;
+  margin: 30px auto;
+  display: block;
+}
