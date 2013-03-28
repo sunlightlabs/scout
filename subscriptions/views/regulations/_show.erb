@@ -62,7 +62,8 @@
 
       function displayDocument(url) {
         if (isFirefox)
-          $("iframe").attr("src", url);
+          $("iframe").attr("src", "/document?filename=" + encodeURIComponent(url));
+          // $("iframe").attr("src", url);
         // else if (isChrome)
         //   $("iframe").attr("src", "/document?filename=" + encodeURIComponent(url));
         else
