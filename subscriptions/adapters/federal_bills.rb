@@ -23,6 +23,8 @@ module Subscriptions
         fields = %w{ bill_id bill_type number congress
           short_title official_title summary
           introduced_on last_version last_version_on
+          sponsor.first_name sponsor.last_name sponsor.nickname
+          sponsor.name_suffix sponsor.title sponsor.party sponsor.state
         }
 
         url = endpoint
@@ -102,10 +104,11 @@ module Subscriptions
         end
         
         fields = %w{ 
-          bill_id bill_type number congress
-          sponsor urls
+          bill_id bill_type number congress urls
           short_title official_title summary
           introduced_on last_action_at last_version last_version_on
+          sponsor.first_name sponsor.last_name sponsor.nickname
+          sponsor.name_suffix sponsor.title sponsor.party sponsor.state
         }
 
         url = "#{endpoint}/bills?apikey=#{api_key}"
