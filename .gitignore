@@ -10,6 +10,7 @@
 /tmp
 /REVISION
 /TODO*
+/todo*
 /log
 
 *.kate-swp
