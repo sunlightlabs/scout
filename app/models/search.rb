@@ -58,7 +58,7 @@ class Search
       return nil
     end
 
-    [title, "usc", section, subsections].flatten.join "_"
+    ["usc", title, section, subsections].flatten.join "/"
   end
 
   def self.law_check(string)
@@ -66,7 +66,7 @@ class Search
     if parts = string.scan(/(pub(?:lic)?|priv(?:ate)?)\.? +l(?:aw)?\.?(?: +No\.?)? +(\d+)[-–]+(\d+)/i).first 
       type, congress, number = parts
       type = type.match(/^priv/i) ? "private" : "public"
-      [type, "law", congress, number].join "_"
+      ["law", type, congress, number].join "/"
     else
       nil
     end
@@ -122,13 +122,13 @@ class Search
     citation_id = citation['citation_id']
     
     if citation['citation_type'] == 'usc'
-      title, usc, section, *subsections = citation_id.split "_"
+      usc, title, section, *subsections = citation_id.split "/"
       base = "#{title} USC § #{section}"
       base << "(#{subsections.join(")(")})" if subsections.any?
       base
     elsif citation['citation_type'] == 'law'
       # subsections not supported
-      type, law, congress, number = citation_id.split "_"
+      law, type, congress, number = citation_id.split "/"
       "#{type.capitalize} Law #{congress}-#{number}"
     end
   end
