@@ -474,3 +474,33 @@ task :clear_cache => :environment do
   Cache.delete_all
   puts "Cleared cache."
 end
+
+
+# depends on misc/usc.json having the structure of the US Code
+# as output by the github.com/unitedstates/uscode project:
+#
+#   ./run structure --sections > usc.json
+
+desc "Load in the structure of the US Code."
+namespace :usc do
+  task :load => :environment do
+    only = ENV['title'] || nil
+
+    titles = MultiJson.load open("misc/usc.json")
+
+    titles.each do |title|
+      next if only and (title['number'].to_s != only.to_s)
+      next if title['number']["a"] # skip appendices, too complicated
+
+      title['subparts'].each do |section|
+        puts "[#{section['citation']}] Processing..."
+
+        cite = Citation.find_or_initialize_by citation_id: section['citation']
+        cite.description = section['name']
+        cite.usc['title'] = title['number']
+        cite.usc['section'] = section['number']
+        cite.save!
+      end
+    end
+  end
+end
