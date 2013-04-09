@@ -800,6 +800,8 @@ footer nav li{
     color: #aaa;
 }
 
+.searchParameters.simple p.cite span.usc_title {font-weight: bold;}
+
 .searchParameters.advanced .advanced {
     margin: 8px 0;
 }
@@ -844,9 +846,10 @@ footer nav li{
     font-family: "alternate-gothic-no-3-d", arial, 'helvetica Neue', sans-serif;
 }
 
-.searchParameters .category{
+.searchParameters .category {
     font-weight: bold;
 }
+
 .resultsIntro{
     background: #f5f6f3 url('/images/tinyborder.png') bottom left repeat-x;
     padding: 16px 10px 16px 0;

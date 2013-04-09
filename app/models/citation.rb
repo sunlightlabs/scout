@@ -4,6 +4,7 @@ class Citation
   include Mongoid::Timestamps
 
   field :citation_id
+  field :citation_type
   field :description
 
   # us code specific stuff

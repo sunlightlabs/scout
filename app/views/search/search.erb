@@ -92,10 +92,17 @@
       <div class="searchParameters <%= interest.query_type %>">
         <% if interest.query_type == "simple" %>
           <% if interest.query['citations'].any? %>
+            <% citation = interest.query['citations'].first %>
             <h2 class="smaller">
               <span class="citing">citing:</span>
-              <%= Search.cite_standard interest.query['citations'].first %>
+              <%= Search.cite_standard citation %>
             </h2>
+            <% if match = Citation.where(citation_id: citation['citation_id']).first %>
+              <p class="cite">
+                <%= cite_description match %>
+                (<a href="<%= cite_link citation %>" target="_blank">full text</a>)
+              </p>
+            <% end %>
           <% else %>
             <% name = interest_name interest %>
             <h2 class="<%= query_size name %>">
@@ -169,12 +176,11 @@
             </div>
           <% end %>
         <% end %>
-        in 
+        
         <% if interest.search_type == "all" %>
-          <span class="category">
-            Everything
-          </span>
+          <!-- nothing -->
         <% else %>
+          in
           <span class="category">
             <%= subscription.search_name %>
           </span> 

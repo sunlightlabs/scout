@@ -27,6 +27,28 @@ module Helpers
       title = "#{title} | Scout"
     end
 
+    # takes in a hash of citation details from the interest query builder
+    def cite_link(citation)
+      if citation['citation_type'] == "law"
+        law, type, congress, number = citation['citation_id'].split "/"
+        if type == "public"
+          "http://www.gpo.gov/fdsys/pkg/PLAW-#{congress}publ#{number}/pdf/PLAW-#{congress}publ#{number}.pdf"
+        else # private
+          "http://www.gpo.gov/fdsys/pkg/PLAW-#{congress}pvtl#{number}/pdf/PLAW-#{congress}pvtl#{number}.pdf"
+        end
+      else
+        usc, title, section, *subsections = citation['citation_id'].split "/"
+        "http://www.law.cornell.edu/uscode/text/#{title}/#{section}"
+      end
+    end
+
+    # this takes in a Citation instance
+    def cite_description(match)
+      if match.citation_type == "usc"
+        "<span class=\"usc_title\">#{match.usc['title_name']}</span>: #{match.description}"
+      end
+    end
+
     def query_size(query)
       if query.size < 30
         "smaller"
