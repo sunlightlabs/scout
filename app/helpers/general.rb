@@ -11,12 +11,20 @@ module Helpers
     end
 
     def page_title(interest)
-      type = if interest.search_type == "all"
-        "Everything"
+      if (interest.query_type == "simple") and (interest.query['citations'] and interest.query['citations'].any?)
+        name = Search.cite_standard interest.query['citations'].first
       else
-        Subscription.adapter_for(interest.search_type).search_name nil
+        name = interest.in
       end
-      "#{type} about \"#{interest.in}\" | Scout"
+
+      if interest.search_type == "all"
+        title = name
+      else
+        type = Subscription.adapter_for(interest.search_type).search_name nil
+        title = "#{type}: #{name}"
+      end
+
+      title = "#{title} | Scout"
     end
 
     def query_size(query)
