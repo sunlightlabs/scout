@@ -206,15 +206,18 @@
       <div class="clear"></div>
   	</div>
 
-    <% if interest.new_record? %>
-      <div class="resultsIntro">
-        <p>
+    
+    <div class="resultsIntro">
+      <p>
+        <% if interest.new_record? %>
           Create an alert to receive notifications of more results like these.
-        </p>
-        <span style="display: none" id="share-title"><%= interest_name(interest) %></span>
-        <%= partial "partials/share", engine: :erb %>
-      </div>
-    <% end %>
+        <% else %>
+          You are receiving notifications for these results.
+        <% end %>
+      </p>
+      <span style="display: none" id="share-title"><%= interest_name(interest) %></span>
+      <%= partial "partials/share", engine: :erb %>
+    </div>
   </div>
 
   <div class="clear"></div>
