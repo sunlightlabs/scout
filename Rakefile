@@ -506,3 +506,22 @@ namespace :usc do
     end
   end
 end
+
+# assumes usc already loaded, update the sitemap
+# saves a static file, using the production URL
+task :sitemap => :environment do
+  require 'big_sitemap'
+
+  BigSitemap.generate(base_url: "https://scout.sunlightfoundation.com", document_root: "public") do
+
+    # map of US Code searches/landings
+    Citation.where(citation_type: "usc").asc(:citation_id).each do |citation|
+      standard = Search.cite_standard citation.attributes
+      puts "[#{standard}] Adding to sitemap..."
+      add "/search/all/#{URI.escape standard}", change_frequency: :daily
+    end
+
+  end
+
+  puts "Saved sitemaps."
+end

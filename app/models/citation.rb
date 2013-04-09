@@ -13,4 +13,5 @@ class Citation
   validates_presence_of :citation_id
 
   index citation_id: 1
+  index citation_type: 1
 end

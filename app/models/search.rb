@@ -118,6 +118,7 @@ class Search
     end
   end
 
+  # takes in a hash with 'citation_id' and 'citation_type' fields
   def self.cite_standard(citation)
     citation_id = citation['citation_id']
     

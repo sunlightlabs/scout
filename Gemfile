@@ -26,6 +26,8 @@ gem 'twilio-rb', '2.2.0'
 gem 'rack', '1.4.1'
 gem 'rake', '0.9.2.2'
 
+gem 'big_sitemap'
+
 group :development do
   gem 'wirb'
   gem 'paint'

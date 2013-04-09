@@ -17,6 +17,7 @@ GEM
       multi_json (~> 1.0)
     backports (2.5.3)
     bcrypt-ruby (3.0.1)
+    big_sitemap (1.1.0)
     blankslate (2.1.2.4)
     builder (3.0.4)
     curb (0.8.1)
@@ -133,6 +134,7 @@ PLATFORMS
 
 DEPENDENCIES
   bcrypt-ruby (= 3.0.1)
+  big_sitemap
   curb (= 0.8.1)
   factory_girl
   feedbag (= 0.9.1)
