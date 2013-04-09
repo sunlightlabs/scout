@@ -497,8 +497,10 @@ namespace :usc do
 
         cite = Citation.find_or_initialize_by citation_id: section['citation']
         cite.description = section['name']
+        cite.citation_type = "usc"
         cite.usc['title'] = title['number']
         cite.usc['section'] = section['number']
+        cite.usc['title_name'] = title['name']
         cite.save!
       end
     end
