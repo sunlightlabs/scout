@@ -16,7 +16,7 @@ module Helpers
       [type, number, session, code, chamber]
     end
     
-    # standardized in accordance with http://www.gpoaccess.gov/bills/glossary.html
+    # standardized in accordance with http://www.gpo.gov/help/index.html#about_congressional_bills.htm
     def bill_type(short)
       {
         "hr" => "H.R.",
@@ -273,7 +273,7 @@ module Helpers
       }
     end
     
-    # adapted from http://www.gpoaccess.gov/bills/glossary.html
+    # adapted from http://www.gpo.gov/help/index.html#about_congressional_bills.htm
     def bill_version(code)
       {
         'ash' => "Additional Sponsors House",
