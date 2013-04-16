@@ -15,6 +15,7 @@
 
 *.kate-swp
 .DS_Store
+*.pyc
 
 /stats.rb
 /dump
