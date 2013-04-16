@@ -26,7 +26,7 @@ current_path = "%s/current" % home
 ## can be run only as part of deploy
 
 def checkout():
-  run('git clone -q -b %s %s %s && rm -r %s/.git' % (branch, repo, version_path, version_path))
+  run('git clone -q -b %s %s %s' % (branch, repo, version_path))
 
 def links():
   run("ln -s %s/config.yml %s/config/config.yml" % (shared_path, version_path))
@@ -59,7 +59,7 @@ def disable_crontab():
   run("cd %s && rake crontab:disable" % current_path)
 
 def start():
-  run("cd %s && unicorn -D -l %s/%s.sock -c unicorn.rb" % (username, current_path, shared_path))
+  run("cd %s && unicorn -D -l %s/%s.sock -c unicorn.rb" % (current_path, shared_path, username))
 
 def stop():
   run("kill `cat %s/unicorn.pid`" % shared_path)
@@ -79,3 +79,12 @@ def deploy():
   execute(make_current)
   execute(set_crontab)
   execute(restart)
+
+def deploy_cold():
+  execute(checkout)
+  execute(links)
+  execute(dependencies)
+  execute(create_indexes)
+  execute(make_current)
+  execute(set_crontab)
+  execute(start)
