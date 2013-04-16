@@ -7,7 +7,7 @@ branch = "master"
 repo = "git://github.com/sunlightlabs/scout.git"
 
 # default to staging, override with "fab [command] --set target=production"
-env.target = env.target or "staging"
+target = env.get('target', 'staging')
 
 if target == "staging":
   env.hosts = ["alarms@dupont"]
@@ -26,7 +26,7 @@ current_path = "%s/current" % home
 ## can be run only as part of deploy
 
 def checkout():
-  run('git clone -q -b %s %s %s' % (branch, repo, version_path))
+  run('git clone -q -b %s %s %s && rm -r %s/.git' % (branch, repo, version_path, version_path))
 
 def links():
   run("ln -s %s/config.yml %s/config/config.yml" % (shared_path, version_path))
@@ -53,7 +53,7 @@ def prune_releases():
 ## can be run on their own
 
 def set_crontab():
-  run("cd %s && rake crontab:set environment=%s current_path=%s" % (current_path, environment, current_path))
+  run("cd %s && rake crontab:set environment=%s current_path=%s" % (current_path, target, current_path))
 
 def disable_crontab():
   run("cd %s && rake crontab:disable" % current_path)
@@ -69,7 +69,7 @@ def restart():
 
 def clear_cache():
   run("cd %s && rake clear_cache" % current_path)
-  
+
 
 def deploy():
   execute(checkout)
