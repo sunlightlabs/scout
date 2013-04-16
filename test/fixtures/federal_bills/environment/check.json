@@ -18,6 +18,13 @@
           },
         "last_version_on" : "2012-07-10",
         "number" : 727,
+        "sponsor": {
+          "title": "Rep",
+          "state": "WI",
+          "party": "D",
+          "first_name": "Gwen",
+          "last_name": "Moore"
+        },
         "official_title" : "Directing the Clerk of the House of Representatives to provide members of the public with Internet access to certain Congressional Research Service publications, and for other purposes.",
         "search" : { "highlight" : { "summary" : [ "infringe the copyright of a protected work; and (2) make any changes that the Director determines are necessary to ensure that information in the database is accurate and current. Requires each official public website of a House Member, House committee, or joint committee of Congress to permit public use to obtain the information contained in such database to the same extent as House users may obtain such information through the CRS website." ],
                 "text" : [ "infringe the copyright of a work protected under title 17, United States Code; and (C) make any changes in the information included in the database (including from the issue brief, product, or report itself) that the Director determines necessary to ensure that the information is accurate and current, except that if the Clerk makes any such change with respect to any material in the database, the Clerk shall indicate in the database (with such notation as the Clerk considers appropriate) that more current" ]
@@ -43,6 +50,13 @@
           },
         "last_version_on" : "2012-06-11",
         "number" : 5882,
+        "sponsor": {
+          "title": "Rep",
+          "state": "WI",
+          "party": "D",
+          "first_name": "Gwen",
+          "last_name": "Moore"
+        },
         "official_title" : "Making appropriations for the Legislative Branch for the fiscal year ending September 30, 2013, and for other purposes.",
         "search" : { "highlight" : { "summary" : [ "expenses, the Copyright Office, the Congressional Research Service (CRS), and Books for the Blind and Physically Handicapped; (2) the GPO for congressional printing and binding (including transfer of funds); (3) the GPO for the Office of Superintendent of Documents (including transfer of funds); (4) the GPO Revolving Fund; (5) GAO for salaries and expenses; and (6) the Open World Leadership Center Trust Fund. (Sec. 1401) Establishes an upper limit of $178.958 million for the FY2013 obligational authority" ],
                 "text" : [ "\"International Copyright Institute\" in the Copyright Office of the Library of Congress for the purpose of training nationals of developing countries in intellectual property laws and policies: Provided further, That not more than $4,250 may be expended, on the certification of the Librarian of Congress, in connection with official representation and reception expenses for activities of the International Copyright Institute and for copyright delegations, visitors, and seminars: Provided further, That notwithstanding",
