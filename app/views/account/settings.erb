@@ -5,7 +5,9 @@
     <%= flash_for [:user] %>
     <%= errors_for user %>
 
-    <% form_for user, "/account/settings", :method => "put" do |f| %>
+    <form action="/account/settings" method="post">
+      <input type="hidden" name="_method" value="put" />
+
       <div class="module user">
         <ul>
           <li class="email">
@@ -49,20 +51,24 @@
         </ul>
       </div>
       <div class="module updateSettings">
-            <button type="submit">
-                <span>Update Account Info</span>
-            </button>
+        <button type="submit">
+            <span>Update Account Info</span>
+        </button>
       </div>
       <div class="clear"></div>
-    <% end %>
+    </form>
   </div>
 
   <div class="module allNotifications">
     <div class="module notifications">
       <h3>Email Notifications</h3>
       <% if user.email.present? %>
-        <% form_for user, "/account/settings", :method => "put" do |f| %>
+
+        <form action="/account/settings" method="post">
+          <input type="hidden" name="_method" value="put" />
+
           <fieldset>
+
             <legend>
               We can email you about all the new things that you're following.
               <small>You can also control this <a href="/account/subscriptions">per-subscription</a>.</small>
@@ -71,17 +77,17 @@
             <ul>
               <li>
                 <label>
-                  <%= f.radio_button :notifications, :value => "email_daily" %>
+                  <%= radio_button_tag "user[notifications]", checked: (user.notifications == "email_daily"), value: "email_daily" %>
                   <span>Yes, once a day</span>
                 </label>
 
                 <label>
-                  <%= f.radio_button :notifications, :value => "email_immediate" %>
+                  <%= radio_button_tag "user[notifications]", checked: (user.notifications == "email_immediate"),value: "email_immediate" %>
                   <span>Yes, immediately</span>
                 </label>
 
                 <label>
-                  <%= f.radio_button :notifications, :value => "none" %>
+                  <%= radio_button_tag "user[notifications]", checked: (user.notifications == "none"), value: "none" %>
                   <span>No, thanks</span>
                 </label>
               </li>
@@ -90,11 +96,12 @@
 
           <fieldset>
             <label for="user_announcements">
-              <%= f.check_box :announcements, :uncheck_value => 'false' %>
+              <%= check_box_tag "user[announcements]", checked: user.announcements?, uncheck_value: 'false', id: "user_announcements" %>
               <span>Get updates about new Scout features</span>
             </label>
+
             <label for="sunlight_announcements">
-              <%= f.check_box :sunlight_announcements, :uncheck_value => 'false' %>
+              <%= check_box_tag "user[sunlight_announcements]", checked: user.sunlight_announcements?, uncheck_value: 'false', id: "sunlight_announcements" %>
               <span>Get updates about the Sunlight Foundation</span>
             </label>
           </fieldset>
@@ -103,12 +110,14 @@
             <span>Submit Changes</span>
           </button>
 
-        <% end %>
+        </form>
+
       <% else %>
         <p>
           Enter an email address above to manage your email notification settings.
         </p>
       <% end %>
+
     </div>
 
     <div class="module phoneSettings">
@@ -156,14 +165,17 @@
             We'll send you a text message to confirm.
           </p>
 
-          <% form_for user, "/account/phone", method: "put" do |f| %>
-            <%= f.label :phone %>
-            <%= f.text_field :phone %>
+          <form action="/account/phone" method="post">
+            <input type="hidden" name="_method" value="put" />
+
+            <label for="user_phone">Phone:</label>
+            <%= text_field_tag "user[phone]", value: user.phone %>
 
             <button type="submit">
               <span>Add Phone Number</span>
             </button>
-          <% end %>
+          </form>
+          
           <small>
             Standard text message charges may apply. Some subscriptions can generate a lot of results &mdash; be careful what you sign up for.
           </small>

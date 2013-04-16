@@ -4,11 +4,11 @@ gem 'oj', '1.3.0'
 gem 'multi_json', '1.3.6'
 gem 'curb', '0.8.1'
 
-gem 'sinatra', '1.3.3'
-gem 'sinatra-contrib', '1.3.1'
+gem 'sinatra', '1.4.2'
+gem 'sinatra-contrib', '1.4.0'
 gem 'sinatra-flash', '0.3.0'
 
-gem 'padrino-helpers', '0.10.6'
+gem 'padrino-helpers', '0.11.1'
 gem 'rinku', '1.5.1'
 
 gem "mongoid", '3.0.9'
@@ -23,7 +23,7 @@ gem 'mail', '2.4.4'
 gem 'pony', '1.4'
 gem 'twilio-rb', '2.2.0'
 
-gem 'rack', '1.4.1'
+gem 'rack', '1.5.2'
 gem 'rake', '0.9.2.2'
 
 gem 'big_sitemap'

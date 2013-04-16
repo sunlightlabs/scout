@@ -32,6 +32,11 @@ post '/login' do
 end
 
 post '/account/new' do
+  if User.where(email: params[:user]['email']).first
+    flash[:user] = "There is already a registered account for this email."
+    redirect "/login"
+  end
+
   @new_user = User.new
   ['email', 'password', 'password_confirmation', 'announcements', 'sunlight_announcements'].each do |field|
     @new_user.send "#{field}=", params[:user][field]

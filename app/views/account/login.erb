@@ -35,30 +35,30 @@
     <% end %>
 
 
-    <% form_for @new_user, "/account/new", :method => "post", :class => "signup_form" do |f| %>
+    <form action="/account/new" method="post" class="signup_form">
       <input class="redirect" name="redirect" type="hidden" value="<%= h params[:redirect] %>" />
 
       <label class="placeholder">Email</label>
-      <%= f.text_field :email, :type => "email", :placeholder => "your email" %>
+      <%= text_field_tag "user[email]", value: @new_user.email, type: "email", placeholder: "your email" %>
 
       <label class="placeholder">Password</label>
-      <%= f.password_field :password, :placeholder => "password" %>
+      <%= password_field_tag "user[password]", placeholder: "password" %>
 
       <label class="placeholder">Confirm password</label>
-      <%= f.password_field :password_confirmation, :placeholder => "password again" %>
+      <%= password_field_tag "user[password_confirmation]", placeholder: "password again" %>
       
     
       <label for="user_announcements">
-          <%= f.check_box :announcements, :uncheck_value => 'false' %>
-          <span>Get updates about new Scout features</span>
+        <%= check_box_tag "user[announcements]", checked: @new_user.announcements?, uncheck_value: 'false', id: "user_announcements" %>
+        <span>Get updates about new Scout features</span>
       </label>
     
       <label for="sunlight_announcements">
-          <%= f.check_box :sunlight_announcements, :uncheck_value => 'false' %>
-          <span>Get updates about the Sunlight Foundation</span>
+        <%= check_box_tag "user[sunlight_announcements]", checked: @new_user.sunlight_announcements?, uncheck_value: 'false', id: "sunlight_announcements" %>
+        <span>Get updates about the Sunlight Foundation</span>
       </label>
     
       <button type="submit" class="text login"><span>Sign Up</span></button>
-    <% end %>
+    </form>
   </div>
 </div>

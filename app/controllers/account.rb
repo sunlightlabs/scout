@@ -34,6 +34,11 @@ put '/account/settings' do
   # first, any attributes given under the user hash
   current_user.attributes = params[:user]
 
+  # special case for checkboxes, sigh
+  ['announcements', 'sunlight_announcements'].each do |field|
+    current_user.send "#{field}=", !!params[:user][field]
+  end
+
   # second, if there is a 'password' param then we need to verify the old password and pass in the confirmation
   if params[:password].present?
     unless User.authenticate(current_user, params[:old_password])

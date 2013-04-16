@@ -214,7 +214,7 @@ class LoginTest < Test::Unit::TestCase
     count = User.count
 
     post "/account/new", {user: {email: email, password: "test", password_confirmation: "test"}}
-    assert_response 200
+    assert_redirect "/login"
     assert_equal count, User.count
   end
 
