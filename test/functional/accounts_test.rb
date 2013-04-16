@@ -56,7 +56,7 @@ class AccountsTest < Test::Unit::TestCase
     assert_equal 'email_immediate', user.notifications
     assert_equal true, user.announcements
 
-    put '/account/settings', {:user => {:notifications => "email_daily", :announcements => "false"}}, login(user)
+    put '/account/settings', {user: {notifications: "email_daily", announcements: "false"}}, login(user)
     assert_redirect "/account/settings"
 
     user.reload
@@ -71,7 +71,7 @@ class AccountsTest < Test::Unit::TestCase
     assert_equal 'email_immediate', user.notifications
     assert_equal true, user.announcements
 
-    put '/account/settings', {:user => {:notifications => "not_valid", :announcements => "false"}}, login(user)
+    put '/account/settings', {user: {notifications: "not_valid", announcements: "false"}}, login(user)
     assert_response 200
 
     user.reload
@@ -85,7 +85,7 @@ class AccountsTest < Test::Unit::TestCase
     user = create :user
     password_hash = user.password_hash
 
-    put '/account/settings', {:user => {:notifications => "email_immediate", :announcements => "false"}}, login(user)
+    put '/account/settings', {user: {notifications: "email_immediate", announcements: "false"}}, login(user)
     assert_redirect "/account/settings"
 
     user.reload
