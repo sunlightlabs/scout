@@ -9,9 +9,9 @@ get '/search/:subscription_type/:query/?:query_type?' do
   subscriptions = Interest.subscriptions_for interest
 
 
-  # see if we have cached content for any of these
+  # see if we have cached content for any of these. if so, we'll render the cached items
+  # directly and pass it down now, so the client doesn't need to fetch them.
   cached = {}
-
   subscriptions.each do |subscription|
     type = subscription.subscription_type
     if results = subscription.search(page: 1, per_page: 20, cache_only: !crawler?)
@@ -27,6 +27,7 @@ get '/search/:subscription_type/:query/?:query_type?' do
     end
   end
 
+  # render the search skeleton, possibly with a hash of cached content keyed by search type
   erb :"search/search", layout: !pjax?, locals: {
     interest: interest,
 
