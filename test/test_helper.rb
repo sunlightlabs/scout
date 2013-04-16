@@ -30,28 +30,12 @@ module TestHelper
     end
 
     def verify
-      RSpec::Mocks.space.verify_all
+      RSpec::Mocks.verify
     end
 
-    # clearly should be replaced with something automatic
     def teardown
-      User.delete_all
-      Interest.delete_all
-      Subscription.delete_all
-      SeenItem.delete_all
-      Tag.delete_all
-
-      Delivery.delete_all
-      Receipt.delete_all
-      Report.delete_all
-
-      ApiKey.delete_all
-      Event.delete_all
-
-      Cache.delete_all
-
-      # remove rspec mocks
-      RSpec::Mocks.space.reset_all
+      Mongoid.models.each &:delete_all
+      RSpec::Mocks.teardown
     end
 
 
@@ -81,9 +65,9 @@ module TestHelper
     def mock_response(url, fixture)
       file = "test/fixtures/#{fixture}.json"
       if File.exists?(file)
-        Subscriptions::Manager.should_receive(:download).with(url).and_return File.read(file)
+        Subscriptions::Manager.should_receive(:download).any_number_of_times.with(url).and_return File.read(file)
       else
-        Subscriptions::Manager.should_receive(:download).with(url).and_raise Errno::ECONNREFUSED.new
+        Subscriptions::Manager.should_receive(:download).any_number_of_times.with(url).and_raise Errno::ECONNREFUSED.new
       end
     end
 
