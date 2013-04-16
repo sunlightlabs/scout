@@ -17,6 +17,13 @@
             "version_name" : "Referred in Senate"
           },
         "last_version_on" : "2012-06-11",
+        "sponsor": {
+          "title": "Rep",
+          "state": "WI",
+          "party": "D",
+          "first_name": "Gwen",
+          "last_name": "Moore"
+        },
         "number" : 5882,
         "official_title" : "Making appropriations for the Legislative Branch for the fiscal year ending September 30, 2013, and for other purposes.",
         "search" : { "highlight" : { "summary" : [ "expenses, the Copyright Office, the Congressional Research Service (CRS), and Books for the Blind and Physically Handicapped; (2) the GPO for congressional printing and binding (including transfer of funds); (3) the GPO for the Office of Superintendent of Documents (including transfer of funds); (4) the GPO Revolving Fund; (5) GAO for salaries and expenses; and (6) the Open World Leadership Center Trust Fund. (Sec. 1401) Establishes an upper limit of $178.958 million for the FY2013 obligational authority" ],
