@@ -4,20 +4,22 @@ task :environment do
   require './config/environment'
 end
 
-# does not hinge on the environment, test_helper loads it itself
-task default: :test
-task :test do
-  responses = Dir.glob("test/**/*_test.rb").map do |file|
-    puts "\nRunning #{file}:\n"
-    system "ruby #{file}"
+require 'rake/testtask'
+
+namespace :test do 
+  Rake::TestTask.new(:all) do |t|
+    t.libs << "test"
+    t.test_files = FileList['test/**/*_test.rb']
   end
-  
-  if responses.any? {|code| code == false}
-    puts "\nFAILED\n"
-    exit -1
-  else
-    puts "\nSUCCESS\n"
-    exit 0
+
+  Rake::TestTask.new(:functional) do |t|
+    t.libs << "test"
+    t.test_files = FileList['test/functional/*_test.rb']
+  end
+
+  Rake::TestTask.new(:mini) do |t|
+    t.libs << "minitest"
+    t.test_files = FileList['minitest/**/*_test.rb']
   end
 end
 
@@ -54,17 +56,9 @@ end
 desc "Run through each model and create all indexes" 
 task :create_indexes => :environment do
   begin
-    models = Dir.glob('app/models/*.rb').map do |file|
-      File.basename(file, File.extname(file)).camelize.constantize
-    end
-
-    raise Exception.new("What? No models") if models.empty?
-
-    models.each do |model|
-      if model.respond_to?(:create_indexes) 
-        model.create_indexes
-        puts "Created indexes for #{model}"
-      end
+    Mongoid.models.each do |model|
+      model.create_indexes
+      puts "Created indexes for #{model}"
     end
     
   rescue Exception => ex
