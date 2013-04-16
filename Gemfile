@@ -11,7 +11,7 @@ gem 'sinatra-flash', '0.3.0'
 gem 'padrino-helpers', '0.11.1'
 gem 'rinku', '1.5.1'
 
-gem "mongoid", '3.0.9'
+gem "mongoid", '3.1.2'
 
 gem 'ruby-hmac', '0.4.0'
 gem 'bcrypt-ruby', '3.0.1'
