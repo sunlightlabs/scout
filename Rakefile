@@ -174,7 +174,7 @@ namespace :subscriptions do
             end
           end
 
-          Subscription.initialized.where(criteria).each do |subscription|
+          Subscription.initialized.no_timeout.where(criteria).each do |subscription|
             if subscription.user.confirmed?
               
               result = Subscriptions::Manager.check!(subscription)
