@@ -92,25 +92,6 @@ module Helpers
       end.join(", ")
     end
 
-    def set_home
-      content_for(:home) { true }
-    end
-
-    def home?
-      content_from :home
-    end
-
-    # don't give me empty strings
-    def content_from(symbol)
-      content = yield_content symbol
-      content.force_encoding("UTF-8") # not sure why yield_content returns US-ASCII
-      if content.present?
-        content
-      else
-        nil
-      end
-    end
-
     def show_data?
       !api_key.nil?
     end

@@ -16,10 +16,10 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-    <%= content_from :head %>
+    <%= yield_content :head %>
 
-    <% if title = content_from(:title) %>
-    <title><%= title %></title>
+    <% if content_for?(:title) %>
+    <title><%= yield_content :title %></title>
     <% else %>
     <title>Scout</title>
     <% end %>
@@ -77,8 +77,10 @@
             </div>
         </div>
 
-        <% if home? %>
-        <div class="homeWrapper">
+        <% if content_for?(:home) %>
+            <div class="homeWrapper">
+        <% else %>
+            <!-- not home -->
         <% end %>
 
         <header class="contentWrapper">
@@ -124,7 +126,8 @@
             <a href="/">
                 <h1 class="textIndent">Scout</h1>
             </a>
-            <% if home? %>
+            
+            <% if content_for?(:home) %>
             <p class="splashtext">
                 Get alerts when congress or your state capitol talks about issues you care about
             </p>
@@ -135,17 +138,17 @@
             <div class="clear"></div>
         </header>
 
-        <% if home? %>
-        </div>
+        <% if content_for?(:home) %>
+            </div>
         <% end %>
     </div>
 
     <div class="fauxBody">
         <div class="contentWrapper" id="content">
 
-            <% if left_bar = content_from(:sidebar_left) %>
+            <% if content_for?(:sidebar_left) %>
                 <div class="sidebar left">
-                    <%= left_bar %>
+                    <%= yield_content :sidebar_left %>
                 </div>
             <% end %> 
             
@@ -153,9 +156,9 @@
                 <%= yield %>
             </div>
 
-            <% if right_bar = content_from(:sidebar_right) %>
+            <% if content_for?(:sidebar_right) %>
                 <div class="sidebar right">
-                    <%= right_bar %>
+                    <%= yield_content :sidebar_right %>
                 </div>
             <% end %>
         </div>
