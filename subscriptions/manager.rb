@@ -279,7 +279,7 @@ module Subscriptions
     end
 
     def self.cache_for(url, function, subscription_type)
-      return if config[:no_cache]
+      return nil if config[:no_cache]
 
       if result = Cache.where(url: url, function: function, subscription_type: subscription_type).first
         puts "USE CACHE: [#{function}] #{url}\n\n" if development?
