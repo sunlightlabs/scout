@@ -14,6 +14,7 @@ get '/search/:subscription_type/:query/?:query_type?' do
   cached = {}
   subscriptions.each do |subscription|
     type = subscription.subscription_type
+    
     if results = subscription.search(page: 1, per_page: 20, cache_only: !crawler?)
       cached[type] = erb :"search/items", layout: false, locals: {
         items: results, 
