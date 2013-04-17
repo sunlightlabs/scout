@@ -33,6 +33,7 @@ def reserved_names
       server client rss feed atom json xml search api api_key import 
       export download upload favicon index about privacy_policy privacy 
       terms legal contact username slug name error exception tos terms_of_service
+      a b c d e f g h i j k l m n o p q r s t u v w x y z
       
       bill state_bill regulation speech document hearing update floor_update
       rule uscode cfr report
