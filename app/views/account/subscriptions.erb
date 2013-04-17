@@ -70,7 +70,7 @@
         </div>
 
         <% grouped['tag'].each do |interest| %>
-          <%= partial "account/interest", :engine => "erb", :locals => {:interest => interest, :edit => true} %>
+          <%= partial "account/interest", engine: "erb", locals: {interest: interest, edit: true} %>
         <% end %>
 
       </div>
