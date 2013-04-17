@@ -1,4 +1,7 @@
-<li class="item <%= item.subscription.subscription_type %>">
+<li class="item <%= item.subscription.subscription_type %>" 
+  data-subscription_type="<%= item.subscription.subscription_type %>" 
+  data-search_type="<%= interest.search_type %>">
+  
   <time class="result" datetime="<%= html_date item.date %>">
     <%= just_date_year item.date %>
   </time>

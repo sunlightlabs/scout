@@ -88,7 +88,7 @@ $(function() {
     var resource = $(this).data("resource");
 
     _gaq.push(['_trackEvent', 'External Resources', item_type, resource]);
-  })
+  });
 
 });
 

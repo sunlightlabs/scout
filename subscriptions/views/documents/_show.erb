@@ -19,7 +19,7 @@
     <h5>Resources</h5>
     <ul>
       <li class="documents <%= document['document_type'] %>">
-        <a data-resource="<%= document['document_type'] %>" href="<%= document['url'] %>">
+        <a data-resource="<%= document['document_type'] %>" target="_blank" href="<%= document['url'] %>">
           <% if document['document_type'] == "gao_report" %>
             GAO
           <% else %>
@@ -30,7 +30,7 @@
 
       <li class="source">
         <% if document['source_url'] %>
-          <a data-resource="<%= document['document_type'] %>-original" href="<%= document['source_url'] %>">
+          <a data-resource="<%= document['document_type'] %>-original" target="_blank" href="<%= document['source_url'] %>">
             <% if document['document_type'] == "gao_report" %>
               Full Report
             <% else %>
