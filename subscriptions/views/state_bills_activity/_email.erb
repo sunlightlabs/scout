@@ -1,7 +1,7 @@
 <% bill = interest.data %>
 <% action = item.data %>
 
-<%= email_header just_date(item.date), item_url(item, interest, user) %>
+<%= email_header just_date(item.date), url %>
 
 <%= email_content_p %>
   <%= action['action'] %>

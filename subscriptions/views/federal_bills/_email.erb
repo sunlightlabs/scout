@@ -2,9 +2,9 @@
 <% version = item.data['last_version'] %>
 
 <% if bill['short_title'].present? %>
-  <%= email_header bill['short_title'], item_url(item) %>
+  <%= email_header bill['short_title'], url %>
 <% else %>
-  <%= email_header_small bill['official_title'], item_url(item) %>
+  <%= email_header_small bill['official_title'], url %>
 <% end %>
 
 <%= email_subheader_div %>

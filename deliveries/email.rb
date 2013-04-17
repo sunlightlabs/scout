@@ -7,6 +7,7 @@ module Deliveries
 
     # give these methods at the class level, since all the methods in here are class methods
     extend Helpers::Routing
+    extend Helpers::Subscriptions
 
     def self.deliver_for_user!(user, frequency, options = {})
       dry_run = options['dry_run'] || false
@@ -281,8 +282,12 @@ module Deliveries
     # render a Delivery into its email content
     def self.render_delivery(user, delivery, interest, subscription_type)
       item = Deliveries::SeenItemProxy.new(SeenItem.new(delivery.item))
+      
+      # permalink to item, but wrapped up in a redirector
+      url = email_item_url item, interest, user
+
       template = Tilt::ERBTemplate.new "app/views/subscriptions/#{subscription_type}/_email.erb"
-      rendered = template.render item, user: user, item: item, interest: interest, trim: false
+      rendered = template.render item, user: user, item: item, interest: interest, url: url, trim: false
       rendered.force_encoding "utf-8"
       rendered
     end

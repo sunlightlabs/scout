@@ -161,6 +161,35 @@ module Helpers
       "#{config[:hostname]}/url?#{data.to_query}"
     end
 
+    def email_item_url(item, interest, user)
+      url = item_url item, interest, user
+
+      service = user.service # todo: replace
+
+      puts item.attributes.inspect
+
+      data = {
+        from: "email",
+        to: url,
+        d: {
+          url_type: "item",
+          item_id: item.item_id,
+          subscription_type: item.subscription_type,
+          interest_type: interest.interest_type
+        }
+      }
+
+      if interest.search?
+        data[:d][:query] = interest.in
+      end
+
+      if service.present?
+        data[:d][:service] = service
+      end
+
+      redirect_url url, data
+    end
+
     def user_id(user)
       if user.username.present?
         user.username

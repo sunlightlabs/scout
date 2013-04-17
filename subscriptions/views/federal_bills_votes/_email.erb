@@ -1,6 +1,6 @@
 <% vote = item.data %>
 
-<%= email_header "#{vote['chamber'].capitalize} Vote ##{vote['number']}", item_url(item) %>
+<%= email_header "#{vote['chamber'].capitalize} Vote ##{vote['number']}", url %>
 
 <%= email_subheader_div %>
   <%= just_date vote['voted_at'] %>

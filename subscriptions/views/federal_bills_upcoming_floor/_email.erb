@@ -1,7 +1,7 @@
 <% bill = interest.data %>
 <% upcoming = item.data %>
 
-<%= email_header upcoming_date(upcoming), item_url(item) %>
+<%= email_header upcoming_date(upcoming), url %>
 
 <%= email_content_p %>
   Coming up on the <%= upcoming['chamber'].capitalize %> Floor

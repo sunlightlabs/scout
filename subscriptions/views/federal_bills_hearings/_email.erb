@@ -1,5 +1,5 @@
 <% hearing = item.data %>
-<%= email_header "Hearing: #{hearing['committee']['name']}", item_url(item) %>
+<%= email_header "Hearing: #{hearing['committee']['name']}", url %>
 
 <%= email_subheader_div %>
   <%= just_date hearing['occurs_at'] %>, <%= just_time hearing['occurs_at'] %>
