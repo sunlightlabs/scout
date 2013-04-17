@@ -10,7 +10,7 @@ before_script:
   - cp config/config.yml.example config/config.yml
   - cp config/mongoid.yml.example config/mongoid.yml
 
-script: rake test:all
+script: rake tests:all
 
 notifications:
   email:

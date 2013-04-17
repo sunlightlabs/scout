@@ -6,20 +6,17 @@ end
 
 require 'rake/testtask'
 
-namespace :test do 
+namespace :tests do 
   Rake::TestTask.new(:all) do |t|
     t.libs << "test"
     t.test_files = FileList['test/**/*_test.rb']
   end
 
-  Rake::TestTask.new(:functional) do |t|
-    t.libs << "test"
-    t.test_files = FileList['test/functional/*_test.rb']
-  end
-
-  Rake::TestTask.new(:mini) do |t|
-    t.libs << "minitest"
-    t.test_files = FileList['minitest/**/*_test.rb']
+  ["functional", "delivery", "unit"].each do |type|
+    Rake::TestTask.new(type.to_sym) do |t|
+      t.libs << "test"
+      t.test_files = FileList["test/#{type}/*_test.rb"]
+    end
   end
 end
 
