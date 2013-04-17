@@ -39,7 +39,7 @@ class DeliveryTest < Test::Unit::TestCase
     assert_match /#{items.size}/, receipt.subject
     assert_not_match /Daily digest/i, receipt.subject
     items.each do |item|
-      assert_not_nil receipt.content[routing.item_url item]
+      assert_not_nil receipt.content[routing.email_item_url item]
     end
   end
 
@@ -77,7 +77,7 @@ class DeliveryTest < Test::Unit::TestCase
     assert_match /#{items.size}/, receipt.subject
     assert_match /Daily digest/i, receipt.subject
     items.each do |item|
-      assert_not_nil receipt.content[routing.item_url item]
+      assert_not_nil receipt.content[routing.email_item_url item]
     end
   end
 
@@ -124,7 +124,7 @@ class DeliveryTest < Test::Unit::TestCase
 
       assert_match /#{items.size}/, receipt.subject
       items.each do |item|
-        assert_not_nil receipt.content[routing.item_url item]
+        assert_not_nil receipt.content[routing.email_item_url item]
       end
     end
   end
@@ -170,7 +170,7 @@ class DeliveryTest < Test::Unit::TestCase
     assert_match /#{items.size}/, receipt.subject
     assert_match /Daily digest/i, receipt.subject
     items.each do |item|
-      assert_not_nil receipt.content[routing.item_url item]
+      assert_not_nil receipt.content[routing.email_item_url item]
     end
   end
 
@@ -284,7 +284,6 @@ class DeliveryTest < Test::Unit::TestCase
       initial = i.seen_items.count
       Subscriptions::Manager.check! i.subscriptions.first
       all_items[i.id] = i.seen_items.asc(:_id).to_a[initial..-1]
-      # puts [all_items[i.id].size, initial, i.seen_items.count].join ", "
     end
 
     [user1, user2, user3].each do |u|
@@ -324,7 +323,7 @@ class DeliveryTest < Test::Unit::TestCase
       assert_match /1234567/, receipt.content
 
       items.each do |item|
-        assert_not_nil receipt.content[routing.item_url item]
+        assert_not_nil receipt.content[routing.email_item_url item]
       end
     end
 

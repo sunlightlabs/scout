@@ -161,12 +161,11 @@ module Helpers
       "#{config[:hostname]}/url?#{data.to_query}"
     end
 
-    def email_item_url(item, interest, user)
+    def email_item_url(item, interest = nil, user = nil)
+      interest ||= item.interest
+      user ||= item.user
+      
       url = item_url item, interest, user
-
-      service = user.service # todo: replace
-
-      puts item.attributes.inspect
 
       data = {
         from: "email",
@@ -174,17 +173,20 @@ module Helpers
         d: {
           url_type: "item",
           item_id: item.item_id,
-          subscription_type: item.subscription_type,
-          interest_type: interest.interest_type
+          subscription_type: item.subscription_type
         }
       }
 
-      if interest.search?
-        data[:d][:query] = interest.in
+      if interest
+        data[:d][:interest_type] = interest.interest_type
+
+        if interest.search?
+          data[:d][:query] = interest.in
+        end
       end
 
-      if service.present?
-        data[:d][:service] = service
+      if user and user.service.present?
+        data[:d][:service] = user.service
       end
 
       redirect_url url, data
