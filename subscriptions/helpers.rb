@@ -423,13 +423,19 @@ module Helpers
       return nil unless document['gao_report']['description'] # shouldn't happen
 
       description = document['gao_report']['description']
+
       if document['document_type'] == "gao_report"
-        ["What GAO Found", "Why GAO Did This Study"].each do |header|
-          description = description.gsub /(#{header})/, '<strong>\1</strong>'
+        post_truncate = lambda do |desc|
+          ["What GAO Found", "Why GAO Did This Study"].each do |header|
+            desc.gsub! /(#{header})/, '<strong>\1</strong>'
+          end
+          desc
         end
+      else
+        post_truncate = nil
       end
 
-      truncate_more_html "document_description", description, 1500
+      truncate_more_html "document_description", description, 1500, post_truncate
     end
 
     def legislator_image(legislator)

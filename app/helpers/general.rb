@@ -148,14 +148,14 @@ module Helpers
     def truncate_more_html(tag, text, max, post = nil)
       truncated = truncate text, max
       
+      text = simple_format text
+      truncated = simple_format truncated
+
       # if a lambda for post processing is given, run it
       if post
         truncated = post.call truncated
         text = post.call text
       end
-
-      text = simple_format text
-      truncated = simple_format truncated
 
       if truncated == text
         text
