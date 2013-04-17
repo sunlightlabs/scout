@@ -82,6 +82,14 @@ $(function() {
     return false;
   });
 
+  // track certain kinds of link clicks as events
+  $("div.entry.contentArea div.resources a").click(function() {
+    var item_type = $(this).parents(".entry").data("item_type");
+    var resource = $(this).data("resource");
+
+    _gaq.push(['_trackEvent', 'External Resources', item_type, resource]);
+  })
+
 });
 
 var Utils = {
