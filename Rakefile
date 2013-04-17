@@ -505,15 +505,28 @@ end
 
 # assumes usc already loaded, update the sitemap
 # saves a static file, using the production URL
+desc "Generate a sitemap."
 task :sitemap => :environment do
   require 'big_sitemap'
 
+  include Helpers::Routing
+
   BigSitemap.generate(base_url: "https://scout.sunlightfoundation.com", document_root: "public") do
+
+    # about page, changes rarely
+    add "/about", change_frequency: "monthly"
+
+    # public tags
+    Tag.where(public: true).each do |tag|
+      path = tag_path tag.user, tag
+      puts "[tag][#{tag.name}] Adding to sitemap..."
+      add path, change_frequency: "daily"
+    end
 
     # map of US Code searches/landings
     Citation.where(citation_type: "usc").asc(:citation_id).each do |citation|
       standard = Search.cite_standard citation.attributes
-      puts "[#{standard}] Adding to sitemap..."
+      puts "[cite][#{standard}] Adding to sitemap..."
       add "/search/all/#{URI.escape standard}", change_frequency: :daily
     end
 
