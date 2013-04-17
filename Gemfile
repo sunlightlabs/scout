@@ -1,22 +1,22 @@
 source 'http://rubygems.org'
 
-gem 'oj', '1.3.0'
-gem 'multi_json', '1.3.6'
-gem 'curb', '0.8.1'
+gem 'oj'
+gem 'multi_json'
+gem 'curb'
 
 gem 'sinatra', '1.4.2'
 gem 'sinatra-contrib', '1.4.0'
 gem 'sinatra-flash', '0.3.0'
 
 gem 'padrino-helpers', '0.11.1'
-gem 'rinku', '1.5.1'
+gem 'rinku'
 
 gem "mongoid", '3.1.2'
 
-gem 'ruby-hmac', '0.4.0'
-gem 'bcrypt-ruby', '3.0.1'
+gem 'ruby-hmac'
+gem 'bcrypt-ruby'
 
-gem 'rack-ssl', '1.3.2'
+gem 'rack-ssl'
 
 gem 'postmark', '0.9.10'
 gem 'mail', '2.4.4'
@@ -35,14 +35,14 @@ group :development do
 end
 
 group :test do
-  gem 'rack-test', '0.6.1'
+  gem 'rack-test'
   gem 'rspec-mocks', '2.9.0'
   gem 'factory_girl'
 end
 
 # feed parsing
 gem 'feedzirra', '0.2.0.rc1'
-gem 'feedbag', '0.9.1'
+gem 'feedbag'
 
 # phone number standardization - thrilling
 gem 'phone', '1.1'
