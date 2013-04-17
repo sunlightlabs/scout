@@ -129,4 +129,58 @@ class ItemsTest < Test::Unit::TestCase
     assert_equal 0, user.subscriptions.count
   end
 
+  
+  # redirecting and tracking
+
+  # an item page, from a set of search results
+  def test_redirecting_from_email
+    assert_equal 0, Event.where(type: "email-click").count
+
+    get "/url", {
+      from: "email",
+      to: "/my/url",
+      d: {
+        url_type: "item",
+
+        item_id: "state_bills",
+        item_type: "anything",
+        because: "search"
+      }
+    }
+
+    assert_redirect "/my/url"
+
+    event = Event.where(type: "email-click").first
+    assert_not_nil event
+
+    assert_equal "email-click", event.type
+    assert_equal "item", event.url_type
+    assert_equal "/my/url", event.to
+    assert_equal "state_bills", event.item_id
+    assert_equal "anything", event.item_type
+    assert_equal "search", event.because
+  end
+
+  # not using this, but want to exercise it anyway
+  def test_redirect_just_to_redirect
+    assert_equal 0, Event.where(type: "email-click").count
+
+    get "/url", {
+      to: "http://openstates.org/my/url",
+    }
+
+    assert_redirect "http://openstates.org/my/url"
+
+    assert_equal 0, Event.where(type: "email-click").count
+  end
+
+  def test_bad_redirect
+    assert_equal 0, Event.where(type: "email-click").count
+
+    get "/url"
+    assert_response 500
+
+    assert_equal 0, Event.where(type: "email-click").count
+  end
+
 end

@@ -8,7 +8,17 @@ class Event
 
   index type: 1
 
+  # for looking up email clicks
+  index({type: 1, item_type: 1})
+
   scope :for_time, ->(start, ending) {where(created_at: {"$gt" => Time.zone.parse(start).midnight, "$lt" => Time.zone.parse(ending).midnight})}
+
+  # log a visit to the redirector
+  def self.email_click!(data = {})
+    create!({
+      type: "email-click"
+    }.merge(data))
+  end
 
   def self.remove_alert!(interest)
     create!(

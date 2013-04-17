@@ -155,6 +155,12 @@ module Helpers
       end
     end
 
+    # wraps the given URL in the redirect URL, 
+    # with an arbitrary hash of data to be query string encoded
+    def redirect_url(url, data = {})
+      "#{config[:hostname]}/url?#{data.to_query}"
+    end
+
     def user_id(user)
       if user.username.present?
         user.username

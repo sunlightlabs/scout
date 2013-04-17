@@ -71,6 +71,34 @@ get '/document' do
   erb :"documents/viewer", layout: false
 end
 
+# redirector and tracker
+# * records the click event and data, redirects user to final URL
+# 
+# recognized params:
+#   * from - 'email'
+#   * to - url to redirect to (generated at email render time)
+# 
+# And a 'd' hash that can contain:
+#   * remote - a remote service name, e.g. "open_states"
+#   * url_type - 'item' 
+# 
+# and if this is to a landing:
+#   * item_type - type of landing page
+#   * item_id - ID of landing item
+#   * because - 'search' if a search result, 'item' if an item subscription
+#   * query - for 'search' - search term
+
+get '/url' do 
+  halt 500 unless params[:to].present?
+  
+  if params[:from] == "email"
+    Event.email_click! params[:d].merge(to: params[:to])
+  end
+
+  redirect params[:to]
+end
+
+
 not_found do
   erb :"404"
 end
