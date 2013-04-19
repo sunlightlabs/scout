@@ -342,6 +342,12 @@ module Helpers
         's_p' => "Star (No.) Print of an Amendment"
       }[code]
     end
+
+    def bill_text_url(bill, version)
+      if version and version['urls']
+        version['urls']['xml'] || version['urls']['pdf']
+      end
+    end
     
     def state_name(code)
       state_map[code.to_s.upcase]
@@ -398,12 +404,26 @@ module Helpers
       truncate_more_html "bill_summary", summary, 500, post_truncate
     end
 
+    def state_bill_title_reasonable?(bill)
+      return false unless bill['+short_title'].present? or bill['title'].present? 
+      title = state_bill_title_text bill
+      title.size <= 100
+    end
+
+    def state_bill_title_text(bill)
+      if bill['+short_title'].present?
+        bill['+short_title'].dup
+      else
+        bill['title'].dup
+      end
+    end
+
     def state_bill_title(bill)
-      return nil unless bill['title'].present? # shouldn't happen
+      # shouldn't happen
+      return nil unless bill['+short_title'].present? or bill['title'].present? 
 
-      title = bill['title'].dup
+      title = state_bill_title_text bill
       title.gsub! ';', ";\n\n"
-
       truncate_more_html "state_bill_title", title, 500
     end
 

@@ -1,0 +1,48 @@
+/** document viewer **/
+
+/*.entry {
+    width: 960px;
+}
+*/
+
+.entry #document {
+  float: left;
+}
+
+
+/** federal bills **/
+
+.entry.bill #document {font-size: 10pt; line-height: 28px;}
+
+.entry.bill #document .section:first-child {display: none;}
+.entry.bill #document .toc {display: none;}
+
+.entry.bill #document .title {margin-bottom: 25px; display: block;} /* todo: turn title into div */
+.entry.bill #document .title>.enum:before {content: "Title ";}
+.entry.bill #document .title>.enum:after {content: " — ";}
+.entry.bill #document .title>.header,
+.entry.bill #document .title>.enum {font-weight: bold;}
+.entry.bill #document .title>.header:after {content: "";}
+
+.entry.bill #document .header:after {content: " — ";}
+
+.entry.bill #document .enum {margin-right: 3px;}
+
+.entry.bill #document .toc-entry,
+.entry.bill #document .section,
+.entry.bill #document .subsection, 
+.entry.bill #document .subchapter,
+.entry.bill #document .paragraph,
+.entry.bill #document .quoted-block,
+.entry.bill #document .subparagraph {margin-top: 13px; margin-bottom: 13px;}
+
+.entry.bill #document .subsection,
+.entry.bill #document .subchapter,
+.entry.bill #document .paragraph,
+.entry.bill #document .subparagraph {margin-left: 20px;}
+
+
+
+.entry.bill #document .quoted-block {font-style: italic; padding-left: 20px;}
+.entry.bill #document .quoted-block>*:first-child {display: inline;}
+.entry.bill #document .after-quoted-block {display: none;}

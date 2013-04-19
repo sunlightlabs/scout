@@ -107,6 +107,7 @@ module Subscriptions
         fields = %w{ 
           bill_id bill_type number congress urls
           short_title official_title summary
+          last_action actions
           introduced_on last_action_at last_version last_version_on
           sponsor.first_name sponsor.last_name sponsor.nickname
           sponsor.name_suffix sponsor.title sponsor.party sponsor.state

@@ -1031,10 +1031,7 @@ ul.items{
     background: url('/images/tinyborder_andshadow.png') center top repeat-x;
 }
 
-
-
-
-time.item, .entry time, .time {   
+time.item, .time {   
     font-style: italic;
     font-weight: 200;
     font-size: 93%;
@@ -1090,13 +1087,14 @@ time.item, .entry time, .time {
     padding-right: 45px;
     margin-top: 10px;
 }
+
 .viewMore a .dataSet{
     color: #1C6979;
 }
+
 .subtitle{
     color: #83858b;
-    font-style: italic;
-    margin-bottom: 10px;
+    margin-bottom: 10px; margin-top: 5px;
     display: block;
     clear: both;
     float: left;
@@ -1150,75 +1148,6 @@ button.follow, button.following {
     padding: 0 33px 0 10px;
 }
 
-.resources{
-    float: left;
-    background: #f5f6f5;
-    -webkit-box-shadow: inset -14px 0px 14px -7px #e2e3e0;
-    -moz-box-shadow: inset -14px 0px 14px -7px #e2e3e0;
-    box-shadow: inset -14px 0px 14px -7px #e2e3e0;
-    padding: 8px 33px 8px 10px;
-    margin-bottom: 20px;
-    width: 666px;
-}
-
-.resources li{
-    display: block;
-    float: left;
-    margin-right: 16px;
-}
-.resources h5{
-    float: left;
-    margin-right: 10px;
-    margin-bottom: 5px;
-}
-.resources ul{
-    display: block;
-    float: left;
-    padding-top: 0;
-    width: 591px;
-    font-weight: bold;
-}
-.resources span{
-    background-image: url('/images/icons_resources.png');
-    background-repeat: none;
-    text-indent: -9999em;
-    display: block;
-    width: 27px;
-    height: 27px;
-    float: left;
-    margin-top: -6px;
-    margin-right: 3px;
-}
-
-.resources .thomas span{
-    background-position: left top;
-}
-.resources .thomas a:hover span{
-    background-position: left bottom;
-}
-.resources .govTrack span{
-    background-position: 53px top;
-}
-.resources .govTrack a:hover span{
-    background-position: 53px bottom;
-}
-.resources .openCongress span{
-    background-position: 81px top;
-}
-.resources .openCongress a:hover span{
-    background-position: 81px bottom;
-}
-.resources .capWords span{
-    background-position: 26px top;
-}
-.resources .capWords a:hover span{
-    background-position: 26px bottom;
-}
-.resources .source {
-    float: right;
-    margin-right: 0;
-    font-weight: normal;
-}
 
 .entryHeader{
     float: left;
@@ -1247,9 +1176,76 @@ button.follow, button.following {
     padding-bottom: 10px;
 }
 
+
+.entry .core-context {
+    float: left;
+    margin-top: 10px;
+}
+
+.entry {}
+
+.entry .core-context p {padding: 0; margin: 0;}
+
+.entry .resources h5,
+.entry #document header strong,
+.entry .core-context dt {
+    font-weight: bold;
+    margin-right: 10px;
+    display: inline-block;
+    width: 100px;
+}
+
+.entry .resources,
+.entry #document,
+.entry .core-context {
+    padding-left: 10px; padding-right: 10px;
+}
+
+.entry .core-context dl {
+    display: block;
+    margin-bottom: 20px;
+}
+
+.entry .core-context dd {
+    display: inline-block;
+    max-width: 550px;
+}
+
+.entry .resources {
+    float: left;
+    background: #f5f6f5;
+    padding-top: 8px; padding-bottom: 8px;
+    width: 666px; margin-top: 0px;
+}
+
+.entry .resources ul {
+    display: inline-block;
+}
+
+.entry .resources li {
+    display: inline-block;
+    margin-right: 16px;
+    font-weight: bold;
+}
+
+.entry #document {margin-top: 15px; padding-bottom: 50px;}
+.entry #document header h5,
+.entry #document header p {display: inline-block;}
+.entry #document hr {
+    width: 400px;
+    background-color: #999; 
+    margin-left: auto; margin-right: auto;
+    margin-top: 25px; margin-bottom: 20px;
+}
+
+.entry #document article {
+    padding-right: 30px;
+    margin-top: 20px; padding-top: 10px;
+}
+
 /** item subscription modules **/
 
-.entry .details{
+.entry .details {
     padding: 33px 0 33px 10px;
     margin-bottom: 155px;
 }
@@ -1264,6 +1260,8 @@ button.follow, button.following {
 .entry .details table p{
     font-size: 100%; padding: 5px 0;
 }
+.entry .details table p.motion,
+.entry .details table p.vote_count {margin-bottom: 0px;}
 .entry .details td{
     padding: 5px 0;
 }

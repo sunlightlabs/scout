@@ -140,7 +140,7 @@ module Subscriptions
         fields = %w{ 
           id bill_id state chamber created_at updated_at 
           title sources actions votes session versions %2Bshort_title 
-          action_dates
+          action_dates actions
         }
         
         # item_id is of the form ":state/:session/:chamber/:bill_id" (URI encoded already)

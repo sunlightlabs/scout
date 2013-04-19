@@ -1,4 +1,5 @@
 <% bill = item.data %>
+<% use_title = state_bill_title_reasonable? bill %>
 
 <div class="followChanges">
   <div class="trackSubscribe" style="margin-top: 16px">
@@ -10,10 +11,16 @@
     <div class="clear"></div>
 </div>
 
-<div class="summary followable">
+<div class="summary">
 
   <div class="entryHeader">
-    <h2><%= bill['bill_id'] %></h2>
+    <h2>
+      <% if use_title %>
+        <%= state_bill_title_text bill %>
+      <% else %>
+        <%= bill['bill_id'] %>
+      <% end %>
+    </h2>
 
     <div class="subtitle">
       <%= state_name bill['state'] %>
@@ -23,7 +30,7 @@
         <% if date < Time.zone.now %>
           Last activity on
         <% else %>
-          Upcoming activity on
+          Next activity on
         <% end %>
       <% else %>
         <% date = bill['created_at'] %>
@@ -34,33 +41,54 @@
       </time>
     </div>
   </div>
-        
-    <div class="clear"></div>
-    <div class="resources">
-        <h5>Resources</h5>
-        <li class="openstates">
-          <a data-resource="open_states" target="_blank" href="<%= openstates_url bill %>" title="Open States">
-            Open States
-          </a>
-        </li>
-        
-        <% if bill['versions'] and bill['versions'].any? %>
-          <a data-resource="original" target="_blank" class="source" href="<%= bill['versions'].last['url'] %>">
-            Original Text
-          </a>
 
-        <% elsif bill['sources'] and bill['sources'].any? %>
-          <% bill['sources'].each_with_index do |source, i| %>
-            <a data-resource="original" target="_blank" class="source" href="<%= source['url'] %>">Source <%= i + 1 %></a>
-          <% end %>
-      <% end %>
+  <div class="clear"></div>
+
+  <div class="core-context">
+    <% unless use_title %>
+      <dl>
+        <dt>Title</dt>
+        <dd>
+          <%= state_bill_title bill %>
+        </dd>
+      </dl>
+    <% end %>
+    <dl>
+      <% action = bill['actions'].last %>
+      
+      <dt>
+        <% if action['date'] < Time.zone.now %>
+          Last activity
+        <% else %>
+          Next activity
+        <% end %>
+      </dt>
+      <dd>
+        <%= just_date_year action['date'] %>
+        &mdash;
+        <%= truncate action['action'], 500 %>
+      </dd>
+    </dl>
+  </div>
+        
+  <div class="resources">
+    <h5>Resources</h5>
+    
+    <span>
+      Visit 
+      <strong><a data-resource="open_states" target="_blank" href="<%= openstates_url bill %>" title="Open States">Open States</a></strong>
+      for much more information about this bill.
+    </li>
   </div>
 
-  <% if bill['+short_title'].present? %>
-    <p><%= bill['+short_title'] %></p>
-  <% else %>
-    <%= state_bill_title bill %>
+  <% if bill['versions'] and bill['versions'].any? %>
+    <div id="document">
+      <header>
+        <strong>Full Text</strong>
+        <span>
+          Read the <a data-resource="original" target="_blank" href="<%= bill['versions'].last['url'] %>">official bill text</a>.
+        </span>
+      </header>
+    </div>
   <% end %>
-    
-
 </div>

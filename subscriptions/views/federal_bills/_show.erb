@@ -11,18 +11,19 @@
   <div class="clear"></div>
 </div>
 
-<div class="summary followable">
+<div class="summary">
   
   <div class="entryHeader">
     <% if bill['short_title'].present? %>
-        <h2><%= bill['short_title'] %></h2>
+      <h2><%= bill['short_title'] %></h2>
     <% else %>
-        <h2 class="official bill title"><%= bill['official_title'] %></h2>
+      <h2 class="official bill title"><%= bill['official_title'] %></h2>
     <% end %>
 
     <div class="subtitle">
-      <%= bill_code bill['bill_type'], bill['number'] %>
-      &mdash;
+      <span class="code">
+        <%= bill_code bill['bill_type'], bill['number'] %>,
+      </span>
       <% if version %>
         <%= bill_version version['version_code'] %>
       <% else %>
@@ -35,6 +36,15 @@
       by
       <%= bill_sponsor bill %>
     </div>
+  </div>
+
+  <div class="core-context">
+    <dl>
+      <dt class="float-left">Last activity</dt>
+      <dd>
+        <%= just_date_year bill['last_action']['acted_at'] %> &mdash; <%= bill['last_action']['text'] %>
+      </dd>
+    </dl>
   </div>
 
   <div class="resources">
@@ -52,26 +62,48 @@
         <li class="openCongress">
           <a data-resource="opencongress" target="_blank" href="<%= bill['urls']['opencongress'] %>" title="OpenCongress">OpenCongress</a>
         </li>
-
-        <li class="source">
-          <% if version %>
-            <% if version['urls'] and version['urls']['xml'] %>
-              <a data-resource="original" target="_blank" href="<%= version['urls']['xml'] %>">Original Text</a>
-            <% elsif version['urls'] and version['urls']['pdf'] %>
-              <a data-resource="original" target="_blank" href="<%= version['urls']['pdf'] %>">Original Text</a>
-            <% end %>
-          <% else %>
-            (Text not yet published)
-          <% end %>
-        </li>
       </ul>
   </div>
 
-  <% if (summary = bill_summary(bill)).present? %>
-    <%= summary %>
-  <% else %>
-    <p>No summary available.</p>
-  <% end %>
+  <% if version %>
+    <div id="document">
+      <header>
+        <strong>Full Text</strong>
+        <span>
+          Adapted from Congress' <a data-resource="original" target="_blank" href="<%= bill_text_url bill, version %>">official bill text</a>.
+        </span>
+      </header>
+      <hr />
+      <article></article>
+    </div>
 
-  <div class="clear"></div>
+    <script type="text/javascript">
+      $.get("/item/document?filename=s676-113-is.html", function(data) {
+        $("#document article").html(data);
+        markupDocument();
+      });
+
+      function markupDocument() {
+        $("span[data-citation-type=usc]").each(function() {
+          var elem = document.createElement("a");
+          elem.className = "citation usc";
+          elem.textContent = $(this).text();
+          elem.target="_blank";
+          
+          var citation_id = $(this).data("citation-id");
+          var pieces = citation_id.split("/");
+          var url = "/search/all/" + pieces[1] + " usc " + pieces[2];
+          elem.href = url;
+
+          this.parentNode.replaceChild(elem, this);
+        });
+      }
+    </script>
+  <% else %>
+    <div class="no-text">
+      <p>
+        The text of this bill has not been published yet.
+      </p>
+    </div>
+  <% end %>
 </div>

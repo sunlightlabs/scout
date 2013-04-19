@@ -34,10 +34,14 @@ get "/item/:item_type/:item_id" do
     title: title,
 
     interest: interest,
-    subscriptions: Interest.subscriptions_for(interest),
+    subscriptions: [],
     item_type: params[:item_type],
     item_id: params[:item_id]
   }
+end
+
+get "/item/document" do
+  File.read "misc/#{params[:filename]}"
 end
 
 get "/fetch/item/:item_type/:item_id" do
