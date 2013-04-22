@@ -50,13 +50,11 @@
         <dl>
           <dt class="float-left">Public Input</dt>
           <dd>
-            The public comment period for this <%= regulation_type regulation %>
             <% if regulation['comments_close_on'] < Time.now %>
-              closed
+              This <%= regulation_type regulation %>'s window for public comment closed on <%= just_date regulation['comments_close_on'] %>.
             <% else %>
-              is open, and will close
+              This <%= regulation_type regulation %> is <strong>open for public comment</strong> until <strong><%= just_date regulation['comments_close_on'] %></strong>.
             <% end %>
-            on <strong><%= just_date regulation['comments_close_on'] %></strong>.
           </dd>
         </dl>
       <% end %>
