@@ -18,43 +18,35 @@
   <div class="resources">
     <h5>Resources</h5>
     <ul>
-      <li class="documents <%= document['document_type'] %>">
-        <a data-resource="<%= document['document_type'] %>" target="_blank" href="<%= document['url'] %>">
-          <% if document['document_type'] == "gao_report" %>
-            GAO
-          <% else %>
-            More Information
-          <% end %>
-        </a>
-      </li>
-
-      <li class="source">
-        <% if document['source_url'] %>
-          <a data-resource="<%= document['document_type'] %>-original" target="_blank" href="<%= document['source_url'] %>">
-            <% if document['document_type'] == "gao_report" %>
-              Full Report
-            <% else %>
-              Source
-            <% end %>
-            
-            <% if document['source_url'] =~ /\.pdf$/ %>
-              (PDF)
-            <% end %>
-          </a>
+      <span>
+        <% if document['document_type'] == "gao_report" %>
+          Visit
+          <strong><a data-resource="<%= document['document_type'] %>" target="_blank" href="<%= document['url'] %>">
+            GAO</a></strong>
+          for more context.
         <% end %>
       </li>
-      </ul>
+    </ul>
   </div>
-    
-  <div class="clear"></div>
 
-  <% if document['gao_report']['description'].present? %>
-    <p class="explanation">
-      The below text is an official summary of the report, <strong>not the full report</strong>. Visit the resources above to read the full report.
-    </p>
-
-    <%= document_description document %>
-  <% else %>
-    <p>No description available.</p>
-  <% end %>
+  <div id="document">
+    <header>
+      <strong>Summary</strong>
+      <span>
+        Below is the official summary.
+        <% if document['source_url'] %>
+          The <a data-resource="<%= document['document_type'] %>-original" target="_blank" href="<%= document['source_url'] %>">
+            full report</a>
+          <% if document['source_url'] =~ /\.pdf$/ %>
+            (PDF)
+          <% end %>
+          is also available.
+        <% end %>
+      </span>
+    </header>
+    <hr/>
+    <article>
+      <%= gao_description document %>
+    </article>
+  </div>
 </div>

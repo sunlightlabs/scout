@@ -30,7 +30,7 @@
         Introduced
       <% end %>
       on
-      <time class="item" datetime="<%= html_date item.date %>">
+      <time datetime="<%= html_date item.date %>">
         <%= just_date_year item.date %>
       </time>
       by
@@ -48,21 +48,20 @@
   </div>
 
   <div class="resources">
-      <h5>Resources</h5>
-      <ul>
-        
-        <li class="congressGov">
-          <a data-resource="congress" target="_blank" href="<%= bill['urls']['congress'] %>" title="Congress.gov">Congress.gov</a>
-        </li>
-        
-        <li class="govTrack">
-          <a data-resource="govtrack" target="_blank" href="<%= bill['urls']['govtrack'] %>" title="GovTrack">GovTrack</a>
-        </li>
-        
-        <li class="openCongress">
-          <a data-resource="opencongress" target="_blank" href="<%= bill['urls']['opencongress'] %>" title="OpenCongress">OpenCongress</a>
-        </li>
-      </ul>
+    <h5>Resources</h5>
+    <ul>
+      <li class="congressGov">
+        <a data-resource="congress" target="_blank" href="<%= bill['urls']['congress'] %>" title="Congress.gov">Congress.gov</a>
+      </li>
+      
+      <li class="govTrack">
+        <a data-resource="govtrack" target="_blank" href="<%= bill['urls']['govtrack'] %>" title="GovTrack">GovTrack</a>
+      </li>
+      
+      <li class="openCongress">
+        <a data-resource="opencongress" target="_blank" href="<%= bill['urls']['opencongress'] %>" title="OpenCongress">OpenCongress</a>
+      </li>
+    </ul>
   </div>
 
   <% if version %>

@@ -88,7 +88,7 @@ module Subscriptions
       end
 
       def self.interest_title(interest)
-        interest.data['title']
+        "GAO: #{interest.data['title']}"
       end
 
       def self.search_name(subscription)

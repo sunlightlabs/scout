@@ -430,32 +430,24 @@ module Helpers
     def regulation_abstract(regulation)
       return nil unless regulation['abstract'].present? # also checked in view
 
-      truncate_more_html "regulation_abstract", regulation['abstract'], 1500
+      simple_format regulation['abstract']
     end
 
     def speech_speaking(speech)
       speaking = speech['speaking'].join("\n\n")
-
-      truncate_more_html "speech_speaking", speaking, 2000
+      simple_format speaking
     end
 
-    def document_description(document)
-      return nil unless document['gao_report']['description'] # shouldn't happen
+    def gao_description(document)
+      return nil unless description = document['gao_report']['description'] # shouldn't happen
 
-      description = document['gao_report']['description']
+      description = simple_format description
 
-      if document['document_type'] == "gao_report"
-        post_truncate = lambda do |desc|
-          ["What GAO Found", "Why GAO Did This Study"].each do |header|
-            desc.gsub! /(#{header})/, '<strong>\1</strong>'
-          end
-          desc
-        end
-      else
-        post_truncate = nil
+      ["What GAO Found", "Why GAO Did This Study"].each do |header|
+        description.gsub! /(#{header})/, '<strong>\1</strong>'
       end
 
-      truncate_more_html "document_description", description, 1500, post_truncate
+      description
     end
 
     def legislator_image(legislator)

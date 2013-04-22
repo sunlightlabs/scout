@@ -27,7 +27,8 @@ module Subscriptions
         fields = %w{ 
           document_number document_type article_type
           stage title abstract 
-          posted_at publication_date
+          posted_at publication_date 
+          effective_on comments_close_on
           url agency_names agency_ids 
         }
 
@@ -88,6 +89,7 @@ module Subscriptions
         fields = %w{ 
           stage title abstract article_type
           document_number document_type 
+          effective_on comments_close_on
           posted_at publication_date 
           url pdf_url 
           agency_names agency_ids

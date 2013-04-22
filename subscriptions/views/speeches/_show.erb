@@ -1,36 +1,41 @@
 <% speech = item.data %>
 
 <div class="summary">
-	<div class="entryHeader">
-		<h2><%= speech['title'] %></h2>
-		<div class="subtitle">
-		    <h4>
-		        <%= speaker_name speech %>, on
-                <time class="item" datetime="<%= html_date item.date %>">
-                    <%= just_date_year item.date %>
-                </time>
-		    </h4>
-		</div>
-	</div>
-
-    <div class="clear"></div>
-
-    <div class="resources">
-        <h5>Resources</h5>
-        <ul>
-            <li class="capWords">
-                <a data-resource="capitolwords" target="_blank" href="<%= speech['capitolwords_url'] %>">CapitolWords</a>
-            </li>
-
-			<li class="source">
-				<a data-resource="original" target="_blank" href="<%= speech['origin_url'] %>">Original Text</a>
-			</li>
-        </ul>
+  <div class="entryHeader">
+    <h2><%= speech['title'] %></h2>
+    <div class="subtitle">
+      <h4>
+        a speech in Congress by
+        <%= speaker_name speech %>, on
+        <time datetime="<%= html_date item.date %>">
+            <%= just_date_year item.date %>
+        </time>
+      </h4>
     </div>
+  </div>
 
+  <div class="clear"></div>
 
-    <div class="clear"></div>
+  <div class="resources">
+    <h5>Resources</h5>
+    <span>
+      Visit 
+      <strong><a data-resource="capitolwords" target="_blank" href="<%= speech['capitolwords_url'] %>">CapitolWords</a></strong>
+      for more context.
+    </span>
+  </div>
 
-	<%= speech_speaking speech %>
+  <div id="document">
+    <header>
+      <strong>Full Text</strong>
+      <span>
+        Below, adapted from the <a data-resource="original" target="_blank" href="<%= speech['origin_url'] %>">Congressional Record</a>.
+      </span>
+    </header>
+    <hr />
+    <article>
+      <%= speech_speaking speech %>
+    </article>
+  </div>
 
 </div>
