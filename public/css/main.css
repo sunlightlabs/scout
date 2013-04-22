@@ -1157,21 +1157,22 @@ button.follow, button.following {
 
 .entry {}
 
-.entry .subtitle {
+.subtitle {
     color: #83858b;
-    margin: 3px 0;
+    
     display: block;
     clear: both;
     float: left;
 }
 
-.entry .subtitle:last-child {padding-bottom: 8px;}
+.entry .subtitle:last-child,
+.results .subtitle {padding-bottom: 8px;}
 
-.entry .subtitle h4{
+.subtitle h4{
     float: left;
 }
 
-.entry .subtitle h3{
+.subtitle h3{
     color: #83858b;
     font-style: normal;
     font-size: 100%;
