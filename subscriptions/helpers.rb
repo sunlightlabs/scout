@@ -441,7 +441,9 @@ module Helpers
     def gao_description(document)
       return nil unless description = document['gao_report']['description'] # shouldn't happen
 
-      description = simple_format description
+      # simple simple_format (avoids re-escaping that padrino now enforces)
+      description = description.split(/\n{2,}/).join "</p><p>"
+      description = "<p>#{description}</p>"
 
       ["What GAO Found", "Why GAO Did This Study"].each do |header|
         description.gsub! /(#{header})/, '<strong>\1</strong>'
