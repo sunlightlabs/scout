@@ -69,34 +69,34 @@
       <header>
         <strong>Full Text</strong>
         <span>
-          Below, adapted from Congress' <a data-resource="original" target="_blank" href="<%= bill_text_url bill, version %>">official bill text</a>.
+          Read Congress' <a data-resource="original" target="_blank" href="<%= bill_text_url bill, version %>">official bill text</a>.
         </span>
       </header>
-      <hr />
-      <article></article>
+      <!-- <hr />
+      <article></article> -->
     </div>
 
     <script type="text/javascript">
-      $.get("/item/document?filename=s676-113-is.html", function(data) {
-        $("#document article").html(data);
-        markupDocument();
-      });
+      // $.get("/item/document?filename=s676-113-is.html", function(data) {
+      //   $("#document article").html(data);
+      //   markupDocument();
+      // });
 
-      function markupDocument() {
-        $("span[data-citation-type=usc]").each(function() {
-          var elem = document.createElement("a");
-          elem.className = "citation usc";
-          elem.textContent = $(this).text();
-          elem.target="_blank";
+      // function markupDocument() {
+      //   $("span[data-citation-type=usc]").each(function() {
+      //     var elem = document.createElement("a");
+      //     elem.className = "citation usc";
+      //     elem.textContent = $(this).text();
+      //     elem.target="_blank";
           
-          var citation_id = $(this).data("citation-id");
-          var pieces = citation_id.split("/");
-          var url = "/search/all/" + pieces[1] + " usc " + pieces[2];
-          elem.href = url;
+      //     var citation_id = $(this).data("citation-id");
+      //     var pieces = citation_id.split("/");
+      //     var url = "/search/all/" + pieces[1] + " usc " + pieces[2];
+      //     elem.href = url;
 
-          this.parentNode.replaceChild(elem, this);
-        });
-      }
+      //     this.parentNode.replaceChild(elem, this);
+      //   });
+      // }
     </script>
   <% else %>
     <div id="document">
