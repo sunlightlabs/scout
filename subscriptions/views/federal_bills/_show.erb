@@ -70,7 +70,7 @@
       <header>
         <strong>Full Text</strong>
         <span>
-          Adapted from Congress' <a data-resource="original" target="_blank" href="<%= bill_text_url bill, version %>">official bill text</a>.
+          Below, adapted from Congress' <a data-resource="original" target="_blank" href="<%= bill_text_url bill, version %>">official bill text</a>.
         </span>
       </header>
       <hr />
@@ -100,10 +100,13 @@
       }
     </script>
   <% else %>
-    <div class="no-text">
-      <p>
-        The text of this bill has not been published yet.
-      </p>
+    <div id="document">
+      <header>
+        <strong>Full Text</strong>
+        <span>
+          The text of this bill has not yet been released.
+        </span>
+      </header>
     </div>
   <% end %>
 </div>
