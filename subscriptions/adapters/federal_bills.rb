@@ -124,6 +124,15 @@ module Subscriptions
         url
       end
 
+      # given a seen item (bill), return the document URL to fetch
+      def self.document_url(item)
+        bill = item.data
+        if bill['last_version'] and bill['last_version']['urls']['xml']
+          bill_version_id = bill['last_version']['bill_version_id']
+          "http://unitedstates.sunlightfoundation.com/documents/bills/#{bill['congress']}/#{bill['bill_type']}/#{bill_version_id}.htm"
+        end
+      end
+
       def self.search_name(subscription)
         "Bills in Congress"
       end

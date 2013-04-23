@@ -64,39 +64,51 @@
     </ul>
   </div>
 
-  <% if version %>
+  <% if version and bill['document'].present? %>
     <div id="document">
       <header>
         <strong>Full Text</strong>
         <span>
-          Read Congress' <a data-resource="original" target="_blank" href="<%= bill_text_url bill, version %>">official bill text</a>.
+          Below is a simple rendition of Congress' <a data-resource="original" target="_blank" href="<%= bill_text_url bill, version %>">official bill text</a>.
         </span>
       </header>
-      <!-- <hr />
-      <article></article> -->
+      <hr />
+      <article>
+        <%= bill['document'] %>
+      </article>
     </div>
 
     <script type="text/javascript">
-      // $.get("/item/document?filename=s676-113-is.html", function(data) {
-      //   $("#document article").html(data);
-      //   markupDocument();
-      // });
+      function markupDocument() {
+        // add show link for table of contents
+        $("#document article .toc").each(function() {
+          $(this.parentNode).append(
+            "<div class=\"toc-hidden\">(table of contents hidden) <a href=\"#\">show</a></div>"
+          );
+        });
 
-      // function markupDocument() {
-      //   $("span[data-citation-type=usc]").each(function() {
-      //     var elem = document.createElement("a");
-      //     elem.className = "citation usc";
-      //     elem.textContent = $(this).text();
-      //     elem.target="_blank";
+        $("#document article .toc-hidden a").click(function() {
+          var parent = this.parentNode;
+          $(parent).hide().siblings(".toc").show();
+          return false;
+        })
+
+        $("#document article span[data-citation-type=usc]").each(function() {
+          var elem = document.createElement("a");
+          elem.className = "citation usc";
+          elem.textContent = $(this).text();
+          elem.target="_blank";
           
-      //     var citation_id = $(this).data("citation-id");
-      //     var pieces = citation_id.split("/");
-      //     var url = "/search/all/" + pieces[1] + " usc " + pieces[2];
-      //     elem.href = url;
+          var citation_id = $(this).data("citation-id");
+          var pieces = citation_id.split("/");
+          var url = "/search/all/" + pieces[1] + " usc " + pieces[2];
+          elem.href = url;
 
-      //     this.parentNode.replaceChild(elem, this);
-      //   });
-      // }
+          this.parentNode.replaceChild(elem, this);
+        });
+      }
+
+      $(markupDocument);
     </script>
   <% else %>
     <div id="document">

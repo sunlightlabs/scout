@@ -63,7 +63,12 @@ module TestHelper
     # mock helpers for faking remote content
 
     def mock_response(url, fixture)
-      file = "test/fixtures/#{fixture}.json"
+      if fixture["."]
+        file = "test/fixtures/#{fixture}"
+      else
+        file = "test/fixtures/#{fixture}.json"
+      end
+
       if File.exists?(file)
         Subscriptions::Manager.should_receive(:download).any_number_of_times.with(url).and_return File.read(file)
       else

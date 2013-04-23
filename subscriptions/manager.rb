@@ -151,7 +151,8 @@ module Subscriptions
       
       puts "\n[#{subscription.subscription_type}][#{function}][#{subscription.interest_in}][#{subscription.id}] #{url}\n\n" if !test? and config[:debug][:output_urls]
 
-      # this override is only used by the external feed parser, which is parsing some kind of XML feed
+
+      # Feed parser
       if adapter.respond_to?(:url_to_response)
         begin
           response = adapter.url_to_response url
@@ -170,7 +171,7 @@ module Subscriptions
           return error_for "Unknown error polling feed", url, function, options, subscription, ex
         end
 
-      # every other adapter is parsing a remote JSON feed
+      # Every other adapter is parsing a remote JSON feed
       else
         items = begin
           # searches use a caching layer
@@ -250,7 +251,7 @@ module Subscriptions
         elsif options[:cache_only]
           return nil
         else
-          body = download(url)
+          body = download url
           response = ::Oj.load body, mode: :compat
 
           # wait for JSON parse, so as not to cache errors
@@ -272,10 +273,48 @@ module Subscriptions
       
       if item
         item.find_url = url
+
+        if adapter.respond_to?(:document_url)
+          url = adapter.document_url item
+          item.data['document'] = fetch url, :document, options
+        end
+
         item
       else
         nil
       end
+    end
+
+    # get the content at an arbitrary location, using the same cache logic as the poll and find operations
+    # (include adapter_type and item_id to better track what's happening)
+    def self.fetch(url, url_type, options = {})
+      puts "\n[fetch][#{url_type}] #{url}\n\n" if !test? and config[:debug][:output_urls]
+      
+      body = nil
+      begin
+        if body = cache_for(url, :fetch, url_type)
+          # nothing
+        elsif options[:cache_only]
+          return nil
+        else
+          body = download url
+
+          # wait for JSON parse, so as not to cache errors
+          if !config[:no_cache]
+            cache! url, :fetch, url_type, body
+          end
+        end
+      rescue Curl::Err::ConnectionFailedError, Curl::Err::PartialFileError, 
+          Curl::Err::RecvError, Curl::Err::HostResolutionError, 
+          Timeout::Error, Errno::ECONNREFUSED, EOFError, Errno::ETIMEDOUT => ex
+        Admin.report Report.warning("fetch:#{url_type}", "[find][#{url_type}] find timeout, returned nil")
+        return nil
+      rescue SyntaxError => ex
+        Admin.report Report.exception("fetch:#{url_type}", "[find][#{url_type}] JSON parse error, returned nil, body was:\n\n#{body}", ex)
+        return nil
+      end
+
+      body
     end
 
     def self.cache_for(url, function, subscription_type)
@@ -303,7 +342,7 @@ module Subscriptions
     end
 
     # download content at the given URL
-    def self.download(url, cache = {})
+    def self.download(url)
       curl = Curl::Easy.new url
       curl.perform
       curl.body_str

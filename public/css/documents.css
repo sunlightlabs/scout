@@ -14,8 +14,9 @@
 
 .entry.bill #document {font-size: 10pt; line-height: 28px;}
 
-.entry.bill #document .section:first-child {display: none;}
 .entry.bill #document .toc {display: none;}
+.entry.bill #document .toc-hidden {margin-left: 20px; color: #888; margin-top: 13px;}
+.entry.bill #document .toc-hidden a {color: #888; margin-left: 7px;}
 
 .entry.bill #document .title {margin-bottom: 25px; display: block;} /* todo: turn title into div */
 .entry.bill #document .title>.enum:before {content: "Title ";}

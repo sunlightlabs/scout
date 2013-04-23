@@ -40,10 +40,6 @@ get "/item/:item_type/:item_id" do
   }
 end
 
-get "/item/document" do
-  File.read "misc/#{params[:filename]}"
-end
-
 get "/fetch/item/:item_type/:item_id" do
   valid_item
   
