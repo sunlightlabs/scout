@@ -274,8 +274,7 @@ module Subscriptions
       if item
         item.find_url = url
 
-        if adapter.respond_to?(:document_url)
-          url = adapter.document_url item
+        if adapter.respond_to?(:document_url) and (url = adapter.document_url item)
           item.data['document'] = fetch url, :document, options
         end
 
