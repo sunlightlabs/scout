@@ -315,6 +315,8 @@ div.error {
     display: none;
 }
 
+.entry div.error {margin-top: 30px; font-size: 15pt; color: #888;}
+
 
 /*-- Hat Styling --*/
 .hatWrap div.contentWrapper{
