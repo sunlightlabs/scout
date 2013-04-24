@@ -5,6 +5,8 @@ get "/item/:item_type/:item_id" do
 
   item_type = params[:item_type].strip
   item_id = params[:item_id].strip
+  
+  halt 404 unless item_types[item_type]
   subscription_type = item_types[item_type]['adapter']
 
   if item = Subscriptions::Manager.find(subscription_type, item_id, {cache_only: !crawler?})
