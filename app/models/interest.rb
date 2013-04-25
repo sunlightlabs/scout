@@ -68,7 +68,7 @@ class Interest
   end
 
   def title
-    Subscription.adapter_for(item_types[self.item_type]['adapter']).interest_title self
+    Subscription.adapter_for(item_types[self.item_type]['adapter']).title_for self.data
   end
 
   def item?

@@ -1,6 +1,6 @@
 # landing pages
 
-get "/item/:item_type/:item_id" do
+get "/item/:item_type/:item_id/?:slug?" do
   interest = item_interest
 
   item_type = params[:item_type].strip
@@ -42,7 +42,7 @@ get "/item/:item_type/:item_id" do
   }
 end
 
-get "/fetch/item/:item_type/:item_id" do
+get "/fetch/item/:item_type/:item_id/?:slug?" do
   valid_item
   
   item_type = params[:item_type].strip

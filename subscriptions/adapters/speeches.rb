@@ -72,8 +72,14 @@ module Subscriptions
         url
       end
 
-      def self.interest_title(interest)
-        interest.data['title']
+      def self.title_for(speech)
+        speech['title']
+      end
+
+      def self.slug_for(speech)
+        title = (speech['chamber'] == 'Senate') ? 'Sen' : 'Rep'
+        speaker = "#{title} #{speech['speaker_first']} #{speech['speaker_last']}"
+        [speaker, title_for(speech)].join " "
       end
 
       def self.search_name(subscription)

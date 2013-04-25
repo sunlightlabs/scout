@@ -13,6 +13,7 @@ gem 'rinku'
 
 gem "mongoid", '3.1.2'
 
+gem "stringex" # slug generation
 gem 'ruby-hmac'
 gem 'bcrypt-ruby'
 

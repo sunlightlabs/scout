@@ -87,8 +87,12 @@ module Subscriptions
         url
       end
 
-      def self.interest_title(interest)
-        "GAO: #{interest.data['title']}"
+      def self.title_for(document)
+        "GAO: #{document['title']}"
+      end
+
+      def self.slug_for(document)
+        title_for document
       end
 
       def self.search_name(subscription)

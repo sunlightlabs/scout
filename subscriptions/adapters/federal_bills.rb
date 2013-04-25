@@ -155,8 +155,12 @@ module Subscriptions
         "#{code} #{interest.data['number']}"
       end
 
-      def self.interest_title(interest)
-        interest.data['short_title'] || interest.data['official_title']
+      def self.title_for(bill)
+        bill['short_title'] || bill['official_title']
+      end
+
+      def self.slug_for(bill)
+        title_for bill
       end
       
       # takes parsed response and returns an array where each item is 
@@ -164,8 +168,8 @@ module Subscriptions
       def self.items_for(response, function, options = {})
         raise AdapterParseException.new("Response didn't include results field: #{response.inspect}") unless response['results']
         
-        response['results'].map do |bv|
-          item_for bv
+        response['results'].map do |bill|
+          item_for bill
         end
       end
 

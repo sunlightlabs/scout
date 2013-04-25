@@ -102,8 +102,16 @@ module Subscriptions
         url
       end
 
-      def self.interest_title(interest)
-        interest.data['title']
+      def self.title_for(regulation)
+        regulation['title']
+      end
+
+      def self.slug_for(regulation)
+        slug = title_for regulation
+        if agency = regulation['agency_names'].first
+          slug = [agency, slug].join " "
+        end
+        slug
       end
 
       def self.search_name(subscription)

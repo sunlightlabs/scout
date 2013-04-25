@@ -44,8 +44,8 @@ module Helpers
           filters_short interest.subscriptions.first
         end
       elsif interest.item?
-        if interest_adapter(interest).respond_to?(:interest_title)
-          interest_adapter(interest).interest_title interest
+        if interest_adapter(interest).respond_to?(:title_for)
+          interest_adapter(interest).title_for interest.data
         end
       elsif interest.feed?
         interest.data['description']
@@ -129,11 +129,18 @@ module Helpers
     
     def item_path(item)
       if item.item?
-        "/item/#{item.item_type}/#{item.interest_in}##{item.item_id}"
+        "/item/#{item.item_type}/#{item.interest_in}"
       elsif item.feed?
         item.data['url']
       elsif item.search?
-        "/item/#{item.item_type}/#{item.item_id}"
+        route = "/item/#{item.item_type}/#{item.item_id}"
+        
+        adapter = Subscription.adapter_for item.subscription_type
+        if adapter.respond_to?(:slug_for)
+          route = "#{route}/#{Environment.to_url adapter.slug_for(item.data)}"
+        end
+
+        route
       end
     end
 

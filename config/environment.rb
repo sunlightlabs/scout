@@ -6,6 +6,7 @@ require 'twilio-rb'
 require 'feedbag'
 require 'phone'
 
+require 'stringex'
 
 def config
   @config ||= YAML.load_file File.join(File.dirname(__FILE__), "config.yml")
@@ -14,6 +15,10 @@ end
 class Environment
   def self.services
     @services ||= YAML.load_file File.join(File.dirname(__FILE__), "services.yml")
+  end
+
+  def self.to_url(string)
+    string.to_url[0..200]
   end
 end
 

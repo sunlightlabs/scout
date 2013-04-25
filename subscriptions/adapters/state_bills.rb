@@ -127,8 +127,12 @@ module Subscriptions
         "#{state_map[interest.data['state'].upcase]} - #{interest.data['bill_id']}"
       end
 
-      def self.interest_title(interest)
-        interest.data['+short_title'] || interest.data['title']
+      def self.title_for(bill)
+        bill['+short_title'] || bill['title']
+      end
+
+      def self.slug_for(bill)
+        [bill['bill_id'], title_for(bill)].join " "
       end
 
       # item_id in this case is not actually the remote bill_id, since that's not specific enough
