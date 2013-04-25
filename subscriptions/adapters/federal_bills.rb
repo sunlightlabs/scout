@@ -3,6 +3,18 @@ module Subscriptions
 
     class FederalBills
 
+      MAX_PER_PAGE = 50
+
+      FIELDS = %w{ 
+        bill_id bill_type number congress urls
+        short_title official_title summary
+        last_action actions
+        introduced_on last_action_at last_version last_version_on
+        sponsor.first_name sponsor.last_name sponsor.nickname
+        sponsor.name_suffix sponsor.title sponsor.party sponsor.state
+        created_at
+      }
+
       def self.filters
         {
           "stage" => {
@@ -20,13 +32,6 @@ module Subscriptions
           endpoint = "http://congress.api.sunlightfoundation.com"
         end
         
-        fields = %w{ bill_id bill_type number congress
-          short_title official_title summary
-          introduced_on last_version last_version_on
-          sponsor.first_name sponsor.last_name sponsor.nickname
-          sponsor.name_suffix sponsor.title sponsor.party sponsor.state
-        }
-
         url = endpoint
 
         query = subscription.query['query']
@@ -57,7 +62,7 @@ module Subscriptions
         end
 
         url << "&order=last_version_on"
-        url << "&fields=#{fields.join ','}"
+        url << "&fields=#{FIELDS.join ','}"
         url << "&apikey=#{api_key}"
 
         # should be unnecessary, we set last_version_on to introduced_on if GPO hasn't published yet
@@ -104,23 +109,40 @@ module Subscriptions
           endpoint = "http://congress.api.sunlightfoundation.com"
         end
         
-        fields = %w{ 
-          bill_id bill_type number congress urls
-          short_title official_title summary
-          last_action actions
-          introduced_on last_action_at last_version last_version_on
-          sponsor.first_name sponsor.last_name sponsor.nickname
-          sponsor.name_suffix sponsor.title sponsor.party sponsor.state
-        }
-
         url = "#{endpoint}/bills?apikey=#{api_key}"
 
         # should be unnecessary, we set last_version_on to introduced_on if GPO hasn't published yet
         url << "&last_version_on__exists=true"
         
         url << "&bill_id=#{item_id}"
-        url << "&fields=#{fields.join ','}"
+        url << "&fields=#{FIELDS.join ','}"
 
+        url
+      end
+
+      def self.url_for_sync(options = {})
+        api_key = options[:api_key] || config[:subscriptions][:sunlight_api_key]
+
+        if config[:subscriptions][:congress_endpoint].present?
+          endpoint = config[:subscriptions][:congress_endpoint].dup
+        else
+          endpoint = "http://congress.api.sunlightfoundation.com"
+        end
+
+        url = "#{endpoint}/bills?apikey=#{api_key}"
+        url << "&fields=#{FIELDS.join ','}"
+        url << "&order=created_at__asc"
+
+        # can be limited to a given or current congress
+        if options[:congress] == "current"
+          options[:congress] = current_congress
+        end
+
+        url << "&congress=#{options[:congress]}" if options[:congress]
+
+        url << "&page=#{options[:page]}" if options[:page]
+        url << "&per_page=#{MAX_PER_PAGE}"
+        
         url
       end
 
@@ -193,6 +215,33 @@ module Subscriptions
         )
       end
       
+      # e.g. 2009 & 2010 -> 111th congress, 2011 & 2012 -> 112th congress
+      def self.current_congress
+        congress_for_year current_legislative_year
+      end
+
+      def self.congress_for_year(year)
+        ((year.to_i + 1) / 2) - 894
+      end
+
+      # legislative year - consider Jan 1, Jan 2, and first half of Jan 3 to be last year
+      def self.current_legislative_year(now = nil)
+        now ||= Time.now
+        now = now.in_time_zone # enforce EST
+
+        year = now.year
+        if now.month == 1
+          if [1, 2].include?(now.day)
+            year - 1
+          elsif (now.day == 3) and (now.hour < 12)
+            year - 1
+          else
+            year
+          end
+        else
+          year
+        end
+      end
     end
   
   end

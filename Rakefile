@@ -5,6 +5,7 @@ task :environment do
 end
 
 require 'rake/testtask'
+load "./tasks/sync.rake"
 
 namespace :tests do 
   Rake::TestTask.new(:all) do |t|
@@ -282,7 +283,7 @@ namespace :test do
 
   desc "Send two test reports"
   task :email_report => :environment do
-    Admin.report Report.failure("Admin.report 1", "Testing regular failure reports.", {:name => "test report"})
+    Admin.report Report.failure("Admin.report 1", "Testing regular failure reports.", {name: "test report"})
     Admin.report Report.exception("Admin.report 2", "Testing exception reports", Exception.new("WOW! OUCH!!"))
   end
 

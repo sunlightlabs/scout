@@ -151,7 +151,6 @@ module Subscriptions
       
       puts "\n[#{subscription.subscription_type}][#{function}][#{subscription.interest_in}][#{subscription.id}] #{url}\n\n" if !test? and config[:debug][:output_urls]
 
-
       # Feed parser
       if adapter.respond_to?(:url_to_response)
         begin
@@ -168,6 +167,7 @@ module Subscriptions
           # don't allow caller to accumulate unexpected errors, email right away
           report = Report.exception self, "Exception processing URL #{url}", ex, subscription_type: subscription.subscription_type, function: function, interest_in: subscription.interest_in, subscription_id: subscription.id
           puts report.to_s
+          Admin.report report
           return error_for "Unknown error polling feed", url, function, options, subscription, ex
         end
 
@@ -229,7 +229,7 @@ module Subscriptions
         url: url,
         function: function,
         options: options,
-        subscription: subscription.attributes.dup,
+        subscription: subscription ? subscription.attributes.dup : nil,
         exception: (exception ? Report.exception_to_hash(exception) : nil)
       }
     end
@@ -288,7 +288,7 @@ module Subscriptions
     # (include adapter_type and item_id to better track what's happening)
     def self.fetch(url, url_type, options = {})
       puts "\n[fetch][#{url_type}] #{url}\n\n" if !test? and config[:debug][:output_urls]
-      
+
       body = nil
       begin
         if body = cache_for(url, :fetch, url_type)
@@ -298,7 +298,6 @@ module Subscriptions
         else
           body = download url
 
-          # wait for JSON parse, so as not to cache errors
           if !config[:no_cache]
             cache! url, :fetch, url_type, body
           end
@@ -314,6 +313,40 @@ module Subscriptions
       end
 
       body
+    end
+
+    # just get items and feed them into the parser -
+    # no caching, no feed parsing, no related subscription
+    def self.sync(subscription_type, options = {})
+      adapter = Subscription.adapter_for subscription_type
+      url = adapter.url_for_sync options
+      
+      puts "\n[#{subscription_type}][sync][#{options[:page]}] #{url}\n\n" if !test? and config[:debug][:output_urls]
+
+      items = begin
+        body = download url
+        response = ::Oj.load body, mode: :compat
+        adapter.items_for response, :sync, options
+      rescue Curl::Err::ConnectionFailedError, Curl::Err::PartialFileError, 
+        Curl::Err::RecvError, Curl::Err::HostResolutionError, 
+        Curl::Err::GotNothingError,
+        Timeout::Error, Errno::ECONNREFUSED, EOFError, Errno::ETIMEDOUT => ex
+        return error_for "Network or timeout error", url, :sync, options, nil, ex
+      rescue SyntaxError => ex
+        message = if body =~ /504 Gateway Time-out/
+          "Timeout (504)"
+        else
+          "JSON parser error, body was:\n\n#{body}"
+        end
+        return error_for message, url, :sync, options, nil, ex
+      rescue AdapterParseException => ex
+        return error_for ex.message, url, :sync, options, nil
+      end
+
+      items.map do |item|
+        item.item_type = search_adapters[subscription_type]
+        item
+      end
     end
 
     def self.cache_for(url, function, subscription_type)
