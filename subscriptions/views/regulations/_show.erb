@@ -37,7 +37,7 @@
           <dt class="float-left">Effective Date</dt>
           <dd>
             This <%= regulation_type regulation %> 
-            <% if regulation["effective_on"] < Time.now %>
+            <% if Time.zone.parse(regulation["effective_on"]) < Time.zone.now %>
               became
             <% else %>
               will become
@@ -50,7 +50,7 @@
         <dl>
           <dt class="float-left">Public Input</dt>
           <dd>
-            <% if regulation['comments_close_on'] < Time.now %>
+            <% if Time.zone.parse(regulation['comments_close_on']) < Time.zone.now %>
               This <%= regulation_type regulation %>'s window for public comment closed on <%= just_date regulation['comments_close_on'] %>.
             <% else %>
               This <%= regulation_type regulation %> is <strong>open for public comment</strong> until <strong><%= just_date regulation['comments_close_on'] %></strong>.
