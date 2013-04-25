@@ -66,29 +66,6 @@ get "/fetch/item/:item_type/:item_id/?:slug?" do
   json 200, {share: share, results: results}
 end
 
-get "/fetch/item/:item_type/:item_id/:subscription_type" do
-  valid_item
-
-  interest = item_interest
-
-  # pass regenerate=true flag because we don't need the saved subscription, even if there is one
-  subscription = Interest.subscription_for interest, params[:subscription_type], true
-
-  # todo: this comes back nil as a race condition when occurring in parallel with a follow action
-  items = subscription.search
-
-  if items.is_a?(Hash)
-    puts "[#{params[:subscription_type]}][#{params[:item_id]}][search] ERROR while loading this:\n\n#{JSON.pretty_generate items}" unless Sinatra::Application.test?
-    items = nil # frontend gets nil
-  end
-
-  partial "show_results", engine: :erb, locals: {
-    interest: interest,
-    subscription: subscription,
-    items: items
-  }
-end
-
 post '/item/:item_type/:item_id/follow' do
   requires_login
 

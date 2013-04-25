@@ -44,24 +44,6 @@ class ItemsTest < Test::Unit::TestCase
     assert_match /Due Process/, last_response.body
   end
 
-  def test_fetch_item_adapter_contents
-    item_id = "hr4192-112"
-    item_type = "bill"
-    subscription_type = "federal_bills_activity"
-
-    get "/fetch/item/#{item_type}/#{item_id}/#{subscription_type}"
-    assert_response 200
-  end
-
-  def test_fetch_item_adapter_with_bad_adapter
-    item_id = "hr4192-112"
-    item_type = "bill"
-    subscription_type = "nothing"
-
-    get "/fetch/item/#{item_type}/#{item_id}/#{subscription_type}"
-    assert_response 404
-  end
-
   def test_fetch_item_itself
     item_id = "hr4192-112"
     item_type = "bill"
