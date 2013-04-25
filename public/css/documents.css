@@ -10,22 +10,10 @@
 }
 
 
+
 /** federal bills **/
 
-.entry.bill #document {font-size: 10pt; line-height: 28px;}
-
-.entry.bill #document .toc {display: none;}
-.entry.bill #document .toc-hidden {margin-left: 20px; color: #888; margin-top: 13px;}
-.entry.bill #document .toc-hidden a {color: #888; margin-left: 7px;}
-
-.entry.bill #document .title {margin-bottom: 25px; display: block;} /* todo: turn title into div */
-.entry.bill #document .title>.enum:before {content: "Title ";}
-.entry.bill #document .title>.enum:after {content: " — ";}
-.entry.bill #document .title>.header,
-.entry.bill #document .title>.enum {font-weight: bold;}
-.entry.bill #document .title>.header:after {content: "";}
-
-.entry.bill #document .header:after {content: " — ";}
+/* general */
 
 .entry.bill #document .enum {margin-right: 3px;}
 
@@ -42,8 +30,36 @@
 .entry.bill #document .paragraph,
 .entry.bill #document .subparagraph {margin-left: 20px;}
 
-
-
 .entry.bill #document .quoted-block {font-style: italic; padding-left: 20px;}
 .entry.bill #document .quoted-block>*:first-child {display: inline;}
 .entry.bill #document .after-quoted-block {display: none;}
+
+.entry.bill #document {font-size: 10pt; line-height: 28px;}
+
+.entry.bill #document .toc {display: none;}
+.entry.bill #document .toc-hidden {margin-left: 20px; color: #888; }
+.entry.bill #document .toc-hidden a {color: #888; margin-left: 7px;}
+
+/* hierarchy-specific */
+
+.entry.bill #document .section {margin-bottom: 20px;}
+.entry.bill #document .section>.enum:before {content: "Sec ";}
+.entry.bill #document .section>.enum,
+.entry.bill #document .section>.header {
+  font-weight: bold; font-size: 10pt;
+}
+.entry.bill #document .section>.enum {margin-right: 10px;}
+.entry.bill #document .section>.enum+.header+* {display: block;}
+
+.entry.bill #document .title {margin-bottom: 25px;}
+.entry.bill #document .title>.enum:before {content: "Title ";}
+.entry.bill #document .title>.enum:after {content: " — ";}
+
+.entry.bill #document .title>.header,
+.entry.bill #document .title>.enum {
+  font-weight: bold; font-size: 14pt; font-variant: small-caps;
+}
+.entry.bill #document .title>.header:after {content: "";}
+
+.entry.bill #document .header:after {content: " — ";}
+.entry.bill #document .section>.header:after {content: "";}
