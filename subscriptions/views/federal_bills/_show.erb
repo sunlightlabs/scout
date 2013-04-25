@@ -42,7 +42,7 @@
     <dl>
       <dt class="float-left">Last activity</dt>
       <dd>
-        <%= just_date_year bill['last_action']['acted_at'] %> &mdash; <%= bill['last_action']['text'] %>
+        <%= just_date_year bill['actions'].last['acted_at'] %> &mdash; <%= bill['actions'].last['text'] %>
       </dd>
     </dl>
   </div>
