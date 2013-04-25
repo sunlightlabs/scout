@@ -9,6 +9,17 @@
   float: left;
 }
 
+.entry.bill #document article,
+.entry.speech #document article,
+.entry.document #document article {
+  color: #111;
+}
+
+.entry.speech #document article p,
+.entry.document #document article p {
+  line-height: 22px;
+}
+
 
 
 /** federal bills **/
@@ -25,6 +36,8 @@
 .entry.bill #document .quoted-block,
 .entry.bill #document .subparagraph {margin-top: 13px; margin-bottom: 13px;}
 
+.entry.bill #document .section:first-child {margin-top: 0;}
+
 .entry.bill #document .subsection,
 .entry.bill #document .subchapter,
 .entry.bill #document .paragraph,
@@ -33,6 +46,7 @@
 .entry.bill #document .quoted-block {font-style: italic; padding-left: 20px;}
 .entry.bill #document .quoted-block>*:first-child {display: inline;}
 .entry.bill #document .after-quoted-block {display: none;}
+
 
 .entry.bill #document {font-size: 10pt; line-height: 28px;}
 
