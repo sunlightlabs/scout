@@ -142,6 +142,10 @@ module Subscriptions
       end
 
       def self.interest_name(interest)
+        formatted_code interest.data
+      end
+
+      def self.formatted_code(bill)
         code = {
           "hr" => "H.R.",
           "hres" => "H.Res.",
@@ -151,16 +155,16 @@ module Subscriptions
           "sres" => "S.Res.",
           "sjres" => "S.J.Res.",
           "sconres" => "S.Con.Res."
-        }[interest.data['bill_type']]
-        "#{code} #{interest.data['number']}"
+        }[bill['bill_type']]
+        "#{code} #{bill['number']}"
       end
 
       def self.title_for(bill)
-        bill['short_title'] || bill['official_title']
+        [formatted_code(bill), (bill['short_title'] || bill['official_title'])].join ": "
       end
 
       def self.slug_for(bill)
-        title_for bill
+        bill['short_title'] || bill['official_title']
       end
       
       # takes parsed response and returns an array where each item is 
