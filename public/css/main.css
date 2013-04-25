@@ -1127,7 +1127,6 @@ button.follow, button.following {
     padding: 0 33px 0 10px;
 }
 
-
 .entryHeader{
     float: left;
     margin-left: 10px;
@@ -1156,6 +1155,17 @@ button.follow, button.following {
     float: left;
     margin-top: 10px;
 }
+
+.entry .core-context ul,
+.entry .core-context li {
+    list-style-type: none
+}
+.entry .core-context li {
+    margin-bottom: 10px;
+}
+
+.entry .core-context li.rest {display: none;}
+.entry .core-context li.hide {display: none;}
 
 .entry {}
 

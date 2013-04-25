@@ -40,9 +40,21 @@
 
   <div class="core-context">
     <dl>
-      <dt class="float-left">Last activity</dt>
+      <dt class="float-left">Recent activity</dt>
       <dd>
-        <%= just_date_year bill['actions'].last['acted_at'] %> &mdash; <%= bill['actions'].last['text'] %>
+        <ul>
+          <% bill['actions'].reverse.each_with_index do |action, i| %>
+            <li class="<%= i == 0 ? "first" : "rest" %>">
+              <%= just_date_year action['acted_at'] %> &mdash; <%= action['text'] %>
+            </li>
+          <% end %>
+          <li class="show">
+            <a href="#" class="all-actions">Show complete history</a>
+          </li>
+          <li class="hide">
+            <a href="#" class="all-actions">Hide complete history</a>
+          </li>
+        </ul>
       </dd>
     </dl>
   </div>
@@ -125,3 +137,21 @@
     </div>
   <% end %>
 </div>
+
+<script type="text/javascript">
+  $(function() {
+    $(".core-context li.show a").click(function() {
+      $(".core-context li.rest").show();
+      $(".core-context li.hide").show();
+      $(".core-context li.show").hide();
+      return false;
+    });
+
+    $(".core-context li.hide a").click(function() {
+      $(".core-context li.rest").hide();
+      $(".core-context li.hide").hide();
+      $(".core-context li.show").show();
+      return false;
+    });
+  });
+</script>
