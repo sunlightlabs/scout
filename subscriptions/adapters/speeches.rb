@@ -78,7 +78,7 @@ module Subscriptions
 
       def self.slug_for(speech)
         title = (speech['chamber'] == 'Senate') ? 'Sen' : 'Rep'
-        speaker = "#{title} #{speech['speaker_first']} #{speech['speaker_last']}"
+        speaker = "#{title}. #{speech['speaker_first']} #{speech['speaker_last']}"
         [speaker, title_for(speech)].join " "
       end
 
