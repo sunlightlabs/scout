@@ -528,6 +528,12 @@ task :sitemap => :environment do
       add "/search/all/#{URI.escape standard}", change_frequency: :daily
     end
 
+    # federal bills
+    Item.where(item_type: "bill").asc(:created_at).each do |item|
+      puts "[bill][#{item.item_id}] Adding to sitemap..."
+      add landing_path(item), change_frequency: :daily
+    end
+
   end
 
   puts "Saved sitemaps."
