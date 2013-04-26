@@ -200,7 +200,7 @@ module Subscriptions
           Curl::Err::GotNothingError,
           Timeout::Error, Errno::ECONNREFUSED, EOFError, Errno::ETIMEDOUT => ex
           return error_for "Network or timeout error", url, function, options, subscription, ex
-        rescue SyntaxError => ex
+        rescue Oj::ParseError, SyntaxError => ex
           message = if body =~ /504 Gateway Time-out/
             "Timeout (504)"
           else
@@ -264,7 +264,7 @@ module Subscriptions
           Timeout::Error, Errno::ECONNREFUSED, EOFError, Errno::ETIMEDOUT => ex
         Admin.report Report.warning("find:#{adapter_type}", "[#{adapter_type}][find][#{item_id}] find timeout, returned nil")
         return nil
-      rescue SyntaxError => ex
+      rescue Oj::ParseError, SyntaxError => ex
         Admin.report Report.exception("find:#{adapter_type}", "[#{adapter_type}][find][#{item_id}] JSON parse error, returned nil, body was:\n\n#{body}", ex)
         return nil
       end
@@ -307,7 +307,7 @@ module Subscriptions
           Timeout::Error, Errno::ECONNREFUSED, EOFError, Errno::ETIMEDOUT => ex
         Admin.report Report.warning("fetch:#{url_type}", "[find][#{url_type}] find timeout, returned nil")
         return nil
-      rescue SyntaxError => ex
+      rescue Oj::ParseError, SyntaxError => ex
         Admin.report Report.exception("fetch:#{url_type}", "[find][#{url_type}] JSON parse error, returned nil, body was:\n\n#{body}", ex)
         return nil
       end
@@ -332,7 +332,7 @@ module Subscriptions
         Curl::Err::GotNothingError,
         Timeout::Error, Errno::ECONNREFUSED, EOFError, Errno::ETIMEDOUT => ex
         return error_for "Network or timeout error", url, :sync, options, nil, ex
-      rescue SyntaxError => ex
+      rescue Oj::ParseError, SyntaxError => ex
         message = if body =~ /504 Gateway Time-out/
           "Timeout (504)"
         else
