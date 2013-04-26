@@ -18,6 +18,9 @@ class Environment
   end
 
   def self.to_url(string)
+    # workaround until https://github.com/rsl/stringex/issues/103 is fixed
+    string.gsub! /[`\{\}]/, ""
+
     string.to_url[0..200]
   end
 end
