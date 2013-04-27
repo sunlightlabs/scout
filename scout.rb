@@ -67,10 +67,6 @@ post '/error' do
   raise Exception.new("KABOOM.")
 end
 
-get '/document' do
-  erb :"documents/viewer", layout: false
-end
-
 # redirector and tracker
 # * records the click event and data, redirects user to final URL
 # 
