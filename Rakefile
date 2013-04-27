@@ -514,7 +514,11 @@ task :sitemap => :environment do
     pages: 1 # assume /about works
   } 
   
-  BigSitemap.generate(base_url: "https://scout.sunlightfoundation.com", document_root: "public/sitemap") do
+  BigSitemap.generate(
+    base_url: "https://scout.sunlightfoundation.com", 
+    document_root: "public/sitemap",
+    ping_google: true,
+    ping_bing: true) do
 
     # about page, changes rarely
     add "/about", change_frequency: "monthly"
