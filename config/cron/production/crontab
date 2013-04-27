@@ -3,6 +3,16 @@
 */30 * * * * /projects/scout/current/config/cron/production/rake.sh subscriptions:reinitialize
 
 
+######## Sync and sitemap tasks #################
+
+# update latest info every night and generate a sitemap
+
+30 13 * * * /projects/scout/current/config/cron/production/rake.sh sync:federal_bills congress=current && /projects/scout/current/config/cron/production/rake.sh sitemap
+
+
+# do full sync once a week to catch any changed old stuff
+0 0 * * 0 /projects/scout/current/config/cron/production/rake.sh sync:federal_bills
+
 ######## Delivery tasks ########
 
 # email digests - once a day, in the morning, 8am/9am EST/EDT
@@ -52,8 +62,8 @@
 */10 * * * *   /projects/scout/current/config/cron/production/check.sh federal_bills_votes
 
 # activity on bills in the States - 8am (Open States done scraping by 6:30am)
-0 13 * * * /projects/scout/current/config/cron/production/check.sh state_bills_activity rate_limit=0.3
-0 13 * * * /projects/scout/current/config/cron/production/check.sh state_bills_votes rate_limit=0.3
+30 12 * * * /projects/scout/current/config/cron/production/check.sh state_bills_activity rate_limit=0.3
+30 12 * * * /projects/scout/current/config/cron/production/check.sh state_bills_votes rate_limit=0.3
 
 # external feed subscriptions, once an hour
 0 * * * * /projects/scout/current/config/cron/production/check.sh feed
