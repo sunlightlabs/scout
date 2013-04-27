@@ -137,14 +137,17 @@ module Subscriptions
         
         if options[:since] == "all"
           # ok, get everything
-          
+
+        elsif options[:since] == "current_congress"
+          url << "&congress=#{current_congress}"
+
         # can specify a single congress (e.g. '111', '112')
         elsif options[:since] =~ /^\d+$/
           url << "&congress=#{options[:since]}"
 
-        # default to the last 5 days
+        # default to the last 3 days
         else
-          url << "&created_at__gte=#{5.days.ago.strftime "%Y-%m-%d"}"
+          url << "&created_at__gte=#{3.days.ago.strftime "%Y-%m-%d"}"
         end
 
         url << "&page=#{options[:page]}" if options[:page]

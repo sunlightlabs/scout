@@ -3,6 +3,8 @@ module Subscriptions
 
     class Speeches
 
+      MAX_PER_PAGE = 50
+
       def self.filters
         {
           "state" => {
@@ -69,6 +71,39 @@ module Subscriptions
         url = "#{endpoint}/text.json?apikey=#{api_key}"
         url << "&id=#{item_id}"
         
+        url
+      end
+
+      def self.url_for_sync(options = {})
+        api_key = options[:api_key] || config[:subscriptions][:sunlight_api_key]
+        
+        endpoint = "http://capitolwords.org/api"
+
+        url = "#{endpoint}/text.json?apikey=#{api_key}"
+        
+        # count up from date of speech
+        url << "&sort=date%20asc"
+
+        # keep it only to fields with a speaker (bioguide_id)
+        url << "&bioguide_id=[''%20TO%20*]"
+
+        
+        if options[:since] == "all"
+          # ok, get everything (you sure?)
+
+        # can specify a year (e.g. '2009', '2010')
+        elsif options[:since] =~ /^\d+$/
+          url << "&start_date=#{options[:since]}-01-01"
+          url << "&end_date=#{options[:since]}-12-31"
+
+        # default to the last 3 days
+        else
+          url << "&start_date=#{3.days.ago.strftime "%Y-%m-%d"}"
+        end
+
+        url << "&page=#{options[:page].to_i - 1}"
+        url << "&per_page=#{MAX_PER_PAGE}"
+
         url
       end
 

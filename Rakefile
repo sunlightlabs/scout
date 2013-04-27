@@ -510,7 +510,7 @@ task :sitemap => :environment do
   include Helpers::Routing
 
   counts = {
-    tags: 0, cites: 0, bills: 0,
+    tags: 0, cites: 0,
     pages: 1 # assume /about works
   } 
   
@@ -539,11 +539,15 @@ task :sitemap => :environment do
       add "/search/all/#{URI.escape standard}", change_frequency: :daily
     end
 
-    # federal bills
-    Item.where(item_type: "bill").asc(:created_at).each do |item|
-      counts[:bills] += 1
-      puts "[bill][#{item.item_id}] Adding to sitemap..."
-      add landing_path(item), change_frequency: :daily
+    # synced remote item landing pages
+    [:bill, :speech].each do |item_type|
+      counts[item_type] = 0
+      Item.where(item_type: item_type.to_s).asc(:created_at).each do |item|
+        counts[item_type] += 1
+        url = landing_path item
+        puts "[#{item_type}][#{item.item_id}] Adding to sitemap: #{url}"
+        add url, change_frequency: :daily
+      end
     end
 
   end
