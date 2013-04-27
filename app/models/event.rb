@@ -81,4 +81,15 @@ class Event
     # email admin
     Admin.bounce_report event.description, event.attributes.dup
   end
+
+  def self.blocked_email!(email, service)
+    event = create!(
+      type: "blocked-email",
+      description: "Blocked #{email} from logging in with their account because it came from #{service} :(",
+      email: email,
+      service: service
+    )
+
+    Admin.report Report.warning("Login", "Blocked login from #{email}, frowny face", event.attributes.dup)
+  end
 end
