@@ -2,5 +2,9 @@ Sitemap: https://scout.sunlightfoundation.com/sitemap/sitemap_index.xml.gz
 
 User-agent: *
 Disallow: /import/feed/preview
+Disallow: /import/feed/create
 Disallow: /error
 Disallow: /fetch
+Disallow: /follow
+Disallow: /unfollow
+Disallow: /url
