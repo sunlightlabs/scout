@@ -543,14 +543,13 @@ task :sitemap => :environment do
     end
 
     # synced remote item landing pages
-    freqs = {bill: :daily, speech: :weekly}
-    [:bill, :speech].each do |item_type|
+    {bill: :daily, speech: :monthly}.each do |item_type, frequency|
       counts[item_type] = 0
       Item.where(item_type: item_type.to_s).asc(:created_at).each do |item|
         counts[item_type] += 1
         url = landing_path item
         puts "[#{item_type}][#{item.item_id}] Adding to sitemap: #{url}"
-        add url, change_frequency: freqs[item_type]
+        add url, change_frequency: frequency
       end
     end
 
