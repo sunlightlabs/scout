@@ -509,7 +509,7 @@ task :sitemap => :environment do
 
   include Helpers::Routing
 
-  BigSitemap.generate(base_url: "https://scout.sunlightfoundation.com", document_root: "public") do
+  BigSitemap.generate(base_url: "https://scout.sunlightfoundation.com", document_root: "public/sitemap") do
 
     # about page, changes rarely
     add "/about", change_frequency: "monthly"

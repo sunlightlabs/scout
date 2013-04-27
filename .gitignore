@@ -6,6 +6,7 @@
 /config/services.yml
 /vendor/gems
 /.bundle
+/public/sitemap
 
 /tmp
 /REVISION
