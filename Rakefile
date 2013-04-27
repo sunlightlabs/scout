@@ -512,13 +512,16 @@ task :sitemap => :environment do
   counts = {
     tags: 0, cites: 0,
     pages: 1 # assume /about works
-  } 
+  }
+
+  ping = ENV['debug'] ? false : true
   
   BigSitemap.generate(
     base_url: "https://scout.sunlightfoundation.com", 
     document_root: "public/sitemap",
-    ping_google: true,
-    ping_bing: true) do
+    url_path: "sitemap",
+    ping_google: ping,
+    ping_bing: ping) do
 
     # about page, changes rarely
     add "/about", change_frequency: "monthly"
@@ -540,13 +543,14 @@ task :sitemap => :environment do
     end
 
     # synced remote item landing pages
+    freqs = {bill: :daily, speech: :weekly}
     [:bill, :speech].each do |item_type|
       counts[item_type] = 0
       Item.where(item_type: item_type.to_s).asc(:created_at).each do |item|
         counts[item_type] += 1
         url = landing_path item
         puts "[#{item_type}][#{item.item_id}] Adding to sitemap: #{url}"
-        add url, change_frequency: :daily
+        add url, change_frequency: freqs[item_type]
       end
     end
 
