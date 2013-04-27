@@ -509,6 +509,11 @@ task :sitemap => :environment do
 
   include Helpers::Routing
 
+  counts = {
+    tags: 0, cites: 0, bills: 0,
+    pages: 1 # assume /about works
+  } 
+  
   BigSitemap.generate(base_url: "https://scout.sunlightfoundation.com", document_root: "public/sitemap") do
 
     # about page, changes rarely
@@ -516,6 +521,7 @@ task :sitemap => :environment do
 
     # public tags
     Tag.where(public: true).each do |tag|
+      counts[:tags] += 1
       path = tag_path tag.user, tag
       puts "[tag][#{tag.name}] Adding to sitemap..."
       add path, change_frequency: "daily"
@@ -523,6 +529,7 @@ task :sitemap => :environment do
 
     # map of US Code searches/landings
     Citation.where(citation_type: "usc").asc(:citation_id).each do |citation|
+      counts[:cites] += 1
       standard = Search.cite_standard citation.attributes
       puts "[cite][#{standard}] Adding to sitemap..."
       add "/search/all/#{URI.escape standard}", change_frequency: :daily
@@ -530,11 +537,14 @@ task :sitemap => :environment do
 
     # federal bills
     Item.where(item_type: "bill").asc(:created_at).each do |item|
+      counts[:bills] += 1
       puts "[bill][#{item.item_id}] Adding to sitemap..."
       add landing_path(item), change_frequency: :daily
     end
 
   end
+
+  Admin.report Report.success("Sitemap", "Updated sitemap.", {counts: counts})
 
   puts "Saved sitemaps."
 end
