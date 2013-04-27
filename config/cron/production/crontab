@@ -7,11 +7,11 @@
 
 # update latest info every night and generate a sitemap
 
-30 13 * * * /projects/scout/current/config/cron/production/rake.sh sync:federal_bills congress=current && /projects/scout/current/config/cron/production/rake.sh sitemap
-
+30 13 * * * /projects/scout/current/config/cron/production/rake.sh sync:federal_bills && /projects/scout/current/config/cron/production/rake.sh sitemap
 
 # do full sync once a week to catch any changed old stuff
-0 0 * * 0 /projects/scout/current/config/cron/production/rake.sh sync:federal_bills
+0 0 * * 0 /projects/scout/current/config/cron/production/rake.sh sync:federal_bills since=all
+
 
 ######## Delivery tasks ########
 

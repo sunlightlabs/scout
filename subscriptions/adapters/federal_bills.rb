@@ -3,6 +3,7 @@ module Subscriptions
 
     class FederalBills
 
+      # if the adapter support sync, this must be supplied
       MAX_PER_PAGE = 50
 
       FIELDS = %w{ 
@@ -133,12 +134,18 @@ module Subscriptions
         url << "&fields=#{FIELDS.join ','}"
         url << "&order=created_at__asc"
 
-        # can be limited to a given or current congress
-        if options[:congress] == "current"
-          options[:congress] = current_congress
-        end
+        
+        if options[:since] == "all"
+          # ok, get everything
+          
+        # can specify a single congress (e.g. '111', '112')
+        elsif options[:since] =~ /^\d+$/
+          url << "&congress=#{options[:since]}"
 
-        url << "&congress=#{options[:congress]}" if options[:congress]
+        # default to the last 5 days
+        else
+          url << "&created_at__gte=#{5.days.ago.strftime "%Y-%m-%d"}"
+        end
 
         url << "&page=#{options[:page]}" if options[:page]
         url << "&per_page=#{MAX_PER_PAGE}"
