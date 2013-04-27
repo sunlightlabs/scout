@@ -53,22 +53,25 @@
         </dd>
       </dl>
     <% end %>
-    <dl>
-      <% action = bill['actions'].last %>
-      
-      <dt>
-        <% if action['date'] < Time.zone.now %>
-          Last activity
-        <% else %>
-          Next activity
-        <% end %>
-      </dt>
-      <dd>
-        <%= just_date_year action['date'] %>
-        &mdash;
-        <%= truncate action['action'], 500 %>
-      </dd>
-    </dl>
+
+    <% if bill['actions'] and bill['actions'].any? %>
+      <dl>
+        <% action = bill['actions'].last %>
+        
+        <dt>
+          <% if action['date'] < Time.zone.now %>
+            Last activity
+          <% else %>
+            Next activity
+          <% end %>
+        </dt>
+        <dd>
+          <%= just_date_year action['date'] %>
+          &mdash;
+          <%= truncate action['action'], 500 %>
+        </dd>
+      </dl>
+    <% end %>
   </div>
         
   <div class="resources">
