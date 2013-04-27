@@ -283,22 +283,22 @@ strong {
 
 /*-- Flash Messages --*/
 
-#flash div.flash {
+#flash .flash {
   padding: 10px 20px;
   margin-top: 15px;
   margin-bottom: 15px;
 }
 
 
-#flash div.flash.failure,
-#flash div.flash.password,
-#flash div.flash.forgot {
+#flash .flash.failure,
+#flash .flash.password,
+#flash .flash.forgot {
   color: #C13445;
   padding: 0;
 
 }
 
-#flash div.flash.user, #flash div.flash.phone{
+#flash .flash.user, #flash .flash.phone{
     color: #438C2A;
     padding: 0;
 }
@@ -319,7 +319,7 @@ div.error {
 
 
 /*-- Hat Styling --*/
-.hatWrap div.contentWrapper{
+.hatWrap .contentWrapper{
     overflow: visible;
     margin-top: 0;
 }
@@ -498,7 +498,8 @@ select.subscription_type {
 .fauxBody{
     background: #fafbf8;
 }
-div.contentWrapper{
+
+.contentWrapper{
     overflow: hidden;
     margin-top: -11px;
 }
@@ -825,7 +826,7 @@ footer nav li{
     color: #848480;
 }
 
-.searchParameters.advanced .advanced.distance div.container {
+.searchParameters.advanced .advanced.distance .container {
     display: block;
 
 }
