@@ -106,7 +106,7 @@ error do
 
   request = {
     method: env['REQUEST_METHOD'], 
-    url: env['REQUEST_URI'],
+    url: [config[:hostname], env['REQUEST_URI']].join,
     params: params.inspect
   }
   
