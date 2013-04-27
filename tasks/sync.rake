@@ -26,9 +26,9 @@ namespace :sync do
         page += 1
       end
 
-      Admin.report Report.success("sync:federal_bills", "Synced #{total} federal bills.", {duration: (Time.now - start), total: total})
+      Admin.report Report.success("sync:federal_bills", "Synced #{total} federal bills.", {duration: (Time.now - start), total: total, options: options})
     rescue Exception => ex
-      Admin.report Report.exception("sync:federal_bills", "Failed to sync bills, died at page #{page}", ex)
+      Admin.report Report.exception("sync:federal_bills", "Failed to sync bills, died at page #{page}", ex, {duration: (Time.now - start), options: options})
     end
   end
 end
