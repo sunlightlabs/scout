@@ -19,6 +19,9 @@ class Item
   index created_at: 1
   index({item_type: 1, created_at: 1})
 
+  field :google_hits, type: Array, default: []
+  field :last_google_hit, type: Time
+
   validates_presence_of :item_type
   validates_presence_of :item_id
 

@@ -92,4 +92,13 @@ class Event
 
     Admin.report Report.warning("Login", "Blocked login from #{email}, frowny face", event.attributes.dup)
   end
+
+  def self.google_crawling!(item_id, item_type)
+    if item = Item.where(item_id: item_id, item_type: item_type).first
+      time = Time.now
+      item.google_hits << time
+      item.last_google_hit = time
+      item.save!
+    end
+  end
 end

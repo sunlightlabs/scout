@@ -9,6 +9,9 @@ get "/item/:item_type/:item_id/?:slug?" do
   halt 404 unless item_types[item_type]
   subscription_type = item_types[item_type]['adapter']
 
+  # log google crawls if we have an item synced
+  Event.google_crawling!(item_id, item_type) if google?
+
   if item = Subscriptions::Manager.find(subscription_type, item_id, {cache_only: !crawler?})
     interest = item_interest
     interest.data = item.data # required for the interest to know its own title

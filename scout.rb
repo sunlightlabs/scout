@@ -138,6 +138,10 @@ helpers do
 
     false
   end
+
+  def google?
+    !!(request.env['HTTP_USER_AGENT'] =~ /googlebot/i)
+  end
   
   def current_user
     @current_user ||= (session['user_id'] ? User.find(session['user_id']) : nil)
