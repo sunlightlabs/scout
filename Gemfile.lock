@@ -7,7 +7,7 @@ GIT
       rainbow
 
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
     activemodel (3.2.12)
       activesupport (= 3.2.12)
