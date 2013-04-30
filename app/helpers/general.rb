@@ -100,7 +100,7 @@ module Helpers
       if current_user and current_user.api_key
         current_user.api_key
       elsif params[:hood] == "up"
-        config[:demo_key]
+        Environment.config['demo_key']
       end
     end
 

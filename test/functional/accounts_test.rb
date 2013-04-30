@@ -287,14 +287,14 @@ class AccountsTest < Test::Unit::TestCase
 
   def test_add_phone_number_when_user_has_none
     user = create :user
-    phone = "+11234567890"
+    phone = "+16173140966"
 
     assert_nil user.phone
     assert !user.phone_confirmed?
     assert_nil user.phone_verify_code
     SMS.should_receive(:deliver!).with("Verification Code", phone, anything)
 
-    put '/account/phone', {:user => {:phone => phone}}, login(user)
+    put '/account/phone', {user: {phone: phone}}, login(user)
     assert_redirect '/account/settings'
 
     user.reload
@@ -304,10 +304,10 @@ class AccountsTest < Test::Unit::TestCase
   end
 
   def test_add_phone_number_unconfirms_existing_number
-    phone1 = "+11234567890"
+    phone1 = "+16173140966"
     phone2 = phone1.succ
     original_verify_code = "1234"
-    user = create :user, :phone => phone1, :phone_confirmed => true, :phone_verify_code => original_verify_code
+    user = create :user, phone: phone1, phone_confirmed: true, phone_verify_code: original_verify_code
 
     assert user.phone_confirmed?
     SMS.should_receive(:deliver!).with("Verification Code", phone2, anything)
@@ -339,10 +339,10 @@ class AccountsTest < Test::Unit::TestCase
   end
 
   def test_add_existing_phone_number
-    phone = "1234567890"
+    phone = "6173140966"
     phone_user = create :phone_user, phone: phone
 
-    assert_equal "+11234567890", phone_user.phone
+    assert_equal "+16173140966", phone_user.phone
 
     user = create :user
     assert_nil user.phone
@@ -355,7 +355,7 @@ class AccountsTest < Test::Unit::TestCase
   end
 
   def test_resend_phone_verification_code
-    phone = "+11234567890"
+    phone = "+16173140966"
     verify_code = "1234"
     user = create :user, :phone => phone, :phone_verify_code => verify_code
 
@@ -374,7 +374,7 @@ class AccountsTest < Test::Unit::TestCase
   end
 
   def test_confirm_phone_verification_code_valid
-    phone = "+11234567890"
+    phone = "+16173140966"
     verify_code = "1234"
     user = create :user, :phone => phone, :phone_verify_code => verify_code
 
@@ -392,7 +392,7 @@ class AccountsTest < Test::Unit::TestCase
   end
 
   def test_confirm_phone_verification_code_invalid
-    phone = "+11234567890"
+    phone = "+16173140966"
     verify_code = "1234"
     user = create :user, :phone => phone, :phone_verify_code => verify_code
 

@@ -4,6 +4,9 @@ gem 'oj'
 gem 'multi_json'
 gem 'curb'
 
+# avoids problems with YAML vulnerabilities, but no symbol keys
+gem 'safe_yaml'
+
 gem 'sinatra', '1.4.2'
 gem 'sinatra-contrib', '1.4.0'
 gem 'sinatra-flash', '0.3.0'
@@ -46,7 +49,7 @@ gem 'feedzirra', '0.2.0.rc1'
 gem 'feedbag'
 
 # phone number standardization - thrilling
-gem 'phone', '1.1'
+gem 'phone', git: 'git://github.com/sunlightlabs/phone.git'
 
 # advanced query string parsing
 gem 'lucene_query_parser', git: 'git://github.com/sunlightlabs/lucene_query_parser.git'

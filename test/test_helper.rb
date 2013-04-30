@@ -25,7 +25,7 @@ module TestHelper
       Subscriptions::Manager.stub(:download).and_return("{}")
       Feedbag.stub(:find).and_return([])
 
-      services = YAML.load_file File.join(File.dirname(__FILE__), "fixtures/services.yml")
+      services = YAML.safe_load_file File.join(File.dirname(__FILE__), "fixtures/services.yml")
       Environment.stub(:services).and_return(services)
     end
 

@@ -1,6 +1,8 @@
 require 'sinatra'
 require 'mongoid'
 
+require 'safe_yaml' # we only use yaml for config, but just in case, sanitize
+
 require 'tzinfo'
 require 'twilio-rb'
 require 'feedbag'
@@ -8,13 +10,14 @@ require 'phone'
 
 require 'stringex'
 
-def config
-  @config ||= YAML.load_file File.join(File.dirname(__FILE__), "config.yml")
-end
 
 class Environment
   def self.services
-    @services ||= YAML.load_file File.join(File.dirname(__FILE__), "services.yml")
+    @services ||= YAML.safe_load_file File.join(File.dirname(__FILE__), "services.yml")
+  end
+
+  def self.config
+    @config ||= YAML.safe_load_file File.join(File.dirname(__FILE__), "config.yml")
   end
 
   def self.to_url(string)
@@ -26,7 +29,7 @@ class Environment
 end
 
 def subscription_map
-  @subscription_map ||= YAML.load_file File.join(File.dirname(__FILE__), "../subscriptions/subscriptions.yml")
+  @subscription_map ||= YAML.safe_load_file File.join(File.dirname(__FILE__), "../subscriptions/subscriptions.yml")
 end
 
 # words not allowed to be usernames, very inclusive to preserve flexibility in routing
@@ -56,10 +59,10 @@ configure do
 
   Mongoid.load! "config/mongoid.yml"
   
-  if config[:twilio]
+  if Environment.config['twilio']
     Twilio::Config.setup(
-      account_sid: config[:twilio][:account_sid],
-      auth_token: config[:twilio][:auth_token]
+      account_sid: Environment.config['twilio']['account_sid'],
+      auth_token: Environment.config['twilio']['auth_token']
     )
   end
 

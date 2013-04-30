@@ -149,7 +149,7 @@ module Subscriptions
       adapter = subscription.adapter
       url = adapter.url_for subscription, function, options
       
-      puts "\n[#{subscription.subscription_type}][#{function}][#{subscription.interest_in}][#{subscription.id}] #{url}\n\n" if !test? and config[:debug][:output_urls]
+      puts "\n[#{subscription.subscription_type}][#{function}][#{subscription.interest_in}][#{subscription.id}] #{url}\n\n" if !test? and Environment.config['debug']['output_urls']
 
       # Feed parser
       if adapter.respond_to?(:url_to_response)
@@ -189,7 +189,7 @@ module Subscriptions
             response = ::Oj.load body, mode: :compat
 
             # wait for JSON parse, so as not to cache errors
-            if function == :search and !config[:no_cache]
+            if function == :search and !Environment.config['no_cache']
               cache! url, :search, subscription.subscription_type, body
             end
           end
@@ -243,7 +243,7 @@ module Subscriptions
       adapter = Subscription.adapter_for adapter_type
       url = adapter.url_for_detail item_id, options
       
-      puts "\n[#{adapter_type}][find][#{item_id}] #{url}\n\n" if !test? and config[:debug][:output_urls]
+      puts "\n[#{adapter_type}][find][#{item_id}] #{url}\n\n" if !test? and Environment.config['debug']['output_urls']
       
       begin
         if body = cache_for(url, :find, adapter_type)
@@ -255,7 +255,7 @@ module Subscriptions
           response = ::Oj.load body, mode: :compat
 
           # wait for JSON parse, so as not to cache errors
-          if !config[:no_cache]
+          if !Environment.config['no_cache']
             cache! url, :find, adapter_type, body
           end
         end
@@ -287,7 +287,7 @@ module Subscriptions
     # get the content at an arbitrary location, using the same cache logic as the poll and find operations
     # (include adapter_type and item_id to better track what's happening)
     def self.fetch(url, url_type, options = {})
-      puts "\n[fetch][#{url_type}] #{url}\n\n" if !test? and config[:debug][:output_urls]
+      puts "\n[fetch][#{url_type}] #{url}\n\n" if !test? and Environment.config['debug']['output_urls']
 
       body = nil
       begin
@@ -298,7 +298,7 @@ module Subscriptions
         else
           body = download url
 
-          if !config[:no_cache]
+          if !Environment.config['no_cache']
             cache! url, :fetch, url_type, body
           end
         end
@@ -321,7 +321,7 @@ module Subscriptions
       adapter = Subscription.adapter_for subscription_type
       url = adapter.url_for_sync options
       
-      puts "\n[#{subscription_type}][sync][#{options[:page]}] #{url}\n\n" if !test? and config[:debug][:output_urls]
+      puts "\n[#{subscription_type}][sync][#{options[:page]}] #{url}\n\n" if !test? and Environment.config['debug']['output_urls']
 
       items = begin
         body = download url
@@ -350,7 +350,7 @@ module Subscriptions
     end
 
     def self.cache_for(url, function, subscription_type)
-      return nil if config[:no_cache]
+      return nil if Environment.config['no_cache']
 
       if result = Cache.where(url: url, function: function, subscription_type: subscription_type).first
         puts "USE CACHE: [#{function}] #{url}\n\n" if development?

@@ -5,7 +5,7 @@
 # Verify that posts to API key management endpoints are verified
 
 before /^\/services\// do
-  unless SunlightServices.verify params, config[:services][:shared_secret], config[:services][:api_name]
+  unless SunlightServices.verify params, Environment.config['services']['shared_secret'], Environment.config['services']['api_name']
     Admin.report Report.failure(
       "API Key Signature Check", "Bad signature", 
       key: params[:key], email: params[:email], status: params[:status],

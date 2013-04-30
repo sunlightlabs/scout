@@ -10,10 +10,10 @@ module Subscriptions
       end
       
       def self.url_for(subscription, function, options = {})
-        api_key = options[:api_key] || config[:subscriptions][:sunlight_api_key]
+        api_key = options[:api_key] || Environment.config['subscriptions']['sunlight_api_key']
         
-        if config[:subscriptions][:congress_endpoint].present?
-          endpoint = config[:subscriptions][:congress_endpoint].dup
+        if Environment.config['subscriptions']['congress_endpoint'].present?
+          endpoint = Environment.config['subscriptions']['congress_endpoint'].dup
         else
           endpoint = "http://congress.api.sunlightfoundation.com"
         end
@@ -65,10 +65,10 @@ module Subscriptions
       end
 
       def self.url_for_detail(item_id, options = {})
-        api_key = options[:api_key] || config[:subscriptions][:sunlight_api_key]
+        api_key = options[:api_key] || Environment.config['subscriptions']['sunlight_api_key']
 
-        if config[:subscriptions][:congress_endpoint].present?
-          endpoint = config[:subscriptions][:congress_endpoint].dup
+        if Environment.config['subscriptions']['congress_endpoint'].present?
+          endpoint = Environment.config['subscriptions']['congress_endpoint'].dup
         else
           endpoint = "http://congress.api.sunlightfoundation.com"
         end

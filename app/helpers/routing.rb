@@ -94,7 +94,7 @@ module Helpers
       if interest.feed?
         interest_path interest
       else
-        "#{config[:hostname]}#{interest_path interest}"
+        "#{Environment.config['hostname']}#{interest_path interest}"
       end
     end
 
@@ -165,14 +165,14 @@ module Helpers
           openstates_url item.data
         end
       else
-        "#{config[:hostname]}#{item_path item}"
+        "#{Environment.config['hostname']}#{item_path item}"
       end
     end
 
     # wraps the given URL in the redirect URL, 
     # with an arbitrary hash of data to be query string encoded
     def redirect_url(url, data = {})
-      "#{config[:hostname]}/url?#{data.to_query}"
+      "#{Environment.config['hostname']}/url?#{data.to_query}"
     end
 
     def email_item_url(item, interest = nil, user = nil)

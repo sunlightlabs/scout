@@ -396,7 +396,7 @@ class RemoteTest < Test::Unit::TestCase
 
     mock_item item_id, item_type
 
-    assert_nil User.where(:phone => phone).first
+    assert_nil User.where(phone: phone).first
     interest_count = Interest.count
     subscriptions_count = Subscription.count
 
@@ -404,8 +404,8 @@ class RemoteTest < Test::Unit::TestCase
     SMS.should_receive(:deliver!).with("Remote Subscription", phone, anything)
 
     post "/remote/subscribe/sms", {
-      :phone => phone, :interest_type => "item", :item_id => item_id, :item_type => item_type,
-      :source => "testing"
+      phone: phone, interest_type: "item", item_id: item_id, item_type: item_type,
+      source: "testing"
     }
     assert_response 200
 

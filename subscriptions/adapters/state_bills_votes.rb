@@ -5,7 +5,7 @@ module Subscriptions
       
       def self.url_for(subscription, function, options = {})
         endpoint = "http://openstates.org/api/v1"
-        api_key = config[:subscriptions][:sunlight_api_key]
+        api_key = options[:api_key] || Environment.config['subscriptions']['sunlight_api_key']
         
         fields = %w{ id bill_id state chamber session votes }
         

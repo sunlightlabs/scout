@@ -13,9 +13,9 @@ module Email
       return true
     end
 
-    if config[:email][:via] == :pony
+    if Environment.config['email']['via'] == 'pony'
       with_pony! tag, to, subject, body, from, reply_to
-    elsif config[:email][:via] == :postmark
+    elsif Environment.config['email']['via'] == 'postmark'
       with_postmark! tag, to, subject, body, from, reply_to
     else
       puts "[#{tag}][ERROR] No delivery method specified."
@@ -44,9 +44,20 @@ module Email
       return true
     end
 
-    options = config[:email][:pony].dup
-    options[:from] = from || config[:email][:from]
-    options[:reply_to] = reply_to || config[:email][:reply_to]
+    options = {
+      via: Environment.config['email']['pony']['via'].to_sym,
+      via_options: {
+        address: Environment.config['email']['pony']['via_options']['address'],
+        port: Environment.config['email']['pony']['via_options']['port'],
+        user_name: Environment.config['email']['pony']['via_options']['user_name'],
+        password: Environment.config['email']['pony']['via_options']['password'],
+        authentication: Environment.config['email']['pony']['via_options']['authentication'],
+        domain: Environment.config['email']['pony']['via_options']['domain'],
+        enable_starttls_auto: Environment.config['email']['pony']['via_options']['enable_starttls_auto']
+      }
+    }
+    options[:from] = from || Environment.config['email']['from']
+    options[:reply_to] = reply_to || Environment.config['email']['reply_to']
 
     begin
       if tag == "User Alert" # html emails
@@ -72,7 +83,7 @@ module Email
 
     message = Mail.new
 
-    message.delivery_method Mail::Postmark, :api_key => config[:email][:postmark][:api_key]
+    message.delivery_method Mail::Postmark, api_key: Environment.config['email']['postmark']['api_key']
 
     if tag == "User Alert"
       message.content_type = "text/html"
@@ -82,8 +93,8 @@ module Email
     
     message.tag = tag
 
-    message.from = from || config[:email][:from]
-    message.reply_to = reply_to || config[:email][:reply_to]
+    message.from = from || Environment.config['email']['from']
+    message.reply_to = reply_to || Environment.config['email']['reply_to']
 
     message.to = to
     message.subject = subject
@@ -134,7 +145,7 @@ module Email
   # always disable email in test mode
   # allow development mode to disable email by withholding the from email
   def self.email?
-    !Sinatra::Application.test? and config[:email][:from].present?
+    !Sinatra::Application.test? and Environment.config['email']['from'].present?
   end
 
   def self.sent_message(method, tag, to, subject, body, from = nil, reply_to = nil)

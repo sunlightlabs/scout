@@ -6,6 +6,12 @@ GIT
       parslet
       rainbow
 
+GIT
+  remote: git://github.com/sunlightlabs/phone.git
+  revision: 3bd81f494bafaa3e19f3c4784d0f81158b38e9fb
+  specs:
+    phone (1.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -77,7 +83,6 @@ GEM
     paint (0.8.5)
     parslet (1.5.0)
       blankslate (~> 2.0)
-    phone (1.1)
     polyglot (0.3.3)
     pony (1.4)
       mail (> 2.0)
@@ -95,6 +100,7 @@ GEM
     rinku (1.7.2)
     rspec-mocks (2.9.0)
     ruby-hmac (0.4.0)
+    safe_yaml (0.9.1)
     sax-machine (0.1.0)
       nokogiri (> 0.0.0)
     sinatra (1.4.2)
@@ -149,7 +155,7 @@ DEPENDENCIES
   oj
   padrino-helpers (= 0.11.1)
   paint
-  phone (= 1.1)
+  phone!
   pony (= 1.4)
   postmark (= 0.9.10)
   rack (= 1.5.2)
@@ -159,6 +165,7 @@ DEPENDENCIES
   rinku
   rspec-mocks (= 2.9.0)
   ruby-hmac
+  safe_yaml
   sinatra (= 1.4.2)
   sinatra-contrib (= 1.4.0)
   sinatra-flash (= 0.3.0)

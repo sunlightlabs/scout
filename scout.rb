@@ -14,7 +14,7 @@ unless test?
   use Rack::Session::Cookie, :key => 'rack.session',
     :path => '/',
     :expire_after => (60 * 60 * 24 * 30), # 30 days
-    :secret => config[:session_secret]
+    :secret => Environment.config['session_secret']
 end
 
 # TODO: seriously?
@@ -106,7 +106,7 @@ error do
 
   request = {
     method: env['REQUEST_METHOD'], 
-    url: [config[:hostname], env['REQUEST_URI']].join,
+    url: [Environment.config['hostname'], env['REQUEST_URI']].join,
     params: params.inspect
   }
   

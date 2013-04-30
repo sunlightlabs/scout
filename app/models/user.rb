@@ -163,7 +163,7 @@ class User
   # phone number confirming and verification logic
 
   field :phone_verify_code
-  field :phone_confirmed, :type => Boolean, :default => false
+  field :phone_confirmed, type: Boolean, default: false
 
   # only +, -, ., and digits allowed
   validates_uniqueness_of :phone, :allow_blank => true, message: "has been taken"

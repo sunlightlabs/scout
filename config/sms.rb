@@ -5,7 +5,7 @@ module SMS
 
   def self.deliver!(tag, phone, body)
     if sms?
-      Twilio::SMS.create :to => phone, :from => config[:twilio][:from], :body => body
+      Twilio::SMS.create to: phone, from: Environment.config['twilio']['from'], body: body
       sent_message "Twilio", tag, phone, body
     else
       sent_message "FAKE", tag, phone, body
@@ -20,7 +20,7 @@ module SMS
   # always disable email in test mode
   # allow development mode to disable email by withholding the from email
   def self.sms?
-    !Sinatra::Application.test? and config[:twilio][:from].present?
+    !Sinatra::Application.test? and Environment.config['twilio']['from'].present?
   end
 
   def self.sent_message(method, tag, phone, body)

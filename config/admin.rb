@@ -105,7 +105,7 @@ module Admin
   end
 
   def self.admin_emails
-    config[:admin]
+    Environment.config['admin']
   end
 
   def self.exception_message(report)

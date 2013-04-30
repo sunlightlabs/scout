@@ -307,7 +307,7 @@ namespace :test do
       exit -1
     end
 
-    unless user = User.where(email: (ENV['email'] || config[:admin].first)).first
+    unless user = User.where(email: (ENV['email'] || Environment.config['admin'].first)).first
       puts "Provide an email of a registered user."
       exit -1
     end
@@ -342,7 +342,7 @@ namespace :test do
 
   desc "Forces emails or SMSes to be sent for the first X results of every subscription a user has"
   task send_user: :environment do
-    email = ENV['email'] || config[:admin].first
+    email = ENV['email'] || Environment.config['admin'].first
     phone = ENV['phone']
 
     max = (ENV['max'] || ENV['limit'] || 2).to_i
@@ -437,7 +437,7 @@ namespace :test do
       end
       item_type = ENV['item_type'] || 'bill'
       item_id = ENV['item_id'] || 'hr1234-112'
-      hostname = ENV['host'] || config[:hostname]
+      hostname = ENV['host'] || Environment.config['hostname']
 
       url = "#{hostname}/remote/subscribe/sms"
 
@@ -455,7 +455,7 @@ namespace :test do
       unless (phone = ENV['phone']).present?
         puts "Give a phone number with the 'phone' parameter."
       end
-      hostname = ENV['host'] || config[:hostname]
+      hostname = ENV['host'] || Environment.config['hostname']
 
       url = "#{hostname}/remote/subscribe/sms"
     end

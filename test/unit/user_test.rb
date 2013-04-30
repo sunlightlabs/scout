@@ -33,9 +33,9 @@ class UserTest < Test::Unit::TestCase
     user = build :user
     assert user.valid?
 
-    user = build :user, phone: "1234567890"
+    user = build :user, phone: "6173140966"
     assert user.save
-    assert_equal "+11234567890", user.phone
+    assert_equal "+16173140966", user.phone
 
     user = build :user, phone: "(555) (666) (7890)"
     assert user.save
@@ -51,7 +51,7 @@ class UserTest < Test::Unit::TestCase
   end
 
   def test_phone_invalid_formats
-    phone = "1234567890"
+    phone = "6173140966" # don't call me please
     user = build :user, phone: phone
     assert user.valid?
 
