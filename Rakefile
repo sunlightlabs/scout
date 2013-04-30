@@ -185,7 +185,10 @@ namespace :subscriptions do
             end
           end
 
-          if errors.any?
+          # feed errors are far too common to get this way - it's basically expected.
+          # I can't even look at them to decide what makes sense. Users will need to observe
+          # the behavior and preview of a feed and judge for themselves.
+          if errors.any? and (subscription_type != "feed")
             Admin.report Report.warning(
               "check:#{subscription_type}", "#{errors.size} errors while checking #{subscription_type}, will check again next time.", 
               errors: errors[0..2],
