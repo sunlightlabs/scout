@@ -14,13 +14,15 @@ class Item
   # data (same as stored on seen items, and item interests)
   field :data, type: Hash, default: {}
 
+  field :google_hits, type: Array, default: []
+  field :last_google_hit, type: Time
+
   index item_id: 1
   index item_type: 1
   index created_at: 1
   index({item_type: 1, created_at: 1})
-
-  field :google_hits, type: Array, default: []
-  field :last_google_hit, type: Time
+  index google_hits: 1
+  index last_google_hit: 1
 
   validates_presence_of :item_type
   validates_presence_of :item_id
