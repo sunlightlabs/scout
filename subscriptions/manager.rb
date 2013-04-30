@@ -189,7 +189,7 @@ module Subscriptions
             response = ::Oj.load body, mode: :compat
 
             # wait for JSON parse, so as not to cache errors
-            if function == :search and !Environment.config['no_cache']
+            if (function == :search) and !Environment.config['no_cache']
               cache! url, :search, subscription.subscription_type, body
             end
           end
@@ -377,7 +377,11 @@ module Subscriptions
     def self.download(url)
       curl = Curl::Easy.new url
       curl.perform
-      curl.body_str
+      if curl.status.start_with?("2")
+        curl.body_str
+      else
+        raise AdapterParseException.new("Bad status code: #{curl.status}")
+      end
     end
 
     # helper function to straighten dates into UTC times (necessary for serializing to BSON, sigh)
