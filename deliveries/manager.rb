@@ -15,7 +15,7 @@ module Deliveries
       # all users with interests of the specified type
       interests = Interest.where interest_conditions
       user_ids = interests.distinct :user_id
-      conditions = {:_id => {"$in" => user_ids}}
+      conditions = {_id: {"$in" => user_ids}}
 
       if email
         conditions[:email] = email
@@ -63,7 +63,7 @@ module Deliveries
       user_ids = deliveries.distinct :user_id
       interest_ids = deliveries.distinct :interest_id
 
-      users = User.where(:_id => {"$in" => user_ids}).all
+      users = User.where(_id: {"$in" => user_ids}).all
 
       # if there's a suspiciously high amount of deliveries, 
       # leave the deliveries there and notify the admin

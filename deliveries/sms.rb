@@ -99,16 +99,16 @@ module Deliveries
 
     def self.save_receipt!(user, deliveries, content)
       Receipt.create!(
-        :mechanism => "sms",
+        mechanism: "sms",
 
-        :deliveries => deliveries.map {|delivery| delivery.attributes.dup},
+        deliveries: deliveries.map {|delivery| delivery.attributes.dup},
 
-        :user_id => user.id,
-        :user_phone => user.phone,
-        :user_notifications => user.notifications,
+        user_id: user.id,
+        user_phone: user.phone,
+        user_notifications: user.notifications,
 
-        :content => content,
-        :delivered_at => Time.now
+        content: content,
+        delivered_at: Time.now
       )
     end
 

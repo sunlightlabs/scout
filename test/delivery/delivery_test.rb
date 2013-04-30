@@ -81,6 +81,52 @@ class DeliveryTest < Test::Unit::TestCase
     end
   end
 
+  # simulate a scheduled delivery, then the user changes their email between the scheduling
+  # and the actual delivery. the delivery should go to their new email.
+  def test_deliver_after_changed_email
+    email1 = "first@example.com"
+    email2 = "second@example.com"
+    user = create :user, email: email1, notifications: "email_daily"
+    
+    # one fixture, one email
+
+    interest = search_interest! user, "state_bills", "science_transition", "simple"
+    assert_equal 3, interest.seen_items.count
+
+    Subscriptions::Manager.check! interest.subscriptions.first
+    assert_equal 6, interest.seen_items.count
+
+    # 3 items in check that weren't present on initialize
+    items = interest.seen_items.asc(:_id).to_a[3..-1]
+    assert_equal items.size, Delivery.count
+
+    assert_equal 0, Receipt.count
+
+    # now, change the email
+    user.email = email2
+    user.save!
+
+    Deliveries::Manager.deliver! 'mechanism' => "email", 'email_frequency' => "daily"
+
+    assert_equal 0, Delivery.count
+    assert_equal 1, Receipt.count
+    receipt = Receipt.first
+
+    assert_equal "email", receipt.mechanism
+    assert_equal "daily", receipt.email_frequency
+    assert_equal user.id, receipt.user_id
+    assert_equal user.email, receipt.user_email
+    
+    assert_equal items.size, receipt.deliveries.size
+    assert_equal items.map(&:item_id).sort, receipt.deliveries.map {|d| d['item']['item_id']}.sort
+
+    assert_match /#{items.size}/, receipt.subject
+    assert_match /Daily digest/i, receipt.subject
+    items.each do |item|
+      assert_not_nil receipt.content[routing.email_item_url item]
+    end
+  end
+
   def test_deliver_multiple_interests_email_immediate
     user = create :user, notifications: "email_immediate"
 

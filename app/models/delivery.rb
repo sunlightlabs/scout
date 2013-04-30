@@ -9,9 +9,12 @@ class Delivery
   belongs_to :user
   
   # core fields needed to deliver the goods
-  field :user_email
   field :subscription_type
   field :interest_in
+
+  # used for DEBUG CONVENIENCE ONLY - the email to deliver this to 
+  # should be looked up at delivery-time, not schedule-time.
+  field :user_email
 
   # if the user is not the owner of the main interest, there will be another
   # interest here, owned by the deliver's user, that the user saw the item "through"
@@ -45,6 +48,8 @@ class Delivery
   # user and delivery mechanism decided in advance
   def self.schedule!(item, interest, subscription_type, seen_through, user, mechanism, email_frequency)
     create! user_id: user.id,
+    
+      # for convenience of debugging only - what these values were at schedule-time
       user_email: user.email,
       user_phone: user.phone,
       
