@@ -376,6 +376,9 @@ module Subscriptions
     # download content at the given URL
     def self.download(url)
       curl = Curl::Easy.new url
+      
+      curl.headers["User-Agent"] = "Scout (scout.sunlightfoundation.com) / curl"
+
       curl.perform
       if curl.status.start_with?("2")
         curl.body_str
