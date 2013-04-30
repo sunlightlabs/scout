@@ -65,7 +65,7 @@
     <h5>Resources</h5>
     <ul>
       <span>
-        Visit the <strong><a data-resource="federalregister" target="_blank" href="<%= regulation['url'] %>">Federal Register</a></strong> for much more information.
+        Visit the <strong><a data-resource="federalregister" href="<%= regulation['url'] %>">Federal Register</a></strong> for much more information.
       </span>
     </ul>
   </div>
@@ -75,7 +75,7 @@
       <header>
         <strong>Full Text</strong>
         <span>
-          Read the <a data-resource="original" target="_blank" class="pdf" href="<%= regulation['pdf_url'] %>">full text</a> (PDF) of this document.
+          Read the <a data-resource="original" class="pdf" href="<%= regulation['pdf_url'] %>">full text</a> (PDF) of this document.
         </span>
       </header>
       <article>
@@ -90,7 +90,7 @@
       <header>
         <strong>Abstract</strong>
         <span>
-          Below is the abstract of this <%= regulation_type regulation %>. The <a data-resource="original" target="_blank" class="pdf" href="<%= regulation['pdf_url'] %>">official text</a> (PDF) is also available.
+          Below is the abstract of this <%= regulation_type regulation %>. The <a data-resource="original" class="pdf" href="<%= regulation['pdf_url'] %>">official text</a> (PDF) is also available.
         </span>
         <hr/>
         <% if regulation['abstract'].present? %>

@@ -63,15 +63,15 @@
     <h5>See More At</h5>
     <ul>
       <li class="congressGov">
-        <a data-resource="congress" target="_blank" href="<%= bill['urls']['congress'] %>" title="Congress.gov">Congress.gov</a>
+        <a data-resource="congress" href="<%= bill['urls']['congress'] %>" title="Congress.gov">Congress.gov</a>
       </li>
       
       <li class="govTrack">
-        <a data-resource="govtrack" target="_blank" href="<%= bill['urls']['govtrack'] %>" title="GovTrack">GovTrack</a>
+        <a data-resource="govtrack" href="<%= bill['urls']['govtrack'] %>" title="GovTrack">GovTrack</a>
       </li>
       
       <li class="openCongress">
-        <a data-resource="opencongress" target="_blank" href="<%= bill['urls']['opencongress'] %>" title="OpenCongress">OpenCongress</a>
+        <a data-resource="opencongress" href="<%= bill['urls']['opencongress'] %>" title="OpenCongress">OpenCongress</a>
       </li>
     </ul>
   </div>
@@ -81,7 +81,7 @@
       <header>
         <strong>Full Text</strong>
         <span>
-          Below is a simple rendition of Congress' <a data-resource="original" target="_blank" href="<%= bill_text_url bill, version %>">official bill text</a>.
+          Below is a simple rendition of Congress' <a data-resource="original" href="<%= bill_text_url bill, version %>">official bill text</a>.
         </span>
       </header>
       <hr />
@@ -122,7 +122,7 @@
         <strong>Full Text</strong>
         <span>
           <% if version %>
-            Read this bill's <a data-resource="original" target="_blank" href="<%= bill_text_url bill, version %>">official text</a> (PDF).
+            Read this bill's <a data-resource="original" href="<%= bill_text_url bill, version %>">official text</a> (PDF).
           <% else %>
             The text of this bill has not yet been released.
           <% end %>
