@@ -66,7 +66,9 @@ def stop():
   run("kill `cat %s/unicorn.pid`" % shared_path)
 
 def restart():
-  run("kill -HUP `cat %s/unicorn.pid`" % shared_path)
+  stop()
+  start()
+  # run("kill -HUP `cat %s/unicorn.pid`" % shared_path)
 
 def clear_cache():
   run("cd %s && rake clear_cache" % current_path)
