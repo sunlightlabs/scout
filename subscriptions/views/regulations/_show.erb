@@ -61,17 +61,17 @@
     </div>
   <% end %>
 
-  <div class="resources">
-    <h5>Resources</h5>
-    <ul>
-      <span>
-        Visit the <strong><a data-resource="federalregister" href="<%= regulation['url'] %>">Federal Register</a></strong> for much more information.
-      </span>
-    </ul>
-  </div>
+  <% if regulation['document_type'] == 'public_inspection' %>
+    <div class="resources">
+      <h5>Resources</h5>
+      <ul>
+        <span>
+          Visit the <strong><a data-resource="federalregister" href="<%= regulation['url'] %>">Federal Register</a></strong> for much more information.
+        </span>
+      </ul>
+    </div>
 
-  <div id="document">
-    <% if regulation['document_type'] == 'public_inspection' %>
+    <div id="document">
       <header>
         <strong>Full Text</strong>
         <span>
@@ -86,20 +86,35 @@
           Though it is an official document, it can theoretically be withdrawn before formal publication, and some details may not yet be available. <a href="https://www.federalregister.gov/learn/public-inspection-desk-2">Read more about pre-release documents.</a>
         </p>
       </article>
-    <% else %>
+    </div>
+
+  <% else %>
+    <div class="resources">
+      <h5>Full Text</h5>
+      <ul>
+        <span>
+          Visit the <strong><a data-resource="federalregister" href="<%= regulation['url'] %>">Federal Register</a></strong> to read the full text.
+        </span>
+      </ul>
+    </div>
+
+    <div id="document">
       <header>
         <strong>Abstract</strong>
-        <span>
-          Below is the abstract of this <%= regulation_type regulation %>. The <a data-resource="original" class="pdf" href="<%= regulation['pdf_url'] %>">official text</a> (PDF) is also available.
-        </span>
-        <hr/>
         <% if regulation['abstract'].present? %>
+          <span>
+            Below is the abstract of this <%= regulation_type regulation %>.
+          </span>
+          <hr/>
+        
           <article>
             <%= regulation_abstract regulation %>
           </article>
+        <% else %>
+          This <%= regulation_type regulation %> doesn't have an abstract.
         <% end %>
       </header>
-    <% end %>
-  </div>
+    </div>
+  <% end %>
 
 </div>
