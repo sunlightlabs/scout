@@ -9,6 +9,8 @@
   float: left;
 }
 
+.entry.regulation #document article {padding-top: 0px;}
+
 .entry.bill #document article,
 .entry.speech #document article,
 .entry.document #document article,
@@ -39,7 +41,7 @@
 .entry.regulation article h1,
 .entry.regulation article h2,
 .entry.regulation article h3 {
-  text-transform: none; font-size: 14pt;
+  text-transform: none; font-size: 12pt;
 }
 
 .entry.regulation article h4 {
@@ -51,6 +53,8 @@
 .entry.regulation article .body_column p {margin-bottom: 12px; line-height: 24px;}
 
 .entry.regulation article .table_of_contents {display: none;}
+.entry.regulation article .toc-hidden {margin-left: 20px; margin-top: 10px; color: #888; }
+.entry.regulation article .toc-hidden a {color: #888; margin-left: 7px;}
 .entry.regulation article .document_details {display: none;}
 .entry.regulation article .signature {display: none;}
 .entry.regulation article a.back_to_top {display: none;}

@@ -93,7 +93,7 @@
       <header>
         <strong>Full Text</strong>
         <span>
-          Below is a simple rendition of the Federal Register's <strong><a data-resource="federalregister" href="<%= regulation['url'] %>">full text</a></strong>.
+          Below is a simple rendition of the Federal Register's <strong><a data-resource="federalregister" href="<%= regulation['url'] %>">full text</a>.</strong>
         </span>
       </header>
       <hr />
@@ -102,6 +102,34 @@
       </article>
       </header>
     </div>
+
+    <script type="text/javascript">
+      function markupDocument() {
+        $("h1[data-id=table_of_contents]").each(function() {
+          $(this.parentNode).hide();
+        });
+
+        $("#document article a.external.usc").each(function() {
+          this.target="_blank";
+          
+          var title = $(this).data("title");
+          var section = $(this).data("section");
+          var url = "/search/all/" + title + " usc " + section;
+          this.href = url;
+        });
+
+        $("#document article a.external.publ").each(function() {
+          this.target="_blank";
+          
+          var congress = $(this).data("congress");
+          var number = $(this).data("number");
+          var url = "/search/all/public law " + congress + "-" + number;
+          this.href = url;
+        });
+      }
+
+      $(markupDocument);
+    </script>
   <% end %>
 
 </div>
