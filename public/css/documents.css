@@ -11,7 +11,8 @@
 
 .entry.bill #document article,
 .entry.speech #document article,
-.entry.document #document article {
+.entry.document #document article,
+.entry.regulation #document article.text {
   color: #111;
 }
 
@@ -20,6 +21,60 @@
   line-height: 22px;
 }
 
+
+/** federal register documents **/
+
+.entry.regulation article {}
+
+.entry.regulation article h1,
+.entry.regulation article h2,
+.entry.regulation article h3,
+.entry.regulation article h4,
+.entry.regulation article h5,
+.entry.regulation article h6 {
+  font-family: arial, 'helvetica Neue', sans-serif;
+  color: #111; font-weight: bold;
+}
+
+.entry.regulation article h1,
+.entry.regulation article h2,
+.entry.regulation article h3 {
+  text-transform: none; font-size: 14pt;
+}
+
+.entry.regulation article h4 {
+  text-transform: none; font-size: 10pt; 
+}
+
+.entry.regulation article .header_column {margin-bottom: 10px;}
+.entry.regulation article .body_column {margin-bottom: 20px;}
+.entry.regulation article .body_column p {margin-bottom: 12px; line-height: 24px;}
+
+.entry.regulation article .table_of_contents {display: none;}
+.entry.regulation article .document_details {display: none;}
+.entry.regulation article .signature {display: none;}
+.entry.regulation article a.back_to_top {display: none;}
+
+
+.entry.regulation article .reg_text {}
+
+.entry.regulation article .reg_text h1,
+.entry.regulation article .reg_text h2,
+.entry.regulation article .reg_text h3,
+.entry.regulation article .reg_text h4,
+.entry.regulation article .reg_text h5,
+.entry.regulation article .reg_text h6 {font-size: 10pt;}
+
+.entry.regulation article .reg_text h1,
+.entry.regulation article .reg_text h2,
+.entry.regulation article .reg_text h3,
+.entry.regulation article .reg_text h4,
+.entry.regulation article .reg_text h5,
+.entry.regulation article .reg_text h6,
+.entry.regulation article .reg_text p,
+.entry.regulation article .reg_text .contents {margin-top: 0; margin-bottom: 15px;}
+.entry.regulation article .reg_text .divider {display: none;}
+.entry.regulation article .reg_text .contents {background-color: #eeeeee; padding: 10px;}
 
 
 /** federal bills **/

@@ -89,30 +89,17 @@
     </div>
 
   <% else %>
-    <div class="resources">
-      <h5>Full Text</h5>
-      <ul>
-        <span>
-          Visit the <strong><a data-resource="federalregister" href="<%= regulation['url'] %>">Federal Register</a></strong> to read the full text.
-        </span>
-      </ul>
-    </div>
-
     <div id="document">
       <header>
-        <strong>Abstract</strong>
-        <% if regulation['abstract'].present? %>
-          <span>
-            Below is the abstract of this <%= regulation_type regulation %>.
-          </span>
-          <hr/>
-        
-          <article>
-            <%= regulation_abstract regulation %>
-          </article>
-        <% else %>
-          This <%= regulation_type regulation %> doesn't have an abstract.
-        <% end %>
+        <strong>Full Text</strong>
+        <span>
+          Below is a simple rendition of the Federal Register's <strong><a data-resource="federalregister" href="<%= regulation['url'] %>">full text</a></strong>.
+        </span>
+      </header>
+      <hr />
+      <article class="text">
+        <%= document %>
+      </article>
       </header>
     </div>
   <% end %>

@@ -5,7 +5,7 @@ get "/interest/:interest_id.:format" do
     halt 404 and return
   end
 
-  items = SeenItem.where(:interest_id => interest.id).desc :date
+  items = SeenItem.where(interest_id: interest.id).desc :date
 
   if params[:format] == 'rss'
     rss_for "interest", items, interest: interest
