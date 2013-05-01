@@ -101,4 +101,16 @@ class Event
       item.save!
     end
   end
+
+  def self.json_used!(url, api_key)
+    event = find_or_initialize_by(
+      type: "json-used",
+      url: url,
+      api_key: api_key
+    )
+
+    event['count'] ||= 0
+    event['count'] += 1
+    event.save!
+  end
 end
