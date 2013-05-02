@@ -93,12 +93,18 @@
       <header>
         <strong>Full Text</strong>
         <span>
-          Below is a simple rendition of the Federal Register's <strong><a data-resource="federalregister" href="<%= regulation['url'] %>">full text</a>.</strong>
+          <% if regulation['document'].present? %>
+            Below is a simple rendition of the Federal Register's <strong><a data-resource="federalregister" href="<%= regulation['url'] %>">full text</a>.</strong>
+          <% else %>
+            Read the Federal Register's <strong><a data-resource="federalregister" href="<%= regulation['url'] %>">full text</a>.</strong>
+          <% end %>
         </span>
       </header>
       <hr />
       <article class="text">
-        <%= document %>
+        <% if regulation['document'].present? %>
+          <%= regulation['document'] %>
+        <% end %>
       </article>
       </header>
     </div>

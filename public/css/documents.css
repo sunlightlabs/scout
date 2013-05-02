@@ -59,6 +59,10 @@
 .entry.regulation article .signature {display: none;}
 .entry.regulation article a.back_to_top {display: none;}
 
+.entry.regulation article ul.bullets,
+.entry.regulation article ul.bullets li {list-style-type: disc; list-style-position: outside;}
+.entry.regulation article ul.bullets {padding: 0 30px;}
+.entry.regulation article ul.bullets li {margin-bottom: 5px;}
 
 .entry.regulation article .reg_text {}
 

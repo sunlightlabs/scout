@@ -3,6 +3,15 @@ module Subscriptions
 
     class Regulations
 
+      FIELDS = %w{ 
+        document_number document_type article_type
+        stage title abstract 
+        posted_at publication_date 
+        effective_on comments_close_on
+        url pdf_url
+        agency_names agency_ids 
+      }
+
       def self.filters
         {
           "agency" => {
@@ -24,13 +33,7 @@ module Subscriptions
           endpoint = "http://congress.api.sunlightfoundation.com"
         end
         
-        fields = %w{ 
-          document_number document_type article_type
-          stage title abstract 
-          posted_at publication_date 
-          effective_on comments_close_on
-          url agency_names agency_ids 
-        }
+        
 
         url = endpoint
 
@@ -53,7 +56,7 @@ module Subscriptions
         end
 
         url << "&order=posted_at"
-        url << "&fields=#{fields.join ','}"
+        url << "&fields=#{FIELDS.join ','}"
         url << "&apikey=#{api_key}"
 
         # filters
@@ -86,20 +89,19 @@ module Subscriptions
           endpoint = "http://congress.api.sunlightfoundation.com"
         end
         
-        fields = %w{ 
-          stage title abstract article_type
-          document_number document_type 
-          effective_on comments_close_on
-          posted_at publication_date 
-          url pdf_url 
-          agency_names agency_ids
-        }
-
         url = "#{endpoint}/regulations?apikey=#{api_key}"
         url << "&document_number=#{item_id}"
-        url << "&fields=#{fields.join ','}"
+        url << "&fields=#{FIELDS.join ','}"
 
         url
+      end
+
+      # given a seen item (bill), return the document URL to fetch
+      def self.document_url(item)
+        regulation = item.data
+        if regulation['document_type'] == 'article'
+          "http://unitedstates.sunlightfoundation.com/documents/federal_register/article/#{regulation['document_number']}.htm"
+        end
       end
 
       def self.title_for(regulation)

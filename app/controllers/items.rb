@@ -19,8 +19,7 @@ get "/item/:item_type/:item_id/?:slug?" do
     content = erb :"subscriptions/#{subscription_type}/_show", layout: false, locals: {
       item: item,
       interest: interest,
-      item_type: item_type,
-      document: File.read("misc/regulation.html")
+      item_type: item_type
     }
     
     share = partial "partials/share", engine: :erb
