@@ -87,6 +87,11 @@
 
 .entry.bill #document .enum {margin-right: 3px;}
 
+.entry.bill #document .form, 
+.entry.bill #document .amendment-form, 
+.entry.bill #document .engrossed-amendment-form, 
+.entry.bill #document .resolution-form {display: none;}
+
 .entry.bill #document .toc-entry,
 .entry.bill #document .section,
 .entry.bill #document .subsection, 
