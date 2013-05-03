@@ -3,6 +3,15 @@ module Subscriptions
 
     class Documents
 
+      MAX_PER_PAGE = 50
+
+      FIELDS = %w{ 
+        document_id document_type document_type_name 
+        title categories posted_at
+        url source_url 
+        gao_report.gao_id gao_report.description
+      }
+
       def self.filters
         {
           # todo: document_type, once more than one is present
@@ -18,13 +27,6 @@ module Subscriptions
           endpoint = "http://congress.api.sunlightfoundation.com"
         end
         
-        fields = %w{ 
-          document_id document_type document_type_name 
-          title categories posted_at
-          url source_url 
-          gao_report.gao_id gao_report.description
-        }
-
         url = endpoint
 
         query = subscription.query['query']
@@ -47,7 +49,7 @@ module Subscriptions
 
         url << "&document_type=gao_report"
         url << "&order=posted_at"
-        url << "&fields=#{fields.join ','}"
+        url << "&fields=#{FIELDS.join ','}"
         url << "&apikey=#{api_key}"
 
 
@@ -72,18 +74,54 @@ module Subscriptions
         else
           endpoint = "http://congress.api.sunlightfoundation.com"
         end
-        
-        fields = %w{ 
-          document_id document_type document_type_name 
-          title categories posted_at
-          url source_url 
-          gao_report.gao_id gao_report.description
-        }
 
         url = "#{endpoint}/documents?apikey=#{api_key}"
         url << "&document_id=#{item_id}"
-        url << "&fields=#{fields.join ','}"
+        url << "&fields=#{FIELDS.join ','}"
 
+        url
+      end
+
+      def self.url_for_sync(options = {})
+        api_key = options[:api_key] || Environment.config['subscriptions']['sunlight_api_key']
+
+        if Environment.config['subscriptions']['congress_endpoint'].present?
+          endpoint = Environment.config['subscriptions']['congress_endpoint'].dup
+        else
+          endpoint = "http://congress.api.sunlightfoundation.com"
+        end
+
+        url = "#{endpoint}/documents?apikey=#{api_key}"
+        url << "&fields=#{FIELDS.join ','}"
+        url << "&order=posted_at__asc"
+
+        # still just GAO reports
+        url << "&document_type=gao_report"
+
+        # per-year sync is made inefficient by two Congress API bugs:
+        # https://github.com/sunlightlabs/congress/issues/391
+        # https://github.com/sunlightlabs/congress/issues/392
+        
+        if options[:since] == "all"
+          # ok, get everything
+
+        elsif options[:since] == "current_year"
+          url << "&posted_at__gte=#{Time.now.year}-01-01T00:00:00Z"
+          # url << "&posted_at__lte=#{Time.now.year}-12-31"
+
+        # can specify a single year (e.g. '2012', '2013')
+        elsif options[:since] =~ /^\d+$/
+          url << "&posted_at__gte=#{options[:since]}-01-01T00:00:00Z"
+          # url << "&posted_at__lte=#{options[:since]}-12-31"
+
+        # default to the last 3 days
+        else
+          url << "&posted_at__gte=#{3.days.ago.strftime "%Y-%m-%d"}T00:00:00Z"
+        end
+
+        url << "&page=#{options[:page]}" if options[:page]
+        url << "&per_page=#{MAX_PER_PAGE}"
+        
         url
       end
 

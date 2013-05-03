@@ -3,7 +3,7 @@ module Subscriptions
 
     class FederalBills
 
-      # if the adapter support sync, this must be supplied
+      # if the adapter supports sync, this must be supplied
       MAX_PER_PAGE = 50
 
       FIELDS = %w{ 

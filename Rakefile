@@ -546,7 +546,13 @@ task :sitemap => :environment do
     end
 
     # synced remote item landing pages
-    {bill: :daily, speech: :monthly}.each do |item_type, frequency|
+    {
+      bill: :weekly, 
+      speech: :monthly, 
+      regulation: :monthly,
+      document: :monthly
+    }.each do |item_type, frequency|
+      
       counts[item_type] = 0
       Item.where(item_type: item_type.to_s).asc(:created_at).each do |item|
         counts[item_type] += 1
