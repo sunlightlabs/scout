@@ -57,7 +57,14 @@
 .entry.regulation article .toc-hidden a {color: #888; margin-left: 7px;}
 .entry.regulation article .document_details {display: none;}
 .entry.regulation article .signature {display: none;}
-.entry.regulation article a.back_to_top {display: none;}
+.entry.regulation article a.back_to_top,
+.entry.regulation article a.back_to_table_index {display: none;}
+
+.entry.regulation article table {border-spacing: 5px; border-collapse: separate;}
+.entry.regulation article table td {padding-bottom: 5px;}
+.entry.regulation article table caption {margin-bottom: 5px; font-weight: bold;}
+
+.entry.regulation article .subject_list {padding: 10px 20px;}
 
 .entry.regulation article ul.bullets,
 .entry.regulation article ul.bullets li {list-style-type: disc; list-style-position: outside;}
