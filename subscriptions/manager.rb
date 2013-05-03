@@ -161,7 +161,7 @@ module Subscriptions
           Curl::Err::GotNothingError,
           Timeout::Error, Errno::ECONNREFUSED, EOFError, Errno::ETIMEDOUT => ex
           return error_for "Network or timeout error while polling feed", url, function, options, subscription, ex
-        rescue AdapterParseException => ex
+        rescue AdapterParseException, BadFetchException => ex
           return error_for "Error during initial processing of feed: #{ex.message}", url, function, options, subscription
         rescue Exception => ex
           # don't allow caller to accumulate unexpected errors, email right away
@@ -207,7 +207,7 @@ module Subscriptions
             "JSON parser error, body was:\n\n#{body}"
           end
           return error_for message, url, function, options, subscription, ex
-        rescue AdapterParseException => ex
+        rescue AdapterParseException, BadFetchException => ex
           return error_for ex.message, url, function, options, subscription
         end
       end
@@ -307,6 +307,9 @@ module Subscriptions
           Timeout::Error, Errno::ECONNREFUSED, EOFError, Errno::ETIMEDOUT => ex
         Admin.report Report.warning("fetch:#{url_type}", "[find][#{url_type}] find timeout, returned nil")
         return nil
+      rescue BadFetchException => ex
+        Admin.report Report.warning("fetch:#{url_type}", "[find][#{url_type}] #{ex.message}", url: url)
+        return nil
       rescue Oj::ParseError, SyntaxError => ex
         Admin.report Report.exception("fetch:#{url_type}", "[find][#{url_type}] JSON parse error, returned nil, body was:\n\n#{body}", ex)
         return nil
@@ -339,7 +342,7 @@ module Subscriptions
           "JSON parser error, body was:\n\n#{body}"
         end
         return error_for message, url, :sync, options, nil, ex
-      rescue AdapterParseException => ex
+      rescue AdapterParseException, BadFetchException => ex
         return error_for ex.message, url, :sync, options, nil
       end
 
@@ -383,7 +386,7 @@ module Subscriptions
       if curl.status.start_with?("2")
         curl.body_str
       else
-        raise AdapterParseException.new("Bad status code: #{curl.status}")
+        raise BadFetchException.new("Bad status code: #{curl.status}")
       end
     end
 
@@ -396,5 +399,6 @@ module Subscriptions
 
   # used by adapters to signal an error in parsing
   class AdapterParseException < Exception; end
+  class BadFetchException < Exception; end
   
 end
