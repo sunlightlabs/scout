@@ -55,138 +55,134 @@
 <body>
 
     <div class="headerWrapper">
-        <div class="hatWrap">
-            <div class="contentWrapper">
-                <a class="productOf" href="http://www.sunlightfoundation.com">
-                    a product of Sunlight Foundation
-                </a>
-            </div>
+      <div class="hatWrap">
+        <div class="contentWrapper">
+          <a class="productOf" href="http://www.sunlightfoundation.com">
+            a product of Sunlight Foundation
+          </a>
         </div>
+      </div>
 
-        <% if content_for?(:home) %>
-            <div class="homeWrapper">
-        <% else %>
-            <!-- not home -->
-        <% end %>
+      <% if content_for?(:home) %>
+        <div class="homeWrapper">
+      <% else %>
+        <!-- not home -->
+      <% end %>
 
-        <header class="contentWrapper">
-            <nav>
-                <ul id="userNav">
-                    <% if logged_in? %>
-                        <li class="user">
-                            <%= user_contact current_user %>
-                        </li>
-                        <li class="subscriptions">
-                            <a href="/account/subscriptions">
-                                Subscriptions
-                                <span class="count">(<%= @interests.size %>)</span>
-                            </a>
-                        </li>
-                        <li class="settings">
-                            <a href="/account/settings">Settings</a>
-                        </li>
-                        <li class="feedback">
-                            <a href="mailto:scout+contact@sunlightfoundation.com" class="feedback">Contact</a>
-                        </li>
-                        <li>
-                            <a href="/logout" class="logout">Log Out</a>
-                        </li>
-                    <% else %>
-                        <li class="feedback">
-                            <a href="mailto:scout+contact@sunlightfoundation.com" class="feedback">Contact</a>
-                        </li>
-                        <li>
-                            <a href="/login" class="login">Login or Sign up</a>
-                        </li>
-                    <% end %>
-                </ul>
-                <% if logged_in? and current_user.should_change_password? %>
-                    <div class="should_change_password clear">
-                        You should <a href="/account/settings">change your password</a>.
-                    </div>
-                <% end %>
-            </nav>
-            
-            <div class="clear"></div>
-            
-            <a href="/">
-                <h1 class="textIndent">Scout</h1>
-            </a>
-            
-            <% if content_for?(:home) %>
-            <p class="splashtext">
-                Get alerts when congress or your state capitol talks about issues you care about
-            </p>
+      <header class="contentWrapper">
+        <nav>
+          <ul id="userNav">
+            <% if logged_in? %>
+              <li class="user">
+                <%= user_contact current_user %>
+              </li>
+              <li class="subscriptions">
+                <a href="/account/subscriptions">
+                  Subscriptions
+                  <span class="count">(<%= @interests.size %>)</span>
+                </a>
+              </li>
+              <li class="settings">
+                <a href="/account/settings">Settings</a>
+              </li>
+              <li class="feedback">
+                <a href="mailto:scout+contact@sunlightfoundation.com" class="feedback">Contact</a>
+              </li>
+              <li>
+                <a href="/logout" class="logout">Log Out</a>
+              </li>
+            <% else %>
+              <li class="feedback">
+                <a href="mailto:scout+contact@sunlightfoundation.com" class="feedback">Contact</a>
+              </li>
+              <li>
+                <a href="/login" class="login">Login or Sign up</a>
+              </li>
             <% end %>
-            
-            <%= partial "search/search", :engine => "erb", :locals => {} %>
-
-            <div class="clear"></div>
-        </header>
-
-        <% if content_for?(:home) %>
+          </ul>
+          <% if logged_in? and current_user.should_change_password? %>
+            <div class="should_change_password clear">
+              You should <a href="/account/settings">change your password</a>.
             </div>
+          <% end %>
+        </nav>
+        
+        <div class="clear"></div>
+        
+        <a href="/">
+          <h1 class="textIndent">Scout</h1>
+        </a>
+        
+        <% if content_for?(:home) %>
+        <p class="splashtext">
+          Get alerts when congress or your state capitol talks about issues you care about
+        </p>
         <% end %>
+        
+        <%= partial "search/search", :engine => "erb", :locals => {} %>
+
+        <div class="clear"></div>
+      </header>
+
+      <% if content_for?(:home) %>
+        </div>
+      <% end %>
     </div>
 
     <div class="fauxBody">
-        <div class="contentWrapper" id="content">
-
-            <% if content_for?(:sidebar_left) %>
-                <div class="sidebar left">
-                    <%= yield_content :sidebar_left %>
-                </div>
-            <% end %> 
-            
-            <div id="center">
-                <%= yield %>
-            </div>
-
-            <% if content_for?(:sidebar_right) %>
-                <div class="sidebar right">
-                    <%= yield_content :sidebar_right %>
-                </div>
-            <% end %>
+      <div class="contentWrapper" id="content">
+        <% if content_for?(:sidebar_left) %>
+          <div class="sidebar left">
+            <%= yield_content :sidebar_left %>
+          </div>
+        <% end %> 
+        
+        <div id="center">
+          <%= yield %>
         </div>
+
+        <% if content_for?(:sidebar_right) %>
+          <div class="sidebar right">
+            <%= yield_content :sidebar_right %>
+          </div>
+        <% end %>
+      </div>
     </div>
 
     <div class="footerWrapper">
-        <footer class="contentWrapper">
-            <a href="http://sunlightfoundation.com" class="sunlightFoundation textIndent">
-                Sunlight Foundation
-            </a>
+      <footer class="contentWrapper">
+        <a href="http://sunlightfoundation.com" class="sunlightFoundation textIndent">
+          Sunlight Foundation
+        </a>
 
-            <div class="aboutSF">
-                <p>
-                Founded in 2006, the Sunlight Foundation is a non-partisan non-profit that uses cutting-edge technology and ideas to make government transparent and accountable.   </p>
-                <p>
-                    Visit <a href="http://sunlightfoundation.com">SunlightFoundation.com</a> to learn more.
-                </p>
-            </div>
-            
-            <nav>
-                <a href="/about">About</a>
-            </nav>
+        <div class="aboutSF">
+          <p>
+            Founded in 2006, the Sunlight Foundation is a non-partisan non-profit that uses cutting-edge technology and ideas to make government transparent and accountable.
+          </p>
+          <p>
+            Visit <a href="http://sunlightfoundation.com">SunlightFoundation.com</a> to learn more.
+          </p>
+        </div>
+          
+        <nav>
+          <a href="/about">About</a>
+        </nav>
 
-            <div class="clear"></div>
-        </footer>
+        <div class="clear"></div>
+      </footer>
     </div>
 
     <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-22821126-16']);
+      _gaq.push(['_trackPageview']);
 
-        var _gaq = _gaq || [];
-        _gaq.push(['_setAccount', 'UA-22821126-16']);
-        _gaq.push(['_trackPageview']);
-
-        (function() {
-          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-        })();
-
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
     </script>
-
-    <!-- chartbeat -->
 
     <script type="text/javascript">
     var _sf_async_config={uid:980,domain:"scout.sunlightfoundation.com"};
@@ -202,10 +198,8 @@
         document.body.appendChild(e);
       }
       var oldonload = window.onload;
-      window.onload = (typeof window.onload != 'function') ?
-         loadChartbeat : function() { oldonload(); loadChartbeat(); };
+      window.onload = (typeof window.onload != 'function') ? loadChartbeat : function() { oldonload(); loadChartbeat(); };
     })();
-
     </script>
 
 </body>
