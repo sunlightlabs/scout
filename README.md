@@ -2,6 +2,8 @@
 
 A government-wide search and notification system. Currently deployed to [scout.sunlightfoundation.com](https://scout.sunlightfoundation.com/). [![Build Status](https://secure.travis-ci.org/sunlightlabs/scout.png)](http://travis-ci.org/sunlightlabs/scout)
 
+Testing.
+
 ## Setting Up
 
 Scout depends on Ruby 1.9. **Recommended**: use [rvm](https://rvm.io/) to install Ruby 1.9.X and create a virtual environment for the project.
