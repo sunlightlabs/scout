@@ -9,14 +9,13 @@
 <head>
     <script type="text/javascript">var _sf_startpt=(new Date()).getTime()</script>
 
-    <script type="text/javascript" src="https://use.typekit.com/bsl1eko.js"></script>
-    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    <link rel="shortcut icon" href="/favicon.ico">
     
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="google-site-verification" content="5EhJ93mPwaiWioTBlDqRtVwFZhwteGQ-7ysCs-hlUxI" />
 
-    <%= yield_content :head %>
+    <meta property="og:image" content="https://scout.sunlightfoundation.com/favicon.ico" />
 
     <% if content_for?(:title) %>
       <title><%= yield_content :title %></title>
@@ -32,25 +31,14 @@
       <meta property="og:description" content="A search and notification engine for government action in Washington DC and all 50 states, by the Sunlight Foundation." />
     <% end %>
 
+    <!-- my CSS, plus any page-specific CSS -->
+
     <link rel="stylesheet" href="/css/html5-reset.css" />
     <link rel="stylesheet" href="/css/main.css?<%= Time.now.to_i %>" />
-    <link rel="stylesheet" href="/css/documents.css?<%= Time.now.to_i %>" />
 
-    <!--[if lt IE 9]>
-    <script src="/js/html5.js"></script>
-    <script src="https://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
-    <![endif]-->
-
-    <link rel="shortcut icon" href="/favicon.ico">
+    <%= yield_content :head %>
 
     <script src="/js/jquery-1.9.1.min.js"></script>
-    <script src="/js/jquery.pjax.js"></script>
-    <script src="/js/h5f.min.js"></script>
-    <script src="/js/main.js?<%= Time.now.to_i %>"></script>
-
-    <script type="text/javascript" src="https://s3.amazonaws.com/assets.sunlightfoundation.com/social/scripts/simple-socialite-pack.min.js.gz" ></script>
-
-    <meta property="og:image" content="https://scout.sunlightfoundation.com/favicon.ico" />
 </head>
 <body>
 
@@ -172,6 +160,8 @@
       </footer>
     </div>
 
+    <!-- lots of javascript... -->
+
     <script type="text/javascript">
       var _gaq = _gaq || [];
       _gaq.push(['_setAccount', 'UA-22821126-16']);
@@ -200,6 +190,31 @@
       var oldonload = window.onload;
       window.onload = (typeof window.onload != 'function') ? loadChartbeat : function() { oldonload(); loadChartbeat(); };
     })();
+    </script>
+
+    <%= yield_content :foot %>
+
+    <!--[if lt IE 9]>
+    <script src="/js/html5.js"></script>
+    <script src="https://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
+    <![endif]-->
+
+    
+    <script src="/js/jquery.pjax.js"></script>
+    <script src="/js/h5f.min.js"></script>
+    <script src="/js/main.js?<%= Time.now.to_i %>"></script>
+
+    <script type="text/javascript" src="https://s3.amazonaws.com/assets.sunlightfoundation.com/social/scripts/simple-socialite-pack.min.js.gz" ></script>
+
+    <!-- typekit -->
+    <script type="text/javascript">
+      (function() {
+        var config = {
+          kitId: 'bsl1eko',
+          scriptTimeout: 3000
+        };
+        var h=document.getElementsByTagName("html")[0];h.className+=" wf-loading";var t=setTimeout(function(){h.className=h.className.replace(/(\s|^)wf-loading(\s|$)/g," ");h.className+=" wf-inactive"},config.scriptTimeout);var tk=document.createElement("script"),d=false;tk.src='//use.typekit.net/'+config.kitId+'.js';tk.type="text/javascript";tk.async="true";tk.onload=tk.onreadystatechange=function(){var a=this.readyState;if(d||a&&a!="complete"&&a!="loaded")return;d=true;clearTimeout(t);try{Typekit.load(config)}catch(b){}};var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(tk,s)
+      })();
     </script>
 
 </body>
