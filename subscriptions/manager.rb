@@ -241,35 +241,42 @@ module Subscriptions
 
     def self.find(adapter_type, item_id, options = {})
       adapter = Subscription.adapter_for adapter_type
+      item_type = search_adapters[adapter_type]
+
       url = adapter.url_for_detail item_id, options
       
       puts "\n[#{adapter_type}][find][#{item_id}] #{url}\n\n" if !test? and Environment.config['debug']['output_urls']
       
-      begin
-        if body = cache_for(url, :find, adapter_type)
-          response = ::Oj.load body, mode: :compat
-        elsif options[:cache_only]
-          return nil
-        else
-          body = download url
-          response = ::Oj.load body, mode: :compat
+      # top-layer cache - if we've synced the item already, use it
+      if item = item_cache_for(item_type, item_id)
+        # pass
+      else
+        begin
+          if body = cache_for(url, :find, adapter_type)
+            response = ::Oj.load body, mode: :compat
+          elsif options[:cache_only]
+            return nil
+          else
+            body = download url
+            response = ::Oj.load body, mode: :compat
 
-          # wait for JSON parse, so as not to cache errors
-          if !Environment.config['no_cache']
-            cache! url, :find, adapter_type, body
+            # wait for JSON parse, so as not to cache errors
+            if !Environment.config['no_cache']
+              cache! url, :find, adapter_type, body
+            end
           end
+        rescue Curl::Err::ConnectionFailedError, Curl::Err::PartialFileError, 
+            Curl::Err::RecvError, Curl::Err::HostResolutionError, 
+            Timeout::Error, Errno::ECONNREFUSED, EOFError, Errno::ETIMEDOUT => ex
+          Admin.report Report.warning("find:#{adapter_type}", "[#{adapter_type}][find][#{item_id}] find timeout, returned nil")
+          return nil
+        rescue Oj::ParseError, SyntaxError => ex
+          Admin.report Report.exception("find:#{adapter_type}", "[#{adapter_type}][find][#{item_id}] JSON parse error, returned nil, body was:\n\n#{body}", ex)
+          return nil
         end
-      rescue Curl::Err::ConnectionFailedError, Curl::Err::PartialFileError, 
-          Curl::Err::RecvError, Curl::Err::HostResolutionError, 
-          Timeout::Error, Errno::ECONNREFUSED, EOFError, Errno::ETIMEDOUT => ex
-        Admin.report Report.warning("find:#{adapter_type}", "[#{adapter_type}][find][#{item_id}] find timeout, returned nil")
-        return nil
-      rescue Oj::ParseError, SyntaxError => ex
-        Admin.report Report.exception("find:#{adapter_type}", "[#{adapter_type}][find][#{item_id}] JSON parse error, returned nil, body was:\n\n#{body}", ex)
-        return nil
+        
+        item = adapter.item_detail_for response
       end
-      
-      item = adapter.item_detail_for response
       
       if item
         item.find_url = url
@@ -349,6 +356,16 @@ module Subscriptions
       items.map do |item|
         item.item_type = search_adapters[subscription_type]
         item
+      end
+    end
+
+    def self.item_cache_for(item_type, item_id)
+      return nil if Environment.config['no_cache']
+      
+      if item = Item.where(item_type: item_type, item_id: item_id).first
+        Item.to_seen! item
+      else
+        nil
       end
     end
 

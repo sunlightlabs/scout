@@ -44,6 +44,22 @@ class ItemsTest < Test::Unit::TestCase
     assert_match /Due Process/, last_response.body
   end
 
+  def test_show_with_item_cache_but_not_url_cache_also_renders_directly
+    item_id = "hr4192-112"
+    item_type = "bill"
+
+    mock_item item_id, item_type # not url cached
+    cache_item_direct item_id, item_type # cached in the item repo
+
+    assert_equal 0, Cache.count
+    assert_equal 1, Item.count
+
+    get "/item/#{item_type}/#{item_id}"
+    assert_response 200
+
+    assert_match /Due Process/, last_response.body
+  end
+
   def test_fetch_item_itself
     item_id = "hr4192-112"
     item_type = "bill"

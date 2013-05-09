@@ -102,6 +102,21 @@ module TestHelper
       mock_response url, fixture
     end
 
+    def cache_item_direct(item_id, item_type)
+      subscription_type = item_types[item_type]['adapter']
+      adapter = Subscription.adapter_for subscription_type
+
+      fixture = "#{subscription_type}/item/#{item_id}"
+      file = "test/fixtures/#{fixture}.json"
+      content = File.read file
+      response = ::Oj.load content, mode: :compat
+      
+      seen_item = adapter.item_detail_for response
+      seen_item.item_type = item_type
+
+      Item.from_seen! seen_item
+    end
+
     def cache_item(item_id, item_type)
       subscription_type = item_types[item_type]['adapter']
       
