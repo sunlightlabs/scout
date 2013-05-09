@@ -226,7 +226,7 @@ nav li{
 
 nav .should_change_password {
     clear: both; float: right;
-    padding-top: 10px;;
+    padding-top: 10px;
 }
 
 nav .should_change_password a {
@@ -575,7 +575,6 @@ select.subscription_type {
 .sidebar label{
     display: block;
     margin-bottom: 7px;
-    font-size: ; /* 11 px / 13 px*/
 }
 .sidebar input{
     margin-right: 5px;
