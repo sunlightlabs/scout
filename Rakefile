@@ -514,7 +514,7 @@ task :sitemap => :environment do
 
   counts = {
     tags: 0, cites: 0,
-    pages: 1 # assume /about works
+    pages: 2 # assume / and /about work
   }
 
   ping = ENV['debug'] ? false : true
@@ -525,6 +525,9 @@ task :sitemap => :environment do
     url_path: "sitemap",
     ping_google: ping,
     ping_bing: ping) do
+
+    # homepage! come back to me
+    add "/", change_frequency: "daily"
 
     # about page, changes rarely
     add "/about", change_frequency: "monthly"
