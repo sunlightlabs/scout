@@ -30,7 +30,12 @@ namespace :sync do
 
         total += items.size
         break if items.size < adapter::MAX_PER_PAGE
-        break if (Time.now - start) > 60.minutes # emergency brake, I hate while-true's
+        
+        # emergency brake, I hate while-true's
+        if (Time.now - start) > 600.minutes
+          puts "Emergency brake!"
+          break
+        end
 
         page += 1
       end
