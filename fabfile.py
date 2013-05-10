@@ -42,6 +42,9 @@ def dependencies():
 def create_indexes():
   run("cd %s && rake create_indexes" % version_path)
 
+def sync_assets():
+  run("cd %s && rake assets:sync" % version_path)
+
 def make_current():
   run('rm -f %s && ln -s %s %s' % (current_path, version_path, current_path))
 
@@ -79,6 +82,7 @@ def deploy():
   execute(links)
   execute(dependencies)
   execute(create_indexes)
+  execute(sync_assets)
   execute(make_current)
   execute(set_crontab)
   execute(restart)
@@ -88,6 +92,7 @@ def deploy_cold():
   execute(links)
   execute(dependencies)
   execute(create_indexes)
+  execute(sync_assets)
   execute(make_current)
   execute(set_crontab)
   execute(start)
