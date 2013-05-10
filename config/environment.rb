@@ -94,6 +94,7 @@ configure do
       config.fail_silently = false
       config.existing_remote_files = 'ignore'
     else
+      puts "Asset syncing disabled, using local assets."
       config.enabled = false
     end
   end
