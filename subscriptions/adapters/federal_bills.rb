@@ -132,7 +132,7 @@ module Subscriptions
 
         url = "#{endpoint}/bills?apikey=#{api_key}"
         url << "&fields=#{FIELDS.join ','}"
-        url << "&order=created_at__asc"
+        url << "&order=introduced_on__asc"
 
         
         if options[:since] == "all"
@@ -147,7 +147,7 @@ module Subscriptions
 
         # default to the last 3 days
         else
-          url << "&created_at__gte=#{3.days.ago.strftime "%Y-%m-%d"}"
+          url << "&introduced_on__gte=#{3.days.ago.strftime "%Y-%m-%d"}"
         end
 
         url << "&page=#{options[:page]}" if options[:page]
