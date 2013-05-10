@@ -33,12 +33,12 @@
 
     <!-- my CSS, plus any page-specific CSS -->
 
-    <link rel="stylesheet" href="/css/html5-reset.css" />
-    <link rel="stylesheet" href="/css/main.css?<%= Time.now.to_i %>" />
+    <link rel="stylesheet" href="<%= asset_path "/css/html5-reset.css" %>" />
+    <link rel="stylesheet" href="<%= asset_path "/css/main.css" %>" />
 
     <%= yield_content :head %>
 
-    <script src="/js/jquery-2.0.0.min.js"></script>
+    <script src="<%= asset_path "/js/jquery-2.0.0.min.js" %>"></script>
 </head>
 <body>
 
@@ -195,14 +195,14 @@
     <%= yield_content :foot %>
 
     <!--[if lt IE 9]>
-    <script src="/js/html5.js"></script>
+    <script src="<%= asset_path "/js/html5.js" %>"></script>
     <script src="https://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
     <![endif]-->
 
     
-    <script src="/js/jquery.pjax.js"></script>
-    <script src="/js/h5f.min.js"></script>
-    <script src="/js/main.js?<%= Time.now.to_i %>"></script>
+    <script src="<%= asset_path "/js/jquery.pjax.js" %>"></script>
+    <script src="<%= asset_path "/js/h5f.min.js" %>"></script>
+    <script src="<%= asset_path "/js/main.js" %>"></script>
 
     <script type="text/javascript" src="https://s3.amazonaws.com/assets.sunlightfoundation.com/social/scripts/simple-socialite-pack.min.js.gz" ></script>
 

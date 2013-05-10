@@ -7,8 +7,9 @@ require 'tzinfo'
 require 'twilio-rb'
 require 'feedbag'
 require 'phone'
-
 require 'stringex'
+
+require 'asset_sync'
 
 
 class Environment
@@ -25,6 +26,14 @@ class Environment
     string.gsub! /[`\{\}]/, ""
 
     string.to_url[0..200]
+  end
+
+  def self.asset_path(path)
+    if config['assets'] and config['assets']['enabled']
+      File.join Environment.config['assets']['asset_host'], "assets", path
+    else
+      File.join "assets", path
+    end
   end
 end
 
@@ -68,7 +77,25 @@ configure do
 
   # if a consistent time zone is needed, use Eastern Time
   Time.zone = ActiveSupport::TimeZone.find_tzinfo "America/New_York"
+
+
+  assets = Environment.config['assets']
+  if assets and assets['enabled']
+    AssetSync.configure do |config|
+      config.fog_provider = 'AWS'
+      config.fog_directory = assets['s3']['bucket']
+      config.aws_access_key_id = assets['s3']['access_key']
+      config.aws_secret_access_key = assets['s3']['secret_key']
+
+      config.prefix = "assets"
+      config.public_path = Pathname('./public')
+
+      config.fail_silently = false
+      config.existing_remote_files = 'ignore'
+    end
+  end
 end
+
 
 # models
 Dir.glob('app/models/*.rb').each {|filename| load filename}

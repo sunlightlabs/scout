@@ -11,6 +11,16 @@
 # set to true to turn off caching of remote content (useful for development)
 :no_cache: true
 
+# asset hosting on S3, sync with rake assets:sync
+assets:
+  enabled: false # turn on in production
+  asset_host: # URL to put before assets
+  s3:
+    bucket: 
+    access_key: 
+    secret_key: 
+
+
 # email details
 :email:
   :via: :smtp

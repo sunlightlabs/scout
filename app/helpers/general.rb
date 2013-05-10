@@ -4,6 +4,10 @@ require 'rinku'
 module Helpers
   module General
 
+    def asset_path(path)
+      Environment.asset_path path
+    end
+
     def sadness
       sads = %w{regrettably sadly unfortunately inexplicably sadheartedly sorrowfully most-unpleasantly with-great-sadness}
       sad = sads[rand sads.size]

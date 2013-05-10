@@ -3,7 +3,7 @@
 <% end %>
 
 <% content_for :head do %>
-  <link rel="stylesheet" href="/css/documents.css?<%= Time.now.to_i %>" />
+  <link rel="stylesheet" href="<%= asset_path "/css/documents.css" %>" />
 <% end %>
 
 <% content_for :sidebar_right do %>

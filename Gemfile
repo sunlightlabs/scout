@@ -20,15 +20,16 @@ gem "stringex" # slug generation
 gem 'ruby-hmac'
 gem 'bcrypt-ruby'
 
-gem 'rack-ssl'
-
 gem 'postmark', '0.9.10'
 gem 'mail', '2.4.4'
 gem 'pony', '1.4'
 gem 'twilio-rb', '2.2.0'
 
 gem 'rack', '1.5.2'
+gem 'rack-ssl'
 gem 'rake', '0.9.2.2'
+
+gem 'asset_sync' # asset syncing to S3
 
 gem 'big_sitemap'
 
