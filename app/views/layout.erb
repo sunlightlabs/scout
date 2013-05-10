@@ -192,8 +192,6 @@
     })();
     </script>
 
-    <%= yield_content :foot %>
-
     <!-- typekit -->
     <script type="text/javascript">
       (function() {
@@ -216,6 +214,8 @@
     <script src="<%= asset_path "/js/main.js" %>"></script>
 
     <script type="text/javascript" src="https://s3.amazonaws.com/assets.sunlightfoundation.com/social/scripts/simple-socialite-pack.min.js.gz" ></script>
+
+    <%= yield_content :foot %>
 
 </body>
 </html>

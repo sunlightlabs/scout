@@ -85,40 +85,54 @@ $(function() {
 });
 
 var Utils = {
-    log: function(msg) {
-      if (typeof(console) != "undefined")
-        console.log(msg);
-    },
+  log: function(msg) {
+    if (typeof(console) != "undefined")
+      console.log(msg);
+  },
 
-    pjax: function(href, container) {
-      if (!container)
-        container = "#center";
+  pjax: function(href, container) {
+    if (!container)
+      container = "#center";
 
-      if ($.support.pjax) {
-        $.pjax({
-          url: href,
-          container: container,
-          timeout: 5000,
-          error: function() {
-            Utils.log("Error on PJAX: " + href);
-          }
-        });
-      } else
-        window.location = href;
-    },
+    if ($.support.pjax) {
+      $.pjax({
+        url: href,
+        container: container,
+        timeout: 5000,
+        error: function() {
+          Utils.log("Error on PJAX: " + href);
+        }
+      });
+    } else
+      window.location = href;
+  },
 
-    // returns a path string suitable for redirects back to this location
-    currentPath: function(options) {
-      var fullDomain = window.location.protocol + "//" + window.location.host;
-      var queryString = window.location.href.replace(fullDomain + window.location.pathname, "");
-      
-      if (options) {
-        if (queryString)
-          queryString += "&" + $.param(options);
-        else
-          queryString = "?" + $.param(options);
-      }
-
-      return escape(window.location.pathname + queryString);
+  // returns a path string suitable for redirects back to this location
+  currentPath: function(options) {
+    var fullDomain = window.location.protocol + "//" + window.location.host;
+    var queryString = window.location.href.replace(fullDomain + window.location.pathname, "");
+    
+    if (options) {
+      if (queryString)
+        queryString += "&" + $.param(options);
+      else
+        queryString = "?" + $.param(options);
     }
+
+    return escape(window.location.pathname + queryString);
+  },
+
+  shareButtons: function(title) {
+    var title = $("#share-title, .entryHeader h2").text();
+    if (!title) return;
+
+    title = "Scout - " + title;
+
+    $(".share-buttons")
+      .attr("data-options", "title=" + encodeURIComponent(title))
+      .attr("data-twitter-tweet-options", "count=none");
+
+    $(".share-buttons").trigger("register").trigger("ready");
+    // console.log("Sharing: " + title);
+  }
 };

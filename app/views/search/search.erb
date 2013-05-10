@@ -212,6 +212,7 @@
         <% end %>
       </p>
       <span style="display: none" id="share-title"><%= interest_name(interest) %></span>
+
       <%= partial "partials/share", engine: :erb %>
     </div>
   </div>
@@ -274,6 +275,7 @@
   </div>
 <% end %>
 
+
 <script type="text/javascript">
   
   var cached = {
@@ -312,6 +314,8 @@
   }
 
   function initializeSubscriptions() {
+    Utils.shareButtons();
+
     var initialQuery = "<%= escape_javascript query %>";
     var initialQueryType = "<%= escape_javascript(params[:query_type] || "simple") %>";
     $(".filters input.query").val(initialQuery);

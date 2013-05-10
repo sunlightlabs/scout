@@ -3,21 +3,3 @@
   data-services="twitter-tweet,facebook"
 
   ></div>
-
-<script>
-  $(document).ready(shareButtons);
-
-  function shareButtons(title) {
-    var title = $("#share-title, .entryHeader h2").text();
-    if (!title) return;
-
-    title = "Scout - " + title;
-
-    $(".share-buttons")
-      .attr("data-options", "title=" + encodeURIComponent(title))
-      .attr("data-twitter-tweet-options", "count=none");
-
-    $(".share-buttons").trigger("register").trigger("ready");
-    // console.log("Sharing: " + title);
-  }
-</script>
