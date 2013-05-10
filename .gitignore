@@ -7,6 +7,7 @@
 /vendor/gems
 /.bundle
 /public/sitemap
+/public/assets/*/*.gz
 
 /tmp
 /REVISION

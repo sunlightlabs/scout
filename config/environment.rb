@@ -93,6 +93,8 @@ configure do
 
       config.fail_silently = false
       config.existing_remote_files = 'ignore'
+
+      config.gzip_compression = true
     else
       puts "Asset syncing disabled, using local assets."
       config.enabled = false
