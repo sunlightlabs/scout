@@ -32,7 +32,7 @@ class Environment
     if config['assets'] and config['assets']['enabled']
       File.join Environment.config['assets']['asset_host'], "assets", path
     else
-      File.join "assets", path
+      File.join "/assets", path
     end
   end
 end
@@ -80,8 +80,9 @@ configure do
 
 
   assets = Environment.config['assets']
-  if assets and assets['enabled']
-    AssetSync.configure do |config|
+  AssetSync.configure do |config|
+
+    if assets and assets['enabled']
       config.fog_provider = 'AWS'
       config.fog_directory = assets['s3']['bucket']
       config.aws_access_key_id = assets['s3']['access_key']
@@ -92,6 +93,8 @@ configure do
 
       config.fail_silently = false
       config.existing_remote_files = 'ignore'
+    else
+      config.enabled = false
     end
   end
 end
