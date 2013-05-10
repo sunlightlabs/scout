@@ -282,6 +282,8 @@ module Subscriptions
         item.find_url = url
 
         if adapter.respond_to?(:document_url) and (url = adapter.document_url item)
+          # a url_type of 'document' means their cache will not get flushed --
+          # which is what we want. keep documents forever.
           item.data['document'] = fetch url, :document, options
         end
 
@@ -304,7 +306,6 @@ module Subscriptions
           return nil
         else
           body = download url
-
           if !Environment.config['no_cache']
             cache! url, :fetch, url_type, body
           end
@@ -355,6 +356,13 @@ module Subscriptions
 
       items.map do |item|
         item.item_type = search_adapters[subscription_type]
+        
+        if adapter.respond_to?(:document_url) and (url = adapter.document_url item)
+          # a url_type of 'document' means their cache will not get flushed --
+          # which is what we want. keep documents forever.
+          item.data['document'] = fetch url, :document, options
+        end
+
         item
       end
     end
@@ -363,6 +371,7 @@ module Subscriptions
       return nil if Environment.config['no_cache']
       
       if item = Item.where(item_type: item_type, item_id: item_id).first
+        puts "ITEM CACHE: [#{item_type}][#{item_id}]\n\n" if development?
         Item.to_seen! item
       else
         nil
