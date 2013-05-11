@@ -19,10 +19,8 @@
 
     <% if content_for?(:title) %>
       <title><%= yield_content :title %></title>
-      <meta property="og:title" content="<%= form_escape yield_content(:title) %>" />
     <% else %>
       <title>Scout</title>
-      <meta property="og:title" content="Scout" />
     <% end %>
 
     <% if content_for?(:description) %>
