@@ -597,7 +597,9 @@ namespace :assets do
     begin
       # first, run through each asset and compress it using gzip
       Dir["public/assets/**/*.*"].each do |path|
-        system "gzip -9 -c #{path} > #{path}.gz"
+        if File.extname(path) != ".gz"
+          system "gzip -9 -c #{path} > #{path}.gz"
+        end
       end
 
       # asset sync is configured to use the .gz version of a file if it exists,
