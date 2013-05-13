@@ -11,11 +11,13 @@ set :public_folder, 'public'
 
 # disable sessions in test environment so it can be manually set
 unless test?
-  use Rack::Session::Cookie, :key => 'rack.session',
-    :path => '/',
-    :expire_after => (60 * 60 * 24 * 30), # 30 days
-    :secret => Environment.config['session_secret']
+  use Rack::Session::Cookie, 
+    key: 'rack.session',
+    path: '/',
+    expire_after: (60 * 60 * 24 * 30), # 30 days
+    secret: Environment.config['session_secret']
 end
+
 
 # TODO: seriously?
 disable :protection
@@ -39,7 +41,7 @@ Dir.glob("./app/controllers/*.rb").each {|filename| load filename}
 
 before do
   # interest count is displayed in layout header for logged in users
-  @interests = logged_in? ? current_user.interests.desc(:created_at).all.map {|k| [k, k.subscriptions]} : []
+  @interest_count = logged_in? ? current_user.interests.count : 0
 
   # lightweight server-side campaign conversion tracking 
   [:utm_source, :utm_medium, :utm_content, :utm_campaign].each do |campaign|
