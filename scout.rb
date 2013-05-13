@@ -97,6 +97,8 @@ get '/url' do
 end
 
 
+# custom 404 and 500 handlers
+
 not_found do
   erb :"404"
 end
@@ -109,7 +111,8 @@ error do
   request = {
     method: env['REQUEST_METHOD'], 
     url: [Environment.config['hostname'], env['REQUEST_URI']].join,
-    params: params.inspect
+    params: params.inspect,
+    user_agent: env['HTTP_USER_AGENT']
   }
   
   if current_user
