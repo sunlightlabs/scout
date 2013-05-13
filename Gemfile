@@ -13,10 +13,11 @@ gem 'sinatra-flash', '0.3.0'
 
 gem 'padrino-helpers', '0.11.1'
 gem 'rinku'
+gem "stringex" # slug generation
+gem 'escape_utils'
 
 gem "mongoid", '3.1.2'
 
-gem "stringex" # slug generation
 gem 'ruby-hmac'
 gem 'bcrypt-ruby'
 
@@ -37,6 +38,8 @@ group :development do
   gem 'wirb'
   gem 'paint'
   gem 'unicorn'
+  gem 'rblineprof', github: 'tmm1/rblineprof' # required until v0.3.1 is pushed
+  gem 'rack-lineprof'
 end
 
 group :test do
@@ -45,7 +48,7 @@ group :test do
   gem 'factory_girl'
 end
 
-# feed parsing
+# feed parsing and discovery
 gem 'feedzirra', '0.2.0.rc1'
 gem 'feedbag'
 

@@ -2,6 +2,7 @@ require 'sinatra'
 require 'mongoid'
 
 require 'safe_yaml' # we only use yaml for config, but just in case, sanitize
+require 'escape_utils'
 
 require 'tzinfo'
 require 'twilio-rb'
