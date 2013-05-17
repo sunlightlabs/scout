@@ -31,10 +31,13 @@ module Helpers
     end
 
     def bill_sponsor(bill)
-      sponsor = bill['sponsor']
-      first = sponsor['nickname'].present? ? sponsor['nickname'] : sponsor['first_name']
-      name = "#{sponsor['title']}. #{first} #{sponsor['last_name']} #{sponsor['name_suffix']}".strip
-      "#{name} (#{sponsor['party']}-#{sponsor['state']})"
+      if sponsor = bill['sponsor']
+        first = sponsor['nickname'].present? ? sponsor['nickname'] : sponsor['first_name']
+        name = "#{sponsor['title']}. #{first} #{sponsor['last_name']} #{sponsor['name_suffix']}".strip
+        "#{name} (#{sponsor['party']}-#{sponsor['state']})"
+      else
+        "(no sponsor)"
+      end
     end
     
     def regulation_title(regulation)
