@@ -18,12 +18,14 @@ namespace :sync do
       total = 0
       page = ENV['start'] ? ENV['start'].to_i : 1
 
+      bad_pages = []
+
       while true # oh boy
-        items = Subscriptions::Manager.sync subscription_type, options.merge(page: page)
+        items = Subscriptions::Manager.sync subscription_type, options.merge(page: page, start: start)
         
         unless items.is_a?(Array)
-          Admin.report Report.failure("sync:#{subscription_type}", "Error fetching page #{page}", {options: options, page: page})
-          break
+          bad_pages << page
+          next
         end
 
         items.each {|item| Item.from_seen! item}
@@ -38,6 +40,10 @@ namespace :sync do
         end
 
         page += 1
+      end
+
+      if bad_pages.any?
+        Admin.report Report.failure("sync:#{subscription_type}", "Error fetching pages", {options: options, bad_pages: bad_pages})
       end
 
       Admin.report Report.success("sync:#{subscription_type}", "Synced #{total} #{subscription_type}.", {duration: (Time.now - start), total: total, options: options, subscription_type: subscription_type})
