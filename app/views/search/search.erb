@@ -1,5 +1,8 @@
 <% unless pjax? %>
   <% content_for :title do %><%= title %><% end %>
+  <% if interest.query['citations'].any? %>
+    <% content_for :description do %>Live government activity and alerts on <%= Search.cite_standard interest.query['citations'].first %>.<% end %>
+  <% end %>
 
   <% content_for :sidebar_left do %>
    	<div class="module controls">
