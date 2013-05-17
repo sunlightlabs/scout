@@ -560,13 +560,14 @@ task :sitemap => :environment do
     # synced remote item landing pages
     frequencies = {
       bill: :weekly, 
+      state_bill: :weekly,
       speech: :monthly, 
       regulation: :monthly,
       document: :monthly
     }
 
     item_types = frequencies.keys.sort
-    if only # if only...
+    if only #...
       item_types = item_types.select {|i| only.include? i.to_s}
     end
 

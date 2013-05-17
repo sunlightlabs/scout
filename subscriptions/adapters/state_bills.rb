@@ -3,6 +3,16 @@ module Subscriptions
 
     class StateBills
 
+      # if the adapter supports sync, this must be supplied
+      MAX_PER_PAGE = 50
+
+      FIELDS = %w{ 
+        id bill_id subjects state chamber created_at updated_at 
+        title sources versions session %2Bshort_title 
+        action_dates 
+        actions votes
+      }
+
       def self.filters
         {
           "state" => {
@@ -11,20 +21,40 @@ module Subscriptions
         }
       end
       
+      def self.url_for_sync(options = {})
+        api_key = options[:api_key] || Environment.config['subscriptions']['sunlight_api_key']
+
+        endpoint = "http://openstates.org/api/v1"
+        
+        url = "#{endpoint}/bills/?apikey=#{api_key}"
+        url << "&fields=#{FIELDS.join ','}"
+
+        # for sanity's sake, and to align it with the normal check process,
+        # stick to last action, even though created_at or introduced might make more sense
+        url << "&sort=last"
+
+        if options[:since] == "all"
+          url << "&search_window=all"
+        elsif options[:since] == "current_session" # default to current session only
+          url << "&search_window=session"
+        else # default to just 2 days, it's big
+          last_action_since = (2.days.ago).strftime("%Y-%m-%dT%H:%M:%S")
+          url << "&last_action_since=#{last_action_since}"
+        end
+
+        url << "&page=#{options[:page]}" if options[:page]
+        url << "&per_page=#{MAX_PER_PAGE}"
+
+        url
+      end
+
       def self.url_for(subscription, function, options = {})
         api_key = options[:api_key] || Environment.config['subscriptions']['sunlight_api_key']
 
         endpoint = "http://openstates.org/api/v1"
         
-        fields = %w{ 
-          id bill_id subjects state chamber created_at updated_at 
-          title sources versions session %2Bshort_title 
-          action_dates
-        }
-        
         url = "#{endpoint}/bills/?apikey=#{api_key}"
-        
-        url << "&fields=#{fields.join ','}"
+        url << "&fields=#{FIELDS.join ','}"
         
 
         # state_bills don't support citations
@@ -128,11 +158,11 @@ module Subscriptions
       end
 
       def self.title_for(bill)
-        bill['+short_title'] || bill['title']
+        "#{bill['bill_id']}, #{state_map[bill['state'].upcase]}: #{(bill['+short_title'] || bill['title'])}"
       end
 
       def self.slug_for(bill)
-        [bill['bill_id'], title_for(bill)].join " "
+        title_for bill
       end
 
       # item_id in this case is not actually the remote bill_id, since that's not specific enough
@@ -141,15 +171,9 @@ module Subscriptions
         
         endpoint = "http://openstates.org/api/v1"
         
-        fields = %w{ 
-          id bill_id state chamber created_at updated_at 
-          title sources actions votes session versions %2Bshort_title 
-          action_dates actions
-        }
-        
         # item_id is of the form ":state/:session/:chamber/:bill_id" (URI encoded already)
         url = "#{endpoint}/bills/#{URI.encode item_id.gsub('__', '/').gsub('_', ' ')}/?apikey=#{api_key}"
-        url << "&fields=#{fields.join ','}"
+        url << "&fields=#{FIELDS.join ','}"
 
         url
       end

@@ -1,6 +1,6 @@
 namespace :sync do
   
-  [:federal_bills, :speeches, :regulations, :documents].each do |type|
+  [:state_bills, :federal_bills, :speeches, :regulations, :documents].each do |type|
     desc "Sync #{type}"
     task type => :environment do
       sync type.to_s
