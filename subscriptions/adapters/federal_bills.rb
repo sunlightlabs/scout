@@ -145,7 +145,12 @@ module Subscriptions
         elsif options[:since] =~ /^\d+$/
           url << "&congress=#{options[:since]}"
 
-        # default to the last 3 days
+        # TODO: this is bad. (I use current_congress in production.)
+        # this will not catch changes in bills introduced before 3 days ago.
+        # using updated_at would just mean everything. 
+        # last_action_at doesn't catch changes that don't have actions associated,
+        # but might be the best bet - but the sort would need to change too.
+        # it might be best to just not use this mode.
         else
           url << "&introduced_on__gte=#{3.days.ago.strftime "%Y-%m-%d"}"
         end
