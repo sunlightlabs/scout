@@ -152,3 +152,5 @@
 
 .entry.bill #document .header:after {content: " — ";}
 .entry.bill #document .section>.header:after {content: "";}
+
+.entry.bill #document .attestation {display: none;}
