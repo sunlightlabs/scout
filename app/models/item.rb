@@ -1,5 +1,5 @@
 # Any item, seen or not. Not attached to a subscription, user, or interest.
-#   currently only used to generate sitemaps.
+# Currently used to generate sitemaps, and to provide a primed cache of item data.
 
 class Item
   include Mongoid::Document
@@ -16,15 +16,10 @@ class Item
   # data (same as stored on seen items, and item interests)
   field :data, type: Hash, default: {}
 
-  field :google_hits, type: Array, default: []
-  field :last_google_hit, type: Time
-
   index item_id: 1
   index item_type: 1
   index created_at: 1
   index({item_type: 1, created_at: 1})
-  index google_hits: 1
-  index last_google_hit: 1
 
   validates_presence_of :item_type
   validates_presence_of :item_id

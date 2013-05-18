@@ -44,12 +44,15 @@ before do
   @interest_count = logged_in? ? current_user.interests.count : 0
 
   # lightweight server-side campaign conversion tracking 
-  [:utm_source, :utm_medium, :utm_content, :utm_campaign].each do |campaign|
-    if params[campaign].present?
-      session['campaign'] ||= {}
-      session['campaign'][campaign] = params[campaign]
-    end
-  end
+  # [:utm_source, :utm_medium, :utm_content, :utm_campaign].each do |campaign|
+  #   if params[campaign].present?
+  #     session['campaign'] ||= {}
+  #     session['campaign'][campaign] = params[campaign]
+  #   end
+  # end
+
+  # for now, log google hits in a database, to understand behavior better
+  Event.google!(env) if google?
 end
 
 

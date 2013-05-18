@@ -7,9 +7,15 @@ class Event
   field :data, type: Hash
 
   index type: 1
+  index({type: 1, created_at: 1})
 
-  # for looking up email clicks
+  # for email clicks
   index({type: 1, item_type: 1})
+
+  # for Google activity
+  index({type: 1, "data.url" => 1})
+  index({type: 1, "data.url_type" => 1})
+  index({type: 1, "data.url_type" => 1, "data.url_subtype" => 1})
 
   scope :for_time, ->(start, ending) {where(created_at: {"$gt" => Time.zone.parse(start).midnight, "$lt" => Time.zone.parse(ending).midnight})}
 
@@ -93,13 +99,21 @@ class Event
     Admin.report Report.warning("Login", "Blocked login from #{email}, frowny face", event.attributes.dup)
   end
 
-  def self.google_crawling!(item_id, item_type)
-    if item = Item.where(item_id: item_id, item_type: item_type).first
-      time = Time.now
-      item.google_hits << time
-      item.last_google_hit = time
-      item.save!
-    end
+  # use direct upsert command for efficiency
+  def self.google!(env)
+    url = env['REQUEST_URI']
+    pieces = url.split("/")
+
+    collection = Mongoid.session(:default)[:events]
+    collection.find({type: "google", url: url}).
+      upsert({
+        "$inc" => {google_hits: 1},
+        "$set" => {
+          last_google_hit: Time.now,
+          url_type: pieces[1],
+          url_subtype: pieces[2]
+        }
+      })
   end
 
   def self.json_used!(url, api_key)
