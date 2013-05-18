@@ -99,6 +99,10 @@
           );
         });
 
+        // fix some bills with a missing first section enum
+        var elem = $("#document article span.enum").get(0);
+        if (!elem.innerText) elem.innerText = "1.";
+
         $("#document article span[data-citation-type=usc]").each(function() {
           var elem = document.createElement("a");
           elem.className = "citation usc";
