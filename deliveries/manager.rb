@@ -216,7 +216,7 @@ module Deliveries
       item.send m, *args, &block
     end
 
-    def initialize(item)
+    def initialize(item = nil)
       self.item = item
     end
   end

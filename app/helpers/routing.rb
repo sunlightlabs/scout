@@ -172,7 +172,16 @@ module Helpers
     # wraps the given URL in the redirect URL, 
     # with an arbitrary hash of data to be query string encoded
     def redirect_url(url, data = {})
+      data.merge! to: url
       "#{Environment.config['hostname']}/url?#{data.to_query}"
+    end
+
+    def email_url(url, data = {})
+      if url !~ /^https?:/
+        url = [Environment.config['hostname'], url].join
+      end
+      
+      redirect_url url, {from: "email", d: data}
     end
 
     def email_item_url(item, interest = nil, user = nil)
@@ -183,7 +192,6 @@ module Helpers
 
       data = {
         from: "email",
-        to: url,
         d: {
           url_type: "item",
           item_id: item.item_id,

@@ -248,10 +248,6 @@ module Deliveries
       "<hr style=\"padding: 0; margin: 0; margin-top: 20px; margin-bottom: 20px\"/>"
     end
 
-    def self.render_footer(user)
-      Tilt::ERBTemplate.new("app/views/footers/#{user.service || "general"}.erb").render trim: false
-    end
-
     def self.from_for(user)
       if user.service == "open_states"
         "Open States <openstates-alerts@sunlightfoundation.com>"
@@ -277,6 +273,14 @@ module Deliveries
       suffix = "#{number} new #{number > 1 ? "results" : "result"}"
 
       "#{prefix} - #{suffix}"
+    end
+
+    def self.render_footer(user)
+      context = Deliveries::SeenItemProxy.new # dummy to get helpers
+      template = Tilt::ERBTemplate.new "app/views/footers/#{user.service || "general"}.erb"
+      rendered = template.render context, trim: false
+      rendered.force_encoding "utf-8"
+      rendered
     end
 
     # render a Delivery into its email content

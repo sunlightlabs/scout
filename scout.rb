@@ -93,7 +93,7 @@ get '/url' do
   halt 500 unless params[:to].present?
   
   if params[:from] == "email"
-    Event.email_click! params[:d].merge(to: params[:to])
+    Event.email_click! (params[:d] || {}).merge(to: params[:to])
   end
 
   redirect params[:to]
