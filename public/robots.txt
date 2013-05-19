@@ -4,7 +4,7 @@ User-agent: *
 Disallow: /import/feed/preview
 Disallow: /import/feed/create
 Disallow: /error
-Disallow: /fetch
-Disallow: /follow
-Disallow: /unfollow
+Disallow: /fetch/
+Disallow: /follow/
+Disallow: /unfollow/
 Disallow: /url
