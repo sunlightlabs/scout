@@ -44,6 +44,8 @@ module Email
       return true
     end
 
+    # Pony demands symbol keys for everything, but using safe_yaml
+    # commits us to string keys.
     options = {
       via: Environment.config['email']['pony']['via'].to_sym,
       via_options: {
