@@ -56,6 +56,10 @@ post "/remote/service/sync" do
     # unless user.service == data['service']
     #   halt 403, "Wrong service for this user."
     # end
+
+    # the remote service can take this opportunity to turn notifications on/off
+    user.notifications = data['notifications']
+
   else
     user = User.new(
       email: data['email'],
@@ -78,8 +82,8 @@ post "/remote/service/sync" do
     end
   end
 
-  unless data['interests'] and data['interests'].any?
-    halt 403, "Nothing to sync."
+  unless data['interests']
+    halt 403, "Need a valid interests field."
   end
 
   # figure out which interests should be added and removed

@@ -48,6 +48,7 @@ class RemoteTest < Test::Unit::TestCase
     assert_equal count + 1, User.count
     assert_equal interest_count + 1, Interest.count
 
+    assert_equal notifications, user.notifications
     assert user.confirmed?
     assert_not_nil user.password_hash
     assert !user.should_change_password?
@@ -283,6 +284,25 @@ class RemoteTest < Test::Unit::TestCase
     assert_equal created.in, item_id
     assert_equal created.item_type, item_type
 
+    # now turn the user's email notifications off
+
+    post "/remote/service/sync", {
+      email: email,
+      service: service,
+      secret_key: Environment.services[service]['secret_key'],
+      notifications: "none",
+      interests: []
+    }.to_json
+
+    assert_response 201
+
+    assert_equal 0, json_response['actions']['added']
+    assert_equal 0, json_response['actions']['removed']
+
+    user = User.where(email: email).first
+    assert_equal 2, user.interests.count
+    assert_equal "none", user.notifications
+
     
     # pretend an hour has passed
 
@@ -318,6 +338,7 @@ class RemoteTest < Test::Unit::TestCase
     user = User.where(email: email).first
     assert_equal 1, user.interests.count
     assert_equal interest1.in, user.interests.first.in
+    assert_equal notifications, user.notifications # changed back
 
     
     # now, remove the *original* native interest, through the sync endpoint
