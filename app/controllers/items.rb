@@ -9,22 +9,28 @@ get "/item/:item_type/:item_id/?:slug?" do
   halt 404 unless item_types[item_type]
   subscription_type = item_types[item_type]['adapter']
 
-  if item = Subscriptions::Manager.find(subscription_type, item_id, {cache_only: !crawler?})
-    interest = item_interest
-    interest.data = item.data # required for the interest to know its own title
+  begin
+    if item = Subscriptions::Manager.find(subscription_type, item_id, {cache_only: !crawler?})
+      interest = item_interest
+      interest.data = item.data # required for the interest to know its own title
 
-    content = erb :"subscriptions/#{subscription_type}/_show", layout: false, locals: {
-      item: item,
-      interest: interest,
-      item_type: item_type
-    }
-    
-    share = partial "partials/share", engine: :erb
-    title = interest.title
-  else
-    content = nil
-    share = nil
-    title = nil
+      content = erb :"subscriptions/#{subscription_type}/_show", layout: false, locals: {
+        item: item,
+        interest: interest,
+        item_type: item_type
+      }
+      
+      share = partial "partials/share", engine: :erb
+      title = interest.title
+    else
+      content = nil
+      share = nil
+      title = nil
+    end
+
+  # handle this here, just call it a day
+  rescue Subscriptions::BadFetchException => ex
+    halt 404 
   end
 
   erb :show, layout: !pjax?, locals: {
@@ -49,7 +55,15 @@ get "/fetch/item/:item_type/:item_id/?:slug?" do
   item_id = params[:item_id].strip
   subscription_type = item_types[item_type]['adapter']
 
-  unless item = Subscriptions::Manager.find(subscription_type, item_id)
+  begin
+    item = Subscriptions::Manager.find(subscription_type, item_id)
+
+  # handle this here, just call it a day
+  rescue Subscriptions::BadFetchException => ex
+    halt 404 
+  end
+
+  unless item
     halt 404 and return
   end
 
