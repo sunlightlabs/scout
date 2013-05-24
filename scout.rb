@@ -51,8 +51,12 @@ before do
   #   end
   # end
 
+  @start_time = Time.now
+end
+
+after do
   # for now, log google hits in a database, to understand behavior better
-  Event.google!(env) if google?
+  Event.google!(env, @start_time) if google?
 end
 
 

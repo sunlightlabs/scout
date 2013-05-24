@@ -13,9 +13,10 @@ class Event
   index({type: 1, item_type: 1})
 
   # for Google activity
-  index({type: 1, "data.url" => 1})
-  index({type: 1, "data.url_type" => 1})
-  index({type: 1, "data.url_type" => 1, "data.url_subtype" => 1})
+  index({type: 1, url: 1})
+  index({type: 1, url_type: 1})
+  index({type: 1, url_type: 1, data: 1})
+  index({type: 1, url_type: 1, my_ms: 1})
 
   scope :for_time, ->(start, ending) {where(created_at: {"$gt" => Time.zone.parse(start).midnight, "$lt" => Time.zone.parse(ending).midnight})}
 
@@ -100,18 +101,21 @@ class Event
   end
 
   # use direct upsert command for efficiency
-  def self.google!(env)
+  def self.google!(env, start_time)
     url = env['REQUEST_URI']
     pieces = url.split("/")
+
+    now = Time.now
 
     collection = Mongoid.session(:default)[:events]
     collection.find({type: "google", url: url}).
       upsert({
         "$inc" => {google_hits: 1},
         "$set" => {
-          last_google_hit: Time.now,
+          last_google_hit: now,
           url_type: pieces[1],
-          url_subtype: pieces[2]
+          url_subtype: pieces[2],
+          my_ms: ((now - start_time) * 1000).to_i
         }
       })
   end
