@@ -585,7 +585,8 @@ task :sitemap => :environment do
 
   end
 
-  Admin.report Report.success("Sitemap", "Updated sitemap.", {counts: counts})
+  # not usually necessary
+  # Admin.report Report.success("Sitemap", "Updated sitemap.", {counts: counts})
 
   puts "Saved sitemaps."
 end
