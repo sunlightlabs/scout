@@ -102,7 +102,7 @@ class Event
 
   # use direct upsert command for efficiency
   def self.google!(env, start_time)
-    url = env['REQUEST_URI']
+    url = env['REQUEST_URI'] || env['PATH_INFO']
     pieces = url.split("/")
 
     now = Time.now
