@@ -38,7 +38,7 @@ group :development do
   gem 'wirb'
   gem 'paint'
   gem 'unicorn'
-  gem 'rblineprof', github: 'tmm1/rblineprof' # required until v0.3.1 is pushed
+  gem 'rblineprof'
   gem 'rack-lineprof'
 end
 
