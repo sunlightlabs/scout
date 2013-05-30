@@ -87,6 +87,7 @@ def deploy():
   execute(set_crontab)
   execute(restart)
 
+# only difference is it uses start instead of restart
 def deploy_cold():
   execute(checkout)
   execute(links)
