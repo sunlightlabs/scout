@@ -151,7 +151,7 @@ module Helpers
 
     def truncate_more_html(tag, text, max, post = nil)
       truncated = truncate text, max
-      
+
       text = simple_format text
       truncated = simple_format truncated
 
@@ -196,11 +196,11 @@ module Helpers
         time.strftime "%Y-%m-%d"
       end
     end
-    
+
     def h(text)
       Rack::Utils.escape_html(text)
     end
-    
+
     def form_escape(string)
       string.to_s.gsub "\"", "&quot;"
     end
@@ -208,7 +208,7 @@ module Helpers
     def js_escape(string)
       URI.decode(string.to_s).gsub "\"", "\\\""
     end
-    
+
     def long_date(date)
       date = Time.zone.parse(date) if date.is_a?(String)
       local = date.in_time_zone
@@ -227,7 +227,7 @@ module Helpers
       hour = local.strftime("%I").gsub(/^0/, "")
       "#{hour}#{local.strftime(":%M %p")}"
     end
-    
+
     def just_date(date)
       date = Time.zone.parse(date) if date.is_a?(String)
       local = date.in_time_zone
@@ -244,13 +244,13 @@ module Helpers
       date = Time.zone.parse(date) if date.is_a?(String)
       just_date date
     end
-    
+
     def very_short_date(time)
       date = Time.zone.parse(date) if date.is_a?(String)
       local = time.in_time_zone
       local.strftime "%m/%d"
     end
-    
+
     def zero_prefix(number)
       number.to_i < 10 ? "0#{number}" : number.to_s
     end
@@ -277,9 +277,9 @@ module Helpers
       Rinku.auto_link string, :all, "rel='nofollow'"
     end
 
-    
+
     # email-related
-    
+
     def email_header(text, url)
       "<h3 style=\"padding: 0; margin: 0; margin-top: 30px;\">
         <a href=\"#{url}\">
