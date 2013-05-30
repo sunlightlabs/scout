@@ -7,6 +7,7 @@
 
 .entry #document {
   float: left;
+  width: 700px;
 }
 
 .entry.regulation #document article {padding-top: 0px;}
@@ -45,7 +46,7 @@
 }
 
 .entry.regulation article h4 {
-  text-transform: none; font-size: 10pt; 
+  text-transform: none; font-size: 10pt;
 }
 
 .entry.regulation article .header_column {margin-bottom: 10px;}
@@ -69,7 +70,7 @@
 .entry.regulation article ul.bullets,
 .entry.regulation article ul.bullets li {list-style-type: disc; list-style-position: outside;}
 .entry.regulation article ul.bullets {padding: 0 30px;}
-.entry.regulation article ul.bullets li {margin-bottom: 5px;}
+.entry.regulation article ul.bullets li {margin-bottom: 10px; margin-top: 10px;}
 
 .entry.regulation article .reg_text {}
 
@@ -98,14 +99,14 @@
 
 .entry.bill #document .enum {margin-right: 3px;}
 
-.entry.bill #document .form, 
-.entry.bill #document .amendment-form, 
-.entry.bill #document .engrossed-amendment-form, 
+.entry.bill #document .form,
+.entry.bill #document .amendment-form,
+.entry.bill #document .engrossed-amendment-form,
 .entry.bill #document .resolution-form {display: none;}
 
 .entry.bill #document .toc-entry,
 .entry.bill #document .section,
-.entry.bill #document .subsection, 
+.entry.bill #document .subsection,
 .entry.bill #document .subchapter,
 .entry.bill #document .paragraph,
 .entry.bill #document .quoted-block,
