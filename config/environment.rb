@@ -51,15 +51,15 @@ def reserved_names
       user account subscription interest item fetch
       ajax pjax tag seen delivery receipt report email route
       sms admin login logout session signup signout request response
-      server client rss feed atom json xml search api api_key import 
-      export download upload favicon index about privacy_policy privacy 
+      server client rss feed atom json xml search api api_key import
+      export download upload favicon index about privacy_policy privacy
       terms legal contact username slug name error exception tos terms_of_service
       a b c d e f g h i j k l m n o p q r s t u v w x y z
-      
+
       bill state_bill regulation speech document hearing update floor_update
       rule uscode cfr report
     }
-    @reserved_names = names + names.map(&:pluralize)
+    @reserved_names = names + names.map(&:pluralize) + names.map(&:upcase) + names.map(&:capitalize)
   end
 end
 
@@ -72,7 +72,7 @@ configure do
     # Mongoid.logger.level = Logger::DEBUG
     # Moped.logger.level = Logger::DEBUG
   end
-  
+
   if Environment.config['twilio']
     Twilio::Config.setup(
       account_sid: Environment.config['twilio']['account_sid'],
@@ -139,9 +139,9 @@ require './subscriptions/manager'
 def search_adapters
   if @search_adapters
     @search_adapters
-  else 
+  else
     @search_adapters = {}
-    
+
     item_types.each do |item_type, info|
       if search_adapter = info['adapter']
         @search_adapters[search_adapter] = item_type
@@ -155,9 +155,9 @@ end
 def item_adapters
   if @item_adapters
     @item_adapters
-  else 
+  else
     @item_adapters = {}
-    
+
     item_types.each do |item_type, info|
       if subscriptions = info['subscriptions']
         subscriptions.each do |subscription_type|
@@ -165,7 +165,7 @@ def item_adapters
         end
       end
     end
-    
+
     @item_adapters
   end
 end
