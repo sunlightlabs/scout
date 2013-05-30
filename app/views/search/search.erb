@@ -1,5 +1,6 @@
 <% unless pjax? %>
   <% content_for :title do %><%= title %><% end %>
+
   <% if interest.query['citations'].any? %>
     <% content_for :description do %>Live government activity and alerts on <%= Search.cite_standard interest.query['citations'].first %>.<% end %>
   <% end %>
@@ -8,7 +9,7 @@
    	<div class="module controls">
   		<h4>Filter search results</h4>
   		<ul class="categories">
-        <li 
+        <li
           class="all <%= subscription ? "" : "current" %>"
           data-subscription_type="all"
           >
@@ -18,7 +19,7 @@
         </li>
 
 	      <% search_types.each do |subscription_type| %>
-	        <li 
+	        <li
             class="<%= subscription_type %> <%= subscription_type == interest.search_type ? "current" : "" %>"
             data-subscription_type="<%= subscription_type %>"
             style="display: none"
@@ -29,16 +30,16 @@
 	        </li>
 	      <% end %>
 	    </ul>
-  		
+
       <div class="filters">
         <form>
 
     	    <%= hidden_field_tag :query, :class => "query" %>
           <%= hidden_field_tag :query_type, :class => "query_type" %>
     	    <%= hidden_field_tag :subscription_type, :class => "subscription_type" %>
-    	    
+
           <% search_types.each do |subscription_type| %>
-            <ul 
+            <ul
               class="filter_controls <%= subscription_type %>"
               data-subscription_type="<%= subscription_type %>"
               >
@@ -86,7 +87,7 @@
 
 <main role="main" class="results contentArea right <%= interest.search_type == "all" ? "" : "single" %>">
   <div class="resultsHeader">
-    
+
     <div class="pageTitle">
       <div class="searchParameters <%= interest.query_type %>">
         <% if interest.query_type == "simple" %>
@@ -114,7 +115,7 @@
             <% included = interest.query['advanced']['included'] %>
             <% distance = interest.query['advanced']['distance'] %>
             <% excluded = interest.query['advanced']['excluded'] %>
-            
+
             <% if citations.any? %>
               <div class="advanced citations">
                 <h2>Citing:</h2>
@@ -133,7 +134,7 @@
                   <span>
                     <%= included.map {|term| term['term']}.join ", " %>
                   </span>
-                </div> 
+                </div>
               </div>
             <% end %>
 
@@ -163,7 +164,7 @@
                 </div>
               </div>
             <% end %>
-          
+
           <% else %>
             <div class="advanced">
               <h2>Search For:</h2>
@@ -175,15 +176,15 @@
             </div>
           <% end %>
         <% end %>
-        
+
         <% if interest.search_type == "all" %>
           <!-- nothing -->
         <% else %>
           in
           <span class="category">
             <%= subscription.search_name %>
-          </span> 
-        
+          </span>
+
           <% if subscription.filters.any? %>
   			    <div class="filters">
               <%= subscription.filters.map do |field, value|
@@ -205,7 +206,7 @@
       <div class="clear"></div>
   	</div>
 
-    
+
     <div class="resultsIntro">
       <p>
         <% if interest.new_record? %>
@@ -221,7 +222,7 @@
   </div>
 
   <div class="clear"></div>
-  
+
   <% subscriptions.each do |s| %>
     <div class="search" id="<%= s.subscription_type %>" data-subscription="<%= s.subscription_type %>">
 
@@ -271,7 +272,7 @@
 <% if logged_in? and related_interests and related_interests.any? %>
   <div class="template subscriptions related">
     <%= partial "search/related_interests", :engine => :erb, :locals => {
-      related_interests: related_interests, 
+      related_interests: related_interests,
       current_interest: interest,
       interest_in: interest.in
     } %>
@@ -280,7 +281,7 @@
 
 
 <script type="text/javascript">
-  
+
   var cached = {
     <% keys = cached.keys %>
     <% keys.each do |key| %>
@@ -294,7 +295,7 @@
     <% end %>
 
     initializeSubscriptions();
-    
+
     <% if logged_in? and (params[:follow] == "now") and interest.new_record? %>
       follow();
     <% end %>
@@ -335,13 +336,13 @@
     var subscriptionType = currentSubscriptionType();
     var query = currentQuery();
     var queryType = currentQueryType();
-    
+
     // update the main filter links
     $("ul.categories li a").each(function(i, elem) {
       var type = $(elem).parent("li").data("subscription_type");
-      
+
       var url = "/search/" + type + "/" + encodeURIComponent(query);
-      
+
       if (queryType == "advanced")
         url += "/advanced";
 
@@ -354,7 +355,7 @@
     <% (interest.query['citations'].any? ? cite_types : search_types).each do |subscription_type| %>
       $("ul.categories li[data-subscription_type='<%= subscription_type %>']").show()
     <% end %>
-    
+
     // follow button
     $("button.follow, button.following").hide();
 
@@ -392,7 +393,7 @@
 
 
     // show the field filter pane for the selected subscription
-    
+
     $(".filters ,.filters ul").hide();
     <% if subscription %>
       $(".filters, .filters ul." + subscriptionType).show();
@@ -421,7 +422,7 @@
     var queryType = currentQueryType();
     var query = encodeURIComponent(currentQuery());
     var filters = currentFilters();
-    
+
     // serialize the filters and preserve the brackets
     var filterString = $.param(filters).replace(/%5B/g, "[").replace(/%5D/g, "]");
     var url = "/search/" + type + "/" + query;
@@ -532,7 +533,7 @@
 
     // all search options (filters, pagination)
     var search = {};
-    
+
     // carry along the filters
     $.extend(search, currentFilters());
 
@@ -550,10 +551,10 @@
       url += "/advanced";
 
     $.get(url, search, function(data) {
-      
+
       container.find(".loading").hide();
       container.find("ul.items").append(data.html);
-      
+
       $("ul.items").data("page", data.page);
 
       if (data.count == 0)
