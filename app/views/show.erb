@@ -5,6 +5,7 @@
 
 <% content_for :head do %>
   <link rel="stylesheet" href="<%= asset_path "/css/documents.css" %>" />
+  <link rel="canonical" href="/item/<%= item_type %>/<%= item_id %>" />
 <% end %>
 
 <% content_for :sidebar_right do %>
@@ -69,7 +70,7 @@
           <div class="results"></div>
         </div>
       <% end %>
-      
+
       <div class="clear"></div>
 
     </div>
