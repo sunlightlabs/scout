@@ -16,7 +16,7 @@ post '/login' do
 
   if (user = User.where(email: login).first || User.by_phone(login)) and User.authenticate(user, params[:password])
     if user.service.present?
-      Event.blocked_email! login, user.service  
+      Event.blocked_email! login, user.service
       flash.now[:login] = "This email is registered through a separate service. To use Scout, register an account under a separate email address."
       erb :"account/login"
     elsif !user.confirmed?
@@ -91,7 +91,7 @@ post '/account/password/forgot' do
 end
 
 get '/account/password/reset' do
-  unless params[:reset_token] and user = User.where(:reset_token => params[:reset_token]).first
+  unless params[:reset_token] and user = User.where(reset_token: params[:reset_token]).first
     halt 404 and return
   end
 
@@ -106,7 +106,7 @@ get '/account/password/reset' do
   # send the next email with the new password
 
   subject = "Your password has been reset"
-  body = erb :"account/mail/new_password", :layout => false, :locals => {:new_password => new_password}
+  body = erb :"account/mail/new_password", layout: false, locals: {new_password: new_password}
 
   unless Email.deliver!("Password Reset", user.email, subject, body)
     flash[:forgot] = "There was an error emailing you a new password. Please contact us for support."
@@ -125,11 +125,11 @@ helpers do
       redirect(params[:redirect].present? ? params[:redirect] : path)
     end
   end
-  
+
   def log_in(user)
     session['user_id'] = user.id
   end
-  
+
   def log_out
     session['user_id'] = nil
   end
