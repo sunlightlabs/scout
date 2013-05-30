@@ -9,15 +9,16 @@ class Tag
   field :description
 
   index name: 1
-  index :public => 1
+  index public: 1
+  index user_id: 1
 
   validates_uniqueness_of :name, :scope => :user_id
-  
+
   default_scope desc(:created_at)
 
   # not a formal relationship, depends on interests keeping their own tag array
   def interests
-    user.interests.where :tags => name
+    user.interests.where tags: name
   end
 
   after_destroy :remove_from_interests

@@ -1,7 +1,7 @@
 class Interest
   include Mongoid::Document
   include Mongoid::Timestamps
-  
+
   belongs_to :user
   has_many :subscriptions, dependent: :destroy
   has_many :seen_items, dependent: :destroy
@@ -18,7 +18,7 @@ class Interest
   field :interest_type
 
   # if interest_type is "search", can be "all" or the subscription_type in question
-  field :search_type 
+  field :search_type
   # if interest_type is "search", can be "simple" or "advanced"
   field :query_type
 
@@ -28,12 +28,12 @@ class Interest
   # arbitrary metadata
   #   search query - search filters
   #     (e.g. "stage" => "passed_house")
-  #   item - metadata about the related item 
+  #   item - metadata about the related item
   #     (e.g. "chamber" => "house", "state" => "NY", "bill_id" => "hr2134-112")
   field :data, type: Hash, default: {}
 
   # query metadata, not persisted.
-  # citations, operators extracted from the query, 
+  # citations, operators extracted from the query,
   # and the revised query string after post-processing.
   def query; @query ||= query!; @query; end
 
@@ -44,18 +44,18 @@ class Interest
   field :notifications
   validates_inclusion_of :notifications, :in => ["none", "email_daily", "email_immediate", "sms"], :allow_blank => true
 
-  index :in => 1
+  index in: 1
   index user_id: 1
   index interest_type: 1
   index search_type: 1
   index item_type: 1
   index tags: 1
-  
+
   validates_presence_of :user_id
   validates_presence_of :in
-  
+
   scope :for_time, ->(start, ending) {where(created_at: {"$gt" => Time.zone.parse(start).midnight, "$lt" => Time.zone.parse(ending).midnight})}
-  
+
   before_destroy :record_unsubscribe
   def record_unsubscribe
     Event.remove_alert! self
@@ -156,7 +156,7 @@ class Interest
   end
 
 
-  # for search interests only - 
+  # for search interests only -
   # any keys inside the 'data' field that match the adapter's filter keys
   # Important: 'all' search subscriptions are assumed to have no filters
   def filters
@@ -190,7 +190,7 @@ class Interest
   # idempotent, clears itself, can be run over and over
   def query!
     query = {}
-    
+
     if self.query_type == "advanced"
       query.merge! Search.parse_advanced(self.in)
     else
@@ -199,7 +199,7 @@ class Interest
 
     # citations should at least be an empty array (could remove this req)
     query['citations'] ||= []
-    
+
     query
   end
 
@@ -225,18 +225,18 @@ class Interest
 
       interest = if user
         # we use dot notation for the criteria instead of passing in a hash, because
-        # apparently hash key order is important in matching on the subdocument, 
+        # apparently hash key order is important in matching on the subdocument,
         # which is ridiculous.
-        # 
+        #
         # however, the approach of finding with dot notation means that we could find results
         # that have fields we didn't ask for, which would not be right.
-        # 
+        #
         # the only approach I've found so far is to find all candidates using dot notation,
-        # then filter the too-broad ones client-side. 
+        # then filter the too-broad ones client-side.
         interest = user.interests.where(find_criteria).detect do |interest|
           interest.data.keys.select {|key| !data.keys.include?(key)}.empty?
         end
-        
+
         interest || user.interests.new(criteria)
       else
         Interest.new criteria
@@ -247,7 +247,7 @@ class Interest
     interest
   end
 
-  # does the user have a search interest for this query, of this 
+  # does the user have a search interest for this query, of this
   # search type ("all" or an individual type), and this set of filters?
   def self.for_search(user, search_type, interest_in, query_type, filters = {})
     # choke unless interest_in and query_type are present
@@ -269,7 +269,7 @@ class Interest
       'query_type' => query_type,
       'in_normal' => in_normal
     }
-    
+
     # assign original interest_in, even though it's not used to look up the query
     interest = self.for user, criteria, filters
     interest.in = interest_in
@@ -277,7 +277,7 @@ class Interest
     interest
   end
 
-  # if this is used to make a new item, the caller will have to 
+  # if this is used to make a new item, the caller will have to
   # fetch and populate the item's relevant data
   def self.for_item(user, item_id, item_type)
     criteria = {
@@ -289,7 +289,7 @@ class Interest
     self.for user, criteria
   end
 
-  # if this is used to make a new feed, the caller will have to 
+  # if this is used to make a new feed, the caller will have to
   # fetch the feed's title, description, site URL, and other details
   def self.for_feed(user, url)
     criteria = {

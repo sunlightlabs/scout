@@ -11,12 +11,12 @@ end
 
 get "/user/:user_id/:tag.rss" do
   name = Tag.deslugify params[:tag]
-  unless (user = load_user) and (tag = user.tags.where(:name => name).first)
+  unless (user = load_user) and (tag = user.tags.where(name: name).first)
     halt 404 and return
   end
 
   interest_ids = tag.interests.only(:_id).map &:_id
-  items = SeenItem.where(:interest_id => {"$in" => interest_ids}).desc :date
+  items = SeenItem.where(interest_id: {"$in" => interest_ids}).desc :date
 
   rss_for "tag", items, tag: tag
 end
