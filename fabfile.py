@@ -31,7 +31,6 @@ def checkout():
 def links():
   run("ln -s %s/sitemap %s/public/sitemap" % (shared_path, version_path))
   run("ln -s %s/config.yml %s/config/config.yml" % (shared_path, version_path))
-  run("ln -s %s/mongoid.yml %s/config/mongoid.yml" % (shared_path, version_path))
   run("ln -s %s/services.yml %s/config/services.yml" % (shared_path, version_path))
   run("ln -s %s/config.ru %s/config.ru" % (shared_path, version_path))
   run("ln -s %s/unicorn.rb %s/unicorn.rb" % (shared_path, version_path))
