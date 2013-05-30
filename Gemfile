@@ -28,7 +28,7 @@ gem 'twilio-rb', '2.2.0'
 
 gem 'rack', '1.5.2'
 gem 'rack-ssl'
-gem 'rake', '0.9.2.2'
+gem 'rake'
 
 gem 'asset_sync' # asset syncing to S3
 
