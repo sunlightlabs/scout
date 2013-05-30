@@ -97,15 +97,7 @@ module Helpers
     end
 
     def show_data?
-      !api_key.nil?
-    end
-
-    def api_key
-      if current_user and current_user.api_key
-        current_user.api_key
-      elsif params[:hood] == "up"
-        Environment.config['demo_key']
-      end
+      params[:hood] == "up"
     end
 
     def errors_for(object)

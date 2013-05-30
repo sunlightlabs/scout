@@ -29,8 +29,8 @@ class Event
 
   def self.remove_alert!(interest)
     create!(
-      type: "remove-alert", 
-      description: "#{interest.user.contact} from #{interest.in}", 
+      type: "remove-alert",
+      description: "#{interest.user.contact} from #{interest.in}",
       data: interest.attributes.dup
     )
   end
@@ -118,17 +118,5 @@ class Event
           my_ms: ((now - start_time) * 1000).to_i
         }
       })
-  end
-
-  def self.json_used!(url, api_key)
-    event = find_or_initialize_by(
-      type: "json-used",
-      url: url,
-      api_key: api_key
-    )
-
-    event['count'] ||= 0
-    event['count'] += 1
-    event.save!
   end
 end

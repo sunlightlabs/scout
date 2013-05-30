@@ -73,7 +73,7 @@
               We can email you about all the new things that you're following.
               <small>You can also control this <a href="/account/subscriptions">per-subscription</a>.</small>
             </legend>
-        
+
             <ul>
               <li>
                 <label>
@@ -175,54 +175,22 @@
               <span>Add Phone Number</span>
             </button>
           </form>
-          
+
           <small>
             Standard text message charges may apply. Some subscriptions can generate a lot of results &mdash; be careful what you sign up for.
           </small>
         </div>
     </div>
-
-    <div class="module developer_mode">
-      <h3>Data Mode</h3>
-
-      <% if current_user.developer? %>
-        <p>
-          You have a Sunlight API key, so we're turning on Data Mode. Now you can:
-        </p>
-        <ul>
-          <li>
-            Use JSON feeds for
-            <a href="/account/subscriptions">all of your subscriptions.</a>
-          </li>
-
-          <li>
-            See the JSON underlying
-            <a href="/search/federal_bills/open%20government">every search</a>.
-          </li>
-        </ul>
-
-      <% else %>
-        <p>
-          Data Mode opens the hood of the website, and gives you access to more powerful feeds. (If you know what JSON is, you should turn it on.)
-        </p>
-        <p>
-          It will turn on automatically, if you create a Sunlight API key for this email address.
-        </p>
-        <a class="button" href="http://services.sunlightlabs.com/accounts/register/">
-          Go get a Sunlight key
-        </a>
-      <% end %>
-    </div>
   </div>
-  
+
   <div class="module donate">
-    <h3>You're on the <em>free plan</em>. Everyone is!</h3> 
+    <h3>You're on the <em>free plan</em>. Everyone is!</h3>
     <p>
       But if you like this service and want to give us money anyway, by all means:
     </p>
 
     <form action="https://checkout.google.com/cws/v2/Donations/548702786961191/checkoutForm" id="BB_BuyButtonForm" method="post" name="BB_BuyButtonForm" target="_top">
-            
+
       <input name="item_name_1" type="hidden" value="Scout - Donation to support the service"/>
       <input name="item_description_1" type="hidden" value="The Sunlight Foundation is a non-profit, nonpartisan organization that uses the power of the Internet to catalyze greater government openness and transparency and to provide new tools and resources for media and individuals alike."/>
       <input name="item_quantity_1" type="hidden" value="1"/>
@@ -233,13 +201,13 @@
       <input name="_charset_" type="hidden" value="utf-8"/>
       <label>$</label>
       <input id="item_price_1" name="item_price_1" type="text" value="10.00" placeholder="10.00"/>
-    
+
       <button class="donatebutton smallButton" type="submit">
           <span>Donate</span>
       </button>
       <div class="clear"></div>
     </form>
-    
+
     <small>
       The Sunlight Foundation is a 501 (c)(3) nonprofit, nonpartisan organization. All contributions are tax-deductible.
     </small>

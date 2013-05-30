@@ -18,10 +18,6 @@ class User
   field :service, default: nil
   field :synced_at, type: Time
 
-  # will get assigned automatically by the API key syncing service
-  # if a user has one, we turn on various features in the site
-  field :api_key
-
   # whether and how the user will receive notifications
   field :notifications, default: "email_immediate"
   validates_inclusion_of :notifications, :in => ["none", "email_daily", "email_immediate"] # sms not valid at the user level
@@ -70,19 +66,6 @@ class User
     end
   end
 
-  after_save :find_api_key
-
-  def developer?
-    api_key.present?
-  end
-
-  def find_api_key
-    if key = ApiKey.where(:email => email).first
-      ApiKey.sync_with_user! key, self
-    end
-  end
-
-
   # delivery notification stuff
   def allowable_notifications
     types = []
@@ -99,17 +82,17 @@ class User
 
   attr_accessible :email, :username, :display_name, :phone,
     :notifications, :announcements, :sunlight_announcements
-  
+
   field :password_hash, :type => String # type needs to be specified, otherwise it'd be a BCrypt::Password
-  
+
   validates_presence_of :email, :message => "We need an email address.", :unless => :has_phone?
   validates_uniqueness_of :email, :message => "That email address is already signed up.", :allow_blank => true
   validates_format_of :email, :with => /^[-a-z0-9_+\.]+\@([-a-z0-9]+\.)+[a-z0-9]{2,4}$/i, :message => "Not a valid email address.", :allow_blank => true
 
   validates_confirmation_of :password, :message => "Your passwords did not match."
-  
+
   before_save :encrypt_password
-  
+
   # used to allow email-less user accounts
   def has_phone?
     self.phone.present?
@@ -118,7 +101,7 @@ class User
   def self.authenticate(user, password)
     BCrypt::Password.new(user.password_hash) == password
   end
-  
+
   def encrypt_password
     if password # should only occur if a new password has been set on this user
       self.password_hash = BCrypt::Password.create password
@@ -156,7 +139,7 @@ class User
     self.should_change_password = true
 
     # need to return the actual password, so it can be emailed
-    new_password 
+    new_password
   end
 
 
@@ -169,7 +152,7 @@ class User
   validates_uniqueness_of :phone, :allow_blank => true, message: "has been taken"
 
   before_validation :standardize_phone, :if => :has_phone?
-  
+
   def standardize_phone
     if Phoner::Phone.valid?(self.phone)
       self.phone = Phoner::Phone.parse(self.phone).to_s

@@ -9,15 +9,12 @@ class UserTest < Test::Unit::TestCase
     user = create :user
 
     not_email = "not@example.com"
-    not_api_key = "notapikey"
 
     assert user.confirmed?
     assert_not_equal not_email, user.email
-    assert_not_equal not_api_key, user.api_key
 
     user.attributes = {
         email: not_email,
-        api_key: not_api_key,
         confirmed: false
     }
 
@@ -25,7 +22,6 @@ class UserTest < Test::Unit::TestCase
     user.reload
 
     assert_equal not_email, user.email
-    assert_not_equal not_api_key, user.api_key
     assert user.confirmed?
   end
 

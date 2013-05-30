@@ -1,5 +1,4 @@
-get "/interest/:interest_id.:format" do
-  feed_only
+get "/interest/:interest_id.rss" do
 
   unless interest = Interest.find(params[:interest_id])
     halt 404 and return
@@ -7,19 +6,10 @@ get "/interest/:interest_id.:format" do
 
   items = SeenItem.where(interest_id: interest.id).desc :date
 
-  if params[:format] == 'rss'
-    rss_for "interest", items, interest: interest
-  else
-    halt 403 unless api_key?
-    Event.json_used! env['REQUEST_URI'], the_key
-
-    json_for items
-  end
+  rss_for "interest", items, interest: interest
 end
 
-get "/user/:user_id/:tag.:format" do
-  feed_only
-
+get "/user/:user_id/:tag.rss" do
   name = Tag.deslugify params[:tag]
   unless (user = load_user) and (tag = user.tags.where(:name => name).first)
     halt 404 and return
@@ -28,28 +18,10 @@ get "/user/:user_id/:tag.:format" do
   interest_ids = tag.interests.only(:_id).map &:_id
   items = SeenItem.where(:interest_id => {"$in" => interest_ids}).desc :date
 
-  if params[:format] == 'rss'
-    rss_for "tag", items, tag: tag
-  else
-    halt 403 unless api_key?
-    Event.json_used! env['REQUEST_URI'], the_key
-    json_for items
-  end
+  rss_for "tag", items, tag: tag
 end
 
 helpers do
-
-  def api_key?
-    ApiKey.allowed?(the_key)
-  end
-
-  def the_key
-    params[:apikey] || request.env['HTTP_X_APIKEY']
-  end
-
-  def feed_only
-    halt 404 unless ['rss', 'json'].include?(params[:format])
-  end
 
   def rss_for(view, items, locals = {})
     page = (params[:page] || 1).to_i
@@ -63,46 +35,6 @@ helpers do
       items: items,
       url: request.url
     }.merge(locals)
-  end
-  
-  def json_for(items)
-    count = items.count
-    
-    pagination = pagination_for params
-    skip = pagination[:per_page] * (pagination[:page]-1)
-    limit = pagination[:per_page]
-    items = items.skip(skip).limit(limit)
-
-    results = {
-      :results => items.map {|item| item.json_view},
-      :count => count,
-      :page => {
-        :count => items.size,
-        :per_page => pagination[:per_page],
-        :page => pagination[:page]
-      }
-    }
-
-    response['Content-Type'] = 'application/json'
-    json = results.to_json
-    params[:callback].present? ? "#{params[:callback]}(#{json});" : json
-  end
-
-  def pagination_for(params)
-    default_per_page = 50
-    max_per_page = 50
-    max_page = 200000000 # let's keep it realistic
-    
-    # rein in per_page to somewhere between 1 and the max
-    per_page = (params[:per_page] || default_per_page).to_i
-    per_page = default_per_page if per_page <= 0
-    per_page = max_per_page if per_page > max_per_page
-    
-    # valid page number, please
-    page = (params[:page] || 1).to_i
-    page = 1 if page <= 0 or page > max_page
-    
-    {:per_page => per_page, :page => page}
   end
 
 end

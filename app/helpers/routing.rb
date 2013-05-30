@@ -53,7 +53,7 @@ module Helpers
         interest.tag.description
       end
 
-      if description.present? 
+      if description.present?
         truncate_more("interest-#{interest.id}", description, 70)
       else
         nil
@@ -113,12 +113,12 @@ module Helpers
     # assumes it is a search subscription
     def subscription_path(subscription)
       base = "/search/#{subscription.subscription_type}"
-      
+
       base << "/#{URI.encode subscription.interest_in}"
 
       base << "/advanced" if subscription.query_type == 'advanced'
-      
-      query_string = subscription.filters.map do |key, value| 
+
+      query_string = subscription.filters.map do |key, value|
         "#{subscription.subscription_type}[#{key}]=#{URI.encode value}"
       end.join("&")
 
@@ -126,7 +126,7 @@ module Helpers
 
       base
     end
-    
+
     def item_path(item)
       if item.item?
         "/item/#{item.item_type}/#{item.interest_in}"
@@ -140,10 +140,10 @@ module Helpers
     # given an item or seen_item, generate a landing page route
     def landing_path(item)
       route = "/item/#{item.item_type}/#{item.item_id}"
-      
+
       # may not have a subscription_type, but will have an item type
       adapter = Subscription.adapter_for item_types[item.item_type]['adapter']
-      
+
       if adapter.respond_to?(:slug_for)
         route = "#{route}/#{Environment.to_url adapter.slug_for(item.data)}"
       end
@@ -169,7 +169,7 @@ module Helpers
       end
     end
 
-    # wraps the given URL in the redirect URL, 
+    # wraps the given URL in the redirect URL,
     # with an arbitrary hash of data to be query string encoded
     def redirect_url(url, data = {})
       data.merge! to: url
@@ -180,14 +180,14 @@ module Helpers
       if url !~ /^https?:/
         url = [Environment.config['hostname'], url].join
       end
-      
+
       redirect_url url, {from: "email", d: data}
     end
 
     def email_item_url(item, interest = nil, user = nil)
       interest ||= item.interest
       user ||= item.user
-      
+
       url = item_url item, interest, user
 
       data = {
@@ -239,14 +239,14 @@ module Helpers
       end
     end
 
-    # URLs for the JSON feeds behid the searches, but with the user's API key
+    # URLs for the JSON feeds behind the searches, but with a demo API key
     def developer_search_url(subscription)
-      subscription.search_url :api_key => api_key
+      subscription.search_url api_key: Environment.config['demo_key']
     end
 
     def developer_find_url(item_type, item_id)
       adapter = Subscription.adapter_for item_types[item_type]['adapter']
-      adapter.url_for_detail item_id, :api_key => api_key
+      adapter.url_for_detail item_id, api_key: Environment.config['demo_key']
     end
 
     # shrug
