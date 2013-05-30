@@ -1,5 +1,3 @@
-/* eric test 2 */
-
 html, body{
     background: url('/assets/images/bg_body.jpg') center top repeat;
     font-family: arial, 'helvetica Neue', sans-serif;
@@ -111,7 +109,7 @@ button, a.update.button {
     text-transform: uppercase;
     font-size: 15px;
     padding-left: 5px;
-    padding-right: 5px;   
+    padding-right: 5px;
 
 
 }
@@ -137,7 +135,7 @@ button.following, a.update.button.following {
     background: -o-linear-gradient(top,  rgba(83,129,138,1) 0%,rgba(83,129,138,1) 50%,rgba(77,111,118,1) 51%,rgba(77,111,118,1) 100%); /* Opera 11.10+ */
     background: -ms-linear-gradient(top,  rgba(83,129,138,1) 0%,rgba(83,129,138,1) 50%,rgba(77,111,118,1) 51%,rgba(77,111,118,1) 100%); /* IE10+ */
     background: linear-gradient(top,  rgba(83,129,138,1) 0%,rgba(83,129,138,1) 50%,rgba(77,111,118,1) 51%,rgba(77,111,118,1) 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#53818a', endColorstr='#4d6f76',GradientType=0 ); /* IE6-9 */    
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#53818a', endColorstr='#4d6f76',GradientType=0 ); /* IE6-9 */
 }
 button.following:hover, a.update.button.following:hover {
     background: rgb(28,131,152); /* Old browsers */
@@ -147,7 +145,7 @@ button.following:hover, a.update.button.following:hover {
     background: -o-linear-gradient(top,  rgba(77,111,118,1) 0%,rgba(77,111,118,1) 50%,rgba(64,101,109,1) 51%,rgba(64,101,109,1) 100%); /* Opera 11.10+ */
     background: -ms-linear-gradient(top,  rgba(77,111,118,1) 0%,rgba(77,111,118,1) 50%,rgba(64,101,109,1) 51%,rgba(64,101,109,1) 100%); /* IE10+ */
     background: linear-gradient(top,  rgba(77,111,118,1) 0%,rgba(77,111,118,1) 50%,rgba(64,101,109,1) 51%,rgba(64,101,109,1) 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#53818a', endColorstr='#40656d',GradientType=0 ); /* IE6-9 */    
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#53818a', endColorstr='#40656d',GradientType=0 ); /* IE6-9 */
 }
 
 button span, a.update.button span{
@@ -258,7 +256,7 @@ small, .small, ul.search_explain li {
 }
 .small p{
     line-height: 1.6;
-    
+
 }
 em{
     font-weight: bold;
@@ -447,9 +445,9 @@ header h1{
     display: block;
     width: 32px;
     padding-left: 0;
-    padding-right: 0; 
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF,endColorstr=#00FFFFFF)"; /* IE8 */   
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF,endColorstr=#00FFFFFF);   /* IE6 & 7 */      
+    padding-right: 0;
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF,endColorstr=#00FFFFFF)"; /* IE8 */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF,endColorstr=#00FFFFFF);   /* IE6 & 7 */
     zoom: 1;
 }
 .count{
@@ -478,7 +476,7 @@ header h1{
 #search_form .search_explain li {
     list-style-type: none;
     margin-left: 25px;
-    
+
 }
 
 select.subscription_type {
@@ -667,7 +665,7 @@ footer nav li{
     float: none;
     margin-bottom: 8px;
     list-style-type: none;
-    
+
 }
 
 
@@ -689,10 +687,10 @@ footer nav li{
     padding-left: 35px;
     padding-right: 14px;
     width: inherit;
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF,endColorstr=#00FFFFFF)"; /* IE8 */   
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF,endColorstr=#00FFFFFF);   /* IE6 & 7 */      
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF,endColorstr=#00FFFFFF)"; /* IE8 */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF,endColorstr=#00FFFFFF);   /* IE6 & 7 */
     zoom: 1;
-    
+
 }
 .homeWrapper #search_form input[type="search"]{
     width: 454px;
@@ -701,7 +699,7 @@ footer nav li{
 .homeWrapper #search_form{
     margin-top: 30px;
     width: 677px;
-} 
+}
 .homeWrapper #search_form button:hover{
     }
 .homeWrapper .initialFilters{
@@ -711,7 +709,7 @@ footer nav li{
 }
 
 .home.modules{
-    
+
 }
 
 .home.modules .module{
@@ -757,7 +755,7 @@ footer nav li{
 /*-- Search Results Styling --*/
 .results.contentArea{
     background: url('/assets/images/tinyshadow.png') top left repeat-x;
-    
+
 }
 
 .right .searchHeader {
@@ -811,7 +809,7 @@ footer nav li{
 .searchParameters.advanced .advanced h2 {
     font-size: 100%;
     display: inline-block;
-    
+
     color: #aaa;
 }
 
@@ -830,7 +828,7 @@ footer nav li{
 
 }
 .searchParameters.advanced .advanced.distance span.terms {
-    
+
 }
 
 .searchParameters.advanced .advanced.distance span.n {
@@ -866,7 +864,7 @@ footer nav li{
 }
 
 .results .resultsHeader {
-    margin-bottom: 54px; 
+    margin-bottom: 54px;
 }
 .results.single .resultsHeader {
     margin-bottom: 0;
@@ -959,7 +957,7 @@ div.share-buttons td {padding-right: 5px;}
     margin:0;
 }
 .contentArea.right ul{
-    background: url('/assets/images/tinyborder_andshadow.png') center bottom repeat-x;    
+    background: url('/assets/images/tinyborder_andshadow.png') center bottom repeat-x;
 }
 .contentArea.right div.search{
     padding-bottom: 85px;
@@ -988,7 +986,7 @@ div.share-buttons td {padding-right: 5px;}
 
 .feed_preview .loading span, .feed_preview .error span, .feed_preview.empty span,
 .entry .loading span, .results .loading span, .results .error span, .results .empty span, .results .special span {
-  color: #444; 
+  color: #444;
   font-size: 110%;
   display: block;
   padding-top: 20px; padding: 20px; padding-left: 50px;
@@ -1008,7 +1006,7 @@ div.share-buttons td {padding-right: 5px;}
   padding-top: 30px;
   padding-bottom: 20px;
   padding-left: 40px;
-  
+
 }
 .results.contentArea h4{
     font-weight: bold;
@@ -1033,7 +1031,7 @@ ul.items{
     background: url('/assets/images/tinyborder_andshadow.png') center top repeat-x;
 }
 
-time.item, .time {   
+time.item, .time {
     font-style: italic;
     font-weight: 200;
     font-size: 93%;
@@ -1119,7 +1117,7 @@ button.follow, button.following {
     float: left;
     margin-top: 8px;
     font-style: italic;
-    width: 500px;
+    width: 450px;
     line-height: 20px;
 }
 
@@ -1171,7 +1169,7 @@ button.follow, button.following {
 
 .subtitle {
     color: #83858b;
-    
+
     display: block;
     clear: both;
     float: left;
@@ -1248,7 +1246,7 @@ button.follow, button.following {
 .entry #document header p {display: inline-block;}
 .entry #document hr {
     width: 400px;
-    background-color: #999; 
+    background-color: #999;
     margin-left: auto; margin-right: auto;
     margin-top: 25px; margin-bottom: 20px;
 }
@@ -1550,7 +1548,7 @@ div.indicators span.spinning{
     height: 16px;
     background: url('/assets/images/loader-32.gif') top center no-repeat;
     background-size: 16px 16px;
-    margin-top: 4px;    
+    margin-top: 4px;
 }
 
 div.indicators span.failed{
@@ -1590,12 +1588,12 @@ div.indicators span {
 }
 .import .add.rss ul{
     margin-top: 6px;
-    font-size: 80%; 
+    font-size: 80%;
     font-style: italic;
 }
 .import .add.rss li {
     padding: 3px 0;
-    
+
 }
 .import .hide_start {
     display: none;
@@ -1676,11 +1674,11 @@ div.indicators span {
     margin-bottom: 5px;
 }
 
-.settings.contentArea form input[type="text"], 
-.settings.contentArea form input[type="password"], 
-.settings.contentArea form input[type="email"], 
-.settings.contentArea form.phone input[type="text"], 
-.settings.contentArea .email input, 
+.settings.contentArea form input[type="text"],
+.settings.contentArea form input[type="password"],
+.settings.contentArea form input[type="email"],
+.settings.contentArea form.phone input[type="text"],
+.settings.contentArea .email input,
 .settings.contentArea .username input {
     width: 100%;
     height: 30px;
@@ -1734,7 +1732,7 @@ div.indicators span {
     padding-right: 10px;
 }
 .settings.contentArea .module.notifications legend{
-    width: 100%; 
+    width: 100%;
     font-weight: bold;
 }
 .settings.contentArea .module.notifications form, .settings.contentArea .module.allUserSettings form{
@@ -1883,11 +1881,11 @@ div.indicators span {
 }
 
 .module.tags ul li.public a {
-    
+
 }
 
 .module.tags button.delete {
-    float: left; 
+    float: left;
     display: none;
 }
 
@@ -1946,10 +1944,10 @@ div.indicators span {
 }
 
 .tag a.description {
-    font-style: italic; 
+    font-style: italic;
 }
 .tag a.edit_name {
-    font-style: italic; 
+    font-style: italic;
     margin-left: 3px;
     font-size: 80%;
 }
@@ -1986,7 +1984,7 @@ div.indicators span {
 }
 .tag .feed{
     margin: 10px 0 0 10px;
-    
+
 }
 .tag .tagHeader button.tag {
     float: right;
@@ -2015,11 +2013,11 @@ div.indicators span {
 /*-- PUBLIC Tag Grouping Topic Styling --*/
 
 .tag.public .tagHeader button, .tag.public p.description{
-    
+
 }
 
 .tag.public textarea.description, .tag.public .edit, .tag.public .removeHeader, .tag.public .tags{
-    
+
 }
 
 .tag.public .subscription .details{
