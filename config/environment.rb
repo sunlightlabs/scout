@@ -67,10 +67,8 @@ configure do
   # default country code for phone numbers
   Phoner::Phone.default_country_code = '1'
 
-  Mongoid.load! "config/mongoid.yml"
-  if development?
-    # Mongoid.logger.level = Logger::DEBUG
-    # Moped.logger.level = Logger::DEBUG
+  Mongoid.configure do |c|
+    c.load_configuration Environment.config['mongoid'][Sinatra::Base.environment.to_s]
   end
 
   if Environment.config['twilio']

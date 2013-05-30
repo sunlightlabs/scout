@@ -11,12 +11,12 @@ gem 'sinatra', '1.4.2'
 gem 'sinatra-contrib', '1.4.0'
 gem 'sinatra-flash', '0.3.0'
 
-gem 'padrino-helpers', '0.11.1'
+gem 'padrino-helpers', '0.11.2'
 gem 'rinku'
 gem "stringex" # slug generation
 gem 'escape_utils'
 
-gem "mongoid", '3.1.2'
+gem "mongoid", '3.1.4'
 
 gem 'ruby-hmac'
 gem 'bcrypt-ruby'
