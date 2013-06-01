@@ -1,5 +1,5 @@
 namespace :sync do
-  
+
   [:state_bills, :federal_bills, :speeches, :regulations, :documents].each do |type|
     desc "Sync #{type}"
     task type => :environment do
@@ -22,9 +22,10 @@ namespace :sync do
 
       while true # oh boy
         items = Subscriptions::Manager.sync subscription_type, options.merge(page: page, start: start)
-        
+
         unless items.is_a?(Array)
           bad_pages << page
+          page += 1
           next
         end
 
@@ -32,7 +33,7 @@ namespace :sync do
 
         total += items.size
         break if items.size < adapter::MAX_PER_PAGE
-        
+
         # emergency brake, I hate while-true's
         if (Time.now - start) > 600.minutes
           puts "Emergency brake!"
