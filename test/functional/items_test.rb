@@ -31,17 +31,19 @@ class ItemsTest < Test::Unit::TestCase
     assert_match /Due Process/, last_response.body
   end
 
-  def test_show_with_bot_fetches_and_renders_directly
+  def test_show_with_bot_when_not_cached_does_not_render_directly
     item_id = "hr4192-112"
     item_type = "bill"
 
-    mock_item item_id, item_type
+    mock_item item_id, item_type # not url cached
+    # not cached in the item repo
+
     assert_equal 0, Cache.count
 
     get "/item/#{item_type}/#{item_id}", {}, {"HTTP_USER_AGENT" => "Googlebot"}
     assert_response 200
 
-    assert_match /Due Process/, last_response.body
+    assert_not_match /Due Process/, last_response.body
   end
 
   def test_show_with_item_cache_but_not_url_cache_also_renders_directly
@@ -94,7 +96,7 @@ class ItemsTest < Test::Unit::TestCase
     assert_response 200
 
     user.reload
-    
+
     assert_equal 1, user.interests.count
     assert_equal item_types[item_type]['subscriptions'].size, user.subscriptions.count
 
@@ -127,7 +129,7 @@ class ItemsTest < Test::Unit::TestCase
     assert_equal 0, user.subscriptions.count
   end
 
-  
+
   # redirecting and tracking
 
   # an item page, from a set of search results

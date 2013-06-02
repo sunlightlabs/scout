@@ -39,12 +39,13 @@ end
 Dir.glob("./app/controllers/*.rb").each {|filename| load filename}
 
 
+# log google hits in a database, to understand behavior better
+
 before do
   @start_time = Time.now
 end
 
 after do
-  # for now, log google hits in a database, to understand behavior better
   Event.google!(env, @start_time) if google?
 end
 
@@ -130,18 +131,8 @@ helpers do
     !current_user.nil?
   end
 
-  def crawler?
-    ["googlebot", "twitterbot", "facebookexternalhit", "msnbot"].each do |agent|
-      if request.env['HTTP_USER_AGENT'] =~ /#{agent}/i
-        return true
-      end
-    end
-
-    false
-  end
-
   def google?
-    !!(request.env['HTTP_USER_AGENT'] =~ /googlebot/i)
+    request.env['HTTP_USER_AGENT']["Googlebot"] if request.env['HTTP_USER_AGENT']
   end
 
   def current_user

@@ -5,12 +5,12 @@ get "/item/:item_type/:item_id/?:slug?" do
 
   item_type = params[:item_type].strip
   item_id = params[:item_id].strip
-  
+
   halt 404 unless item_types[item_type]
   subscription_type = item_types[item_type]['adapter']
 
   begin
-    if item = Subscriptions::Manager.find(subscription_type, item_id, {cache_only: !crawler?})
+    if item = Subscriptions::Manager.find(subscription_type, item_id, {cache_only: true})
       interest = item_interest
       interest.data = item.data # required for the interest to know its own title
 
@@ -19,7 +19,7 @@ get "/item/:item_type/:item_id/?:slug?" do
         interest: interest,
         item_type: item_type
       }
-      
+
       share = partial "partials/share", engine: :erb
       title = interest.title
     else
@@ -30,12 +30,12 @@ get "/item/:item_type/:item_id/?:slug?" do
 
   # handle this here, just call it a day
   rescue Subscriptions::BadFetchException => ex
-    halt 404 
+    halt 404
   end
 
   erb :show, layout: !pjax?, locals: {
     # if blank, will be ajaxed in later at the /fetch endpoint
-    content: content, 
+    content: content,
     share: share,
 
     # only used if it's cached or for a spider
@@ -50,7 +50,7 @@ end
 
 get "/fetch/item/:item_type/:item_id/?:slug?" do
   valid_item
-  
+
   item_type = params[:item_type].strip
   item_id = params[:item_id].strip
   subscription_type = item_types[item_type]['adapter']
@@ -60,7 +60,7 @@ get "/fetch/item/:item_type/:item_id/?:slug?" do
 
   # handle this here, just call it a day
   rescue Subscriptions::BadFetchException => ex
-    halt 404 
+    halt 404
   end
 
   unless item
@@ -85,7 +85,7 @@ post '/item/:item_type/:item_id/follow' do
 
   item_type = params[:item_type]
   item_id = params[:item_id]
-  
+
   interest = item_interest
   halt 200 and return unless interest.new_record?
 
@@ -95,7 +95,7 @@ post '/item/:item_type/:item_id/follow' do
   else
     item_type.pluralize
   end
-  
+
   unless item = Subscriptions::Manager.find(adapter, item_id)
     halt 404 and return
   end
