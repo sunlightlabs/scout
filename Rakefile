@@ -6,8 +6,9 @@ end
 
 require 'rake/testtask'
 load "./tasks/sync.rake"
+load "./tasks/analytics.rake"
 
-namespace :tests do 
+namespace :tests do
   Rake::TestTask.new(:all) do |t|
     t.libs << "test"
     t.test_files = FileList['test/**/*_test.rb']
@@ -26,12 +27,12 @@ namespace :crontab do
   task :set => :environment do
     environment = ENV['environment']
     current_path = ENV['current_path']
-    
+
     if environment.blank? or current_path.blank?
       Admin.message "No environment or current path given, emailing and exiting."
       next
     end
-    
+
     if system("cat #{current_path}/config/cron/#{environment}/crontab | crontab")
       puts "Successfully overwrote crontab."
     else
@@ -51,14 +52,14 @@ namespace :crontab do
   end
 end
 
-desc "Run through each model and create all indexes" 
+desc "Run through each model and create all indexes"
 task :create_indexes => :environment do
   begin
     Mongoid.models.each do |model|
       model.create_indexes
       puts "Created indexes for #{model}"
     end
-    
+
   rescue Exception => ex
     report = Report.exception 'Indexes', "Exception creating indexes", ex
     Admin.report report
@@ -71,8 +72,8 @@ task :clear_data => :environment do
   models = Dir.glob('app/models/*.rb').map do |file|
     File.basename(file, File.extname(file)).camelize.constantize
   end
-  
-  models.each do |model| 
+
+  models.each do |model|
     model.delete_all
     puts "Cleared model #{model}."
   end
@@ -128,7 +129,7 @@ namespace :subscriptions do
 
     if errors.size > 0 # any? apparently returns false if the contents are just nils!
       Admin.report Report.warning(
-        "Initialize", "#{errors.size} errors while re-initializing subscriptions, will try again later.", 
+        "Initialize", "#{errors.size} errors while re-initializing subscriptions, will try again later.",
         errors: errors,
         )
     end
@@ -139,7 +140,7 @@ namespace :subscriptions do
       puts "Did not re-initialize any subscriptions."
     end
   end
-  
+
   namespace :check do
 
     subscription_types.each do |subscription_type|
@@ -148,7 +149,7 @@ namespace :subscriptions do
       task subscription_type.to_sym => :environment do
         begin
           rate_limit = ENV['rate_limit'].present? ? ENV['rate_limit'].to_f : 0.1
-          
+
           count = 0
           errors = []
           start = Time.now
@@ -159,7 +160,7 @@ namespace :subscriptions do
 
           criteria = {subscription_type: subscription_type}
 
-          if ENV['email'] 
+          if ENV['email']
             if user = User.where(email: ENV['email']).first
               criteria[:user_id] = user.id
             else
@@ -170,7 +171,7 @@ namespace :subscriptions do
 
           Subscription.initialized.no_timeout.where(criteria).each do |subscription|
             if subscription.user.confirmed?
-              
+
               result = Subscriptions::Manager.check!(subscription)
               count += 1
 
@@ -190,7 +191,7 @@ namespace :subscriptions do
           # the behavior and preview of a feed and judge for themselves.
           if errors.any? and (subscription_type != "feed")
             Admin.report Report.warning(
-              "check:#{subscription_type}", "#{errors.size} errors while checking #{subscription_type}, will check again next time.", 
+              "check:#{subscription_type}", "#{errors.size} errors while checking #{subscription_type}, will check again next time.",
               errors: errors[0..2],
             )
           end
@@ -212,7 +213,7 @@ namespace :subscriptions do
 
   end
 end
-  
+
 namespace :deliver do
 
   desc "Custom delivery task"
@@ -234,7 +235,7 @@ namespace :deliver do
   desc "Deliveries for a single daily email digest"
   task :email_daily => :environment do
     delivery_options = {"mechanism" => "email", "email_frequency" => "daily"}
-    
+
     if ENV['email']
       delivery_options["user_email"] = ENV['email'].strip
     end
@@ -250,7 +251,7 @@ namespace :deliver do
   desc "Deliveries of emails for whenever, per-interest"
   task :email_immediate => :environment do
     delivery_options = {"mechanism" => "email", "email_frequency" => "immediate"}
-    
+
     if ENV['email']
       delivery_options["user_email"] = ENV['email'].strip
     end
@@ -388,7 +389,7 @@ namespace :test do
         if citation
           next unless subscription.data['citation_id'] == citation
         end
-        
+
         if interest_in.any?
           next unless interest_in.include?(subscription.interest_in)
         end
@@ -525,9 +526,9 @@ task :sitemap => :environment do
   debug = ENV['debug'] ? true : false
   ping = ENV['no_ping'] ? false : true
   only = ENV['only'].present? ? ENV['only'].split(',') : nil
-  
+
   BigSitemap.generate(
-    base_url: "https://scout.sunlightfoundation.com", 
+    base_url: "https://scout.sunlightfoundation.com",
     document_root: "public/sitemap",
     url_path: "sitemap",
     ping_google: ping,
@@ -559,9 +560,9 @@ task :sitemap => :environment do
 
     # synced remote item landing pages
     frequencies = {
-      bill: :weekly, 
+      bill: :weekly,
       state_bill: :weekly,
-      speech: :monthly, 
+      speech: :monthly,
       regulation: :monthly,
       document: :monthly
     }
