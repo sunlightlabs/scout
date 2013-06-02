@@ -1,7 +1,7 @@
 class Subscription
   include Mongoid::Document
   include Mongoid::Timestamps
-  
+
   field :subscription_type
   field :initialized, type: Boolean, default: false
   field :interest_in
@@ -23,12 +23,12 @@ class Subscription
   index last_checked_at: 1
   index interest_id: 1
   index user_id: 1
-  
+
   has_many :seen_items
   has_many :deliveries
   belongs_to :user
   belongs_to :interest
-  
+
   validates_presence_of :user_id
   validates_presence_of :subscription_type
 
@@ -38,17 +38,17 @@ class Subscription
       errors.add(:base, "Enter a keyword or phrase to subscribe to.")
     end
   end
-  
+
   scope :initialized, where(initialized: true)
   scope :uninitialized, where(initialized: false)
-  
+
   # adapter class associated with a particular subscription
   def adapter
     Subscription.adapter_for subscription_type
   end
 
   def self.adapter_for(type)
-    "Subscriptions::Adapters::#{type.camelize}".constantize rescue nil
+    adapter_map[type]
   end
 
   def search(options = {})

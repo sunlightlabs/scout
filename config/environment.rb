@@ -177,6 +177,22 @@ def search_types
   ["federal_bills", "speeches", "state_bills", "regulations", "documents"]
 end
 
+# cache the constantized stuff (this is dumb, this all needs to be refactored)
+def adapter_map
+  if @adapter_map
+    @adapter_map
+  else
+    @adapter_map = {}
+    adapters = Dir.glob File.join(File.dirname(__FILE__), "../subscriptions/adapters/*.rb")
+    adapters.each do |adapter|
+      type = File.basename adapter, ".rb"
+      @adapter_map[type] = "Subscriptions::Adapters::#{type.camelize}".constantize
+    end
+    @adapter_map
+  end
+end
+adapter_map # warm cache
+
 def cite_types
   ["federal_bills", "regulations", "documents"]
 end
