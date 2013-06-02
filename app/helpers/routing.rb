@@ -142,8 +142,6 @@ module Helpers
       route = "/item/#{item.item_type}/#{item.item_id}"
 
       # may not have a subscription_type, but will have an item type
-      puts "item_type: #{item.item_type}"
-
       adapter = Subscription.adapter_for item_types[item.item_type]['adapter']
 
       if adapter.respond_to?(:slug_for)
