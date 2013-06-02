@@ -16,6 +16,7 @@ class ItemsTest < Test::Unit::TestCase
     assert_response 200
 
     assert_not_match /Due Process/, last_response.body
+    assert_not_match /rel="canonical"/, last_response.body
   end
 
   def test_show_when_cached_renders_directly
@@ -29,6 +30,7 @@ class ItemsTest < Test::Unit::TestCase
     assert_response 200
 
     assert_match /Due Process/, last_response.body
+    assert_match /rel="canonical"/, last_response.body
   end
 
   def test_show_with_bot_when_not_cached_does_not_render_directly
@@ -44,6 +46,7 @@ class ItemsTest < Test::Unit::TestCase
     assert_response 200
 
     assert_not_match /Due Process/, last_response.body
+    assert_not_match /rel="canonical"/, last_response.body
   end
 
   def test_show_with_item_cache_but_not_url_cache_also_renders_directly
@@ -60,6 +63,7 @@ class ItemsTest < Test::Unit::TestCase
     assert_response 200
 
     assert_match /Due Process/, last_response.body
+    assert_match /rel="canonical"/, last_response.body
   end
 
   def test_fetch_item_itself

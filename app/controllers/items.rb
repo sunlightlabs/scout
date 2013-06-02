@@ -44,7 +44,9 @@ get "/item/:item_type/:item_id/?:slug?" do
     interest: interest,
     subscriptions: [],
     item_type: params[:item_type],
-    item_id: params[:item_id]
+    item_id: params[:item_id],
+
+    item: item # can be nil
   }
 end
 

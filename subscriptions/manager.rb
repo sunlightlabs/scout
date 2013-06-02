@@ -4,10 +4,10 @@ module Subscriptions
 
   class Manager
 
-    def self.search(subscription, options = {})      
+    def self.search(subscription, options = {})
       poll subscription, :search, options
     end
-    
+
     def self.initialize!(subscription)
 
       # TODO: refactor so that these come in as the arguments
@@ -16,7 +16,7 @@ module Subscriptions
 
       # default strategy:
       # 1) does the initial poll
-      # 2) stores every item ID as seen 
+      # 2) stores every item ID as seen
 
       # make initialization idempotent, remove any existing seen items first
       interest.seen_items.where(subscription_type: subscription_type).delete_all
@@ -29,14 +29,14 @@ module Subscriptions
       results.each do |item|
         mark_as_seen! item
       end
-      
+
       subscription.initialized = true
       subscription.last_checked_at = Time.now
       subscription.save!
 
       true
     end
-    
+
     def self.check!(subscription)
       # support rake task command line dry run flag
       dry_run = ENV["dry_run"] || false
@@ -55,16 +55,16 @@ module Subscriptions
 
       # any users' tag interests who are following a public tag that includes
       following_interests = interest.followers
-      
 
-      # catch any items which suddenly appear, dated in the past, 
+
+      # catch any items which suddenly appear, dated in the past,
       # that weren't caught during initialization or prior polls
 
       # accumulate backfilled items to report per-subscription.
-      # buffer of 30 days, to allow for information to make its way through whatever 
+      # buffer of 30 days, to allow for information to make its way through whatever
       # pipelines it has to go through (could eventually configure this per-adapter)
-      
-      # Was 5 days, bumped it to 30 because of federal_bills. The LOC, CRS, and GPO all 
+
+      # Was 5 days, bumped it to 30 because of federal_bills. The LOC, CRS, and GPO all
       # move in waves, apparently, of unpredictable frequency.
 
       # disabled in test mode (for now, this is obviously not ideal)
@@ -96,7 +96,7 @@ module Subscriptions
           mark_as_seen! item unless dry_run
 
           if !test? and (item.date < backfill_date)
-            # this is getting out of hand - 
+            # this is getting out of hand -
             # don't deliver state bill backfills, but don't email me about them
             # temporary until Open States allows sorting by last_action dates
             # if subscription_type != "state_bills"
@@ -120,7 +120,7 @@ module Subscriptions
       if backfills.any?
         Admin.report Report.warning("Check", "[#{subscription.subscription_type}][#{subscription.interest_in}] #{backfills.size} backfills not delivered, attached", :backfills => backfills)
       end
-      
+
       unless dry_run
         subscription.last_checked_at = Time.now
         subscription.save!
@@ -128,7 +128,7 @@ module Subscriptions
 
       true
     end
-    
+
     def self.mark_as_seen!(item)
       item.save!
     end
@@ -140,15 +140,15 @@ module Subscriptions
     def self.development?
       Sinatra::Application.development?
     end
-    
+
     # function is one of [:search, :initialize, :check]
     # options hash can contain epheremal modifiers for search (right now just a 'page' parameter)
-    # 
+    #
       # cache_only: return nil if the object is not present, do not hit the network
     def self.poll(subscription, function = :search, options = {})
       adapter = subscription.adapter
       url = adapter.url_for subscription, function, options
-      
+
       puts "\n[#{subscription.subscription_type}][#{function}][#{subscription.interest_in}][#{subscription.id}] #{url}\n\n" if !test? and Environment.config['debug']['output_urls']
 
       # Feed parser
@@ -156,8 +156,8 @@ module Subscriptions
         begin
           response = adapter.url_to_response url
           items = adapter.items_for response, function, options
-        rescue Curl::Err::ConnectionFailedError, Curl::Err::PartialFileError, 
-          Curl::Err::RecvError, Curl::Err::HostResolutionError, 
+        rescue Curl::Err::ConnectionFailedError, Curl::Err::PartialFileError,
+          Curl::Err::RecvError, Curl::Err::HostResolutionError,
           Curl::Err::GotNothingError,
           Timeout::Error, Errno::ECONNREFUSED, EOFError, Errno::ETIMEDOUT => ex
           return error_for "Network or timeout error while polling feed", url, function, options, subscription, ex
@@ -195,8 +195,8 @@ module Subscriptions
           end
 
           adapter.items_for response, function, options
-        rescue Curl::Err::ConnectionFailedError, Curl::Err::PartialFileError, 
-          Curl::Err::RecvError, Curl::Err::HostResolutionError, 
+        rescue Curl::Err::ConnectionFailedError, Curl::Err::PartialFileError,
+          Curl::Err::RecvError, Curl::Err::HostResolutionError,
           Curl::Err::GotNothingError,
           Timeout::Error, Errno::ECONNREFUSED, EOFError, Errno::ETIMEDOUT => ex
           return error_for "Network or timeout error", url, function, options, subscription, ex
@@ -213,7 +213,7 @@ module Subscriptions
       end
 
       if items.is_a?(Array)
-        items.map do |item| 
+        items.map do |item|
           item.assign_to_subscription subscription
           item.search_url = url
           item
@@ -244,9 +244,9 @@ module Subscriptions
       item_type = search_adapters[adapter_type]
 
       url = adapter.url_for_detail item_id, options
-      
+
       puts "\n[#{adapter_type}][find][#{item_id}] #{url}\n\n" if !test? and Environment.config['debug']['output_urls']
-      
+
       # top-layer cache - if we've synced the item already, use it
       if item = item_cache_for(item_type, item_id)
         # pass
@@ -265,8 +265,8 @@ module Subscriptions
               cache! url, :find, adapter_type, body
             end
           end
-        rescue Curl::Err::ConnectionFailedError, Curl::Err::PartialFileError, 
-            Curl::Err::RecvError, Curl::Err::HostResolutionError, 
+        rescue Curl::Err::ConnectionFailedError, Curl::Err::PartialFileError,
+            Curl::Err::RecvError, Curl::Err::HostResolutionError,
             Timeout::Error, Errno::ECONNREFUSED, EOFError, Errno::ETIMEDOUT => ex
           Admin.report Report.warning("find:#{adapter_type}", "[#{adapter_type}][find][#{item_id}] find timeout, returned nil")
           return nil
@@ -274,11 +274,12 @@ module Subscriptions
           Admin.report Report.exception("find:#{adapter_type}", "[#{adapter_type}][find][#{item_id}] JSON parse error, returned nil, body was:\n\n#{body}", ex)
           return nil
         end
-        
+
         item = adapter.item_detail_for response
       end
-      
+
       if item
+        item.item_type = item_type
         item.find_url = url
 
         if adapter.respond_to?(:document_url) and (url = adapter.document_url item)
@@ -310,8 +311,8 @@ module Subscriptions
             cache! url, :fetch, url_type, body
           end
         end
-      rescue Curl::Err::ConnectionFailedError, Curl::Err::PartialFileError, 
-          Curl::Err::RecvError, Curl::Err::HostResolutionError, 
+      rescue Curl::Err::ConnectionFailedError, Curl::Err::PartialFileError,
+          Curl::Err::RecvError, Curl::Err::HostResolutionError,
           Timeout::Error, Errno::ECONNREFUSED, EOFError, Errno::ETIMEDOUT => ex
         Admin.report Report.warning("fetch:#{url_type}", "[find][#{url_type}] find timeout, returned nil")
         return nil
@@ -331,15 +332,15 @@ module Subscriptions
     def self.sync(subscription_type, options = {})
       adapter = Subscription.adapter_for subscription_type
       url = adapter.url_for_sync options
-      
+
       puts "\n[#{subscription_type}][sync][#{options[:page]}] #{url}\n\n" if !test? and Environment.config['debug']['output_urls']
 
       items = begin
         body = download url
         response = ::Oj.load body, mode: :compat
         adapter.items_for response, :sync, options
-      rescue Curl::Err::ConnectionFailedError, Curl::Err::PartialFileError, 
-        Curl::Err::RecvError, Curl::Err::HostResolutionError, 
+      rescue Curl::Err::ConnectionFailedError, Curl::Err::PartialFileError,
+        Curl::Err::RecvError, Curl::Err::HostResolutionError,
         Curl::Err::GotNothingError,
         Timeout::Error, Errno::ECONNREFUSED, EOFError, Errno::ETIMEDOUT => ex
         return error_for "Network or timeout error", url, :sync, options, nil, ex
@@ -356,7 +357,7 @@ module Subscriptions
 
       items.map do |item|
         item.item_type = search_adapters[subscription_type]
-        
+
         if adapter.respond_to?(:document_url) and (url = adapter.document_url item)
           # a url_type of 'document' means their cache will not get flushed --
           # which is what we want. keep documents forever.
@@ -369,7 +370,7 @@ module Subscriptions
 
     def self.item_cache_for(item_type, item_id)
       return nil if Environment.config['no_cache']
-      
+
       if item = Item.where(item_type: item_type, item_id: item_id).first
         puts "ITEM CACHE: [#{item_type}][#{item_id}]\n\n" if development?
         Item.to_seen! item
@@ -390,8 +391,8 @@ module Subscriptions
     def self.cache!(url, function, subscription_type, content)
       puts "\nCACHE: [#{function}] #{url}\n\n" if development?
       Cache.create!(
-        url: url, 
-        subscription_type: subscription_type, 
+        url: url,
+        subscription_type: subscription_type,
         function: function,
         content: content
       )
@@ -405,7 +406,7 @@ module Subscriptions
     # download content at the given URL
     def self.download(url)
       curl = Curl::Easy.new url
-      
+
       curl.headers["User-Agent"] = "Scout (scout.sunlightfoundation.com) / curl"
 
       curl.perform
@@ -426,5 +427,5 @@ module Subscriptions
   # used by adapters to signal an error in parsing
   class AdapterParseException < Exception; end
   class BadFetchException < Exception; end
-  
+
 end

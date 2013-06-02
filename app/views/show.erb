@@ -5,7 +5,9 @@
 
 <% content_for :head do %>
   <link rel="stylesheet" href="<%= asset_path "/css/documents.css" %>" />
-  <link rel="canonical" href="/item/<%= item_type %>/<%= item_id %>" />
+  <% if item %>
+    <link rel="canonical" href="<%= landing_path item %>" />
+  <% end %>
 <% end %>
 
 <% content_for :sidebar_right do %>
