@@ -10,13 +10,13 @@ class SeenItem
   belongs_to :user
 
   #TODO: refactor this out
-  field :subscription_id 
+  field :subscription_id
 
   field :interest_in
   field :interest_type
   field :subscription_type
-  
-  # doesn't refer to the type of the item itself, but 
+
+  # doesn't refer to the type of the item itself, but
   # rather which one of the standard item_type's it relates to
   field :item_type # 'bill', 'speech', etc.
 
@@ -30,9 +30,14 @@ class SeenItem
   index({subscription_id: 1, item_id: 1})
   index item_id: 1
   index subscription_type: 1
-  index interest_id: 1
   index user_id: 1
   index seen_by_id: 1
+  index created_at: 1
+  index date: 1
+  index interest_id: 1
+
+  # used for lookups for RSS feeds
+  index({interest_id: 1, date: 1})
 
   validates_presence_of :subscription_id
   validates_presence_of :item_id
@@ -68,7 +73,7 @@ class SeenItem
     elsif item_type = item_adapters[subscription.subscription_type]
       interest_type = "item"
     end
-    
+
     self.attributes = {
       # core fields
       subscription_type: subscription.subscription_type,
@@ -88,7 +93,7 @@ class SeenItem
     }
   end
 
-  # renders a *hash* suitable for turning into json, 
+  # renders a *hash* suitable for turning into json,
   # that includes attributes for its parent subscription and interest
   def json_view
     self.interest

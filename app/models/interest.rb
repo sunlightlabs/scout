@@ -50,6 +50,7 @@ class Interest
   index search_type: 1
   index item_type: 1
   index tags: 1
+  index({user_id: 1, tags: 1})
 
   validates_presence_of :user_id
   validates_presence_of :in
