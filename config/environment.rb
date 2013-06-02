@@ -23,8 +23,10 @@ class Environment
 
   # my own slugifier (wildly more performant than the all-Ruby solutions I found)
   def self.to_url(string)
+    string = string.dup
     string.gsub! /[^\w\-\s]+/, ""
     string.gsub! /\s+/, '-'
+    string.downcase!
     string[0..200]
   end
 

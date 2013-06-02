@@ -1,4 +1,4 @@
-module Subscriptions  
+module Subscriptions
   module Adapters
 
     class FederalBills
@@ -6,7 +6,7 @@ module Subscriptions
       # if the adapter supports sync, this must be supplied
       MAX_PER_PAGE = 50
 
-      FIELDS = %w{ 
+      FIELDS = %w{
         bill_id bill_type number congress urls
         short_title official_title summary
         last_action actions
@@ -26,13 +26,13 @@ module Subscriptions
 
       def self.url_for(subscription, function, options = {})
         api_key = options[:api_key] || Environment.config['subscriptions']['sunlight_api_key']
-        
+
         if Environment.config['subscriptions']['congress_endpoint'].present?
           endpoint = Environment.config['subscriptions']['congress_endpoint'].dup
         else
           endpoint = "http://congress.api.sunlightfoundation.com"
         end
-        
+
         url = endpoint
 
         query = subscription.query['query']
@@ -97,7 +97,7 @@ module Subscriptions
 
         per_page = (function == :search) ? (options[:per_page] || 20) : 40
         url << "&per_page=#{per_page}"
-        
+
         url
       end
 
@@ -109,12 +109,12 @@ module Subscriptions
         else
           endpoint = "http://congress.api.sunlightfoundation.com"
         end
-        
+
         url = "#{endpoint}/bills?apikey=#{api_key}"
 
         # should be unnecessary, we set last_version_on to introduced_on if GPO hasn't published yet
         url << "&last_version_on__exists=true"
-        
+
         url << "&bill_id=#{item_id}"
         url << "&fields=#{FIELDS.join ','}"
 
@@ -134,7 +134,7 @@ module Subscriptions
         url << "&fields=#{FIELDS.join ','}"
         url << "&order=introduced_on__asc"
 
-        
+
         if options[:since] == "all"
           # ok, get everything
 
@@ -147,7 +147,7 @@ module Subscriptions
 
         # TODO: this is bad. (I use current_congress in production.)
         # this will not catch changes in bills introduced before 3 days ago.
-        # using updated_at would just mean everything. 
+        # using updated_at would just mean everything.
         # last_action_at doesn't catch changes that don't have actions associated,
         # but might be the best bet - but the sort would need to change too.
         # it might be best to just not use this mode.
@@ -157,7 +157,7 @@ module Subscriptions
 
         url << "&page=#{options[:page]}" if options[:page]
         url << "&per_page=#{MAX_PER_PAGE}"
-        
+
         url
       end
 
@@ -203,12 +203,12 @@ module Subscriptions
       def self.slug_for(bill)
         bill['short_title'] || bill['official_title']
       end
-      
-      # takes parsed response and returns an array where each item is 
+
+      # takes parsed response and returns an array where each item is
       # a hash containing the id, title, and post date of each item found
       def self.items_for(response, function, options = {})
         raise AdapterParseException.new("Response didn't include results field: #{response.inspect}") unless response['results']
-        
+
         response['results'].map do |bill|
           item_for bill
         end
@@ -219,7 +219,7 @@ module Subscriptions
         return nil unless response
         item_for response['results'][0]
       end
-      
+
       def self.item_for(bill)
         return nil unless bill
 
@@ -229,7 +229,7 @@ module Subscriptions
           data: bill
         )
       end
-      
+
       # e.g. 2009 & 2010 -> 111th congress, 2011 & 2012 -> 112th congress
       def self.current_congress
         congress_for_year current_legislative_year
@@ -258,6 +258,6 @@ module Subscriptions
         end
       end
     end
-  
+
   end
 end
