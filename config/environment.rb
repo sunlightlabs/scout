@@ -8,7 +8,6 @@ require 'tzinfo'
 require 'twilio-rb'
 require 'feedbag'
 require 'phone'
-require 'stringex'
 
 require 'asset_sync'
 
@@ -22,11 +21,11 @@ class Environment
     @config ||= YAML.safe_load_file File.join(File.dirname(__FILE__), "config.yml")
   end
 
+  # my own slugifier (wildly more performant than the all-Ruby solutions I found)
   def self.to_url(string)
-    # workaround until https://github.com/rsl/stringex/issues/103 is fixed
-    string.gsub! /[`\{\}]/, ""
-
-    string.to_url[0..200]
+    string.gsub! /[^\w\-\s]+/, ""
+    string.gsub! /\s+/, '-'
+    string[0..200]
   end
 
   def self.asset_path(path)
@@ -191,8 +190,12 @@ def adapter_map
     @adapter_map
   end
 end
-adapter_map # warm cache
 
 def cite_types
   ["federal_bills", "regulations", "documents"]
 end
+
+# warm caches (ugh)
+adapter_map
+item_adapters
+search_adapters

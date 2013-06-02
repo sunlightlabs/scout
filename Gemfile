@@ -14,9 +14,6 @@ gem 'sinatra-flash', '0.3.0'
 gem 'padrino-helpers', '0.11.2'
 gem 'rinku'
 
-# slug generation
-gem "stringex"
-
 gem 'escape_utils'
 
 gem "mongoid", '3.1.4'
