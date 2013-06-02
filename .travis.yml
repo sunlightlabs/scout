@@ -8,13 +8,12 @@ bundler_args: --local
 
 before_script:
   - cp config/config.yml.example config/config.yml
-  - cp config/mongoid.yml.example config/mongoid.yml
 
 script: rake tests:all
 
 notifications:
   email:
-    recipients: 
+    recipients:
       - eric@sunlightfoundation.com
     on_success: change
     on_failure: change
