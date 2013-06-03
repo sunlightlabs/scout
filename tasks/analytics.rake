@@ -33,6 +33,8 @@ namespace :analytics do
     url_types = {}
     types.each do |type|
       criteria = hits.where(url_type: type)
+
+      url_types[type] = {}
       url_types[type][:count] = criteria.count
       url_types[type][:avg] = (criteria.only(&:my_ms).map(&:my_ms).sum.to_f / url_types[type][:count]).round
     end
@@ -41,28 +43,41 @@ namespace :analytics do
     msg = "= Google activity for #{day}\n\n"
     msg += "Times are measured by Scout. External estimates add 60ms.\n\n"
 
+    max_type = types.map(&:size).max
+    max_count = url_types.values.map {|t| t[:count].to_s.size}.max
+    max_avg = url_types.values.map {|t| t[:avg].to_s.size}.max
+
     types.each do |type|
-      count = fix url_types[type][:count], 7
-      avg = fix url_types[type][:avg], 5
-      est = fix "~#{url_types[type][:avg] + 60}", 6
-      fixed_type = fix type, types.map(&:size).max
-      msg += "/#{fixed_type} - #{count} hits (avg #{avg}, est #{est})"
+      count = fix url_types[type][:count], max_count
+      avg = fix url_types[type][:avg], max_avg
+      est = fix "~#{url_types[type][:avg] + 60}", (max_avg + 1)
+      fixed_type = fix type, max_type, :right
+      msg += "  /#{fixed_type} - #{count} hits (avg #{avg}ms, est #{est}ms)\n"
     end
 
     msg += "\n\nSlow hits (>#{slow}ms as measured in Scout)\n\n"
 
+    max_slow = slow_hits.only(&:my_ms).map {|h| h.my_ms.to_s.size}.max
+
     slow_hits.each do |hit|
-      ms = fix hit.my_ms, 5
-      link = "<a href=\"#{Environment.config[:hostname]}#{hit.url}>#{hit.url}</a>"
-      msg += "#{ms}ms - #{link}"
+      ms = fix hit.my_ms, max_slow
+      msg += "  #{ms}ms - #{hit.url}\n"
     end
 
     msg
   end
 
-  def fix(obj, width)
+  def fix(obj, width, side = :left)
     obj = obj.to_s
-    (" " * (width-obj.size)) + obj
+    spaces = width - obj.size
+    spaces = 0 if spaces < 0
+    space = " " * spaces
+
+    if side == :left
+      space + obj
+    else
+      obj + space
+    end
   end
 
   def general_report(day)

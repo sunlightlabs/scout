@@ -21,9 +21,9 @@ module Email
       puts "[#{tag}][ERROR] No delivery method specified."
       false
     end
-    
-  # Important that this method *not* raise any Exceptions, 
-  # because our top-level generic exception handlers will 
+
+  # Important that this method *not* raise any Exceptions,
+  # because our top-level generic exception handlers will
   # cause an error report to get sent, leading to an infinite loop.
 
   rescue Exception => exc
@@ -92,7 +92,7 @@ module Email
     else
       message.content_type = "text/plain"
     end
-    
+
     message.tag = tag
 
     message.from = from || Environment.config['email']['from']
@@ -128,7 +128,7 @@ module Email
           Report.exception "Postmark Exception", "Failed to email #{to}, trying to deliver via SMTP", e,
             tag: tag, to: to, subject: subject, body: body, from: from, reply_to: reply_to
         )
-        
+
         puts "\n[#{tag}][Postmark] Couldn't send message to Postmark. Trying Pony as a backup."
 
         # backup, try to use Pony to send the message
@@ -152,7 +152,7 @@ module Email
 
   def self.sent_message(method, tag, to, subject, body, from = nil, reply_to = nil)
     return if Sinatra::Application.test?
-    
+
     puts
     puts "--------------------------------"
     puts "[#{tag}][#{method}] Delivered to #{to}: #{from ? "(from: #{from})" : nil}"
