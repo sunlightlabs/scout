@@ -48,7 +48,7 @@ namespace :analytics do
     })
     types = hits.distinct(:url_type).sort_by &:to_s
 
-    slow = 100
+    slow = 200
     slow_hits = hits.where(my_ms: {"$gt" => slow}).asc(:my_ms)
 
     url_types = {}
@@ -80,7 +80,7 @@ namespace :analytics do
 
     slow_hits.each do |hit|
       ms = fix hit.my_ms, max_slow
-      msg += "  #{ms}ms - #{hit.url}\n"
+      msg += "  #{ms}ms - #{URI.decode hit.url}\n"
     end
 
     fixed msg
