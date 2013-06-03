@@ -2,6 +2,9 @@
 
 */30 * * * * /projects/scout/current/config/cron/production/rake.sh subscriptions:reinitialize
 
+# post-midnight, email an analytics report
+0 6 * * * /projects/scout/current/config/cron/production/rake.sh analytics:google
+
 
 ######## Sync and sitemap tasks #################
 

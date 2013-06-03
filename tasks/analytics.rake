@@ -12,15 +12,20 @@ namespace :analytics do
   end
 
   task google: :environment do
-    day = ENV['day'] || Time.now.strftime("%Y-%m-%d")
-    msg = google_report day
-    Admin.analytics "Google Report for #{day}", msg
+    begin
+      day = ENV['day'] || Time.now.strftime("%Y-%m-%d")
+      msg = google_report day
+      Admin.analytics "Google Report for #{day}", msg
+    rescue Exception => ex
+      report = Report.exception 'Analytics', "Exception preparing analytics:google", ex
+      Admin.report report
+      puts "Error sending analytics, emailed report."
+    end
   end
 
   def google_report(day)
     start_time = Time.zone.parse(day).midnight # midnight Eastern time
     end_time = start_time + 1.day
-
 
     hits = Event.where(type: "google", last_google_hit: {
       "$gte" => start_time, "$lt" => end_time
