@@ -145,7 +145,7 @@ module Email
   end
 
   def self.html_tags
-    ["User Alert", "Analytics"]
+    ["User Alert"] #, "Analytics"]
   end
 
   # always disable email in test mode

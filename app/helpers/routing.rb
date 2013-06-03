@@ -250,6 +250,7 @@ module Helpers
     end
 
     # shrug
+    # TODO: if we support us-code search URLs, this will need to change
     def searching?
       request.path =~ /^\/search\//
     end

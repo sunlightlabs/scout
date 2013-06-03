@@ -25,8 +25,8 @@ module Admin
     deliver! "Unsubscribe", "Unsubscribe: #{user.contact}", JSON.pretty_generate(data)
   end
 
-  def self.analytics(subject, body)
-    deliver! "Analytics", subject, body, analytics_emails, "Scout Analytics"
+  def self.analytics(type, subject, body)
+    deliver! "Analytics", subject, body, analytics_emails[type], "Analytics"
   end
 
   def self.new_feed(interest)

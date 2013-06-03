@@ -3,7 +3,7 @@
 class Receipt
   include Mongoid::Document
   include Mongoid::Timestamps
-  
+
   field :deliveries, :type => Array
 
   field :user_id
@@ -14,14 +14,15 @@ class Receipt
   field :subject
   field :content
   field :delivered_at, :type => Time
-  
+
   index delivered_at: 1
   index user_id: 1
   index user_email: 1
   index user_service: 1
   index mechanism: 1
   index created_at: 1
-  
+  index({mechanism: 1, user_service: 1, created_at: 1})
+
   validates_presence_of :delivered_at
   validates_presence_of :content
 
