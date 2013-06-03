@@ -345,13 +345,17 @@ class Interest
   # look up or generate a single subscription for this interest
   # assumes an interest can have at most one subscription of a particular type
   def self.subscription_for(interest, subscription_type, regenerate = false)
-    if !interest.new_record?
-      unless regenerate
-        return interest.subscriptions.where(subscription_type: subscription_type).first
-      end
+    # if the interest is created, and we're not asking for regeneration,
+    # we can count on the interest having it
+    if !interest.new_record? and !regenerate
+      return interest.subscriptions.where(subscription_type: subscription_type).first
     end
 
-    subscription = interest.subscriptions.find_or_initialize_by subscription_type: subscription_type
+    if interest.new_record?
+      subscription = interest.subscriptions.new subscription_type: subscription_type
+    else
+      subscription = interest.subscriptions.find_or_initialize_by subscription_type: subscription_type
+    end
 
     # TODO: refactor these all away, make the subscription worth only its type
     subscription.interest_in = interest.in
