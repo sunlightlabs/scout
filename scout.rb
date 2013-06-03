@@ -39,7 +39,7 @@ end
 Dir.glob("./app/controllers/*.rb").each {|filename| load filename}
 
 
-# log google hits in a database, to understand behavior better
+# log google hits in a database, to understand behavior and performance better
 
 before do
   @start_time = Time.now
