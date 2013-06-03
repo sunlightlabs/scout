@@ -46,7 +46,7 @@ namespace :analytics do
     hits = Event.where(type: "google", last_google_hit: {
       "$gte" => start_time, "$lt" => end_time
     })
-    types = hits.distinct(:url_type).sort
+    types = hits.distinct(:url_type).sort_by &:to_s
 
     slow = 100
     slow_hits = hits.where(my_ms: {"$gt" => slow}).asc(:my_ms)
@@ -62,7 +62,7 @@ namespace :analytics do
 
     msg = "Crawling activity (avg measured by Scout, external est adds 60ms)\n\n"
 
-    max_type = types.map(&:size).max
+    max_type = types.map {|t| t.to_s.size}.max
     max_count = url_types.values.map {|t| t[:count].to_s.size}.max
     max_avg = url_types.values.map {|t| t[:avg].to_s.size}.max
 
