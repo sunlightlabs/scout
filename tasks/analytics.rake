@@ -3,7 +3,7 @@ namespace :analytics do
   desc "Daily report on various things."
   task daily: :environment do
 
-    day = ENV['day'] || Time.now.strftime("%Y-%m-%d")
+    day = ENV['day'] || 1.day.ago.strftime("%Y-%m-%d")
 
     msg = ""
     msg += general_report day
@@ -13,7 +13,7 @@ namespace :analytics do
 
   task google: :environment do
     begin
-      day = ENV['day'] || Time.now.strftime("%Y-%m-%d")
+      day = ENV['day'] || 1.day.ago.strftime("%Y-%m-%d")
       msg = google_report day
       Admin.analytics "Google Report for #{day}", msg
     rescue Exception => ex
