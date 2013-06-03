@@ -62,7 +62,7 @@ module Email
     options[:reply_to] = reply_to || Environment.config['email']['reply_to']
 
     begin
-      if tag == "User Alert" # html emails
+      if html_tags.include?(tag) # html emails
         Pony.mail options.merge(subject: subject, html_body: body, to: to)
       else
         Pony.mail options.merge(subject: subject, body: body, to: to)
@@ -87,7 +87,7 @@ module Email
 
     message.delivery_method Mail::Postmark, api_key: Environment.config['email']['postmark']['api_key']
 
-    if tag == "User Alert"
+    if html_tags.include?(tag)
       message.content_type = "text/html"
     else
       message.content_type = "text/plain"
@@ -142,6 +142,10 @@ module Email
         end
       end
     end
+  end
+
+  def self.html_tags
+    ["User Alert", "Analytics"]
   end
 
   # always disable email in test mode

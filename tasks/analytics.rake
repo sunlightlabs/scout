@@ -67,7 +67,11 @@ namespace :analytics do
       msg += "  #{ms}ms - #{hit.url}\n"
     end
 
-    msg
+    fixed msg
+  end
+
+  def fixed(text)
+    "<font size=\"-1\"><pre>#{text}</pre></font>"
   end
 
   def fix(obj, width, side = :left)
