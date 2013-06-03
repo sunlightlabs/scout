@@ -94,9 +94,9 @@ namespace :analytics do
     })
 
     starting = start_time.strftime "%Y-%m-%d"
-    ending = end_time.strftime "%Y-%m-%d"
+    ending = (end_time - 1.day).strftime "%Y-%m-%d"
 
-    msg << "User activity from #{starting} to #{ending}:\n\n"
+    msg << "User activity from #{starting} through #{ending}:\n\n"
 
     msg << "  #{users.count} new users (#{total_users.count} total, #{total_active_users.size} active)\n"
     msg << "  #{interests.size} alerts created (#{total_interests.size} total)\n"
