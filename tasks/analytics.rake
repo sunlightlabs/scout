@@ -63,16 +63,20 @@ namespace :analytics do
     total_users = User.where(service: lookup_service)
     # todo - expand this to accommodate unsubscribed users
     total_active_users = total_users.select {|u| u.interests.count > 0}
-    total_interests = Interest.where(service: lookup_service)
+    total_interests = Interest.all.select {|i|
+      (user = i.user) and (user.service == lookup_service)
+    }
 
 
     users = User.where(service: lookup_service, created_at: {
       "$gte" => start_time, "$lt" => end_time
     })
 
-    interests = Interest.where(service: lookup_service, created_at: {
+    interests = Interest.where(created_at: {
       "$gte" => start_time, "$lt" => end_time
-    })
+    }).select {|i|
+      (user = i.user) and (user.service == lookup_service)
+    }
 
     removed = Event.where(type: "remove-alert", created_at: {
       "$gte" => start_time, "$lt" => end_time
@@ -95,7 +99,7 @@ namespace :analytics do
     msg << "User activity from #{starting} to #{ending}:\n\n"
 
     msg << "  #{users.count} new users (#{total_users.count} total, #{total_active_users.size} active)\n"
-    msg << "  #{interests.count} alerts created (#{total_interests.count} total)\n"
+    msg << "  #{interests.size} alerts created (#{total_interests.size} total)\n"
     msg << "  #{removed.size} alerts removed\n"
     msg << "  #{unsubscribes.count} full unsubscribes\n"
     msg << "  #{receipts.count} delivered emails\n"
