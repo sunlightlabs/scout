@@ -7,6 +7,7 @@ namespace :analytics do
 
     msg = ""
     msg += general_report day
+    msg += clicks_report day
     msg += google_report day
     puts msg
   end
@@ -15,12 +16,27 @@ namespace :analytics do
     begin
       day = ENV['day'] || 1.day.ago.strftime("%Y-%m-%d")
       msg = google_report day
-      Admin.analytics "Google Report for #{day}", msg
+      Admin.analytics "Google activity for #{day}", msg
     rescue Exception => ex
-      report = Report.exception 'Analytics', "Exception preparing analytics:google", ex
+      report = Report.exception 'analytics:google', "Exception preparing analytics:google", ex
       Admin.report report
       puts "Error sending analytics, emailed report."
     end
+  end
+
+  task clicks: :environment do
+    begin
+      day = ENV['day'] || 1.day.ago.strftime("%Y-%m-%d")
+      msg = google_report day
+      Admin.analytics "Clicks for #{day}", msg
+    rescue Exception => ex
+      report = Report.exception 'analytics:clicks', "Exception preparing analytics:clicks", ex
+      Admin.report report
+      puts "Error sending analytics, emailed report."
+    end
+  end
+
+  def clicks_report(day)
   end
 
   def google_report(day)
