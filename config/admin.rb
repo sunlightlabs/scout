@@ -25,6 +25,10 @@ module Admin
     deliver! "Unsubscribe", "Unsubscribe: #{user.contact}", JSON.pretty_generate(data)
   end
 
+  def self.analytics(subject, body)
+    deliver! "Analytics", subject, body, analytics_emails, "Scout Analytics"
+  end
+
   def self.new_feed(interest)
     title = interest.data['title']
     url = interest.data['url']
@@ -91,10 +95,13 @@ module Admin
     deliver! "Admin", subject, (body || subject)
   end
 
-  def self.deliver!(tag, subject, body)
+  def self.deliver!(tag, subject, body, recipients = nil, email_tag = nil)
+    recipients ||= admin_emails
+    email_tag ||= "ADMIN"
+
     if admin?
       # admin emails always use pony, even if postmark is on for the app in general
-      Email.with_pony!(tag, admin_emails, "[ADMIN] #{subject}", body)
+      Email.with_pony!(tag, recipients, "[#{email_tag}] #{subject}", body)
     else
       puts "\n[#{tag}] #{subject}\n\n#{body}" unless Sinatra::Application.test?
     end
@@ -106,6 +113,10 @@ module Admin
 
   def self.admin_emails
     Environment.config['admin']
+  end
+
+  def self.analytics_emails
+    Environment.config['analytics']
   end
 
   def self.exception_message(report)

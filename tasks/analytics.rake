@@ -14,7 +14,7 @@ namespace :analytics do
   task google: :environment do
     day = ENV['day'] || Time.now.strftime("%Y-%m-%d")
     msg = google_report day
-    Admin.message "Google Report for #{day}", msg
+    Admin.analytics "Google Report for #{day}", msg
   end
 
   def google_report(day)
@@ -39,9 +39,7 @@ namespace :analytics do
       url_types[type][:avg] = (criteria.only(&:my_ms).map(&:my_ms).sum.to_f / url_types[type][:count]).round
     end
 
-
-    msg = "= Google activity for #{day}\n\n"
-    msg += "Times are measured by Scout. External estimates add 60ms.\n\n"
+    msg = "Crawling activity (avg measured by Scout, external est adds 60ms)\n\n"
 
     max_type = types.map(&:size).max
     max_count = url_types.values.map {|t| t[:count].to_s.size}.max

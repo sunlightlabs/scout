@@ -60,6 +60,10 @@ assets:
 :admin:
   -
 
+# set of emails to receive analytics reports
+analytics:
+  -
+
 # Mongoid details
 mongoid:
   development:
