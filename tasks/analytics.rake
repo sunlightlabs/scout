@@ -183,6 +183,14 @@ namespace :analytics do
       url_types[type][:avg] = (criteria.only(&:my_ms).map(&:my_ms).sum.to_f / url_types[type][:count]).round
     end
 
+    total_count = hits.count
+    if total_count > 0
+      total_avg = (hits.only(&:my_ms).map(&:my_ms).sum.to_f / total_count).round
+    else
+      total_avg = 0
+    end
+
+
     msg = "Crawling activity (avg measured by Scout, external est adds 60ms)\n\n"
 
     max_type = types.map {|t| t.to_s.size}.max
@@ -196,6 +204,8 @@ namespace :analytics do
       fixed_type = fix type, max_type, :right
       msg << "  /#{fixed_type} - #{count} hits (avg #{avg}ms, est #{est}ms)\n"
     end
+
+    msg << "\n  total: #{total_count} (avg: #{total_avg}ms, est #{total_avg + 60}ms)\n"
 
     msg << "\n\nSlow hits (>#{slow}ms as measured in Scout)\n\n"
 
