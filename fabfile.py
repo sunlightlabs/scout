@@ -68,8 +68,6 @@ def stop():
   run("kill `cat %s/unicorn.pid`" % shared_path)
 
 def restart():
-  # stop()
-  # start()
   run("kill -USR2 `cat %s/unicorn.pid`" % shared_path)
 
 def clear_cache():

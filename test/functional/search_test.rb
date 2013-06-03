@@ -16,7 +16,7 @@ class SearchTest < Test::Unit::TestCase
       mock_search subscription, :search, page: 1, per_page: 20
       # don't cache
     end
-    
+
     get "/search/#{search_type}/#{query}"
     assert_response 200
 
@@ -29,35 +29,12 @@ class SearchTest < Test::Unit::TestCase
     assert_not_match /Congressional Research Service/i, last_response.body
   end
 
-  def test_search_when_cached_renders_directly
-    query = "environment"
-    search_type = "federal_bills"
-
-    interest = Interest.for_search nil, search_type, query, "simple"
-    interest.ensure_subscriptions
-
-    interest.subscriptions.each do |subscription|
-      # mock_search subscription, :search, page: 1, per_page: 20
-      # cache, no need to mock
-      cache_search subscription
-    end
-
-    get "/search/#{search_type}/#{query}"
-    assert_response 200
-
-    # title of bill in federal_bills search
-    assert_match /Congressional Research Service/i, last_response.body
-
-    # I'd like to test on "all", but this test would have to be updated 
-    # every time new info was added, which is silly
-  end
-
 
   def test_subscribe_to_searches_by_plain_keyword
     user = create :user
     query = "environment"
     query2 = "copyright"
-    
+
     assert_equal 0, user.subscriptions.count
     assert_equal 0, user.interests.count
 
@@ -103,7 +80,7 @@ class SearchTest < Test::Unit::TestCase
     interest3 = subscription3.interest
     assert_equal 1, interest3.subscriptions.count
     assert_equal 1, interest2.reload.subscriptions.count
-    
+
 
     # posting the same subscription should return 200, but be idempotent - nothing changed
     post "/interests/search", {:search_type => "state_bills", :query => query2}, login(user)
@@ -140,7 +117,7 @@ class SearchTest < Test::Unit::TestCase
     user = create :user
     query = "environment"
     query2 = "copyright"
-    
+
     assert_equal 0, user.subscriptions.count
     assert_equal 0, user.interests.count
 
@@ -168,7 +145,7 @@ class SearchTest < Test::Unit::TestCase
     interest2 = user.interests.where(:in => query2).first
     assert_not_nil interest2
     assert_equal search_types.size, interest2.subscriptions.count
-    
+
 
     post "/interests/search", {:search_type => "all", :query => query2}, login(user)
     assert_response 200
@@ -181,7 +158,7 @@ class SearchTest < Test::Unit::TestCase
     user = create :user
     query_encoded = "sunlight%20foundation"
     query_decoded = "sunlight foundation"
-    
+
     assert_equal 0, user.subscriptions.count
     assert_equal 0, user.interests.count
 
@@ -216,12 +193,12 @@ class SearchTest < Test::Unit::TestCase
     assert_response 200
 
     assert_nil Interest.find(i1.id)
-    
+
     delete "/interests/search", {:search_type => i2.search_type, :query => i2.in, i2.search_type => {'state' => 'DE'}}, login(user)
     assert_response 404
 
     assert_not_nil Interest.find(i2.id)
-    
+
     delete "/interests/search", {:search_type => i2.search_type, :query => i2.in, i2.search_type => {'state' => "CA"}}, login(user)
     assert_response 200
 
@@ -232,7 +209,7 @@ class SearchTest < Test::Unit::TestCase
     user = create :user
     query = "environment"
     interest = search_interest! user, "all", query, "simple"
-    
+
     delete "/interests/search", {:search_type => "all", :query => interest.in}, login(user)
     assert_response 200
 

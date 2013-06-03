@@ -8,26 +8,6 @@ get '/search/:subscription_type/:query/?:query_type?' do
   interest = search_interest_for query, params[:subscription_type]
   subscriptions = Interest.subscriptions_for interest
 
-
-  # see if we have cached content for any of these. if so, we'll render the cached items
-  # directly and pass it down now, so the client doesn't need to fetch them.
-  cached = {}
-  subscriptions.each do |subscription|
-    type = subscription.subscription_type
-    
-    if (results = subscription.search(page: 1, per_page: 20, cache_only: true)) and results.is_a?(Array)
-      cached[type] = erb :"search/items", layout: false, locals: {
-        items: results, 
-        subscription: subscription,
-        interest: interest,
-        query: query,
-        sole: (subscriptions.size  == 1),
-        page: 1,
-        per_page: (subscriptions.size == 1) ? 20 : 2 # per_page cutoff at the client level
-      }
-    end
-  end
-
   # render the search skeleton, possibly with a hash of cached content keyed by search type
   erb :"search/search", layout: !pjax?, locals: {
     interest: interest,
@@ -35,7 +15,7 @@ get '/search/:subscription_type/:query/?:query_type?' do
     subscriptions: subscriptions,
     subscription: (subscriptions.size == 1 ? subscriptions.first : nil),
 
-    cached: cached,
+    cached: {}, # disabling for now, though leaving view's code path
 
     related_interests: related_interests(interest),
     query: query,
@@ -50,7 +30,7 @@ get '/fetch/search/:subscription_type/:query/?:query_type?' do
   # make a fake interest, it may not be the one that's really generating this search request
   interest = search_interest_for query, params[:subscription_type]
   subscription = Interest.subscriptions_for(interest).first
-  
+
   page = params[:page].present? ? params[:page].to_i : 1
 
   # only used to decide how many to display
@@ -58,7 +38,7 @@ get '/fetch/search/:subscription_type/:query/?:query_type?' do
 
   # perform the remote search, pass along page number and default per_page of 20
   results = subscription.search page: page, per_page: 20
-    
+
   # if results is nil, it usually indicates an error in one of the remote services
   if results.nil?
     puts "[#{subscription_type}][#{query}][search] ERROR (unknown) while loading this"
@@ -66,9 +46,9 @@ get '/fetch/search/:subscription_type/:query/?:query_type?' do
     puts "[#{subscription_type}][#{query}][search] ERROR while loading this:\n\n#{JSON.pretty_generate results}"
     results = nil # frontend gets nil
   end
-  
+
   items = erb :"search/items", layout: false, locals: {
-    items: results, 
+    items: results,
     subscription: subscription,
     interest: interest,
     query: query,
@@ -94,10 +74,10 @@ post '/interests/search' do
 
   interest = search_interest_for query, params[:search_type]
   halt 200 and return unless interest.new_record?
-  
+
   if interest.save
     interest_pane = partial "search/related_interests", :engine => :erb, :locals => {
-      related_interests: related_interests(interest), 
+      related_interests: related_interests(interest),
       current_interest: interest,
       interest_in: interest.in
     }
@@ -123,11 +103,11 @@ delete '/interests/search' do
 
   interest = search_interest_for query, params[:search_type]
   halt 404 and return false if interest.new_record?
-  
+
   interest.destroy
 
   interest_pane = partial "search/related_interests", :engine => :erb, :locals => {
-    related_interests: related_interests(interest), 
+    related_interests: related_interests(interest),
     current_interest: nil,
     interest_in: interest.in
   }
@@ -148,7 +128,7 @@ helpers do
   def related_interests(interest)
     if logged_in?
       current_user.interests.where(
-        in_normal: interest.in_normal, 
+        in_normal: interest.in_normal,
         interest_type: "search",
         query_type: query_type
       )
@@ -164,7 +144,7 @@ helpers do
 
     # don't allow plain wildcards
     query = query.gsub /^[^\w]*\*[^\w]*$/, ''
-    
+
     if query_type == "simple"
       query = query.tr "\"", ""
     elsif query_type == "advanced"
