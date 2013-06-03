@@ -9,3 +9,6 @@ Disallow: /unfollow/
 Disallow: /url
 Disallow: /error
 Disallow: /*.rss$
+Disallow: /css/
+Disallow: /js/
+Disallow: /account/
