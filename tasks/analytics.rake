@@ -171,7 +171,7 @@ namespace :analytics do
     })
     types = hits.distinct(:url_type).sort_by &:to_s
 
-    slow = 200
+    slow = 400
     slow_hits = hits.where(my_ms: {"$gt" => slow}).asc(:my_ms)
 
     url_types = {}
