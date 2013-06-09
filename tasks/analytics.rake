@@ -219,14 +219,6 @@ namespace :analytics do
     msg
   end
 
-  def rel(url)
-    url.gsub /^#{Environment.config['hostname']}/, ''
-  end
-
-  def fixed(text)
-    "<font size=\"-1\"><pre>#{text}</pre></font>"
-  end
-
   def fix(obj, width, side = :left)
     obj = obj.to_s
     spaces = width - obj.size
