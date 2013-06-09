@@ -4,8 +4,9 @@ User-agent: *
 Disallow: /interest/
 Disallow: /import/
 Disallow: /fetch/
-Disallow: /follow/
-Disallow: /unfollow/
+Disallow: /fetch
+Disallow: /follow
+Disallow: /unfollow
 Disallow: /url
 Disallow: /error
 Disallow: /*.rss$
@@ -14,3 +15,4 @@ Disallow: /js/
 Disallow: /account/
 Disallow: /login
 Disallow: /logout
+Disallow: /articles/
