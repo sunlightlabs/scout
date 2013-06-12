@@ -4,12 +4,12 @@
 <% if bill['short_title'].present? %>
   <%= email_header bill['short_title'], url %>
 <% else %>
-  <%= email_header_small bill['official_title'], url %>
+  <%= email_header bill['official_title'], url %>
 <% end %>
 
 <%= email_subheader_div %>
   <span class="code">
-    <%= just_date item.date %>, 
+    <%= just_date item.date %>,
     <%= bill_code bill['bill_type'], bill['number'] %>
   </span>
   &mdash;
