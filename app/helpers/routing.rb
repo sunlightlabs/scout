@@ -20,9 +20,14 @@ module Helpers
       Subscription.adapter_for(item_types[interest.item_type]['adapter'])
     end
 
-    def interest_name(interest)
+    # Warning: using keyword arg syntax in this way is new in Ruby 2.0!
+    def interest_name(interest, long: false)
       if interest.item?
-        interest_adapter(interest).interest_name interest
+        if long
+          interest_adapter(interest).title_for interest.data
+        else
+          interest_adapter(interest).interest_name interest
+        end
       elsif interest.feed?
         interest.data['title']
       elsif interest.search?

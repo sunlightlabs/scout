@@ -119,7 +119,7 @@ module Helpers
     def truncate(string, length)
       string ||= ""
       if string.size > length
-        string[0...length] + "..."
+        string[0...length] + "…"
       else
         string
       end
@@ -272,8 +272,8 @@ module Helpers
 
     # email-related
 
-    def email_header(text, url)
-      "<h3 style=\"padding: 0; margin: 0; margin-top: 30px;\">
+    def email_header(text, url, space: 20)
+      "<h3 style=\"padding: 0; margin: 0; margin-top: #{space}px; \">
         <a href=\"#{url}\">
           #{text}
         </a>

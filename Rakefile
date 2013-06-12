@@ -455,7 +455,7 @@ namespace :test do
     end
 
     desc "Test confirmation of remote account, via SMS"
-    task :confirm => :environment do
+    task confirm: :environment do
       unless (phone = ENV['phone']).present?
         puts "Give a phone number with the 'phone' parameter."
       end
@@ -468,7 +468,7 @@ namespace :test do
 end
 
 desc "Clear all cached content."
-task :clear_cache => :environment do
+task clear_cache: :environment do
   Cache.delete_all
   puts "Cleared cache."
 end
