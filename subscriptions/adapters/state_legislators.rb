@@ -1,4 +1,4 @@
-# Copyright (c) 2012, Sunlight Foundation, under the terms of the Scout 
+# Copyright (c) 2012, Sunlight Foundation, under the terms of the Scout
 # project's licensing.
 
 module Subscriptions
@@ -21,6 +21,10 @@ module Subscriptions
 
       def self.interest_title(interest)
         interest.data['full_name']
+      end
+
+      def self.title_for(legislator)
+        "Bills sponsored by #{legislator['full_name']}"
       end
 
       def self.item_for(legislator)

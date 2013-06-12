@@ -169,6 +169,12 @@ module Helpers
         elsif interest.item? and interest.item_type == "state_legislator"
           openstates_url item.data
         end
+
+      # item subscription adapters must each define a direct_item_url method
+      elsif item.item? and interest and
+        (adapter = Subscription.adapter_for(item.subscription_type)) and
+        (url = adapter.direct_item_url item.data, interest)
+        url
       else
         "#{Environment.config['hostname']}#{item_path item}"
       end

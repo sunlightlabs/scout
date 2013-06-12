@@ -1,4 +1,4 @@
-module Subscriptions  
+module Subscriptions
   module Adapters
 
     class StateBills
@@ -6,10 +6,10 @@ module Subscriptions
       # if the adapter supports sync, this must be supplied
       MAX_PER_PAGE = 50
 
-      FIELDS = %w{ 
-        id bill_id subjects state chamber created_at updated_at 
-        title sources versions session %2Bshort_title 
-        action_dates 
+      FIELDS = %w{
+        id bill_id subjects state chamber created_at updated_at
+        title sources versions session %2Bshort_title
+        action_dates
         actions votes
       }
 
@@ -20,12 +20,12 @@ module Subscriptions
           }
         }
       end
-      
+
       def self.url_for_sync(options = {})
         api_key = options[:api_key] || Environment.config['subscriptions']['sunlight_api_key']
 
         endpoint = "http://openstates.org/api/v1"
-        
+
         url = "#{endpoint}/bills/?apikey=#{api_key}"
         url << "&fields=#{FIELDS.join ','}"
 
@@ -52,10 +52,10 @@ module Subscriptions
         api_key = options[:api_key] || Environment.config['subscriptions']['sunlight_api_key']
 
         endpoint = "http://openstates.org/api/v1"
-        
+
         url = "#{endpoint}/bills/?apikey=#{api_key}"
         url << "&fields=#{FIELDS.join ','}"
-        
+
 
         # state_bills don't support citations
         if subscription.query['citations'].any?
@@ -118,7 +118,7 @@ module Subscriptions
         if subscription.data['status'].present? and subscription.data['status'].any?
           url << subscription.data['status'].map {|s| "&status=#{s}"}.join("")
         end
-        
+
         # order
 
         url << "&sort=last"
@@ -131,7 +131,7 @@ module Subscriptions
           url << "&last_action_since=#{last_action_since}"
         end
 
-        
+
         # pagination
 
         if options[:page]
@@ -168,21 +168,21 @@ module Subscriptions
       # item_id in this case is not actually the remote bill_id, since that's not specific enough
       def self.url_for_detail(item_id, options = {})
         api_key = options[:api_key] || Environment.config['subscriptions']['sunlight_api_key']
-        
+
         endpoint = "http://openstates.org/api/v1"
-        
+
         # item_id is of the form ":state/:session/:chamber/:bill_id" (URI encoded already)
         url = "#{endpoint}/bills/#{URI.encode item_id.gsub('__', '/').gsub('_', ' ')}/?apikey=#{api_key}"
         url << "&fields=#{FIELDS.join ','}"
 
         url
       end
-      
-      # takes parsed response and returns an array where each item is 
+
+      # takes parsed response and returns an array where each item is
       # a hash containing the id, title, and post date of each item found
       def self.items_for(response, function, options = {})
         raise AdapterParseException.new("Got string response from Open States:\n\n#{response}") if response.is_a?(String)
-        
+
         # # OpenStates API does not have server-side pagination - so we do it here
         # per_page = options[:per_page] || 20
         # page = options[:page] || 1
@@ -199,9 +199,9 @@ module Subscriptions
         return nil unless bill
         item_for bill.to_hash
       end
-      
+
       # internal
-      
+
       def self.item_for(bill)
         # manually parse all of the dates - so lame, not sure why HTTParty is so bad at the format OpenStates uses
 
@@ -241,7 +241,7 @@ module Subscriptions
           data: bill
         )
       end
-      
+
       # utilities, useful across the app
 
       def self.state_map
@@ -300,7 +300,15 @@ module Subscriptions
           "WY" => "Wyoming"
         }
       end
+
+      def self.openstates_url(bill)
+        state = bill['state'].to_s.downcase
+        bill_id = bill['bill_id'].tr(' ', '')
+        session = bill['session']
+
+        "http://openstates.org/#{state}/bills/#{session}/#{bill_id}/"
+      end
+
     end
-    
   end
 end

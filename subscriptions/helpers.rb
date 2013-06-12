@@ -9,13 +9,13 @@ module Helpers
       type = bill_id.gsub /[^a-z]/, ''
       number = bill_id.match(/[a-z]+(\d+)-/)[1].to_i
       session = bill_id.match(/-(\d+)$/)[1].to_i
-      
+
       code = "#{type}#{number}"
       chamber = {'h' => 'house', 's' => 'senate'}[type.first.downcase]
-      
+
       [type, number, session, code, chamber]
     end
-    
+
     # standardized in accordance with http://www.gpo.gov/help/index.html#about_congressional_bills.htm
     def bill_type(short)
       {
@@ -39,7 +39,7 @@ module Helpers
         "(no sponsor)"
       end
     end
-    
+
     def regulation_title(regulation)
       regulation['title'].present? ? regulation['title'] : "(No published title yet)"
     end
@@ -72,7 +72,7 @@ module Helpers
         if field == "keywords"
           text = "Official keyword: \"#{text}\""
         end
-        
+
         excerpt text, keywords, options
       end
     end
@@ -88,7 +88,7 @@ module Helpers
         field = preferred_field item, regulation_priorities
         return nil unless field
         text = item.data['search']['highlight'][field].first
-        
+
         excerpt text, keywords, options
       end
     end
@@ -104,7 +104,7 @@ module Helpers
         field = preferred_field item, document_priorities
         return nil unless field
         text = item.data['search']['highlight'][field].first
-        
+
         if field == "categories"
           text = "Official category: \"#{text}\""
         end
@@ -152,7 +152,7 @@ module Helpers
         [interest.in]
       end
     end
-    
+
     # client-side truncation and highlighting
     def excerpt(text, keywords, options = {})
       options[:highlight] = true unless options.has_key?(:highlight)
@@ -172,12 +172,12 @@ module Helpers
           break
         end
       end
-      
+
       # maximum size of the excerpt
       max = options[:max] || 500
 
       # minimum room to leave after the term
-      buffer = 100 
+      buffer = 100
 
       word = matched_keyword ? matched_keyword.size : 0
       length = text.size
@@ -219,7 +219,7 @@ module Helpers
 
     # for excerpting advanced searches with multiple terms,
     # try to produce excerpts that show each term used at least once
-    # 
+    #
     # texts: array of excerpts
     # terms: array of term hashes as returned from the Search model
     # options: options hash to be passed directly to underlying excerpt function
@@ -252,7 +252,7 @@ module Helpers
     #   end
     # end
 
-    
+
     def bill_priorities
       {
         "summary" => 1,
@@ -275,7 +275,7 @@ module Helpers
         "categories" => 3
       }
     end
-    
+
     # adapted from http://www.gpo.gov/help/index.html#about_congressional_bills.htm
     def bill_version(code)
       {
@@ -351,7 +351,7 @@ module Helpers
         version['urls']['xml'] || version['urls']['pdf']
       end
     end
-    
+
     def state_name(code)
       state_map[code.to_s.upcase]
     end
@@ -359,11 +359,11 @@ module Helpers
     def state_map
       @state_map ||= ::Subscriptions::Adapters::StateBills.state_map
     end
-    
+
     def state_version_info?(bill)
       bill['versions'] and bill['versions'].any?
     end
-    
+
     def state_source_info?(bill)
       bill['sources'] and bill['sources'].any?
     end
@@ -408,7 +408,7 @@ module Helpers
     end
 
     def state_bill_title_reasonable?(bill)
-      return false unless bill['+short_title'].present? or bill['title'].present? 
+      return false unless bill['+short_title'].present? or bill['title'].present?
       title = state_bill_title_text bill
       title.size <= 100
     end
@@ -423,7 +423,7 @@ module Helpers
 
     def state_bill_title(bill)
       # shouldn't happen
-      return nil unless bill['+short_title'].present? or bill['title'].present? 
+      return nil unless bill['+short_title'].present? or bill['title'].present?
 
       title = state_bill_title_text bill
       title.gsub! ';', ";\n\n"
@@ -458,7 +458,7 @@ module Helpers
     def legislator_image(legislator)
       "http://assets.sunlightfoundation.com/moc/40x50/#{legislator['bioguide_id']}.jpg"
     end
-    
+
     def speaker_url(speech)
       "http://capitolwords.org/legislator/#{speech['bioguide_id']}"
     end
@@ -475,17 +475,13 @@ module Helpers
     end
 
     def openstates_url(bill)
-      state = bill['state'].to_s.downcase
-      bill_id = bill['bill_id'].tr(' ', '')
-      session = bill['session']
-      
-      "http://openstates.org/#{state}/bills/#{session}/#{bill_id}/"
+      ::Subscriptions::Adapters::StateBills.openstates_url bill
     end
 
     def openstates_legislator_url(legislator)
       state = legislator['state'].downcase
       id = legislator['id']
-      
+
       "http://openstates.org/#{state}/legislators/#{id}/"
     end
 
@@ -512,12 +508,12 @@ module Helpers
     def vote_breakdown(vote)
       numbers = []
       total = vote['breakdown']['total']
-            
+
       numbers << total['Yea']
       numbers << total['Nay']
       # numbers << total['Present'] if total['Present']
       # numbers << total['Not Voting'] if total['Not Voting']
-      
+
       numbers.join " - "
     end
 

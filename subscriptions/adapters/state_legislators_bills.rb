@@ -7,15 +7,15 @@ module Subscriptions
     class StateLegislatorsBills
       def self.url_for(subscription, function, options = {})
         api_key = options[:api_key] || Environment.config['subscriptions']['sunlight_api_key']
-        
+
         endpoint = "http://openstates.org/api/v1"
 
-        fields = %w{ 
-          id bill_id subjects state chamber created_at updated_at 
-          title sources versions session %2Bshort_title 
+        fields = %w{
+          id bill_id subjects state chamber created_at updated_at
+          title sources versions session %2Bshort_title
           action_dates
         }
-        
+
         legislator_id = subscription.interest_in
 
         url = "#{endpoint}/bills/?apikey=#{api_key}"
@@ -29,10 +29,10 @@ module Subscriptions
         url << "&sort=first"
 
         # for speed's sake, limit check to bills updated in last 2 months
-        if function == :check
-          last_action_since = (2.months.ago).strftime("%Y-%m-%dT%H:%M:%S")
-          url << "&last_action_since=#{last_action_since}"
-        end
+        # if function == :check
+        #   last_action_since = (2.months.ago).strftime("%Y-%m-%dT%H:%M:%S")
+        #   url << "&last_action_since=#{last_action_since}"
+        # end
 
         # pagination
 
@@ -53,6 +53,10 @@ module Subscriptions
 
       def self.short_name(number, interest)
         "#{number > 1 ? "bills" : "bill"}"
+      end
+
+      def self.direct_item_url(bill, interest)
+        ::Subscriptions::Adapters::StateBills.openstates_url bill
       end
 
       def self.items_for(response, function, options = {})
