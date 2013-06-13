@@ -13,7 +13,7 @@ module SMS
 
     true
   rescue Exception => ex
-    Admin.report Report.exception("SMS Delivery", "Error delivering SMS through Twilio", ex, :tag => tag, :phone => phone, :content => content)
+    Admin.report Report.exception("SMS Delivery", "Error delivering SMS through Twilio", ex, tag: tag, phone: phone, body: body)
     false
   end
 
@@ -25,7 +25,7 @@ module SMS
 
   def self.sent_message(method, tag, phone, body)
     return if Sinatra::Application.test?
-    
+
     puts
     puts "--------------------------------"
     puts "[#{tag}][#{method}] SMS to #{phone}:"
