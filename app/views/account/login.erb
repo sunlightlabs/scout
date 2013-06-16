@@ -1,6 +1,8 @@
+<%= flash_for [:login, :user, :forgot] %>
+
 <div class="settings login contentArea full">
 
-  <%= flash_for [:login] %>
+
 
   <div class="module notifications">
 
@@ -13,17 +15,15 @@
 
         <label class="placeholder">Password</label>
         <input class="password" type="password" placeholder="password" name="password" />
-        
+
         <div class="forgot">
           <a href="/account/password/forgot">Forgot your password?</a>
         </div>
-      
+
         <button type="submit" class="text login"><span>Login</span></button>
     </form>
   </div>
 
-	<%= flash_for [:user, :forgot] %>
-	
 	<div class="module notifications">
 
     <h2>Sign Up</h2>
@@ -46,18 +46,18 @@
 
       <label class="placeholder">Confirm password</label>
       <%= password_field_tag "user[password_confirmation]", placeholder: "password again" %>
-      
-    
+
+
       <label for="user_announcements">
         <%= check_box_tag "user[announcements]", checked: @new_user.announcements?, uncheck_value: 'false', id: "user_announcements" %>
         <span>Get updates about new Scout features</span>
       </label>
-    
+
       <label for="sunlight_announcements">
         <%= check_box_tag "user[sunlight_announcements]", checked: @new_user.sunlight_announcements?, uncheck_value: 'false', id: "sunlight_announcements" %>
         <span>Get updates about the Sunlight Foundation</span>
       </label>
-    
+
       <button type="submit" class="text login"><span>Sign Up</span></button>
     </form>
   </div>
