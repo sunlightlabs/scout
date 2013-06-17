@@ -14,7 +14,7 @@ namespace :tests do
     t.test_files = FileList['test/**/*_test.rb']
   end
 
-  ["functional", "delivery", "unit"].each do |type|
+  ["functional", "helpers", "delivery", "unit"].each do |type|
     Rake::TestTask.new(type.to_sym) do |t|
       t.libs << "test"
       t.test_files = FileList["test/#{type}/*_test.rb"]

@@ -5,53 +5,12 @@ class AccountsTest < Test::Unit::TestCase
   include TestHelper::Methods
   include FactoryGirl::Syntax::Methods
 
-  def test_unsubscribe_actual
-    user = create :user, sunlight_announcements: true
 
-    assert_equal 'email_immediate', user.notifications
-    assert_equal true, user.announcements
-    assert_equal true, user.sunlight_announcements
 
-    post '/account/unsubscribe/actually', {}, login(user)
-    assert_redirect "/account/unsubscribe"
-
-    user.reload
-
-    assert_equal 'none', user.notifications
-    assert_equal false, user.announcements
-    assert_equal false, user.sunlight_announcements
-  end
-
-  def test_unsubscribe_actual_not_logged_in
-    post '/account/unsubscribe/actually', {}
-    assert_redirect "/"
-  end
-
-  # doesn't actually do the unsubscribe
-  def test_unsubscribe_landing
-    user = create :user, sunlight_announcements: true
-
-    assert_equal 'email_immediate', user.notifications
-    assert_equal true, user.announcements
-    assert_equal true, user.sunlight_announcements
-
-    get '/account/unsubscribe', {}, login(user)
-    assert_response 200
-
-    user.reload
-
-    assert_equal 'email_immediate', user.notifications
-    assert_equal true, user.announcements
-    assert_equal true, user.sunlight_announcements
-  end
-
-  def test_unsubscribe_landing_not_logged_in
-    get '/account/unsubscribe', {}
-    assert_redirect "/login?redirect=/account/unsubscribe"
-  end
+  ### Update account settings
 
   def test_update_account_settings
-    user = create :user
+    user = create :user, announcements: true
 
     assert_equal 'email_immediate', user.notifications
     assert_equal true, user.announcements
@@ -66,7 +25,7 @@ class AccountsTest < Test::Unit::TestCase
   end
 
   def test_update_account_settings_invalid
-    user = create :user
+    user = create :user, announcements: true
 
     assert_equal 'email_immediate', user.notifications
     assert_equal true, user.announcements
@@ -94,61 +53,6 @@ class AccountsTest < Test::Unit::TestCase
     assert_equal false, user.announcements
 
     assert_equal password_hash, user.password_hash
-  end
-
-  def test_change_password
-    user = create :user, :password => "test", :password_confirmation => "test", :should_change_password => true
-
-    old_password_hash = user.password_hash
-    assert User.authenticate(user, "test")
-    assert !User.authenticate(user, "not-test")
-    assert user.should_change_password
-
-    put '/account/settings', {:old_password => "test", :password => "not-test", :password_confirmation => "not-test"}, login(user)
-    assert_redirect '/account/settings'
-
-    user.reload
-    assert_not_equal old_password_hash, user.password_hash
-    assert !User.authenticate(user, "test")
-    assert User.authenticate(user, "not-test")
-    assert !user.should_change_password
-  end
-
-  def test_change_password_not_logged_in
-    put '/account/settings', {:old_password => "test", :password => "not-test", :password_confirmation => "not-test"}
-    assert_redirect '/'
-  end
-
-  def test_change_password_wrong_original_password
-    password = "test"
-    new_password = password.succ
-    user = create :user, :password => password
-
-    assert User.authenticate(user, password)
-    assert !User.authenticate(user, new_password)
-
-    put '/account/settings', {:old_password => new_password.succ, :password => new_password, :password_confirmation => new_password}, login(user)
-    assert_response 200
-
-    user.reload
-    assert User.authenticate(user, password)
-    assert !User.authenticate(user, new_password)
-  end
-
-  def test_change_password_mismatched_new_passwords
-    password = "test"
-    new_password = password.succ
-    user = create :user, :password => password
-
-    assert User.authenticate(user, password)
-    assert !User.authenticate(user, new_password)
-
-    put '/account/settings', {:old_password => password, :password => new_password, :password_confirmation => new_password.succ}, login(user)
-    assert_response 200
-
-    user.reload
-    assert User.authenticate(user, password)
-    assert !User.authenticate(user, new_password)
   end
 
   def test_update_name_details
@@ -283,7 +187,70 @@ class AccountsTest < Test::Unit::TestCase
   end
 
 
-  # phone settings
+
+
+  #### Change password
+
+  def test_change_password
+    user = create :user, :password => "test", :password_confirmation => "test", :should_change_password => true
+
+    old_password_hash = user.password_hash
+    assert User.authenticate(user, "test")
+    assert !User.authenticate(user, "not-test")
+    assert user.should_change_password
+
+    put '/account/settings', {:old_password => "test", :password => "not-test", :password_confirmation => "not-test"}, login(user)
+    assert_redirect '/account/settings'
+
+    user.reload
+    assert_not_equal old_password_hash, user.password_hash
+    assert !User.authenticate(user, "test")
+    assert User.authenticate(user, "not-test")
+    assert !user.should_change_password
+  end
+
+  def test_change_password_not_logged_in
+    put '/account/settings', {:old_password => "test", :password => "not-test", :password_confirmation => "not-test"}
+    assert_redirect '/'
+  end
+
+  def test_change_password_wrong_original_password
+    password = "test"
+    new_password = password.succ
+    user = create :user, :password => password
+
+    assert User.authenticate(user, password)
+    assert !User.authenticate(user, new_password)
+
+    put '/account/settings', {:old_password => new_password.succ, :password => new_password, :password_confirmation => new_password}, login(user)
+    assert_response 200
+
+    user.reload
+    assert User.authenticate(user, password)
+    assert !User.authenticate(user, new_password)
+  end
+
+  def test_change_password_mismatched_new_passwords
+    password = "test"
+    new_password = password.succ
+    user = create :user, :password => password
+
+    assert User.authenticate(user, password)
+    assert !User.authenticate(user, new_password)
+
+    put '/account/settings', {:old_password => password, :password => new_password, :password_confirmation => new_password.succ}, login(user)
+    assert_response 200
+
+    user.reload
+    assert User.authenticate(user, password)
+    assert !User.authenticate(user, new_password)
+  end
+
+
+
+
+
+  #### Phone settings
 
   def test_add_phone_number_when_user_has_none
     user = create :user
@@ -406,6 +373,58 @@ class AccountsTest < Test::Unit::TestCase
 
     assert_equal 302, last_response.status
     assert_equal '/account/settings', redirect_path
+  end
+
+
+
+
+
+
+  #### Unsubscribe ####
+
+  def test_unsubscribe_actual
+    user = create :user, sunlight_announcements: true, announcements: true
+
+    assert_equal 'email_immediate', user.notifications
+    assert_equal true, user.announcements
+    assert_equal true, user.sunlight_announcements
+
+    post '/account/unsubscribe/actually', {}, login(user)
+    assert_redirect "/account/unsubscribe"
+
+    user.reload
+
+    assert_equal 'none', user.notifications
+    assert_equal false, user.announcements
+    assert_equal false, user.sunlight_announcements
+  end
+
+  def test_unsubscribe_actual_not_logged_in
+    post '/account/unsubscribe/actually', {}
+    assert_redirect "/"
+  end
+
+  # doesn't actually do the unsubscribe
+  def test_unsubscribe_landing
+    user = create :user, sunlight_announcements: true, announcements: true
+
+    assert_equal 'email_immediate', user.notifications
+    assert_equal true, user.announcements
+    assert_equal true, user.sunlight_announcements
+
+    get '/account/unsubscribe', {}, login(user)
+    assert_response 200
+
+    user.reload
+
+    assert_equal 'email_immediate', user.notifications
+    assert_equal true, user.announcements
+    assert_equal true, user.sunlight_announcements
+  end
+
+  def test_unsubscribe_landing_not_logged_in
+    get '/account/unsubscribe', {}
+    assert_redirect "/login?redirect=/account/unsubscribe"
   end
 
 end

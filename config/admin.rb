@@ -14,7 +14,18 @@ module Admin
       message = "[#{user.service}] #{message}"
     end
 
-    deliver! "New User", message, JSON.pretty_generate(user_attributes)
+    if user.signup_process == "quick"
+      subject = "New User [quick]"
+    else
+      subject = "New User"
+    end
+
+    deliver! subject, message, JSON.pretty_generate(user_attributes)
+  end
+
+  def self.confirmed_user(user)
+    message = "User confirmed: #{user.email || user.phone}"
+    deliver! "Confirmed User", message
   end
 
   def self.bounce_report(description, data)

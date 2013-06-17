@@ -35,7 +35,7 @@ class LoginTest < Test::Unit::TestCase
 
     assert_match /Invalid/, last_response.body
   end
-  
+
   def test_login_invalid_password
     email = "test@example.com"
     password = "test"
@@ -121,17 +121,120 @@ class LoginTest < Test::Unit::TestCase
   def test_logout_redirects_back
     get '/logout'
     assert_redirect '/'
-    
+
     redirect = "/search/federal_bills/anything"
-    get '/logout', :redirect => redirect
+    get '/logout', redirect: redirect
     assert_redirect redirect
   end
 
+
+
+  ### Create user (quick)
+
+  def test_create_user_quick
+    email = "fake@example.com"
+    password = "fake_password"
+    assert_nil User.where(email: email).first
+
+    User.stub(:friendly_token).and_return password
+
+    Email.should_receive(:deliver!).with("User Confirm Email", email, anything, anything)
+
+    post '/account/new/quick', email: email
+    assert_response 201
+
+    user = User.where(email: email).first
+    assert_not_nil user
+    assert User.authenticate(user, password)
+    assert !user.announcements
+    assert !user.sunlight_announcements
+    assert !user.confirmed?
+    assert user.should_change_password?
+    assert_equal "quick", user.signup_process
+  end
+
+  def test_create_user_quick_email_invalid
+    email = "bademail.com"
+    assert_nil User.where(email: email).first
+
+    post '/account/new/quick', email: email
+    assert_response 400
+    assert_match /invalid/i, last_response.body
+
+    user = User.where(email: email).first
+    assert_nil user
+  end
+
+  def test_create_user_quick_email_taken_and_confirmed
+    email = "taken@example.com"
+    user = create :user, email: email
+    assert user.confirmed?
+
+    post '/account/new/quick', email: email
+    assert_response 400
+    assert_match /taken/i, last_response.body
+
+    user.reload
+    assert user.confirmed?
+  end
+
+  def test_create_user_quick_email_taken_and_unconfirmed
+    email = "taken@example.com"
+    user = create :user, email: email, confirmed: false
+    assert !user.confirmed?
+
+    confirm_token = user.confirm_token
+
+    post '/account/new/quick', email: email
+    assert_response 400
+    assert_match /taken/i, last_response.body
+
+    user.reload
+    assert !user.confirmed?
+    assert_equal confirm_token, user.confirm_token
+  end
+
+
+  def test_confirm_user
+    user = create :user, confirmed: false, should_change_password: true
+
+    assert !user.confirmed?
+    confirm_token = user.confirm_token
+    assert_not_nil confirm_token
+
+    get "/account/confirm", confirm_token: confirm_token
+    assert_redirect "/account/settings"
+
+    user.reload
+    assert user.confirmed?
+    assert_not_equal confirm_token, user.confirm_token
+    assert user.should_change_password?
+  end
+
+  def test_confirm_user_invalid_token
+    user = create :user, confirmed: false, should_change_password: true
+
+    assert !user.confirmed?
+    confirm_token = user.confirm_token
+    assert_not_nil confirm_token
+
+    get "/account/confirm", confirm_token: user.confirm_token.succ
+    assert_response 404
+
+    user.reload
+    assert !user.confirmed?
+    assert_equal confirm_token, user.confirm_token
+    assert user.should_change_password?
+  end
+
+
+  ### Create user (traditional)
+
   def test_create_user
     email = "fake@example.com"
-    assert_nil User.where(:email => email).first
+    assert_nil User.where(email: email).first
 
-    post '/account/new', {:user => {'email' => email, 'password' => "test", 'password_confirmation' => "test", 'announcements' => false, 'sunlight_announcements' => true}}
+    post '/account/new', {user: {'email' => email, 'password' => "test", 'password_confirmation' => "test", 'announcements' => false, 'sunlight_announcements' => true}}
     assert_redirect '/account/settings'
 
     user = User.where(:email => email).first
@@ -140,6 +243,7 @@ class LoginTest < Test::Unit::TestCase
     assert !user.announcements
     assert user.sunlight_announcements
     assert user.confirmed?
+    assert_nil user.signup_process
   end
 
   def test_create_user_saves_campaign_source
@@ -166,30 +270,30 @@ class LoginTest < Test::Unit::TestCase
 
     redirect = "/search/federal_bills/anything"
 
-    post '/account/new', {:user => {'email' => email, 'password' => "test", 'password_confirmation' => "test"}, :redirect => redirect}
+    post '/account/new', {user: {'email' => email, 'password' => "test", 'password_confirmation' => "test"}, redirect: redirect}
     assert_redirect redirect
   end
 
   def test_create_user_invalid
     email = "invalid email"
-    assert_nil User.where(:email => email).first
+    assert_nil User.where(email: email).first
 
-    post '/account/new', {:user => {:email => email, :password => "test", :password_confirmation => "test"}}
+    post '/account/new', {user: {email: email, password: "test", password_confirmation: "test"}}
     assert_response 200 # render with errors
 
-    assert_nil User.where(:email => email).first
+    assert_nil User.where(email: email).first
   end
 
   # normal create user path requires an email
   def test_create_user_without_email_fails
     count = User.count
 
-    post '/account/new', {:user => {'email' => "", 'password' => "test", 'password_confirmation' => "test"}}
+    post '/account/new', {user: {'email' => "", 'password' => "test", 'password_confirmation' => "test"}}
     assert_response 200
 
     assert_equal count, User.count
 
-    post '/account/new', {:user => {'password' => "test", 'password_confirmation' => "test"}}
+    post '/account/new', {user: {'password' => "test", 'password_confirmation' => "test"}}
     assert_response 200
 
     assert_equal count, User.count
@@ -218,7 +322,9 @@ class LoginTest < Test::Unit::TestCase
     assert_equal count, User.count
   end
 
-  # password management
+
+
+  ### Password management
 
   def test_start_reset_password_process
     user = create :user
@@ -226,7 +332,7 @@ class LoginTest < Test::Unit::TestCase
 
     Email.should_receive(:deliver!).with("Password Reset Request", user.email, anything, anything)
 
-    post '/account/password/forgot', :email => user.email
+    post '/account/password/forgot', email: user.email
     assert_redirect '/login'
 
     user.reload
@@ -235,7 +341,7 @@ class LoginTest < Test::Unit::TestCase
 
   def test_start_reset_password_process_with_bad_email
     Email.should_not_receive(:deliver!)
-    post '/account/password/forgot', :email => "notvalid@example.com"
+    post '/account/password/forgot', email: "notvalid@example.com"
     assert_redirect '/login'
   end
 
@@ -247,7 +353,7 @@ class LoginTest < Test::Unit::TestCase
 
     Email.should_receive(:deliver!).with("Password Reset", user.email, anything, anything)
 
-    get '/account/password/reset', :reset_token => reset_token
+    get '/account/password/reset', reset_token: reset_token
     assert_redirect '/login'
 
     user.reload
@@ -267,7 +373,7 @@ class LoginTest < Test::Unit::TestCase
   def test_visit_reset_password_link_with_invalid_token
     Email.should_not_receive(:deliver!)
 
-    get '/account/password/reset', :reset_token => "whatever"
+    get '/account/password/reset', reset_token: "whatever"
     assert_response 404
   end
 

@@ -30,7 +30,7 @@ end
 
 put '/account/settings' do
   requires_login
-  
+
   # first, any attributes given under the user hash
   current_user.attributes = params[:user]
 
@@ -52,7 +52,7 @@ put '/account/settings' do
     current_user.password_confirmation = params[:password_confirmation]
     current_user.should_change_password = false
   end
-  
+
   if current_user.save
     flash[:user] = "Your settings have been updated."
     flash[:password] = "Your password has been changed." if params[:password].present?
@@ -67,9 +67,9 @@ put '/account/phone' do
   requires_login
 
   current_user.phone = params[:user]['phone']
-   
+
   if Phoner::Phone.valid?(current_user.phone) and current_user.valid?
-    
+
     # manually set to false, in case the phone number was set and is changing
     current_user.phone_confirmed = false
 

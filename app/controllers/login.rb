@@ -4,7 +4,9 @@ get '/logout' do
 end
 
 get '/login' do
-  @new_user = User.new
+  # default new users on the normal login form to the Scout box being checked
+  @new_user = User.new announcements: true
+
   erb :"account/login"
 end
 
@@ -53,6 +55,9 @@ post '/account/new' do
     @new_user.source = session['campaign']
   end
 
+  # auto-confirm users who go through the process this way
+  @new_user.confirmed = true
+
   if @new_user.save
     Admin.new_user @new_user
     log_in @new_user
@@ -63,6 +68,58 @@ post '/account/new' do
     erb :"account/login"
   end
 end
+
+post '/account/new/quick' do
+  unless params[:email] and (params[:email] =~ User.email_format)
+    halt 400, "Invalid email."
+  end
+
+  if User.where(email: params[:email]).first
+    halt 400, "This email has been taken."
+  end
+
+  @new_user = User.new email: params[:email]
+  @new_user.reset_password
+  @new_user.confirmed = false
+  @new_user.signup_process = "quick"
+
+  # track campaign origin if possible
+  if session['campaign']
+    @new_user.source = session['campaign']
+  end
+
+  if @new_user.save
+    Admin.new_user @new_user
+
+    # do not log in new user, they are unconfirmed
+
+    subject = "Confirm your email to start getting alerts"
+    body = erb :"account/mail/confirm_account", layout: false, locals: {user: @new_user}
+    Email.deliver!("User Confirm Email", @new_user.email, subject, body)
+
+    halt 201
+  else
+    halt 400, "Unknown error."
+  end
+end
+
+get '/account/confirm' do
+  unless params[:confirm_token] and user = User.where(confirm_token: params[:confirm_token]).first
+    halt 404 and return
+  end
+
+  # confirm user, this is good enough
+  user.confirmed = true
+
+  # reset token for good measure
+  user.new_confirm_token
+
+  user.save!
+
+  flash[:account] = "Your account has been confirmed. You will now receive email alerts."
+  redirect "/account/settings"
+end
+
 
 get '/account/password/forgot' do
   erb :"account/forgot"

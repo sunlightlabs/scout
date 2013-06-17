@@ -7,11 +7,7 @@ class User
   field :email
   field :phone
 
-  # accounts that sign up through the regular login process are auto-confirmed
-  # accounts signed up through the remote API have a confirmation step
-  field :confirmed, type: Boolean, default: true
-
-  # by default, accounts come from the web - we allow a remote API for limited use cases
+  # by default, accounts come from the web - we allow a remote API for specified use cases
   field :source, default: "web"
 
   # whether the account belongs to another service whose alerts Scout is powering
@@ -23,9 +19,8 @@ class User
   validates_inclusion_of :notifications, :in => ["none", "email_daily", "email_immediate"] # sms not valid at the user level
   validates_presence_of :notifications
 
-  # boolean as to whether users wish to receive announcements about Scout features
-  # defaults to true (opt-out)
-  field :announcements, type: Boolean, default: true
+  # announcement list booleans
+  field :announcements, type: Boolean, default: false
   field :sunlight_announcements, type: Boolean, default: false
 
   # used for sharing things
@@ -78,20 +73,27 @@ class User
 
   # user authentication stuff
 
-  attr_accessor         :password, :password_confirmation
+  field :signup_process, default: nil # can be "quick"
 
   attr_accessible :email, :username, :display_name, :phone,
     :notifications, :announcements, :sunlight_announcements
 
-  field :password_hash, :type => String # type needs to be specified, otherwise it'd be a BCrypt::Password
+  attr_accessor         :password, :password_confirmation
 
-  validates_presence_of :email, :message => "We need an email address.", :unless => :has_phone?
-  validates_uniqueness_of :email, :message => "That email address is already signed up.", :allow_blank => true
-  validates_format_of :email, :with => /^[-a-z0-9_+\.]+\@([-a-z0-9]+\.)+[a-z0-9]{2,4}$/i, :message => "Not a valid email address.", :allow_blank => true
-
+  field :password_hash, type: String # type needs to be specified, otherwise it'd be a BCrypt::Password
   validates_confirmation_of :password, :message => "Your passwords did not match."
 
   before_save :encrypt_password
+
+
+  def self.email_format
+    /^[-a-z0-9_+\.]+\@([-a-z0-9]+\.)+[a-z0-9]{2,4}$/i
+  end
+
+  validates_presence_of :email, message: "We need an email address.", :unless => :has_phone?
+  validates_uniqueness_of :email, message: "That email address is already signed up.", :allow_blank => true
+  validates_format_of :email, with: email_format, message: "Not a valid email address.", allow_blank: true
+
 
   # used to allow email-less user accounts
   def has_phone?
@@ -108,14 +110,32 @@ class User
     end
   end
 
+
+  # account confirmation
+
+  # accounts that sign up through the regular login process are auto-confirmed
+  # accounts that sign up through the one-click alert button are *not* confirmed
+  # accounts signed up through the remote API have a confirmation step
+  field :confirmed, type: Boolean
+
+  # it's okay if they always have a confirm token even when confirmed
+  field :confirm_token
+  validates_uniqueness_of :confirm_token, allow_nil: true
+  before_validation :new_confirm_token, on: :create
+
+  def new_confirm_token
+    self.confirm_token = User.friendly_token
+  end
+
+
   # password resetting fields and logic
 
   field :reset_token
   validates_uniqueness_of :reset_token
-  before_validation :new_reset_token, :on => :create
+  before_validation :new_reset_token, on: :create
 
   # set after a password is reset
-  field :should_change_password, :type => Boolean, :default => false
+  field :should_change_password, type: Boolean, default: false
 
   # taken from authlogic
   # https://github.com/binarylogic/authlogic/blob/master/lib/authlogic/random.rb

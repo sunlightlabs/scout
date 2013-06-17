@@ -6,6 +6,7 @@ FactoryGirl.define do
     sequence(:email) {|n| "fake#{n}@example.com"}
     password "test"
     password_confirmation "test"
+    confirmed true # in tests, default it to true for convenience
 
     factory :phone_user do
       email nil
@@ -16,8 +17,6 @@ FactoryGirl.define do
       confirmed false
       notifications "none"
       should_change_password true
-      announcements false
-      sunlight_announcements false
     end
 
     factory :service_user do
@@ -25,8 +24,6 @@ FactoryGirl.define do
       confirmed true
       notifications "email_daily"
       should_change_password false
-      announcements false
-      sunlight_announcements false
     end
   end
 
@@ -38,5 +35,5 @@ FactoryGirl.define do
       self.public true
     end
   end
-  
+
 end
