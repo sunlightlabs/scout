@@ -109,11 +109,15 @@ module Helpers
     end
 
     def flash_for(types)
-      partial "partials/flash", :engine => "erb", :locals => {:types => types}
+      partial "partials/flash", engine: :erb, locals: {types: types}
     end
 
-    def follow_button(item)
-      partial "partials/follow_item", :engine => "erb"
+    def follow_item(interest)
+      partial "partials/follow", engine: :erb, locals: {type: :item, interest: interest}
+    end
+
+    def follow_search(interest)
+      partial "partials/follow", engine: :erb, locals: {type: :search, interest: interest}
     end
 
     def truncate(string, length)

@@ -6,13 +6,13 @@
     Subscribe to <strong>official activity</strong> and <strong>votes</strong> on this bill, notices of <strong>upcoming hearings</strong>, and when it's <strong>coming to the floor</strong>.
   </div>
 
-  <%= follow_button item %>
-  
+  <%= follow_item interest %>
+
   <div class="clear"></div>
 </div>
 
 <div class="summary">
-  
+
   <div class="entryHeader">
     <% if bill['short_title'].present? %>
       <h2><%= bill['short_title'] %></h2>
@@ -65,11 +65,11 @@
       <li class="congressGov">
         <a data-resource="congress" href="<%= bill['urls']['congress'] %>" title="Congress.gov">Congress.gov</a>
       </li>
-      
+
       <li class="govTrack">
         <a data-resource="govtrack" href="<%= bill['urls']['govtrack'] %>" title="GovTrack">GovTrack</a>
       </li>
-      
+
       <li class="openCongress">
         <a data-resource="opencongress" href="<%= bill['urls']['opencongress'] %>" title="OpenCongress">OpenCongress</a>
       </li>
@@ -108,7 +108,7 @@
           elem.className = "citation usc";
           elem.textContent = $(this).text();
           elem.target="_blank";
-          
+
           var citation_id = $(this).data("citation-id");
           var pieces = citation_id.split("/");
           var url = "/search/all/" + pieces[1] + " usc " + pieces[2];
