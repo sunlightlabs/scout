@@ -1093,7 +1093,11 @@ time.item, .time {
 }
 
 
-/*-- Entry Styling --*/
+
+/*-- general follow button styling */
+
+button.follow, button.following {display: none;}
+
 .followChanges{
     background: #f5f6f3 url('/assets/images/tinyborder.png') bottom left repeat-x;
     padding: 16px 0 16px 10px;
@@ -1102,23 +1106,44 @@ time.item, .time {
     box-shadow: inset -14px 0px 14px -7px #e2e3e0;
     padding: 16px 33px 16px 10px;
 
-}
-
-
-.followChanges button{
-    float: right;
-}
-
-button.follow, button.following {
-    display: none;
+    position: relative;
 }
 
 .followChanges .trackSubscribe{
-    float: left;
     margin-top: 8px;
     font-style: italic;
     width: 450px;
     line-height: 20px;
+}
+
+
+/*-- Entry Styling --*/
+
+.entry .followChanges {padding-bottom: 20px;}
+
+.entry .followChanges .follow_buttons {
+    position: absolute; right: 10px; top: 20px;
+}
+
+.entry .followChanges input[type=email],
+.entry .followChanges input[type=submit] {
+    display: block;
+    width: 145px;
+}
+
+.entry .followChanges input[type=email] {
+    margin-bottom: 10px
+}
+
+.entry .followChanges input[type=submit] {
+    font-size: 110%; padding: 3px 0;
+}
+
+.entry .followChanges .quickSignup {
+    display: none;
+    background-color: #e5e5e5;
+    width: 145px;
+    padding: 10px;
 }
 
 .entry .summary, .entry .details {

@@ -1,7 +1,16 @@
-<button class="follow <%= type %>">
-  <span>Create Alert</span>
-</button>
+<div class="follow_buttons">
+  <button class="follow <%= type %>">
+    <span>Create Alert</span>
+  </button>
 
-<button class="following <%= type %>">
-  <span>Remove Alert</span>
-</button>
+  <button class="following <%= type %>">
+    <span>Remove Alert</span>
+  </button>
+
+  <div class="quickSignup">
+    <form>
+      <input type="email" required name="email" placeholder="email address" />
+      <input type="submit" name="submit" value="Sign me up" />
+    </form>
+  </div>
+</div>

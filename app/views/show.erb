@@ -33,7 +33,6 @@
 <main role="main" class="entry contentArea left <%= item_type %>" data-item_type="<%= item_type %>">
 
   <%# hidden by default %>
-
   <div class="loading">
       <span>Fetching...</span>
   </div>
@@ -49,34 +48,6 @@
       <%= content %>
     <% end %>
   </div>
-
-  <% if subscriptions.any? %>
-    <div class="details clear">
-
-      <% subscriptions.each do |subscription| %>
-        <div class="module of2 <%= subscription.subscription_type %>"
-          data-subscription_type="<%= subscription.subscription_type %>"
-          >
-          <h4>
-            <%= subscription.adapter.search_name subscription %>
-          </h4>
-
-          <div class="loading">
-            <span>Fetching...</span>
-          </div>
-
-          <div class="error">
-            <span>Error loading information.</span>
-          </div>
-
-          <div class="results"></div>
-        </div>
-      <% end %>
-
-      <div class="clear"></div>
-
-    </div>
-  <% end %>
 
 </main>
 
@@ -116,50 +87,32 @@
       follow();
     <% end %>
 
-    $(".details .module.of2").each(function(i, elem) {
-      fetchStream($(elem).data("subscription_type"));
-    });
-
     Utils.shareButtons();
   }
 
   function initializeControls() {
-    $("button.follow").hide();
-    $("button.following").hide();
-
-    <% if interest.new_record? %>
-      $("button.follow").show();
-    <% else %>
-      $("button.following").show();
-    <% end %>
-
     <% if logged_in? %>
+      <% if interest.new_record? %>
+        $("button.follow").show();
+        $("button.following").hide();
+      <% else %>
+        $("button.follow").hide();
+        $("button.following").show();
+      <% end %>
+
       $("button.follow").off("click").click(follow);
       $("button.following").off("click").click(unfollow);
+
     <% else %>
+      // assume interest is not saved
+      $("button.follow").show();
+      $("button.following").hide();
+
       $("button.follow").off("click").click(function() {
         window.location = "/login?redirect=" + Utils.currentPath({follow: "now"});
       });
       $("button.following").off("click");
     <% end %>
-  }
-
-  function fetchStream(subscription_type) {
-    var url = "/fetch/item/" + item_type + "/" + item_id + "/" + subscription_type;
-
-    var container = $(".of2.module." + subscription_type);
-    container.show();
-
-    container.find(".loading").show();
-
-    $.get(url, {}, function(data) {
-      container.find(".loading").hide();
-      container.find(".results").html(data);
-    }).error(function() {
-      container.find(".loading").hide();
-      container.find(".error").show();
-      Utils.log("Error loading data for " + subscription_type);
-    });
   }
 
   function follow() {
