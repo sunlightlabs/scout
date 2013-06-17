@@ -8,21 +8,33 @@ class LoginTest < Test::Unit::TestCase
   def test_login
     email = "test@example.com"
     password = "test"
-    user = create :user, :email => email, :password => password, :password_confirmation => password
+    user = create :user, email: email, password: password, password_confirmation: password
 
-    post '/login', :login => email, :password => password
+    post '/login', login: email, password: password
     assert_redirect "/"
   end
 
   def test_login_redirects_back
     email = "test@example.com"
     password = "test"
-    user = create :user, :email => email, :password => password, :password_confirmation => password
+    user = create :user, email: email, password: password, password_confirmation: password
 
     redirect = "/search/federal_bills/anything"
 
-    post '/login', :login => email, :password => password, :redirect => redirect
+    post '/login', login: email, password: password, redirect: redirect
     assert_redirect redirect
+  end
+
+  def test_login_unconfirmed_user_fails
+    email = "test@example.com"
+    password = "test"
+    user = create :user, email: email, password: password, password_confirmation: password, confirmed: false
+    assert !user.confirmed?
+
+    post '/login', login: email, password: password
+    assert_response 200
+
+    assert_match /not been confirmed/, last_response.body
   end
 
   def test_login_invalid_email
