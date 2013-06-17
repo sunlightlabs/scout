@@ -25,7 +25,7 @@ module Admin
 
   def self.confirmed_user(user)
     message = "User confirmed: #{user.email || user.phone}"
-    deliver! "Confirmed User", message
+    deliver! "Confirmed User", message, ""
   end
 
   def self.bounce_report(description, data)

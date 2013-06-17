@@ -202,6 +202,9 @@ class LoginTest < Test::Unit::TestCase
     confirm_token = user.confirm_token
     assert_not_nil confirm_token
 
+    # still useless. I hate rspec-mocks.
+    # Admin.should_receive(:confirmed_user).with(anything)
+
     get "/account/confirm", confirm_token: confirm_token
     assert_redirect "/account/settings"
 

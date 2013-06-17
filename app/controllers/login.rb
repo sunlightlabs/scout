@@ -116,6 +116,8 @@ get '/account/confirm' do
 
   user.save!
 
+  Admin.confirmed_user user
+
   flash[:account] = "Your account has been confirmed. You will now receive email alerts."
   redirect "/account/settings"
 end
