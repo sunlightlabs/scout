@@ -1,15 +1,15 @@
-:subscriptions:
+subscriptions:
   # fill in with your own Sunlight API key
-  :sunlight_api_key:
+  sunlight_api_key:
 
 # used to generate full URLs in emails
-:hostname: "http://localhost:8080"
+hostname: "http://localhost:8080"
 
 # fill in with some unique string per-deployment
-:session_secret: change-this-to-something-else
+session_secret: change-this-to-something-else
 
 # set to true to turn off caching of remote content (useful for development)
-:no_cache: true
+no_cache: true
 
 # asset hosting on S3, sync with rake assets:sync
 assets:
@@ -22,42 +22,42 @@ assets:
 
 
 # email details
-:email:
-  :via: :smtp
-  :from:
-  :reply_to:
+email:
+  via: pony
+  from:
+  reply_to:
 
-  :pony:
+  pony:
     # Can be passed directly into Pony
-    :via: :smtp
-    :via_options:
-      :address:
-      :port:
-      :user_name:
-      :password:
-      :authentication: plain
-      :domain:
-      :enable_starttls_auto: false
+    via: smtp
+    via_options:
+      address:
+      port:
+      user_name:
+      password:
+      authentication: plain
+      domain:
+      enable_starttls_auto: false
 
-  :postmark:
-    :api_key:
+  postmark:
+    api_key:
 
 # SMS details
-:twilio:
-  :account_sid:
-  :auth_token:
-  :from: # phone number
+twilio:
+  account_sid:
+  auth_token:
+  from: # phone number
 
 # outputs polled URLs to STDOUT
-:debug:
-  :output_urls: true
+debug:
+  output_urls: true
 
 # a Sunlight API key, separate from the key used to do most searches/polling,
 # that will be used in links to data URLs that require one, if data demo mode is on
-:demo_key:
+demo_key:
 
 # set of emails to receive admin notices
-:admin:
+admin:
   -
 
 # set of emails to receive analytics reports

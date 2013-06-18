@@ -1140,6 +1140,9 @@ button.follow, button.following {display: none;}
     font-size: 110%; padding: 3px 0;
 }
 
+
+/** quick signup **/
+
 .entry .followChanges .quickSignup {
     display: none;
     background-color: #e5e5e5;
@@ -1161,6 +1164,9 @@ button.follow, button.following {display: none;}
 }
 
 .entry .followChanges .quickSignup .message.problem {color: red;}
+
+
+
 
 .entry .summary, .entry .details {
     padding: 0 33px 0 10px;
