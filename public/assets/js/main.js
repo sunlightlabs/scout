@@ -38,7 +38,7 @@ $(function() {
     var queryType = $(".query_type input[type=radio]:checked").val();
     $("ul.search_explain").hide();
     $("ul.search_explain." + queryType).show();
-    
+
     var placeholder = {
       simple: "Search for a keyword or phrase...",
       advanced: "Enter search terms..."
@@ -62,14 +62,14 @@ $(function() {
 
     // if we are on the search page itself, this search box integrates with the filters
     if (typeof(goToSearch) != "undefined") {
-      // These two values are cached in separate hidden fields, 
+      // These two values are cached in separate hidden fields,
       // and not read live from the search box.
       // Editing the search query and switching from simple/advance
       // should only take effect when the user explicitly hits the search button.
       $(".filters input.query").val(query);
       $(".filters input.query_type").val(queryType);
       goToSearch();
-    } 
+    }
 
     // we're on the home page, just do a bare search
     else {
@@ -108,10 +108,10 @@ var Utils = {
   },
 
   // returns a path string suitable for redirects back to this location
-  currentPath: function(options) {
+  currentPath: function(options, bare) {
     var fullDomain = window.location.protocol + "//" + window.location.host;
     var queryString = window.location.href.replace(fullDomain + window.location.pathname, "");
-    
+
     if (options) {
       if (queryString)
         queryString += "&" + $.param(options);
@@ -119,7 +119,8 @@ var Utils = {
         queryString = "?" + $.param(options);
     }
 
-    return escape(window.location.pathname + queryString);
+    var url = window.location.pathname + queryString;
+    return bare ? url : escape(url);
   },
 
   shareButtons: function(title) {

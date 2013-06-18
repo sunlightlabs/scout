@@ -85,7 +85,11 @@
               </li>
             <% end %>
           </ul>
-          <% if logged_in? and current_user.should_change_password? %>
+          <% if logged_in? and !current_user.confirmed? %>
+            <div class="should_change_password clear">
+              <span class="warning">Your account is unconfirmed.</span> Click the confirmation link in your email to begin getting alerts.
+            </div>
+          <% elsif logged_in? and current_user.should_change_password? %>
             <div class="should_change_password clear">
               You should <a href="/account/settings">change your password</a>.
             </div>

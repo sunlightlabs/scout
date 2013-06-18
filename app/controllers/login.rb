@@ -91,7 +91,7 @@ post '/account/new/quick' do
   if @new_user.save
     Admin.new_user @new_user
 
-    # do not log in new user, they are unconfirmed
+    log_in @new_user
 
     subject = "Confirm your email to start getting alerts"
     body = erb :"account/mail/confirm_account", layout: false, locals: {user: @new_user}

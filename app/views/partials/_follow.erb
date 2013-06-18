@@ -11,6 +11,80 @@
     <form>
       <input type="email" required name="email" placeholder="email address" />
       <input type="submit" name="submit" value="Sign me up" />
+      <div class="spinner"></div>
+      <div class="message problem"></div>
     </form>
   </div>
 </div>
+
+<script type="text/javascript">
+
+Button = {
+  initNewUser: function() {
+    Button.showFollow();
+
+    $("button.follow").off("click").click(function() {
+      $(".quickSignup").toggle();
+      $(".quickSignup input[type=email]").focus();
+    });
+    $("button.following").off("click");
+
+    $(".quickSignup form").submit(Button.newUser);
+  },
+
+  newUser: function() {
+    var email = $.trim($(".quickSignup input[type=email]").val());
+
+    $(".quickSignup input[type=submit]").hide();
+    $(".quickSignup .spinner").show();
+    $(".quickSignup .message").hide();
+
+    $.post("/account/new/quick", {email: email}, function(data, text) {
+      console.log("Created new unconfirmed user account for " + email + ".");
+
+      var location = Utils.currentPath({follow: "now"}, true);
+      console.log(location);
+      window.location = location;
+    }).error(function(error) {
+      var message = error.responseText;
+      console.log("Couldn't create new user: " + message);
+
+      $(".quickSignup .spinner").hide();
+      $(".quickSignup input[type=submit]").show();
+
+      $(".quickSignup .message.problem").html(message).show();
+    });
+
+    return false;
+  },
+
+  initExistingUser: function(follow, unfollow) {
+    <% if interest.new_record? %>
+      Button.showFollow();
+    <% else %>
+      Button.showFollowing();
+    <% end %>
+
+    $("button.follow").off("click").click(function() {
+      follow();
+      return false;
+    });
+
+    $("button.following").off("click").click(function() {
+      unfollow();
+      return false;
+    });
+  },
+
+  showFollow: function() {
+    $("button.follow").show();
+    $("button.following").hide();
+  },
+
+  showFollowing: function() {
+    $("button.follow").hide();
+    $("button.following").show();
+  }
+};
+
+</script>

@@ -81,7 +81,11 @@
   }
 
   function onLoadContent() {
-    initializeControls();
+    <% if logged_in? %>
+      Button.initExistingUser(follow, unfollow);
+    <% else %>
+      Button.initNewUser();
+    <% end %>
 
     <% if logged_in? and interest.new_record? and (params[:follow] == "now") %>
       follow();
@@ -90,59 +94,26 @@
     Utils.shareButtons();
   }
 
-  function initializeControls() {
-    <% if logged_in? %>
-      <% if interest.new_record? %>
-        $("button.follow").show();
-        $("button.following").hide();
-      <% else %>
-        $("button.follow").hide();
-        $("button.following").show();
-      <% end %>
-
-      $("button.follow").off("click").click(follow);
-      $("button.following").off("click").click(unfollow);
-
-    <% else %>
-      // assume interest is not saved
-      $("button.follow").show();
-      $("button.following").hide();
-
-      $("button.follow").off("click").click(function() {
-        window.location = "/login?redirect=" + Utils.currentPath({follow: "now"});
-      });
-      $("button.following").off("click");
-    <% end %>
-  }
-
   function follow() {
-    $("button.follow").hide();
-    $("button.following").show();
+    Button.showFollowing();
 
     $.post("/item/" + item_type + "/" + item_id + "/follow", function(data) {
       Utils.log("Followed " + item_type + " " + item_id + ".");
     }).error(function() {
       Utils.log("ERROR following item.");
-      $("button.follow").show();
-      $("button.following").hide();
+      Button.showFollow();
     });
-
-    return false;
   }
 
   function unfollow() {
-    $("button.follow").show();
-    $("button.following").hide();
+    Button.showFollow();
 
     $.post("/item/" + item_type + "/" + item_id + "/unfollow", {_method: "delete"}, function(data) {
       Utils.log("Unfollowed " + item_type + " " + item_id + ".");
     }).error(function() {
       Utils.log("ERROR unfollowing item.");
-      $("button.follow").hide();
-      $("button.following").show();
+      Button.showFollowing();
     });
-
-    return false;
   }
 </script>
 

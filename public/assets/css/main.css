@@ -228,6 +228,7 @@ nav .should_change_password {
     clear: both; float: right;
     padding-top: 10px;
 }
+nav .should_change_password .warning {color: #a00;}
 
 nav .should_change_password a {
     color: #b00; text-decoration: underline;
@@ -1145,6 +1146,21 @@ button.follow, button.following {display: none;}
     width: 145px;
     padding: 10px;
 }
+
+.entry .followChanges .quickSignup .spinner {
+    height: 30px;
+    display: none;
+    background-image: url('/assets/images/loader-32.gif');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 16px 16px;
+}
+
+.entry .followChanges .quickSignup .message {
+    display: none; margin-top: 5px;
+}
+
+.entry .followChanges .quickSignup .message.problem {color: red;}
 
 .entry .summary, .entry .details {
     padding: 0 33px 0 10px;
