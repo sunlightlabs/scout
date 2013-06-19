@@ -42,6 +42,7 @@ Button = {
     $.post("/account/new/quick", {email: email}, function(data, text) {
       console.log("Created new unconfirmed user account for " + email + ".");
 
+      // the universal outcome is to redirect back to current page with follow=now appended
       var location = Utils.currentPath({follow: "now"}, true);
       console.log(location);
       window.location = location;
@@ -60,7 +61,7 @@ Button = {
 
   // pass in a follow and unfollow callback to run when the button's pressed
   initExistingUser: function(follow, unfollow) {
-    <% if interest.new_record? %>
+    <% if interest.nil? or interest.new_record? %>
       Button.showFollow();
     <% else %>
       Button.showFollowing();

@@ -3,7 +3,7 @@
   <div class="add rss">
     <h2>Import a Feed</h2>
     <form action="#" method="get" class="preview">
-      
+
 		<label>
         Paste in the URL of the feed you'd like to get alerts for:
       </label>
@@ -40,10 +40,8 @@
       </fieldset>
     </div>
 
-    <button class="create hide_start">
-      <span>Create Alert</span>
-    </button>
-    
+    <%= follow_feed %>
+
     <div class="clear"></div>
 
     <div class="contents">
@@ -88,7 +86,7 @@
       var url = $.trim($("input.feed_url").val());
       if (!url) return false;
 
-      $(".hide_start").hide();
+      $(".hide_start, .follow").hide();
 
       var preview = $("div.feed_preview").show();
       preview.find(".previewing").show();
@@ -100,10 +98,10 @@
         preview.find("input.title").val(data.title);
         preview.find("fieldset.description textarea").html(data.description);
         preview.find("ul.items").html(data.html);
-        preview.find(".header, .details, ul.items, button.create").show();
+        preview.find(".header, .details, ul.items, .follow").show();
 
         <% if logged_in? and (params[:follow] == "now") %>
-          createSubscription();
+          follow();
         <% end %>
 
       }).error(function() {
@@ -115,7 +113,7 @@
       return false;
     };
 
-    var createSubscription = function() {
+    var follow = function() {
 
       var url = $.trim($("input.actual_feed_url").val());
       var original_url = $.trim($("input.feed_url").val());
@@ -140,16 +138,15 @@
 
       }).error(function() {
         preview.find(".creating").hide();
-
         preview.find(".error").show();
       });
 
     };
 
     <% if logged_in? %>
-      $("button.create").click(createSubscription);
+      Button.initExistingUser(follow);
     <% else %>
-      $("button.create").click(function() {window.location = "/login?redirect=" + Utils.currentPath({follow: "now"});});
+      Button.initNewUser();
     <% end %>
 
     if ($("input.feed_url").val())

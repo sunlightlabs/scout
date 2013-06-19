@@ -1,13 +1,12 @@
 
 # landing page to begin, preview, and finalize the import of an RSS feed
 get "/import/feed" do
-  erb :"account/import", :locals => {:url => (params[:url] || "").strip}, :layout => !pjax?
+  erb :import, locals: {url: (params[:url] || "").strip}, layout: !pjax?
 end
 
 # fetch a preview of the given RSS feed
 get "/import/feed/preview" do
   url = params[:url] ? params[:url].strip : ""
-
 
   begin
     unless feed = Subscriptions::Adapters::Feed.url_to_response(url)
@@ -42,7 +41,7 @@ get "/import/feed/preview" do
   end
 
   items = erb :"search/items", layout: false, locals: {
-    items: results.first(3), 
+    items: results.first(3),
     subscription: subscription,
     interest: interest,
 
@@ -72,7 +71,7 @@ post "/import/feed/create" do
 
   # for creating, a valid feed URL and title need to be prepared already
   begin
-    unless url.present? and title.present? and 
+    unless url.present? and title.present? and
       (feed = Subscriptions::Adapters::Feed.url_to_response(url)) and
       (feed_details = Subscriptions::Adapters::Feed.feed_details(feed))
       halt 500 and return
@@ -86,7 +85,7 @@ post "/import/feed/create" do
 
   # create interest by the canonical URL
   interest = Interest.for_feed current_user, url
-  
+
   # details used to render and link to feed
   interest.data['url'] = url
   interest.data['title'] = title
@@ -105,5 +104,5 @@ post "/import/feed/create" do
     Admin.new_feed interest
   end
 
-  json 200, {:interest_id => interest.id}
+  json 200, {interest_id: interest.id}
 end

@@ -120,6 +120,11 @@ module Helpers
       partial "partials/follow", engine: :erb, locals: {type: :search, interest: interest}
     end
 
+    # to the follow partial, no interest is a new interest
+    def follow_feed
+      partial "partials/follow", engine: :erb, locals: {type: :feed, interest: nil}
+    end
+
     def truncate(string, length)
       string ||= ""
       if string.size > length

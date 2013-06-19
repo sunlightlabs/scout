@@ -1125,13 +1125,10 @@ button.follow, button.following {display: none;}
 }
 .results .pageTitle {position: relative;}
 
-.follow_buttons {
-    position: absolute;
-    right: 10px;
-    top: 20px;
-}
-
-.results .follow_buttons {top: 10px;}
+.follow_buttons {position: absolute;}
+.entry .follow_buttons {right: 10px; top: 20px;}
+.results .follow_buttons {right: 10px; top: 10px;}
+.feed_preview .follow_buttons {right: 20px; top: 60px;}
 
 /** quick signup **/
 
