@@ -859,7 +859,9 @@ footer nav li{
     box-shadow: inset 14px 0px 14px -7px #e2e3e0;
     padding: 10px 10px 6px 33px;
     border-top: 1px dashed #9D9B9B;
+
     display: block;
+
     color: #83858b;
     font-style: italic;
 }
@@ -874,8 +876,7 @@ footer nav li{
 
 /** social media buttons **/
 
-.resultsIntro {position: relative; height: 30px;}
-.resultsIntro p {position: absolute; left: 30px;}
+.resultsIntro {height: 30px;}
 
 .resultsIntro div#share-buttons {position: absolute; right: 20px;}
 div.share-buttons td {padding-right: 5px;}
@@ -1106,8 +1107,6 @@ button.follow, button.following {display: none;}
     -moz-box-shadow: inset -14px 0px 14px -7px #e2e3e0;
     box-shadow: inset -14px 0px 14px -7px #e2e3e0;
     padding: 16px 33px 16px 10px;
-
-    position: relative;
 }
 
 .followChanges .trackSubscribe{
@@ -1118,39 +1117,44 @@ button.follow, button.following {display: none;}
 }
 
 
-/*-- Entry Styling --*/
+/* placement of buttons on item, search, and feed page */
 
-.entry .followChanges {padding-bottom: 20px;}
-
-.entry .followChanges .follow_buttons {
-    position: absolute; right: 10px; top: 20px;
+.entry .followChanges {
+    position: relative;
+    padding-bottom: 20px;
 }
+.results .pageTitle {position: relative;}
 
-.entry .followChanges input[type=email],
-.entry .followChanges input[type=submit] {
-    display: block;
-    width: 145px;
+.follow_buttons {
+    position: absolute;
+    right: 10px;
+    top: 20px;
 }
-
-.entry .followChanges input[type=email] {
-    margin-bottom: 10px
-}
-
-.entry .followChanges input[type=submit] {
-    font-size: 110%; padding: 3px 0;
-}
-
 
 /** quick signup **/
 
-.entry .followChanges .quickSignup {
+.quickSignup {
     display: none;
     background-color: #e5e5e5;
     width: 145px;
     padding: 10px;
 }
 
-.entry .followChanges .quickSignup .spinner {
+.quickSignup input[type=email],
+.quickSignup input[type=submit] {
+    display: block;
+    width: 145px;
+}
+
+.quickSignup input[type=email] {
+    margin-bottom: 10px
+}
+
+.quickSignup input[type=submit] {
+    font-size: 110%; padding: 3px 0;
+}
+
+.quickSignup .spinner {
     height: 30px;
     display: none;
     background-image: url('/assets/images/loader-32.gif');
@@ -1159,13 +1163,15 @@ button.follow, button.following {display: none;}
     background-size: 16px 16px;
 }
 
-.entry .followChanges .quickSignup .message {
+.quickSignup .message {
     display: none; margin-top: 5px;
 }
 
-.entry .followChanges .quickSignup .message.problem {color: red;}
+.quickSignup .message.problem {color: red;}
 
 
+
+/*-- Entry Styling --*/
 
 
 .entry .summary, .entry .details {

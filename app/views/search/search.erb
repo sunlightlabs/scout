@@ -195,13 +195,7 @@
         <% end %>
       </div>
 
-      <button class="follow search">
-        <span>Create Alert</span>
-      </button>
-
-      <button class="following search">
-        <span>Remove Alert</span>
-      </button>
+      <%= follow_search interest %>
 
       <div class="clear"></div>
   	</div>
@@ -356,24 +350,10 @@
       $("ul.categories li[data-subscription_type='<%= subscription_type %>']").show()
     <% end %>
 
-    // follow button
-    $("button.follow, button.following").hide();
-
-    // handle non-logged-in users
     <% if logged_in? %>
-      $("button.follow").off("click").click(follow);
-      $("button.following").off("click").click(unfollow);
+      Button.initExistingUser(follow, unfollow);
     <% else %>
-      $("button.follow").off("click").click(function() {
-        window.location = "/login?redirect=" + Utils.currentPath({follow: "now"});
-      });
-      $("button.following").off("click");
-    <% end %>
-
-    <% if interest.new_record? %>
-      $("button.follow").show();
-    <% else %>
-      $("button.following").show();
+      Button.initNewUser();
     <% end %>
 
 
@@ -469,6 +449,8 @@
   }
 
   function follow() {
+    Button.showFollowing();
+
     var subscription_type = currentSubscriptionType();
     var query = encodeURIComponent(currentQuery());
     var queryType = currentQueryType();
@@ -479,23 +461,19 @@
       query: query,
       query_type: queryType
     });
-
-    $("button.follow").hide();
-    $("button.following").show();
 
     $.post("/interests/search", subscription, function(data) {
       Utils.log("Created new search interest.");
       loadInterestPane(data.interest_pane);
     }).error(function() {
       Utils.log("ERROR creating new search interest.");
-      $("button.follow").show();
-      $("button.following").hide();
+      Button.showFollow();
     });
-
-    return false;
   }
 
   function unfollow() {
+    Button.showFollow();
+
     var subscription_type = currentSubscriptionType();
     var query = encodeURIComponent(currentQuery());
     var queryType = currentQueryType();
@@ -507,19 +485,13 @@
       query_type: queryType
     });
 
-    $("button.follow").show();
-    $("button.following").hide();
-
     $.post("/interests/search", $.extend(subscription, {_method: "delete"}), function(data) {
       Utils.log("Removed search interest.");
       loadInterestPane(data.interest_pane);
     }).error(function() {
       Utils.log("ERROR removing search interest.");
-      $("button.follow").hide();
-      $("button.following").show();
+      Button.showFollowing();
     });
-
-    return false;
   }
 
   function search(subscriptionType, searchOptions) {

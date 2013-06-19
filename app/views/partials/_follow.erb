@@ -58,6 +58,7 @@ Button = {
     return false;
   },
 
+  // pass in a follow and unfollow callback to run when the button's pressed
   initExistingUser: function(follow, unfollow) {
     <% if interest.new_record? %>
       Button.showFollow();
