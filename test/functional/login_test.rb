@@ -232,6 +232,50 @@ class LoginTest < Test::Unit::TestCase
     assert user.should_change_password?
   end
 
+  def test_confirm_resend_form
+    get "/account/confirm/resend"
+    assert_response 200
+  end
+
+  def test_confirm_resend
+    user = create :user, confirmed: false
+    confirm_token = user.confirm_token
+
+    # still useless. I hate rspec-mocks.
+    # Admin.should_receive(:confirmed_user).with(user)
+
+    post "/account/confirm/resend", email: user.email
+    assert_redirect "/account/confirm/resend"
+
+    user.reload
+    assert !user.confirmed?
+    assert_not_equal confirm_token, user.confirm_token
+  end
+
+  def test_confirm_resend_already_confirmed
+    user = create :user, confirmed: true
+    confirm_token = user.confirm_token
+
+    Admin.should_not_receive(:confirmed_user)
+
+    post "/account/confirm/resend", email: user.email
+    assert_redirect "/account/confirm/resend"
+
+    user.reload
+    assert user.confirmed?
+    assert_equal confirm_token, user.confirm_token
+  end
+
+  def test_confirm_resend_invalid_user
+    email = "nobody@nobody.com"
+    assert_nil User.where(email: email).first
+
+    Admin.should_not_receive(:confirmed_user)
+
+    post "/account/confirm/resend", email: email
+    assert_redirect "/account/confirm/resend"
+  end
+
   def test_welcome
     user = create :user, confirmed: true, should_change_password: true
 
@@ -402,7 +446,7 @@ class LoginTest < Test::Unit::TestCase
     user = create :user
     old_token = user.reset_token
 
-    Email.should_receive(:deliver!).with("Password Reset Request", user.email, anything, anything)
+    Email.should_receive(:deliver!).with("Password Reset Request", user.email, anything, anything).and_return(true)
 
     post '/account/password/forgot', email: user.email
     assert_redirect '/login'
@@ -414,7 +458,7 @@ class LoginTest < Test::Unit::TestCase
   def test_start_reset_password_process_with_bad_email
     Email.should_not_receive(:deliver!)
     post '/account/password/forgot', email: "notvalid@example.com"
-    assert_redirect '/login'
+    assert_redirect '/account/password/forgot'
   end
 
   def test_visit_reset_password_link

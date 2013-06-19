@@ -103,6 +103,27 @@ post '/account/new/quick' do
   end
 end
 
+get '/account/confirm/resend' do
+  erb :"account/resend_confirm"
+end
+
+post '/account/confirm/resend' do
+  unless params[:email].present? and (user = User.where(email: params[:email]).first) and (!user.confirmed?)
+    flash[:resend] = "Couldn't locate an unconfirmed account by that email address."
+    redirect "/account/confirm/resend"
+  end
+
+  user.new_confirm_token
+  user.save!
+
+  subject = "Confirm your email to start getting alerts"
+  body = erb :"account/mail/confirm_account", layout: false, locals: {user: user}
+  Email.deliver!("User Confirm Email", user.email, subject, body)
+
+  flash[:resend] = "We've resent a confirmation email to that address."
+  redirect "/account/confirm/resend"
+end
+
 get '/account/password/forgot' do
   erb :"account/forgot"
 end
@@ -110,7 +131,7 @@ end
 post '/account/password/forgot' do
   unless params[:email] and user = User.where(email: params[:email].strip).first and user.email.present?
     flash[:forgot] = "No account found by that email."
-    redirect "/login" and return
+    redirect "/account/password/forgot" and return
   end
 
   # issue a new reset token
@@ -122,7 +143,8 @@ post '/account/password/forgot' do
 
   unless user.save and Email.deliver!("Password Reset Request", user.email, subject, body)
     flash[:forgot] = "Your account was found, but there was an error actually sending the reset password email. Try again later, or write us and we can try to figure out what happened."
-    redirect "/login" and return
+    puts "HERE: #{result} what"
+    redirect "/account/password/forgot" and return
   end
 
   flash[:forgot] = "We've sent an email to reset your password."

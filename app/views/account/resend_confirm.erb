@@ -1,0 +1,17 @@
+<div class="settings login contentArea full">
+
+  <div class="module notifications">
+
+    <h3>Resend Confirmation Email</h3>
+
+    <%= flash_for [:resend] %>
+
+    <form action="/account/confirm/resend" method="post" class="signup_form">
+      <input class="email" type="email" placeholder="your email" name="email" />
+
+      <button class="text login">
+        <span>OK</span>
+      </button>
+    </form>
+  </div>
+</div>
