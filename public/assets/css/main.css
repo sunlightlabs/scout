@@ -1131,6 +1131,8 @@ button.follow, button.following {display: none;}
     top: 20px;
 }
 
+.results .follow_buttons {top: 10px;}
+
 /** quick signup **/
 
 .quickSignup {

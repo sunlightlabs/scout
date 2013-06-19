@@ -209,9 +209,9 @@
           You are receiving notifications for these results.
         <% end %>
       </p>
-      <span style="display: none" id="share-title"><%= interest_name(interest) %></span>
+      <!-- <span style="display: none" id="share-title"><%= interest_name(interest) %></span> -->
 
-      <%= partial "partials/share", engine: :erb %>
+      <%# partial "partials/share", engine: :erb %>
     </div>
   </div>
 
@@ -312,7 +312,7 @@
   }
 
   function initializeSubscriptions() {
-    Utils.shareButtons();
+    // Utils.shareButtons();
 
     var initialQuery = "<%= escape_javascript query %>";
     var initialQueryType = "<%= escape_javascript(params[:query_type] || "simple") %>";
