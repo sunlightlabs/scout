@@ -90,9 +90,12 @@
               <span class="warning">Your account is unconfirmed.</span> Click the confirmation link in your email to begin getting alerts.
             </div>
           <% elsif logged_in? and current_user.should_change_password? %>
-            <div class="should_change_password clear">
-              You should <a href="/account/settings">change your password</a>.
-            </div>
+            <% paths = ["/account/settings", "/account/welcome"] %>
+            <% unless paths.any? {|path| request.path =~ /^#{path}/} %>
+              <div class="should_change_password clear">
+                You should <a href="/account/settings">change your password</a>.
+              </div>
+            <% end %>
           <% end %>
         </nav>
 

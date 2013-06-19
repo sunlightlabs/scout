@@ -233,12 +233,12 @@ class AccountsTest < Test::Unit::TestCase
   def test_change_password_mismatched_new_passwords
     password = "test"
     new_password = password.succ
-    user = create :user, :password => password
+    user = create :user, password: password
 
     assert User.authenticate(user, password)
     assert !User.authenticate(user, new_password)
 
-    put '/account/settings', {:old_password => password, :password => new_password, :password_confirmation => new_password.succ}, login(user)
+    put '/account/settings', {old_password: password, password: new_password, password_confirmation: new_password.succ}, login(user)
     assert_response 200
 
     user.reload

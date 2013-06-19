@@ -206,11 +206,13 @@ class LoginTest < Test::Unit::TestCase
     # Admin.should_receive(:confirmed_user).with(anything)
 
     get "/account/confirm", confirm_token: confirm_token
-    assert_redirect "/account/settings"
+    assert_redirect "/account/welcome"
 
     user.reload
     assert user.confirmed?
     assert_not_equal confirm_token, user.confirm_token
+
+    # this doesn't change unless the user changes their password!
     assert user.should_change_password?
   end
 
@@ -228,6 +230,73 @@ class LoginTest < Test::Unit::TestCase
     assert !user.confirmed?
     assert_equal confirm_token, user.confirm_token
     assert user.should_change_password?
+  end
+
+  def test_welcome
+    user = create :user, confirmed: true, should_change_password: true
+
+    get "/account/welcome", {}, login(user)
+    assert_response 200
+  end
+
+  def test_welcome_logged_out
+  end
+
+  def test_welcome_form
+    user = create :user, confirmed: true, should_change_password: true
+
+    password = "testing"
+    assert !User.authenticate(user, password)
+    assert !user.announcements?
+    assert !user.sunlight_announcements?
+
+    put "/account/welcome", {password: password, password_confirmation: password, user: {announcements: true, sunlight_announcements: true}}, login(user)
+    assert_redirect "/account/settings"
+
+    user.reload
+    assert !user.should_change_password?
+
+    assert User.authenticate(user, password)
+    assert user.announcements?
+    assert user.sunlight_announcements?
+  end
+
+  def test_welcome_form_mismatched_passwords
+    user = create :user, confirmed: true, should_change_password: true
+
+    password = "testing"
+    assert !User.authenticate(user, password)
+    assert !user.announcements?
+    assert !user.sunlight_announcements?
+
+    put "/account/welcome", {password: password, password_confirmation: password.succ, user: {announcements: true, sunlight_announcements: true}}, login(user)
+    assert_response 200
+
+    user.reload
+    assert user.should_change_password?
+
+    assert !User.authenticate(user, password)
+    assert !user.announcements?
+    assert !user.sunlight_announcements?
+  end
+
+  def test_welcome_form_logged_out
+    user = create :user, confirmed: true, should_change_password: true
+
+    password = "testing"
+    assert !User.authenticate(user, password)
+    assert !user.announcements?
+    assert !user.sunlight_announcements?
+
+    put "/account/welcome", {password: password, password_confirmation: password.succ, user: {announcements: true, sunlight_announcements: true}}
+    assert_redirect "/"
+
+    user.reload
+    assert user.should_change_password?
+
+    assert !User.authenticate(user, password)
+    assert !user.announcements?
+    assert !user.sunlight_announcements?
   end
 
 

@@ -45,7 +45,7 @@ put '/account/settings' do
   if params[:password].present?
     unless User.authenticate(current_user, params[:old_password])
       flash.now[:password] = "Incorrect current password."
-      return erb :"/account/settings", :locals => {:user => current_user}
+      return erb :"/account/settings", locals: {user: current_user}
     end
 
     current_user.password = params[:password]
@@ -58,10 +58,72 @@ put '/account/settings' do
     flash[:password] = "Your password has been changed." if params[:password].present?
     redirect "/account/settings"
   else
-    erb :"account/settings", :locals => {:user => current_user}
+    erb :"account/settings", locals: {user: current_user}
   end
 end
 
+
+# simpler version of the account settings update -
+# doesn't require an existing password to change the current one, but
+# does require the confirm_token (which will be new and
+# different from the one we emailed). Redirects back to itself on error
+# instead of the settins page.
+
+get '/account/confirm' do
+  log_out
+
+  unless params[:confirm_token] and user = User.where(confirm_token: params[:confirm_token]).first
+    halt 404 and return
+  end
+
+  log_in user
+
+  # confirm user, getting here is good enough for that
+  user.confirmed = true
+
+  # reset the token for good measure
+  user.new_confirm_token
+
+  user.save!
+
+  Admin.confirmed_user user
+
+  redirect "/account/welcome"
+end
+
+get '/account/welcome' do
+  requires_login
+
+  # default form checkbox to announcements on,
+  # if they're arriving here directly (not from a bad form submit)
+  current_user.announcements = true
+
+  erb :"account/welcome", locals: {user: current_user}
+end
+
+put '/account/welcome' do
+  requires_login
+
+  if params[:user]
+    ['announcements', 'sunlight_announcements'].each do |field|
+      current_user.send "#{field}=", (["false", false, nil].include?(params[:user][field]) ? false : true)
+    end
+  end
+
+  if params[:password].present?
+    current_user.password = params[:password]
+    current_user.password_confirmation = params[:password_confirmation]
+    current_user.should_change_password = false
+  end
+
+  if current_user.save
+    flash[:user] = "Your settings have been updated."
+    redirect "/account/settings"
+  else
+    flash.now[:password] = "Your passwords did not match."
+    erb :"account/welcome", locals: {user: current_user}
+  end
+end
 
 put '/account/phone' do
   requires_login

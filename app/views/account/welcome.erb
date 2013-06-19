@@ -1,0 +1,52 @@
+<div class="contentArea full user settings">
+  <div class="module allUserSettings">
+    <h3>Update Your Password</h3>
+
+    <%= flash_for [:user, :password] %>
+    <%= errors_for user %>
+
+    <p>
+      <strong>Your email has been confirmed, and you will start receiving alerts.</strong>
+    </p>
+
+    <p>
+      Next, update your password and notification settings.
+    </p>
+
+    <form action="/account/welcome" method="post">
+      <input type="hidden" name="_method" value="put" />
+
+      <div class="module user">
+        <ul>
+          <fieldset>
+            <li class="password">
+              <label for="password">New Password</label>
+              <input type="password" name="password" autocomplete="off" />
+            </li>
+            <li class="password">
+              <label for="password_confirmation">New Password (again)</label>
+              <input type="password" name="password_confirmation" autocomplete="off" />
+            </li>
+
+            <label for="user_announcements">
+              <%= check_box_tag "user[announcements]", checked: user.announcements?, uncheck_value: 'false', id: "user_announcements" %>
+              <span>Get updates about new Scout features</span>
+            </label>
+
+            <label for="sunlight_announcements">
+              <%= check_box_tag "user[sunlight_announcements]", checked: user.sunlight_announcements?, uncheck_value: 'false', id: "sunlight_announcements" %>
+              <span>Get updates about the Sunlight Foundation</span>
+            </label>
+          </fieldset>
+        </ul>
+      </div>
+
+      <div class="module updateSettings">
+        <button type="submit">
+            <span>Update Account Info</span>
+        </button>
+      </div>
+      <div class="clear"></div>
+    </form>
+  </div>
+</div>

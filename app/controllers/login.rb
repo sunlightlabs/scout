@@ -103,26 +103,6 @@ post '/account/new/quick' do
   end
 end
 
-get '/account/confirm' do
-  unless params[:confirm_token] and user = User.where(confirm_token: params[:confirm_token]).first
-    halt 404 and return
-  end
-
-  # confirm user, this is good enough
-  user.confirmed = true
-
-  # reset token for good measure
-  user.new_confirm_token
-
-  user.save!
-
-  Admin.confirmed_user user
-
-  flash[:account] = "Your account has been confirmed. You will now receive email alerts."
-  redirect "/account/settings"
-end
-
-
 get '/account/password/forgot' do
   erb :"account/forgot"
 end
