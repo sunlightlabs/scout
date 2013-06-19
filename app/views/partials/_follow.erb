@@ -26,6 +26,9 @@ Button = {
     $("button.follow").off("click").click(function() {
       $(".quickSignup").toggle();
       $(".quickSignup input[type=email]").focus();
+
+      if ($(".quickSignup").is(":visible"))
+        Utils.event("Quick signup", "Reveal");
     });
     $("button.following").off("click");
 

@@ -90,6 +90,11 @@ var Utils = {
       console.log(msg);
   },
 
+  event: function(category, action, label, value) {
+    console.log("Event: " + [category, action, label, value].join(", "));
+    if (_gaq) _gaq.push(['_trackEvent', category, action, label, value]);
+  },
+
   pjax: function(href, container) {
     if (!container)
       container = "#center";
