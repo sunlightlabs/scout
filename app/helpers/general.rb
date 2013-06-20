@@ -125,6 +125,10 @@ module Helpers
       partial "partials/follow", engine: :erb, locals: {type: :feed, interest: nil}
     end
 
+    def follow_collection(interest)
+      partial "partials/follow", engine: :erb, locals: {type: :tag, interest: interest}
+    end
+
     def truncate(string, length)
       string ||= ""
       if string.size > length
