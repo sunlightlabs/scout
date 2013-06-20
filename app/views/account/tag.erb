@@ -1,33 +1,13 @@
 <% content_for :sidebar_right do %>
 
-	<% if !logged_in? %>
-		<div class="module tag">
-			<p>
-        <% if user_name(user).present? %>
-          <strong><%= user_name user %></strong>
-        <% else %>
-          This user
-        <% end %>
-        is using Scout, a notification platform for government action.
-			</p>
-
-			<p>
-        <strong>Follow</strong> this collection of alerts to be notified whenever anything new happens around the topic at the left.
-      </p>
-      <p>
-        You can also click on any of the alerts to see what the recent results look like, or to subscribe to individual alerts.
-			</p>
-		</div>
-	<% end %>
-
 	<% if user == current_user %>
 		<div class="module sharing">
-			
+
 			<% if tag.public? %>
 				<form action="/account/tag/<%= Tag.slugify h(tag.name) %>/public" method="post">
 					<input type="hidden" name="_method" value="put" />
 					<input type="hidden" name="public" value="false" />
-					
+
 					<p>
 						This collection is <strong>public</strong>. Anybody who has the URL can see it.
 					</p>
@@ -42,12 +22,12 @@
 						<a href="/account/settings">Set a username</a> for a prettier URL.
 					</small>
 				<% end %>
-				
+
 			<% else %>
 				<form action="/account/tag/<%= Tag.slugify h(tag.name) %>/public" method="post">
 					<input type="hidden" name="_method" value="put" />
 					<input type="hidden" name="public" value="true" />
-					
+
           <p>
 						This collection is <strong>private</strong>. You can make this collection of alerts public, so other people can see them and easily follow them.
 					</p>
@@ -59,7 +39,20 @@
 			<% end %>
 
 		</div>
-	<% end %>
+
+  <%# user is either logged out, or logged in and looking at someone else %>
+	<% else %>
+
+    <div class="module tag">
+      <h3>
+        <% if user_name(user).present? %>
+          <strong><%= user_name user %></strong>
+        <% else %>
+          [UNNAMED]
+        <% end %>
+      </h3>
+    </div>
+  <% end %>
 
 <% end %>
 
@@ -73,19 +66,17 @@
 		<a class="rss feed" href="<%= tag_feed_path user, tag, "rss" %>">RSS</a>
 
 		<% if tag.public? %>
-			<% if user != current_user %>
-				<button class="follow tag">
-	  	    <span>Follow</span>
-		    </button>
-
-		    <button class="following tag">
-		      <span>Unfollow</span>
-		    </button>
+			<% if user == current_user %>
+        <button disabled class="follow tag disabled">
+          <span>Follow</span>
+        </button>
+      <% else %>
+        <%= follow_collection interest %>
 			<% end %>
 		<% end %>
 
 		<div class="clear"></div>
-		
+
 		<% if (name = user_name(user)).present? %>
 			<span class="username author">
 				<%= h name %>
@@ -110,7 +101,7 @@
   <% else %>
 
 	  <% grouped = interests.group_by &:interest_type %>
-	  
+
 	  <% if grouped['search'] and grouped['search'].any? %>
 	    <div class="section keywords">
 	      <h2>Searches</h2>
@@ -118,7 +109,7 @@
 	      <% by_query = grouped['search'].group_by &:in %>
 	      <% by_query.each do |query, query_interests| %>
 	        <div class="interest">
-	          
+
 	          <h3 class="interestHeader">"<%= query %>"</h3>
 
 	          <% query_interests.each do |interest| %>
@@ -171,17 +162,6 @@
 
 	var tag_slug = "<%= Tag.slugify h(tag.name) %>";
 	var user_slug = "<%= h params[:user_id] %>";
-	
-	$(function() {
-
-		initializeControls();
-
-		<% if logged_in? and interest.new_record? and (params[:follow] == "now") %>
-      follow();
-    <% end %>
-
-	});
-
 
 	function initializeControls() {
 		<% if logged_in? and (user == current_user) %>
@@ -211,54 +191,39 @@
 			});
 		<% end %>
 
-    $("button.follow").hide();
-    $("button.following").hide();
-
-    <% if interest.new_record? %>
-      $("button.follow").show();
+    <% if logged_in? %>
+      Button.initExistingUser(follow, unfollow);
     <% else %>
-      $("button.following").show();
+      Button.initNewUser();
     <% end %>
 
-    <% if logged_in? %>
-      $("button.follow").off("click").click(follow);
-      $("button.following").off("click").click(unfollow);
-    <% else %>
-      $("button.follow").off("click").click(function() {
-        window.location = "/login?redirect=" + Utils.currentPath({follow: "now"});
-      });
-      $("button.following").off("click");
+    <% if logged_in? and interest.new_record? and (params[:follow] == "now") %>
+      follow();
     <% end %>
   }
 
 	function follow() {
-    $("button.follow").hide();
-    $("button.following").show();
+    Button.showFollowing();
 
     $.post("/user/" + user_slug + "/" + tag_slug + "/follow", function(data) {
       Utils.log("Created tag interest " + data.interest_id);
     }).error(function() {
       Utils.log("ERROR following tag.");
-      $("button.follow").show();
-      $("button.following").hide();
+      Button.showFollow();
     });
-
-    return false;
   }
 
   function unfollow() {
-    $("button.follow").show();
-    $("button.following").hide();
+    Button.showFollow();
 
     $.post("/user/" + user_slug + "/" + tag_slug + "/unfollow", {_method: "delete"}, function(data) {
       Utils.log("Destroyed tag interest.");
     }).error(function() {
       Utils.log("ERROR unfollowing tag.");
-      $("button.follow").hide();
-      $("button.following").show();
+      Button.showFollowing();
     });
-
-    return false;
   }
+
+  $(initializeControls);
 
 </script>

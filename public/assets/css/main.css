@@ -1186,12 +1186,15 @@ button.follow, button.following {display: none;}
 .entry .followChanges {
     position: relative;
     padding-bottom: 20px;
+    height: 50px;
 }
 .results .pageTitle {position: relative;}
+.tagHeader {position: relative;}
 
 .follow_buttons {position: absolute;}
 .entry .follow_buttons {right: 10px; top: 20px;}
 .results .follow_buttons {right: 10px; top: 10px;}
+.tagHeader .follow_buttons {right: 20px; top: 20px;}
 .feed_preview .follow_buttons {right: 20px; top: 60px;}
 
 /** quick signup **/
@@ -1627,6 +1630,9 @@ button.smallButton, button.secondary {
     font-size: 12px;
     height: 29px;
     border: 0;
+}
+
+button.smallButton, button.secondary, button.disabled {
     background: rgb(28,131,152); /* Old browsers */
     background: -moz-linear-gradient(top,  rgba(132,138,139,1) 0%, rgba(132,138,139,1) 50%, rgba(116,121,122,1) 51%, rgba(116,121,122,1) 100%); /* FF3.6+ */
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(132,138,139,1)), color-stop(50%,rgba(132,138,139,1)), color-stop(51%,rgba(116,121,122,1)), color-stop(100%,rgba(116,121,122,1))); /* Chrome,Safari4+ */
@@ -1637,9 +1643,11 @@ button.smallButton, button.secondary {
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1c8398', endColorstr='#1c697a',GradientType=0 ); /* IE6-9 */
     color: #e5e5e5;
 }
-button.smallButton span, button.secondary span{
+
+button.smallButton span, button.secondary span, button.disabled span {
     border: 0;
 }
+
 .removeSubscription button{
     display: none;
     height: 36px;
