@@ -9,7 +9,7 @@
 					<input type="hidden" name="public" value="false" />
 
 					<p>
-						This collection is <strong>public</strong>. Anybody who has the URL can see it.
+						This collection is <strong>public</strong>.
 					</p>
 
 					<button type="submit" class="smallButton tag_public">
@@ -17,19 +17,13 @@
 					</button>
 				</form>
 
-				<% if user.username.blank? %>
-					<small class="username">
-						<a href="/account/settings">Set a username</a> for a prettier URL.
-					</small>
-				<% end %>
-
 			<% else %>
 				<form action="/account/tag/<%= Tag.slugify h(tag.name) %>/public" method="post">
 					<input type="hidden" name="_method" value="put" />
 					<input type="hidden" name="public" value="true" />
 
           <p>
-						This collection is <strong>private</strong>. You can make this collection of alerts public, so other people can see them and easily follow them.
+						This collection is <strong>private</strong>. You can make this collection public, so others can easily follow along.
 					</p>
 
 					<button type="submit" class="smallButton tag_public">
@@ -51,6 +45,19 @@
           [UNNAMED]
         <% end %>
       </h3>
+
+      <% if other_public_tags.any? %>
+        <h4>Other Scout Collections</h4>
+        <ul>
+          <% other_public_tags.each do |tag| %>
+            <li>
+              <a href="<%= tag_path user, tag %>">
+                <%= h tag.name %>
+              </a>
+            </li>
+          <% end %>
+        </ul>
+      <% end %>
     </div>
   <% end %>
 
@@ -77,18 +84,8 @@
 
 		<div class="clear"></div>
 
-		<% if (name = user_name(user)).present? %>
-			<span class="username author">
-				<%= h name %>
-			</span>
-    <% end %>
-
-    <% if (current_user == user) and user.display_name.blank? %>
-      <a href="/account/settings" class="edit_name">set a display name</a>
-		<% end %>
-
 		<div class="description_container">
-			<%= partial "account/description", :engine => "erb", :locals => {:user => user, :tag => tag} %>
+			<%= partial "account/description", engine: :erb, locals: {user: user, tag: tag} %>
 		</div>
 
 	</div>

@@ -38,12 +38,15 @@ get "/user/:user_id/:tag" do
 
   interest = Interest.for_tag current_user, user, tag
 
-  erb :"account/tag", :locals => {
-    :tag => tag,
-    :user => user,
-    :interest => interest,
-    :interests => tag.interests,
-    :edit => (user == current_user)
+  other_public_tags = user.tags.where(public: true, _id: {"$ne" => tag._id}).to_a
+
+  erb :"account/tag", locals: {
+    tag: tag,
+    user: user,
+    interest: interest,
+    interests: tag.interests,
+    other_public_tags: other_public_tags,
+    edit: (user == current_user)
   }
 end
 
