@@ -100,56 +100,52 @@
 	  <% grouped = interests.group_by &:interest_type %>
 
 	  <% if grouped['search'] and grouped['search'].any? %>
-	    <div class="section keywords">
-	      <h2>Searches</h2>
-
-	      <% by_query = grouped['search'].group_by &:in %>
-	      <% by_query.each do |query, query_interests| %>
-	        <div class="interest">
-
-	          <h3 class="interestHeader">"<%= query %>"</h3>
-
-	          <% query_interests.each do |interest| %>
-	            <%= partial "account/interest", :engine => "erb", :locals => {:interest => interest, :edit => false} %>
-	          <% end %>
-
-	        </div>
-
-	      <% end %>
-	    </div>
+      <% by_query = grouped['search'].group_by &:in %>
+      <% by_query.keys.each do |query| %>
+        <div class="interest search">
+          <h4>"<%= query %>"</h4>
+        </div>
+      <% end %>
 	  <% end %>
 
 	  <% if grouped['item'] and grouped['item'].any? %>
 
 	    <% by_item_type = grouped['item'].group_by &:item_type %>
 	    <% by_item_type.each do |item_type, item_interests| %>
-	      <div class="section items <%= item_type %>">
-	        <h2><%= item_type_name item_type %></h2>
-
-	        <div class="interest">
-
-	          <% item_interests.each do |interest| %>
-	            <%= partial "account/interest", :engine => "erb", :locals => {:interest => interest, :edit => false} %>
-	          <% end %>
-
-	        </div>
-	      </div>
+        <% item_interests.each do |interest| %>
+          <div class="interest item <%= item_type %>">
+            <h4>
+              <%= interest_name interest %>
+            </h4>
+          </div>
+        <% end %>
 	    <% end %>
 
 	  <% end %>
 
 	  <% if grouped['feed'] and grouped['feed'].any? %>
-		  <div class="section feeds">
-		    <h2>From Elsewhere</h2>
-		    <div class="interest">
-
-	        <% grouped['feed'].each do |interest| %>
-	          <%= partial "account/interest", :engine => "erb", :locals => {:interest => interest, :edit => false} %>
-	        <% end %>
-
-		    </div>
-		  </div>
+	    <% grouped['feed'].each do |interest| %>
+        <div class="interest collection_feed">
+          <h4>
+            <%= interest_name interest %>
+          </h4>
+        </div>
+      <% end %>
 		<% end %>
+
+    <hr/>
+
+    <h2>Preview of Current Scout Results</h2>
+
+    <% items.each do |item| %>
+      <% if item.search? %>
+        <%= partial "search/item", engine: "erb", locals: {item: item, interest: item.interest, query: interest.in} %>
+      <% elsif item.item? %>
+        <%= partial "subscriptions/#{item.subscription_type}/result", engine: :erb, locals: {item: item} %>
+      <% elsif item.feed? %>
+        <%= partial "search/item", engine: "erb", locals: {item: item, interest: item.interest, query: nil} %>
+      <% end %>
+    <% end %>
 
 	<% end %>
 

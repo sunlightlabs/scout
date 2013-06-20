@@ -38,13 +38,20 @@ get "/user/:user_id/:tag" do
 
   interest = Interest.for_tag current_user, user, tag
 
+  # load in users' other shared collections
   other_public_tags = user.tags.where(public: true, _id: {"$ne" => tag._id}).to_a
+
+  # preview of items fetched so far for this collection
+  interest_ids = tag.interests.only(:_id).map &:_id
+  items = SeenItem.where(interest_id: {"$in" => interest_ids}).desc :date
+  items = items.limit(10).to_a
 
   erb :"account/tag", locals: {
     tag: tag,
     user: user,
     interest: interest,
     interests: tag.interests,
+    items: items,
     other_public_tags: other_public_tags,
     edit: (user == current_user)
   }
@@ -57,7 +64,7 @@ helpers do
       halt 404
     end
 
-    unless tag = user.tags.where(:name => Tag.deslugify(params[:tag])).first
+    unless tag = user.tags.where(name: Tag.deslugify(params[:tag])).first
       halt 404
     end
 
