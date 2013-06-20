@@ -1,60 +1,62 @@
 <% content_for(:home) {true} %>
 
 <div class="home modules">
-	<div class="module updates video">
-		<a href="http://www.youtube.com/watch?v=cKbRsZjoIBU" target="_blank">
-			<img src="<%= asset_path "/images/youtube.png" %>" width=281 height=158 />
-		</a>
-	</div>
-	
-	<div class="module whatUp">
-		<h3>Using Scout</h3>
-		<ul>
-			<li>
-				Set up alerts and subscribe to receive updates from Congress, state legislatures and more via email or SMS text.
-			</li>
+	<h2 class="splashtext">
+		Be a better government watchdog. <em>Stay alert.</em>
+	</h2>
+	<div class="row">
+		<div class="module">
+			<h3>Congress,</h3>
+			<p>
+				Everything the legislative branch does and says, from bills to floor schedules to speeches to GAO reports. <a class="browse" href="">browse</a>
+			</p>
 
-			<li>
-				Search through every bill and regulation in the federal government.
-			</li>
-			
-			<li>
-				Be notified when Congress plans to vote on a bill.
-			</li>
-			
-			<li>
-				Follow and search bills in all 50 states; powered by the <a href="http://openstates.org">Open States</a> project.
-			</li>
-			
-			<li>
-				Import an RSS feed to complement issue alerts.
-			</li>
-			
-			<li>
-				Learn more by watching the video to the left.
-			</li>
-		</ul>
+		</div>
+		<div class="module">
+			<h3>Regulations,</h3>
+			<p>
+				What happens after that law gets passed? Follow regulatory activity in every single executive agency. <a class="browse" href="">browse</a>
+			</p>
+		</div>
+		<div class="module">
+			<h3>State Legislation,</h3>
+			<p>
+				Legislative action in all 50 state capitols - even DC and Puerto Rico. Powered by the Open States project. <a class="browse" href="">browse</a>
+			</p>
+		</div>
+		<div class="module updates samples">
+			<h3>& anything else!</h3>
+			<p>
+				We'll take any RSS or ATOM feed you want to keep tabs on and alert you on updates.
+			</p>
+		</div>
+		<div class="clear"></div>
 	</div>
-
-	<div class="module updates samples">
-		<h3>Suggested Subscriptions</h3>
-		<ul>
-			<li>
-				Receive updates on what Congress and the states are doing and saying about <a href="/search/all/freedom%20of%20information">freedom of information</a>.
-			</li>
-			
-			<li>
-				Stay up-to-date on the campaign finance <a href="/item/bill/s3369-112">DISCLOSE Act</a> in the House and Senate.
-			</li>
-			
-			<li>
-				Follow what others are following. Keep up with Sunlight's set of alerts on <a href="/user/topical_collections/cispa">CISPA and cybersecurity</a>, and <a href="/user/sunlightfoundation/lobbying">lobbying</a>.
-			</li>
-			
-			<li>
-				Read about how Scout helped a non-profit <a href="http://sunlightfoundation.com/blog/2012/05/25/scout-is-already-delivering-results">deliver results</a> on Capitol Hill.
-			</li>
-		</ul>
+	<div class="row">
+		<div class="module rad-collections">
+			<h3>Scout Collections</h3>
+			<div class="feature-collection">
+				<img src="<%= asset_path "/images/logo_sunlightFoundation.png" %>"/>
+				<p>
+					The Electronic Frontier Foundation is following <a href="">cyber security</a>.
+				</p>
+				<div class="clear"></div>
+			</div>
+			<!--
+			<h4>More collections to follow</h4>
+			<ul>
+				<li><a href="">Lorem Ipsum Dolor Set</a></li>
+				<li><a href="">Lorem Ipsum Dolor Set</a></li>
+				<li><a href="">Lorem Ipsum Dolor Set</a></li>
+				<li><a href="">Lorem Ipsum Dolor Set</a></li>
+			</ul>
+			-->
+		</div>
+		<div class="module video">
+			<a href="http://www.youtube.com/watch?v=cKbRsZjoIBU" target="_blank">
+				<img src="<%= asset_path "/images/youtube.png" %>"/>
+			</a>
+		</div>
 	</div>
 </div>
 
