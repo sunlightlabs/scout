@@ -112,6 +112,9 @@
 .entry.bill #document .quoted-block,
 .entry.bill #document .subparagraph {margin-top: 13px; margin-bottom: 13px;}
 
+.entry.bill #document .quote:before,
+.entry.bill #document .quote:after {content: "\"";}
+
 .entry.bill #document .section:first-child {margin-top: 0;}
 
 .entry.bill #document .subsection,
