@@ -174,6 +174,10 @@ module Subscriptions
         "Bills in Congress"
       end
 
+      def self.item_name(subscription)
+        "Bill"
+      end
+
       def self.short_name(number, interest)
         "#{number > 1 ? "bills" : "bill"}"
       end

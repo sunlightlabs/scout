@@ -135,23 +135,25 @@
 
     <hr/>
 
-    <h2>Preview of Current Scout Results</h2>
+    <ul class="preview">
+      <h2>Preview of Current Scout Results</h2>
 
-    <% items.each do |item| %>
-      <% if item.search? %>
-        <%= partial "search/item", engine: "erb", locals: {
-          item: item, interest: item.interest, query: interest.in
-          } %>
-      <% elsif item.item? %>
-        <%= partial "search/item", engine: :erb, locals: {
-          item: item, interest: item.interest, query: nil
-          } %>
-      <% elsif item.feed? %>
-        <%= partial "search/item", engine: "erb", locals: {
-          item: item, interest: item.interest, query: nil
-          } %>
+      <% items.each do |item| %>
+        <% if item.search? %>
+          <%= partial "search/item", engine: "erb", locals: {
+            item: item, interest: item.interest, query: interest.in
+            } %>
+        <% elsif item.item? %>
+          <%= partial "search/item", engine: :erb, locals: {
+            item: item, interest: item.interest, query: nil
+            } %>
+        <% elsif item.feed? %>
+          <%= partial "search/item", engine: "erb", locals: {
+            item: item, interest: item.interest, query: nil
+            } %>
+        <% end %>
       <% end %>
-    <% end %>
+    </ul>
 
 	<% end %>
 

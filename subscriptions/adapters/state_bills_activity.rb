@@ -22,6 +22,10 @@ module Subscriptions
         "Official Activity"
       end
 
+      def self.item_name(subscription)
+        "State bill activity"
+      end
+
       def self.short_name(number, interest)
         "#{number > 1 ? "actions" : "action"}"
       end

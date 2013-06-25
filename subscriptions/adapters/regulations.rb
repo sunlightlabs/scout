@@ -1,17 +1,17 @@
-module Subscriptions  
+module Subscriptions
   module Adapters
 
     class Regulations
 
       MAX_PER_PAGE = 50
 
-      FIELDS = %w{ 
+      FIELDS = %w{
         document_number document_type article_type
-        stage title abstract 
-        posted_at publication_date 
+        stage title abstract
+        posted_at publication_date
         effective_on comments_close_on
         url pdf_url
-        agency_names agency_ids 
+        agency_names agency_ids
       }
 
       def self.filters
@@ -25,17 +25,17 @@ module Subscriptions
           }
         }
       end
-      
+
       def self.url_for(subscription, function, options = {})
         api_key = options[:api_key] || Environment.config['subscriptions']['sunlight_api_key']
-        
+
         if Environment.config['subscriptions']['congress_endpoint'].present?
           endpoint = Environment.config['subscriptions']['congress_endpoint'].dup
         else
           endpoint = "http://congress.api.sunlightfoundation.com"
         end
-        
-        
+
+
 
         url = endpoint
 
@@ -90,7 +90,7 @@ module Subscriptions
         else
           endpoint = "http://congress.api.sunlightfoundation.com"
         end
-        
+
         url = "#{endpoint}/regulations?apikey=#{api_key}"
         url << "&document_number=#{item_id}"
         url << "&fields=#{FIELDS.join ','}"
@@ -114,7 +114,7 @@ module Subscriptions
         # per-year sync is made inefficient by two Congress API bugs:
         # https://github.com/sunlightlabs/congress/issues/391
         # https://github.com/sunlightlabs/congress/issues/392
-        
+
         if options[:since] == "all"
           # ok, get everything
 
@@ -134,7 +134,7 @@ module Subscriptions
 
         url << "&page=#{options[:page]}" if options[:page]
         url << "&per_page=#{MAX_PER_PAGE}"
-        
+
         url
       end
 
@@ -162,15 +162,19 @@ module Subscriptions
         "Federal Regulations"
       end
 
+      def self.item_name(subscription)
+        "Regulatory document"
+      end
+
       def self.short_name(number, interest)
         "#{number > 1 ? "regulations" : "regulation"}"
       end
-      
-      # takes parsed response and returns an array where each item is 
+
+      # takes parsed response and returns an array where each item is
       # a hash containing the id, title, and post date of each item found
       def self.items_for(response, function, options = {})
         raise AdapterParseException.new("Response didn't include results field: #{response.inspect}") unless response['results']
-        
+
         response['results'].map do |regulation|
           item_for regulation
         end
@@ -179,11 +183,11 @@ module Subscriptions
       def self.item_detail_for(response)
         item_for response['results'][0]
       end
-      
-      
-      
+
+
+
       # internal
-      
+
       def self.item_for(regulation)
         return nil unless regulation
 
@@ -192,7 +196,7 @@ module Subscriptions
           date: regulation["posted_at"],
           data: regulation
         )
-          
+
       end
 
       # utility function for mapping agencies
@@ -399,6 +403,6 @@ module Subscriptions
       end
 
     end
-  
+
   end
 end
