@@ -788,15 +788,33 @@ footer nav li{
 }
 .feature-collection {
 	margin-bottom: 40px;
-	background: none;
+	padding: 20px;
+    background: url('/assets/images/bg_featured_collection.png') left top no-repeat;
+    height: 93px;
+    width: 570px;
+}
+.feature-collection .vert-middle {
+    display: table-row;
+    height: 95px;
+}
+.collection-curator {
+	display: table-cell;
+	vertical-align: middle;
+	width: 110px;
+	padding-right: 22px
 }
 .feature-collection img{
-	float: left;
+	width: 110px;
 }
 .home.modules .module .feature-collection p {
-	margin-left: 20px;
-	float: left;
+	padding-left: 20px;
 	background: none;
+	width: 305px;
+	display: table-cell;
+	vertical-align: middle;
+	min-height: 92px;
+	padding: 20px;
+
 }
 .rad-collections ul {
 	column-count: 2;
