@@ -73,13 +73,7 @@
 		<a class="rss feed" href="<%= collection_feed_path user, collection, "rss" %>">RSS</a>
 
 		<% if collection.public? %>
-			<% if user == current_user %>
-        <button disabled class="follow collection disabled">
-          <span>Follow</span>
-        </button>
-      <% else %>
-        <%= follow_collection interest %>
-			<% end %>
+      <%= follow_collection interest, enabled: (user != current_user) %>
 		<% end %>
 
 		<div class="clear"></div>
