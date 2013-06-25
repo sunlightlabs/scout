@@ -77,19 +77,19 @@
       </div>
 
       <% unless interest.tag? %>
-        <div class="tags">
+        <div class="collections">
           <form>
-            <label>Tags</label>
-            <input class="tags" type="text" name="interest[tags]"
+            <label>Collections</label>
+            <input class="collections" type="text" name="interest[collections]"
               placeholder=""
               value="<%= interest.tags.join(", ") %>"
               />
-            <button type="submit" class="smallButton tagsOK" style="display: none">
+            <button type="submit" class="smallButton collectionsOK" style="display: none">
               OK
             </button>
 
             <small class="separate" style="display: none">
-              Separate tags with commas, e.g. "open government, transparency"
+              Separate collections with commas, e.g. "open government, transparency"
             </small>
           </form>
         </div>

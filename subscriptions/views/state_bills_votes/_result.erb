@@ -1,8 +1,3 @@
 <% vote = item.data %>
-<td class="time">
-  <%= just_date_year vote['date'] %>
-</td>
-<td>
-  <p class="motion"><%= vote['motion'] %></p>
-  <p class="vote_count"><%= state_vote_count vote %></p>
-<td>
+<p class="motion"><%= vote['motion'] %></p>
+<p class="vote_count"><%= state_vote_count vote %></p>
