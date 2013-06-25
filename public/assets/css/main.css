@@ -1169,8 +1169,14 @@ button.follow, button.following {display: none;}
 .follow_buttons {position: absolute;}
 .entry .follow_buttons {right: 10px; top: 20px;}
 .results .follow_buttons {right: 10px; top: 10px;}
-.collectionHeader .follow_buttons {right: 20px; top: 20px;}
 .feed_preview .follow_buttons {right: 20px; top: 60px;}
+
+.collectionHeader .follow_mechanisms {right: 20px; top: 0px;}
+.collectionHeader .follow_mechanisms .follow_buttons {right: 20px; top: 20px;}
+.collectionHeader .follow_mechanisms .feed {
+    position: absolute; right: 200px; top: 20px;
+    float: none;
+}
 
 /** quick signup **/
 
@@ -1576,6 +1582,7 @@ h3.interestHeader, .add.rss{
     background: url('/assets/images/rss.png') left bottom no-repeat;
     text-indent: -9999em;
 }
+
 .subscriptions .contentArea form{
     margin-bottom: 155px;
 }
@@ -2083,17 +2090,11 @@ div.indicators span {
     margin-right: 0px;
 }
 
-.collectionHeader .feed, .collectionHeader h2{
+.collectionHeader h2{
     float: left;
     width: none;
 }
-.collection .feed{
-    margin: 10px 0 0 10px;
 
-}
-.collection .collectionHeader button.collection {
-    float: right;
-}
 .collection div.display p {
     font-style: italic;
     margin-top: 5px;
