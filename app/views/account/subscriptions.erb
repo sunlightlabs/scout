@@ -177,25 +177,25 @@
           container.find(".indicators span").hide();
           container.find(".indicators .okay").show().delay(1000).fadeOut(600);
 
-          Utils.log("Interest " + interest_id + " updated with tags (" + data.interest_collections.join(", ") + ")");
+          Utils.log("Interest " + interest_id + " updated with collections (" + data.interest_collections.join(", ") + ")");
           $(".module.collections").html(data.collections_pane);
       }).error(function(xhr) {
           container.find(".indicators span").hide();
           container.find(".indicators .failed").show();
 
-          Utils.log("Error updating tags for interest " + interest_id);
+          Utils.log("Error updating collections for interest " + interest_id);
       });
       return false;
     });
 
-    // show checkboxes and button next to tags when 'edit' is clicked
+    // show checkboxes and button next to collections when 'edit' is clicked
     $(".module.collections").on("click", "h4 a", function() {
       $(".module.collections button, .module.collections input[type=checkbox]").toggle();
       return false;
     });
 
-    // show OK button next to tage input field on focus
-    $("input[type=text].tags").focus(function() {
+    // show OK button next to collection input field on focus
+    $("input[type=text].collections").focus(function() {
       $(this).siblings("button, small").show();
     });
   });

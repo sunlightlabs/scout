@@ -1,7 +1,4 @@
 <% upcoming = item.data %>
-<td class="time">
-  <time datetime="<%= html_date upcoming['legislative_day'] %>"><%= upcoming_date upcoming %></time>
-</td>
-<td>
+<p>
   <a href="<%= upcoming['url'] %>"><%= upcoming['chamber'].capitalize %> Floor</a>
-</td>
+</p>

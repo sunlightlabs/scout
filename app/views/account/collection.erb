@@ -139,11 +139,17 @@
 
     <% items.each do |item| %>
       <% if item.search? %>
-        <%= partial "search/item", engine: "erb", locals: {item: item, interest: item.interest, query: interest.in} %>
+        <%= partial "search/item", engine: "erb", locals: {
+          item: item, interest: item.interest, query: interest.in
+          } %>
       <% elsif item.item? %>
-        <%= partial "subscriptions/#{item.subscription_type}/result", engine: :erb, locals: {item: item} %>
+        <%= partial "search/item", engine: :erb, locals: {
+          item: item, interest: item.interest, query: nil
+          } %>
       <% elsif item.feed? %>
-        <%= partial "search/item", engine: "erb", locals: {item: item, interest: item.interest, query: nil} %>
+        <%= partial "search/item", engine: "erb", locals: {
+          item: item, interest: item.interest, query: nil
+          } %>
       <% end %>
     <% end %>
 
