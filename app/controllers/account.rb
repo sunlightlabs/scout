@@ -3,7 +3,7 @@ get '/account/subscriptions' do
 
   erb :"account/subscriptions", locals: {
     interests: current_user.interests.desc(:created_at),
-    tags: current_user.tags.unscoped.asc(:name)
+    collections: current_user.tags.unscoped.asc(:name)
   }
 end
 

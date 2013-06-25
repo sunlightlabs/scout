@@ -3,8 +3,8 @@
 	<% if user == current_user %>
 		<div class="module sharing">
 
-			<% if tag.public? %>
-				<form action="/account/tag/<%= Tag.slugify h(tag.name) %>/public" method="post">
+			<% if collection.public? %>
+				<form action="/account/collection/<%= Tag.slugify h(collection.name) %>/public" method="post">
 					<input type="hidden" name="_method" value="put" />
 					<input type="hidden" name="public" value="false" />
 
@@ -12,13 +12,13 @@
 						This collection is <strong>public</strong>.
 					</p>
 
-					<button type="submit" class="smallButton tag_public">
+					<button type="submit" class="smallButton collection_public">
 						Make Collection Private
 					</button>
 				</form>
 
 			<% else %>
-				<form action="/account/tag/<%= Tag.slugify h(tag.name) %>/public" method="post">
+				<form action="/account/collection/<%= Tag.slugify h(collection.name) %>/public" method="post">
 					<input type="hidden" name="_method" value="put" />
 					<input type="hidden" name="public" value="true" />
 
@@ -26,7 +26,7 @@
 						This collection is <strong>private</strong>. You can make this collection public, so others can easily follow along.
 					</p>
 
-					<button type="submit" class="smallButton tag_public">
+					<button type="submit" class="smallButton collection_public">
 						Make Collection Public
 					</button>
 				</form>
@@ -37,7 +37,7 @@
   <%# user is either logged out, or logged in and looking at someone else %>
 	<% else %>
 
-    <div class="module tag">
+    <div class="module collection">
       <h3>
         <% if user_name(user).present? %>
           <strong><%= user_name user %></strong>
@@ -46,13 +46,13 @@
         <% end %>
       </h3>
 
-      <% if other_public_tags.any? %>
+      <% if other_public_collections.any? %>
         <h4>Other Scout Collections</h4>
         <ul>
-          <% other_public_tags.each do |tag| %>
+          <% other_public_collections.each do |collection| %>
             <li>
-              <a href="<%= tag_path user, tag %>">
-                <%= h tag.name %>
+              <a href="<%= collection_path user, collection %>">
+                <%= h collection.name %>
               </a>
             </li>
           <% end %>
@@ -63,18 +63,18 @@
 
 <% end %>
 
-<div class="contentArea left tag <%= current_user == user ? "" : "public" %>">
-	<div class="tagHeader">
+<div class="contentArea left collection <%= current_user == user ? "" : "public" %>">
+	<div class="collectionHeader">
 
 		<h2>
-			<%= h tag.name %>
+			<%= h collection.name %>
 		</h2>
 
-		<a class="rss feed" href="<%= tag_feed_path user, tag, "rss" %>">RSS</a>
+		<a class="rss feed" href="<%= collection_feed_path user, collection, "rss" %>">RSS</a>
 
-		<% if tag.public? %>
+		<% if collection.public? %>
 			<% if user == current_user %>
-        <button disabled class="follow tag disabled">
+        <button disabled class="follow collection disabled">
           <span>Follow</span>
         </button>
       <% else %>
@@ -85,7 +85,7 @@
 		<div class="clear"></div>
 
 		<div class="description_container">
-			<%= partial "account/description", engine: :erb, locals: {user: user, tag: tag} %>
+			<%= partial "account/description", engine: :erb, locals: {user: user, collection: collection} %>
 		</div>
 
 	</div>
@@ -93,7 +93,7 @@
 
 	<% if interests.empty? %>
     <p class="empty">
-    	There's nothing tagged here yet.
+    	There's nothing in this Scout collection yet.
     </p>
   <% else %>
 
@@ -153,28 +153,28 @@
 
 <script type="text/javascript">
 
-	var tag_slug = "<%= Tag.slugify h(tag.name) %>";
+	var collection_slug = "<%= Tag.slugify h(collection.name) %>";
 	var user_slug = "<%= h params[:user_id] %>";
 
 	function initializeControls() {
 		<% if logged_in? and (user == current_user) %>
-			$("div.tag").on("click", "a.description", function() {
+			$("div.collection").on("click", "a.description", function() {
 				$("div.display, div.edit").toggle();
 				return false;
 			});
 
-			$("div.tag").on("click", "button.description", function() {
+			$("div.collection").on("click", "button.description", function() {
 				var container = $(this).parents("div.edit");
 				var user = container.data("user");
-				var tag = container.data("tag");
+				var collection = container.data("collection");
 
 				var options = {
 					description: $.trim($("textarea.description").val()),
 					_method: "put"
 				};
 
-				$.post("/account/tag/" + tag_slug + "/description", options, function(data) {
-					Utils.log("Updated description for tag.");
+				$.post("/account/collection/" + collection_slug + "/description", options, function(data) {
+					Utils.log("Updated description for collection.");
 					$("div.description_container").html(data.description_pane);
 				}).error(function() {
 					// todo
@@ -184,10 +184,12 @@
 			});
 		<% end %>
 
-    <% if logged_in? %>
-      Button.initExistingUser(follow, unfollow);
-    <% else %>
-      Button.initNewUser();
+    <% if user != current_user %>
+      <% if logged_in? %>
+        Button.initExistingUser(follow, unfollow);
+      <% else %>
+        Button.initNewUser();
+      <% end %>
     <% end %>
 
     <% if logged_in? and interest.new_record? and (params[:follow] == "now") %>
@@ -198,10 +200,10 @@
 	function follow() {
     Button.showFollowing();
 
-    $.post("/user/" + user_slug + "/" + tag_slug + "/follow", function(data) {
-      Utils.log("Created tag interest " + data.interest_id);
+    $.post("/user/" + user_slug + "/" + collection_slug + "/follow", function(data) {
+      Utils.log("Created collection interest " + data.interest_id);
     }).error(function() {
-      Utils.log("ERROR following tag.");
+      Utils.log("ERROR following collection.");
       Button.showFollow();
     });
   }
@@ -209,10 +211,10 @@
   function unfollow() {
     Button.showFollow();
 
-    $.post("/user/" + user_slug + "/" + tag_slug + "/unfollow", {_method: "delete"}, function(data) {
-      Utils.log("Destroyed tag interest.");
+    $.post("/user/" + user_slug + "/" + collection_slug + "/unfollow", {_method: "delete"}, function(data) {
+      Utils.log("Destroyed collection interest.");
     }).error(function() {
-      Utils.log("ERROR unfollowing tag.");
+      Utils.log("ERROR unfollowing collection.");
       Button.showFollowing();
     });
   }

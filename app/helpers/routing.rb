@@ -69,7 +69,7 @@ module Helpers
       if interest.feed?
         interest.data['url']
       elsif interest.tag?
-        tag_feed_path interest.tag_user, interest.tag, "rss"
+        collection_feed_path interest.tag_user, interest.tag, "rss"
       else
         "/interest/#{interest.id}.rss"
       end
@@ -77,7 +77,7 @@ module Helpers
 
     def interest_json_path(interest)
       if interest.tag?
-        tag_feed_path interest.tag_user, interest.tag, "json"
+        collection_feed_path interest.tag_user, interest.tag, "json"
       else
         "/interest/#{interest.id}.json"
       end
@@ -91,7 +91,7 @@ module Helpers
       elsif interest.search?
         search_interest_path interest
       elsif interest.tag?
-        tag_path interest.tag_user, interest.tag
+        collection_path interest.tag_user, interest.tag
       end
     end
 
@@ -233,12 +233,12 @@ module Helpers
       end
     end
 
-    def tag_path(user, tag)
-      "/user/#{user_id user}/#{Tag.slugify tag.name}"
+    def collection_path(user, collection)
+      "/user/#{user_id user}/#{Tag.slugify collection.name}"
     end
 
-    def tag_feed_path(user, tag, format)
-      "#{tag_path user, tag}.#{format}"
+    def collection_feed_path(user, collection, format)
+      "#{collection_path user, collection}.#{format}"
     end
 
     # only needed in RSS feeds, and external feeds are the only time we override the guid

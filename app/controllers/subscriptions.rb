@@ -1,7 +1,7 @@
 # delete any interest, by ID (from the subscriptions management page)
 delete '/interest/:id' do
   requires_login
-  
+
   if interest = current_user.interests.find(params[:id])
     interest.destroy
     halt 200
@@ -23,24 +23,24 @@ put '/interest/:id' do
     interest.notifications = params[:interest]['notifications']
   end
 
-  tags = []
-  if params[:interest]['tags']
+  collections = []
+  if params[:interest]['collections']
     halt 500 if interest.tag? # no!
-    interest.new_tags = params[:interest]['tags']
-    tags = interest.tags.map do |name| 
+    interest.new_tags = params[:interest]['collections']
+    collections = interest.tags.map do |name|
       current_user.tags.find_or_initialize_by name: name
     end
   end
 
   if interest.save
     # should be guaranteed to be safe
-    tags.each {|tag| tag.save! if tag.new_record?}
+    collections.each {|collection| collection.save! if collection.new_record?}
 
-    pane = partial "account/tags", engine: :erb, locals: {tags: current_user.tags}
+    pane = partial "account/collections", engine: :erb, locals: {collections: current_user.tags}
     json 200, {
-      interest_tags: interest.tags,
+      interest_collections: interest.tags,
       notifications: interest.notifications,
-      tags_pane: pane
+      collections_pane: pane
     }
   else
     halt 500

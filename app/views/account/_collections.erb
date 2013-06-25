@@ -1,0 +1,37 @@
+<h4>
+  Scout Collections
+  <% if collections.any? %>
+    <a class="edit" href="#">edit</a>
+  <% end %>
+</h4>
+
+<% if collections.any? %>
+  <form action="/account/collections" method="post" class="delete_collections">
+    <input type="hidden" name="_method" value="delete" />
+
+    <ul class="collection_list">
+      <% collections.each do |collection| %>
+        <li class="<%= collection.public? ? "public" : "private" %>">
+          <input type="checkbox" class="collection_delete" name="names[]"
+            value="<%= Tag.slugify h(collection.name) %>"
+            />
+          <a href="<%= collection_path current_user, collection %>"
+            class="name"
+            >
+            <%= h collection.name %>
+          </a>
+          <a class="rss feed" href="<%= collection_feed_path current_user, collection, "rss" %>">RSS</a>
+        </li>
+      <% end %>
+    </ul>
+
+    <button type="submit" class="smallButton delete">
+      Remove Selected
+    </button>
+    <div class="clear"></div>
+  </form>
+<% else %>
+  <p>
+    Add your alerts to Scout collections to organize and share them.
+  </p>
+<% end %>
