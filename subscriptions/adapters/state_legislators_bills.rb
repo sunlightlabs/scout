@@ -51,6 +51,10 @@ module Subscriptions
         "Legislator's Sponsored Bills"
       end
 
+      def self.item_name(subscription)
+        "State bill"
+      end
+
       def self.short_name(number, interest)
         "#{number > 1 ? "bills" : "bill"}"
       end

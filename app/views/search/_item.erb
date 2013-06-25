@@ -1,10 +1,20 @@
-<li class="item <%= item.subscription.subscription_type %>" 
-  data-subscription_type="<%= item.subscription.subscription_type %>" 
+<li class="item <%= item.subscription.subscription_type %>"
+  data-subscription_type="<%= item.subscription.subscription_type %>"
   data-search_type="<%= interest.search_type %>">
-  
-  <time class="result" datetime="<%= html_date item.date %>">
-    <%= just_date_year item.date %>
-  </time>
-  
+
+  <div class="side">
+    <time class="result" datetime="<%= html_date item.date %>">
+      <%= just_date_year item.date %>
+    </time>
+
+    <span class="type">
+      <% if item.feed? %>
+        Outside content
+      <% else %>
+        <%= Subscription.adapter_for(item.subscription.subscription_type).item_name item.subscription %>
+      <% end %>
+    </span>
+  </div>
+
   <%= partial "subscriptions/#{item.subscription.subscription_type}/result", engine: "erb", locals: {interest: interest, item: item, query: query} %>
 </li>

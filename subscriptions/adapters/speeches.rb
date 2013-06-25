@@ -31,9 +31,6 @@ module Subscriptions
           query = subscription.query['query']
         end
 
-        # return nil unless query.present?
-
-
         url = "#{endpoint}/text.json?apikey=#{api_key}"
 
         if query.present? and !["\"*\"", "*"].include?(query)
@@ -122,6 +119,10 @@ module Subscriptions
 
       def self.search_name(subscription)
         "Speeches in Congress"
+      end
+
+      def self.item_name(subscription)
+        "Speech"
       end
 
       def self.short_name(number, interest)

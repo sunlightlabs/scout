@@ -27,6 +27,10 @@ module Subscriptions
         "On the Floor"
       end
 
+      def self.item_name(subscription)
+        "Scheduled debate"
+      end
+
       def self.short_name(number, interest)
         "#{number > 1 ? "floor notices" : "floor notice"}"
       end

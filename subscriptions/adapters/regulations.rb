@@ -160,6 +160,10 @@ module Subscriptions
         "Federal Regulations"
       end
 
+      def self.item_name(subscription)
+        "Regulatory document"
+      end
+
       def self.short_name(number, interest)
         "#{number > 1 ? "regulations" : "regulation"}"
       end

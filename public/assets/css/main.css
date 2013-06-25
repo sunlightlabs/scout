@@ -22,56 +22,6 @@ label.placeholder {
     display: inline-block !important;
 }
 
-.ie7 img { -ms-interpolation-mode: bicubic; }
-.ie7 .sidebar.left, .ie7 .sidebar.right {
-    width: 249px;
-}
-.ie7 input[type="submit"], .ie7 button, .ie7 a.update.button {
-    overflow: visible;
-}
-.ie7 #search_form {
-    position: relative;
-}
-.ie7 #search_form input {
-    width: 370px;
-    margin-right: 8px;
-}
-.ie7 .homeWrapper #search_form input{
-    width: 655px;
-}
-.ie7 #search_form button{
-    position: absolute;
-    top: 0;
-    right: 0;
-}
-.ie7 .homeWrapper #search_form button{
-    position: absolute;
-    top: 63px;
-    right: 0;
-}
-.ie7 .homeWrapper #search_form button span{
-    width: auto;
-}
-.ie7 #search_form fieldset{
-    display: block;
-    padding-right: 0;
-    margin-right: 0;
-}
-.ie7 .results.contentArea li{
-    position: relative;
-}
-.ie7 .item time{
-    position: absolute;
-    top: 34px;
-    right: 0;
-}
-.ie7 .entryHeader{
-    width: 667px;
-}
-.ie7 .settings.contentArea .module{
-    width: 312px;
-}
-
 
 input, select, textarea {
     box-sizing: border-box;
@@ -1122,13 +1072,20 @@ time.item, .time {
     margin-top: 10px;
 }
 
-.item time{
+.item .side {
+    float: right;
+}
+
+.item .side time{
     margin-top: 4px;
     font-style: italic;
     font-size: 100%;
     display: block;
-    float: right;
 }
+
+.item .side span.type {display: none;}
+.preview .item .side span.type {display: block;}
+
 .time time{
     float: none;
 }

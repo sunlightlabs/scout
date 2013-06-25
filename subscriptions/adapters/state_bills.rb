@@ -149,6 +149,10 @@ module Subscriptions
         "State Bills"
       end
 
+      def self.item_name(subscription)
+        "State bill"
+      end
+
       def self.short_name(number, interest)
         "state #{number > 1 ? "bills" : "bill"}"
       end
