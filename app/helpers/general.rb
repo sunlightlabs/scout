@@ -113,20 +113,20 @@ module Helpers
     end
 
     def follow_item(interest)
-      partial "partials/follow", engine: :erb, locals: {type: :item, interest: interest}
+      partial "partials/follow", engine: :erb, locals: {type: :item, interest: interest, enabled: true}
     end
 
     def follow_search(interest)
-      partial "partials/follow", engine: :erb, locals: {type: :search, interest: interest}
+      partial "partials/follow", engine: :erb, locals: {type: :search, interest: interest, enabled: true}
     end
 
     # to the follow partial, no interest is a new interest
     def follow_feed
-      partial "partials/follow", engine: :erb, locals: {type: :feed, interest: nil}
+      partial "partials/follow", engine: :erb, locals: {type: :feed, interest: nil, enabled: true}
     end
 
-    def follow_collection(interest)
-      partial "partials/follow", engine: :erb, locals: {type: :tag, interest: interest}
+    def follow_collection(interest, enabled: true)
+      partial "partials/follow", engine: :erb, locals: {type: :tag, interest: interest, enabled: enabled}
     end
 
     def truncate(string, length)

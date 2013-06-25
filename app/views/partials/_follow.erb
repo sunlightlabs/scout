@@ -1,11 +1,17 @@
 <div class="follow_buttons">
-  <button class="follow <%= type %>">
-    <span>Create Alert</span>
-  </button>
+  <% if enabled %>
+    <button class="follow <%= type %>">
+      <span>Create Alert</span>
+    </button>
 
-  <button class="following <%= type %>">
-    <span>Remove Alert</span>
-  </button>
+    <button class="following <%= type %>">
+      <span>Remove Alert</span>
+    </button>
+  <% else %>
+    <button disabled class="follow <%= type %> disabled" style="display: block">
+      <span>Create Alert</span>
+    </button>
+  <% end %>
 
   <div class="quickSignup">
     <form>
@@ -17,79 +23,81 @@
   </div>
 </div>
 
-<script type="text/javascript">
+<% if enabled %>
+  <script type="text/javascript">
 
-Button = {
-  initNewUser: function() {
-    Button.showFollow();
-
-    $("button.follow").off("click").click(function() {
-      $(".quickSignup").toggle();
-      $(".quickSignup input[type=email]").focus();
-
-      if ($(".quickSignup").is(":visible"))
-        Utils.event("Quick signup", "Reveal");
-    });
-    $("button.following").off("click");
-
-    $(".quickSignup form").submit(Button.newUser);
-  },
-
-  newUser: function() {
-    var email = $.trim($(".quickSignup input[type=email]").val());
-
-    $(".quickSignup input[type=submit]").hide();
-    $(".quickSignup .spinner").show();
-    $(".quickSignup .message").hide();
-
-    $.post("/account/new/quick", {email: email}, function(data, text) {
-      console.log("Created new unconfirmed user account for " + email + ".");
-
-      // the universal outcome is to redirect back to current page with follow=now appended
-      var location = Utils.currentPath({follow: "now"}, true);
-      console.log(location);
-      window.location = location;
-    }).error(function(error) {
-      var message = error.responseText;
-      console.log("Couldn't create new user: " + message);
-
-      $(".quickSignup .spinner").hide();
-      $(".quickSignup input[type=submit]").show();
-
-      $(".quickSignup .message.problem").html(message).show();
-    });
-
-    return false;
-  },
-
-  // pass in a follow and unfollow callback to run when the button's pressed
-  initExistingUser: function(follow, unfollow) {
-    <% if interest.nil? or interest.new_record? %>
+  Button = {
+    initNewUser: function() {
       Button.showFollow();
-    <% else %>
-      Button.showFollowing();
-    <% end %>
 
-    $("button.follow").off("click").click(function() {
-      follow();
+      $("button.follow").off("click").click(function() {
+        $(".quickSignup").toggle();
+        $(".quickSignup input[type=email]").focus();
+
+        if ($(".quickSignup").is(":visible"))
+          Utils.event("Quick signup", "Reveal");
+      });
+      $("button.following").off("click");
+
+      $(".quickSignup form").submit(Button.newUser);
+    },
+
+    newUser: function() {
+      var email = $.trim($(".quickSignup input[type=email]").val());
+
+      $(".quickSignup input[type=submit]").hide();
+      $(".quickSignup .spinner").show();
+      $(".quickSignup .message").hide();
+
+      $.post("/account/new/quick", {email: email}, function(data, text) {
+        console.log("Created new unconfirmed user account for " + email + ".");
+
+        // the universal outcome is to redirect back to current page with follow=now appended
+        var location = Utils.currentPath({follow: "now"}, true);
+        console.log(location);
+        window.location = location;
+      }).error(function(error) {
+        var message = error.responseText;
+        console.log("Couldn't create new user: " + message);
+
+        $(".quickSignup .spinner").hide();
+        $(".quickSignup input[type=submit]").show();
+
+        $(".quickSignup .message.problem").html(message).show();
+      });
+
       return false;
-    });
+    },
 
-    $("button.following").off("click").click(function() {
-      unfollow();
-      return false;
-    });
-  },
+    // pass in a follow and unfollow callback to run when the button's pressed
+    initExistingUser: function(follow, unfollow) {
+      <% if interest.nil? or interest.new_record? %>
+        Button.showFollow();
+      <% else %>
+        Button.showFollowing();
+      <% end %>
 
-  showFollow: function() {
-    $("button.follow").show();
-    $("button.following").hide();
-  },
+      $("button.follow").off("click").click(function() {
+        follow();
+        return false;
+      });
 
-  showFollowing: function() {
-    $("button.follow").hide();
-    $("button.following").show();
-  }
-};
+      $("button.following").off("click").click(function() {
+        unfollow();
+        return false;
+      });
+    },
 
-</script>
+    showFollow: function() {
+      $("button.follow").show();
+      $("button.following").hide();
+    },
+
+    showFollowing: function() {
+      $("button.follow").hide();
+      $("button.following").show();
+    }
+  };
+
+  </script>
+<% end %>
