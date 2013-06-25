@@ -5,7 +5,7 @@ class TagsTest < Test::Unit::TestCase
   include TestHelper::Methods
   include FactoryGirl::Syntax::Methods
 
-  
+
   def test_follow_tag
     name = "foia"
     name2 = "open government"
@@ -134,7 +134,7 @@ class TagsTest < Test::Unit::TestCase
 
     # lookup by user ID should also work
     delete "/user/#{sharing.id.to_s}/#{Tag.slugify tag2.name}/unfollow", {} ,login(user)
-    assert_response 200    
+    assert_response 200
 
     assert_equal 0, user.reload.interests.count
     assert_nil user.interests.where(in: tag.id.to_s).first
@@ -189,28 +189,28 @@ class TagsTest < Test::Unit::TestCase
     assert_equal 0, user.tags.count
 
 
-    put "/interest/#{interest.id}", {:interest => {"tags" => new_tags}}, login(user)
+    put "/interest/#{interest.id}", {interest: {collections: new_tags}}, login(user)
     assert_response 200
 
     assert_equal serialized, interest.reload.tags
     assert_equal serialized.sort, user.reload.tags.map(&:name).sort
 
     # spaces affect nothing
-    put "/interest/#{interest.id}", {interest: {"tags" => new_tags_with_spaces}}, login(user)
+    put "/interest/#{interest.id}", {interest: {collections: new_tags_with_spaces}}, login(user)
     assert_response 200
 
     assert_equal serialized, interest.reload.tags
     assert_equal serialized.sort, user.reload.tags.map(&:name).sort
 
 
-    put "/interest/#{interest.id}", {:interest => {"tags" => next_tags}}, login(user)
+    put "/interest/#{interest.id}", {interest: {collections: next_tags}}, login(user)
     assert_response 200
 
     assert_equal ["another", "altogether"], interest.reload.tags
     assert_equal (serialized + ["altogether"]).sort, user.reload.tags.map(&:name).sort
 
 
-    put "/interest/#{interest.id}", {:interest => {"tags" => ""}}, login(user)
+    put "/interest/#{interest.id}", {interest: {collections: ""}}, login(user)
     assert_response 200
 
     assert_equal [], interest.reload.tags
@@ -231,7 +231,7 @@ class TagsTest < Test::Unit::TestCase
 
     assert_equal [], interest.tags
 
-    put "/interest/#{interest.id}", {:interest => {"tags" => new_tags}}, login(user)
+    put "/interest/#{interest.id}", {interest: {collections: new_tags}}, login(user)
     assert_response 500
 
     assert_equal [], interest.reload.tags
@@ -249,8 +249,8 @@ class TagsTest < Test::Unit::TestCase
     assert_equal 0, user1.tags.count
     assert_equal 0, user2.tags.count
 
-    
-    put "/interest/#{interest1.id}", {:interest => {"tags" => new_tags}}, login(user1)
+
+    put "/interest/#{interest1.id}", {interest: {collections: new_tags}}, login(user1)
     assert_response 200
 
     assert_equal 3, Tag.count
@@ -258,7 +258,7 @@ class TagsTest < Test::Unit::TestCase
     assert_equal 0, user2.tags.count
 
 
-    put "/interest/#{interest2.id}", {:interest => {"tags" => new_tags}}, login(user2)
+    put "/interest/#{interest2.id}", {interest: {collections: new_tags}}, login(user2)
     assert_response 200
 
     assert_equal 6, Tag.count
@@ -271,35 +271,35 @@ class TagsTest < Test::Unit::TestCase
     user = create :user
     name1 = "one"
     name2 = "two"
-    tag1 = create :tag, :name => name1, :user => user
-    tag2 = create :tag, :name => name2, :user => user
+    tag1 = create :tag, name: name1, user: user
+    tag2 = create :tag, name: name2, user: user
 
     assert tag1.private?
 
 
     # turn it on
-    put "/account/tag/#{name1}/public", {:public => true}, login(user)
+    put "/account/collection/#{name1}/public", {public: true}, login(user)
     assert_response 302
 
     assert tag1.reload.public?
 
 
     # turn it off
-    put "/account/tag/#{name1}/public", {:public => false}, login(user)
+    put "/account/collection/#{name1}/public", {:public => false}, login(user)
     assert_response 302
 
     assert tag1.reload.private?
 
 
     # turn it off again
-    put "/account/tag/#{name1}/public", {:public => false}, login(user)
+    put "/account/collection/#{name1}/public", {:public => false}, login(user)
     assert_response 302
 
-    assert tag1.reload.private?    
+    assert tag1.reload.private?
 
 
     # turn on another one
-    put "/account/tag/#{name2}/public", {:public => true}, login(user)
+    put "/account/collection/#{name2}/public", {:public => true}, login(user)
     assert_response 302
 
     assert tag1.reload.private?
@@ -314,7 +314,7 @@ class TagsTest < Test::Unit::TestCase
 
     assert_equal 0, user.tags.where(:tag => name).count
 
-    put "/account/tag/#{name}/public", {:public => true}, login(user)
+    put "/account/collection/#{name}/public", {:public => true}, login(user)
     assert_response 404
   end
 
@@ -328,14 +328,14 @@ class TagsTest < Test::Unit::TestCase
     description = "new description"
     description2 = "new new description"
 
-    
-    put "/account/tag/#{Tag.slugify tag.name}/description", {:description => description}, login(user)
+
+    put "/account/collection/#{Tag.slugify tag.name}/description", {:description => description}, login(user)
     assert_response 200
 
     assert_not_nil json_response['description_pane'][description]
     assert_equal description, tag.reload.description
 
-    put "/account/tag/#{Tag.slugify tag.name}/description", {:description => description2}, login(user)
+    put "/account/collection/#{Tag.slugify tag.name}/description", {:description => description2}, login(user)
     assert_response 200
 
     assert_not_nil json_response['description_pane'][description2]
@@ -351,8 +351,8 @@ class TagsTest < Test::Unit::TestCase
     assert_nil tag.description
 
     description = "new description"
-    
-    put "/account/tag/#{Tag.slugify tag.name}/description", {:description => description}, login(other_user)
+
+    put "/account/collection/#{Tag.slugify tag.name}/description", {:description => description}, login(other_user)
     assert_response 404
 
     assert_nil tag.reload.description
@@ -367,7 +367,7 @@ class TagsTest < Test::Unit::TestCase
     description = "new description"
     description2 = "new new description"
 
-    put "/account/tag/#{Tag.slugify tag.name}/description", {:description => description}, {}
+    put "/account/collection/#{Tag.slugify tag.name}/description", {:description => description}, {}
     assert_redirect '/'
 
     assert_nil tag.reload.description
@@ -386,14 +386,14 @@ class TagsTest < Test::Unit::TestCase
     assert_equal 3, Tag.count
     assert_equal 3, user.tags.count
 
-    delete "/account/tags", {:names => [name1]}, login(user)
+    delete "/account/collections", {:names => [name1]}, login(user)
     assert_redirect "/account/subscriptions"
 
     assert_equal 2, Tag.count
     assert_equal 2, user.tags.count
     assert_equal 0, user.tags.where(:name => name1).count
 
-    delete "/account/tags", {:names => [name2, name3]}, login(user)
+    delete "/account/collections", {:names => [name2, name3]}, login(user)
     assert_redirect "/account/subscriptions"
 
     assert_equal 0, Tag.count
@@ -409,7 +409,7 @@ class TagsTest < Test::Unit::TestCase
     assert_equal 1, Tag.count
     assert_equal 1, user.tags.count
 
-    delete "/account/tags", {:names => [name1]}, {}
+    delete "/account/collections", {:names => [name1]}, {}
     assert_redirect '/'
 
     assert_equal 1, Tag.count
@@ -429,7 +429,7 @@ class TagsTest < Test::Unit::TestCase
     assert_equal 1, user.tags.count
     assert_equal 1, other_user.tags.count
 
-    delete "/account/tags", {:names => [name1]}, login(other_user)
+    delete "/account/collections", {:names => [name1]}, login(other_user)
     assert_redirect "/account/subscriptions"
 
     assert_equal 1, Tag.count
@@ -465,8 +465,8 @@ class TagsTest < Test::Unit::TestCase
     assert_equal 5, user1.tags.count
     assert_equal 3, user2.tags.count
 
-    
-    delete "/account/tags", {:names => [name3]}, login(user1)
+
+    delete "/account/collections", {:names => [name3]}, login(user1)
     assert_redirect "/account/subscriptions"
 
     assert_equal 7, Tag.count
@@ -479,7 +479,7 @@ class TagsTest < Test::Unit::TestCase
     assert_equal [name1, name3, name5], interest4.reload.tags
 
 
-    delete "/account/tags", {:names => [name1, name5]}, login(user1)
+    delete "/account/collections", {:names => [name1, name5]}, login(user1)
     assert_redirect "/account/subscriptions"
 
     assert_equal 5, Tag.count
