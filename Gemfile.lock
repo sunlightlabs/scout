@@ -18,17 +18,31 @@ GEM
     activemodel (3.2.12)
       activesupport (= 3.2.12)
       builder (~> 3.0.0)
+    activerecord (3.2.12)
+      activemodel (= 3.2.12)
+      activesupport (= 3.2.12)
+      arel (~> 3.0.2)
+      tzinfo (~> 0.3.29)
     activesupport (3.2.12)
       i18n (~> 0.6)
       multi_json (~> 1.0)
+    arel (3.0.2)
     asset_sync (0.5.4)
       activemodel
       fog
+    aws-sdk (1.11.3)
+      json (~> 1.4)
+      nokogiri (< 1.6.0)
+      uuidtools (~> 2.1)
     backports (3.3.1)
     bcrypt-ruby (3.0.1)
     big_sitemap (1.1.0)
     blankslate (2.1.2.4)
     builder (3.0.4)
+    climate_control (0.0.3)
+      activesupport (>= 3.0)
+    cocaine (0.5.1)
+      climate_control (>= 0.0.3, < 1.0)
     curb (0.8.4)
     debugger-ruby_core_source (1.2.2)
     escape_utils (0.3.2)
@@ -81,6 +95,8 @@ GEM
       moped (~> 1.4)
       origin (~> 1.0)
       tzinfo (~> 0.3.22)
+    mongoid-paperclip (0.0.8)
+      paperclip (>= 2.3.6)
     moped (1.5.0)
     multi_json (1.7.5)
     multi_xml (0.5.3)
@@ -101,6 +117,12 @@ GEM
       i18n (~> 0.6)
       padrino-core (= 0.11.2)
     paint (0.8.6)
+    paperclip (3.4.2)
+      activemodel (>= 3.0.0)
+      activerecord (>= 3.0.0)
+      activesupport (>= 3.0.0)
+      cocaine (~> 0.5.0)
+      mime-types
     parslet (1.5.0)
       blankslate (~> 2.0)
     polyglot (0.3.3)
@@ -163,6 +185,7 @@ GEM
       raindrops (~> 0.7)
     url_mount (0.2.1)
       rack
+    uuidtools (2.1.4)
     wirb (1.0.1)
       paint
 
@@ -171,6 +194,7 @@ PLATFORMS
 
 DEPENDENCIES
   asset_sync
+  aws-sdk
   bcrypt-ruby
   big_sitemap
   curb
@@ -181,6 +205,7 @@ DEPENDENCIES
   lucene_query_parser!
   mail (= 2.4.4)
   mongoid (= 3.1.4)
+  mongoid-paperclip
   multi_json
   oj
   padrino-helpers (= 0.11.2)

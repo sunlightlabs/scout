@@ -1,5 +1,6 @@
 require 'sinatra'
 require 'mongoid'
+require 'mongoid_paperclip'
 
 require 'safe_yaml' # we only use yaml for config, but just in case, sanitize
 require 'escape_utils'
