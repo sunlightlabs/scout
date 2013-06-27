@@ -642,9 +642,10 @@ footer nav li{
 .row {
 	clear: both;
 }
-.modules .row {
-    background: url('/assets/images/through_arrow.png') center top no-repeat;
+.modules .row.functions {
+    background: url('/assets/images/through_arrow.png') center 9px no-repeat;
     padding-top: 17px;
+    margin-bottom: 40px;
 }
 .splashtext{
     padding: 80px 0 60px 0;
@@ -705,9 +706,11 @@ footer nav li{
 .home.modules li{
     margin-bottom: 10px;
 }
-
 .home.modules h3{
-    color: #000000;
+    color: #59585e;
+    margin-bottom: 20px;	
+}
+.home.modules .functions h3{
     color: #59585e;
     margin-bottom: 36px;
 }
@@ -717,7 +720,7 @@ footer nav li{
     -webkit-boxsizing: border-box;
     -moz-box-sizing: border-box;
     background: none;
-    margin-bottom: 40px;
+    margin-bottom: 80px;
 }
 .home.modules .module.video {
 	width: 34%;
@@ -728,10 +731,10 @@ footer nav li{
 }
 .home.modules .module.video img{
 	border: 6px solid #c5c7c7;
-	width: 100%;
     box-sizing: border-box;
     -webkit-boxsizing: border-box;
     -moz-box-sizing: border-box;
+    margin-top: 30px;
 }
 .home.modules .module.video img:hover{
 	opacity: .9;
