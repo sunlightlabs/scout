@@ -31,12 +31,12 @@ end
 put '/account/settings' do
   requires_login
 
-  # if params[:user] and params[:user][:image]
-  #   tempfile = params[:user][:image][:tempfile]
-  #   params[:user].delete :image
-  #   params[:user].delete 'image'
-  #   params[:user]['image'] = tempfile
-  # end
+  if params[:user] and params[:user][:image]
+    tempfile = params[:user][:image][:tempfile]
+    params[:user].delete :image
+    params[:user].delete 'image'
+    params[:user]['image'] = tempfile
+  end
 
   # first, any attributes given under the user hash
   current_user.attributes = params[:user]

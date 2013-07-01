@@ -80,10 +80,15 @@
           <textarea name="user[bio]"><%= user.bio %></textarea>
         </li>
 
-        <!-- <li class="image">
+        <li class="image">
           <label for="image">Image or logo</label>
           <input type="file" name="user[image]" />
-        </li> -->
+        </li>
+
+        <% if user.valid? and user.image.present? %>
+          <small>Current image</small>
+          <img src="<%= user.image.url :small %>" />
+        <% end %>
       </ul>
 
       <button type="submit">
