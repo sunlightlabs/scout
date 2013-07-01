@@ -101,8 +101,9 @@ module Helpers
     end
 
     def errors_for(object)
-      if object and object.errors
-        object.errors.full_messages.map do |msg|
+
+      if object and object.errors and object.errors.any?
+        object.errors.map do |key, msg|
           "<div class=\"error user\">#{msg}</div>"
         end.join
       end
