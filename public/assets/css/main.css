@@ -286,6 +286,16 @@ div.error {
 
 .full.user.settings div.error {display: block;}
 
+
+/** profile sidebar **/
+.settings.contentArea .module.profile {
+    padding: 20px;
+}
+
+.settings.contentArea .module.highlight {
+    background-color: #FBFF90;
+}
+
 /*-- Hat Styling --*/
 .hatWrap .contentWrapper{
     overflow: visible;
