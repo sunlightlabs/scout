@@ -63,6 +63,14 @@ put '/account/settings' do
 end
 
 
+# public profile settings, including possible attached image
+put '/account/profile' do
+  requires_login
+
+
+end
+
+
 # simpler version of the account settings update -
 # doesn't require an existing password to change the current one, but
 # does require the confirm_token (which will be new and

@@ -25,7 +25,7 @@ class User
   field :sunlight_announcements, type: Boolean, default: false
 
   # used for sharing things
-  has_mongoid_attached_file :logo
+  has_mongoid_attached_file :image
   field :username
   field :display_name
   field :url
