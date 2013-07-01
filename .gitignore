@@ -9,6 +9,8 @@
 /public/sitemap
 /public/assets/*/*.gz
 
+/public/system
+
 /tmp
 /REVISION
 /TODO*
