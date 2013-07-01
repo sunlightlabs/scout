@@ -195,7 +195,6 @@ nav .should_change_password a {
     text-decoration: underline;
 }
 
-
 form label {
     font-weight: bold;
 }
@@ -717,7 +716,7 @@ footer nav li{
     margin-bottom: 36px;
 }
 .home.modules .module.rad-collections{
-	width: 100%;
+	width: 66%;
     box-sizing: border-box;
     -webkit-boxsizing: border-box;
     -moz-box-sizing: border-box;
@@ -747,7 +746,6 @@ footer nav li{
     background: url('/assets/images/bg_featured_collection.png') left top no-repeat;
     height: 93px;
     width: 570px;
-    float: left;
 }
 .feature-collection .vert-middle {
     display: table-row;
@@ -772,12 +770,13 @@ footer nav li{
 	padding: 20px;
 
 }
-.more-collections {
-	float: left;
-	padding-left: 30px;
-}
-.more-collections ul {
-	padding-left: 30px;
+.rad-collections ul {
+	column-count: 2;
+	column-gap: 20px;
+	-moz-column-count: 2;
+	-moz-column-gap: 20px;
+	-webkit-column-count: 2;
+	-webkit-column-gap: 20px;
 }
 .rad-collections h3 {
 	text-align: left;
