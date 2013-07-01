@@ -1177,7 +1177,7 @@ button.follow, button.following {display: none;}
 .collectionHeader .follow_mechanisms {right: 20px; top: 0px;}
 .collectionHeader .follow_mechanisms .follow_buttons {right: 20px; top: 20px;}
 .collectionHeader .follow_mechanisms .feed {
-    position: absolute; right: 200px; top: 20px;
+    position: absolute; right: 190px; top: 18px;
     float: none;
 }
 
@@ -2016,7 +2016,7 @@ div.indicators span {
 }
 
 
-/*-- Tag Grouping Topic Styling --*/
+/*-- Tag Grouping Topic Styling AKA COLLECTIONS Page--*/
 
 
 .collectionHeader{
@@ -2030,6 +2030,24 @@ div.indicators span {
 }
 .collection .author{
     font-weight: bold;
+}
+.collection button.feed.rss {
+	width: inherit;
+	height: inherit;
+	background: rgb(28,131,152);
+	background: -moz-linear-gradient(top, rgba(132,138,139,1) 0%, rgba(132,138,139,1) 50%, rgba(116,121,122,1) 51%, rgba(116,121,122,1) 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(132,138,139,1)), color-stop(50%,rgba(132,138,139,1)), color-stop(51%,rgba(116,121,122,1)), color-stop(100%,rgba(116,121,122,1)));
+	background: -webkit-linear-gradient(top, rgba(132,138,139,1) 0%,rgba(132,138,139,1) 50%,rgba(116,121,122,1) 51%,rgba(116,121,122,1) 100%);
+	background: -o-linear-gradient(top, rgba(132,138,139,1) 0%,rgba(132,138,139,1) 50%,rgba(116,121,122,1) 51%,rgba(116,121,122,1) 100%);
+	background: -ms-linear-gradient(top, rgba(132,138,139,1) 0%,rgba(132,138,139,1) 50%,rgba(116,121,122,1) 51%,rgba(116,121,122,1) 100%);
+	background: linear-gradient(top, rgba(132,138,139,1) 0%,rgba(132,138,139,1) 50%,rgba(116,121,122,1) 51%,rgba(116,121,122,1) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1c8398', endColorstr='#1c697a',GradientType=0 );
+}
+.collection button.feed.rss span {
+	width: 22px;
+	height: 22px;
+	background: url('/assets/images/btn_rss.png') left top no-repeat;
+	display: block;
 }
 
 .collection div.edit {
