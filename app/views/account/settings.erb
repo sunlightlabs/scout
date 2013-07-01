@@ -43,7 +43,7 @@
     </form>
   </div>
 
-  <div class="module profile">
+  <div class="module profile <%= "highlight" if params[:highlight] == "profile" %>">
     <h3>Profile</h3>
 
     <small>
@@ -58,7 +58,7 @@
 
       <ul>
         <li class="display_name">
-          <label for="display_name">Full Name</label>
+          <label for="display_name">Full Name (required for sharing)</label>
           <input type="text" name="user[display_name]"
             value="<%= user.display_name %>" autocomplete="off" />
         </li>

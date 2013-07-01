@@ -1,53 +1,56 @@
 <% content_for :sidebar_right do %>
 
-	<% if user == current_user %>
-		<div class="module sharing">
+  <% if user == current_user %>
+    <div class="module sharing">
 
-			<% if collection.public? %>
-				<form action="/account/collection/<%= Tag.slugify h(collection.name) %>/public" method="post">
-					<input type="hidden" name="_method" value="put" />
-					<input type="hidden" name="public" value="false" />
-
-					<p>
-						This collection is <strong>public</strong>.
-					</p>
-
-					<button type="submit" class="smallButton collection_public">
-						Make Collection Private
-					</button>
-				</form>
-
-			<% else %>
-				<form action="/account/collection/<%= Tag.slugify h(collection.name) %>/public" method="post">
-					<input type="hidden" name="_method" value="put" />
-					<input type="hidden" name="public" value="true" />
+      <% if collection.public? %>
+        <form action="/account/collection/<%= Tag.slugify h(collection.name) %>/public" method="post">
+          <input type="hidden" name="_method" value="put" />
+          <input type="hidden" name="public" value="false" />
 
           <p>
-						This collection is <strong>private</strong>. You can make this collection public, so others can easily follow along.
-					</p>
+            This collection is <strong>public</strong>.
+          </p>
+          <p>
+            Your public profile below will be shown to visiting users. <a href="/account/settings?highlight=profile">Update your profile</a> to make changes.
+          </p>
 
-					<button type="submit" class="smallButton collection_public">
-						Make Collection Public
-					</button>
-				</form>
-			<% end %>
-
-      <div class="profile_form">
-        <h3>Your Profile</h3>
-
-        <form action="/account/profile" method="post">
-          <input type="hidden" name="_method" value="put">
-
-          <label>
+          <button type="submit" class="smallButton collection_public">
+            Make Collection Private
+          </button>
         </form>
-      </div>
 
-		</div>
+      <% else %>
+        <% if user.display_name.present? %>
+          <form action="/account/collection/<%= Tag.slugify h(collection.name) %>/public" method="post">
+            <input type="hidden" name="_method" value="put" />
+            <input type="hidden" name="public" value="true" />
+
+            <p>
+              This collection is <strong>private</strong>. You can make this collection public, so others can easily follow along.
+            </p>
+
+            <button type="submit" class="smallButton collection_public">
+              Make Collection Public
+            </button>
+          </form>
+        <% else %>
+          <p>
+            This collection is <strong>private</strong>. If you want to share it publicly, <a href="/account/settings?highlight=profile">fill out your user profile</a>.
+          </p>
+        <% end %>
+      <% end %>
+
+    </div>
 
   <%# user is either logged out, or logged in and looking at someone else %>
-	<% else %>
-    <!-- can assume the user has a display name -->
-    <div class="module collection">
+  <% else %>
+
+  <% end %>
+
+  <%# whether or not it belongs to the visiting user, if it's public show the profile %>
+  <% if collection.public? %>
+    <div class="module profile">
       <% if user.image.present? %>
         <img class="logo" src="<%= user.image.url :small %>"/>
       <% end %>
@@ -88,50 +91,50 @@
 <% end %>
 
 <div class="contentArea left collection <%= current_user == user ? "" : "public" %>">
-	<div class="collectionHeader">
+  <div class="collectionHeader">
 
-		<h2>
-			<%= h collection.name %>
-		</h2>
+    <h2>
+      <%= h collection.name %>
+    </h2>
 
     <div class="follow_mechanisms">
-  		<button class="rss feed" href="<%= collection_feed_path user, collection, "rss" %>"><span>RSS</span></button>
+      <button class="rss feed" href="<%= collection_feed_path user, collection, "rss" %>"><span>RSS</span></button>
 
-  		<% if collection.public? %>
+      <% if collection.public? %>
         <%= follow_collection interest, enabled: (user != current_user) %>
-  		<% end %>
+      <% end %>
     </div>
 
-		<div class="clear"></div>
+    <div class="clear"></div>
 
-		<div class="description_container">
-			<%= partial "account/description", engine: :erb, locals: {user: user, collection: collection} %>
-		</div>
+    <div class="description_container">
+      <%= partial "account/description", engine: :erb, locals: {user: user, collection: collection} %>
+    </div>
 
-	</div>
+  </div>
 
 
-	<% if interests.empty? %>
+  <% if interests.empty? %>
     <p class="empty">
-    	There's nothing in this Scout collection yet.
+      There's nothing in this Scout collection yet.
     </p>
   <% else %>
 
-	  <% grouped = interests.group_by &:interest_type %>
+    <% grouped = interests.group_by &:interest_type %>
 
-	  <% if grouped['search'] and grouped['search'].any? %>
+    <% if grouped['search'] and grouped['search'].any? %>
       <% by_query = grouped['search'].group_by &:in %>
       <% by_query.keys.each do |query| %>
         <div class="interest search">
           <h4>"<%= query %>"</h4>
         </div>
       <% end %>
-	  <% end %>
+    <% end %>
 
-	  <% if grouped['item'] and grouped['item'].any? %>
+    <% if grouped['item'] and grouped['item'].any? %>
 
-	    <% by_item_type = grouped['item'].group_by &:item_type %>
-	    <% by_item_type.each do |item_type, item_interests| %>
+      <% by_item_type = grouped['item'].group_by &:item_type %>
+      <% by_item_type.each do |item_type, item_interests| %>
         <% item_interests.each do |interest| %>
           <div class="interest item <%= item_type %>">
             <h4>
@@ -139,19 +142,19 @@
             </h4>
           </div>
         <% end %>
-	    <% end %>
+      <% end %>
 
-	  <% end %>
+    <% end %>
 
-	  <% if grouped['feed'] and grouped['feed'].any? %>
-	    <% grouped['feed'].each do |interest| %>
+    <% if grouped['feed'] and grouped['feed'].any? %>
+      <% grouped['feed'].each do |interest| %>
         <div class="interest collection_feed">
           <h4>
             <%= interest_name interest %>
           </h4>
         </div>
       <% end %>
-		<% end %>
+    <% end %>
 
     <hr/>
 
@@ -175,42 +178,42 @@
       <% end %>
     </ul>
 
-	<% end %>
+  <% end %>
 
 </div>
 
 <script type="text/javascript">
 
-	var collection_slug = "<%= Tag.slugify h(collection.name) %>";
-	var user_slug = "<%= h params[:user_id] %>";
+  var collection_slug = "<%= Tag.slugify h(collection.name) %>";
+  var user_slug = "<%= h params[:user_id] %>";
 
-	function initializeControls() {
-		<% if logged_in? and (user == current_user) %>
-			$("div.collection").on("click", "a.description", function() {
-				$("div.display, div.edit").toggle();
-				return false;
-			});
+  function initializeControls() {
+    <% if logged_in? and (user == current_user) %>
+      $("div.collection").on("click", "a.description", function() {
+        $("div.display, div.edit").toggle();
+        return false;
+      });
 
-			$("div.collection").on("click", "button.description", function() {
-				var container = $(this).parents("div.edit");
-				var user = container.data("user");
-				var collection = container.data("collection");
+      $("div.collection").on("click", "button.description", function() {
+        var container = $(this).parents("div.edit");
+        var user = container.data("user");
+        var collection = container.data("collection");
 
-				var options = {
-					description: $.trim($("textarea.description").val()),
-					_method: "put"
-				};
+        var options = {
+          description: $.trim($("textarea.description").val()),
+          _method: "put"
+        };
 
-				$.post("/account/collection/" + collection_slug + "/description", options, function(data) {
-					Utils.log("Updated description for collection.");
-					$("div.description_container").html(data.description_pane);
-				}).error(function() {
-					// todo
-				});
+        $.post("/account/collection/" + collection_slug + "/description", options, function(data) {
+          Utils.log("Updated description for collection.");
+          $("div.description_container").html(data.description_pane);
+        }).error(function() {
+          // todo
+        });
 
-				return false;
-			});
-		<% end %>
+        return false;
+      });
+    <% end %>
 
     <% if user != current_user %>
       <% if logged_in? %>
@@ -225,7 +228,7 @@
     <% end %>
   }
 
-	function follow() {
+  function follow() {
     Button.showFollowing();
 
     $.post("/user/" + user_slug + "/" + collection_slug + "/follow", function(data) {
