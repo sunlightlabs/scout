@@ -46,15 +46,29 @@
 
   <%# user is either logged out, or logged in and looking at someone else %>
 	<% else %>
-
+    <!-- can assume the user has a display name -->
     <div class="module collection">
-      <h3>
-        <% if user_name(user).present? %>
-          <strong><%= user_name user %></strong>
-        <% else %>
-          [UNNAMED]
-        <% end %>
-      </h3>
+      <% if user.image.present? %>
+        <img class="logo" src="<%= user.image.url :small %>"/>
+      <% end %>
+
+      <% if user.display_name.present? %>
+        <h3>
+          <%= h user.display_name %>
+        </h3>
+      <% end %>
+
+      <% if user.bio.present? %>
+        <p class="bio">
+          <%= h user.bio %>
+        </p>
+      <% end %>
+
+      <% if user.url.present? %>
+        <a class="url" href="<%= user.url %>">
+          <%= user.url %>
+        </a>
+      <% end %>
 
       <% if other_public_collections.any? %>
         <h4>Other Scout Collections</h4>
