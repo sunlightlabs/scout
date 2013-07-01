@@ -3,6 +3,7 @@ require 'bcrypt'
 class User
   include Mongoid::Document
   include Mongoid::Timestamps
+  include Mongoid::Paperclip
 
   field :email
   field :phone
@@ -16,7 +17,7 @@ class User
 
   # whether and how the user will receive notifications
   field :notifications, default: "email_immediate"
-  validates_inclusion_of :notifications, :in => ["none", "email_daily", "email_immediate"] # sms not valid at the user level
+  validates_inclusion_of :notifications, in: ["none", "email_daily", "email_immediate"] # sms not valid at the user level
   validates_presence_of :notifications
 
   # announcement list booleans
@@ -24,14 +25,17 @@ class User
   field :sunlight_announcements, type: Boolean, default: false
 
   # used for sharing things
+  has_mongoid_attached_file :logo
   field :username
   field :display_name
+  field :url
+
 
   index username: 1
   index user_id: 1
 
   validates_uniqueness_of :username, allow_blank: true, message: "has already been taken."
-  validates_exclusion_of :username, :in => reserved_names, message: "cannot be used."
+  validates_exclusion_of :username, in: reserved_names, message: "cannot be used."
 
   has_many :interests, dependent: :destroy
   has_many :tags, dependent: :destroy
@@ -78,7 +82,7 @@ class User
   attr_accessible :email, :username, :display_name, :phone,
     :notifications, :announcements, :sunlight_announcements
 
-  attr_accessor         :password, :password_confirmation
+  attr_accessor :password, :password_confirmation
 
   field :password_hash, type: String # type needs to be specified, otherwise it'd be a BCrypt::Password
   validates_confirmation_of :password, :message => "Your passwords did not match."
