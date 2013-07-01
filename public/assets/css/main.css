@@ -245,6 +245,7 @@ nav .should_change_password a {
     text-decoration: underline;
 }
 
+
 form label {
     font-weight: bold;
 }
@@ -640,7 +641,7 @@ select.subscription_type {
     height: 48px;
     float: left;
     margin-left: 45px;
-    margin-top: 65px;
+    margin-top: 40px;
     float: left;
 }
 footer{
@@ -655,7 +656,7 @@ footer{
     margin-bottom: 6px;
     margin-top: 40px;
     background: url('/assets/images/tinyborder_footer.png') left top repeat-y;
-    padding: 25px 45px 27px 45px;
+    padding: 0 45px;
 }
 .aboutSF p{
     margin: 0;
@@ -665,7 +666,6 @@ footer nav{
     margin-top: 40px;
     padding-left: 45px;
     background: url('/assets/images/tinyborder_footer.png') left top repeat-y;
-    text-align: center;
 }
 
 footer a{
@@ -683,16 +683,9 @@ footer nav li{
     float: none;
     margin-bottom: 8px;
     list-style-type: none;
-}
-footer a.video {
-	display: block;
 
 }
-footer .video img {
-	width: 155px;
-	border: 4px solid rgb(87, 147, 160);
-	margin-top: 10px;
-}
+
 
 
 /*-- Homepage Styling --*/
