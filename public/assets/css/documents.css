@@ -38,10 +38,13 @@
 .entry.regulation article h2,
 .entry.regulation article h3 {
   text-transform: none; font-size: 12pt;
+  line-height: 25px;
+  margin-bottom: 5px; margin-top: 20px;
 }
 
 .entry.regulation article h4 {
   text-transform: none; font-size: 10pt;
+  margin-bottom: 10px;
 }
 
 .entry.regulation article .header_column {margin-bottom: 10px;}
