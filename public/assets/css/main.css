@@ -285,6 +285,7 @@ div.error {
 	color: #888;
 }
 
+.full.user.settings div.error {display: block;}
 
 /*-- Hat Styling --*/
 .hatWrap .contentWrapper{

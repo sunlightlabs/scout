@@ -1,12 +1,15 @@
 <div class="contentArea full user settings">
+  <%= errors_for user %>
+
   <div class="module allUserSettings">
     <h2>Account Settings</h2>
 
     <%= flash_for [:user] %>
-    <%= errors_for user %>
+    <%= flash_for [:password] %>
 
     <form action="/account/settings" method="post">
       <input type="hidden" name="_method" value="put" />
+      <input type="hidden" name="flash" value="user" />
 
       <div class="module user">
         <ul>
@@ -14,49 +17,80 @@
             <label for="email">Email Address</label>
             <input type="email" name="user[email]" value="<%= user.email %>" autocomplete="off" />
           </li>
-
-          <li class="username">
-            <label for="username">Username (optional)</label>
-            <input type="text" name="user[username]" value="<%= user.username %>" autocomplete="off" />
-          </li>
-
-          <li class="display_name">
-            <label for="display_name">Display Name (optional)</label>
-            <input type="text" name="user[display_name]" value="<%= user.display_name %>" autocomplete="off" />
-          </li>
-
-          <small>
-            Your username and display name are only used if you publicly share your subscriptions.
-          </small>
-
-        </ul>
-      </div>
-
-      <%= flash_for [:password] %>
-
-      <div class="module passwordChange">
-        <ul>
           <li class="password">
             <label for="old_password">Old Password</label>
-            <input type="password" name="old_password" autocomplete="off" />
+            <input type="password" name="old_password"
+              autocomplete="off" />
           </li>
           <li class="password">
             <label for="password">New Password</label>
-            <input type="password" name="password" autocomplete="off" />
+            <input type="password" name="password"
+              autocomplete="off" />
           </li>
           <li class="password">
             <label for="password_confirmation">New Password (again)</label>
-            <input type="password" name="password_confirmation" autocomplete="off" />
+            <input type="password" name="password_confirmation"
+              autocomplete="off" />
           </li>
         </ul>
-      </div>
-      <div class="module updateSettings">
+
         <button type="submit">
-            <span>Update Account Info</span>
+          <span>Update Account Info</span>
         </button>
+
       </div>
       <div class="clear"></div>
     </form>
+  </div>
+
+  <div class="module profile">
+    <h3>Profile</h3>
+
+    <small>
+      Fill out these settings if you want to share your collections of alerts with others.
+    </small>
+
+    <%= flash_for [:profile] %>
+
+    <form action="/account/settings" enctype='multipart/form-data' method="post">
+      <input type="hidden" name="_method" value="put" />
+      <input type="hidden" name="flash" value="profile" />
+
+      <ul>
+        <li class="display_name">
+          <label for="display_name">Full Name</label>
+          <input type="text" name="user[display_name]"
+            value="<%= user.display_name %>" autocomplete="off" />
+        </li>
+
+        <li class="username">
+          <label for="username">Username</label>
+          <input type="text" name="user[username]" value="<%= user.username %>"
+            autocomplete="off" />
+        </li>
+
+        <li class="url">
+          <label for="url">Website</label>
+          <input type="text" name="user[url]" value="<%= user.url %>"
+            autocomplete="off" />
+        </li>
+
+        <li class="bio">
+          <label for="bio">Bio</label>
+          <textarea name="user[bio]"><%= user.bio %></textarea>
+        </li>
+
+        <!-- <li class="image">
+          <label for="image">Image or logo</label>
+          <input type="file" name="user[image]" />
+        </li> -->
+      </ul>
+
+      <button type="submit">
+        <span>Update Profile</span>
+      </button>
+    </form>
+
   </div>
 
   <div class="module allNotifications">

@@ -25,11 +25,25 @@ class User
   field :sunlight_announcements, type: Boolean, default: false
 
   # used for sharing things
-  has_mongoid_attached_file :image
   field :username
   field :display_name
   field :url
+  field :bio
 
+  validates_format_of :url, with: URI::regexp(%w(http https)), message: "Not a valid URL.", allow_blank: true
+
+  # has_mongoid_attached_file :image,
+  #   path: ':attachment/:id/:style.:extension',
+  #   # storage: :s3,
+  #   # url: ':s3_alias_url',
+  #   # s3_host_alias: 'something.cloudfront.net',
+  #   # s3_credentials: File.join('config', 's3.yml'),
+  #   styles: {
+  #     original: ['1000x1000>', :png],
+  #     small: ['100x100#', :png]
+  #   }
+
+  # validates_attachment_size :image, in: 0..1.megabytes
 
   index username: 1
   index user_id: 1
@@ -80,7 +94,8 @@ class User
   field :signup_process, default: nil # can be "quick"
 
   attr_accessible :email, :username, :display_name, :phone,
-    :notifications, :announcements, :sunlight_announcements
+    :notifications, :announcements, :sunlight_announcements,
+    :bio, :image, :url
 
   attr_accessor :password, :password_confirmation
 
