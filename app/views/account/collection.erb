@@ -123,9 +123,11 @@
 	      <% by_query.keys.each do |query| %>
 	        <div class="interest search basic-row">
 	        	<div class="type">
-	        		<img src="">
+	        		<img src="<%= asset_path "/images/icon_type_search.png" %>">
 	        	</div>
-	          <h4>"<%= query %>"</h4>
+	          <h4>
+	          	"<%= query %>"
+	          </h4>
 	        </div>
 	      <% end %>
 	    <% end %>
@@ -137,7 +139,7 @@
 	        <% item_interests.each do |interest| %>
 	          <div class="interest item basic-row <%= item_type %>">
 	            <div class="type">
-	        		<img src="">
+	        		<img src="<%= asset_path "/images/icon_type_bill.png" %>">
 	        	</div>
 	            <h4>
 	              <%= interest_name interest %>
@@ -152,7 +154,7 @@
 	      <% grouped['feed'].each do |interest| %>
 	        <div class="interest basic-row collection_feed">
 	          <div class="type">
-	        		<img src="">
+	        		<img src="<%= asset_path "/images/icon_type_feed.png" %>">
 	        	</div>
 	          <h4>
 	            <%= interest_name interest %>
@@ -161,7 +163,7 @@
 	      <% end %>
 	    <% end %>
 	</div>
-	<div class="collection-preview">
+	<div class="collection-preview section container">
     	<h2>Preview of Current Scout Results</h2>
 	    <ul>
 	      <% items.each do |item| %>
