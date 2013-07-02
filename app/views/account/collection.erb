@@ -113,70 +113,78 @@
 
   </div>
 
+  <div class="collection-index">
+	  <% if interests.empty? %>
+	    <p class="empty">
+	      There's nothing in this Scout collection yet.
+	    </p>
+	  <% else %>
 
-  <% if interests.empty? %>
-    <p class="empty">
-      There's nothing in this Scout collection yet.
-    </p>
-  <% else %>
+	    <% grouped = interests.group_by &:interest_type %>
 
-    <% grouped = interests.group_by &:interest_type %>
+	    <% if grouped['search'] and grouped['search'].any? %>
+	      <% by_query = grouped['search'].group_by &:in %>
+	      <% by_query.keys.each do |query| %>
+	        <div class="interest search basic-row">
+	        	<div class="type">
+	        		<img src="">
+	        	</div>
+	          <h4>"<%= query %>"</h4>
+	        </div>
+	      <% end %>
+	    <% end %>
 
-    <% if grouped['search'] and grouped['search'].any? %>
-      <% by_query = grouped['search'].group_by &:in %>
-      <% by_query.keys.each do |query| %>
-        <div class="interest search">
-          <h4>"<%= query %>"</h4>
-        </div>
-      <% end %>
-    <% end %>
+	    <% if grouped['item'] and grouped['item'].any? %>
 
-    <% if grouped['item'] and grouped['item'].any? %>
+	      <% by_item_type = grouped['item'].group_by &:item_type %>
+	      <% by_item_type.each do |item_type, item_interests| %>
+	        <% item_interests.each do |interest| %>
+	          <div class="interest item basic-row <%= item_type %>">
+	            <div class="type">
+	        		<img src="">
+	        	</div>
+	            <h4>
+	              <%= interest_name interest %>
+	            </h4>
+	          </div>
+	        <% end %>
+	      <% end %>
 
-      <% by_item_type = grouped['item'].group_by &:item_type %>
-      <% by_item_type.each do |item_type, item_interests| %>
-        <% item_interests.each do |interest| %>
-          <div class="interest item <%= item_type %>">
-            <h4>
-              <%= interest_name interest %>
-            </h4>
-          </div>
-        <% end %>
-      <% end %>
+	    <% end %>
 
-    <% end %>
-
-    <% if grouped['feed'] and grouped['feed'].any? %>
-      <% grouped['feed'].each do |interest| %>
-        <div class="interest collection_feed">
-          <h4>
-            <%= interest_name interest %>
-          </h4>
-        </div>
-      <% end %>
-    <% end %>
-
-    <hr/>
-
-    <ul class="preview">
-      <h2>Preview of Current Scout Results</h2>
-
-      <% items.each do |item| %>
-        <% if item.search? %>
-          <%= partial "search/item", engine: "erb", locals: {
-            item: item, interest: item.interest, query: interest.in
-            } %>
-        <% elsif item.item? %>
-          <%= partial "search/item", engine: :erb, locals: {
-            item: item, interest: item.interest, query: nil
-            } %>
-        <% elsif item.feed? %>
-          <%= partial "search/item", engine: "erb", locals: {
-            item: item, interest: item.interest, query: nil
-            } %>
-        <% end %>
-      <% end %>
-    </ul>
+	    <% if grouped['feed'] and grouped['feed'].any? %>
+	      <% grouped['feed'].each do |interest| %>
+	        <div class="interest basic-row collection_feed">
+	          <div class="type">
+	        		<img src="">
+	        	</div>
+	          <h4>
+	            <%= interest_name interest %>
+	          </h4>
+	        </div>
+	      <% end %>
+	    <% end %>
+	</div>
+	<div class="collection-preview">
+    	<h2>Preview of Current Scout Results</h2>
+	    <ul>
+	      <% items.each do |item| %>
+	        <% if item.search? %>
+	          <%= partial "search/item", engine: "erb", locals: {
+	            item: item, interest: item.interest, query: interest.in
+	            } %>
+	        <% elsif item.item? %>
+	          <%= partial "search/item", engine: :erb, locals: {
+	            item: item, interest: item.interest, query: nil
+	            } %>
+	        <% elsif item.feed? %>
+	          <%= partial "search/item", engine: "erb", locals: {
+	            item: item, interest: item.interest, query: nil
+	            } %>
+	        <% end %>
+	      <% end %>
+	    </ul>
+	</div>
 
   <% end %>
 
