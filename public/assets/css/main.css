@@ -1439,7 +1439,7 @@ button.follow, button.following {display: none;}
 .subscriptionsList .interest{
     margin-bottom: 33px;
 }
-.subscription{
+.subscription, .left .basic-row {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
@@ -1517,13 +1517,13 @@ h3.interestHeader, .add.rss{
     border-left: 1px dotted #E5E6E3;
     padding-left: 16px;
 }
-.subscription h4{
+.subscription h4, .left .basic-row h4{
     font-weight: bold;
     font-size: 127%;
     float: left;
     width: 489px;
 }
-.subscription h4 .title{
+.subscription h4 .title, .left .basic-row  h4 .title {
     font-weight: normal;
     font-style: italic;
     display: block;
@@ -1692,6 +1692,14 @@ div.indicators span {
     text-indent: -9999em;
     float: right;
 }
+
+
+
+
+
+
+
+
 
 
 
@@ -2036,7 +2044,7 @@ div.indicators span {
     -moz-box-shadow: inset -14px 0px 14px -7px #e2e3e0;
     box-shadow: inset -14px 0px 14px -7px #E2E3E0;
     padding: 16px 33px 16px 10px;
-    margin-bottom: 33px;
+    margin-bottom: -1px;
 }
 .collection .author{
     font-weight: bold;
@@ -2145,6 +2153,20 @@ div.indicators span {
     margin-bottom: 0px;
     margin-left: 10px;
 }
+.collection-index .interest .type {
+	float: left;
+	border-left: 1px dotted #E5E6E3;
+	padding-left: 16px;
+}
+.collection-preview ul{
+	margin: 20px;
+	background: #ffffff;
+	padding: 10px 0;
+}
+.collection-preview li{
+	list-style-type: none;
+	padding: 10px 20px;
+} 
 
 
 /*-- PUBLIC Tag Grouping Topic Styling --*/
