@@ -980,12 +980,15 @@ div.share-buttons td {padding-right: 5px;}
   padding-left: 40px;
 
 }
-.results.contentArea h4{
+.results.contentArea h4, .collection-preview h4{
     font-weight: bold;
     font-size: 127%;
     float: left;
     margin-bottom: 5px;
     width: 550px;
+}
+.collection-preview h4{
+	width: 500px;
 }
 .results.contentArea h4.smaller {
     font-size: 110%;
@@ -1012,6 +1015,7 @@ time.item, .time {
 
 .item .side {
     float: right;
+    text-align: right;
 }
 
 .item .side time{
@@ -1021,8 +1025,13 @@ time.item, .time {
     display: block;
 }
 
-.item .side span.type {display: none;}
-.preview .item .side span.type {display: block;}
+.item .side span.type {
+	display: none;
+}
+.collection-preview .item .side span.type {
+	display: block;
+	color: #83858b;
+}
 
 .time time{
     float: none;
@@ -1212,7 +1221,10 @@ button.follow, button.following {display: none;}
 }
 
 .entry .subtitle:last-child,
-.results .subtitle {padding-bottom: 8px;}
+.results .subtitle,
+.collection-preview .subtitle {
+	padding-bottom: 8px;
+}
 
 .subtitle h4{
     float: left;
@@ -1364,7 +1376,7 @@ button.follow, button.following {display: none;}
 .subscriptionsList .interest{
     margin-bottom: 33px;
 }
-.subscription{
+.subscription, .left .basic-row {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
@@ -1442,13 +1454,13 @@ h3.interestHeader, .add.rss{
     border-left: 1px dotted #E5E6E3;
     padding-left: 16px;
 }
-.subscription h4{
+.subscription h4, .left .basic-row h4{
     font-weight: bold;
     font-size: 127%;
     float: left;
     width: 489px;
 }
-.subscription h4 .title{
+.subscription h4 .title, .left .basic-row  h4 .title {
     font-weight: normal;
     font-style: italic;
     display: block;
@@ -1564,8 +1576,12 @@ button.smallButton, button.secondary, button.disabled {
     color: #e5e5e5;
 }
 
-button.smallButton span, button.secondary span, button.disabled span {
+button.smallButton span, button.secondary span {
     border: 0;
+}
+button.disabled span {
+	border: 1px solid rgb(108, 113, 114);
+	border-bottom: 0;
 }
 
 .removeSubscription button{
@@ -1617,6 +1633,14 @@ div.indicators span {
     text-indent: -9999em;
     float: right;
 }
+
+
+
+
+
+
+
+
 
 
 
@@ -1961,7 +1985,7 @@ div.indicators span {
     -moz-box-shadow: inset -14px 0px 14px -7px #e2e3e0;
     box-shadow: inset -14px 0px 14px -7px #E2E3E0;
     padding: 16px 33px 16px 10px;
-    margin-bottom: 33px;
+    margin-bottom: -1px;
 }
 .collection .author{
     font-weight: bold;
@@ -1981,8 +2005,12 @@ div.indicators span {
 .collection button.feed.rss span {
 	width: 22px;
 	height: 22px;
-	background: url('/assets/images/btn_rss.png') left top no-repeat;
+	background: url('/assets/images/btn_rss.png') center center no-repeat;
 	display: block;
+	border: 1px solid rgb(108, 113, 114);
+	border-bottom: 0;
+	padding: 4px 4px;
+	margin-top: 3px;
 }
 
 .collection div.edit {
@@ -2051,9 +2079,11 @@ div.indicators span {
     width: none;
 }
 
-.collection div.display p {
+.collection .description_container .display p {
     font-style: italic;
-    margin-top: 5px;
+    margin-top: 20px;
+
+
 }
 
 .collection .interest{
@@ -2070,6 +2100,26 @@ div.indicators span {
     margin-bottom: 0px;
     margin-left: 10px;
 }
+.collection-index, .collection-preview {
+	margin-bottom: 70px;
+}
+.collection-index .interest .type {
+	float: left;
+	border-right: 1px dotted #E5E6E3;
+	padding-right: 16px;
+	margin-right: 16px;
+}
+.collection-preview ul{
+	margin: 20px 20px 20px 0;
+	background: #ffffff;
+	padding: 10px 0;
+}
+.collection-preview li{
+	list-style-type: none;
+	padding: 10px 20px;
+	border-bottom: 2px solid #fafbf8;
+}
+
 
 
 /*-- PUBLIC Tag Grouping Topic Styling --*/
