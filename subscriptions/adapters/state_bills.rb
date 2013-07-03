@@ -69,7 +69,7 @@ module Subscriptions
 
           # if there's a state bill code, extract it and apply the specific bill_ids__in filter
           if state_bill = Search.state_bill_for(query)
-            url << "&bill_id__in=#{state_bill}"
+            url << "&bill_id__in=#{CGI.escape state_bill}"
           else
             url << "&q=#{CGI.escape query}"
           end
@@ -182,15 +182,6 @@ module Subscriptions
       # a hash containing the id, title, and post date of each item found
       def self.items_for(response, function, options = {})
         raise AdapterParseException.new("Got string response from Open States:\n\n#{response}") if response.is_a?(String)
-
-        # # OpenStates API does not have server-side pagination - so we do it here
-        # per_page = options[:per_page] || 20
-        # page = options[:page] || 1
-        # beginning = per_page * (page - 1) # index of first item
-        # ending = (beginning + per_page) - 1  # index of last item
-
-        # # for searching, only return the first "page" of items, otherwise, handle any and all
-        # items = (function == :search) ? (response[beginning..ending] || []) : response
 
         response.map {|bill| item_for bill}
       end
