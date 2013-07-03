@@ -131,7 +131,13 @@ module Helpers
     # can be given one or more terms to match
     def excerpt_pattern(keywords)
       keywords = [keywords] unless keywords.is_a?(Array)
-      patterns = keywords.map {|keyword| keyword.gsub('"', '').gsub(' ', '[\s\-]').gsub('(', '\(').gsub(')', '\)')}
+      patterns = keywords.map do |keyword|
+        keyword.gsub! '"', ''
+        keyword.gsub! ' ', '[\s\-]'
+        %w{+ ? . * ^ $ ( ) [ ] { } | \ }.each {|char| keyword.gsub! char, "\\#{char}"}
+        keyword
+      end
+
       /(#{patterns.join "|"})/i
     end
 
