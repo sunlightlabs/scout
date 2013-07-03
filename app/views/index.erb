@@ -1,60 +1,70 @@
 <% content_for(:home) {true} %>
 
 <div class="home modules">
-	<div class="module updates video">
-		<a href="http://www.youtube.com/watch?v=cKbRsZjoIBU" target="_blank">
-			<img src="<%= asset_path "/images/youtube.png" %>" width=281 height=158 />
-		</a>
-	</div>
-	
-	<div class="module whatUp">
-		<h3>Using Scout</h3>
-		<ul>
-			<li>
-				Set up alerts and subscribe to receive updates from Congress, state legislatures and more via email or SMS text.
-			</li>
+	<h2 class="splashtext">
+		Get alerts about issues you care about.
+	</h2>
+	<div class="row functions">
+		<div class="module">
+			<h3>Congress</h3>
+			<p>
+				Stay up to date on the Hill, from bills to floor schedules to speeches to GAO Reports.
+			</p>
 
-			<li>
-				Search through every bill and regulation in the federal government.
-			</li>
-			
-			<li>
-				Be notified when Congress plans to vote on a bill.
-			</li>
-			
-			<li>
-				Follow and search bills in all 50 states; powered by the <a href="http://openstates.org">Open States</a> project.
-			</li>
-			
-			<li>
-				Import an RSS feed to complement issue alerts.
-			</li>
-			
-			<li>
-				Learn more by watching the video to the left.
-			</li>
-		</ul>
+		</div>
+		<div class="module">
+			<h3>Regulations</h3>
+			<p>
+				What happens after a law passes? Follow regulatory activity for all federal agencies.
+			</p>
+		</div>
+		<div class="module">
+			<h3>State Legislation</h3>
+			<p>
+				Track legislative action for all 50 states, plus D.C. and Puerto Rico. Powered by Open States.
+			</p>
+		</div>
+		<div class="module updates samples">
+			<h3>And More!</h3>
+			<p>
+				Get custom alerts by <a href="/import/feed">adding your own RSS or Atom feed</a>.
+			</p>
+		</div>
+		<div class="clear"></div>
 	</div>
 
-	<div class="module updates samples">
-		<h3>Suggested Subscriptions</h3>
-		<ul>
-			<li>
-				Receive updates on what Congress and the states are doing and saying about <a href="/search/all/freedom%20of%20information">freedom of information</a>.
-			</li>
-			
-			<li>
-				Stay up-to-date on the campaign finance <a href="/item/bill/s3369-112">DISCLOSE Act</a> in the House and Senate.
-			</li>
-			
-			<li>
-				Follow what others are following. Keep up with Sunlight's set of alerts on <a href="/user/topical_collections/cispa">CISPA and cybersecurity</a>, and <a href="/user/sunlightfoundation/lobbying">lobbying</a>.
-			</li>
-			
-			<li>
-				Read about how Scout helped a non-profit <a href="http://sunlightfoundation.com/blog/2012/05/25/scout-is-already-delivering-results">deliver results</a> on Capitol Hill.
-			</li>
-		</ul>
+	<div class="row">
+		<div class="module rad-collections">
+			<h3>Featured Topics</h3>
+			<div class="feature-collection">
+				<div class="vert-middle">
+					<div class="collection-curator">
+						<img src="<%= asset_path "/images/logo_sunlightFoundation_dark.png" %>"/>
+					</div>
+					<p>
+						<em>Sunlight Foundation</em> is following <a href="">The Transparency Ecosystem</a>.
+					</p>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="more-collections">
+				<h4>More collections to follow</h4>
+				<ul>
+					<li><a href="#">Internet Surveillance</a>, by <strong>EFF</strong></li>
+					<li><a href="#">Freedom of Information</a>, by <strong>Sunlight Foundation</strong></li>
+					<li><a href="#">Helium</a>, by <strong>Tom Lee</strong></li>
+					<li><a href="#">Internet Surveillance</a>, by <strong>EFF</strong></li>
+					<li><a href="#">Freedom of Information</a>, by <strong>Sunlight Foundation</strong></li>
+					<li><a href="#">Helium</a>, by <strong>Tom Lee</strong></li>
+				</ul>
+			</div>
+		</div>
+		<div class="module video">
+			<h3>Watch a tutorial</h3>
+			<a href="http://www.youtube.com/watch?v=cKbRsZjoIBU" target="_blank">
+				<img src="<%= asset_path "/images/youtube.png" %>"/>
+			</a>
+		</div>
 	</div>
 </div>
 

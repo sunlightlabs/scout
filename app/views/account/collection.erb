@@ -91,6 +91,7 @@
 <% end %>
 
 <div class="contentArea left collection <%= current_user == user ? "" : "public" %>">
+
   <div class="collectionHeader">
 
     <h2>
@@ -166,8 +167,8 @@
 	        </div>
 	      <% end %>
 	    <% end %>
-	</div>
-	<div class="collection-preview section container">
+  	</div>
+  	<div class="collection-preview section container">
     	<h2>Preview of Current Scout Results</h2>
 	    <ul>
 	      <% items.each do |item| %>
@@ -186,7 +187,7 @@
 	        <% end %>
 	      <% end %>
 	    </ul>
-	</div>
+    </div>
 
   <% end %>
 
@@ -238,7 +239,7 @@
     <% end %>
   }
 
-  function follow() {
+	function follow() {
     Button.showFollowing();
 
     $.post("/user/" + user_slug + "/" + collection_slug + "/follow", function(data) {
