@@ -54,7 +54,9 @@ module Helpers
     end
 
     def query_size(query)
-      if query.size < 30
+      if query == "*"
+        "wildcard"
+      elsif query.size < 30
         "smaller"
       elsif query.size < 80
         "medium"

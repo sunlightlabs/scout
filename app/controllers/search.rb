@@ -143,7 +143,7 @@ helpers do
     query = params[:query] ? URI.decode(params[:query]).strip : nil
 
     # don't allow plain wildcards
-    query = query.gsub /^[^\w]*\*[^\w]*$/, ''
+    query = query.gsub /^[^\w]*\*[^\w]*$/, '*'
 
     if query_type == "simple"
       query = query.tr "\"", ""

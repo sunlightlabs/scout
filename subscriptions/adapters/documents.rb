@@ -1,14 +1,14 @@
-module Subscriptions  
+module Subscriptions
   module Adapters
 
     class Documents
 
       MAX_PER_PAGE = 50
 
-      FIELDS = %w{ 
-        document_id document_type document_type_name 
+      FIELDS = %w{
+        document_id document_type document_type_name
         title categories posted_at
-        url source_url 
+        url source_url
         gao_report.gao_id gao_report.description
       }
 
@@ -17,28 +17,28 @@ module Subscriptions
           # todo: document_type, once more than one is present
         }
       end
-      
+
       def self.url_for(subscription, function, options = {})
         api_key = options[:api_key] || Environment.config['subscriptions']['sunlight_api_key']
-        
+
         if Environment.config['subscriptions']['congress_endpoint'].present?
           endpoint = Environment.config['subscriptions']['congress_endpoint'].dup
         else
           endpoint = "http://congress.api.sunlightfoundation.com"
         end
-        
+
         url = endpoint
+        url << "/documents/search?"
 
         query = subscription.query['query']
-        if query.present?
-          url << "/documents/search?"
+        if query.present? and !["*", "\"*\""].include?(query)
           url << "&query=#{CGI.escape query}"
 
           url << "&highlight=true"
           url << "&highlight.size=500"
           url << "&highlight.tags=,"
         else
-          url << "/documents?"
+
         end
 
         if subscription.query['citations'].any?
@@ -101,7 +101,7 @@ module Subscriptions
         # per-year sync is made inefficient by two Congress API bugs:
         # https://github.com/sunlightlabs/congress/issues/391
         # https://github.com/sunlightlabs/congress/issues/392
-        
+
         if options[:since] == "all"
           # ok, get everything
 
@@ -121,7 +121,7 @@ module Subscriptions
 
         url << "&page=#{options[:page]}" if options[:page]
         url << "&per_page=#{MAX_PER_PAGE}"
-        
+
         url
       end
 
@@ -140,12 +140,12 @@ module Subscriptions
       def self.short_name(number, interest)
         "#{number > 1 ? "GAO reports" : "GAO report"}"
       end
-      
-      # takes parsed response and returns an array where each item is 
+
+      # takes parsed response and returns an array where each item is
       # a hash containing the id, title, and post date of each item found
       def self.items_for(response, function, options = {})
         raise AdapterParseException.new("Response didn't include results field: #{response.inspect}") unless response['results']
-        
+
         response['results'].map do |document|
           item_for document
         end
@@ -154,11 +154,11 @@ module Subscriptions
       def self.item_detail_for(response)
         item_for response['results'][0]
       end
-      
-      
+
+
       def self.item_for(document)
         return nil unless document
-        
+
         SeenItem.new(
           item_id: document["document_id"],
           date: document["posted_at"],

@@ -65,12 +65,12 @@ module Subscriptions
 
         else
           query = subscription.query['query']
-          return nil unless query.present?
+          # return nil unless query.present?
 
           # if there's a state bill code, extract it and apply the specific bill_ids__in filter
           if state_bill = Search.state_bill_for(query)
             url << "&bill_id__in=#{CGI.escape state_bill}"
-          else
+          elsif query.present? and !["*", "\"*\""].include?(query)
             url << "&q=#{CGI.escape query}"
           end
         end

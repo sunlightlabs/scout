@@ -53,10 +53,10 @@ $(function() {
       // no empty string
       query = $.trim(query);
 
-      // also ban plain wildcard searches
-      query = query.replace(/^[^\w]*\*[^\w]*$/, '');
+      // strip plain wildcard searches down to just the wildcard (which is now allowed)
+      query = query.replace(/^[^\w]*\*[^\w]*$/, '*');
     }
-    if (!query) return false;
+    if (!query) query = "*"; // return false;
 
     var queryType = $(".query_type input[type=radio]:checked").val();
 

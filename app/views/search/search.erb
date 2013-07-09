@@ -106,7 +106,11 @@
           <% else %>
             <% name = interest_name interest %>
             <h2 class="<%= query_size name %>">
-              <%= h name %>
+              <% if name == "*" %>
+                Everything
+              <% else %>
+                <%= h name %>
+              <% end %>
             </h2>
           <% end %>
         <% elsif interest.query_type == "advanced" %>
@@ -265,7 +269,7 @@
 <!-- hidden, used to populate contents of sidebar dynamically -->
 <% if logged_in? and related_interests and related_interests.any? %>
   <div class="template subscriptions related">
-    <%= partial "search/related_interests", :engine => :erb, :locals => {
+    <%= partial "search/related_interests", engine: :erb, locals: {
       related_interests: related_interests,
       current_interest: interest,
       interest_in: interest.in
