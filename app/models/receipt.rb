@@ -9,6 +9,7 @@ class Receipt
   field :user_id
   field :user_email
   field :user_delivery
+  field :user_service
   field :mechanism
 
   field :subject
