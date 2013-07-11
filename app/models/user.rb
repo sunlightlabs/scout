@@ -41,7 +41,7 @@ class User
     # s3_credentials: File.join('config', 's3.yml'),
     styles: {
       # original: ['1000x1000>', :png],
-      small: ['200x200>', :png]
+      small: ['217x217>', :png]
     }
 
   validates_attachment_size :image, in: 0..1.megabytes, message: "Image must be less than 1MB."

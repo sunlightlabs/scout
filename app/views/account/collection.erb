@@ -8,9 +8,9 @@
           <input type="hidden" name="_method" value="put" />
           <input type="hidden" name="public" value="false" />
 
-          <p>
+          <h3>
             This collection is <strong>public</strong>.
-          </p>
+          </h3>
           <p>
             Your public profile below will be shown to visiting users. <a href="/account/settings?highlight=profile">Update your profile</a> to make changes.
           </p>
@@ -68,9 +68,18 @@
           <%= user.url %>
         </a>
       <% end %>
-
+	  </div>
+	  <div class="module">
       <% if other_public_collections.any? %>
-        <h4>Other Scout Collections</h4>
+        <h4>
+
+			More Scout Collections by 
+			<% if user.display_name.present? %>
+
+				<%= h user.display_name %>
+
+			<% end %>
+	  </h4>
         <ul>
           <% other_public_collections.each do |collection| %>
             <li>
