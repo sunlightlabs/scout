@@ -1,48 +1,4 @@
-<div class="contentArea full user settings">
-  <%= errors_for user %>
-
-  <div class="module allUserSettings">
-    <h2>Account Settings</h2>
-
-    <%= flash_for [:user] %>
-    <%= flash_for [:password] %>
-
-    <form action="/account/settings" method="post">
-      <input type="hidden" name="_method" value="put" />
-      <input type="hidden" name="flash" value="user" />
-
-      <div class="module user">
-        <ul>
-          <li class="email">
-            <label for="email">Email Address</label>
-            <input type="email" name="user[email]" value="<%= user.email %>" autocomplete="off" />
-          </li>
-          <li class="password">
-            <label for="old_password">Old Password</label>
-            <input type="password" name="old_password"
-              autocomplete="off" />
-          </li>
-          <li class="password">
-            <label for="password">New Password</label>
-            <input type="password" name="password"
-              autocomplete="off" />
-          </li>
-          <li class="password">
-            <label for="password_confirmation">New Password (again)</label>
-            <input type="password" name="password_confirmation"
-              autocomplete="off" />
-          </li>
-        </ul>
-
-        <button type="submit">
-          <span>Update Account Info</span>
-        </button>
-
-      </div>
-      <div class="clear"></div>
-    </form>
-  </div>
-
+<% content_for :sidebar_right do %>
   <div class="module profile <%= "highlight" if params[:highlight] == "profile" %>">
     <h3>Profile</h3>
 
@@ -57,38 +13,34 @@
       <input type="hidden" name="flash" value="profile" />
 
       <ul>
+
+        <% if user.valid? and user.image.present? %>
+          <h5>Current image</h5>
+          <img src="<%= user.image.url :small %>" />
+        <% end %>
+        <li class="image">
+          <label for="image">Upload/change your Image or logo</label>
+          <input type="file" name="user[image]" />
+        </li>
         <li class="display_name">
           <label for="display_name">Full Name (required for sharing)</label>
           <input type="text" name="user[display_name]"
             value="<%= user.display_name %>" autocomplete="off" />
         </li>
-
         <li class="username">
-          <label for="username">Username</label>
+          <label for="username">Username (required for sharing)</label>
           <input type="text" name="user[username]" value="<%= user.username %>"
             autocomplete="off" />
         </li>
-
+        <li class="bio">
+          <label for="bio">Bio</label>
+          <textarea name="user[bio]"><%= user.bio %></textarea>
+        </li>
         <li class="url">
           <label for="url">Website</label>
           <input type="text" name="user[url]" value="<%= user.url %>"
             autocomplete="off" />
         </li>
-
-        <li class="bio">
-          <label for="bio">Bio</label>
-          <textarea name="user[bio]"><%= user.bio %></textarea>
-        </li>
-
-        <li class="image">
-          <label for="image">Image or logo</label>
-          <input type="file" name="user[image]" />
-        </li>
-
-        <% if user.valid? and user.image.present? %>
-          <small>Current image</small>
-          <img src="<%= user.image.url :small %>" />
-        <% end %>
       </ul>
 
       <button type="submit">
@@ -97,9 +49,53 @@
     </form>
 
   </div>
+<% end %>
 
-  <div class="module allNotifications">
-    <div class="module notifications">
+
+<div class="contentArea left user settings">
+  <%= errors_for user %>
+
+  <div class="module allUserSettings">
+    <h2>Account Settings</h2>
+    <div class="module userSettings">
+	    <%= flash_for [:user] %>
+	    <%= flash_for [:password] %>
+	    <form action="/account/settings" method="post">
+	      <input type="hidden" name="_method" value="put" />
+	      <input type="hidden" name="flash" value="user" />
+
+	      <div class="user">
+	      	<h3>User Credentials</h3>
+	        <ul>
+	          <li class="email">
+	            <label for="email">Email Address</label>
+	            <input type="email" name="user[email]" value="<%= user.email %>" autocomplete="off" />
+	          </li>
+	          <li class="password">
+	            <label for="old_password">Old Password</label>
+	            <input type="password" name="old_password"
+	              autocomplete="off" />
+	          </li>
+	          <li class="password">
+	            <label for="password">New Password</label>
+	            <input type="password" name="password"
+	              autocomplete="off" />
+	          </li>
+	          <li class="password">
+	            <label for="password_confirmation">New Password (again)</label>
+	            <input type="password" name="password_confirmation"
+	              autocomplete="off" />
+	          </li>
+	        </ul>
+
+	        <button type="submit">
+	          <span>Update Account Info</span>
+	        </button>
+
+	      </div>
+	    </form>
+	</div>
+	<div class="module notifications">
       <h3>Email Notifications</h3>
       <% if user.email.present? %>
 
@@ -158,7 +154,12 @@
       <% end %>
 
     </div>
+    <div class="clear"></div>
 
+  </div>
+
+
+  <div class="module allNotifications">
     <div class="module phoneSettings">
 
         <h3>SMS</h3>

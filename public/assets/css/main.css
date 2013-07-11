@@ -142,7 +142,6 @@ h3, .entry h2{
 h4 {
 	font-weight: bold;
 	font-size: 120%;
-	clear: both;
 	margin-bottom: 12px;
 }
 
@@ -199,7 +198,7 @@ form label {
     font-weight: bold;
 }
 
-input[type="text"], input[type="password"], input[type="email"]{
+input[type="text"], input[type="password"], input[type="email"], textarea{
     display: block;
     background-color: #ffffff;
     border: 0;
@@ -295,6 +294,21 @@ div.error {
 .settings.contentArea .module.highlight {
     background-color: #FBFF90;
 }
+.sidebar .profile small, .sidebar .profile img {
+	margin-bottom: 16px;
+	display: block;
+}
+.sidebar .profile h5{
+	margin-bottom: 7px;
+}
+.profile .logo {
+	margin-bottom: 33px;
+}
+.profile h3, .profile p, .profile .url{
+	margin-bottom: 16px;
+	display: block;
+}
+
 
 /*-- Hat Styling --*/
 .hatWrap .contentWrapper{
@@ -520,6 +534,7 @@ select.subscription_type {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
+    padding-top: 33px;
 }
 .contentArea.left{
     -webkit-box-shadow: inset -14px 1px 14px -7px #e2e3e0;
@@ -533,9 +548,6 @@ select.subscription_type {
 
 /*-- Sidebar Styling --*/
 
-.sidebar{
-}
-
 .sidebar h4{
     font-family: "alternate-gothic-no-3-d", arial, 'helvetica Neue', sans-serif;
     text-transform: uppercase;
@@ -544,8 +556,9 @@ select.subscription_type {
     margin-bottom: 17px;
 }
 .sidebar .module{
-    padding: 33px 16px;
+    padding: 0 16px 33px 16px;
     background: url('/assets/images/sidebar_divider.png') bottom center no-repeat;
+    margin-bottom: 33px;
 }
 .sidebar form{
     color: #5c5b60;
@@ -556,6 +569,14 @@ select.subscription_type {
 }
 .sidebar input{
     margin-right: 5px;
+}
+.sidebar input[type="text"], textarea {
+    width: 100%;
+}
+.sidebar textarea {
+	min-height: 200px;
+	padding-bottom: 8px;
+	padding-top: 8px;
 }
 .sidebar legend{
     font-weight: bold;
@@ -922,7 +943,11 @@ footer nav li{
 
 .resultsIntro div#share-buttons {position: absolute; right: 20px;}
 div.share-buttons td {padding-right: 5px;}
-.sidebar .module.sharing {padding-bottom: 10px;}
+.sidebar .module.sharing {
+}
+.sharing h3 {
+	margin-bottom: 16px;
+}
 
 
 .pageTitle button{
@@ -1842,10 +1867,10 @@ div.indicators span {
     padding-bottom: 4px;
     padding-left: 16px;
 }
-.settings.contentArea .module.allNotifications{
+.settings.contentArea .module.allUserSettings {
     overflow: hidden;
 }
-.settings.contentArea .module.allNotifications .module, .settings.contentArea .module.allUserSettings .module{
+.settings.contentArea .module.allUserSettings .module {
     margin-bottom: -99999px;
     padding-bottom: 99999px;
 }
@@ -1855,8 +1880,8 @@ div.indicators span {
 }
 .settings.contentArea .module.phoneSettings{
     background: none;
-    padding-left: 33px;
-    padding-right: 0;
+    padding-left: 10px;
+    padding-right: 30px;
 }
 
 .settings.contentArea .module.notifications div.forgot {
@@ -1864,18 +1889,18 @@ div.indicators span {
     padding-left: 5px;
 }
 
-.settings.contentArea .module.notifications, .settings.contentArea .module.phoneSettings{
+.settings.contentArea .module.userSettings {
     background: url('/assets/images/tinyborder_andshadow_vertical.png') right top repeat-y;
 }
-.settings.contentArea .module.notifications, .settings.contentArea .module.user{
+.settings.contentArea .module.notifications, .settings.contentArea .module.userSettings{
     padding-left: 10px;
     padding-right: 33px;
 }
-.settings.contentArea .module.phoneSettings, .settings.contentArea .module.passwordChange{
+.settings.contentArea .module.notifications, .settings.contentArea .module.passwordChange{
     padding-left: 33px;
     padding-right: 33px;
 }
-.settings.contentArea .module.developer_mode, .settings.contentArea .module.updateSettings{
+.settings.contentArea .module.updateSettings{
     background: none;
     padding-left: 33px;
     padding-right: 10px;
@@ -1935,7 +1960,7 @@ div.indicators span {
 .settings.contentArea .module{
     background: url('/assets/images/tinyborder.png') center bottom repeat-x;
     padding: 0;
-    width: 33%;
+    width: 50%;
     float: left;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
