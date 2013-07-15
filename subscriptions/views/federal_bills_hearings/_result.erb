@@ -1,9 +1,11 @@
 <% hearing = item.data %>
-<a href="<%= hearing_url hearing %>">
-  <h4>
+
+<h4>
+  <a href="<%= hearing_url hearing %>">
     <%= hearing['committee']['name'] %>
-  </h4>
-</a>
+  </a>
+</h4>
+
 <p>
   <%= truncate_more "hearing-#{hearing['occurs_at'].to_i}", hearing['description'], 200 %>
 </p>

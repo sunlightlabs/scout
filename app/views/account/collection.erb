@@ -103,7 +103,7 @@
     </h2>
 
     <div class="follow_mechanisms">
-      <button class="rss feed" href="<%= collection_feed_path user, collection, "rss" %>"><span>RSS</span></button>
+      <a class="rss feed" href="<%= collection_feed_path user, collection, "rss" %>">RSS</a>
 
       <% if collection.public? %>
         <%= follow_collection interest, enabled: (user != current_user) %>
