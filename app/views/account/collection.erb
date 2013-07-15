@@ -73,7 +73,7 @@
       <% if other_public_collections.any? %>
         <h4>
 
-			More Scout Collections by 
+			More Scout Collections by
 			<% if user.display_name.present? %>
 
 				<%= h user.display_name %>
@@ -96,6 +96,10 @@
 <% end %>
 
 <div class="contentArea left collection <%= current_user == user ? "" : "public" %>">
+<<<<<<< HEAD
+=======
+
+>>>>>>> 3051cb9c67e316682c109e9a8ad3feec269811ef
   <div class="collectionHeader">
 
     <h2>
@@ -171,8 +175,13 @@
 	        </div>
 	      <% end %>
 	    <% end %>
+<<<<<<< HEAD
 	</div>
 	<div class="collection-preview section container">
+=======
+  	</div>
+  	<div class="collection-preview section container">
+>>>>>>> 3051cb9c67e316682c109e9a8ad3feec269811ef
     	<h2>Preview of Current Scout Results</h2>
 	    <ul>
 	      <% items.each do |item| %>
@@ -191,7 +200,11 @@
 	        <% end %>
 	      <% end %>
 	    </ul>
+<<<<<<< HEAD
 	</div>
+=======
+    </div>
+>>>>>>> 3051cb9c67e316682c109e9a8ad3feec269811ef
 
   <% end %>
 
@@ -243,7 +256,11 @@
     <% end %>
   }
 
+<<<<<<< HEAD
   function follow() {
+=======
+	function follow() {
+>>>>>>> 3051cb9c67e316682c109e9a8ad3feec269811ef
     Button.showFollowing();
 
     $.post("/user/" + user_slug + "/" + collection_slug + "/follow", function(data) {
