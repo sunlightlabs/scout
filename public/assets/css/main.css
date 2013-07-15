@@ -2108,7 +2108,16 @@ div.indicators span {
 	padding: 4px 4px;
 	margin-top: 3px;
 }
-
+.collection a.rss{
+    margin-top: 13px;
+    background: url('/assets/images/icon_rss_large.png') center top no-repeat;
+    width: 30px;
+    height: 30px;
+    margin-right: 3px;
+}
+.collection a.rss:hover{
+    background: url('/assets/images/icon_rss_large.png') center bottom no-repeat;
+}
 .collection div.edit {
     display: none;
 }
