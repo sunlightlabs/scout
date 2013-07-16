@@ -509,6 +509,7 @@ select.subscription_type {
     width: 250px;
     background-color: #f5f6f3;
     z-index: 10;
+    padding-top: 33px;
 }
 
 .contentArea{
@@ -534,7 +535,6 @@ select.subscription_type {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    padding-top: 33px;
 }
 .contentArea.left{
     -webkit-box-shadow: inset -14px 1px 14px -7px #e2e3e0;
