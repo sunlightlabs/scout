@@ -21,8 +21,8 @@
       <span>
         <% if document['document_type'] == "gao_report" %>
           Visit
-          <strong><a data-resource="<%= document['document_type'] %>" href="<%= document['url'] %>">
-            GAO</a></strong>
+          <a data-resource="<%= document['document_type'] %>" href="<%= document['url'] %>">
+            GAO</a>
           for more context.
         <% end %>
       </li>
@@ -35,8 +35,8 @@
       <span>
         Below is the official summary.
         <% if document['source_url'] %>
-          The <a data-resource="<%= document['document_type'] %>-original" href="<%= document['source_url'] %>">
-            full report</a>
+          The <strong><a data-resource="<%= document['document_type'] %>-original" href="<%= document['source_url'] %>">
+            full report</a></strong>
           <% if document['source_url'] =~ /\.pdf$/ %>
             (PDF)
           <% end %>
