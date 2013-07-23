@@ -1312,7 +1312,8 @@ button.follow, button.following {display: none;}
 
 .entry {}
 
-.subtitle {
+.entryHeader .subtitle,
+.results .subtitle {
     color: #83858b;
 
     display: block;
@@ -1320,7 +1321,7 @@ button.follow, button.following {display: none;}
     float: left;
 }
 
-.entry .subtitle:last-child,
+.entry .entryHeader .subtitle:last-child,
 .results .subtitle,
 .collection-preview .subtitle {
 	padding-bottom: 8px;
