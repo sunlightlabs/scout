@@ -82,7 +82,9 @@ def deploy():
   execute(sync_assets)
   execute(make_current)
   execute(set_crontab)
-  execute(restart)
+  execute(stop)
+  execute(start)
+  # execute(restart)
 
 # only difference is it uses start instead of restart
 def deploy_cold():
