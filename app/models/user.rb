@@ -30,7 +30,7 @@ class User
   field :url
   field :bio
 
-  validates_format_of :url, with: URI::regexp(%w(http https)), message: "Not a valid URL.", allow_blank: true
+  # validates_format_of :url, with: URI::regexp(%w(http https)), message: "Not a valid URL.", allow_blank: true
 
   has_mongoid_attached_file :image,
     path: 'public/system/:attachment/:id/:style.:extension',

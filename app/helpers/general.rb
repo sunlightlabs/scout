@@ -8,6 +8,14 @@ module Helpers
       Environment.asset_path path
     end
 
+    def user_url(url)
+      if url !~ /^https?:\/\//
+        "http://#{url}"
+      else
+        url
+      end
+    end
+
     def sadness
       sads = %w{regrettably sadly unfortunately inexplicably sadheartedly sorrowfully most-unpleasantly with-great-sadness}
       sad = sads[rand sads.size]

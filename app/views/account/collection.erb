@@ -64,8 +64,8 @@
       <% end %>
 
       <% if user.url.present? %>
-        <a class="url" href="<%= user.url %>">
-          <%= user.url %>
+        <a class="url" href="<%= user_url user.url %>">
+          <%= user_url user.url %>
         </a>
       <% end %>
     </div>
