@@ -1310,10 +1310,9 @@ button.follow, button.following {display: none;}
 .entry .core-context li.rest {display: none;}
 .entry .core-context li.hide {display: none;}
 
-.entry {}
-
 .entryHeader .subtitle,
-.results .subtitle {
+.results .subtitle,
+.collection-preview .subtitle {
     color: #83858b;
 
     display: block;
@@ -1327,11 +1326,15 @@ button.follow, button.following {display: none;}
 	padding-bottom: 8px;
 }
 
-.subtitle h4{
+.entryHeader .subtitle h4,
+.results .subtitle h4,
+.collection-preview .subtitle h4 {
     float: left;
 }
 
-.subtitle h3{
+.collection-preview .subtitle h3,
+.entryHeader .subtitle h3,
+.collection-preview .subtitle h3{
     color: #83858b;
     font-style: normal;
     font-size: 100%;
