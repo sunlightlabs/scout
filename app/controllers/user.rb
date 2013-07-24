@@ -43,7 +43,10 @@ get "/user/:user_id/:collection" do
 
   # preview of items fetched so far for this collection
   interest_ids = collection.interests.only(:_id).map &:_id
-  items = SeenItem.where(interest_id: {"$in" => interest_ids}).desc :date
+  items = SeenItem.where(
+    interest_id: {"$in" => interest_ids},
+    date: {"$lt" => Time.zone.now}
+  ).desc :date
   items = items.limit(10).to_a
 
   erb :"account/collection", locals: {
