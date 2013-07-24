@@ -29,6 +29,7 @@ def checkout():
   run('git clone -q -b %s %s %s' % (branch, repo, version_path))
 
 def links():
+  run("ln -s %s/system %s/public/system" % (shared_path, version_path))
   run("ln -s %s/sitemap %s/public/sitemap" % (shared_path, version_path))
   run("ln -s %s/config.yml %s/config/config.yml" % (shared_path, version_path))
   run("ln -s %s/services.yml %s/config/services.yml" % (shared_path, version_path))
