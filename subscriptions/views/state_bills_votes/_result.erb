@@ -1,3 +1,16 @@
+<% bill = interest.data %>
 <% vote = item.data %>
-<p class="motion"><%= vote['motion'] %></p>
-<p class="vote_count"><%= state_vote_count vote %></p>
+
+<a href="<%= openstates_url bill %>#votes">
+  <h4>
+    Vote on <%= bill['bill_id'] %>
+  </h4>
+</a>
+
+<div class="subtitle">
+  <span>State bill vote</span>
+</div>
+
+<p class="motion">
+  <%= vote['motion'] %>, <%= state_vote_count vote %>
+</p>

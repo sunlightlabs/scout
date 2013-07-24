@@ -174,7 +174,7 @@
       <ul>
         <% items.each do |item| %>
           <% if item.search? %>
-            <%= partial "search/item", engine: "erb", locals: {
+            <%= partial "search/item", engine: :erb, locals: {
               item: item, interest: item.interest, query: interest.in
               } %>
           <% elsif item.item? %>
@@ -182,7 +182,7 @@
               item: item, interest: item.interest, query: nil
               } %>
           <% elsif item.feed? %>
-            <%= partial "search/item", engine: "erb", locals: {
+            <%= partial "search/item", engine: :erb, locals: {
               item: item, interest: item.interest, query: nil
               } %>
           <% end %>

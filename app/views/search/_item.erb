@@ -7,13 +7,13 @@
       <%= just_date_year item.date %>
     </time>
 
-    <span class="type">
+    <!-- <span class="type">
       <% if item.feed? %>
         Outside content
       <% else %>
         <%= Subscription.adapter_for(item.subscription.subscription_type).item_name item.subscription %>
       <% end %>
-    </span>
+    </span> -->
   </div>
 
   <%= partial "subscriptions/#{item.subscription.subscription_type}/result", engine: "erb", locals: {interest: interest, item: item, query: query} %>

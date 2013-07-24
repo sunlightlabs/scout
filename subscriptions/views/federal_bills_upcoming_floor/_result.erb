@@ -1,4 +1,14 @@
+<% bill = interest.data %>
 <% upcoming = item.data %>
-<p>
-  <a href="<%= upcoming['url'] %>"><%= upcoming['chamber'].capitalize %> Floor</a>
-</p>
+
+<a href="<%= upcoming['url'] %>">
+  <h4>
+    Upcoming <%= upcoming['chamber'].capitalize %> floor activity on <%= bill_code bill['bill_type'], bill['number'] %>
+  </h4>
+</a>
+
+<div class="subtitle">
+  <span>Upcoming bill debate</span>
+</div>
+
+<p></p>

@@ -1,2 +1,16 @@
+<% bill = interest.data %>
 <% action = item.data %>
-<p><%= action['action'] %></p>
+
+<a href="<%= openstates_url bill %>#actions">
+  <h4>
+    Action on <%= bill['bill_id'] %>
+  </h4>
+</a>
+
+<div class="subtitle">
+  <span>State bill activity</span>
+</div>
+
+<p>
+  <%= action['action'] %>
+</p>

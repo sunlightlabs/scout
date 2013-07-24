@@ -1,2 +1,16 @@
+<% bill = interest.data %>
 <% action = item.data %>
-<p><%= action['text'] %></p>
+
+<a href="<%= bill['urls']['congress'] %>/actions">
+  <h4>
+    Action on <%= bill_code bill['bill_type'], bill['number'] %>
+  </h4>
+</a>
+
+<div class="subtitle">
+  <span>Bill activity</span>
+</div>
+
+<p>
+  <%= action['text'] %>
+</p>

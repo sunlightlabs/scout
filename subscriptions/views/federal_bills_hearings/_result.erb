@@ -1,10 +1,15 @@
+<% bill = interest.data %>
 <% hearing = item.data %>
 
-<h4>
-  <a href="<%= hearing_url hearing %>">
-    <%= hearing['committee']['name'] %>
-  </a>
-</h4>
+<a href="<%= hearing_url hearing %>">
+  <h4>
+    <%= hearing['committee']['name'] %> hearing on <%= bill_code bill['bill_type'], bill['number'] %>
+  </h4>
+</a>
+
+<div class="subtitle">
+  <span>Committee hearing</span>
+</div>
 
 <p>
   <%= truncate_more "hearing-#{hearing['occurs_at'].to_i}", hearing['description'], 200 %>
