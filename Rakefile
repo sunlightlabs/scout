@@ -542,10 +542,10 @@ task :sitemap => :environment do
       add "/about", change_frequency: "monthly"
 
       # public tags
-      Tag.where(public: true).each do |tag|
+      Tag.where(public: true).each do |collection|
         counts[:tags] += 1
-        path = tag_path tag.user, tag
-        puts "[tag][#{tag.name}] Adding to sitemap..." if debug
+        path = collection_path collection.user, collection
+        puts "[collection][#{collection.name}] Adding to sitemap..." if debug
         add path, change_frequency: "daily"
       end
 
