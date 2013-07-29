@@ -2222,6 +2222,11 @@ div.indicators span {
 	padding-right: 16px;
 	margin-right: 16px;
 }
+
+.collection-index .interest.search h4 span {
+    font-weight: normal;
+}
+
 .collection-preview ul{
 	margin: 20px 20px 20px 0;
 	background: #ffffff;

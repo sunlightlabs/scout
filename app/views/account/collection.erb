@@ -131,9 +131,18 @@
             <div class="type">
               <img src="<%= asset_path "/images/icon_type_search.png" %>" />
             </div>
-            <h4>
-              <%= query %>
-            </h4>
+            <% if by_query[query].size == 1 %>
+              <h4>
+                <a href="<%= interest_path by_query[query].first %>">
+                  <%= query %>
+                </a>
+              </h4>
+            <% else %>
+              <h4>
+                <%= query %> <span>(only <%= by_query[query].map {|i| linked_search i}.join ", " %>)</span>
+              </h4>
+
+            <% end %>
           </div>
         <% end %>
       <% end %>
@@ -148,7 +157,9 @@
               <img src="<%= asset_path "/images/icon_type_bill.png" %>">
             </div>
               <h4>
-                <%= interest_name interest %>
+                <a href="<%= interest_path interest %>">
+                  <%= interest_name interest, long: true %>
+                </a>
               </h4>
             </div>
           <% end %>
@@ -163,7 +174,9 @@
               <img src="<%= asset_path "/images/icon_type_feed.png" %>">
             </div>
             <h4>
-              <%= interest_name interest %>
+              <a href="<%= interest_path interest %>">
+                <%= interest_name interest %>
+              </a>
             </h4>
           </div>
         <% end %>

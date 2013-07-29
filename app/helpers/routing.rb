@@ -85,7 +85,16 @@ module Helpers
 
     def interest_path(interest)
       if interest.item?
-        "/item/#{interest.item_type}/#{interest.in}"
+        route = "/item/#{interest.item_type}/#{interest.in}"
+
+        adapter = Subscription.adapter_for item_types[interest.item_type]['adapter']
+
+        if adapter.respond_to?(:slug_for)
+          route = "#{route}/#{Environment.to_url adapter.slug_for(interest.data)}"
+        end
+
+        route
+
       elsif interest.feed?
         interest.data['site_url'] || interest.data['url'] # URL
       elsif interest.search?
@@ -266,5 +275,12 @@ module Helpers
       request.path =~ /^\/search\//
     end
 
+    # convenience function to more easily do a map and join in the view
+    def linked_search(interest)
+      subscription = interest.subscriptions.first
+      adapter = subscription.adapter
+      "<a href=\"#{interest_path interest}\">
+        #{adapter.short_name 2, adapter}</a>"
+    end
   end
 end
