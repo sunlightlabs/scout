@@ -24,7 +24,11 @@ module Subscriptions
       end
 
       def self.search_name(subscription)
-        "Official Activity"
+        "Bill Activity"
+      end
+
+      def self.item_name(subscription)
+        "Bill activity"
       end
 
       def self.short_name(number, interest)

@@ -9,16 +9,16 @@ get "/interest/:interest_id.rss" do
   rss_for "interest", items, interest: interest
 end
 
-get "/user/:user_id/:tag.rss" do
-  name = Tag.deslugify params[:tag]
-  unless (user = load_user) and (tag = user.tags.where(name: name).first)
+get "/user/:user_id/:collection.rss" do
+  name = Tag.deslugify params[:collection]
+  unless (user = load_user) and (collection = user.tags.where(name: name).first)
     halt 404 and return
   end
 
-  interest_ids = tag.interests.only(:_id).map &:_id
+  interest_ids = collection.interests.only(:_id).map &:_id
   items = SeenItem.where(interest_id: {"$in" => interest_ids}).desc :date
 
-  rss_for "tag", items, tag: tag
+  rss_for "collection", items, collection: collection
 end
 
 helpers do

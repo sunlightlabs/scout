@@ -18,6 +18,9 @@ gem 'escape_utils'
 
 gem "mongoid", '3.1.4'
 
+gem "mongoid-paperclip", require: "mongoid_paperclip"
+gem "aws-sdk"
+
 gem 'ruby-hmac'
 gem 'bcrypt-ruby'
 
@@ -38,8 +41,8 @@ group :development do
   gem 'wirb'
   gem 'paint'
   gem 'unicorn'
-  gem 'rblineprof'
-  gem 'rack-lineprof'
+#  gem 'rblineprof'
+#  gem 'rack-lineprof'
 end
 
 group :test do

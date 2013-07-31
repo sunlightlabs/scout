@@ -18,10 +18,10 @@ module Subscriptions
           }
         }
       end
-      
+
       def self.url_for(subscription, function, options = {})
         api_key = options[:api_key] || Environment.config['subscriptions']['sunlight_api_key']
-        
+
         endpoint = "http://capitolwords.org/api"
 
         # speeches don't support citations
@@ -30,12 +30,12 @@ module Subscriptions
         else
           query = subscription.query['query']
         end
-        
-        return nil unless query.present?
 
-        
         url = "#{endpoint}/text.json?apikey=#{api_key}"
-        url << "&q=#{CGI.escape query}"
+
+        if query.present? and !["\"*\"", "*"].include?(query)
+          url << "&q=#{CGI.escape query}"
+        end
 
         # keep it only to fields with a speaker (bioguide_id)
         url << "&bioguide_id=[''%20TO%20*]"
@@ -59,35 +59,35 @@ module Subscriptions
         url << "&per_page=#{options[:per_page]}" if options[:per_page]
 
         url << "&sort=date%20desc"
-        
+
         url
       end
 
       def self.url_for_detail(item_id, options = {})
         api_key = options[:api_key] || Environment.config['subscriptions']['sunlight_api_key']
-        
+
         endpoint = "http://capitolwords.org/api"
-        
+
         url = "#{endpoint}/text.json?apikey=#{api_key}"
         url << "&id=#{item_id}"
-        
+
         url
       end
 
       def self.url_for_sync(options = {})
         api_key = options[:api_key] || Environment.config['subscriptions']['sunlight_api_key']
-        
+
         endpoint = "http://capitolwords.org/api"
 
         url = "#{endpoint}/text.json?apikey=#{api_key}"
-        
+
         # count up from date of speech
         url << "&sort=date%20asc"
 
         # keep it only to fields with a speaker (bioguide_id)
         url << "&bioguide_id=[''%20TO%20*]"
 
-        
+
         if options[:since] == "all"
           # ok, get everything (you sure?)
 
@@ -120,29 +120,33 @@ module Subscriptions
       def self.search_name(subscription)
         "Speeches in Congress"
       end
-      
+
+      def self.item_name(subscription)
+        "Speech"
+      end
+
       def self.short_name(number, interest)
         "#{number > 1 ? "speeches" : "speech"}"
       end
-      
-      # takes parsed response and returns an array where each item is 
+
+      # takes parsed response and returns an array where each item is
       # a hash containing the id, title, and post date of each item found
       def self.items_for(response, function, options = {})
         raise AdapterParseException.new("Response didn't include 'results' field: #{response.inspect}") unless response['results']
-        
+
         #TODO: hopefully get the API changed to allow filtering on only spoken results
         response['results'].map do |result|
           item_for result
         end
       end
-      
+
       def self.item_detail_for(response)
         item_for response['results'][0]
       end
-      
-      
+
+
       # internal
-      
+
       def self.item_for(result)
         return nil unless result
 
@@ -150,20 +154,20 @@ module Subscriptions
         result['date_year'] = result['date'].year
         result['date_month']= result['date'].month
         result['date_day'] = result['date'].day
-        
+
         matches = result['origin_url'].scan(/Pg([\w\d-]+)\.htm$/)
         if matches.any?
           result['page_slug'] = matches.first
         end
-        
+
         SeenItem.new(
           :item_id => result['id'],
           :date => result['date'],
           :data => result
         )
-          
+
       end
-      
+
       def self.party_map
         @party_map ||= {
           "R" => "Republican",
@@ -171,8 +175,8 @@ module Subscriptions
           "I" => "Independent"
         }
       end
-      
+
     end
-  
+
   end
 end

@@ -35,25 +35,23 @@ module Subscriptions
 
         url = endpoint
 
+        url << "/bills/search?"
+
         query = subscription.query['query']
         federal_bill = Search.federal_bill_for(query) if query
 
         # if it's a bill filter, will filter on bill_type and number
 
-
         if federal_bill.present?
-          url << "/bills?"
           url << "&bill_type=#{federal_bill[0]}"
           url << "&number=#{federal_bill[1]}"
-        elsif query.present?
-          url << "/bills/search?"
+
+        elsif query.present? and !["*", "\"*\""].include?(query)
           url << "&query=#{CGI.escape query}"
 
           url << "&highlight=true"
           url << "&highlight.size=500"
           url << "&highlight.tags=,"
-        else
-          url << "/bills?"
         end
 
         if subscription.query['citations'].any?
@@ -172,6 +170,10 @@ module Subscriptions
 
       def self.search_name(subscription)
         "Bills in Congress"
+      end
+
+      def self.item_name(subscription)
+        "Bill"
       end
 
       def self.short_name(number, interest)

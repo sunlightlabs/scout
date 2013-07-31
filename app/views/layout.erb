@@ -105,12 +105,6 @@
           <h1 class="textIndent">Scout</h1>
         </a>
 
-        <% if content_for?(:home) %>
-        <p class="splashtext">
-          Get alerts when congress or your state capitol talks about issues you care about
-        </p>
-        <% end %>
-
         <%= partial "search/search", :engine => "erb", :locals => {} %>
 
         <div class="clear"></div>
@@ -149,7 +143,7 @@
 
         <div class="aboutSF">
           <p>
-            Founded in 2006, the Sunlight Foundation is a non-partisan non-profit that uses cutting-edge technology and ideas to make government transparent and accountable.
+            Founded in 2006, the Sunlight Foundation is a nonpartisan nonprofit that uses cutting-edge technology and ideas to make government transparent and accountable.
           </p>
           <p>
             Visit <a href="http://sunlightfoundation.com">SunlightFoundation.com</a> to learn more.
@@ -157,7 +151,9 @@
         </div>
 
         <nav>
-          <a href="/about">About</a>
+        <ul>
+          <li><a href="/about">About</a></li>
+        </ul>
         </nav>
 
         <div class="clear"></div>

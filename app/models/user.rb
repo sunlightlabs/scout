@@ -3,6 +3,7 @@ require 'bcrypt'
 class User
   include Mongoid::Document
   include Mongoid::Timestamps
+  include Mongoid::Paperclip
 
   field :email
   field :phone
@@ -16,7 +17,7 @@ class User
 
   # whether and how the user will receive notifications
   field :notifications, default: "email_immediate"
-  validates_inclusion_of :notifications, :in => ["none", "email_daily", "email_immediate"] # sms not valid at the user level
+  validates_inclusion_of :notifications, in: ["none", "email_daily", "email_immediate"] # sms not valid at the user level
   validates_presence_of :notifications
 
   # announcement list booleans
@@ -26,12 +27,30 @@ class User
   # used for sharing things
   field :username
   field :display_name
+  field :url
+  field :bio
+
+  # validates_format_of :url, with: URI::regexp(%w(http https)), message: "Not a valid URL.", allow_blank: true
+
+  has_mongoid_attached_file :image,
+    path: 'public/system/:attachment/:id/:style.:extension',
+    url: '/system/:attachment/:id/:style.:extension',
+    # storage: :s3,
+    # url: ':s3_alias_url',
+    # s3_host_alias: 'something.cloudfront.net',
+    # s3_credentials: File.join('config', 's3.yml'),
+    styles: {
+      # original: ['1000x1000>', :png],
+      small: ['217x217>', :png]
+    }
+
+  validates_attachment_size :image, in: 0..1.megabytes, message: "Image must be less than 1MB."
 
   index username: 1
   index user_id: 1
 
   validates_uniqueness_of :username, allow_blank: true, message: "has already been taken."
-  validates_exclusion_of :username, :in => reserved_names, message: "cannot be used."
+  validates_exclusion_of :username, in: reserved_names, message: "cannot be used."
 
   has_many :interests, dependent: :destroy
   has_many :tags, dependent: :destroy
@@ -76,9 +95,10 @@ class User
   field :signup_process, default: nil # can be "quick"
 
   attr_accessible :email, :username, :display_name, :phone,
-    :notifications, :announcements, :sunlight_announcements
+    :notifications, :announcements, :sunlight_announcements,
+    :bio, :image, :url
 
-  attr_accessor         :password, :password_confirmation
+  attr_accessor :password, :password_confirmation
 
   field :password_hash, type: String # type needs to be specified, otherwise it'd be a BCrypt::Password
   validates_confirmation_of :password, :message => "Your passwords did not match."

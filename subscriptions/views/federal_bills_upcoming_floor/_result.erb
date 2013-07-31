@@ -1,7 +1,14 @@
+<% bill = interest.data %>
 <% upcoming = item.data %>
-<td class="time">
-  <time datetime="<%= html_date upcoming['legislative_day'] %>"><%= upcoming_date upcoming %></time>
-</td>
-<td>
-  <a href="<%= upcoming['url'] %>"><%= upcoming['chamber'].capitalize %> Floor</a>
-</td>
+
+<a href="<%= upcoming['url'] %>">
+  <h4>
+    Upcoming <%= upcoming['chamber'].capitalize %> floor activity on <%= bill_code bill['bill_type'], bill['number'] %>
+  </h4>
+</a>
+
+<div class="subtitle">
+  <span>Upcoming bill debate</span>
+</div>
+
+<p></p>

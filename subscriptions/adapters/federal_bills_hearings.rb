@@ -35,6 +35,10 @@ module Subscriptions
         "Upcoming Hearings"
       end
 
+      def self.item_name(subscription)
+        "Hearing"
+      end
+
       def self.short_name(number, interest)
         "#{number > 1 ? "hearings" : "hearing"}"
       end

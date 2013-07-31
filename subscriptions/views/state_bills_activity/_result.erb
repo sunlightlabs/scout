@@ -1,7 +1,16 @@
+<% bill = interest.data %>
 <% action = item.data %>
-<td class="date time">
-  <%= just_date_year action['date'] %>
-</td>
-<td>
+
+<a href="<%= openstates_url bill %>#actions">
+  <h4>
+    Action on <%= bill['bill_id'] %>
+  </h4>
+</a>
+
+<div class="subtitle">
+  <span>State bill activity</span>
+</div>
+
+<p>
   <%= action['action'] %>
-</td>
+</p>

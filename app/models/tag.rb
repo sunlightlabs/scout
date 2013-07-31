@@ -14,7 +14,7 @@ class Tag
 
   index({user_id: 1, name: 1})
 
-  validates_uniqueness_of :name, :scope => :user_id
+  validates_uniqueness_of :name, scope: :user_id
 
   default_scope desc(:created_at)
 

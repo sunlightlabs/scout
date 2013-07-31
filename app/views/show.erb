@@ -81,6 +81,7 @@
   }
 
   function onLoadContent() {
+    if (typeof(Button) !== "undefined") {
     <% if logged_in? %>
       Button.initExistingUser(follow, unfollow);
     <% else %>
@@ -90,6 +91,7 @@
     <% if logged_in? and interest.new_record? and (params[:follow] == "now") %>
       follow();
     <% end %>
+    }
 
     Utils.shareButtons();
   }

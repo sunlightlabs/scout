@@ -9,6 +9,7 @@ class Receipt
   field :user_id
   field :user_email
   field :user_delivery
+  field :user_service
   field :mechanism
 
   field :subject
@@ -19,6 +20,7 @@ class Receipt
   index user_id: 1
   index user_email: 1
   index user_service: 1
+  index({created_at: 1, user_service: 1})
   index mechanism: 1
   index created_at: 1
   index({mechanism: 1, user_service: 1, created_at: 1})

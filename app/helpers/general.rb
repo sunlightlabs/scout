@@ -8,6 +8,14 @@ module Helpers
       Environment.asset_path path
     end
 
+    def user_url(url)
+      if url !~ /^https?:\/\//
+        "http://#{url}"
+      else
+        url
+      end
+    end
+
     def sadness
       sads = %w{regrettably sadly unfortunately inexplicably sadheartedly sorrowfully most-unpleasantly with-great-sadness}
       sad = sads[rand sads.size]
@@ -54,7 +62,9 @@ module Helpers
     end
 
     def query_size(query)
-      if query.size < 30
+      if query == "*"
+        "wildcard"
+      elsif query.size < 30
         "smaller"
       elsif query.size < 80
         "medium"
@@ -101,8 +111,9 @@ module Helpers
     end
 
     def errors_for(object)
-      if object and object.errors
-        object.errors.full_messages.map do |msg|
+
+      if object and object.errors and object.errors.any?
+        object.errors.map do |key, msg|
           "<div class=\"error user\">#{msg}</div>"
         end.join
       end
@@ -113,16 +124,20 @@ module Helpers
     end
 
     def follow_item(interest)
-      partial "partials/follow", engine: :erb, locals: {type: :item, interest: interest}
+      partial "partials/follow", engine: :erb, locals: {type: :item, interest: interest, enabled: true}
     end
 
     def follow_search(interest)
-      partial "partials/follow", engine: :erb, locals: {type: :search, interest: interest}
+      partial "partials/follow", engine: :erb, locals: {type: :search, interest: interest, enabled: true}
     end
 
     # to the follow partial, no interest is a new interest
     def follow_feed
-      partial "partials/follow", engine: :erb, locals: {type: :feed, interest: nil}
+      partial "partials/follow", engine: :erb, locals: {type: :feed, interest: nil, enabled: true}
+    end
+
+    def follow_collection(interest, enabled: true)
+      partial "partials/follow", engine: :erb, locals: {type: :tag, interest: interest, enabled: enabled}
     end
 
     def truncate(string, length)

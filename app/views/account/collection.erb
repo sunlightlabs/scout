@@ -1,0 +1,279 @@
+<% content_for :sidebar_right do %>
+
+  <% if user == current_user %>
+    <div class="module sharing">
+
+      <% if collection.public? %>
+        <form action="/account/collection/<%= Tag.slugify h(collection.name) %>/public" method="post">
+          <input type="hidden" name="_method" value="put" />
+          <input type="hidden" name="public" value="false" />
+
+          <h3>
+            This collection is <strong>public</strong>.
+          </h3>
+          <p>
+            Your public profile below will be shown to visiting users. <a href="/account/settings?highlight=profile">Update your profile</a> to make changes.
+          </p>
+
+          <button type="submit" class="smallButton collection_public">
+            Make Collection Private
+          </button>
+        </form>
+
+      <% else %>
+        <% if user.display_name.present? %>
+          <form action="/account/collection/<%= Tag.slugify h(collection.name) %>/public" method="post">
+            <input type="hidden" name="_method" value="put" />
+            <input type="hidden" name="public" value="true" />
+
+            <p>
+              This collection is <strong>private</strong>. You can make this collection public, so others can easily follow along.
+            </p>
+
+            <button type="submit" class="smallButton collection_public">
+              Make Collection Public
+            </button>
+          </form>
+        <% else %>
+          <p>
+            This collection is <strong>private</strong>. If you want to share it publicly, <a href="/account/settings?highlight=profile">fill out your user profile</a>.
+          </p>
+        <% end %>
+      <% end %>
+
+    </div>
+  <% end %>
+
+  <%# whether or not it belongs to the visiting user, if it's public show the profile %>
+  <% if collection.public? %>
+    <div class="module profile">
+      <% if user.image.present? %>
+        <img class="logo" src="<%= user.image.url :small %>"/>
+      <% end %>
+
+      <% if user.display_name.present? %>
+        <h3>
+          <%= h user.display_name %>
+        </h3>
+      <% end %>
+
+      <% if user.bio.present? %>
+        <p class="bio">
+          <%= h user.bio %>
+        </p>
+      <% end %>
+
+      <% if user.url.present? %>
+        <a class="url" href="<%= user_url user.url %>">
+          <%= user_url user.url %>
+        </a>
+      <% end %>
+    </div>
+    <% if other_public_collections.any? %>
+      <div class="module">
+        <h4>
+          More Scout Collections by
+          <% if user.display_name.present? %>
+            <%= h user.display_name %>
+          <% end %>
+        </h4>
+        <ul>
+          <% other_public_collections.each do |collection| %>
+            <li>
+              <a href="<%= collection_path user, collection %>">
+                <%= h collection.name %>
+              </a>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+  <% end %>
+
+<% end %>
+
+<div class="contentArea left collection <%= current_user == user ? "" : "public" %>">
+  <div class="collectionHeader">
+
+    <h2>
+      <%= h collection.name %>
+    </h2>
+
+    <div class="follow_mechanisms">
+      <a class="rss feed" href="<%= collection_feed_path user, collection, "rss" %>">RSS</a>
+
+      <% if collection.public? %>
+        <%= follow_collection interest, enabled: (user != current_user) %>
+      <% end %>
+    </div>
+
+    <div class="clear"></div>
+
+    <div class="description_container">
+      <%= partial "account/description", engine: :erb, locals: {user: user, collection: collection} %>
+    </div>
+
+  </div>
+
+  <div class="collection-index">
+    <% if interests.empty? %>
+      <p class="empty">
+        There's nothing in this Scout collection yet.
+      </p>
+    <% else %>
+
+      <% grouped = interests.group_by &:interest_type %>
+
+      <% if grouped['search'] and grouped['search'].any? %>
+        <% by_query = grouped['search'].group_by &:in %>
+        <% by_query.keys.each do |query| %>
+          <div class="interest search basic-row">
+            <div class="type">
+              <img src="<%= asset_path "/images/icon_type_search.png" %>" />
+            </div>
+            <% if by_query[query].size == 1 %>
+              <h4>
+                <a href="<%= interest_path by_query[query].first %>">
+                  <%= query %>
+                </a>
+              </h4>
+            <% else %>
+              <h4>
+                <%= query %> <span>(only <%= by_query[query].map {|i| linked_search i}.join ", " %>)</span>
+              </h4>
+
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+
+      <% if grouped['item'] and grouped['item'].any? %>
+
+        <% by_item_type = grouped['item'].group_by &:item_type %>
+        <% by_item_type.each do |item_type, item_interests| %>
+          <% item_interests.each do |interest| %>
+            <div class="interest item basic-row <%= item_type %>">
+              <div class="type">
+              <img src="<%= asset_path "/images/icon_type_bill.png" %>">
+            </div>
+              <h4>
+                <a href="<%= interest_path interest %>">
+                  <%= interest_name interest, long: false %>
+                </a>
+              </h4>
+            </div>
+          <% end %>
+        <% end %>
+
+      <% end %>
+
+      <% if grouped['feed'] and grouped['feed'].any? %>
+        <% grouped['feed'].each do |interest| %>
+          <div class="interest basic-row collection_feed">
+            <div class="type">
+              <img src="<%= asset_path "/images/icon_type_feed.png" %>">
+            </div>
+            <h4>
+              <a href="<%= interest_path interest %>">
+                <%= interest_name interest %>
+              </a>
+            </h4>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+    <div class="collection-preview section container">
+      <h2>Preview of Current Scout Results</h2>
+      <ul>
+        <% items.each do |item| %>
+          <% if item.search? %>
+            <%= partial "search/item", engine: :erb, locals: {
+              item: item, interest: item.interest, query: interest.in
+              } %>
+          <% elsif item.item? %>
+            <%= partial "search/item", engine: :erb, locals: {
+              item: item, interest: item.interest, query: nil
+              } %>
+          <% elsif item.feed? %>
+            <%= partial "search/item", engine: :erb, locals: {
+              item: item, interest: item.interest, query: nil
+              } %>
+          <% end %>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+</div>
+
+<script type="text/javascript">
+
+  var collection_slug = "<%= Tag.slugify h(collection.name) %>";
+  var user_slug = "<%= h params[:user_id] %>";
+
+  function initializeControls() {
+    <% if logged_in? and (user == current_user) %>
+      $("div.collection").on("click", "a.description", function() {
+        $("div.display, div.edit").toggle();
+        return false;
+      });
+
+      $("div.collection").on("click", "button.description", function() {
+        var container = $(this).parents("div.edit");
+        var user = container.data("user");
+        var collection = container.data("collection");
+
+        var options = {
+          description: $.trim($("textarea.description").val()),
+          _method: "put"
+        };
+
+        $.post("/account/collection/" + collection_slug + "/description", options, function(data) {
+          Utils.log("Updated description for collection.");
+          $("div.description_container").html(data.description_pane);
+        }).error(function() {
+          // todo
+        });
+
+        return false;
+      });
+    <% end %>
+
+    <% if user != current_user %>
+      <% if logged_in? %>
+        Button.initExistingUser(follow, unfollow);
+      <% else %>
+        Button.initNewUser();
+      <% end %>
+    <% end %>
+
+    <% if logged_in? and interest.new_record? and (params[:follow] == "now") %>
+      follow();
+    <% end %>
+  }
+
+  function follow() {
+    Button.showFollowing();
+
+    $.post("/user/" + user_slug + "/" + collection_slug + "/follow", function(data) {
+      Utils.log("Created collection interest " + data.interest_id);
+    }).error(function() {
+      Utils.log("ERROR following collection.");
+      Button.showFollow();
+    });
+  }
+
+  function unfollow() {
+    Button.showFollow();
+
+    $.post("/user/" + user_slug + "/" + collection_slug + "/unfollow", {_method: "delete"}, function(data) {
+      Utils.log("Destroyed collection interest.");
+    }).error(function() {
+      Utils.log("ERROR unfollowing collection.");
+      Button.showFollowing();
+    });
+  }
+
+  $(initializeControls);
+
+</script>

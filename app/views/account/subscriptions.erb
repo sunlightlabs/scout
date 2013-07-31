@@ -1,6 +1,6 @@
 <% content_for :sidebar_right do %>
-  <div class="module tags">
-    <%= partial "account/tags", engine: :erb, locals: {tags: tags} %>
+  <div class="module collections">
+    <%= partial "account/collections", engine: :erb, locals: {collections: collections} %>
   </div>
 
   <div class="module rss">
@@ -24,7 +24,7 @@
       <% by_query = grouped['search'].group_by &:in %>
       <% by_query.each do |query, query_interests| %>
         <div class="interest">
-          
+
           <h3 class="interestHeader"><%= query %></h3>
 
           <div class="removeHeader">
@@ -61,7 +61,7 @@
   <% end %>
 
   <% if grouped['tag'] and grouped['tag'].any? %>
-    <div class="section tags">
+    <div class="section collections">
       <h2>Others' Collections</h2>
       <div class="interest">
 
@@ -164,38 +164,38 @@
       return false;
     });
 
-    // update tags for an interest when the form is submitted
-    $(".subscription .tags form").submit(function() {
+    // update collections for an interest when the form is submitted
+    $(".subscription .collections form").submit(function() {
       var container = $(this).parents(".subscription");
       var interest_id = container.data("interest_id");
-      var tags = $(this).find("input.tags").val();
+      var collections = $(this).find("input.collections").val();
 
       container.find(".indicators span").hide();
       container.find(".indicators .spinning").show();
 
-      $.post("/interest/" + interest_id, {_method: "put", interest: {tags: tags}}, function(data) {
+      $.post("/interest/" + interest_id, {_method: "put", interest: {collections: collections}}, function(data) {
           container.find(".indicators span").hide();
           container.find(".indicators .okay").show().delay(1000).fadeOut(600);
 
-          Utils.log("Interest " + interest_id + " updated with tags (" + data.interest_tags.join(", ") + ")");
-          $(".module.tags").html(data.tags_pane);
+          Utils.log("Interest " + interest_id + " updated with collections (" + data.interest_collections.join(", ") + ")");
+          $(".module.collections").html(data.collections_pane);
       }).error(function(xhr) {
           container.find(".indicators span").hide();
           container.find(".indicators .failed").show();
 
-          Utils.log("Error updating tags for interest " + interest_id);
+          Utils.log("Error updating collections for interest " + interest_id);
       });
       return false;
     });
 
-    // show checkboxes and button next to tags when 'edit' is clicked
-    $(".module.tags").on("click", "h4 a", function() {
-      $(".module.tags button, .module.tags input[type=checkbox]").toggle();
+    // show checkboxes and button next to collections when 'edit' is clicked
+    $(".module.collections").on("click", "h4 a", function() {
+      $(".module.collections button, .module.collections input[type=checkbox]").toggle();
       return false;
     });
 
-    // show OK button next to tage input field on focus
-    $("input[type=text].tags").focus(function() {
+    // show OK button next to collection input field on focus
+    $("input[type=text].collections").focus(function() {
       $(this).siblings("button, small").show();
     });
   });

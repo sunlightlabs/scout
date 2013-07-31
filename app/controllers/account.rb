@@ -3,7 +3,7 @@ get '/account/subscriptions' do
 
   erb :"account/subscriptions", locals: {
     interests: current_user.interests.desc(:created_at),
-    tags: current_user.tags.unscoped.asc(:name)
+    collections: current_user.tags.unscoped.asc(:name)
   }
 end
 
@@ -31,6 +31,13 @@ end
 put '/account/settings' do
   requires_login
 
+  if params[:user] and params[:user][:image]
+    tempfile = params[:user][:image][:tempfile]
+    params[:user].delete :image
+    params[:user].delete 'image'
+    params[:user]['image'] = tempfile
+  end
+
   # first, any attributes given under the user hash
   current_user.attributes = params[:user]
 
@@ -54,13 +61,31 @@ put '/account/settings' do
   end
 
   if current_user.save
-    flash[:user] = "Your settings have been updated."
+    flash[params[:flash]] = "Your settings have been updated."
     flash[:password] = "Your password has been changed." if params[:password].present?
     redirect "/account/settings"
   else
     erb :"account/settings", locals: {user: current_user}
   end
 end
+
+
+# public profile settings, including possible attached image
+# put '/account/profile' do
+#   requires_login
+
+#   # any attributes given under the user hash
+#   # includes image, handled by mongoid-paperclip
+#   current_user.attributes = params[:user]
+
+#   if current_user.save
+#     flash[:user] = "Your settings have been updated."
+#     flash[:password] = "Your password has been changed." if params[:password].present?
+#     redirect "/account/settings"
+#   else
+#     erb :"account/settings", locals: {user: current_user}
+#   end
+# end
 
 
 # simpler version of the account settings update -

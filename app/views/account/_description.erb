@@ -1,12 +1,12 @@
 <div class="display">
 
-  <% if tag.description.present? %>
-    <%= light_format tag.description %>
+  <% if collection.description.present? %>
+    <%= light_format collection.description %>
   <% end %>
 
   <% if user == current_user %>
     <div class="edit_link">
-      <% if tag.description.present? %>
+      <% if collection.description.present? %>
         <a href="#" class="description edit">
           edit description
         </a>
@@ -21,12 +21,12 @@
 
 <% if user == current_user %>
   <div class="edit">
-    <textarea class="description" 
+    <textarea class="description"
       placeholder="Describe this collection of subscriptions. (optional)"
-      ><%= h tag.description %></textarea>
+      ><%= h collection.description %></textarea>
     <button class="smallButton description">
       Update
     </button>
     <a class="description cancel" href="#">cancel</a>
   </div>
-<% end %> 
+<% end %>
