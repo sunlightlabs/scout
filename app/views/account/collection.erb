@@ -131,7 +131,7 @@
             <div class="type">
               <img src="<%= asset_path "/images/icon_type_search.png" %>" />
             </div>
-            <% if by_query[query].size == 1 %>
+            <% if (by_query[query].size == 1) and (by_query[query].first.search_type == "all") %>
               <h4>
                 <a href="<%= interest_path by_query[query].first %>">
                   <%= query %>
