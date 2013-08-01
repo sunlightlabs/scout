@@ -154,13 +154,34 @@
           <% item_interests.each do |interest| %>
             <div class="interest item basic-row <%= item_type %>">
               <div class="type">
-              <img src="<%= asset_path "/images/icon_type_bill.png" %>">
-            </div>
-              <h4>
-                <a href="<%= interest_path interest %>">
-                  <%= interest_name interest, long: false %>
-                </a>
-              </h4>
+                <img src="<%= asset_path "/images/icon_type_bill.png" %>">
+              </div>
+
+              <% if interest.item_type == "bill" %>
+                <h4>
+                  <a href="<%= interest_path interest %>">
+                    <%= interest_name interest, long: false %>,</a>
+                  <span>
+                    Congress
+                  </span>
+                </h4>
+                <div class="subtitle">
+                  <% title = interest.data['short_title'] || interest.data['official_title'] %>
+                  <%= truncate title, 100 %>
+                </div>
+              <% elsif interest.item_type == "state_bill" %>
+                <h4>
+                  <a href="<%= interest_path interest %>">
+                    <%= interest.data['bill_id'] %></a>,
+                  <span>
+                    <%= Subscriptions::Adapters::StateBills.state_map[interest.data['state'].upcase] %>
+                  </span>
+                </h4>
+                <div class="subtitle">
+                  <% title = interest.data['+short_title'] || interest.data['title'] %>
+                  <%= truncate title, 100 %>
+                </div>
+              <% end %>
             </div>
           <% end %>
         <% end %>
