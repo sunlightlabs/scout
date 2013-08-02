@@ -6,15 +6,24 @@
     <time class="result" datetime="<%= html_date item.date %>">
       <%= just_date_year item.date %>
     </time>
-
-    <!-- <span class="type">
-      <% if item.feed? %>
-        Outside content
-      <% else %>
-        <%= Subscription.adapter_for(item.subscription.subscription_type).item_name item.subscription %>
-      <% end %>
-    </span> -->
   </div>
 
   <%= partial "subscriptions/#{item.subscription.subscription_type}/result", engine: "erb", locals: {interest: interest, item: item, query: query} %>
+
+  <% if defined?(preview) and preview %>
+    <div class="source">
+      <span>
+        <% if item.search? %>
+          Matched search:
+        <% elsif item.item? %>
+          Related to bill:
+        <% elsif item.feed? %>
+          From feed:
+        <% end %>
+      </span>
+      <span class="name">
+        <%= interest_name interest, long: false %>
+      </span>
+    </div>
+  <% end %>
 </li>
