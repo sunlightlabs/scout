@@ -220,6 +220,20 @@
               item: item, interest: item.interest, query: nil
               } %>
           <% end %>
+          <div class="source">
+            <span>
+              <% if item.search? %>
+                Matched search:
+              <% elsif item.item? %>
+                Related to bill:
+              <% elsif item.feed? %>
+                From feed:
+              <% end %>
+            </span>
+            <span class="name">
+              <%= interest_name item.interest, long: false %>
+            </span>
+          </div>
         <% end %>
       </ul>
     </div>
