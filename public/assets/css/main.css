@@ -2233,7 +2233,10 @@ div.indicators span {
 
 
 .collection .interest{
-    margin-bottom: 33px;
+    margin-bottom: ;
+}
+.collection .interest h4 {
+    margin-bottom: 0;
 }
 
 .collection p.empty {
