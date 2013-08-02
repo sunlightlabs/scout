@@ -1564,14 +1564,14 @@ h3.interestHeader, .add.rss{
     float: left;
     width: 489px;
 }
-.subscription h4 .title, .left .basic-row  h4 .title {
+.subscription h4 .title, .left .basic-row  h4 .title, .interest.item h4 .subtitle {
     font-weight: normal;
     font-style: italic;
     display: block;
     font-size: 13px;
 }
 
-.subscription h4 span.title {
+.subscription h4 span.title, .interest.item h4 .subtitle {
     display: block;
     padding: 2px 0;
 }
@@ -2195,9 +2195,43 @@ div.indicators span {
 .collection .description_container .display p {
     font-style: italic;
     margin-top: 20px;
-
-
 }
+.collectionHeader .view_preview {
+    text-align: center;
+    padding: 8px 0;
+    width: 270px;
+    margin: 20px auto;
+    position: relative;
+    background: #e5e6e3;
+    border: 1px solid #ffffff;
+}
+.collectionHeader .view_preview:after, .collectionHeader .view_preview:before {
+    top: 100%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+.collectionHeader .view_preview:after {
+    border-color: rgba(229, 230, 227, 0);
+    border-top-color: #e5e6e3;
+    border-width: 12px;
+    left: 50%;
+    margin-left: -12px;
+}
+
+.collectionHeader .view_preview:after {
+    border-color: rgba(229, 230, 227, 0);
+    border-top-color: #e5e6e3;
+    border-width: 10px;
+    left: 50%;
+    margin-left: -10px;
+}
+
+
+
 
 .collection .interest{
     margin-bottom: 33px;

@@ -113,6 +113,8 @@
       <%= partial "account/description", engine: :erb, locals: {user: user, collection: collection} %>
     </div>
 
+    <h4 class="view_preview"><a href="#preview">Preview Current Scout Results</a></h4>
+
   </div>
 
   <div class="collection-index">
@@ -164,11 +166,12 @@
                   <span>
                     Congress
                   </span>
-                </h4>
-                <div class="subtitle">
+                  <div class="subtitle">
                   <% title = interest.data['short_title'] || interest.data['official_title'] %>
                   <%= truncate title, 100 %>
                 </div>
+                </h4>
+
               <% elsif interest.item_type == "state_bill" %>
                 <h4>
                   <a href="<%= interest_path interest %>">
@@ -176,11 +179,11 @@
                   <span>
                     <%= Subscriptions::Adapters::StateBills.state_map[interest.data['state'].upcase] %>
                   </span>
-                </h4>
-                <div class="subtitle">
+                  <div class="subtitle">
                   <% title = interest.data['+short_title'] || interest.data['title'] %>
                   <%= truncate title, 100 %>
                 </div>
+                </h4>
               <% end %>
             </div>
           <% end %>
@@ -203,7 +206,7 @@
         <% end %>
       <% end %>
     </div>
-    <div class="collection-preview section container">
+    <div id="preview" class="collection-preview section container">
       <h2>Preview of Current Scout Results</h2>
       <ul>
         <% items.each do |item| %>
