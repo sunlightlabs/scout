@@ -1219,10 +1219,9 @@ button.follow, button.following {display: none;}
 .feed_preview .follow_buttons {right: 20px; top: 60px;}
 
 .collectionHeader .follow_mechanisms {right: 20px; top: 0px;}
-.collectionHeader .follow_mechanisms .follow_buttons {right: 20px; top: 20px;}
+.collectionHeader .follow_mechanisms .follow_buttons { margin: 4px -23px 0 10px; position: relative; float: right;}
 .collectionHeader .follow_mechanisms .feed {
-    position: absolute; right: 190px; top: 18px;
-    float: none;
+    float: right;
 }
 
 /** quick signup **/

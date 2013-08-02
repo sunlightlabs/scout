@@ -100,11 +100,10 @@
     </h2>
 
     <div class="follow_mechanisms">
-      <a class="rss feed" href="<%= collection_feed_path user, collection, "rss" %>">RSS</a>
-
       <% if collection.public? %>
         <%= follow_collection interest, enabled: (user != current_user) %>
       <% end %>
+      <a class="rss feed" href="<%= collection_feed_path user, collection, "rss" %>">RSS</a>
     </div>
 
     <div class="clear"></div>
