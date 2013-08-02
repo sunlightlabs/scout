@@ -163,14 +163,14 @@
               <% if interest.item_type == "bill" %>
                 <h4>
                   <a href="<%= interest_path interest %>">
-                    <%= interest_name interest, long: false %>,</a>
+                    <%= interest_name interest, long: false %></a>,
                   <span>
                     Congress
                   </span>
-                  <div class="subtitle">
-                  <% title = interest.data['short_title'] || interest.data['official_title'] %>
-                  <%= truncate title, 100 %>
-                </div>
+                  <span class="subtitle">
+                    <% title = interest.data['short_title'] || interest.data['official_title'] %>
+                    <%= truncate title, 100 %>
+                  </span>
                 </h4>
                 <div class="clear">
                 </div>
@@ -182,10 +182,10 @@
                   <span>
                     <%= Subscriptions::Adapters::StateBills.state_map[interest.data['state'].upcase] %>
                   </span>
-                  <div class="subtitle">
-                  <% title = interest.data['+short_title'] || interest.data['title'] %>
-                  <%= truncate title, 100 %>
-                </div>
+                  <span class="subtitle">
+                    <% title = interest.data['+short_title'] || interest.data['title'] %>
+                    <%= truncate title, 100 %>
+                  </span>
                 </h4>
                 <div class="clear">
                 </div>
