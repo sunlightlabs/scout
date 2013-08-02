@@ -2203,7 +2203,7 @@ div.indicators span {
     margin: 20px auto;
     position: relative;
     background: #e5e6e3;
-    border: 1px solid #ffffff;
+    border: 0 solid #ffffff;
 }
 .collectionHeader .view_preview:after, .collectionHeader .view_preview:before {
     top: 100%;
@@ -2269,8 +2269,19 @@ div.indicators span {
 .collection-preview li{
 	list-style-type: none;
 	padding: 10px 20px;
-	border-bottom: 2px solid #fafbf8;
+	border-bottom: 2px solid #F3F5EF;
 }
+.collection-preview li .source {
+    color: #83858b;
+    border-top: 1px dashed #F3F5EF;
+    padding-top: 5px;
+    font-style: italic;
+}
+.collection-preview li .source .name{
+    font-weight: bold;
+}
+
+
 
 
 
