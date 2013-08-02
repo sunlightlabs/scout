@@ -1,5 +1,13 @@
 $(function() {
 
+  $(".view_preview a").click(function() {
+    $('html, body').animate({
+      scrollTop: $("#preview").offset().top
+     });
+
+    return false;
+  });
+
   // login link should always point to redirect back
   $("a.login, a.logout").click(function() {
     var current = $(this).attr("href");
