@@ -209,31 +209,20 @@
         <% items.each do |item| %>
           <% if item.search? %>
             <%= partial "search/item", engine: :erb, locals: {
-              item: item, interest: item.interest, query: interest.in
+              item: item, interest: item.interest, query: interest.in,
+              preview: true
               } %>
           <% elsif item.item? %>
             <%= partial "search/item", engine: :erb, locals: {
-              item: item, interest: item.interest, query: nil
+              item: item, interest: item.interest, query: nil,
+              preview: true
               } %>
           <% elsif item.feed? %>
             <%= partial "search/item", engine: :erb, locals: {
-              item: item, interest: item.interest, query: nil
+              item: item, interest: item.interest, query: nil,
+              preview: true
               } %>
           <% end %>
-          <div class="source">
-            <span>
-              <% if item.search? %>
-                Matched search:
-              <% elsif item.item? %>
-                Related to bill:
-              <% elsif item.feed? %>
-                From feed:
-              <% end %>
-            </span>
-            <span class="name">
-              <%= interest_name item.interest, long: false %>
-            </span>
-          </div>
         <% end %>
       </ul>
     </div>
