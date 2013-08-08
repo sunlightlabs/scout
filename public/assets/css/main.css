@@ -2233,6 +2233,9 @@ div.indicators span {
 .collection .interest h4 {
     margin-bottom: 0;
 }
+.collection .interest h4 span a {
+    font-weight: bold;
+}
 
 .collection p.empty {
     margin: 10px 10px;
