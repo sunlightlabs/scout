@@ -1260,7 +1260,7 @@ button.follow, button.following {display: none;}
 
 .quickSignup .message.problem {color: #C13445;}
 
-.quickSignup span.login {margin-top: 5px; display: block;}
+.quickSignup span.login {margin-top: 5px; display: block; font-size: 8pt;}
 
 /*-- Entry Styling --*/
 
