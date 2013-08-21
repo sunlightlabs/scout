@@ -58,6 +58,10 @@ get '/about' do
   erb :about
 end
 
+get '/collections' do
+  erb :collections
+end
+
 get '/error' do
   raise Exception.new("KABOOM.")
 end
