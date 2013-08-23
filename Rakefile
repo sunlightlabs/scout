@@ -619,7 +619,36 @@ namespace :assets do
   end
 end
 
-namespace :copy do
+namespace :collection do
+
+  # Rename a collection.
+  #
+  # * Find the Tag, capture its interests in an array.
+  # * Change the Tag's name field.
+  # * Take previously captured interests, replace old name
+  #   with new one in "tags" field.
+  task rename: :environment do
+
+    unless (email = ENV['email']).present? and
+      (collection_name = ENV['collection']).present? and
+      (new_name = ENV['new_name']).present? and
+      (user = User.where(email: email).first) and
+      (collection = user.tags.where(name: collection_name).first)
+      puts "Provide a valid 'email' and 'collection' name for that user."
+      exit
+    end
+
+    interests = collection.interests.all.to_a
+    collection.name = new_name.strip
+    collection.save!
+    interests.each do |interest|
+      interest.tags.delete collection_name
+      interest.tags << new_name
+      interest.save!
+    end
+
+    puts "Renamed collection from \"#{collection_name}\" to \"#{new_name}\"."
+  end
 
   # Copy one user's collection to another:
   #
@@ -631,7 +660,7 @@ namespace :copy do
   #     - set "tags" field to [tag]
   #     - generate subscriptions for each interest
   #     - ensure each subscription is initialized
-  task collection: :environment do
+  task copy: :environment do
 
     unless (from_email = ENV['from']).present? and (to_email = ENV['to']).present? and
       (collection_name = ENV['collection']).present? and
