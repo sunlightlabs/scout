@@ -101,7 +101,7 @@ configure do
 
       config.gzip_compression = true
     else
-      puts "Asset syncing disabled, using local assets."
+      # puts "Asset syncing disabled, using local assets."
       config.enabled = false
     end
   end
