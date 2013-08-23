@@ -1359,6 +1359,11 @@ button.follow, button.following {display: none;}
     width: 100px;
 }
 
+.entry header em {
+    font-weight: bold;
+    font-style: normal;
+}
+
 .entry .resources,
 .entry #document,
 .entry .core-context {

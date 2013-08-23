@@ -35,8 +35,8 @@
       <span>
         Below is the official summary.
         <% if document['source_url'] %>
-          The <strong><a data-resource="<%= document['document_type'] %>-original" href="<%= document['source_url'] %>">
-            full report</a></strong>
+          The <em><a data-resource="<%= document['document_type'] %>-original" href="<%= document['source_url'] %>">
+            full report</a></em>
           <% if document['source_url'] =~ /\.pdf$/ %>
             (PDF)
           <% end %>
