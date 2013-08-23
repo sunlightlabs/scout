@@ -673,7 +673,9 @@ namespace :collection do
 
     # copy the collection
     attributes = collection.attributes.dup
-    attributes.delete "_id"
+    ["_id", "created_at", "updated_at"].each do |field|
+      attributes.delete field
+    end
     new_collection = to.tags.new attributes
     new_collection.save!
     puts "Saved collection \"#{collection_name}\"."
