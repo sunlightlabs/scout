@@ -2366,6 +2366,11 @@ a.ignore{
     margin-top: 25px;
 }
 
+.collections.about img.collections {
+    border: 1px solid #aaa;
+    padding: 10px;
+    margin: 20px 0;
+}
 
 /** document viewing **/
 
