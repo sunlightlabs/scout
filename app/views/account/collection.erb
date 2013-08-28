@@ -68,6 +68,12 @@
           <%= user_url user.url %>
         </a>
       <% end %>
+
+      <% if user.contact_email.present? %>
+        <a class="contact_email" href="mailto:<%= user.contact_email %>">
+          <%= user.contact_email %>
+        </a>
+      <% end %>
     </div>
     <% if other_public_collections.any? %>
       <div class="module">

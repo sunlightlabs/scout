@@ -29,6 +29,7 @@ class User
   field :display_name
   field :url
   field :bio
+  field :contact_email
 
   # validates_format_of :url, with: URI::regexp(%w(http https)), message: "Not a valid URL.", allow_blank: true
 
@@ -96,7 +97,7 @@ class User
 
   attr_accessible :email, :username, :display_name, :phone,
     :notifications, :announcements, :sunlight_announcements,
-    :bio, :image, :url
+    :bio, :image, :url, :contact_email
 
   attr_accessor :password, :password_confirmation
 
