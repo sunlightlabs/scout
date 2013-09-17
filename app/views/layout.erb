@@ -19,8 +19,10 @@
 
     <% if content_for?(:title) %>
       <title><%= yield_content :title %></title>
+      <meta property="og:title" content="<%= escape_javascript yield_content(:title) %>" />
     <% else %>
       <title>Scout</title>
+      <meta property="og:title" content="Scout" />
     <% end %>
 
     <% if content_for?(:description) %>
@@ -28,6 +30,8 @@
     <% else %>
       <meta property="og:description" content="Live government activity and alerts, by the Sunlight Foundation." />
     <% end %>
+
+    <meta name="twitter:card" content="summary" />
 
     <!-- my CSS, plus any page-specific CSS -->
 
