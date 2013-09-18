@@ -17,6 +17,15 @@ module Subscriptions
         {
           "state" => {
             name: -> code {state_map[code.upcase]}
+          },
+          "status" => {
+            name: -> code {
+              {
+                passed_lower: "Passed lower chamber",
+                passed_upper: "Passed upper chamber",
+                signed: "Signed"
+              }[code.to_sym]
+            }
           }
         }
       end
@@ -115,8 +124,16 @@ module Subscriptions
         end
 
         # status - array of strings, e.g. ["passed_upper", "passed_lower"]
-        if subscription.data['status'].present? and subscription.data['status'].any?
-          url << subscription.data['status'].map {|s| "&status=#{s}"}.join("")
+        if subscription.data['status'].present?
+
+          # make it a one-item array if need be
+          if subscription.data['status'].is_a?(String)
+            subscription.data['status'] = [subscription.data['status']]
+          end
+
+          if subscription.data['status'].any?
+            url << subscription.data['status'].map {|s| "&status=#{s}"}.join("")
+          end
         end
 
         # order
