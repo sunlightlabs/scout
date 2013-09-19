@@ -126,13 +126,14 @@ module Subscriptions
         # status - array of strings, e.g. ["passed_upper", "passed_lower"]
         if subscription.data['status'].present?
 
+          status = subscription.data['status'].dup
           # make it a one-item array if need be
-          if subscription.data['status'].is_a?(String)
-            subscription.data['status'] = [subscription.data['status']]
+          if status.is_a?(String)
+            status = [status]
           end
 
-          if subscription.data['status'].any?
-            url << subscription.data['status'].map {|s| "&status=#{s}"}.join("")
+          if status.any?
+            url << status.map {|s| "&status=#{s}"}.join("")
           end
         end
 
