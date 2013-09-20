@@ -19,12 +19,18 @@ module Subscriptions
             name: -> code {state_map[code.upcase]}
           },
           "status" => {
-            name: -> code {
-              {
-                passed_lower: "Passed lower chamber",
-                passed_upper: "Passed upper chamber",
-                signed: "Signed"
-              }[code.to_sym]
+            name: -> codes {
+              if codes.is_a?(String)
+                codes = [codes]
+              end
+
+              codes.map do |code|
+                {
+                  passed_lower: "Passed lower chamber",
+                  passed_upper: "Passed upper chamber",
+                  signed: "Signed"
+                }[code.to_sym]
+              end.join ", "
             }
           }
         }
