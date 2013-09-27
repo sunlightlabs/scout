@@ -63,13 +63,13 @@
 0 8,14 * * *  /projects/scout/current/config/cron/production/check.sh federal_bills_activity
 
 # upcoming notices for bills in Congress - every 10 minutes, bounded by party leadership
-*/10 * * * *   /projects/scout/current/config/cron/production/check.sh federal_bills_upcoming_floor
+*/6 * * * *   /projects/scout/current/config/cron/production/check.sh federal_bills_upcoming_floor
 
 # upcoming hearings for bills in Congress - every 10 minutes, updated throughout the day
-*/10 * * * *   /projects/scout/current/config/cron/production/check.sh federal_bills_hearings
+*/7 * * * *   /projects/scout/current/config/cron/production/check.sh federal_bills_hearings
 
 # vote results for bills in Congress - every 5 minutes, updated by House/Senate throughout the day
-*/10 * * * *   /projects/scout/current/config/cron/production/check.sh federal_bills_votes
+*/8 * * * *   /projects/scout/current/config/cron/production/check.sh federal_bills_votes
 
 # activity on bills in the States - 8am (Open States done scraping by 6:30am)
 30 12 * * * /projects/scout/current/config/cron/production/check.sh state_bills_activity rate_limit=0.3
