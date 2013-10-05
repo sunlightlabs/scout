@@ -3,6 +3,7 @@
 .entry article .glossary {
   border-bottom: 1px dashed #888;
   cursor: help;
+  background-color: #eee;
 }
 
 .entry #document {
