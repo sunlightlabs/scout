@@ -3,7 +3,7 @@
 */30 * * * * /projects/scout/current/config/cron/production/rake.sh subscriptions:reinitialize
 
 # reload glossary terms once an hour
-0 * * * * /projects/scout/current/config/cron/production/rake.sh glossary:load
+# 0 * * * * /projects/scout/current/config/cron/production/rake.sh glossary:load
 
 # post-midnight, email a report of Google's crawling activity
 0 6 * * * /projects/scout/current/config/cron/production/rake.sh analytics:google
