@@ -481,7 +481,7 @@ end
 
 desc "Load in the structure of the US Code."
 namespace :usc do
-  task :load => :environment do
+  task load: :environment do
     only = ENV['title'] || nil
 
     titles = MultiJson.load open("misc/usc.json")
@@ -693,5 +693,40 @@ namespace :collection do
     end
 
     puts "Did it work??"
+  end
+end
+
+namespace :glossary do
+
+  desc "Load glossary from the unitedstates/glossary project"
+  task load: :environment do
+    begin
+      count = 0
+
+      index_url = "http://unitedstates.github.io/glossary/definitions.json"
+      puts "Downloading #{index_url}\n\n"
+      definitions = Oj.load Subscriptions::Manager.download(index_url)
+
+      definitions['definitions'].each do |term|
+        term_url = "http://unitedstates.github.io/glossary/definitions/#{URI.encode term}.json"
+        puts "[#{term}]\n\t#{term_url}"
+        details = Oj.load Subscriptions::Manager.download(term_url)
+
+        definition = Definition.find_or_initialize_by term: term
+        definition.attributes = details
+
+        puts "\t#{definition.new_record? ? "Creating" : "Updating"}..."
+
+        definition.save!
+        count += 1
+      end
+
+      puts "Saved #{count} definitions."
+
+    rescue Exception => ex
+      report = Report.exception 'Glossary', "Exception loading glossary.", ex
+      Admin.report report
+      puts "Error loading glossary, emailed report."
+    end
   end
 end

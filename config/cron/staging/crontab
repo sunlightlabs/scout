@@ -2,6 +2,8 @@
 
 */30 * * * * /projects/alarms/current/config/cron/staging/rake.sh subscriptions:reinitialize
 
+# reload glossary terms once a day
+30 10 * * * /projects/scout/current/config/cron/production/rake.sh glossary:load
 
 ######## Delivery tasks ########
 
@@ -23,7 +25,7 @@
 # bills in Congress - daily, bounded by THOMAS/GPO
 45 10 * * *  /projects/alarms/current/config/cron/staging/check.sh federal_bills
 
-# bills in the states - Open States 
+# bills in the states - Open States
 0 12 * * *     /projects/alarms/current/config/cron/staging/check.sh state_bills
 0 12 * * *     /projects/alarms/current/config/cron/staging/check.sh state_legislators_bills
 
