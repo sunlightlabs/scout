@@ -138,6 +138,16 @@
 
 
 <script type="text/javascript">
+  // for now: serialize all the known terms into a big object
+  var glossary = {
+    <% glossary.each do |definition| %>
+      "<%= escape_javascript definition.term %>": {
+        short_definition: "<%= escape_javascript definition.short_definition %>"
+      },
+    <% end %>
+    i_hate_ie6: null
+  };
+
   $(function() {
     $(".core-context li.show a").click(function() {
       $(".core-context li.rest").show();
@@ -152,5 +162,41 @@
       $(".core-context li.show").show();
       return false;
     });
+
+    var container = $("article");
+    $.each(glossary, function(term, details) {
+      searchHTML(container, term);
+    });
+
+    $("article .glossary").each(function() {
+      $(this).qtip({
+        content: {
+          text: glossary[$(this).data("term")].short_definition
+        }
+      });
+    });
   });
+
+  var glossaryTextNodes;
+  // all praise to http://stackoverflow.com/a/7720056/16075
+  function searchHTML(container, searchString) {
+    var expr = new RegExp(searchString, "gi");
+    if (!glossaryTextNodes) {
+      var elements = container.find("*").andSelf();
+      glossaryTextNodes = elements.contents().not(elements);
+    }
+    glossaryTextNodes.each(function() {
+      var matches = this.nodeValue.match(expr);
+      if (matches) {
+        var parts = this.nodeValue.split(expr);
+        for (var n = 0; n < parts.length; n++) {
+          if (n)
+            $("<span class=\"glossary\" data-term=\"" + searchString + "\">").text(matches[n - 1]).insertBefore(this);
+          if (parts[n])
+            $(document.createTextNode(parts[n])).insertBefore(this);
+        }
+        $(this).remove();
+      }
+    });
+  }
 </script>

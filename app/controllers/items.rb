@@ -17,7 +17,8 @@ get "/item/:item_type/:item_id/?:slug?" do
       content = erb :"subscriptions/#{subscription_type}/_show", layout: false, locals: {
         item: item,
         interest: interest,
-        item_type: item_type
+        item_type: item_type,
+        glossary: glossary
       }
 
       share = partial "partials/share", engine: :erb
@@ -76,7 +77,8 @@ get "/fetch/item/:item_type/:item_id/?:slug?" do
   results = erb :"subscriptions/#{subscription_type}/_show", layout: false, locals: {
     item: item,
     interest: interest,
-    item_type: item_type
+    item_type: item_type,
+    glossary: glossary
   }
 
   json 200, {share: share, results: results}
@@ -136,4 +138,7 @@ helpers do
     Interest.for_item current_user, item_id, item_type
   end
 
+  def glossary
+    Definition.all.to_a
+  end
 end
