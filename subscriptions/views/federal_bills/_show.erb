@@ -143,7 +143,7 @@
     definitions: {
       <% glossary.each do |definition| %>
         "<%= escape_javascript definition.term %>": {
-          short_definition: "<%= escape_javascript definition.short_definition.gsub '\"', "&quot;" %>"
+          short_definition: "<%= escape_javascript definition.short_definition %>".replace(/\"/g, "&quot;")
         },
       <% end %>
     }
@@ -193,7 +193,7 @@
             var def = Glossary.definitions[term].short_definition;
             $("<span class=\"glossary\"" +
               " title=\"" + def + "\"" +
-              " data-term=\"" + searchString + "\">").text(matches[n - 1]).insertBefore(this);
+              " data-term=\"" + term + "\">").text(matches[n - 1]).insertBefore(this);
           }
           if (parts[n])
             $(document.createTextNode(parts[n])).insertBefore(this);
