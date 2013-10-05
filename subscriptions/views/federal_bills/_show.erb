@@ -139,14 +139,17 @@
 
 <script type="text/javascript">
   // for now: serialize all the known terms into a big object
-  var glossary = {
-    <% glossary.each do |definition| %>
-      "<%= escape_javascript definition.term %>": {
-        short_definition: "<%= escape_javascript definition.short_definition %>"
-      },
-    <% end %>
-    i_hate_ie6: null
+  var Glossary = {
+    definitions: {
+      <% glossary.each do |definition| %>
+        "<%= escape_javascript definition.term %>": {
+          short_definition: "<%= escape_javascript definition.short_definition %>"
+        },
+      <% end %>
+      i_hate_ie6: null
+    }
   };
+  Glossary.terms = $.map(Glossary.definitions, function(i, term) {return term;})
 
   $(function() {
     $(".core-context li.show a").click(function() {
@@ -163,15 +166,18 @@
       return false;
     });
 
+    // find and
     var container = $("article");
-    $.each(glossary, function(term, details) {
+
+    $.each(Glossary.terms, function(i, term) {
       searchHTML(container, term);
     });
 
+    //
     $("article .glossary").each(function() {
       $(this).qtip({
         content: {
-          text: glossary[$(this).data("term")].short_definition
+          text: Glossary.definitions[$(this).data("term")].short_definition
         }
       });
     });
