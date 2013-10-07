@@ -707,18 +707,20 @@ namespace :glossary do
       puts "Downloading #{index_url}\n\n"
       definitions = Oj.load Subscriptions::Manager.download(index_url)
 
-      definitions['definitions'].each do |term|
-        term_url = "http://unitedstates.github.io/glossary/definitions/#{URI.encode term}.json"
-        puts "[#{term}]\n\t#{term_url}"
-        details = Oj.load Subscriptions::Manager.download(term_url)
+      definitions['definitions'].each do |section, terms|
+        terms.each do |term|
+          term_url = "http://unitedstates.github.io/glossary/definitions/#{section}/#{URI.encode term}.json"
+          puts "[#{term}]\n\t#{term_url}"
+          details = Oj.load Subscriptions::Manager.download(term_url)
 
-        definition = Definition.find_or_initialize_by term: term
-        definition.attributes = details
+          definition = Definition.find_or_initialize_by term: term
+          definition.attributes = details
 
-        puts "\t#{definition.new_record? ? "Creating" : "Updating"}..."
+          puts "\t#{definition.new_record? ? "Creating" : "Updating"}..."
 
-        definition.save!
-        count += 1
+          definition.save!
+          count += 1
+        end
       end
 
       puts "Saved #{count} definitions."
