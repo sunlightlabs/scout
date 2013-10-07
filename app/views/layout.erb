@@ -37,6 +37,9 @@
 
     <!-- my CSS, plus any page-specific CSS -->
 
+    <!-- qtip CSS first, so it can be overwritten easily -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/qtip2/2.1.1/jquery.qtip.min.css" />
+
     <link rel="stylesheet" href="<%= asset_path "/css/html5-reset.css" %>" />
     <link rel="stylesheet" href="<%= asset_path "/css/main.css?#{Time.now.to_i}" %>" />
 
@@ -44,7 +47,6 @@
 
     <script src="<%= asset_path "/js/jquery-2.0.3.min.js" %>"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qtip2/2.1.1/jquery.qtip.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/qtip2/2.1.1/jquery.qtip.min.css" />
 </head>
 <body>
 

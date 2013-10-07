@@ -1,9 +1,9 @@
 /** document viewer **/
 
 .entry article .glossary {
-  border-bottom: 1px dashed #888;
+  border-bottom: 1px dashed #484;
   cursor: help;
-  background-color: #eee;
+  background-color: #9e9;
 }
 
 .entry #document {
