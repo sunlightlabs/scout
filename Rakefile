@@ -703,24 +703,25 @@ namespace :glossary do
     begin
       count = 0
 
-      index_url = "http://unitedstates.github.io/glossary/definitions.json"
+      index_url = "https://api.github.com/repos/unitedstates/glossary/contents/definitions/congress?ref=gh-pages"
       puts "Downloading #{index_url}\n\n"
       definitions = Oj.load Subscriptions::Manager.download(index_url)
 
-      definitions['definitions'].each do |section, terms|
-        terms.each do |term|
-          term_url = "http://unitedstates.github.io/glossary/definitions/#{section}/#{URI.encode term}.json"
-          puts "[#{term}]\n\t#{term_url}"
-          details = Oj.load Subscriptions::Manager.download(term_url)
+      definitions.each do |file|
+        path = file['path']
+        term_url = "http://unitedstates.github.io/glossary/#{URI.encode path}"
+        term = File.basename(path, ".json")
+        puts "[#{term}]\n\t#{term_url}"
+        details = Oj.load Subscriptions::Manager.download(term_url)
 
-          definition = Definition.find_or_initialize_by term: term
-          definition.attributes = details
 
-          puts "\t#{definition.new_record? ? "Creating" : "Updating"}..."
+        definition = Definition.find_or_initialize_by term: term
+        definition.attributes = details
 
-          definition.save!
-          count += 1
-        end
+        puts "\t#{definition.new_record? ? "Creating" : "Updating"}..."
+
+        definition.save!
+        count += 1
       end
 
       puts "Saved #{count} definitions."
