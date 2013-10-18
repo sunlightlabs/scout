@@ -3,7 +3,7 @@
 */30 * * * * /projects/alarms/current/config/cron/staging/rake.sh subscriptions:reinitialize
 
 # reload glossary terms once a day
-# 30 10 * * * /projects/scout/current/config/cron/production/rake.sh glossary:load
+30 10 * * * /projects/scout/current/config/cron/production/rake.sh glossary:load
 
 ######## Delivery tasks ########
 
