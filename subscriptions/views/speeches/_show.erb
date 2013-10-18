@@ -19,7 +19,7 @@
   <div class="resources">
     <h5>Resources</h5>
     <span>
-      Visit 
+      Visit
       <strong><a data-resource="capitolwords" href="<%= speech['capitolwords_url'] %>">CapitolWords</a></strong>
       for more context.
     </span>
@@ -39,3 +39,16 @@
   </div>
 
 </div>
+
+<script type="text/javascript">
+  $(function() {
+    // for now: serialize all the known terms into a big object
+    var Glossary = <%= glossary.to_json %>;
+
+    $.each(Glossary.terms, function(i, term) {
+      searchHTML(Glossary, $("article"), term);
+    });
+
+    $("article .glossary").qtip();
+  });
+</script>

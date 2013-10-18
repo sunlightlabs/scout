@@ -150,3 +150,48 @@ var Utils = {
     // console.log("Sharing: " + title);
   }
 };
+
+// all praise to http://stackoverflow.com/a/7720056/16075
+// (seriously customized since then)
+// var glossaryTextNodes;
+function searchHTML(Glossary, container, term) {
+  var expr = term.replace(/ /g, "\\s+");
+  expr = new RegExp(expr, "gi");
+  // var once = false;
+  // var expr = new RegExp("(" + terms.join("|") + ")\\b", "gi");
+
+  var elements = container.find("*").andSelf();
+  var glossaryTextNodes = elements.contents().not(elements);
+
+  for (var g=0; g < glossaryTextNodes.length; g++) {
+    var node = glossaryTextNodes[g];
+    var matches = node.nodeValue.match(expr);
+    if (matches) {
+      // console.log(matches);
+
+      var parts = node.nodeValue.split(expr);
+      for (var n = 0; n < parts.length; n++) {
+        if (n) {
+          // var thisMatch = matches[n-1];
+          // console.log(thisMatch);
+          // var term = thisMatch.toLowerCase();
+          // console.log(term);
+
+          var elem = $("<span />");
+          // if (!once) {
+            elem.addClass("glossary");
+            elem.attr("title", Glossary.definitions[term].long_definition_html);
+            // elem.data("term", term);
+            elem.data("long_definition_html", Glossary.definitions[term].long_definition_html);
+          // }
+          // once = true;
+
+          elem.text(matches[n-1]).insertBefore(node);
+        }
+        if (parts[n])
+          $(document.createTextNode(parts[n])).insertBefore(node);
+      }
+      $(node).remove();
+    }
+  }
+}
