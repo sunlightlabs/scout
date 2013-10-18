@@ -703,17 +703,27 @@ namespace :glossary do
     begin
       count = 0
 
+      blacklist = %w{
+        amendment
+      }
+
       index_url = "https://api.github.com/repos/unitedstates/glossary/contents/definitions/congress?ref=gh-pages"
       puts "Downloading #{index_url}\n\n"
       definitions = Oj.load Subscriptions::Manager.download(index_url)
 
+      # track current terms, and if any are no longer included upstream, delete them
+      leftover_terms = Definition.distinct(:term).sort
+
       definitions.each do |file|
         path = file['path']
         term_url = "http://unitedstates.github.io/glossary/#{URI.encode path}"
-        term = File.basename(path, ".json")
-        puts "[#{term}]\n\t#{term_url}"
-        details = Oj.load Subscriptions::Manager.download(term_url)
+        term = File.basename(path, ".json").downcase
 
+        next if blacklist.include? term
+        leftover_terms.delete term
+
+        puts "[#{term}] Creating."
+        details = Oj.load Subscriptions::Manager.download(term_url)
 
         definition = Definition.find_or_initialize_by term: term
         definition.attributes = details
@@ -724,7 +734,12 @@ namespace :glossary do
         count += 1
       end
 
-      puts "Saved #{count} definitions."
+      leftover_terms.each do |term|
+        puts "[#{term}] Axing, no longer in upstream glossary"
+        Definition.where(term: term).delete
+      end
+
+      puts "Saved #{count} definitions, deleted #{leftover_terms.size} terms."
 
     rescue Exception => ex
       report = Report.exception 'Glossary', "Exception loading glossary.", ex
