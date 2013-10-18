@@ -6,6 +6,17 @@
   background-color: #e5e5e5;
 }
 
+.qtip-tip, .qtip-titlebar, .qtip-content, .qtip-default {
+  border-color: #999;
+}
+
+.qtip-tip, .qtip-titlebar, .qtip-content, .qtip-default, .qtip {
+  background-color: #e5e5e5;
+  color: #111;
+}
+
+.qtip-content p:last-child {margin-bottom: 0;}
+
 .entry #document {
   float: left;
   width: 700px;
