@@ -139,6 +139,15 @@ helpers do
   end
 
   def glossary
-    Definition.all.to_a
+    defs = Definition.all.only(:term, :short_definition, :long_definition_html).to_a
+    response = {definitions: {}, terms: []}
+    defs.each do |definition|
+      response[:definitions][definition.term] = {
+        short_definition: definition.short_definition,
+        long_definition_html: definition.long_definition_html
+      }
+      response[:terms] << definition.term
+    end
+    response
   end
 end
