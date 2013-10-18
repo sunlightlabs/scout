@@ -1,9 +1,7 @@
 /** document viewer **/
 
 .entry article .glossary {
-  border-bottom: 1px dashed #444;
-  cursor: help;
-  background-color: #e5e5e5;
+  border-bottom: 1px dashed #444; cursor: help;
 }
 
 .qtip-tip, .qtip-titlebar, .qtip-content, .qtip-default {
@@ -11,7 +9,7 @@
 }
 
 .qtip-tip, .qtip-titlebar, .qtip-content, .qtip-default, .qtip {
-  background-color: #e5e5e5;
+  background-color: #eeeeee;
   color: #111;
 }
 
