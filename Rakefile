@@ -732,6 +732,7 @@ namespace :glossary do
 
         definition.save!
         count += 1
+        sleep 0.2
       end
 
       leftover_terms.each do |term|
