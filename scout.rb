@@ -143,7 +143,7 @@ helpers do
   end
 
   def mobile?
-    request.env['HTTP_USER_AGENT']["Mobi"] if request.env['HTTP_USER_AGENT']
+    !!request.env['HTTP_USER_AGENT']["Mobi"] if request.env['HTTP_USER_AGENT']
   end
 
   def current_user
