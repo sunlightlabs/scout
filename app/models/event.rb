@@ -11,6 +11,7 @@ class Event
 
   # for email clicks
   index({type: 1, item_type: 1})
+  index({type: 1, mobile: 1})
 
   # for Google activity
   index({type: 1, url: 1})
