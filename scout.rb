@@ -81,7 +81,7 @@ end
 #   * remote - a remote service name, e.g. "open_states"
 #   * url_type - 'item'
 #
-# and if this is to a landing:
+# and if this is to a landing page:
 #   * item_type - type of landing page
 #   * item_id - ID of landing item
 #   * because - 'search' if a search result, 'item' if an item subscription
@@ -91,7 +91,10 @@ get '/url' do
   halt 500 unless params[:to].present?
 
   if params[:from] == "email"
-    Event.email_click! (params[:d] || {}).merge(to: params[:to])
+    Event.email_click! (params[:d] || {}).merge(
+      to: params[:to],
+      mobile: mobile?
+    )
   end
 
   redirect params[:to]
@@ -137,6 +140,10 @@ helpers do
 
   def google?
     request.env['HTTP_USER_AGENT']["Googlebot"] if request.env['HTTP_USER_AGENT']
+  end
+
+  def mobile?
+    request.env['HTTP_USER_AGENT']["Mobi"] if request.env['HTTP_USER_AGENT']
   end
 
   def current_user
