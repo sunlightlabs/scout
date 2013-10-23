@@ -5,6 +5,9 @@
 # reload glossary terms every 20 minutes
 */20 * * * * /projects/scout/current/config/cron/production/rake.sh glossary:load
 
+# reload legislators once a day
+20 8 * * * /projects/scout/current/config/cron/production/rake.sh legislators:load
+
 # post-midnight, email a report of Google's crawling activity
 0 6 * * * /projects/scout/current/config/cron/production/rake.sh analytics:google
 

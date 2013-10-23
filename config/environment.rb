@@ -109,7 +109,7 @@ end
 
 
 # models
-Dir.glob('app/models/*.rb').each {|filename| load filename}
+Dir.glob('app/models/**/*.rb').each {|filename| load filename}
 
 # helpers
 require 'padrino-helpers'

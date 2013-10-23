@@ -749,3 +749,33 @@ namespace :glossary do
     end
   end
 end
+
+namespace :legislators do
+
+  desc "Load current legislators"
+  task load: :environment do
+    begin
+      json = Subscriptions::Manager.download Legislator.url_for_current
+      results = Oj.load(json)['results']
+
+      # wipe them all! restore them quickly! (only done once, at night)
+      Legislator.delete_all
+
+      results.each do |result|
+        legislator = Legislator.new
+        legislator.bioguide_id = result['bioguide_id']
+        legislator.name = Legislator.name_for result
+        legislator.title = result['title']
+        legislator.save!
+      end
+
+      puts "Loaded #{Legislator.count} current legislators."
+
+    rescue Exception => ex
+      report = Report.exception 'Legislators', "Exception loading legislators.", ex
+      Admin.report report
+      puts "Error loading legislators, emailed report."
+    end
+
+  end
+end

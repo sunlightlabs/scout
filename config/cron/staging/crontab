@@ -5,6 +5,9 @@
 # reload glossary terms once a day
 30 10 * * * /projects/scout/current/config/cron/production/rake.sh glossary:load
 
+# reload legislators once a day
+20 8 * * * /projects/scout/current/config/cron/production/rake.sh legislators:load
+
 ######## Delivery tasks ########
 
 # email digests - once a day, in the morning, 8am/9am EST/EDT

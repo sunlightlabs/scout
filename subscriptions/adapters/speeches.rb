@@ -15,6 +15,15 @@ module Subscriptions
           },
           "chamber" => {
             name: -> chamber {chamber.capitalize}
+          },
+          "bioguide_id" => {
+            name: -> bioguide_id {
+              if legislator = Legislator.where(bioguide_id: bioguide_id).first
+                legislator.name
+              else
+                "(Unknown)" # better than crashing
+              end
+            }
           }
         }
       end
@@ -37,8 +46,14 @@ module Subscriptions
           url << "&q=#{CGI.escape query}"
         end
 
-        # keep it only to fields with a speaker (bioguide_id)
-        url << "&bioguide_id=[''%20TO%20*]"
+        # limit to one speaker?
+        if subscription.data['bioguide_id'].present?
+          url << "&bioguide_id=#{CGI.escape subscription.data['bioguide_id']}"
+
+        # still keep it only to fields with a speaker (any bioguide_id)
+        else
+          url << "&bioguide_id=[''%20TO%20*]"
+        end
 
         # filters
 

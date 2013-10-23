@@ -24,3 +24,16 @@
 	  <option value="senate">Senate</option>
 	</select>
 </li>
+
+<%# yep, a database call in the view %>
+<li>
+	<label for="bioguide_id">Speaker</label>
+	<select name="bioguide_id" class="filter_control">
+		<option value="">-- Anyone --</option>
+		<% Legislator.all.each do |legislator| %>
+			<option value="<%= legislator.bioguide_id %>">
+				<%= legislator.title %>. <%= legislator.name %>
+			</option>
+		<% end %>
+	</select>
+</li>
