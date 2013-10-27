@@ -413,7 +413,7 @@ module Subscriptions
       if curl.status.start_with?("2")
         curl.body_str
       else
-        raise BadFetchException.new("Bad status code: #{curl.status}")
+        raise BadFetchException.new("Bad status code: #{curl.status} at URL: #{url}")
       end
     end
 
