@@ -81,7 +81,7 @@ GEM
     json (1.8.0)
     jwt (0.1.8)
       multi_json (>= 1.5)
-    kgio (2.8.0)
+    kgio (2.8.1)
     loofah (1.2.1)
       nokogiri (>= 1.4.4)
     mail (2.4.4)
