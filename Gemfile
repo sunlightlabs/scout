@@ -3,9 +3,7 @@ source 'https://rubygems.org'
 gem 'oj'
 gem 'multi_json'
 gem 'curb'
-
-# avoids problems with YAML vulnerabilities, but no symbol keys
-gem 'safe_yaml'
+gem 'safe_yaml' # avoids problems with YAML vulnerabilities, but no symbol keys
 
 gem 'sinatra', '1.4.2'
 gem 'sinatra-contrib', '1.4.0'
@@ -13,13 +11,13 @@ gem 'sinatra-flash', '0.3.0'
 
 gem 'padrino-helpers', '0.11.2'
 gem 'rinku'
-
 gem 'escape_utils'
 
 gem "mongoid", '3.1.4'
-
 gem "mongoid-paperclip", require: "mongoid_paperclip"
+
 gem "aws-sdk"
+gem 'asset_sync' # asset syncing to S3
 
 gem 'ruby-hmac'
 gem 'bcrypt-ruby'
@@ -32,8 +30,6 @@ gem 'twilio-rb', '2.2.0'
 gem 'rack', '1.5.2'
 gem 'rack-ssl'
 gem 'rake'
-
-gem 'asset_sync' # asset syncing to S3
 
 gem 'big_sitemap'
 
