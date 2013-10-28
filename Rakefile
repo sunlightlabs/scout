@@ -716,7 +716,7 @@ namespace :glossary do
 
       definitions.each do |file|
         path = file['path']
-        term_url = "http://unitedstates.github.io/glossary/#{URI.encode path}"
+        term_url = "http://theunitedstates.io/glossary/#{URI.encode path}"
         term = File.basename(path, ".json").downcase
 
         next if blacklist.include? term
