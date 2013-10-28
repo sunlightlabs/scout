@@ -12,7 +12,7 @@
 20 8 * * * /projects/scout/current/config/cron/production/rake.sh legislators:load
 
 # reload agencies once a week (these don't change often)
-0 0 0 * * /projects/scout/current/config/cron/production/rake.sh agencies:load
+0 0 * * 0 /projects/scout/current/config/cron/production/rake.sh agencies:load
 
 
 ######## Delivery tasks ########
