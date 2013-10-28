@@ -18,7 +18,13 @@ module Subscriptions
         {
           "agency" => {
             field: "agency_ids",
-            name: -> id {executive_agency_abbreviations[executive_agency_map[id]] || executive_agency_map[id]}
+            name: -> id {
+              if agency = Agency.where(agency_id: id).first
+                agency.name
+              else
+                "Agency ##{id}" # better than crashing
+              end
+            }
           },
           "stage" => {
             name: -> stage {"#{stage.capitalize} Rule"}

@@ -779,3 +779,31 @@ namespace :legislators do
 
   end
 end
+
+namespace :agencies do
+  desc "Load agency names/IDs from the Federal Register"
+  task load: :environment do
+
+    begin
+      json = Subscriptions::Manager.download Agency.agencies_url
+      results = Oj.load json
+
+      # wipe them all! restore them quickly! (only done once, at night)
+      Agency.delete_all
+
+      results.each do |result|
+        agency = Agency.new
+        agency.attributes = Agency.agency_for result
+        agency.save!
+      end
+
+      puts "Loaded #{Agency.count} current federal agencies."
+
+    rescue Exception => ex
+      report = Report.exception 'Agencies', "Exception loading agencies.", ex
+      Admin.report report
+      puts "Error loading agencies, emailed report."
+    end
+
+  end
+end
