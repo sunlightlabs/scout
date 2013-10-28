@@ -3,8 +3,6 @@
 	<label for="agency">Agency</label>
 	<select name="agency" class="filter_control">
 	  <option value="">-- All Agencies --</option>
-	  <%# reverse_map = Subscriptions::Adapters::Regulations::executive_agency_map.invert %>
-	  <%# reverse_map.keys.sort.each do |name| %>
 	  <% Agency.all.each do |agency| %>
 	      <option value="<%= agency.agency_id %>"><%= agency.name %></option>
 	  <% end %>
