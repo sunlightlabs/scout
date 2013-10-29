@@ -298,20 +298,33 @@ module Helpers
 
     # email-related
 
-    def email_header(text, url, space: 20)
-      "<h3 style=\"padding: 0; margin: 0; margin-top: #{space}px; \">
-        <a href=\"#{url}\">
+    def email_header(text, url)
+      <<-eos
+      <h3 style="padding: 0;margin: 0; margin-bottom: 0.5em; margin-top: 20px; color: #1c8398; font-size: 110%; padding-left: 20px; padding-right: 20px;">
+        <a href="#{url}" target="_blank" style="color: #1c8398;">
           #{text}
         </a>
-      </h3>"
+      </h3>
+      eos
     end
 
-    def email_subheader_div(space = 5)
-      "<div style=\"padding: 0; margin: 0; margin-top: #{space}px; color: #83858B; font-style: italic\">"
+    def email_subheader_div
+      <<-eos
+      <div style="padding: 0; margin: 0; margin-bottom: 0.5em; font-size: 90%; color: #96989E; padding-left: 20px; padding-right: 20px;">
+      eos
     end
 
-    def email_content_p(space = 10)
-      "<p style=\"padding: 0; margin: 0; margin-top: #{space}px\">"
+    def email_content_p
+      <<-eos
+      <div style="padding: 0; margin: 0; font-size: 90%; padding-left: 20px; padding-right: 20px;">
+      eos
+    end
+
+    def inline_highlight_tags
+      [
+        "<span style=\"color: #DCB831; font-weight: bold;\">",
+        "</span>"
+      ]
     end
   end
 end

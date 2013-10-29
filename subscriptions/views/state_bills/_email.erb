@@ -1,5 +1,5 @@
 <%
-# we have the user, interest, and item values available to us 
+# we have the user, interest, and item values available to us
 %>
 <% bill = item.data %>
 <%= email_header bill['bill_id'], url %>
@@ -23,4 +23,4 @@
 
 <%= email_content_p %>
   <%= state_bill_highlight item, interest, inline: true %>
-</p>
+</div>

@@ -211,7 +211,7 @@ module Helpers
         if options[:highlight_tags]
           tag1, tag2 = options[:highlight_tags]
         elsif options[:inline]
-          tag1, tag2 = ["<em style=\"font-weight: bold; font-style: normal; color: #13B326\">", "</em>"]
+          tag1, tag2 = inline_highlight_tags
         else
           tag1, tag2 = ["<em>", "</em>"]
         end
