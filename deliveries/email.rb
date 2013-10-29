@@ -188,7 +188,7 @@ module Deliveries
       rendered = ""
 
       title = truncate interest_name(interest, long: true), 200
-      rendered << Rendering.interest_title(title)
+      rendered << Rendering.interest_title(title, interest.interest_type)
 
       content = []
 
@@ -211,6 +211,9 @@ module Deliveries
         group.each do |delivery|
           one_content << Rendering.delivery(user, delivery, interest, subscription_type)
         end
+
+        # wrap in section div for shading
+        one_content = Rendering.section_for one_content
 
         content << one_content
       end
@@ -319,21 +322,43 @@ module Deliveries
         rendered
       end
 
-      def self.interest_title(name)
-        "<div style=\"margin: 0; padding: 0; margin-top: 5px; margin-bottom: 25px; font-size: 150%\">
-          <span style=\"color: #111\">
+      def self.interest_title(name, interest_type)
+        <<-eos
+        <div style="margin: 0; padding: 0; margin-top: 20px; margin-bottom: 0px; width: 100%; background-color: #238397; padding-left: 5px;">
+          <h1 style="color: #FFF; font-family: 'helvetica Neue', arial, sans-serif; text-transform: uppercase; font-weight: 400; background-color: #238397; font-size: 200%; margin-top: 30px; margin-bottom: 0px; display: inline;">
             #{name}
+          </h1>
+          <span style="color: #CCC; font-size: 90%; font-style: italic;">
+            #{
+              if interest_type == "search"
+                "You are following this search"
+              elsif interest_type == "item"
+                "You are following this bill"
+              elsif interest_type == "feed"
+                "You are following this feed"
+              end
+            }
           </span>
-        </div>"
+        </div>
+        eos
       end
 
-      # description only (section descriptions for item interest updates)
       def self.interest_subtitle(description)
-        "<div style=\"margin: 0; padding: 0; margin-top: 5px; margin-bottom: 5px; font-size: 125%\">
-          <span style=\"color: #666;\">
+        <<-eos
+        <div style="margin-top: 35px; padding: 0;">
+          <h2 style="color: #666; font-family: 'helvetica Neue', arial, sans-serif; text-transform: uppercase; font-weight: 500; font-size: 135%; background-color: #FFF; border-bottom-style: dotted; border-bottom-color: #CCC;">
             #{description}
-          </span>
-        </div>"
+          </h2>
+        </div>
+        eos
+      end
+
+      def self.section_for(html)
+        <<-eos
+        <div class="section" style="background-color: #FAFBF7;padding-bottom: 20px;">
+          #{html}
+        </div>
+        eos
       end
 
     end
