@@ -2,7 +2,7 @@ require 'nokogiri'
 require 'loofah'
 require 'feedzirra'
 
-module Subscriptions  
+module Subscriptions
   module Adapters
 
     class Feed
@@ -13,11 +13,11 @@ module Subscriptions
       #   title: [title set by user (defaults to rss title)]
       #   description: [description set by user (defaults to rss description)]
       #   site_url: [url that feed listed as related]
-      # 
+      #
       #   original_url: [url as entered by user]
       #   original_title: [rss title]
       #   original_description: [rss description]
-      
+
 
       def self.url_for(subscription, function, options = {})
         subscription.interest_in
@@ -27,7 +27,7 @@ module Subscriptions
         item_id
       end
 
-      
+
       # name methods
 
       def self.search_name(subscription)
@@ -55,7 +55,7 @@ module Subscriptions
 
         data['published'] = entry.published
         data['url'] = entry.url
-        
+
         return nil unless data['published'] and data['url']
 
         # turn any HTML in the description into plain text
@@ -90,7 +90,7 @@ module Subscriptions
         raise AdapterParseException.new("Got null from fetching feed") unless xml
         raise AdapterParseException.new("Feed is bigger than 1MB") if xml.size > (1024 * 1024 * 1)
 
-        # re-fetch it to take advantage of Feedzirra's full pipeline 
+        # re-fetch it to take advantage of Feedzirra's full pipeline
         # (including proper logging of the final feed URL location)
         response = Feedzirra::Feed.fetch_and_parse url, timeout: 5
 
@@ -132,7 +132,7 @@ module Subscriptions
 
       def self.strip_tags(string)
         doc = Nokogiri::HTML string
-        (doc/"//*/text()").map do |text| 
+        (doc/"//*/text()").map do |text|
           text.inner_text.strip
         end.select {|text| text.present?}.join " "
       end

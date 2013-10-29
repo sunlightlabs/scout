@@ -12,7 +12,17 @@ get "/import/feed/preview" do
     unless feed = Subscriptions::Adapters::Feed.url_to_response(url)
 
       # give a try at autodiscovery
-      urls = Timeout::timeout(5) {Feedbag.find url}
+      urls = Timeout::timeout(5) {
+        urls = Feedbag.find url
+
+        # manually handle http->https error
+        if urls.empty? and !url.start_with?("https:")
+          url = url.start_with?("http:") ? url : "http://#{url}"
+          Feedbag.find url.sub(/^http:/, "https:")
+        else
+          urls
+        end
+      }
       url = urls.first
 
       unless url and (feed = Subscriptions::Adapters::Feed.url_to_response(url))
