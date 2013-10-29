@@ -18,6 +18,7 @@ gem "mongoid-paperclip", require: "mongoid_paperclip"
 
 gem "aws-sdk"
 gem 'asset_sync' # asset syncing to S3
+gem "unf"
 
 gem 'ruby-hmac'
 gem 'bcrypt-ruby'
