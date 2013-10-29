@@ -16,6 +16,7 @@ module Deliveries
       successes = []
 
       email = user.email
+      header = render_header user
       footer = render_footer user
       from = from_for user
       reply_to = reply_to_for user
@@ -28,7 +29,9 @@ module Deliveries
       if frequency == 'immediate'
 
         interest_deliveries.each do |interest, deliveries|
-          content = render_interest user, interest, deliveries
+          content = ""
+          content << header
+          content << render_interest(user, interest, deliveries)
           content << footer
 
           subject = render_subject interest, deliveries
@@ -52,13 +55,13 @@ module Deliveries
 
         if matching_deliveries.any? # not sure why this would be the case, but, just in case
 
-          content = []
+          content_pieces = []
 
           interest_deliveries.each do |interest, deliveries|
-            content << render_interest(user, interest, deliveries)
+            content_pieces << render_interest(user, interest, deliveries)
           end
 
-          content = content.join interest_barrier
+          content << content_pieces.join(interest_barrier)
           content << footer
 
           subject = daily_subject_for matching_deliveries.size, user
@@ -294,9 +297,30 @@ module Deliveries
       "#{prefix} - #{suffix}"
     end
 
-    def self.render_footer(user)
+    # the actual mechanics of sending the email
+    def self.email_user(email, subject, content, from = nil, reply_to = nil)
+      ::Email.deliver! "User Alert", email, subject, content, from, reply_to
+    end
+
+    def self.truncate(string, length)
+      string ||= ""
+      if string.size > length
+        string[0...length] + "…"
+      else
+        string
+      end
+    end
+
+
+
+    # rendering pieces
+
+    def self.render_footer(user); render_piece "footers", user; end
+    def self.render_header(user); render_piece "headers", user; end
+
+    def self.render_piece(piece, user)
       context = Deliveries::SeenItemProxy.new # dummy to get helpers
-      template = Tilt::ERBTemplate.new "app/views/footers/#{user.service || "general"}.erb"
+      template = Tilt::ERBTemplate.new "app/views/emails/#{piece}/#{user.service || "general"}.erb"
       rendered = template.render context, trim: false
       rendered.force_encoding "utf-8"
       rendered
@@ -313,20 +337,6 @@ module Deliveries
       rendered = template.render item, user: user, item: item, interest: interest, url: url, trim: false
       rendered.force_encoding "utf-8"
       rendered
-    end
-
-    # the actual mechanics of sending the email
-    def self.email_user(email, subject, content, from = nil, reply_to = nil)
-      ::Email.deliver! "User Alert", email, subject, content, from, reply_to
-    end
-
-    def self.truncate(string, length)
-      string ||= ""
-      if string.size > length
-        string[0...length] + "…"
-      else
-        string
-      end
     end
 
   end
