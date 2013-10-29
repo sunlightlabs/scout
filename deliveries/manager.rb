@@ -1,4 +1,5 @@
 
+
 module Deliveries
   module Manager
 
@@ -34,14 +35,14 @@ module Deliveries
         if interests.any?
           receipts += Deliveries::Email.deliver_custom!(
             user, interests, {
-              'subject' => subject, 
+              'subject' => subject,
               'header' => header,
               'dry_run' => dry_run
             }
           )
         end
       end
-      
+
       # Let admin know when emails go out
       if receipts.any?
         delivery_options = {"mechanism" => "email", "email_frequency" => "custom"}
@@ -65,13 +66,13 @@ module Deliveries
 
       users = User.where(_id: {"$in" => user_ids}).all
 
-      # if there's a suspiciously high amount of deliveries, 
+      # if there's a suspiciously high amount of deliveries,
       # leave the deliveries there and notify the admin
       if ENV['force'].blank?
 
         # suspicious: if the deliveries are returning, on average,
         # more than half of the max that they could be
-        
+
         max_per_page = 40 # for now, anyway
         threshold = 0.5
 
@@ -92,7 +93,7 @@ module Deliveries
           Admin.message "Unsure how to deliver to user #{user_contact user}, no known delivery mechanism for #{delivery_options['mechanism']}"
         end
       end
-      
+
       # Let admin know when emails go out
       if receipts.any?
         Admin.message "Sent #{receipts.size} notifications", report_for(receipts, delivery_options)
@@ -102,8 +103,8 @@ module Deliveries
     end
 
     def self.flood_check(message, size, delivery_options, options = {})
-      Admin.report Report.warning("Flood Check", 
-        "High amount (#{size}) of deliveries, leaving in place and not delivering", 
+      Admin.report Report.warning("Flood Check",
+        "High amount (#{size}) of deliveries, leaving in place and not delivering",
         {:delivery_count => size,
         :message => message,
         :subscription_types => Delivery.where(delivery_options).distinct(:subscription_type),
@@ -122,7 +123,7 @@ module Deliveries
       seen_through = nil,
 
       # Allow manual override of delivery options (useful for debugging)
-      mechanism = nil, 
+      mechanism = nil,
       email_frequency = nil
       )
 
@@ -160,7 +161,7 @@ module Deliveries
       if delivery_options['mechanism'] == 'email'
         delivery_type << "[#{delivery_options['email_frequency']}]"
       end
-      
+
       receipts.group_by(&:user_id).each do |user_id, user_receipts|
         user = User.find user_id
         report << "[#{user_contact user}]#{delivery_type} #{user_receipts.size} notifications"
@@ -168,7 +169,7 @@ module Deliveries
         user_receipts.each do |receipt|
           receipt.deliveries.group_by {|d| [d['interest_id'], d['seen_through_id']]}.each do |interest_ids, interest_deliveries|
             interest_id, seen_through_id = interest_ids
-            
+
             # there's a chance the interest has been deleted by the time the report is generated,
             # like if someone gets an email and then immediately unsubscribes from it,
             # before the report is generated at the conclusion of sending all those emails.
@@ -181,8 +182,8 @@ module Deliveries
             end
 
             report << "\n\t#{interest_name interest} - #{interest_deliveries.size} things"
-            
-            if interest_id != seen_through_id 
+
+            if interest_id != seen_through_id
               seen_through = Interest.find seen_through_id
               tag = seen_through.tag
               user = seen_through.tag_user
@@ -205,10 +206,12 @@ module Deliveries
 
   # dummy proxy class to provide a context with helper modules
   # included so that ERB can render with their assistance
+  require "./deliveries/email"
   class SeenItemProxy
     include Helpers::General
     include Helpers::Routing
     include Helpers::Subscriptions
+    extend Deliveries::Email::Rendering # this is so dumb
 
     attr_accessor :item
 

@@ -16,8 +16,8 @@ module Deliveries
       successes = []
 
       email = user.email
-      header = render_header user
-      footer = render_footer user
+      header = Rendering.header user
+      footer = Rendering.footer user
       from = from_for user
       reply_to = reply_to_for user
 
@@ -54,14 +54,14 @@ module Deliveries
       elsif frequency == 'daily' # digest all deliveries into one single email
 
         if matching_deliveries.any? # not sure why this would be the case, but, just in case
-
+          content = ""
           content_pieces = []
 
           interest_deliveries.each do |interest, deliveries|
             content_pieces << render_interest(user, interest, deliveries)
           end
 
-          content << content_pieces.join(interest_barrier)
+          content << content_pieces.join("\n\n")
           content << footer
 
           subject = daily_subject_for matching_deliveries.size, user
@@ -114,14 +114,14 @@ module Deliveries
 
 
       if matching_deliveries.any?
-        content = []
+        content_pieces = []
 
         interest_deliveries.each do |interest, deliveries|
-          content << render_interest(user, interest, deliveries)
+          content_pieces << render_interest(user, interest, deliveries)
         end
 
-        content = content.join interest_barrier
-        content << render_footer(user)
+        content = content_pieces.join "\n\n"
+        content << Rendering.footer(user)
 
         # prepend custom header if present
         if options['header']
@@ -188,7 +188,7 @@ module Deliveries
       rendered = ""
 
       title = truncate interest_name(interest, long: true), 200
-      rendered << interest_title(title)
+      rendered << Rendering.interest_title(title)
 
       content = []
 
@@ -206,16 +206,16 @@ module Deliveries
           description << " (#{filters})"
         end
 
-        one_content << interest_subtitle(description)
+        one_content << Rendering.interest_subtitle(description)
 
         group.each do |delivery|
-          one_content << render_delivery(user, delivery, interest, subscription_type)
+          one_content << Rendering.delivery(user, delivery, interest, subscription_type)
         end
 
         content << one_content
       end
 
-      rendered << content.join(interest_barrier visible: false)
+      rendered << content.join("\n\n")
     end
 
     # subject line for per-interest emails
@@ -243,31 +243,6 @@ module Deliveries
       end
 
       subject
-    end
-
-    def self.interest_title(name)
-      "<div style=\"margin: 0; padding: 0; margin-top: 5px; margin-bottom: 25px; font-size: 150%\">
-        <span style=\"color: #111\">
-          #{name}
-        </span>
-      </div>"
-    end
-
-    # description only (section descriptions for item interest updates)
-    def self.interest_subtitle(description)
-      "<div style=\"margin: 0; padding: 0; margin-top: 5px; margin-bottom: 5px; font-size: 125%\">
-        <span style=\"color: #666;\">
-          #{description}
-        </span>
-      </div>"
-    end
-
-    def self.interest_barrier(visible: true)
-      if visible
-        "<hr style=\"padding: 0; margin: 0; margin-top: 20px; margin-bottom: 20px;\"/>"
-      else
-        "<div style=\"padding: 0; margin: 20px 0;\">&nbsp;</div>"
-      end
     end
 
     def self.from_for(user)
@@ -315,28 +290,52 @@ module Deliveries
 
     # rendering pieces
 
-    def self.render_footer(user); render_piece "footers", user; end
-    def self.render_header(user); render_piece "headers", user; end
+    module Rendering
 
-    def self.render_piece(piece, user)
-      context = Deliveries::SeenItemProxy.new # dummy to get helpers
-      template = Tilt::ERBTemplate.new "app/views/emails/#{piece}/#{user.service || "general"}.erb"
-      rendered = template.render context, trim: false
-      rendered.force_encoding "utf-8"
-      rendered
-    end
+      extend Helpers::Routing
+      extend Helpers::Subscriptions
 
-    # render a Delivery into its email content
-    def self.render_delivery(user, delivery, interest, subscription_type)
-      item = Deliveries::SeenItemProxy.new(SeenItem.new(delivery.item))
+      def self.footer(user); piece "footers", user; end
+      def self.header(user); piece "headers", user; end
 
-      # permalink to item, but wrapped up in a redirector
-      url = email_item_url item, interest, user
+      def self.piece(piece, user)
+        context = Deliveries::SeenItemProxy.new # dummy to get helpers
+        template = Tilt::ERBTemplate.new "app/views/emails/#{piece}/#{user.service || "general"}.erb"
+        rendered = template.render context, trim: false
+        rendered.force_encoding "utf-8"
+        rendered
+      end
 
-      template = Tilt::ERBTemplate.new "app/views/subscriptions/#{subscription_type}/_email.erb"
-      rendered = template.render item, user: user, item: item, interest: interest, url: url, trim: false
-      rendered.force_encoding "utf-8"
-      rendered
+      # render a Delivery into its email content
+      def self.delivery(user, delivery, interest, subscription_type)
+        item = Deliveries::SeenItemProxy.new(SeenItem.new(delivery.item))
+
+        # permalink to item, but wrapped up in a redirector
+        url = email_item_url item, interest, user
+
+        template = Tilt::ERBTemplate.new "app/views/subscriptions/#{subscription_type}/_email.erb"
+        rendered = template.render item, user: user, item: item, interest: interest, url: url, trim: false
+        rendered.force_encoding "utf-8"
+        rendered
+      end
+
+      def self.interest_title(name)
+        "<div style=\"margin: 0; padding: 0; margin-top: 5px; margin-bottom: 25px; font-size: 150%\">
+          <span style=\"color: #111\">
+            #{name}
+          </span>
+        </div>"
+      end
+
+      # description only (section descriptions for item interest updates)
+      def self.interest_subtitle(description)
+        "<div style=\"margin: 0; padding: 0; margin-top: 5px; margin-bottom: 5px; font-size: 125%\">
+          <span style=\"color: #666;\">
+            #{description}
+          </span>
+        </div>"
+      end
+
     end
 
   end
