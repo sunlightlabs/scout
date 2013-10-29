@@ -55,6 +55,7 @@ module Deliveries
 
         if matching_deliveries.any? # not sure why this would be the case, but, just in case
           content = ""
+          content << header
           content_pieces = []
 
           interest_deliveries.each do |interest, deliveries|
