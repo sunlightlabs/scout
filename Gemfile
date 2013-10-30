@@ -51,6 +51,7 @@ end
 # feed parsing and discovery
 gem 'feedzirra', '0.2.0.rc1'
 gem 'feedbag'
+gem 'sanitize'
 
 # phone number standardization - thrilling
 gem 'phone', git: 'git://github.com/sunlightlabs/phone.git'

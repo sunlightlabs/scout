@@ -135,6 +135,8 @@ GEM
     rspec-mocks (2.9.0)
     ruby-hmac (0.4.0)
     safe_yaml (0.9.7)
+    sanitize (2.0.6)
+      nokogiri (>= 1.4.4)
     sax-machine (0.1.0)
       nokogiri (> 0.0.0)
     sinatra (1.4.2)
@@ -207,6 +209,7 @@ DEPENDENCIES
   rspec-mocks (= 2.9.0)
   ruby-hmac
   safe_yaml
+  sanitize
   sinatra (= 1.4.2)
   sinatra-contrib (= 1.4.0)
   sinatra-flash (= 0.3.0)

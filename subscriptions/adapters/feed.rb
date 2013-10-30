@@ -1,6 +1,6 @@
 require 'nokogiri'
-require 'loofah'
 require 'feedzirra'
+require 'sanitize'
 
 module Subscriptions
   module Adapters
@@ -60,7 +60,7 @@ module Subscriptions
 
         # turn any HTML in the description into plain text
         content = entry.content.present? ? entry.content : entry.summary
-        content = strip_tags(sanitize(content)) if content.present?
+        content = sanitize(content) if content.present?
 
         data['content'] = content
 
@@ -123,18 +123,13 @@ module Subscriptions
       end
 
 
-      # strip out unsafe HTML
-
+      # strip out unsafe HTML, leave only links
       def self.sanitize(string)
         return nil unless string
-        Loofah.scrub_fragment(string.encode(Encoding::UTF_8), :prune).to_s.strip
-      end
-
-      def self.strip_tags(string)
-        doc = Nokogiri::HTML string
-        (doc/"//*/text()").map do |text|
-          text.inner_text.strip
-        end.select {|text| text.present?}.join " "
+        Sanitize.clean(string, elements: ['a'],
+          attributes: {'a' => ['href', 'title']},
+          protocols: {'a' => {'href' => ['http', 'https', 'mailto']}}
+        )
       end
 
     end
