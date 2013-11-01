@@ -299,13 +299,27 @@ module Deliveries
       extend Helpers::Routing
       extend Helpers::Subscriptions
 
+      # general header, then service-specific header
+      def self.header(user)
+        header = top
+        header << piece("headers", user)
+        header
+      end
+
+      # service-specific footer has everything we need
       def self.footer(user); piece "footers", user; end
-      def self.header(user); piece "headers", user; end
 
       def self.piece(piece, user)
         context = Deliveries::SeenItemProxy.new # dummy to get helpers
         template = Tilt::ERBTemplate.new "app/views/emails/#{piece}/#{user.service || "general"}.erb"
         rendered = template.render context, trim: false
+        rendered.force_encoding "utf-8"
+        rendered
+      end
+
+      def self.top
+        template = Tilt::ERBTemplate.new "app/views/emails/header.erb"
+        rendered = template.render Object.new, trim: false
         rendered.force_encoding "utf-8"
         rendered
       end
