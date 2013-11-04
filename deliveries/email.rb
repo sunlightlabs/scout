@@ -338,9 +338,15 @@ module Deliveries
       end
 
       def self.interest_title(name, interest_type)
+        if name.size > 100
+          font_size = "150"
+        else
+          font_size = "200"
+        end
+
         <<-eos
         <div style="margin: 0; padding: 0; margin-top: 20px; margin-bottom: 0px; width: 100%; background-color: #238397; padding-left: 5px;">
-          <h1 style="color: #FFF; font-family: 'helvetica Neue', arial, sans-serif; text-transform: uppercase; font-weight: 400; background-color: #238397; font-size: 200%; margin-top: 30px; margin-bottom: 0px; display: inline;">
+          <h1 style="color: #FFF; font-family: 'helvetica Neue', arial, sans-serif; text-transform: uppercase; font-weight: 400; background-color: #238397; font-size: #{font_size}%; margin-top: 30px; margin-bottom: 0px; display: inline;">
             #{name}
           </h1>
           <span style="color: #CCC; font-size: 90%; font-style: italic;">
