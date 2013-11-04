@@ -448,6 +448,40 @@ module Helpers
       simple_format speaking
     end
 
+
+    ## Documents
+
+    # description, or doc-type-specific one, for use in listings/emails
+    def document_description(document)
+      if document['description'].present?
+        document['description']
+      else
+        case document['document_type']
+        when 'gao_report'
+          document['gao_report']['description']
+        when 'ig_report'
+          # doesn't exist yet, hopefully someday
+          document['ig_report']['description']
+        else
+          nil
+        end
+      end
+    end
+
+    # type-specific description, for use in listing subheaders
+    def document_subtitle(document)
+      case document['document_type']
+      when 'gao_report'
+        document['document_type_name']
+      when 'ig_report'
+        inspector = ::Subscriptions::Adapters::Documents.inspector_name document['ig_report']['inspector']
+        "#{document['document_type_name']} &mdash; #{inspector}"
+      else
+        nil
+      end
+    end
+
+    # GAO report description, ready for rendering on show page
     def gao_description(document)
       return nil unless description = document['gao_report']['description'] # shouldn't happen
 

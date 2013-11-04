@@ -5,7 +5,7 @@
   <div class="entryHeader">
     <h2><%= document['title'] %></h2>
     <div class="subtitle">
-      <%= document['document_type_name'] %>
+      <%= document_subtitle document %>
       released on
       <time class="item" datetime="<%= html_date item.date %>">
         <%= just_date_year item.date %>
@@ -15,38 +15,63 @@
 
   <div class="clear"></div>
 
-  <div class="resources">
-    <h5>Resources</h5>
-    <ul>
-      <span>
-        <% if document['document_type'] == "gao_report" %>
+  <% if document['document_type'] == "gao_report" %>
+
+    <div class="resources">
+      <h5>Resources</h5>
+      <ul>
+        <li>
           Visit
           <a data-resource="<%= document['document_type'] %>" href="<%= document['url'] %>">
-            GAO</a>
+            GAO
+          </a>
           for more context.
-        <% end %>
-      </li>
-    </ul>
-  </div>
+        </li>
+      </ul>
+    </div>
 
-  <div id="document">
-    <header>
-      <strong>Summary</strong>
-      <span>
-        Below is the official summary.
-        <% if document['source_url'] %>
-          The <em><a data-resource="<%= document['document_type'] %>-original" href="<%= document['source_url'] %>">
-            full report</a></em>
-          <% if document['source_url'] =~ /\.pdf$/ %>
-            (PDF)
+    <div id="document">
+      <header>
+        <strong>Summary</strong>
+        <span>
+          Below is the official summary.
+          <% if document['source_url'] %>
+            The <em><a data-resource="<%= document['document_type'] %>-original" href="<%= document['source_url'] %>" target="_blank">
+              full report</a></em>
+            <% if document['source_url'] =~ /\.pdf$/ %>
+              (PDF)
+            <% end %>
+            is also available.
           <% end %>
-          is also available.
+        </span>
+      </header>
+      <hr/>
+      <article>
+        <%= gao_description document %>
+      </article>
+    </div>
+  <% elsif document['document_type'] == 'ig_report' %>
+    <div id="document">
+      <header>
+        <strong>Summary</strong>
+        <span>
+          <% if document['description'].present? %>
+            Below is the official summary.
+          <% else %>
+            No official summary available.
+          <% end %>
+
+          For more details, read the <em><a data-resource="<%= document['document_type'] %>-original" href="<%= document['source_url'] %>" target="_blank">
+            full report</a></em><% if document['ig_report']['file_type'] == 'pdf' %>
+            (PDF)<% end %>.
+        </span>
+      </header>
+      <hr/>
+      <article>
+        <% if document['description'].present? %>
+          <%= document['description'] %>
         <% end %>
-      </span>
-    </header>
-    <hr/>
-    <article>
-      <%= gao_description document %>
-    </article>
-  </div>
+      </article>
+    </div>
+  <% end %>
 </div>

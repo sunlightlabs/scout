@@ -10,11 +10,17 @@ module Subscriptions
         title categories posted_at
         url source_url
         gao_report.gao_id gao_report.description
+        ig_report.inspector ig_report.type ig_report.file_type
       }
 
       def self.filters
         {
-          # todo: document_type, once more than one is present
+          'document_type' => {
+            name: -> type {
+              pieces = type.split("_")
+              [pieces[0].upcase, pieces[1].capitalize.pluralize].join " "
+            }
+          }
         }
       end
 
@@ -47,7 +53,12 @@ module Subscriptions
           url << "&citing.details=true"
         end
 
-        url << "&document_type=gao_report"
+        # TODO: ditch the limitation
+        # url << "&document_type=gao_report"
+        if subscription.data["document_type"].present?
+          url << "&document_type=#{subscription.data['document_type']}"
+        end
+
         url << "&order=posted_at"
         url << "&fields=#{FIELDS.join ','}"
         url << "&apikey=#{api_key}"
@@ -95,8 +106,7 @@ module Subscriptions
         url << "&fields=#{FIELDS.join ','}"
         url << "&order=posted_at__asc"
 
-        # still just GAO reports
-        url << "&document_type=gao_report"
+        # url << "&document_type=gao_report"
 
         # per-year sync is made inefficient by two Congress API bugs:
         # https://github.com/sunlightlabs/congress/issues/391
@@ -126,7 +136,7 @@ module Subscriptions
       end
 
       def self.title_for(document)
-        "GAO: #{document['title']}"
+        "#{document['document_type_name']}: #{document['title']}"
       end
 
       def self.slug_for(document)
@@ -134,15 +144,15 @@ module Subscriptions
       end
 
       def self.search_name(subscription)
-        "GAO Reports"
+        "Reports"
       end
 
       def self.item_name(subscription)
-        "Document"
+        "Report"
       end
 
       def self.short_name(number, interest)
-        "#{number > 1 ? "GAO reports" : "GAO report"}"
+        "#{number > 1 ? "reports" : "report"}"
       end
 
       # takes parsed response and returns an array where each item is
@@ -168,6 +178,13 @@ module Subscriptions
           date: document["posted_at"],
           data: document
         )
+      end
+
+      # mapping for IG report agency handles to names
+      def self.inspector_name(inspector)
+        {
+          usps: "US Postal Service"
+        }[inspector.to_sym]
       end
 
     end

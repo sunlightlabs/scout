@@ -7,14 +7,14 @@
     <%= just_date item.date %>
   </span>
   &mdash;
-  <%= document['document_type_name'] %>
+  <%= document_subtitle document %>
 </div>
 
 <%= email_content_p %>
   <% if highlight = document_highlight(item, interest, inline: true) %>
     <%= highlight %>
-  <% elsif document['gao_report']['description'].present? %>
-    <%= truncate document['gao_report']['description'], 500 %>
+  <% elsif (description = document_description(document)).present? %>
+    <%= truncate description, 500 %>
   <% else %>
     No excerpt or abstract available.
   <% end %>
