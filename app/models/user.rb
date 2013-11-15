@@ -22,7 +22,7 @@ class User
 
   # announcement list booleans
   field :announcements, type: Boolean, default: false
-  field :sunlight_announcements, type: Boolean, default: false
+  field :sunlight_announcements, as: :organization_announcements, type: Boolean, default: false
 
   # used for sharing things
   field :username
@@ -96,7 +96,7 @@ class User
   field :signup_process, default: nil # can be "quick"
 
   attr_accessible :email, :username, :display_name, :phone,
-    :notifications, :announcements, :sunlight_announcements,
+    :notifications, :announcements, :organization_announcements,
     :bio, :image, :url, :contact_email
 
   attr_accessor :password, :password_confirmation
@@ -248,13 +248,13 @@ class User
     old_info = {
       notifications: self.notifications,
       announcements: self.announcements,
-      sunlight_announcements: self.sunlight_announcements,
+      organization_announcements: self.organization_announcements,
       service: self.service # context
     }
 
     self.notifications = "none"
     self.announcements = false
-    self.sunlight_announcements = false
+    self.organization_announcements = false
     self.save!
 
     # unsubscribe individual interests

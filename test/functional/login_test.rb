@@ -147,7 +147,7 @@ class LoginTest < Test::Unit::TestCase
     assert_not_nil user
     assert User.authenticate(user, password)
     assert !user.announcements
-    assert !user.sunlight_announcements
+    assert !user.organization_announcements
     assert !user.confirmed?
     assert user.should_change_password?
     assert_equal "quick", user.signup_process
@@ -292,9 +292,9 @@ class LoginTest < Test::Unit::TestCase
     password = "testing"
     assert !User.authenticate(user, password)
     assert !user.announcements?
-    assert !user.sunlight_announcements?
+    assert !user.organization_announcements?
 
-    put "/account/welcome", {password: password, password_confirmation: password, user: {announcements: true, sunlight_announcements: true}}, login(user)
+    put "/account/welcome", {password: password, password_confirmation: password, user: {announcements: true, organization_announcements: true}}, login(user)
     assert_redirect "/account/settings"
 
     user.reload
@@ -302,7 +302,7 @@ class LoginTest < Test::Unit::TestCase
 
     assert User.authenticate(user, password)
     assert user.announcements?
-    assert user.sunlight_announcements?
+    assert user.organization_announcements?
   end
 
   def test_welcome_form_mismatched_passwords
@@ -311,9 +311,9 @@ class LoginTest < Test::Unit::TestCase
     password = "testing"
     assert !User.authenticate(user, password)
     assert !user.announcements?
-    assert !user.sunlight_announcements?
+    assert !user.organization_announcements?
 
-    put "/account/welcome", {password: password, password_confirmation: password.succ, user: {announcements: true, sunlight_announcements: true}}, login(user)
+    put "/account/welcome", {password: password, password_confirmation: password.succ, user: {announcements: true, organization_announcements: true}}, login(user)
     assert_response 200
 
     user.reload
@@ -321,7 +321,7 @@ class LoginTest < Test::Unit::TestCase
 
     assert !User.authenticate(user, password)
     assert !user.announcements?
-    assert !user.sunlight_announcements?
+    assert !user.organization_announcements?
   end
 
   def test_welcome_form_logged_out
@@ -330,9 +330,9 @@ class LoginTest < Test::Unit::TestCase
     password = "testing"
     assert !User.authenticate(user, password)
     assert !user.announcements?
-    assert !user.sunlight_announcements?
+    assert !user.organization_announcements?
 
-    put "/account/welcome", {password: password, password_confirmation: password.succ, user: {announcements: true, sunlight_announcements: true}}
+    put "/account/welcome", {password: password, password_confirmation: password.succ, user: {announcements: true, organization_announcements: true}}
     assert_redirect "/"
 
     user.reload
@@ -340,7 +340,7 @@ class LoginTest < Test::Unit::TestCase
 
     assert !User.authenticate(user, password)
     assert !user.announcements?
-    assert !user.sunlight_announcements?
+    assert !user.organization_announcements?
   end
 
 
@@ -350,14 +350,14 @@ class LoginTest < Test::Unit::TestCase
     email = "fake@example.com"
     assert_nil User.where(email: email).first
 
-    post '/account/new', {user: {'email' => email, 'password' => "test", 'password_confirmation' => "test", 'announcements' => false, 'sunlight_announcements' => true}}
+    post '/account/new', {user: {'email' => email, 'password' => "test", 'password_confirmation' => "test", 'announcements' => false, 'organization_announcements' => true}}
     assert_redirect '/account/settings'
 
     user = User.where(:email => email).first
     assert_not_nil user
     assert User.authenticate(user, "test")
     assert !user.announcements
-    assert user.sunlight_announcements
+    assert user.organization_announcements
     assert user.confirmed?
     assert_nil user.signup_process
   end
@@ -368,7 +368,7 @@ class LoginTest < Test::Unit::TestCase
 
     campaign = {'campaign' => {'utm_source' => 'source', 'utm_medium' => 'banner', 'utm_content' => '640', 'utm_campaign' => 'campaign'}}
 
-    post '/account/new', {:user => {'email' => email, 'password' => "test", 'password_confirmation' => "test", 'announcements' => false, 'sunlight_announcements' => true}}, session(campaign)
+    post '/account/new', {:user => {'email' => email, 'password' => "test", 'password_confirmation' => "test", 'announcements' => false, 'organization_announcements' => true}}, session(campaign)
     assert_redirect '/account/settings'
 
     user = User.where(:email => email).first
