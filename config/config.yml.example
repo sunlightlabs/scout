@@ -12,6 +12,29 @@ organization:
   # A URL to the organization's terms of service.
   terms: http://sunlightfoundation.com/legal/terms/
 
+layout:
+  # Uncomment to set your Google site verification code.
+  # @see https://support.google.com/webmasters/answer/35179?hl=en
+  # google_site_verification: 5EhJ93mPwaiWioTBlDqRtVwFZhwteGQ-7ysCs-hlUxI
+
+  # Uncomment to use Google Analytics.
+  # @see https://support.google.com/analytics/answer/1032385?hl=en
+  # google_analytics_property_id: UA-22821126-16
+
+  # Twitter summary card.
+  # @see https://dev.twitter.com/docs/cards/types/summary-card
+  twitter_site: @sunfoundation
+  twitter_site_id: 5743162
+
+  # Uncomment to use Chartbeat.
+  # @see https://chartbeat.com/
+  # chartbeat_uid: 980
+  # chartbeat_domain: scout.sunlightfoundation.com
+
+  # Uncomment to use TypeKit.
+  # @see https://typekit.com/
+  # typekit_id: bsl1eko
+
 subscriptions:
   # fill in with your own Sunlight API key
   sunlight_api_key:

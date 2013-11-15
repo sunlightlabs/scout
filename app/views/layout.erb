@@ -13,7 +13,7 @@
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="google-site-verification" content="5EhJ93mPwaiWioTBlDqRtVwFZhwteGQ-7ysCs-hlUxI" />
+    <meta name="google-site-verification" content="<%= Environment.config['layout']['google_site_verification'] %>" />
 
     <meta property="og:image" content="<%= asset_path "/images/icon.png" %>" />
 
@@ -32,8 +32,8 @@
     <% end %>
 
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:site" content="@sunfoundation" />
-    <meta name="twitter:site:id" content="5743162" />
+    <meta name="twitter:site" content="<%= Environment.config['layout']['twitter_site'] %>" />
+    <meta name="twitter:site:id" content="<%= Environment.config['layout']['twitter_site_id'] %>" />
 
     <!-- my CSS, plus any page-specific CSS -->
 
@@ -147,7 +147,7 @@
 
     <div class="footerWrapper">
       <footer class="contentWrapper">
-        <a href="<%= Environment.config['organization']['url'] %>" class="sunlightFoundation textIndent">
+        <a href="<%= Environment.config['organization']['url'] %>" class="organization textIndent">
           <%= Environment.config['organization']['name'] %>
         </a>
 
@@ -173,9 +173,10 @@
 
     <!-- lots of javascript... -->
 
+<% if Environment.config['layout']['google_analytics_property_id'] %>
     <script type="text/javascript">
       var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-22821126-16']);
+      _gaq.push(['_setAccount', '<%= Environment.config['layout']['google_analytics_property_id'] %>']);
       _gaq.push(['_trackPageview']);
 
       (function() {
@@ -184,9 +185,11 @@
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
       })();
     </script>
+<% end %>
 
+<% if Environment.config['layout']['chartbeat_uid'] && Environment.config['layout']['chartbeat_domain'] %>
     <script type="text/javascript">
-    var _sf_async_config={uid:980,domain:"scout.sunlightfoundation.com"};
+    var _sf_async_config={uid:<%= Environment.config['layout']['chartbeat_uid'] %>,domain:"<%= Environment.config['layout']['chartbeat_domain'] %>"};
     (function(){
       function loadChartbeat() {
         window._sf_endpt=(new Date()).getTime();
@@ -202,17 +205,20 @@
       window.onload = (typeof window.onload != 'function') ? loadChartbeat : function() { oldonload(); loadChartbeat(); };
     })();
     </script>
+<% end %>
 
+<% if Environment.config['layout']['typekit_id'] %>
     <!-- typekit -->
     <script type="text/javascript">
       (function() {
         var config = {
-          kitId: 'bsl1eko',
+          kitId: '<%= Environment.config['layout']['typekit_id'] %>',
           scriptTimeout: 3000
         };
         var h=document.getElementsByTagName("html")[0];h.className+=" wf-loading";var t=setTimeout(function(){h.className=h.className.replace(/(\s|^)wf-loading(\s|$)/g," ");h.className+=" wf-inactive"},config.scriptTimeout);var tk=document.createElement("script"),d=false;tk.src='//use.typekit.net/'+config.kitId+'.js';tk.type="text/javascript";tk.async="true";tk.onload=tk.onreadystatechange=function(){var a=this.readyState;if(d||a&&a!="complete"&&a!="loaded")return;d=true;clearTimeout(t);try{Typekit.load(config)}catch(b){}};var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(tk,s)
       })();
     </script>
+<% end %>
 
     <!--[if lt IE 9]>
     <script src="<%= asset_path "/js/html5.js" %>"></script>
