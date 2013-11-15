@@ -4,12 +4,20 @@ organization:
   url: http://sunlightfoundation.com/
   # General intake email for comments, questions and bug reports.
   contact: scout+contact@sunlightfoundation.com
+  description: Founded in 2006, the Sunlight Foundation is a nonpartisan nonprofit that uses cutting-edge technology and ideas to make government transparent and accountable.
+  # The organization's domain for display to users.
+  domain: SunlightFoundation.com
+  # A URL to the organization's privacy policy.
+  privacy: http://sunlightfoundation.com/legal/privacy/
+  # A URL to the organization's terms of service.
+  terms: http://sunlightfoundation.com/legal/terms/
 
 subscriptions:
   # fill in with your own Sunlight API key
   sunlight_api_key:
 
 # used to generate full URLs in emails
+# hostname: "https://scout.sunlightfoundation.com"
 hostname: "http://localhost:8080"
 
 # fill in with some unique string per-deployment

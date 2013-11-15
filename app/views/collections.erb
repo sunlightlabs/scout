@@ -17,19 +17,19 @@
     <h3>Making a collection</h3>
     </p>
     <p>
-    To get started, begin by creating alerts on key terms or bills on Scout. (Watch <a href="http://training.sunlightfoundation.com/module/scout-training/">this tutorial</a> if you are new to Scout). Once you created your Scout alerts, go to <a href="https://scout.sunlightfoundation.com/account/subscriptions">Manage Alerts</a> in your account. An empty "collections" field will appear under your alerts. Type in the name of your collection to add the alert to it.
+    To get started, begin by creating alerts on key terms or bills on Scout. (Watch <a href="http://training.sunlightfoundation.com/module/scout-training/">this tutorial</a> if you are new to Scout). Once you created your Scout alerts, go to <a href="/account/subscriptions">Manage Alerts</a> in your account. An empty "collections" field will appear under your alerts. Type in the name of your collection to add the alert to it.
     </p>
 
     <img class="collections" src="<%= asset_path "/images/scout-collections-1.png" %>" />
 
     <p>
-    Repeat this step for all the alerts you want included in the collection. When you create a collection, it will appear in the right sidebar of your <a href="https://scout.sunlightfoundation.com/account/subscriptions">Manage Alerts</a> page. To view your collection, click on the name of your collection in the sidebar.
+    Repeat this step for all the alerts you want included in the collection. When you create a collection, it will appear in the right sidebar of your <a href="/account/subscriptions">Manage Alerts</a> page. To view your collection, click on the name of your collection in the sidebar.
     </p>
     <p>
     <h3>Viewing your collection</h3>
     </p>
     <p>
-    Your collection will be accessible in the sidebar via the <a href="https://scout.sunlightfoundation.com/account/subscriptions">Manage Alerts</a> page of your account. On the collection page, it will list all of the alerts that are currently part of the collection. You also have an option to add a description (via "edit description" under the header) to the collection. You can also preview the list of recent activities of your collection by clicking on the "Jump to preview of results" link under the description. To edit your collection, simply return to the <a href="https://scout.sunlightfoundation.com/account/subscriptions">Manage Alerts</a> page to add or remove collections for alerts.
+    Your collection will be accessible in the sidebar via the <a href="/account/subscriptions">Manage Alerts</a> page of your account. On the collection page, it will list all of the alerts that are currently part of the collection. You also have an option to add a description (via "edit description" under the header) to the collection. You can also preview the list of recent activities of your collection by clicking on the "Jump to preview of results" link under the description. To edit your collection, simply return to the <a href="/account/subscriptions">Manage Alerts</a> page to add or remove collections for alerts.
     </p>
 
     <img class="collections" src="<%= asset_path "/images/scout-collections-2.png" %>" />
@@ -41,7 +41,7 @@
     <h3>Setting up a Profile</h3>
     </p>
     <p>
-    To add a profile to your Scout account, click on the Settings link in the navigation. In the "profile" sidebar, fill in the information that is required for sharing including "Full Name" and a username. The "Full Name" is the name of your organization that will be displayed. Your username is the handle used in the URL of your collection. For example, if your username is <strong>johnny</strong> and your collection is named <strong>candy</strong>, your collect will appear at https://scout.sunlightfoundation.com/user/<strong>johnny</strong>/<strong>candy</strong>.
+    To add a profile to your Scout account, click on the Settings link in the navigation. In the "profile" sidebar, fill in the information that is required for sharing including "Full Name" and a username. The "Full Name" is the name of your organization that will be displayed. Your username is the handle used in the URL of your collection. For example, if your username is <strong>johnny</strong> and your collection is named <strong>candy</strong>, your collect will appear at <%= Environment.config['hostname'] %>/user/<strong>johnny</strong>/<strong>candy</strong>.
     </p>
     <p>
     You also have the option to add a brief user bio and website to your profile, shown alongside your public collections.
