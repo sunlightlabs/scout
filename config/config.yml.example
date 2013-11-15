@@ -119,9 +119,9 @@ rss:
   # The value of the top-level <description> tag.
   description: US government-wide search and notification service. Created by the Sunlight Foundation, a non-profit dedicated to using the power of technology to increase government transparency and accountability.
 
-# Whether the subscription manager should print polled, searched, fetched and
-# synced URLs to STDOUT.
 debug:
+  # Whether the subscription manager should print polled, searched, fetched and
+  # synced URLs to STDOUT. Useful both in development and production.
   output_urls: true
 
 # A Sunlight API key, distinct from the key used to search, poll, etc., that
