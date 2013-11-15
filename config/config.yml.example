@@ -24,7 +24,7 @@ layout:
 
   # Twitter summary card.
   # @see https://dev.twitter.com/docs/cards/types/summary-card
-  twitter_site: @sunfoundation
+  twitter_site: "@sunfoundation"
   twitter_site_id: 5743162
 
   # Uncomment to use Chartbeat.
