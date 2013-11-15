@@ -4,6 +4,7 @@ organization:
   url: http://sunlightfoundation.com/
   # General intake email for comments, questions and bug reports.
   contact: scout+contact@sunlightfoundation.com
+  # A brief description to appear in the page's footer.
   description: Founded in 2006, the Sunlight Foundation is a nonpartisan nonprofit that uses cutting-edge technology and ideas to make government transparent and accountable.
   # The organization's domain for display to users.
   domain: SunlightFoundation.com
@@ -36,77 +37,110 @@ layout:
   # typekit_id: bsl1eko
 
 subscriptions:
-  # fill in with your own Sunlight API key
+  # If you are using the Sunlight Foundation's subscription adapters, get a
+  # Sunlight API key at http://sunlightfoundation.com/api/accounts/register/
   sunlight_api_key:
 
-# used to generate full URLs in emails
+# The application's hostname, e.g. to generate full URLs in email messages.
 # hostname: "https://scout.sunlightfoundation.com"
 hostname: "http://localhost:8080"
 
-# fill in with some unique string per-deployment
+# Your secret key for verifying the integrity of signed cookies. If you change
+# this key, all old signed cookies will become invalid!
+#
+# You can use this code to generate a secure secret key:
+#
+#     require 'securerandom'
+#     puts SecureRandom.hex(64)
 session_secret: change-this-to-something-else
 
-# set to true to turn off caching of remote content (useful for development)
+# Disables caching of remote content (useful in development).
+# Set to false in production.
 no_cache: true
 
-# asset hosting on S3, sync with rake assets:sync
+# Assets include stylesheets, javascripts and images.
 assets:
-  enabled: false # turn on in production
-  asset_host: # URL to put before assets
+  # Set to true in production, or to override the default assets.
+  enabled: false
+  # This URL (or path) will appear before "assets" and the asset's path.
+  asset_host:
+  # If the following are set, you can sync assets to S3 with:
+  #
+  #     bundle exec rake assets:sync
   s3:
     bucket:
     access_key:
     secret_key:
 
-
-# email details
+# Outgoing email configuration.
 email:
+  # Either "pony" for SMTP and sendmail or "postmark".
   via: pony
+  # The "From" header of outgoing messages.
   from:
+  # The "Reply-To" header of outgoing messages.
   reply_to:
 
+  # The following options are passed directly to Pony.
+  # @see https://github.com/benprew/pony#readme
   pony:
-    # Can be passed directly into Pony
+    # Either "smtp" or "sendmail".
     via: smtp
     via_options:
+      # The address of your SMTP server.
       address:
+      # The port on your SMTP server.
       port:
+      # Your SMTP username.
       user_name:
+      # Your SMTP password.
       password:
+      # "plain", "login" or "cram_md5".
       authentication: plain
+      # The HELO domain provided by the client to the server.
       domain:
+      # If using TLS/SSL.
       enable_starttls_auto: false
 
+  # Sign up at https://postmarkapp.com/
   postmark:
     api_key:
 
-# SMS details
+# SMS message configuration.
 twilio:
+  # Your Account SID and Auth Token.
+  # @see http://twilio.com/user/account
   account_sid:
   auth_token:
-  from: # phone number
+  # The phone number purchased from Twilio from which to send the message.
+  from:
 
-# RSS configuration.
 rss:
+  # The value of the top-level <description> tag.
   description: US government-wide search and notification service. Created by the Sunlight Foundation, a non-profit dedicated to using the power of technology to increase government transparency and accountability.
 
-# outputs polled URLs to STDOUT
 debug:
+  # Whether the subscription manager should print polled, searched, fetched and
+  # synced URLs to STDOUT. Useful both in development and production.
   output_urls: true
 
-# a Sunlight API key, separate from the key used to do most searches/polling,
-# that will be used in links to data URLs that require one, if data demo mode is on
+# A Sunlight API key, distinct from the key used to search, poll, etc., that
+# will be used *in public* to link to source data. For example, if you add the
+# `hood=up` query string to item pages, you will see a link in the sidebar to
+# the "underlying data".
+# @see https://scout.sunlightfoundation.com/item/bill/hr624-113?hood=up
 demo_key:
 
-# set of emails to receive admin notices
+# A list of email addresses to which admin notices will be sent.
 admin:
   -
 
-# set of emails to receive analytics reports
+# A list of email addresses to which analytics reports will be sent.
 analytics:
   -
 
-# Mongoid details
+# MongoDB configuration.
+# @see http://mongoid.org/en/mongoid/docs/installation.html#configuration
 mongoid:
   development:
     sessions:
