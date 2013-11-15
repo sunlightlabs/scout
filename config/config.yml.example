@@ -2,6 +2,13 @@
 organization:
   name: Sunlight Foundation
   url: http://sunlightfoundation.com/
+  description: Founded in 2006, the Sunlight Foundation is a nonpartisan nonprofit that uses cutting-edge technology and ideas to make government transparent and accountable.
+  # The organization's domain for display to users.
+  domain: SunlightFoundation.com
+  # A URL to the organization's privacy policy.
+  privacy: http://sunlightfoundation.com/legal/privacy/
+  # A URL to the organization's terms of service.
+  terms: http://sunlightfoundation.com/legal/terms/
 
 subscriptions:
   # fill in with your own Sunlight API key
