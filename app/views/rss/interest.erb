@@ -3,9 +3,7 @@
   <channel>
     <title>Scout - Activity for <%= interest_name interest %></title>
     <link><%= Environment.config['hostname'] %></link>
-    <description>
-      US government-wide search and notification service. Created by the Sunlight Foundation, a non-profit dedicated to using the power of technology to increase government transparency and accountability.
-    </description>
+    <description><%= Environment.config['rss']['description'] %></description>
     <language>en-us</language>
     <atom:link href="<%= url %>" rel="self" type="application/rss+xml" />
     
