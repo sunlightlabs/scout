@@ -49,6 +49,8 @@ email:
 
 # SMS details
 twilio:
+  # The app's domain for display to users.
+  domain: scout.sunlightfoundation.com
   account_sid:
   auth_token:
   from: # phone number
