@@ -124,8 +124,11 @@ rss:
 debug:
   output_urls: true
 
-# A Sunlight API key, distinct from the key used to do most searches/polling, that
-# that will be used in links to data URLs that require one, if data demo mode is on
+# A Sunlight API key, distinct from the key used to search, poll, etc., that
+# will be used *in public* to link to source data. For example, if you add the
+# `hood=up` query string to item pages, you will see a link in the sidebar to
+# the "underlying data".
+# @see https://scout.sunlightfoundation.com/item/bill/hr624-113?hood=up
 demo_key:
 
 # A list of email addresses to which admin notices will be sent.
