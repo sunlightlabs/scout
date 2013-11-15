@@ -33,9 +33,9 @@
               <span>Get updates about new Scout features</span>
             </label>
 
-            <label for="sunlight_announcements">
-              <%= check_box_tag "user[sunlight_announcements]", checked: user.sunlight_announcements?, uncheck_value: 'false', id: "sunlight_announcements" %>
-              <span>Get updates about the Sunlight Foundation</span>
+            <label for="organization_announcements">
+              <%= check_box_tag "user[organization_announcements]", checked: user.organization_announcements?, uncheck_value: 'false', id: "organization_announcements" %>
+              <span>Get updates about the <%= Environment.config['organization']['name'] %></span>
             </label>
           </fieldset>
         </ul>

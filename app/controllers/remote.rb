@@ -16,7 +16,7 @@
 #   with the provided 'notifications' field
 #   with the provided email address
 #   confirmed=true
-#   announcements and sunlight_announcements as false
+#   announcements and organization_announcements as false
 #   random password (unsynced with other service)
 #
 # If the user account is invalid somehow, 400.
@@ -66,7 +66,7 @@ post "/remote/service/sync" do
       notifications: data['notifications'],
       
       announcements: false,
-      sunlight_announcements: false
+      organization_announcements: false
     )
 
     user.confirmed = true
@@ -205,7 +205,7 @@ end
 #   source: "remote"
 #   confirmed: false
 #   announcements: false
-#   sunlight_announcements: false
+#   organization_announcements: false
 #   notifications: none
 #   phone: [phone number]
 #   phone_confirmed: false
@@ -233,7 +233,7 @@ post "/remote/subscribe/sms" do
     user = User.new(
       phone: params[:phone],
       announcements: false,
-      sunlight_announcements: false,
+      organization_announcements: false,
       notifications: "none"
     )
 

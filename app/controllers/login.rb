@@ -41,7 +41,7 @@ post '/account/new' do
   end
 
   @new_user = User.new
-  ['email', 'password', 'password_confirmation', 'announcements', 'sunlight_announcements'].each do |field|
+  ['email', 'password', 'password_confirmation', 'announcements', 'organization_announcements'].each do |field|
     @new_user.send "#{field}=", params[:user][field]
   end
 

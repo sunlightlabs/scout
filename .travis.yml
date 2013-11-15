@@ -9,8 +9,6 @@ bundler_args: --local
 before_script:
   - cp config/config.yml.example config/config.yml
 
-script: rake tests:all
-
 notifications:
   email:
     recipients:
