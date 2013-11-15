@@ -64,6 +64,21 @@ admin:
 analytics:
   -
 
+# A list of filenames of subscription adapters to load (loads all if empty)
+adapters:
+  - feed # required
+  - documents
+  - federal_bills
+  - federal_bills_activity
+  - federal_bills_hearings
+  - federal_bills_upcoming_floor
+  - federal_bills_votes
+  - regulations
+  - speeches
+  - state_bills
+  - state_bills_activity
+  - state_bills_votes
+
 # Mongoid details
 mongoid:
   development:

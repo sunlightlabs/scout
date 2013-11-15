@@ -130,7 +130,13 @@ require './config/admin'
 Dir.glob('deliveries/*.rb').each {|filename| load filename}
 
 # subscription management and adapters
-Dir.glob('subscriptions/adapters/*.rb').each {|filename| load filename}
+if Environment.config['adapters'] && !Environment.config['adapters'].empty?
+  Environment.config['adapters'].each do |adapter|
+    load File.expand_path(File.join('..', 'subscriptions', 'adapters', "#{adapter}.rb"), __dir__)
+  end
+else
+  Dir.glob('subscriptions/adapters/*.rb').each {|filename| load filename}
+end
 require './subscriptions/manager'
 
 
@@ -185,9 +191,14 @@ def adapter_map
     @adapter_map
   else
     @adapter_map = {}
-    adapters = Dir.glob File.join(File.dirname(__FILE__), "../subscriptions/adapters/*.rb")
-    adapters.each do |adapter|
-      type = File.basename adapter, ".rb"
+    adapters = if Environment.config['adapters'] && !Environment.config['adapters'].empty?
+      Environment.config['adapters']
+    else
+      Dir.glob(File.join(File.dirname(__FILE__), "../subscriptions/adapters/*.rb")).map do |filename|
+        File.basename(adapter, '.rb')
+      end
+    end
+    adapters.each do |type|
       @adapter_map[type] = "Subscriptions::Adapters::#{type.camelize}".constantize
     end
     @adapter_map
