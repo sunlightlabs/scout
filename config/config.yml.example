@@ -15,6 +15,7 @@ subscriptions:
   sunlight_api_key:
 
 # used to generate full URLs in emails
+# hostname: "https://scout.sunlightfoundation.com"
 hostname: "http://localhost:8080"
 
 # fill in with some unique string per-deployment
