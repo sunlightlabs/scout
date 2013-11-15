@@ -383,11 +383,11 @@ class AccountsTest < Test::Unit::TestCase
   #### Unsubscribe ####
 
   def test_unsubscribe_actual
-    user = create :user, sunlight_announcements: true, announcements: true
+    user = create :user, organization_announcements: true, announcements: true
 
     assert_equal 'email_immediate', user.notifications
     assert_equal true, user.announcements
-    assert_equal true, user.sunlight_announcements
+    assert_equal true, user.organization_announcements
 
     post '/account/unsubscribe/actually', {}, login(user)
     assert_redirect "/account/unsubscribe"
@@ -396,7 +396,7 @@ class AccountsTest < Test::Unit::TestCase
 
     assert_equal 'none', user.notifications
     assert_equal false, user.announcements
-    assert_equal false, user.sunlight_announcements
+    assert_equal false, user.organization_announcements
   end
 
   def test_unsubscribe_actual_not_logged_in
@@ -406,11 +406,11 @@ class AccountsTest < Test::Unit::TestCase
 
   # doesn't actually do the unsubscribe
   def test_unsubscribe_landing
-    user = create :user, sunlight_announcements: true, announcements: true
+    user = create :user, organization_announcements: true, announcements: true
 
     assert_equal 'email_immediate', user.notifications
     assert_equal true, user.announcements
-    assert_equal true, user.sunlight_announcements
+    assert_equal true, user.organization_announcements
 
     get '/account/unsubscribe', {}, login(user)
     assert_response 200
@@ -419,7 +419,7 @@ class AccountsTest < Test::Unit::TestCase
 
     assert_equal 'email_immediate', user.notifications
     assert_equal true, user.announcements
-    assert_equal true, user.sunlight_announcements
+    assert_equal true, user.organization_announcements
   end
 
   def test_unsubscribe_landing_not_logged_in

@@ -53,7 +53,7 @@ class RemoteTest < Test::Unit::TestCase
     assert_not_nil user.password_hash
     assert !user.should_change_password?
     assert !user.announcements?
-    assert !user.sunlight_announcements?
+    assert !user.organization_announcements?
 
     assert_not_nil user.synced_at
 
@@ -444,7 +444,7 @@ class RemoteTest < Test::Unit::TestCase
     assert !user.phone_confirmed?
 
     assert !user.announcements
-    assert !user.sunlight_announcements
+    assert !user.organization_announcements
 
     assert_equal 1, user.interests.count
     interest = user.interests.first
