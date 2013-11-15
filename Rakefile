@@ -529,7 +529,7 @@ task :sitemap => :environment do
     only = ENV['only'].present? ? ENV['only'].split(',') : nil
 
     BigSitemap.generate(
-      base_url: "https://scout.sunlightfoundation.com",
+      base_url: Environment.config['hostname'],
       document_root: "public/sitemap",
       url_path: "sitemap",
       ping_google: ping,
