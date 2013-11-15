@@ -27,7 +27,7 @@ module Subscriptions
       end
 
       def self.short_name(number, interest)
-        "#{number > 1 ? "actions" : "action"}"
+        number > 1 ? 'actions' : 'action'
       end
 
       def self.direct_item_url(action, interest)

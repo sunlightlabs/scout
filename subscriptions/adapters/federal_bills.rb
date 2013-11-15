@@ -177,7 +177,7 @@ module Subscriptions
       end
 
       def self.short_name(number, interest)
-        "#{number > 1 ? "bills" : "bill"}"
+        number > 1 ? 'bills' : 'bill'
       end
 
       def self.interest_name(interest)
