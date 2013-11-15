@@ -2,6 +2,8 @@
 organization:
   name: Sunlight Foundation
   url: http://sunlightfoundation.com/
+  # General intake email for comments, questions and bug reports.
+  contact: scout+contact@sunlightfoundation.com
   description: Founded in 2006, the Sunlight Foundation is a nonpartisan nonprofit that uses cutting-edge technology and ideas to make government transparent and accountable.
   # The organization's domain for display to users.
   domain: SunlightFoundation.com
