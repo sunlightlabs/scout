@@ -23,6 +23,8 @@ assets:
 
 # email details
 email:
+  # General intake email for comments, questions and bug reports.
+  contact: scout+contact@sunlightfoundation.com
   via: pony
   from:
   reply_to:
