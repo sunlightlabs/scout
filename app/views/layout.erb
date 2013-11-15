@@ -81,14 +81,14 @@
                 <a href="/account/settings">Settings</a>
               </li>
               <li class="feedback">
-                <a href="mailto:<%= Environment.config['email']['contact'] %>" class="feedback">Contact</a>
+                <a href="mailto:<%= Environment.config['organization']['contact'] %>" class="feedback">Contact</a>
               </li>
               <li>
                 <a href="/logout" class="logout">Log Out</a>
               </li>
             <% else %>
               <li class="feedback">
-                <a href="mailto:<%= Environment.config['email']['contact'] %>" class="feedback">Contact</a>
+                <a href="mailto:<%= Environment.config['organization']['contact'] %>" class="feedback">Contact</a>
               </li>
               <li>
                 <a href="/login" class="login">Login or Sign up</a>

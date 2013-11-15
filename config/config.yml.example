@@ -2,6 +2,8 @@
 organization:
   name: Sunlight Foundation
   url: http://sunlightfoundation.com/
+  # General intake email for comments, questions and bug reports.
+  contact: scout+contact@sunlightfoundation.com
 
 subscriptions:
   # fill in with your own Sunlight API key
@@ -28,8 +30,6 @@ assets:
 
 # email details
 email:
-  # General intake email for comments, questions and bug reports.
-  contact: scout+contact@sunlightfoundation.com
   via: pony
   from:
   reply_to:
