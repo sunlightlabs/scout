@@ -43,7 +43,7 @@ put '/account/settings' do
 
   # special case for checkboxes, sigh
   if params[:user]
-    ['announcements', 'sunlight_announcements'].each do |field|
+    ['announcements', 'organization_announcements'].each do |field|
       current_user.send "#{field}=", (["false", false, nil].include?(params[:user][field]) ? false : true)
     end
   end
@@ -130,7 +130,7 @@ put '/account/welcome' do
   requires_login
 
   if params[:user]
-    ['announcements', 'sunlight_announcements'].each do |field|
+    ['announcements', 'organization_announcements'].each do |field|
       current_user.send "#{field}=", (["false", false, nil].include?(params[:user][field]) ? false : true)
     end
   end

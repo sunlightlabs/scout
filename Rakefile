@@ -1,3 +1,5 @@
+task default: 'tests:all'
+
 task :environment do
   require 'rubygems'
   require 'bundler/setup'

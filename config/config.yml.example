@@ -1,3 +1,8 @@
+# Change the following settings to match your organization's details.
+organization:
+  name: Sunlight Foundation
+  url: http://sunlightfoundation.com/
+
 subscriptions:
   # fill in with your own Sunlight API key
   sunlight_api_key:
@@ -49,6 +54,10 @@ twilio:
   account_sid:
   auth_token:
   from: # phone number
+
+# RSS configuration.
+rss:
+  description: US government-wide search and notification service. Created by the Sunlight Foundation, a non-profit dedicated to using the power of technology to increase government transparency and accountability.
 
 # outputs polled URLs to STDOUT
 debug:

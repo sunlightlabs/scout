@@ -1,7 +1,7 @@
 <div class="settings login contentArea full">
   <div class="module notifications">
 
-    <% if (current_user.notifications == "none") and !current_user.announcements? and !current_user.sunlight_announcements? %>
+    <% if (current_user.notifications == "none") and !current_user.announcements? and !current_user.organization_announcements? %>
       <h3>You're Unsubscribed</h3>
       <p>
         You're unsubscribed from everything. If you think we haven't properly unsubscribed you, <a href="mailto:<%= Environment.config['email']['contact'] %>">send us an email</a> and we'll take care of it.
@@ -10,7 +10,7 @@
       <h3>Unsubscribe from Everything?</h3>
 
       <p>
-        This will turn off emails for new alerts, Scout feature announcements, and Sunlight Foundation announcements.
+        This will turn off emails for new alerts, Scout feature announcements, and <%= Environment.config['organization']['name'] %> announcements.
       </p>
 
       <form action="/account/unsubscribe/actually" method="post">
