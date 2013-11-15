@@ -28,7 +28,7 @@
     <% if content_for?(:description) %>
       <meta property="og:description" content="<%= escape_javascript yield_content(:description) %>" />
     <% else %>
-      <meta property="og:description" content="Live government activity and alerts, by the Sunlight Foundation." />
+      <meta property="og:description" content="Live government activity and alerts, by the <%= Environment.config['organization']['name'] %>." />
     <% end %>
 
     <meta name="twitter:card" content="summary" />
@@ -53,8 +53,8 @@
     <div class="headerWrapper">
       <div class="hatWrap">
         <div class="contentWrapper">
-          <a class="productOf" href="http://sunlightfoundation.com">
-            a product of Sunlight Foundation
+          <a class="productOf" href="<%= Environment.config['organization']['url'] %>">
+            a product of <%= Environment.config['organization']['name'] %>
           </a>
         </div>
       </div>
@@ -147,16 +147,16 @@
 
     <div class="footerWrapper">
       <footer class="contentWrapper">
-        <a href="http://sunlightfoundation.com" class="sunlightFoundation textIndent">
-          Sunlight Foundation
+        <a href="<%= Environment.config['organization']['url'] %>" class="sunlightFoundation textIndent">
+          <%= Environment.config['organization']['name'] %>
         </a>
 
         <div class="aboutSF">
           <p>
-            Founded in 2006, the Sunlight Foundation is a nonpartisan nonprofit that uses cutting-edge technology and ideas to make government transparent and accountable.
+            <%= Environment.config['organization']['description'] %>
           </p>
           <p>
-            Visit <a href="http://sunlightfoundation.com">SunlightFoundation.com</a> to learn more.
+            Visit <a href="<%= Environment.config['organization']['url'] %>"><%= Environment.config['organization']['domain'] %></a> to learn more.
           </p>
         </div>
 
