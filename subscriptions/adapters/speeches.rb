@@ -141,7 +141,7 @@ module Subscriptions
       end
 
       def self.short_name(number, interest)
-        "#{number > 1 ? "speeches" : "speech"}"
+        number > 1 ? 'speeches' : 'speech'
       end
 
       # takes parsed response and returns an array where each item is
