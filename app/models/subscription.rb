@@ -26,6 +26,8 @@ class Subscription
   # @return [String] either "simple" or "advanced"
   field :query_type # can't wait to ditch this
 
+  # @todo We should not have to query the subscription's query and always be
+  #   able to use the interest's query
   # @return a query
   def query; interest ? interest.query : @query; end
   # @param obj
@@ -68,18 +70,7 @@ class Subscription
     adapter_map[type]
   end
 
-  # Sends an API request for all documents relevant to the subscription and
-  # returns them as a list of items.
-  #
-  # @param [Hash] options
-  # @option options [String] :api_key an API key
-  # @option options [Integer] :page a page number
-  # @option options [Integer] :per_page the number of items per page
-  # @option options [Boolean] :cache_only if truthy and if the cache contains no
-  #   cached response of a request to the data source, then no requests are sent
-  #   to the data source and `nil` is returned
-  # @return [Array<SeenItem>,Hash] the items from the data source that match
-  #   this subscription's query, or an error hash
+  # @see Subscriptions::Manager.search
   def search(options = {})
     Subscriptions::Manager.search self, options
   end

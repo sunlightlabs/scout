@@ -190,8 +190,7 @@ module Subscriptions
 
 
 
-      # internal
-
+      # @private
       def self.item_for(regulation)
         return nil unless regulation
 

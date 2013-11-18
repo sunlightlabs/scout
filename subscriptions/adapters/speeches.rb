@@ -160,8 +160,7 @@ module Subscriptions
       end
 
 
-      # internal
-
+      # @private
       def self.item_for(result)
         return nil unless result
 

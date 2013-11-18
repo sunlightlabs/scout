@@ -17,7 +17,7 @@ class Interest
   # @return [String] what the user is interested in, which varies according to
   #   the value of `interest_type`:
   #   * "feed": a feed URL
-  #   * "item": the item's ID
+  #   * "item": the item's `item_id`
   #   * "search": search terms
   #   * "tag": the tag's ID
   field :in
@@ -413,7 +413,6 @@ class Interest
   end
 
   after_create :create_subscriptions
-  # XXX init is unused (i.e. always true)
   # @private
   def create_subscriptions(init = true)
     self.subscriptions.each do |subscription|

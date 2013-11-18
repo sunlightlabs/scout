@@ -1,7 +1,9 @@
 # An item that is attached to a subscription or interest. To avoid notifying a
 # user about the same item twice within the same interest, we track which items
 # are "seen", per-user and per-interest. It's possible that a user will see the
-# same item twice across multiple interests.
+# same item twice across multiple interests. This is intentional, as different
+# text may be highlighted in each notification: consider, for example, a long
+# bill that touches on many different subjects.
 class SeenItem
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -10,7 +12,8 @@ class SeenItem
   belongs_to :interest
   belongs_to :user
 
-  #TODO: refactor this out
+  # @todo Refactor this out. It should be possible to derive subscriptions
+  #   on-demand from the interest.
   # XXX redundant with `belongs_to :subscription`?
   field :subscription_id
 
@@ -109,19 +112,6 @@ class SeenItem
     }
   end
 
-  # renders a *hash* suitable for turning into json,
-  # that includes attributes for its parent subscription and interest
-  # XXX unused
-  def json_view
-    self.interest
-
-    SeenItem.clean_document(self, SeenItem.public_json_fields).merge(
-      interest: SeenItem.clean_document(self.interest, Interest.public_json_fields)
-    )
-  end
-
-
-  # internal XXX no need for a comment here if you use the `private` keyword
   # @private
   def self.clean_document(document, only = nil)
     attrs = document.attributes
