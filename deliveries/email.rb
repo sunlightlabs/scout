@@ -132,7 +132,7 @@ module Deliveries
         if options['subject']
           subject = options['subject']
         else
-          subject = "Daily digest - #{matching_deliveries.size} new #{matching_deliveries.size > 1 ? "results" : "result"}"
+          subject = "Daily digest - #{matching_deliveries.size} new #{matching_deliveries.size == 1 ? 'result' : 'results'}"
         end
 
         if dry_run
@@ -271,7 +271,7 @@ module Deliveries
       else
         prefix = "Scout daily digest"
       end
-      suffix = "#{number} new #{number > 1 ? "results" : "result"}"
+      suffix = "#{number} new #{number == 1 ? 'result' : 'results'}"
 
       "#{prefix} - #{suffix}"
     end

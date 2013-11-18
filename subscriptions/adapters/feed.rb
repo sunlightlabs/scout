@@ -35,7 +35,7 @@ module Subscriptions
       end
 
       def self.short_name(number, interest)
-        number > 1 ? 'results' : 'result'
+        number == 1 ? 'result' : 'results'
       end
 
       # go through each RSS item, exclude any invalid things

@@ -32,7 +32,7 @@ module Subscriptions
       end
 
       def self.short_name(number, interest)
-        number > 1 ? 'floor notices' : 'floor notice'
+        number == 1 ? 'floor notice' : 'floor notices'
       end
 
       def self.direct_item_url(upcoming, interest)

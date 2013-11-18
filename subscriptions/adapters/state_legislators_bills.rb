@@ -56,7 +56,7 @@ module Subscriptions
       end
 
       def self.short_name(number, interest)
-        number > 1 ? 'bills' : 'bill'
+        number == 1 ? 'bill' : 'bills'
       end
 
       def self.direct_item_url(bill, interest)
