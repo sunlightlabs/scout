@@ -1,10 +1,38 @@
 # An interest, e.g. "intellectual property". 
 #
-# A user creates an interest, e.g. "intellectual property", and chooses to
-# receive new items related to that interest from all data sources. The interest
-# will have one or more *subscriptions* per data source. For example, if a user
-# has an interest in state bills about agriculture, they may be suscribed to not
-# only new bills, but also new actions and new votes on those bills.
+# ## "search" interests
+#
+# Alice searches for an interest of hers, "intellectual property", filters for
+# "Bills in Congress," and signs up for notifications. This creates a "search"
+# interest. The interest is *in* "intellectual property". It also creates a
+# single subscription, whose adapter is the `federal_bills` adapter. Alice will
+# receive notifications about new items related to her interest from the data
+# source for that adapter, Sunlight's Congress API.
+#
+# If Alice did not filter for "Bills in Congress", Scout creates a subscription
+# for each adapter that is a "search-type" adapter (currently hardcoded).
+#
+# ## "item" interests
+#
+# Alice navigates to the page of a single item, e.g. a bill, and signs up for
+# notifications. This creates an "item" interest. The interest is *in* the item.
+# It also creates subscriptions to adapters for things related to the item, like
+# votes, notices of upcoming hearings, etc. Alice will receive notifications
+# about new items related to the item from the data sources for those adapters.
+#
+# ## "feed" interests
+#
+# Alice imports an RSS feed into Scout. This creates a "feed" interest. The
+# interest is *in* the feed. It also creates a single subscription, whose
+# adapter is the `feed` adapter. Alice will receive notifications about new
+# items in the feed. (In other words, this is RSS-to-Email.)
+#
+# ## "tag" interests
+#
+# These interests have no subscriptions and are specially handled. See the
+# `Delivery` class for more discussion.
+#
+# Read `Interest#subscriptions_for` for more understanding.
 class Interest
   include Mongoid::Document
   include Mongoid::Timestamps
