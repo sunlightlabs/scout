@@ -8,12 +8,8 @@ module Subscriptions
     #
     # @param [Subscription] subscription a subscription
     # @param [Hash] options
-    # @option options [String] :api_key an API key
     # @option options [Integer] :page a page number
     # @option options [Integer] :per_page the number of items per page
-    # @option options [Boolean] :cache_only if truthy and if the cache contains
-    #   no cached response of a request to the data source, then no requests are
-    #   sent to the data source and `nil` is returned
     # @return [Array<SeenItem>,Hash] the items from the data source that match
     #   the subscription's query, or an error hash
     def self.search(subscription, options = {})
@@ -377,6 +373,13 @@ module Subscriptions
 
     # just get items and feed them into the parser -
     # no caching, no feed parsing, no related subscription
+    # @param [String] subscription_type a subscription adapter's lowercase
+    #   underscored name
+    # @param [Hash] options
+    # @option options [String] :since e.g. "all", "2010", "current"
+    # @option options [Integer] :page a page number
+    # @option options [Integer] :start a timestamp
+    # @return [Array<SeenItem>,Hash] items from the data source or an error hash
     def self.sync(subscription_type, options = {})
       adapter = Subscription.adapter_for subscription_type
       url = adapter.url_for_sync options

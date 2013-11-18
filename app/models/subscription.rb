@@ -78,8 +78,6 @@ class Subscription
 
   # @param [Hash] options
   # @option options [String] :api_key an API key
-  # @option options [Integer] :page a page number
-  # @option options [Integer] :per_page the number of items per page
   # @return [String] a URL with which to search the adapter's data source
   def search_url(options = {})
     adapter.url_for self, :search, options
