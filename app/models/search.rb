@@ -4,7 +4,7 @@ require 'lucene_query_parser'
 
 
 # collection of methods for processing search queries
-class Search
+module Search
 
   # run term through a gauntlet of citation checks
   # 'citation_id' is the slug for a cite as defined by github.com/unitedstates/citation
