@@ -133,7 +133,7 @@ module Helpers
       keywords = [keywords] unless keywords.is_a?(Array)
       patterns = keywords.map do |keyword|
         keyword = keyword.gsub '"', ''
-        %w{+ ? . * ^ $ ( ) [ ] { } | \\ }.each {|char| keyword = keyword.gsub char, "\\#{char}"}
+        keyword = Regexp.escape(keyword)
         keyword = keyword.gsub ' ', '[\s\-]'
 
         keyword
