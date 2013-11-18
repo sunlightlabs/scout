@@ -56,7 +56,7 @@ Scout also implements an "RSS/Atom to Email/SMS" feature.
 ## Under the Hood
 
 * Scout checks for new items in multiple data sources. To add a new data source, you must write a *subscription adapter*. The adapter tells Scout how to query the data source with the search terms provided by its users.
-* When users subscribe to be sent messages, they create an *interest*. The user may choose to receive new items for all data sources, or just one. An interest will have one *subscription* for each data source.
+* When users subscribe to be sent messages, they create an *interest*. The user may choose to receive new items for all data sources, or just one. An interest will have one or more *subscriptions* per data source.
 
 ## Re-use
 

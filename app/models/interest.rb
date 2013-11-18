@@ -1,8 +1,10 @@
 # An interest, e.g. "intellectual property". 
 #
 # A user creates an interest, e.g. "intellectual property", and chooses to
-# receive new items related to that interest from all data sources. The
-# interest will have one *subscription* per data source.
+# receive new items related to that interest from all data sources. The interest
+# will have one or more *subscriptions* per data source. For example, if a user
+# has an interest in state bills about agriculture, they may be suscribed to not
+# only new bills, but also new actions and new votes on those bills.
 class Interest
   include Mongoid::Document
   include Mongoid::Timestamps
