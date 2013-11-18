@@ -2,7 +2,6 @@
 
 A government-wide search and notification system. Currently deployed to [scout.sunlightfoundation.com](https://scout.sunlightfoundation.com/). [![Build Status](https://secure.travis-ci.org/sunlightlabs/scout.png)](http://travis-ci.org/sunlightlabs/scout)
 
-
 ## Setting Up
 
 Scout depends on **Ruby 2.0**.
@@ -30,7 +29,7 @@ Then run the app on port 8080 with:
 bundle exec unicorn
 ```
 
-## How It Works
+## What It Does
 
 * Alice visits the [Scout website](https://scout.sunlightfoundation.com/) and searches for terms of interest to her, e.g. ["intellectual property"](https://scout.sunlightfoundation.com/search/all/intellectual%20property).
 * Alice subscribes to be sent messages via email when new items are published for those search terms: that is, new items related to her interest.
