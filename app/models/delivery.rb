@@ -19,8 +19,14 @@ class Delivery
   # @return [String] the subscriber's email address
   field :user_email
 
-  # if the user is not the owner of the main interest, there will be another
-  # interest here, owned by the deliver's user, that the user saw the item "through"
+  # Alice tags her interests, creating a collection. Bob is interested in
+  # Alice's collection; his interest is modeled as an interest of type "tag"
+  # pointing to the collection. Bob sees an item in one of Alice's collected
+  # interests through his interest.
+  #
+  # For deliveries related to Bob's interest in Alice's collection, the `user`
+  # is Bob, the `interest` is Alice's interest and `seen_through` is Bob's
+  # interest.
   belongs_to :seen_through, class_name: "Interest"
 
 
@@ -51,10 +57,11 @@ class Delivery
   # delivered to a user via either email or SMS, either immediately or daily.
   #
   # @param [SeenItem] item the item to deliver
-  # @param [Interest] interest
+  # @param [Interest] interest the interest to which the item is related
   # @param [String] subscription_type the lowercase underscored name of the
   #   subscription's adapter
-  # @param [Interest] seen_through
+  # @param [Interest] seen_through "tag" interests see items through other
+  #   user's interests
   # @param [User] user the user to deliver the item to
   # @param [String] mechanism either "sms" or "email"
   # @param [String] email_frequency either "daily" or "immediate"
