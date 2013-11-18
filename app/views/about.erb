@@ -63,7 +63,7 @@
     <h2>Contact Us</h2>
 
     <p>
-      For questions or comments, please <a href="mailto:scout+contact@sunlightfoundation.com" class="feedback">contact us</a>. We promise to respond promptly.
+      For questions or comments, please <a href="mailto:<%= Environment.config['organization']['contact'] %>" class="feedback">contact us</a>. We promise to respond promptly.
     </p>
   </div>
 </div>
@@ -71,8 +71,8 @@
   <div class="module">
     <h4>Policies</h4>
     <ul>
-        <li><a href="http://sunlightfoundation.com/legal/privacy/">Privacy Policy</a></li>
-        <li><a href="http://sunlightfoundation.com/legal/terms/">Terms of Service</a></li>
+        <li><a href="<%= Environment.config['organization']['privacy'] %>">Privacy Policy</a></li>
+        <li><a href="<%= Environment.config['organization']['terms'] %>">Terms of Service</a></li>
     </ul>
   </div>
 </div>

@@ -87,7 +87,7 @@ configure do
   assets = Environment.config['assets']
   AssetSync.configure do |config|
 
-    if assets and assets['enabled']
+    if assets && assets['enabled'] && assets['s3']
       config.fog_provider = 'AWS'
       config.fog_directory = assets['s3']['bucket']
       config.aws_access_key_id = assets['s3']['access_key']

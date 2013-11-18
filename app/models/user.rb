@@ -239,7 +239,7 @@ class User
   end
 
   def self.phone_remote_confirm_message(password)
-    "Your number has been confirmed. Log in to scout.sunlightfoundation.com with the password \"#{password}\" to manage your alerts." # Text \"HELP\" for a list of commands."
+    "Your number has been confirmed. Log in to #{Environment.config['hostname']} with the password \"#{password}\" to manage your alerts." # Text \"HELP\" for a list of commands."
   end
 
   # turn off the user's email notifications, and any announcement subscriptions
