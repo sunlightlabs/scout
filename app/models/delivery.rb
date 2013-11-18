@@ -1,6 +1,7 @@
-# queue of to-be-delivered items
-# designed to stay empty, inbox-zero style, with completed deliveries stored separately
-
+# An item in a queue of to-be-delivered items.
+#
+# The queue is designed to empty itself as items are delivered (like most MTAs)
+# with successful deliveries stored separately as receipts.
 class Delivery
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -8,12 +9,14 @@ class Delivery
   belongs_to :interest
   belongs_to :user
   
-  # core fields needed to deliver the goods
+  # @return [String] the lowercase underscored name of the subscription's adapter
   field :subscription_type
+  # @return [String] what the user is interested in (terms, feed URL, etc.)
   field :interest_in
 
   # used for DEBUG CONVENIENCE ONLY - the email to deliver this to 
   # should be looked up at delivery-time, not schedule-time.
+  # @return [String] the subscriber's email address
   field :user_email
 
   # if the user is not the owner of the main interest, there will be another
@@ -22,12 +25,12 @@ class Delivery
 
 
 
-  # store where this delivery should go out over email or sms
   # the delivery task should look at *this* field, so that we can
   # add the ability to override per-interest, per-subscription, whatever
+  # @return [String] the way in which to deliver the alert ("sms" or "email")
   field :mechanism
   
-  # item details
+  # @return [Hash] a copy of the item's attributes
   field :item, :type => Hash, :default => {}
   
   index subscription_type: 1
@@ -44,8 +47,17 @@ class Delivery
   validates_presence_of :user_id
   validates_presence_of :item
 
-
-  # user and delivery mechanism decided in advance
+  # Schedules an item, from a data source, related to an interest, to be
+  # delivered to a user via either email or SMS, either immediately or daily.
+  #
+  # @param [SeenItem] item the item to deliver
+  # @param [Interest] interest
+  # @param [String] subscription_type the lowercase underscored name of the
+  #   subscription's adapter
+  # @param [Interest] seen_through
+  # @param [User] user the user to deliver the item to
+  # @param [String] mechanism either "sms" or "email"
+  # @param [String] email_frequency either "daily" or "immediate"
   def self.schedule!(item, interest, subscription_type, seen_through, user, mechanism, email_frequency)
     create! user_id: user.id,
     

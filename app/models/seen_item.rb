@@ -1,6 +1,7 @@
-# Stores full data on seen items
-# Used to cache items and render them later if need be (e.g. RSS, SMS)
-
+# An item that is attached to a subscription or interest. To avoid notifying a
+# user about the same item twice within the same interest, we track which items
+# are "seen", per-user and per-interest. It's possible that a user will see the
+# same item twice across multiple interests.
 class SeenItem
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -10,22 +11,33 @@ class SeenItem
   belongs_to :user
 
   #TODO: refactor this out
+  # XXX redundant with `belongs_to :subscription`?
   field :subscription_id
 
+  # @return [String] what the user is interested in (terms, feed URL, etc.)
   field :interest_in
+  # @return [String] one of "feed", "item", "search" or "tag"
   field :interest_type
+  # @return [String] the lowercase underscored name of the subscription's adapter
   field :subscription_type
 
-  # doesn't refer to the type of the item itself, but
-  # rather which one of the standard item_type's it relates to
-  field :item_type # 'bill', 'speech', etc.
+  # @return [String] the item's type, e.g. "bill"
+  # @note There is a list of item types in `subscriptions/subscriptions.yml`
+  field :item_type
 
-  # result fields from remote source
+  # @return [String] the item's unique identifier among items of the same type
   field :item_id
+  # @return [Hash] arbitrary data
   field :data, type: Hash
+  # @return [Time] the time at which this item occurred, at which it was created
+  #   or published, or another time of origin
   field :date, type: Time
-  field :search_url # search URL that originally produced this item
-  field :find_url # if this came from a find request, produce that URL
+  # @return [String] the URL to query the data source for items relevant to the
+  #   subscription, which included this item
+  field :search_url
+  # @return [String] the URL to get this item from the data source, if this item
+  #   originates from an API request for a single document
+  field :find_url
 
   index({subscription_id: 1, item_id: 1})
   index item_id: 1
@@ -43,20 +55,24 @@ class SeenItem
   validates_presence_of :item_id
 
   # the subset of fields appropriate for public syndication (omit database IDs, for instance)
+  # @private
   def self.public_json_fields
     [
       'created_at', 'item_id', 'data', 'date', 'subscription_type'
     ]
   end
 
+  # @return [Boolean] whether the interest is in search terms
   def search?
     interest_type == "search"
   end
 
+  # @return [Boolean] whether the interest is in a feed
   def feed?
     interest_type == "feed"
   end
 
+  # @return [Boolean] whether the interest is in an item
   def item?
     interest_type == "item"
   end
@@ -95,6 +111,7 @@ class SeenItem
 
   # renders a *hash* suitable for turning into json,
   # that includes attributes for its parent subscription and interest
+  # XXX unused
   def json_view
     self.interest
 
@@ -104,8 +121,8 @@ class SeenItem
   end
 
 
-  # internal
-
+  # internal XXX no need for a comment here if you use the `private` keyword
+  # @private
   def self.clean_document(document, only = nil)
     attrs = document.attributes
     attrs.delete "_id"

@@ -1,3 +1,5 @@
+# A report to be sent to the administrators about an error or a warning during
+# execution, of a successful execution, or of the completion of a task.
 class Report
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -11,7 +13,8 @@ class Report
   index status: 1
   index source: 1
   index created_at: 1
-  
+
+  # @private
   def self.file(status, source, message, attached = {})
     report = Report.create!(source: source.to_s, status: status, message: message, attached: attached)
     # stdout, but don't bother stdout-ing reports COMPLETE reports, or reports that will be emailed

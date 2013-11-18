@@ -1,11 +1,16 @@
+# A user may tag their interests to produce collections.
 class Tag
   include Mongoid::Document
   include Mongoid::Timestamps
 
+  # @return [User] the user who created the collection
   belongs_to :user
 
+  # @return [String] the collection's name
   field :name
+  # @return [Boolean] whether the collection is public or private
   field :public, type: Boolean, default: false
+  # @return [String] the collection's description
   field :description
 
   index name: 1
@@ -24,12 +29,14 @@ class Tag
   end
 
   after_destroy :remove_from_interests
+  # @private
   def remove_from_interests
     interests.each do |interest|
       interest.pull :tags, name
     end
   end
 
+  # @return [Boolean] whether the collection is private
   def private?
     !public?
   end

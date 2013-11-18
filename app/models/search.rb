@@ -10,6 +10,7 @@ class Search
   # 'citation_id' is the slug for a cite as defined by github.com/unitedstates/citation
   # 'citation_type' is the slug for a cite format as defined by github.com/unitedstates/citation
   # 'original' returned for adapters not supporting citations
+  # @private
   def self.citation_for(term)
 
     if citation_id = usc_check(term)
@@ -42,6 +43,7 @@ class Search
   # Checks the string to see if it *is* (not contains) a US Code citation.
   # If yes, returns the citation ID.
   # If not, returns nil.
+  # @private
   def self.usc_check(string)
     string = string.strip # for good measure
     section = subsections = title = nil
@@ -61,6 +63,7 @@ class Search
     ["usc", title, section, subsections].flatten.join "/"
   end
 
+  # @private
   def self.law_check(string)
     string = string.strip
     if parts = string.scan(/(pub(?:lic)?|priv(?:ate)?)\.? +l(?:aw)?\.?(?: +No\.?)? +(\d+)[-–]+(\d+)/i).first 
@@ -72,6 +75,7 @@ class Search
     end
   end
 
+  # XXX should be moved to its adapter, where it can be a private method
   def self.state_bill_for(string)
     string = string.strip
     string = string.gsub "\"", "" # can be used later, after quoting
@@ -97,6 +101,7 @@ class Search
     end
   end
 
+  # XXX should be moved to its adapter, where it can be a private method
   def self.federal_bill_for(string)
     string = string.strip
     string = string.gsub "\"", "" # can be used later, after quoting
@@ -214,6 +219,7 @@ class Search
   # take a parsed advanced query (with citations removed) and
   # turn it into a query string suitable for lucene
   # order should be deterministic no matter order of components
+  # @private
   def self.reserialize(advanced)
     quotify = -> str {str[" "] ? "\"#{str}\"" : str}
 

@@ -1,34 +1,53 @@
 require 'bcrypt'
 
+# A subscriber.
+#
+# Scout can act as a white-label service for other services. For example,
+# Sunlight's OpenStates uses Scout. Third-party services are configured in
+# `config/services.yml`.
 class User
   include Mongoid::Document
   include Mongoid::Timestamps
   include Mongoid::Paperclip
 
+  # @return [String] the subscriber's email address
   field :email
+  # @return [String] the subscriber's phone number
   field :phone
 
-  # by default, accounts come from the web - we allow a remote API for specified use cases
+  # @return [String] one of "web", "remote" or a third-party service's ID
   field :source, default: "web"
 
-  # whether the account belongs to another service whose alerts Scout is powering
+  # @return [String] the service that generated the user, if not Scout itself,
+  #   e.g. "open_states"
   field :service, default: nil
+  # @return [Time] the time at which the user was last synced with the remote
+  #   service that generated the user
   field :synced_at, type: Time
 
-  # whether and how the user will receive notifications
+  # @return [String] one of:
+  #   * "email_immediate": the user will receive notifications immediately
+  #   * "email_daily" the user will receive notifications daily
+  #   * "none": the user will not receive notifications
   field :notifications, default: "email_immediate"
   validates_inclusion_of :notifications, in: ["none", "email_daily", "email_immediate"] # sms not valid at the user level
   validates_presence_of :notifications
 
-  # announcement list booleans
+  # @return [Boolean] whether the user receives announcements about Scout
   field :announcements, type: Boolean, default: false
+  # @return [Boolean] whether the user receives announcements about the
+  #   organization that has deployed Scout
   field :sunlight_announcements, as: :organization_announcements, type: Boolean, default: false
 
-  # used for sharing things
+  # @return [String] the user's username, used in public URLs
   field :username
+  # @return [String] the user's public name
   field :display_name
+  # @return [String] a URL the user chooses to display with their account
   field :url
+  # @return [String] the user's biography
   field :bio
+  # @return [String] the user's public email address
   field :contact_email
 
   # validates_format_of :url, with: URI::regexp(%w(http https)), message: "Not a valid URL.", allow_blank: true
@@ -65,6 +84,7 @@ class User
   scope :scout, where(service: nil)
 
   before_validation :slugify_username
+  # @private
   def slugify_username
     if self.username.present?
       self.username = self.username.gsub(/[^\w\d\s]/, '')
@@ -117,6 +137,7 @@ class User
 
 
   # used to allow email-less user accounts
+  # @private
   def has_phone?
     self.phone.present?
   end
@@ -125,6 +146,7 @@ class User
     BCrypt::Password.new(user.password_hash) == password
   end
 
+  # @private
   def encrypt_password
     if password # should only occur if a new password has been set on this user
       self.password_hash = BCrypt::Password.create password
@@ -160,11 +182,13 @@ class User
 
   # taken from authlogic
   # https://github.com/binarylogic/authlogic/blob/master/lib/authlogic/random.rb
+  # @private
   def self.friendly_token
     # use base64url as defined by RFC4648
     SecureRandom.base64(15).tr('+/=', '').strip.delete("\n")
   end
 
+  # @private
   def self.short_token
     zero_prefix rand(10000)
   end
@@ -194,6 +218,7 @@ class User
 
   before_validation :standardize_phone, :if => :has_phone?
 
+  # @private
   def standardize_phone
     if Phoner::Phone.valid?(self.phone)
       self.phone = Phoner::Phone.parse(self.phone).to_s
@@ -218,6 +243,7 @@ class User
   end
 
   # zero prefixes a number below 10,000 out to 4 digits
+  # @private
   def self.zero_prefix(number)
     if number < 10
       "000#{number}"
@@ -230,14 +256,17 @@ class User
     end
   end
 
+  # XXX this method should be a helper method to the account controller, because it's View not Model code
   def self.phone_verify_message(code)
     "[Scout] Your verification code is #{code}."
   end
 
+  # XXX this method can be inlined
   def self.phone_remote_subscribe_message
     "You've been signed up for SMS alerts. Confirm your phone number by replying to this text with 'C'."
   end
 
+  # XXX this method can be inlined
   def self.phone_remote_confirm_message(password)
     "Your number has been confirmed. Log in to #{Environment.config['hostname']} with the password \"#{password}\" to manage your alerts." # Text \"HELP\" for a list of commands."
   end

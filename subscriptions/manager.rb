@@ -3,11 +3,25 @@ require 'oj'
 module Subscriptions
 
   class Manager
-
+    # Sends an API request for all documents relevant to the subscription and
+    # returns them as a list of items.
+    #
+    # @param [Subscription] subscription a subscription
+    # @param [Hash] options
+    # @option options [String] :api_key an API key
+    # @option options [Integer] :page a page number
+    # @option options [Integer] :per_page the number of items per page
+    # @option options [Boolean] :cache_only if truthy and if the cache contains
+    #   no cached response of a request to the data source, then no requests are
+    #   sent to the data source and `nil` is returned
+    # @return [Array<SeenItem>,Hash] the items from the data source that match
+    #   the subscription's query, or an error hash
     def self.search(subscription, options = {})
       poll subscription, :search, options
     end
 
+    # @param [Subscription] subscription a subscription
+    # @return [Hash,TrueClass] `true` or an error hash
     def self.initialize!(subscription)
 
       # TODO: refactor so that these come in as the arguments
@@ -37,6 +51,8 @@ module Subscriptions
       true
     end
 
+    # @param [Subscription] subscription a subscription
+    # @return [Hash,TrueClass] `true` or an error hash
     def self.check!(subscription)
       # support rake task command line dry run flag
       dry_run = ENV["dry_run"] || false
@@ -129,22 +145,39 @@ module Subscriptions
       true
     end
 
+    # @private
     def self.mark_as_seen!(item)
       item.save!
     end
 
+    # @private
     def self.test?
       Sinatra::Application.test?
     end
 
+    # @private
     def self.development?
       Sinatra::Application.development?
     end
 
-    # function is one of [:search, :initialize, :check]
-    # options hash can contain epheremal modifiers for search (right now just a 'page' parameter)
+    # Sends an API request for all documents relevant to the subscription and
+    # returns them as a list of items.
     #
-      # cache_only: return nil if the object is not present, do not hit the network
+    # If performing a `:search` operation, it will check the cache before
+    # sending the request and it will cache the response of the request.
+    #
+    # @param [Subscription] subscription a subscription
+    # @param [Symbol] function one of:
+    #   * `:check`: TODO
+    #   * `:initialize`: TODO
+    #   * `:search`: TODO
+    # @param [Hash] options
+    # @option options [String] :api_key an API key
+    # @option options [Integer] :page a page number
+    # @option options [Integer] :per_page the number of items per page
+    # @option options [Boolean] :cache_only if truthy and if the cache contains
+    #   no cached response of a request to the data source, then no requests are
+    #   sent to the data source and `nil` is returned
     def self.poll(subscription, function = :search, options = {})
       adapter = subscription.adapter
       url = adapter.url_for subscription, function, options
@@ -223,6 +256,7 @@ module Subscriptions
       end
     end
 
+    # @private
     def self.error_for(message, url, function, options, subscription, exception = nil)
       {
         message: message,
@@ -234,11 +268,19 @@ module Subscriptions
       }
     end
 
-    # given a type of adapter, and an item ID, fetch the item and return a seen item
-
-    # options:
-      # cache_only: return nil if the object is not present, do not hit the network
-
+    # Sends an API request for a single document and returns it as an item.
+    #
+    # @param [String] adapter_type a subscription adapter's lowercase
+    #   underscored name
+    # @param [String] item_id a document's identifier in the data source
+    # @param [Hash] options
+    # @option options [String] :api_key an API key
+    # @option options [Integer] :page a page number
+    # @option options [Integer] :per_page the number of items per page
+    # @option options [Boolean] :cache_only if truthy and if the cache contains
+    #   no cached response of a request to the data source, then no requests are
+    #   sent to the data source and `nil` is returned
+    # @return [SeenItem,nil] the item, or nil
     def self.find(adapter_type, item_id, options = {})
       adapter = Subscription.adapter_for adapter_type
       item_type = search_adapters[adapter_type]
@@ -296,6 +338,12 @@ module Subscriptions
 
     # get the content at an arbitrary location, using the same cache logic as the poll and find operations
     # (include adapter_type and item_id to better track what's happening)
+    # @param [String] url
+    # @param [Symbol] url_type always `:document`
+    # @param [Hash] options
+    # @option options [Boolean] :cache_only
+    # @return [String] the response body
+    # @private
     def self.fetch(url, url_type, options = {})
       puts "\n[fetch][#{url_type}] #{url}\n\n" if !test? and Environment.config['debug']['output_urls']
 
@@ -368,6 +416,7 @@ module Subscriptions
       end
     end
 
+    # @private
     def self.item_cache_for(item_type, item_id)
       return nil if Environment.config['no_cache']
 
@@ -379,6 +428,7 @@ module Subscriptions
       end
     end
 
+    # @private
     def self.cache_for(url, function, subscription_type)
       return nil if Environment.config['no_cache']
 
@@ -388,6 +438,7 @@ module Subscriptions
       end
     end
 
+    # @private
     def self.cache!(url, function, subscription_type, content)
       puts "\nCACHE: [#{function}] #{url}\n\n" if development?
       Cache.create!(
@@ -418,6 +469,7 @@ module Subscriptions
     end
 
     # helper function to straighten dates into UTC times (necessary for serializing to BSON, sigh)
+    # XXX move to the speeches adapter
     def self.noon_utc_for(date)
       return nil unless date
       date.to_time.midnight + 12.hours
