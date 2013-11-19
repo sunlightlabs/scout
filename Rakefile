@@ -8,10 +8,6 @@ end
 
 require 'rake/testtask'
 
-subscription_types = Dir.glob('subscriptions/adapters/*.rb').map do |file|
-  File.basename file, File.extname(file)
-end
-
 Dir.glob('tasks/*.rake').each{|filename| load filename}
 
 namespace :tests do

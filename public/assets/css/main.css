@@ -1,5 +1,5 @@
 html, body{
-    background: url('/assets/images/bg_body.jpg') center top repeat;
+    background: url('../images/bg_body.jpg') center top repeat;
     font-family: arial, 'helvetica Neue', sans-serif;
     color: #5c5b60;
     height: 100%;
@@ -316,11 +316,11 @@ div.error {
     margin-top: 0;
 }
 .hatWrap{
-    background: url('/assets/images/bg_hat.png') center top repeat-x;
+    background: url('../images/bg_hat.png') center top repeat-x;
     height: 45px;
 }
 .productOf{
-    background: url('/assets/images/productOf.png') center top no-repeat;
+    background: url('../images/productOf.png') center top no-repeat;
     width: 198px;
     height: 26px;
     text-indent: -99999em;
@@ -338,7 +338,7 @@ div.error {
 
 .headerWrapper{
     background: #ffffff;
-    background: url('/assets/images/bg_header.png') center bottom repeat-x;
+    background: url('../images/bg_header.png') center bottom repeat-x;
     display: block;
     min-height: 247px;
     position: relative;
@@ -357,7 +357,7 @@ li.user{
 }
 
 header h1{
-    background: url('/assets/images/logo_scout.png') top left no-repeat;
+    background: url('../images/logo_scout.png') top left no-repeat;
     display: block;
     width: 207px;
     height: 58px;
@@ -371,15 +371,15 @@ header h1{
 }
 
 #userNav li.subscriptions{
-    background: url('/assets/images/icon_subscriptions.png') 0 1px  no-repeat;
+    background: url('../images/icon_subscriptions.png') 0 1px  no-repeat;
     padding-left: 23px;
 }
 #userNav li.settings{
-    background: url('/assets/images/icon_settings.png') top left no-repeat;
+    background: url('../images/icon_settings.png') top left no-repeat;
     padding-left: 22px;
 }
 #userNav li.feedback{
-    background: url('/assets/images/icon_feedback.png') top left no-repeat;
+    background: url('../images/icon_feedback.png') top left no-repeat;
     padding-left: 22px;
 }
 
@@ -400,7 +400,7 @@ header h1{
 }
 .searchField{
     float: left;
-    background: url('/assets/images/newSearch.png') top left repeat-x;
+    background: url('../images/newSearch.png') top left repeat-x;
     margin-right: 20px;
     padding: 7px;
     margin-bottom: 7px;
@@ -432,7 +432,7 @@ header h1{
 
 
 #search_form button span, #search_form a.update.button span {
-    background:url('/assets/images/icon_search.png') center -4px no-repeat ;
+    background:url('../images/icon_search.png') center -4px no-repeat ;
     text-indent: -9999em;
     display: block;
     width: 32px;
@@ -477,7 +477,7 @@ select.subscription_type {
 .categoryMenu{
     padding-right: 33px;
     margin-right: 33px;
-    background: url('/assets/images/tinyborder_andshadow_vertical_dark.png') right top repeat-y;
+    background: url('../images/tinyborder_andshadow_vertical_dark.png') right top repeat-y;
 }
 #search_form .categoryMenu legend{
     margin-bottom: 7px;
@@ -557,7 +557,7 @@ select.subscription_type {
 }
 .sidebar .module{
     padding: 0 16px 33px 16px;
-    background: url('/assets/images/sidebar_divider.png') bottom center no-repeat;
+    background: url('../images/sidebar_divider.png') bottom center no-repeat;
     margin-bottom: 33px;
 }
 .sidebar form{
@@ -612,11 +612,11 @@ select.subscription_type {
 /*-- Footer Styling --*/
 .footerWrapper{
     display: block;
-    background: url('/assets/images/bg_footer.png') center top repeat-x;
+    background: url('../images/bg_footer.png') center top repeat-x;
 }
 
 .organization{
-    background: url('/assets/images/logo_sunlightFoundation.png') top left no-repeat;
+    background: url('../images/logo_sunlightFoundation.png') top left no-repeat;
     display: block;
     width: 159px;
     height: 48px;
@@ -636,7 +636,7 @@ footer{
     font-size: 88%;
     margin-bottom: 6px;
     margin-top: 40px;
-    background: url('/assets/images/tinyborder_footer.png') left top repeat-y;
+    background: url('../images/tinyborder_footer.png') left top repeat-y;
     padding: 0 45px;
 }
 .aboutSF p{
@@ -646,7 +646,7 @@ footer nav{
     float: left;
     margin-top: 40px;
     padding-left: 45px;
-    background: url('/assets/images/tinyborder_footer.png') left top repeat-y;
+    background: url('../images/tinyborder_footer.png') left top repeat-y;
 }
 
 footer a{
@@ -675,7 +675,7 @@ footer nav li{
 	clear: both;
 }
 .modules .row.functions {
-    background: url('/assets/images/through_arrow.png') center 9px no-repeat;
+    background: url('../images/through_arrow.png') center 9px no-repeat;
     padding-top: 17px;
     margin-bottom: 40px;
 }
@@ -693,7 +693,7 @@ footer nav li{
 }
 
 .homeWrapper #search_form button span, .homeWrapper #search_form a.update.button span {
-    background: url('/assets/images/icon_search.png') 5px -2px no-repeat ;
+    background: url('../images/icon_search.png') 5px -2px no-repeat ;
     text-indent: 0;
     display: block;
     padding-left: 35px;
@@ -719,7 +719,7 @@ footer nav li{
     display: block;
 }
 .home.modules {
-    background: url('/assets/images/splash.png') center top no-repeat;
+    background: url('../images/splash.png') center top no-repeat;
 }
 .home.modules .module{
     float: left;
@@ -729,7 +729,7 @@ footer nav li{
     -moz-box-sizing: border-box;
 }
 .home.modules .module p {
-    background: url('/assets/images/tinyborder_andshadow_vertical.png') left top repeat-y;
+    background: url('../images/tinyborder_andshadow_vertical.png') left top repeat-y;
     padding: 0 20px 0 20px;
     font-size: 110%;
     min-height: 110px;
@@ -771,7 +771,7 @@ footer nav li{
 .feature-collection {
 	margin-bottom: 40px;
 	padding: 0 20px;
-    background: url('/assets/images/bg_featured_collection.png') left top no-repeat;
+    background: url('../images/bg_featured_collection.png') left top no-repeat;
     height: 133px;
     width: 570px;
     margin-top: 35px;
@@ -818,7 +818,7 @@ footer nav li{
 
 /*-- Search Results Styling --*/
 .results.contentArea{
-    background: url('/assets/images/tinyshadow.png') top left repeat-x;
+    background: url('../images/tinyshadow.png') top left repeat-x;
 
 }
 
@@ -838,7 +838,7 @@ footer nav li{
 
 }
 .left .pageTitle{
-    background: #f5f6f3 url('/assets/images/tinyborder.png') bottom left repeat-x;
+    background: #f5f6f3 url('../images/tinyborder.png') bottom left repeat-x;
     -webkit-box-shadow: inset -14px 0px 14px -7px #e2e3e0;
     -moz-box-shadow: inset -14px 0px 14px -7px #e2e3e0;
     box-shadow: inset -14px 0px 14px -7px #e2e3e0;
@@ -919,7 +919,7 @@ footer nav li{
 }
 
 .resultsIntro{
-    background: #f5f6f3 url('/assets/images/tinyborder.png') bottom left repeat-x;
+    background: #f5f6f3 url('../images/tinyborder.png') bottom left repeat-x;
     padding: 16px 10px 16px 0;
     -webkit-box-shadow: inset 14px 0px 14px -7px #e2e3e0;
     -moz-box-shadow: inset 14px 0px 14px -7px #e2e3e0;
@@ -965,7 +965,7 @@ div.share-buttons td {padding-right: 5px;}
 .module.controls form{
     padding-left: 16px;
     padding-right: 16px;
-    background: url('/assets/images/tinyborder.png') center bottom repeat-x;
+    background: url('../images/tinyborder.png') center bottom repeat-x;
     padding-bottom: 10px;
     margin-top: 20px;
 }
@@ -973,7 +973,7 @@ div.share-buttons td {padding-right: 5px;}
     padding-left: 16px;
 }
 .module.controls .categories{
-    background: url('/assets/images/tinyborder.png') center bottom repeat-x;
+    background: url('../images/tinyborder.png') center bottom repeat-x;
     padding-bottom: 20px;
 }
 
@@ -986,7 +986,7 @@ div.share-buttons td {padding-right: 5px;}
     text-decoration: none;
 }
 .module.controls .categories .current{
-    background: #e5e6e3 url('/assets/images/bg_currentCat.png') 5px 12px no-repeat;
+    background: #e5e6e3 url('../images/bg_currentCat.png') 5px 12px no-repeat;
     font-weight: bold;
 }
 
@@ -1014,7 +1014,7 @@ div.share-buttons td {padding-right: 5px;}
 }
 .subscriptions.related li{
     display: inline;
-    background: url('/assets/images/bullet.png') right center no-repeat;
+    background: url('../images/bullet.png') right center no-repeat;
     padding-right: 7px;
     margin:0;
     margin-right: 7px;
@@ -1029,19 +1029,19 @@ div.share-buttons td {padding-right: 5px;}
     margin:0;
 }
 .contentArea.right ul{
-    background: url('/assets/images/tinyborder_andshadow.png') center bottom repeat-x;
+    background: url('../images/tinyborder_andshadow.png') center bottom repeat-x;
 }
 .contentArea.right div.search{
     padding-bottom: 85px;
 }
 .contentArea.right .section{
-    background: url('/assets/images/tinyborder_andshadow.png') center top repeat-x;
+    background: url('../images/tinyborder_andshadow.png') center top repeat-x;
     padding-bottom: 17px;
 }
 
 .results.contentArea li{
     padding: 33px 10px 33px 33px;
-    background: url('/assets/images/tinyborder_entry.png') center top no-repeat;
+    background: url('../images/tinyborder_entry.png') center top no-repeat;
     font-size: 100%;
     list-style-type: none;
 }
@@ -1070,7 +1070,7 @@ div.share-buttons td {padding-right: 5px;}
 
 .feed_preview .loading span, .results .loading span, .entry .loading span {
   background-position: left;
-  background-image: url('/assets/images/loader-32.gif');
+  background-image: url('../images/loader-32.gif');
   background-repeat: no-repeat;
   background-size: 16px 16px;
   display: block;
@@ -1103,7 +1103,7 @@ div.share-buttons td {padding-right: 5px;}
 }
 ul.items{
     margin-top: -2px;
-    background: url('/assets/images/tinyborder_andshadow.png') center top repeat-x;
+    background: url('../images/tinyborder_andshadow.png') center top repeat-x;
 }
 
 time.item, .time {
@@ -1149,7 +1149,7 @@ time.item, .time {
     color: #cdb81f;
 }
 .contentArea.right h3 {
-    background: url('/assets/images/bg_sectionHeader.png') top right no-repeat;
+    background: url('../images/bg_sectionHeader.png') top right no-repeat;
     display: inline;
     height: 38px;
     padding: 11px 70px 6px 33px;
@@ -1171,7 +1171,7 @@ time.item, .time {
 }
 .viewMore{
     float: right;
-    background: url('/assets/images/more.png') right 3px no-repeat;
+    background: url('../images/more.png') right 3px no-repeat;
     padding-right: 45px;
     margin-top: 10px;
 }
@@ -1187,7 +1187,7 @@ time.item, .time {
 button.follow, button.following {display: none;}
 
 .followChanges{
-    background: #f5f6f3 url('/assets/images/tinyborder.png') bottom left repeat-x;
+    background: #f5f6f3 url('../images/tinyborder.png') bottom left repeat-x;
     padding: 16px 0 16px 10px;
     -webkit-box-shadow: inset -14px 0px 14px -7px #e2e3e0;
     -moz-box-shadow: inset -14px 0px 14px -7px #e2e3e0;
@@ -1248,7 +1248,7 @@ button.follow, button.following {display: none;}
 .quickSignup .spinner {
     height: 30px;
     display: none;
-    background-image: url('/assets/images/loader-32.gif');
+    background-image: url('../images/loader-32.gif');
     background-repeat: no-repeat;
     background-position: center center;
     background-size: 16px 16px;
@@ -1489,7 +1489,7 @@ button.follow, button.following {display: none;}
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     padding: 16px 33px 16px 16px;
-    background: url('/assets/images/tinyborder_andshadow.png') top left repeat-x;
+    background: url('../images/tinyborder_andshadow.png') top left repeat-x;
     column-break-inside: avoid;
     -moz-column-break-inside: avoid;
     -webkit-column-break-inside: avoid;
@@ -1631,13 +1631,13 @@ h3.interestHeader, .add.rss{
     margin-top: 0;
 }
 .rss.feed{
-    background: url('/assets/images/rss.png') left top no-repeat;
+    background: url('../images/rss.png') left top no-repeat;
     text-indent: -9999em;
     width: 22px;
     height: 22px;
 }
 .rss.feed:hover{
-    background: url('/assets/images/rss.png') left bottom no-repeat;
+    background: url('../images/rss.png') left bottom no-repeat;
     text-indent: -9999em;
 }
 
@@ -1718,13 +1718,13 @@ button.disabled span {
 div.indicators span.okay{
     width: 25px;
     height: 16px;
-    background: url('/assets/images/icon_check.png') top center no-repeat;
+    background: url('../images/icon_check.png') top center no-repeat;
     margin-top: 4px;
 }
 div.indicators span.spinning{
     width: 25px;
     height: 16px;
-    background: url('/assets/images/loader-32.gif') top center no-repeat;
+    background: url('../images/loader-32.gif') top center no-repeat;
     background-size: 16px 16px;
     margin-top: 4px;
 }
@@ -1732,7 +1732,7 @@ div.indicators span.spinning{
 div.indicators span.failed{
     width: 16px;
     height: 16px;
-    background: url('/assets/images/icon_error.png') top center no-repeat;
+    background: url('../images/icon_error.png') top center no-repeat;
     margin-top: 4px;
 }
 
@@ -1835,7 +1835,7 @@ div.indicators span {
 }
 .feed_preview ul.items li{
     list-style-type: none;
-    background: url('/assets/images/tinyborder_andshadow.png') top left repeat-x;
+    background: url('../images/tinyborder_andshadow.png') top left repeat-x;
     padding: 16px 33px 8px 33px;
     width: 90%;
 }
@@ -1874,7 +1874,7 @@ div.indicators span {
     background: none;
 }
 .settings.contentArea .module .username.highlight label{
-    background: #E5E6E3 url('/assets/images/bg_currentCat.png') 5px center no-repeat;
+    background: #E5E6E3 url('../images/bg_currentCat.png') 5px center no-repeat;
     padding-top: 4px;
     padding-bottom: 4px;
     padding-left: 16px;
@@ -1902,7 +1902,7 @@ div.indicators span {
 }
 
 .settings.contentArea .module.userSettings {
-    background: url('/assets/images/tinyborder_andshadow_vertical.png') right top repeat-y;
+    background: url('../images/tinyborder_andshadow_vertical.png') right top repeat-y;
 }
 .settings.contentArea .module.notifications, .settings.contentArea .module.userSettings{
     padding-left: 10px;
@@ -1970,7 +1970,7 @@ div.indicators span {
 }
 
 .settings.contentArea .module{
-    background: url('/assets/images/tinyborder.png') center bottom repeat-x;
+    background: url('../images/tinyborder.png') center bottom repeat-x;
     padding: 0;
     width: 50%;
     float: left;
@@ -1979,7 +1979,7 @@ div.indicators span {
     box-sizing: border-box;
 }
 .settings.contentArea .module.donate{
-    background: url('/assets/images/splash.png') -170px -130px no-repeat;
+    background: url('../images/splash.png') -170px -130px no-repeat;
     padding-left: 10px;
     padding-right: 10px;
     clear: both;
@@ -2087,7 +2087,7 @@ div.indicators span {
 
 
 .collectionHeader{
-    background: #F5F6F3 url('/assets/images/tinyborder.png') bottom left repeat-x;
+    background: #F5F6F3 url('../images/tinyborder.png') bottom left repeat-x;
     padding: 16px 0 16px 10px;
     -webkit-box-shadow: inset -14px 0px 14px -7px #E2E3E0;
     -moz-box-shadow: inset -14px 0px 14px -7px #e2e3e0;
@@ -2113,7 +2113,7 @@ div.indicators span {
 .collection button.feed.rss span {
 	width: 22px;
 	height: 22px;
-	background: url('/assets/images/btn_rss.png') center center no-repeat;
+	background: url('../images/btn_rss.png') center center no-repeat;
 	display: block;
 	border: 1px solid rgb(108, 113, 114);
 	border-bottom: 0;
@@ -2122,13 +2122,13 @@ div.indicators span {
 }
 .collection a.rss{
     margin-top: 13px;
-    background: url('/assets/images/icon_rss_large.png') center top no-repeat;
+    background: url('../images/icon_rss_large.png') center top no-repeat;
     width: 30px;
     height: 30px;
     margin-right: 3px;
 }
 .collection a.rss:hover{
-    background: url('/assets/images/icon_rss_large.png') center bottom no-repeat;
+    background: url('../images/icon_rss_large.png') center bottom no-repeat;
 }
 .collection div.edit {
     display: none;

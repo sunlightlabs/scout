@@ -219,8 +219,7 @@ module Subscriptions
         item_for bill.to_hash
       end
 
-      # internal
-
+      # @private
       def self.item_for(bill)
         # manually parse all of the dates - so lame, not sure why HTTParty is so bad at the format OpenStates uses
 

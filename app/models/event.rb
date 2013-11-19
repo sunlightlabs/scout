@@ -1,3 +1,5 @@
+# An event for administrators to review, e.g. a subcriber clicks a link in an
+# email, a subscriber unsubscribes, etc.
 class Event
   include Mongoid::Document
   include Mongoid::Timestamps

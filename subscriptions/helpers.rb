@@ -5,6 +5,7 @@ module Helpers
       "#{bill_type type} #{number}"
     end
 
+    # XXX unused
     def bill_fields_from(bill_id)
       type = bill_id.gsub /[^a-z]/, ''
       number = bill_id.match(/[a-z]+(\d+)-/)[1].to_i
@@ -17,6 +18,7 @@ module Helpers
     end
 
     # standardized in accordance with http://www.gpo.gov/help/index.html#about_congressional_bills.htm
+    # @private
     def bill_type(short)
       {
         "hr" => "H.R.",
@@ -30,6 +32,7 @@ module Helpers
       }[short]
     end
 
+    # XXX only used by federal_bills views
     def bill_sponsor(bill)
       if sponsor = bill['sponsor']
         first = sponsor['nickname'].present? ? sponsor['nickname'] : sponsor['first_name']
@@ -40,14 +43,17 @@ module Helpers
       end
     end
 
+    # XXX only used by regulations views
     def regulation_title(regulation)
       regulation['title'].present? ? regulation['title'] : "(No published title yet)"
     end
 
+    # XXX only used by regulations views
     def agency_names(regulation)
       regulation['agency_names'].uniq.join ", "
     end
 
+    # @private
     def preferred_field(item, priorities)
       highlighting = item.data['search']['highlight']
       valid_keys = priorities.keys & highlighting.keys
@@ -77,6 +83,7 @@ module Helpers
       end
     end
 
+    # XXX only used by regulations views
     def regulation_highlight(item, interest, options = {})
       keywords = keywords_from interest
 
@@ -93,6 +100,7 @@ module Helpers
       end
     end
 
+    # XXX only used by documents views
     def document_highlight(item, interest, options = {})
       keywords = keywords_from interest
 
@@ -120,6 +128,7 @@ module Helpers
       excerpt || title
     end
 
+    # XXX only used by speeches views
     def speech_excerpt(speech, interest, options = {})
       keywords = keywords_from interest
       text = speech['speaking'].join("\n\n")
@@ -129,6 +138,7 @@ module Helpers
 
 
     # can be given one or more terms to match
+    # @private
     def excerpt_pattern(keywords)
       keywords = [keywords] unless keywords.is_a?(Array)
       patterns = keywords.map do |keyword|
@@ -142,6 +152,7 @@ module Helpers
       /(#{patterns.join "|"})/i
     end
 
+    # @private
     def keywords_from(interest)
       if interest.query['advanced']
         keywords = []
@@ -161,6 +172,7 @@ module Helpers
     end
 
     # client-side truncation and highlighting
+    # @private
     def excerpt(text, keywords, options = {})
       options[:highlight] = true unless options.has_key?(:highlight)
 
@@ -259,7 +271,7 @@ module Helpers
     #   end
     # end
 
-
+    # @private
     def bill_priorities
       {
         "summary" => 1,
@@ -268,6 +280,7 @@ module Helpers
       }
     end
 
+    # @private
     def regulation_priorities
       {
         'abstract' => 1,
@@ -275,6 +288,7 @@ module Helpers
       }
     end
 
+    # @private
     def document_priorities
       {
         "description" => 1,
@@ -284,6 +298,7 @@ module Helpers
     end
 
     # adapted from http://www.gpo.gov/help/index.html#about_congressional_bills.htm
+    # XXX only used by federal_bills views
     def bill_version(code)
       {
         'ash' => "Additional Sponsors House",
@@ -353,6 +368,7 @@ module Helpers
       }[code]
     end
 
+    # XXX only used by federal_bills views
     def bill_text_url(bill, version)
       if version and version['urls']
         version['urls']['xml'] || version['urls']['pdf']
@@ -367,34 +383,41 @@ module Helpers
       @state_map ||= ::Subscriptions::Adapters::StateBills.state_map
     end
 
+    # XXX unused
     def state_version_info?(bill)
       bill['versions'] and bill['versions'].any?
     end
 
+    # XXX unused
     def state_source_info?(bill)
       bill['sources'] and bill['sources'].any?
     end
 
+    # XXX only used by speeches views
     def speaker_name(speech)
       party = speech['speaker_party']
       state = speech['speaker_state']
       "#{speaker_name_only speech} (#{party}-#{state})"
     end
 
+    # XXX unused
     def speaker_party(party)
       ::Subscriptions::Adapters::Speeches.party_map[party]
     end
 
+    # @private
     def speaker_name_only(speech)
       title = (speech['chamber'] == 'Senate') ? 'Sen' : 'Rep'
       "#{title}. #{speech['speaker_first']} #{speech['speaker_last']}"
     end
 
+    # XXX unused
     def legislator_name(legislator)
       titled_name = "#{legislator['title']}. #{(legislator['nickname'].to_s != "") ? legislator['nickname'] : legislator['first_name']} #{legislator['last_name']}"
       "#{titled_name} [#{legislator['party']}-#{legislator['state']}]"
     end
 
+    # XXX unused
     def bill_summary(bill)
       return nil unless bill['summary'].present?
 
@@ -414,12 +437,14 @@ module Helpers
       truncate_more_html "bill_summary", summary, 500, post_truncate
     end
 
+    # XXX only used by state_bills views
     def state_bill_title_reasonable?(bill)
       return false unless bill['+short_title'].present? or bill['title'].present?
       title = state_bill_title_text bill
       title.size <= 100
     end
 
+    # XXX only used by state_bills views
     def state_bill_title_text(bill)
       if bill['+short_title'].present?
         bill['+short_title'].dup
@@ -437,12 +462,14 @@ module Helpers
       truncate_more_html "state_bill_title", title, 500
     end
 
+    # XXX unused
     def regulation_abstract(regulation)
       return nil unless regulation['abstract'].present? # also checked in view
 
       simple_format regulation['abstract']
     end
 
+    # XXX only used by speeches views
     def speech_speaking(speech)
       speaking = speech['speaking'].join("\n\n")
       simple_format speaking
@@ -452,6 +479,7 @@ module Helpers
     ## Documents
 
     # description, or doc-type-specific one, for use in listings/emails
+    # XXX only used by documents views
     def document_description(document)
       if document['description'].present?
         document['description']
@@ -469,6 +497,7 @@ module Helpers
     end
 
     # type-specific description, for use in listing subheaders
+    # XXX only used by documents views
     def document_subtitle(document)
       case document['document_type']
       when 'gao_report'
@@ -482,6 +511,7 @@ module Helpers
     end
 
     # GAO report description, ready for rendering on show page
+    # XXX only used by documents views
     def gao_description(document)
       return nil unless description = document['gao_report']['description'] # shouldn't happen
 
@@ -496,14 +526,17 @@ module Helpers
       description
     end
 
+    # XXX unused
     def legislator_image(legislator)
       "http://assets.sunlightfoundation.com/moc/40x50/#{legislator['bioguide_id']}.jpg"
     end
 
+    # XXX unused
     def speaker_url(speech)
       "http://capitolwords.org/legislator/#{speech['bioguide_id']}"
     end
 
+    # XXX only used by regulations views
     def regulation_type(regulation)
       if regulation['article_type'].nil? or (regulation['article_type'] == "regulation")
         {
@@ -519,6 +552,7 @@ module Helpers
       ::Subscriptions::Adapters::StateBills.openstates_url bill
     end
 
+    # XXX only used by state_legislators views
     def openstates_legislator_url(legislator)
       state = legislator['state'].downcase
       id = legislator['id']
@@ -526,10 +560,12 @@ module Helpers
       "http://openstates.org/#{state}/legislators/#{id}/"
     end
 
+    # XXX only used by state_bills_votes views
     def state_vote_count(vote)
       "#{vote['passed'] ? "Passed" : "Not Passed"}, #{vote['yes_count']}-#{vote['no_count']}-#{vote['other_count']}"
     end
 
+    # XXX only used by state_bills_votes views
     def state_vote_type(vote)
       type = ""
       if vote['committee'] or vote['motion'] =~ /committee/i
@@ -538,6 +574,7 @@ module Helpers
       "#{type}#{vote['type'].capitalize}"
     end
 
+    # XXX only used by federal_bills_hearings views
     def hearing_url(hearing)
       if hearing['chamber'] == 'senate'
         "http://www.senate.gov/pagelayout/committees/b_three_sections_with_teasers/committee_hearings.htm"
@@ -546,6 +583,7 @@ module Helpers
       end
     end
 
+    # XXX only used by federal_bills_votes views
     def vote_breakdown(vote)
       numbers = []
       total = vote['breakdown']['total']
@@ -558,6 +596,7 @@ module Helpers
       numbers.join " - "
     end
 
+    # XXX only used by federal_bills_votes views
     def vote_url(vote)
       if vote['chamber'] == "house"
         "http://clerk.house.gov/evs/#{vote['year']}/roll#{vote['number']}.xml"
@@ -568,6 +607,7 @@ module Helpers
     end
 
     # date, possibly a range, for upcoming bill schedulings
+    # XXX only used by federal_bills_upcoming_floor views
     def upcoming_date(upcoming)
       if upcoming['legislative_day']
         date = just_date_no_year(upcoming['legislative_day'])
