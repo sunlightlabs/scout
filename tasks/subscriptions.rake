@@ -1,7 +1,11 @@
+subscription_types = Dir.glob('subscriptions/adapters/*.rb').map do |file|
+  File.basename file, File.extname(file)
+end
+
 namespace :subscriptions do
 
   # don't run this from the command line - modify for individual tasks
-  task :generate => :environment do
+  task generate: :environment do
     item_type = ENV['item_type']
     subscription_type = ENV['subscription_type']
 
@@ -21,7 +25,7 @@ namespace :subscriptions do
   end
 
   desc "Try to initialize any uninitialized subscriptions"
-  task :reinitialize => :environment do
+  task reinitialize: :environment do
     errors = []
     successes = []
     count = 0
