@@ -1,3 +1,38 @@
+# An interest, e.g. "intellectual property". 
+#
+# ## "search" interests
+#
+# Alice searches for an interest of hers, "intellectual property", filters for
+# "Bills in Congress," and signs up for notifications. This creates a "search"
+# interest. The interest is *in* "intellectual property". It also creates a
+# single subscription, whose adapter is the `federal_bills` adapter. Alice will
+# receive notifications about new items related to her interest from the data
+# source for that adapter, Sunlight's Congress API.
+#
+# If Alice did not filter for "Bills in Congress", Scout creates a subscription
+# for each adapter that is a "search-type" adapter (currently hardcoded).
+#
+# ## "item" interests
+#
+# Alice navigates to the page of a single item, e.g. a bill, and signs up for
+# notifications. This creates an "item" interest. The interest is *in* the item.
+# It also creates subscriptions to adapters for things related to the item, like
+# votes, notices of upcoming hearings, etc. Alice will receive notifications
+# about new items related to the item from the data sources for those adapters.
+#
+# ## "feed" interests
+#
+# Alice imports an RSS feed into Scout. This creates a "feed" interest. The
+# interest is *in* the feed. It also creates a single subscription, whose
+# adapter is the `feed` adapter. Alice will receive notifications about new
+# items in the feed. (In other words, this is RSS-to-Email.)
+#
+# ## "tag" interests
+#
+# These interests have no subscriptions and are specially handled. See the
+# `Delivery` class for more discussion.
+#
+# Read `Interest#subscriptions_for` for more understanding.
 class Interest
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -7,40 +42,57 @@ class Interest
   has_many :seen_items, dependent: :destroy
   has_many :deliveries, dependent: :destroy
 
-  # a search string, item ID, or other normalized ID
+  # @return [String] what the user is interested in, which varies according to
+  #   the value of `interest_type`:
+  #   * "feed": a feed URL
+  #   * "item": the item's `item_id`
+  #   * "search": search terms
+  #   * "tag": the tag's ID
   field :in
 
-  # normalized query useful for de-duping - only needed for search interests whose
-  # query strings can go through post-processing
+  # @return [String] normalized search terms, useful for deduping
+  # @note Only set if the interest is in search terms.
   field :in_normal
 
-  # 'search', or 'item'
+  # @return [String] one of "feed", "item", "search" or "tag"
   field :interest_type
 
-  # if interest_type is "search", can be "all" or the subscription_type in question
+  # @return [String] either "all" or a subscription adapter's lowercase
+  #   underscored name
+  # @note Only relevant if the interest is in search terms.
   field :search_type
-  # if interest_type is "search", can be "simple" or "advanced"
+  # @return [String] either "simple" or "advanced"
+  # @note Only relevant if the interest is in search terms.
   field :query_type
 
-  # if interest_type is "item", the item type (e.g. 'bill')
+  # @return [String] the item's type, e.g. "bill"
+  # @note Only relevant if the interest is in an item.
+  # @note There is a list of item types in `subscriptions/subscriptions.yml`
   field :item_type
 
-  # arbitrary metadata
-  #   search query - search filters
-  #     (e.g. "stage" => "passed_house")
-  #   item - metadata about the related item
-  #     (e.g. "chamber" => "house", "state" => "NY", "bill_id" => "hr2134-112")
+  # @return [Hash] arbitrary metadata, which varies depending according to the
+  #   value of `interest_type`:
+  #   * "feed": the feed's URL, title, description, etc.
+  #   * "item": a copy of the item's metadata, e.g. "bill_id" => "hr2134-112"
+  #   * "search": filters, e.g. "stage" => "passed_house"
+  #   * "tag": nothing
   field :data, type: Hash, default: {}
 
   # query metadata, not persisted.
   # citations, operators extracted from the query,
   # and the revised query string after post-processing.
+  # @return a query
   def query; @query ||= query!; @query; end
 
-  # tags the user has set on this interest
+  # @return [Array<String>] a list of user-set tags for this interest
   field :tags, type: Array, default: []
 
-  # per-interest override of notification mechanism
+  # @return [String] the interest's notification settings, which override the
+  #   user's global notification settings:
+  #   * "email_immediate": the user will receive notifications immediately
+  #   * "email_daily" the user will receive notifications daily
+  #   * "sms": the user will receive both an SMS and email immediately
+  #   * "none": the user will not receive notifications
   field :notifications
   validates_inclusion_of :notifications, :in => ["none", "email_daily", "email_immediate", "sms"], :allow_blank => true
 
@@ -58,12 +110,14 @@ class Interest
   scope :for_time, ->(start, ending) {where(created_at: {"$gt" => Time.zone.parse(start).midnight, "$lt" => Time.zone.parse(ending).midnight})}
 
   before_destroy :record_unsubscribe
+  # @private
   def record_unsubscribe
     Event.remove_alert! self
   end
 
   # when a search interest is saved, flash a normalized version of the query for use in de-duping
   before_save :normalize_query, :if => :search?
+  # @private
   def normalize_query
     self.in_normal = Search.normalize self.query
   end
@@ -72,18 +126,22 @@ class Interest
     Subscription.adapter_for(item_types[self.item_type]['adapter']).title_for self.data
   end
 
+  # @return [Boolean] whether the interest is in an item
   def item?
     interest_type == "item"
   end
 
+  # @return [Boolean] whether the interest is in a feed
   def feed?
     interest_type == "feed"
   end
 
+  # @return [Boolean] whether the interest is in search terms
   def search?
     interest_type == "search"
   end
 
+  # @return [Boolean] whether the interest is in a collection
   def tag?
     interest_type == "tag"
   end
@@ -110,6 +168,7 @@ class Interest
     @tag_user ||= tag.user
   end
 
+  # XXX unused
   def tags_display
     self.tags.join ", "
   end
@@ -189,6 +248,7 @@ class Interest
   # run processing on the interest to extract additional data useful for display and logic
   # does not need to be stored with the interest, or used for de-duping, but helpful
   # idempotent, clears itself, can be run over and over
+  # @private
   def query!
     query = {}
 
@@ -207,6 +267,7 @@ class Interest
   # does the user have an interest with this criteria, and this data hash?
   # optional: a 'populate' hash for attributes to be set on new records,
   #           but which should not be used to constrain lookup of existing records
+  # @private
   def self.for(user, criteria, data = nil)
 
     # if no data given, then we don't care whether the data differs,
@@ -374,11 +435,13 @@ class Interest
   # split up before and after create because the subscriptions_for method
   # (currently) will just look up existing subscriptions if the interest has an id
   before_create :ensure_subscriptions
+  # @private
   def ensure_subscriptions
     self.subscriptions = Interest.subscriptions_for self
   end
 
   after_create :create_subscriptions
+  # @private
   def create_subscriptions(init = true)
     self.subscriptions.each do |subscription|
       subscription.save!

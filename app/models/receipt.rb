@@ -1,19 +1,31 @@
-# transaction log of delivered emails
-
+# A statement acknowledging the successful sending of a notification to a
+# subscriber. The notification may be, for example, an email message about new
+# items related to an interest of the subscriber.
 class Receipt
   include Mongoid::Document
   include Mongoid::Timestamps
 
+  # @return [Array<Hash>] a list of the attributes of the deliveries made in
+  #   this transaction (each delivery is about a single item)
   field :deliveries, :type => Array
 
+  # @return [String] the user's ID
   field :user_id
+  # @return [String] the user's email address, if delivered via email
   field :user_email
+  # XXX unused
   field :user_delivery
+  # @return [String] the service that generated the user, if not Scout itself,
+  #   e.g. "open_states"
   field :user_service
+  # @return [String] either "sms" or "email"
   field :mechanism
 
+  # @return [String] the email's "Subject" header
   field :subject
+  # @return [String] the content of the notification
   field :content
+  # @return [Time] the time at which the notification was sent
   field :delivered_at, :type => Time
 
   index delivered_at: 1
