@@ -3,10 +3,10 @@
   <channel>
     <title>Scout - Activity for <%= interest_name interest %></title>
     <link><%= Environment.config['hostname'] %></link>
-    <description><%= Environment.config['rss']['description'] %></description>
+    <description><%= Environment.config['organization']['rss_description'] %></description>
     <language>en-us</language>
     <atom:link href="<%= url %>" rel="self" type="application/rss+xml" />
-    
+
     <%= partial "rss/items", engine: :erb, locals: {items: items, interest: interest} %>
   </channel>
 </rss>
