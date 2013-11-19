@@ -503,8 +503,7 @@ module Helpers
       when 'gao_report'
         document['document_type_name']
       when 'ig_report'
-        inspector = ::Subscriptions::Adapters::Documents.inspector_name document['ig_report']['inspector']
-        "#{document['document_type_name']} &mdash; #{inspector}"
+        "#{document['document_type_name']} &mdash; #{document['ig_report']['agency_name']}"
       else
         nil
       end

@@ -11,6 +11,7 @@ module Subscriptions
         url source_url
         gao_report.gao_id gao_report.description
         ig_report.inspector ig_report.type ig_report.file_type
+        ig_report.agency ig_report.agency_name ig_report.inspector_url
       }
 
       def self.filters
@@ -178,13 +179,6 @@ module Subscriptions
           date: document["posted_at"],
           data: document
         )
-      end
-
-      # mapping for IG report agency handles to names
-      def self.inspector_name(inspector)
-        {
-          usps: "US Postal Service"
-        }[inspector.to_sym]
       end
 
     end
