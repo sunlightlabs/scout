@@ -2,4 +2,5 @@
 
 # service_name:
 #   name: Open States
-#   secret_key: 
+#   url: http://openstates.org
+#   secret_key:

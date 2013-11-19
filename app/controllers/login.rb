@@ -19,8 +19,8 @@ post '/login' do
   if (user = User.where(email: login).first || User.by_phone(login)) and User.authenticate(user, params[:password])
     if user.service.present?
       Event.blocked_email! login, user.service
-      flash.now[:login] = "This email is registered through a separate service. To use Scout, register an account under a separate email address."
-      erb :"account/login"
+
+      erb :"account/login", locals: {blocked: user.service}
     elsif !user.confirmed?
       flash.now[:login] = "Your account has not been confirmed."
       erb :"account/login"

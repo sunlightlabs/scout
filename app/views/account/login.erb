@@ -1,5 +1,9 @@
 <%= flash_for [:login, :user, :forgot] %>
 
+<% if defined?(blocked) and blocked.present? %>
+  <%= partial "account/blocked", engine: :erb, locals: {service: blocked} %>
+<% end %>
+
 <div class="settings login contentArea full">
 
 
