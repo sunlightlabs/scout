@@ -7,232 +7,235 @@
 <!--[if (gt IE 9)|!(IE)]><!-->
 <html lang="en"> <!--<![endif]-->
 <head>
+
+  <% if chartbeat? %>
     <script>var _sf_startpt=(new Date()).getTime();</script>
+  <% end %>
 
-    <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="shortcut icon" href="/favicon.ico">
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="google-site-verification" content="<%= Environment.config['layout']['google_site_verification'] %>" />
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="google-site-verification" content="<%= Environment.config['layout']['google_site_verification'] %>" />
 
-    <meta property="og:image" content="<%= asset_path "/images/icon.png" %>" />
+  <meta property="og:image" content="<%= asset_path "/images/icon.png" %>" />
 
-    <% if content_for?(:title) %>
-      <title><%= yield_content :title %></title>
-      <meta property="og:title" content="<%= escape_javascript yield_content(:title) %>" />
-    <% else %>
-      <title>Scout</title>
-      <meta property="og:title" content="Scout" />
-    <% end %>
+  <% if content_for?(:title) %>
+    <title><%= yield_content :title %></title>
+    <meta property="og:title" content="<%= escape_javascript yield_content(:title) %>" />
+  <% else %>
+    <title>Scout</title>
+    <meta property="og:title" content="Scout" />
+  <% end %>
 
-    <% if content_for?(:description) %>
-      <meta property="og:description" content="<%= escape_javascript yield_content(:description) %>" />
-    <% else %>
-      <meta property="og:description" content="Live government activity and alerts, by the <%= Environment.config['organization']['name'] %>." />
-    <% end %>
+  <% if content_for?(:description) %>
+    <meta property="og:description" content="<%= escape_javascript yield_content(:description) %>" />
+  <% else %>
+    <meta property="og:description" content="Live government activity and alerts, by the <%= Environment.config['organization']['name'] %>." />
+  <% end %>
 
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:site" content="<%= Environment.config['layout']['twitter_site'] %>" />
-    <meta name="twitter:site:id" content="<%= Environment.config['layout']['twitter_site_id'] %>" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="<%= Environment.config['layout']['twitter_site'] %>" />
+  <meta name="twitter:site:id" content="<%= Environment.config['layout']['twitter_site_id'] %>" />
 
-    <!-- my CSS, plus any page-specific CSS -->
+  <!-- my CSS, plus any page-specific CSS -->
 
-    <!-- qtip CSS first, so it can be overwritten easily -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/qtip2/2.1.1/jquery.qtip.min.css" />
+  <!-- qtip CSS first, so it can be overwritten easily -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/qtip2/2.1.1/jquery.qtip.min.css" />
 
-    <link rel="stylesheet" href="<%= asset_path "/css/html5-reset.css" %>" />
-    <link rel="stylesheet" href="<%= asset_path "/css/main.css?#{Time.now.to_i}" %>" />
+  <link rel="stylesheet" href="<%= asset_path "/css/html5-reset.css" %>" />
+  <link rel="stylesheet" href="<%= asset_path "/css/main.css?#{Time.now.to_i}" %>" />
 
-    <%= yield_content :head %>
+  <%= yield_content :head %>
 
-    <script src="<%= asset_path "/js/jquery-2.0.3.min.js" %>"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qtip2/2.1.1/jquery.qtip.min.js"></script>
+  <script src="<%= asset_path "/js/jquery-2.0.3.min.js" %>"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qtip2/2.1.1/jquery.qtip.min.js"></script>
 </head>
 <body>
 
-    <div class="headerWrapper">
-      <div class="hatWrap">
-        <div class="contentWrapper">
-          <a class="productOf" href="<%= Environment.config['organization']['url'] %>">
-            a product of <%= Environment.config['organization']['name'] %>
-          </a>
-        </div>
+  <div class="headerWrapper">
+    <div class="hatWrap">
+      <div class="contentWrapper">
+        <a class="productOf" href="<%= Environment.config['organization']['url'] %>">
+          a product of <%= Environment.config['organization']['name'] %>
+        </a>
       </div>
+    </div>
 
-      <% if content_for?(:home) %>
-        <div class="homeWrapper">
-      <% else %>
-        <!-- not home -->
-      <% end %>
+    <% if content_for?(:home) %>
+      <div class="homeWrapper">
+    <% else %>
+      <!-- not home -->
+    <% end %>
 
-      <header class="contentWrapper">
-        <nav>
-          <ul id="userNav">
-            <% if logged_in? %>
-              <li class="user">
-                <%= user_contact current_user %>
-              </li>
-              <li class="subscriptions">
-                <a href="/account/subscriptions">
-                  Manage Alerts
-                </a>
-              </li>
-              <li class="settings">
-                <a href="/account/settings">Settings</a>
-              </li>
-              <li class="feedback">
-                <a href="mailto:<%= Environment.config['organization']['contact'] %>" class="feedback">Contact</a>
-              </li>
-              <li>
-                <a href="/logout" class="logout">Log Out</a>
-              </li>
-            <% else %>
-              <li class="feedback">
-                <a href="mailto:<%= Environment.config['organization']['contact'] %>" class="feedback">Contact</a>
-              </li>
-              <li>
-                <a href="/login" class="login">Login or Sign up</a>
-              </li>
-            <% end %>
-          </ul>
-          <% if logged_in? and !current_user.confirmed? %>
-            <div class="should_change_password clear">
-              <span>Your account is unconfirmed.</span> Use the confirmation link in your email, or <a href="/account/confirm/resend">have us resend it</a>.
-            </div>
-          <% elsif logged_in? and current_user.should_change_password? %>
-            <% paths = ["/account/settings", "/account/welcome"] %>
-            <% unless paths.any? {|path| request.path =~ /^#{path}/} %>
-              <div class="should_change_password clear">
-                You should <a href="/account/settings">change your password</a>.
-              </div>
-            <% end %>
+    <header class="contentWrapper">
+      <nav>
+        <ul id="userNav">
+          <% if logged_in? %>
+            <li class="user">
+              <%= user_contact current_user %>
+            </li>
+            <li class="subscriptions">
+              <a href="/account/subscriptions">
+                Manage Alerts
+              </a>
+            </li>
+            <li class="settings">
+              <a href="/account/settings">Settings</a>
+            </li>
+            <li class="feedback">
+              <a href="mailto:<%= Environment.config['organization']['contact'] %>" class="feedback">Contact</a>
+            </li>
+            <li>
+              <a href="/logout" class="logout">Log Out</a>
+            </li>
+          <% else %>
+            <li class="feedback">
+              <a href="mailto:<%= Environment.config['organization']['contact'] %>" class="feedback">Contact</a>
+            </li>
+            <li>
+              <a href="/login" class="login">Login or Sign up</a>
+            </li>
           <% end %>
-        </nav>
+        </ul>
+        <% if logged_in? and !current_user.confirmed? %>
+          <div class="should_change_password clear">
+            <span>Your account is unconfirmed.</span> Use the confirmation link in your email, or <a href="/account/confirm/resend">have us resend it</a>.
+          </div>
+        <% elsif logged_in? and current_user.should_change_password? %>
+          <% paths = ["/account/settings", "/account/welcome"] %>
+          <% unless paths.any? {|path| request.path =~ /^#{path}/} %>
+            <div class="should_change_password clear">
+              You should <a href="/account/settings">change your password</a>.
+            </div>
+          <% end %>
+        <% end %>
+      </nav>
 
-        <div class="clear"></div>
+      <div class="clear"></div>
 
-        <a href="/">
-          <h1 class="textIndent">Scout</h1>
-        </a>
+      <a href="/">
+        <h1 class="textIndent">Scout</h1>
+      </a>
 
-        <%= partial "search/search", :engine => "erb", :locals => {} %>
+      <%= partial "search/search", :engine => "erb", :locals => {} %>
 
-        <div class="clear"></div>
-      </header>
+      <div class="clear"></div>
+    </header>
 
-      <% if content_for?(:home) %>
+    <% if content_for?(:home) %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="fauxBody">
+    <div class="contentWrapper" id="content">
+      <% if content_for?(:sidebar_left) %>
+        <div class="sidebar left">
+          <%= yield_content :sidebar_left %>
+        </div>
+      <% end %>
+
+      <div id="center">
+        <%= yield %>
+      </div>
+
+      <% if content_for?(:sidebar_right) %>
+        <div class="sidebar right">
+          <%= yield_content :sidebar_right %>
         </div>
       <% end %>
     </div>
+  </div>
 
-    <div class="fauxBody">
-      <div class="contentWrapper" id="content">
-        <% if content_for?(:sidebar_left) %>
-          <div class="sidebar left">
-            <%= yield_content :sidebar_left %>
-          </div>
-        <% end %>
+  <div class="footerWrapper">
+    <footer class="contentWrapper">
+      <a href="<%= Environment.config['organization']['url'] %>" class="organization textIndent">
+        <%= Environment.config['organization']['name'] %>
+      </a>
 
-        <div id="center">
-          <%= yield %>
-        </div>
-
-        <% if content_for?(:sidebar_right) %>
-          <div class="sidebar right">
-            <%= yield_content :sidebar_right %>
-          </div>
-        <% end %>
+      <div class="aboutSF">
+        <p>
+          <%= Environment.config['organization']['description'] %>
+        </p>
+        <p>
+          Visit <a href="<%= Environment.config['organization']['url'] %>"><%= Environment.config['organization']['domain'] %></a> to learn more.
+        </p>
       </div>
-    </div>
 
-    <div class="footerWrapper">
-      <footer class="contentWrapper">
-        <a href="<%= Environment.config['organization']['url'] %>" class="organization textIndent">
-          <%= Environment.config['organization']['name'] %>
-        </a>
+      <nav>
+      <ul>
+        <li><a href="/collections">Scout Collections</a></li>
+        <li><a href="/about">About</a></li>
+      </ul>
+      </nav>
 
-        <div class="aboutSF">
-          <p>
-            <%= Environment.config['organization']['description'] %>
-          </p>
-          <p>
-            Visit <a href="<%= Environment.config['organization']['url'] %>"><%= Environment.config['organization']['domain'] %></a> to learn more.
-          </p>
-        </div>
+      <div class="clear"></div>
+    </footer>
+  </div>
 
-        <nav>
-        <ul>
-          <li><a href="/collections">Scout Collections</a></li>
-          <li><a href="/about">About</a></li>
-        </ul>
-        </nav>
-
-        <div class="clear"></div>
-      </footer>
-    </div>
-
-    <!-- lots of javascript... -->
+  <!-- lots of javascript... -->
 
 <% if Environment.config['layout']['google_analytics_property_id'] %>
-    <script type="text/javascript">
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', '<%= Environment.config['layout']['google_analytics_property_id'] %>']);
-      _gaq.push(['_trackPageview']);
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', '<%= Environment.config['layout']['google_analytics_property_id'] %>']);
+    _gaq.push(['_trackPageview']);
 
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-    </script>
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
 <% end %>
 
-<% if Environment.config['layout']['chartbeat_uid'] && Environment.config['layout']['chartbeat_domain'] %>
-    <script type="text/javascript">
-    var _sf_async_config={uid:<%= Environment.config['layout']['chartbeat_uid'] %>,domain:"<%= Environment.config['layout']['chartbeat_domain'] %>"};
-    (function(){
-      function loadChartbeat() {
-        window._sf_endpt=(new Date()).getTime();
-        var e = document.createElement('script');
-        e.setAttribute('language', 'javascript');
-        e.setAttribute('type', 'text/javascript');
-        e.setAttribute('src',
-           (("https:" == document.location.protocol) ? "https://a248.e.akamai.net/chartbeat.download.akamai.com/102508/" : "http://static.chartbeat.com/") +
-           "js/chartbeat.js");
-        document.body.appendChild(e);
-      }
-      var oldonload = window.onload;
-      window.onload = (typeof window.onload != 'function') ? loadChartbeat : function() { oldonload(); loadChartbeat(); };
-    })();
-    </script>
+<% if chartbeat? %>
+  <script type="text/javascript">
+  var _sf_async_config={uid:<%= Environment.config['layout']['chartbeat_uid'] %>,domain:"<%= Environment.config['layout']['chartbeat_domain'] %>"};
+  (function(){
+    function loadChartbeat() {
+      window._sf_endpt=(new Date()).getTime();
+      var e = document.createElement('script');
+      e.setAttribute('language', 'javascript');
+      e.setAttribute('type', 'text/javascript');
+      e.setAttribute('src',
+         (("https:" == document.location.protocol) ? "https://a248.e.akamai.net/chartbeat.download.akamai.com/102508/" : "http://static.chartbeat.com/") +
+         "js/chartbeat.js");
+      document.body.appendChild(e);
+    }
+    var oldonload = window.onload;
+    window.onload = (typeof window.onload != 'function') ? loadChartbeat : function() { oldonload(); loadChartbeat(); };
+  })();
+  </script>
 <% end %>
 
 <% if Environment.config['layout']['typekit_id'] %>
-    <!-- typekit -->
-    <script type="text/javascript">
-      (function() {
-        var config = {
-          kitId: '<%= Environment.config['layout']['typekit_id'] %>',
-          scriptTimeout: 3000
-        };
-        var h=document.getElementsByTagName("html")[0];h.className+=" wf-loading";var t=setTimeout(function(){h.className=h.className.replace(/(\s|^)wf-loading(\s|$)/g," ");h.className+=" wf-inactive"},config.scriptTimeout);var tk=document.createElement("script"),d=false;tk.src='//use.typekit.net/'+config.kitId+'.js';tk.type="text/javascript";tk.async="true";tk.onload=tk.onreadystatechange=function(){var a=this.readyState;if(d||a&&a!="complete"&&a!="loaded")return;d=true;clearTimeout(t);try{Typekit.load(config)}catch(b){}};var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(tk,s)
-      })();
-    </script>
+  <!-- typekit -->
+  <script type="text/javascript">
+    (function() {
+      var config = {
+        kitId: '<%= Environment.config['layout']['typekit_id'] %>',
+        scriptTimeout: 3000
+      };
+      var h=document.getElementsByTagName("html")[0];h.className+=" wf-loading";var t=setTimeout(function(){h.className=h.className.replace(/(\s|^)wf-loading(\s|$)/g," ");h.className+=" wf-inactive"},config.scriptTimeout);var tk=document.createElement("script"),d=false;tk.src='//use.typekit.net/'+config.kitId+'.js';tk.type="text/javascript";tk.async="true";tk.onload=tk.onreadystatechange=function(){var a=this.readyState;if(d||a&&a!="complete"&&a!="loaded")return;d=true;clearTimeout(t);try{Typekit.load(config)}catch(b){}};var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(tk,s)
+    })();
+  </script>
 <% end %>
 
-    <!--[if lt IE 9]>
-    <script src="<%= asset_path "/js/html5.js" %>"></script>
-    <script src="https://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
-    <![endif]-->
+  <!--[if lt IE 9]>
+  <script src="<%= asset_path "/js/html5.js" %>"></script>
+  <script src="https://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
+  <![endif]-->
 
 
-    <script src="<%= asset_path "/js/jquery.pjax.js" %>"></script>
-    <script src="<%= asset_path "/js/h5f.min.js" %>"></script>
-    <script src="<%= asset_path "/js/main.js?#{Time.now.to_i}" %>"></script>
+  <script src="<%= asset_path "/js/jquery.pjax.js" %>"></script>
+  <script src="<%= asset_path "/js/h5f.min.js" %>"></script>
+  <script src="<%= asset_path "/js/main.js?#{Time.now.to_i}" %>"></script>
 
-    <script type="text/javascript" src="https://s3.amazonaws.com/assets.sunlightfoundation.com/social/scripts/simple-socialite-pack.min.js.gz" ></script>
+  <script type="text/javascript" src="https://s3.amazonaws.com/assets.sunlightfoundation.com/social/scripts/simple-socialite-pack.min.js.gz" ></script>
 
-    <%= yield_content :foot %>
+  <%= yield_content :foot %>
 
 </body>
 </html>

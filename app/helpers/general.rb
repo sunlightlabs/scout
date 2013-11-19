@@ -8,6 +8,10 @@ module Helpers
       Environment.asset_path path
     end
 
+    def chartbeat?
+      Environment.config['layout']['chartbeat_uid'].present? and Environment.config['layout']['chartbeat_domain'].present?
+    end
+
     def user_url(url)
       if url !~ /^https?:\/\//
         "http://#{url}"
