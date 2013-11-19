@@ -134,7 +134,7 @@ module Helpers
       patterns = keywords.map do |keyword|
         keyword = keyword.gsub '"', ''
         keyword = Regexp.escape(keyword)
-        keyword = keyword.gsub ' ', '[\s\-]'
+        keyword = keyword.gsub '\\ ', '[\s\-]'
 
         keyword
       end
