@@ -16,7 +16,10 @@
 
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <meta name="google-site-verification" content="<%= Environment.config['layout']['google_site_verification'] %>" />
+
+  <% if Environment.config['layout']['google_site_verification'].present? %>
+    <meta name="google-site-verification" content="<%= Environment.config['layout']['google_site_verification'] %>" />
+  <% end %>
 
   <meta property="og:image" content="<%= asset_path "/images/icon.png" %>" />
 
