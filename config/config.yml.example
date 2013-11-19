@@ -44,7 +44,7 @@ subscriptions:
   sunlight_api_key:
 
 # The application's hostname, e.g. to generate full URLs in email messages.
-# hostname: "https://scout.sunlightfoundation.com"
+# e.g. Sunlight's production URL is "https://scout.sunlightfoundation.com"
 hostname: "http://localhost:8080"
 
 # Your secret key for verifying the integrity of signed cookies. If you change
