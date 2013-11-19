@@ -37,9 +37,11 @@
     <meta property="og:description" content="Live government activity and alerts, by the <%= Environment.config['organization']['name'] %>." />
   <% end %>
 
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:site" content="<%= Environment.config['layout']['twitter_site'] %>" />
-  <meta name="twitter:site:id" content="<%= Environment.config['layout']['twitter_site_id'] %>" />
+  <% if Environment.config['layout']['twitter_site'].present? %>
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="<%= Environment.config['layout']['twitter_site'] %>" />
+    <meta name="twitter:site:id" content="<%= Environment.config['layout']['twitter_site_id'] %>" />
+  <% end %>
 
   <!-- my CSS, plus any page-specific CSS -->
 
