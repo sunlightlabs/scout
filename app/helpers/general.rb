@@ -147,7 +147,7 @@ module Helpers
     def truncate(string, length)
       string ||= ""
       if string.size > length
-        string[0...length] + "…"
+        string[0...(length-1)] + "…"
       else
         string
       end
