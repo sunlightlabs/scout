@@ -225,6 +225,11 @@ module Helpers
       string.to_s.gsub "\"", "&quot;"
     end
 
+    # escape meta attributes, like for og tags
+    def escape_attribute(string)
+      string ? string.gsub("\"", "&quot;") : nil
+    end
+
     def js_escape(string)
       URI.decode(string.to_s).gsub "\"", "\\\""
     end
