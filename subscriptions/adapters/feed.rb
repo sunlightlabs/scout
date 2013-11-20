@@ -126,10 +126,29 @@ module Subscriptions
       # strip out unsafe HTML, leave only links
       def self.sanitize(string)
         return nil unless string
-        Sanitize.clean(string, elements: ['a'],
+        result = Sanitize.clean(string, elements: ['a'],
           attributes: {'a' => ['href', 'title']},
           protocols: {'a' => {'href' => ['http', 'https', 'mailto']}}
         )
+      end
+
+      # sent in a sanitized, truncated string, which could conceivably have
+      # <a> tags cut off mid-html. parse, remove aborted <a>'s,
+      # and re-serialize.
+      def self.clean_truncated(html)
+        doc = Nokogiri::HTML html
+
+        # Nokogiri creates a body, sometimes a p
+        inner = doc.at("body")
+        inner = inner.at("p") if inner.at("p")
+
+        last_link = (inner / :a).last
+        if last_link.inner_text.blank?
+          last_link.remove
+          inner.inner_html + "…"
+        else
+          inner.inner_html
+        end
       end
 
     end

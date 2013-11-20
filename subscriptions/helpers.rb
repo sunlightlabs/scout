@@ -1,6 +1,21 @@
 module Helpers
   module Subscriptions
 
+    # I can't believe I'm defining this a third time, I need to bring order to this helper morass
+    def truncate(string, length)
+      string ||= ""
+      if string.size > length
+        string[0...(length-1)] + "…"
+      else
+        string
+      end
+    end
+
+    def truncate_feed(html, length)
+      truncated_html = truncate html, length
+      ::Subscriptions::Adapters::Feed.clean_truncated truncated_html
+    end
+
     def bill_code(type, number)
       "#{bill_type type} #{number}"
     end
