@@ -32,7 +32,7 @@
   <% end %>
 
   <% if content_for?(:description) %>
-    <meta property="og:description" content="<%= escape_javascript yield_content(:description) %>" />
+    <meta property="og:description" content="<%= escape_attribute yield_content(:description) %>" />
   <% else %>
     <meta property="og:description" content="Live government activity and alerts, by the <%= Environment.config['organization']['name'] %>." />
   <% end %>
