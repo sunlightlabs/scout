@@ -214,7 +214,7 @@ module Subscriptions
             return nil
 
           else
-            body = download url
+            body = download url, adapter
             response = ::Oj.load body, mode: :compat
 
             # wait for JSON parse, so as not to cache errors
@@ -295,7 +295,7 @@ module Subscriptions
           elsif options[:cache_only]
             return nil
           else
-            body = download url
+            body = download url, adapter
             response = ::Oj.load body, mode: :compat
 
             # wait for JSON parse, so as not to cache errors
@@ -387,7 +387,7 @@ module Subscriptions
       puts "\n[#{subscription_type}][sync][#{options[:page]}] #{url}\n\n" if !test? and Environment.config['debug']['output_urls']
 
       items = begin
-        body = download url
+        body = download url, adapter
         response = ::Oj.load body, mode: :compat
         adapter.items_for response, :sync, options
       rescue Curl::Err::ConnectionFailedError, Curl::Err::PartialFileError,
@@ -458,10 +458,15 @@ module Subscriptions
     end
 
     # download content at the given URL
-    def self.download(url)
+    def self.download(url, adapter = nil)
       curl = Curl::Easy.new url
 
       curl.headers["User-Agent"] = "Scout (scout.sunlightfoundation.com) / curl"
+
+      # provide adapter an optional chance to modify Curl request
+      if adapter and adapter.respond_to?(:http)
+        curl = adapter.http curl
+      end
 
       curl.perform
       if curl.status.start_with?("2")

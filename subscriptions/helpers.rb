@@ -143,6 +143,13 @@ module Helpers
       excerpt || title
     end
 
+    def opinion_highlight(item, interest, options = {})
+      opinion = item.data
+      keywords = keywords_from interest
+      text = opinion['snippet']
+      excerpt text, keywords, options
+    end
+
     # XXX only used by speeches views
     def speech_excerpt(speech, interest, options = {})
       keywords = keywords_from interest
@@ -150,7 +157,6 @@ module Helpers
       excerpt = excerpt text, keywords, options
       excerpt || truncate(text, 500)
     end
-
 
     # can be given one or more terms to match
     # @private

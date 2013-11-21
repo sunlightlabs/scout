@@ -176,7 +176,7 @@ end
 
 # hardcoded for now
 def search_types
-  ["federal_bills", "speeches", "state_bills", "regulations", "documents"]
+  ["federal_bills", "speeches", "state_bills", "regulations", "documents", "court_opinions"]
 end
 
 # cache the constantized stuff (this is dumb, this all needs to be refactored)

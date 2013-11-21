@@ -1,0 +1,21 @@
+<% opinion = item.data %>
+
+<a href="<%= item_path item %>">
+  <h4>
+    <%= opinion['case_name'] %>
+  </h4>
+</a>
+
+<div class="subtitle">
+  <span class="code">
+    <%= opinion['court'] %>
+  </span>
+</div>
+
+<p>
+  <% if highlight = opinion_highlight(item, interest) %>
+    <%= highlight %>
+  <% else %>
+    No excerpt available.
+  <% end %>
+</p>

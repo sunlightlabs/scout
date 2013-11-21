@@ -145,11 +145,11 @@ module Subscriptions
       end
 
       def self.search_name(subscription)
-        "Reports"
+        "Oversight Reports"
       end
 
       def self.item_name(subscription)
-        "Report"
+        "Oversight Report"
       end
 
       def self.short_name(number, interest)

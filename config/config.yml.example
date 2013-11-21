@@ -42,6 +42,10 @@ subscriptions:
   # If you are using the Sunlight Foundation's subscription adapters, get a
   # Sunlight API key at http://sunlightfoundation.com/api/accounts/register/
   sunlight_api_key:
+  # If you are using the CourtListener adapter for court opinions,
+  # register for an account at https://www.courtlistener.com
+  courtlistener_username:
+  courtlistener_password:
 
 # The application's hostname, e.g. to generate full URLs in email messages.
 # e.g. Sunlight's production URL is "https://scout.sunlightfoundation.com"
