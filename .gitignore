@@ -8,6 +8,7 @@
 /.bundle
 /public/sitemap
 /public/assets/*/*.gz
+/public/assets/*/*/*.gz
 
 /public/system
 
