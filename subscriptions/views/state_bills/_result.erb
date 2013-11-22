@@ -7,9 +7,9 @@
 
 <div class="subtitle">
   <span class="state"><%= state_name bill['state'] %></span>
-  &mdash;
-  <strong>
-    <% if bill['action_dates'] %>
+  <% if bill['action_dates'] %>
+    &mdash;
+    <strong>
       <% if bill['action_dates']['signed'] %>
         Signed
       <% elsif bill['action_dates']['passed_lower'] and bill['action_dates']['passed_upper'] %>
@@ -21,8 +21,8 @@
       <% else %>
         Introduced
       <% end %>
-    <% end %>
-  </strong>
+    </strong>
+  <% end %>
 </div>
 
 <p>
