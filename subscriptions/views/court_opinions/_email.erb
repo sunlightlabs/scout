@@ -1,0 +1,17 @@
+<% opinion = item.data %>
+
+<%= email_header opinion['case_name'], url %>
+
+<%= email_subheader_div %>
+  <span class="code">
+    <%= opinion['court'] %>
+  </span>
+</div>
+
+<%= email_content_p %>
+  <% if highlight = opinion_highlight(item, interest) %>
+    <%= highlight %>
+  <% else %>
+    No excerpt available.
+  <% end %>
+</div>

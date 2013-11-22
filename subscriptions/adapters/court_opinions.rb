@@ -30,6 +30,7 @@ module Subscriptions
         curl
       end
 
+      # no filters for the time being
       def self.filters
         {
 
@@ -60,6 +61,9 @@ module Subscriptions
           url << "&filed_after=2009-01-01"
         end
 
+        # default is dateFiled desc, but make it explicit
+        url << "&order_by=dateFiled+desc"
+
         if options[:page]
           offset = (options[:page].to_i - 1) * 20
           url << "&offset=#{offset}"
@@ -69,9 +73,17 @@ module Subscriptions
       end
 
       def self.url_for_detail(item_id, options = {})
-        ""
+        endpoint = "https://www.courtlistener.com/api/rest/v1"
+
+        url = endpoint
+        url << "/search"
+        url << "/#{item_id}/"
+        url << "?format=json"
+
+        url
       end
 
+      # not synced to a sitemap at this time
       def self.url_for_sync(options = {})
         ""
       end

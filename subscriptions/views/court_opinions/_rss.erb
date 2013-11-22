@@ -1,0 +1,15 @@
+<% opinion = item.data %>
+<title>
+  <h4>
+    <%= opinion['case_name'] %>
+  </h4>
+</title>
+<% if highlight = opinion_highlight(item, interest) %>
+    <description><![CDATA[
+      <%= opinion['court'] %> &mdash; <%= highlight %>
+    ]]></description>
+<% else %>
+  <description>
+    No excerpt available.
+  </description>
+<% end %>
