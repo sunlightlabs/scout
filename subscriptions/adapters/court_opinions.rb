@@ -36,9 +36,9 @@ module Subscriptions
         query = subscription.query['query']
 
         # if it's background checking, filter to just the last month for speed
-        # if function == :check
-        #   url << "&last_version_on__gte=#{1.month.ago.strftime "%Y-%m-%d"}"
-        # end
+        if function == :check
+          url << "&filed_after=#{1.month.ago.strftime "%Y-%m-%d"}"
+        end
 
         if options[:page]
           offset = (options[:page].to_i - 1) * 20
