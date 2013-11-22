@@ -69,6 +69,8 @@
 # documents - varies by source
 30 11,15,19 * * *     /projects/scout/current/config/cron/production/check.sh documents rate_limit=0
 
+# court opinions - we've established a 4:30am EST checking time
+30 9 * * * /projects/scout/current/config/cron/production/check.sh court_opinions rate_limit=0
 
 # item-specific subscriptions
 
