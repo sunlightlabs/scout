@@ -6,8 +6,20 @@ module Subscriptions
       # if the adapter supports sync, this must be supplied
       MAX_PER_PAGE = 20
 
-      FIELDS = %w{
+      # currently unused, but CL API does support partial responses
+      FIELDS = %w{}
 
+      # using:
+      #   Federal Appellate, Federal Special, Committee
+      # not using:
+      #   Federal District, State Appellate, State Supreme
+      #   Federal Bankruptcy, Federal Bankruptcy Panel
+      COURTS = %w{
+        scotus
+        ca1 ca2 ca3 ca4 ca5 ca6 ca7 ca8 ca9 ca10 ca11 cadc cafc
+        armfor cc uscfc com ccpa cusc tax mc cavc
+        eca tecoa fiscr reglrailreorgct cit
+        usjc jpml stp
       }
 
       # this adapter needs to inject http basic auth details into the Curl request
@@ -39,9 +51,13 @@ module Subscriptions
           url << "&q=#{CGI.escape query}"
         end
 
+        url << "&court=#{COURTS.join ','}"
+
         # if it's background checking, filter to just the last month for speed
         if function == :check
           url << "&filed_after=#{1.month.ago.strftime "%Y-%m-%d"}"
+        else
+          url << "&filed_after=2009-01-01"
         end
 
         if options[:page]
