@@ -145,9 +145,10 @@ module Helpers
 
     def opinion_highlight(item, interest, options = {})
       opinion = item.data
-      keywords = keywords_from interest
-      text = opinion['snippet']
-      excerpt text, keywords, options
+      # keywords = keywords_from interest
+      # text = opinion['snippet']
+      # excerpt text, keywords, options
+      opinion['snippet']
     end
 
     # XXX only used by speeches views

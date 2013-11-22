@@ -219,7 +219,7 @@ small, .small, ul.search_explain li {
     line-height: 1.6;
 
 }
-em{
+em, mark {
     font-weight: bold;
     font-style: italic;
 }
@@ -1153,9 +1153,14 @@ time.item, .time {
 .contentArea p{
     clear: both;
 }
-.contentArea em{
+
+/* reset mark */
+mark {background-color: inherit;}
+.contentArea em, .contentArea mark {
     color: #cdb81f;
 }
+
+
 .contentArea.right h3 {
     background: url('../images/bg_sectionHeader.png') top right no-repeat;
     display: inline;

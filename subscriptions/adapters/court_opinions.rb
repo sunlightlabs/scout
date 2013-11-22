@@ -35,6 +35,10 @@ module Subscriptions
 
         query = subscription.query['query']
 
+        if query.present? and !["*", "\"*\""].include?(query)
+          url << "&q=#{CGI.escape query}"
+        end
+
         # if it's background checking, filter to just the last month for speed
         if function == :check
           url << "&filed_after=#{1.month.ago.strftime "%Y-%m-%d"}"
