@@ -139,7 +139,7 @@ module Subscriptions
         doc = Nokogiri::HTML html
 
         # Nokogiri creates a body, sometimes a p
-        inner = doc.at("body")
+        inner = doc.at("body") || doc.root
         inner = inner.at("p") if inner.at("p")
 
         last_link = (inner / :a).last
