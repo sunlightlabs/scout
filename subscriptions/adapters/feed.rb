@@ -136,10 +136,12 @@ module Subscriptions
       # <a> tags cut off mid-html. parse, remove aborted <a>'s,
       # and re-serialize.
       def self.clean_truncated(html)
+        return nil unless html.present?
+
         doc = Nokogiri::HTML html
 
         # Nokogiri creates a body, sometimes a p
-        inner = doc.at("body")
+        inner = doc.at("body") || doc.root
         inner = inner.at("p") if inner.at("p")
 
         last_link = (inner / :a).last

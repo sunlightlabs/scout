@@ -7,20 +7,22 @@
 
 <div class="subtitle">
   <span class="state"><%= state_name bill['state'] %></span>
-  &mdash;
-  <strong>
-    <% if bill['action_dates']['signed'] %>
-      Signed
-    <% elsif bill['action_dates']['passed_lower'] and bill['action_dates']['passed_upper'] %>
-      Passed both chambers
-    <% elsif bill['action_dates']['passed_lower'] %>
-      Passed lower chamber
-    <% elsif bill['action_dates']['passed_upper'] %>
-      Passed upper chamber
-    <% else %>
-      Introduced
-    <% end %>
-  </strong>
+  <% if bill['action_dates'] %>
+    &mdash;
+    <strong>
+      <% if bill['action_dates']['signed'] %>
+        Signed
+      <% elsif bill['action_dates']['passed_lower'] and bill['action_dates']['passed_upper'] %>
+        Passed both chambers
+      <% elsif bill['action_dates']['passed_lower'] %>
+        Passed lower chamber
+      <% elsif bill['action_dates']['passed_upper'] %>
+        Passed upper chamber
+      <% else %>
+        Introduced
+      <% end %>
+    </strong>
+  <% end %>
 </div>
 
 <p>

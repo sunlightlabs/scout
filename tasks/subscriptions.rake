@@ -4,7 +4,14 @@ end
 
 namespace :subscriptions do
 
-  # don't run this from the command line - modify for individual tasks
+  # for use in adding new subscription types to people's existing alerts.
+  #
+  # possible uses:
+  #
+  # add court opinion subscriptions to all existing Everything search interests
+  #   rake subscriptions:generate subscription_type=court_opinions
+  # add federal bill hearing subscriptions to all existing federal bill item interests
+  #   rake subscriptions:generate subscription_type=federal_bills_hearings item_type=bill
   task generate: :environment do
     item_type = ENV['item_type']
     subscription_type = ENV['subscription_type']

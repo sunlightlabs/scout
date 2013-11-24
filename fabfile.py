@@ -12,6 +12,7 @@ target = env.get('target', 'staging')
 if target == "staging":
   env.hosts = ["alarms@dupont"]
   username = "alarms"
+#  branch = "courtlistener"
 elif target == "production":
   env.hosts = ["scout@scout"]
   username = "scout"
@@ -63,7 +64,7 @@ def disable_crontab():
   run("cd %s && rake crontab:disable" % current_path)
 
 def start():
-  run("cd %s && unicorn -D -l %s/%s.sock -c unicorn.rb" % (current_path, shared_path, username))
+  run("cd %s && bundle exec unicorn -D -l %s/%s.sock -c unicorn.rb" % (current_path, shared_path, username))
 
 def stop():
   run("kill `cat %s/unicorn.pid`" % shared_path)
