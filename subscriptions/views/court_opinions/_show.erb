@@ -1,0 +1,64 @@
+<% opinion = item.data %>
+
+<div class="summary">
+
+  <div class="entryHeader">
+    <h2>
+      <%= opinion['case_name'] %>
+    </h2>
+    <div class="subtitle">
+      Opinion from the
+      <%= opinion['court'] %>,
+      filed on
+      <time datetime="<%= html_date item.date %>">
+        <%= just_date_year item.date %>
+      </time>
+    </div>
+  </div>
+
+  <div class="clear"></div>
+
+  <div class="resources">
+    <h5>Resources</h5>
+    <ul>
+      <span>
+        Visit our data source,
+        <strong><a href="https://www.courtlistener.com<%= opinion['absolute_url'] %>">
+          CourtListener</a></strong>,
+        for much more information.
+      </span>
+    </ul>
+  </div>
+
+  <div id="document">
+    <header>
+      <strong>Full Opinion</strong>
+      <span>
+        Read the
+        <em><a href="<%= opinion['download_url'] %>" target="_blank">
+          original full opinion</a></em>
+        <% if opinion['download_url'].ends_with? 'pdf' %>
+          (PDF)
+        <% end %>
+        at the court's website.
+      </span>
+    </header>
+    <hr/>
+
+    <article>
+    </article>
+  </div>
+
+  <script type="text/javascript">
+    $(function() {
+      var url = "<%= escape_javascript opinion['download_url'] %>";
+
+      if (!window._ie) {
+        var elem = $("<iframe/>", {src: url})
+        elem.css("width", "100%");
+        elem.css("height", "800px");
+        elem.appendTo("article");
+      }
+    });
+  </script>
+</div>

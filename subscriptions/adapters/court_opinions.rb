@@ -6,8 +6,10 @@ module Subscriptions
       # if the adapter supports sync, this must be supplied
       MAX_PER_PAGE = 20
 
-      # currently unused, but CL API does support partial responses
-      FIELDS = %w{}
+      FIELDS = %w{
+        id absolute_url download_url
+        case_name case_number court court_id date_filed docket_number
+      }
 
       # using:
       #   Federal Appellate, Federal Special, Committee
@@ -45,6 +47,7 @@ module Subscriptions
         url = endpoint
         url << "/search/?"
         url << "&format=json"
+        url << "&fields=#{FIELDS.join ','}"
 
         query = subscription.query['query']
 
@@ -79,6 +82,7 @@ module Subscriptions
         url << "/search"
         url << "/#{item_id}/"
         url << "?format=json"
+        url << "&fields=#{FIELDS.join ','}"
 
         url
       end
@@ -122,10 +126,8 @@ module Subscriptions
         end
       end
 
-      # parse response when asking for a single opinion
       def self.item_detail_for(response)
-        # return nil unless response
-        # item_for response['results'][0]
+        item_for response
       end
 
       def self.item_for(opinion)
