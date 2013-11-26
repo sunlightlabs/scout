@@ -148,7 +148,7 @@ module Helpers
       # keywords = keywords_from interest
       # text = opinion['snippet']
       # excerpt text, keywords, options
-      opinion['snippet']
+      "…#{opinion['snippet'].strip}…"
     end
 
     # XXX only used by speeches views

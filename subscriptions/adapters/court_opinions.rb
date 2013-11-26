@@ -8,7 +8,7 @@ module Subscriptions
 
       FIELDS = %w{
         id absolute_url download_url
-        download_URL citation
+        download_URL citation snippet
         case_name case_number court court_id date_filed docket_number
       }
 
