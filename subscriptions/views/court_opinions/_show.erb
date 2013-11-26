@@ -30,35 +30,39 @@
     </ul>
   </div>
 
-  <div id="document">
-    <header>
-      <strong>Full Opinion</strong>
-      <span>
-        Read the
-        <em><a href="<%= opinion['download_url'] %>" target="_blank">
-          original full opinion</a></em>
-        <% if opinion['download_url'].ends_with? 'pdf' %>
-          (PDF)
-        <% end %>
-        at the court's website.
-      </span>
-    </header>
-    <hr/>
+  <% if opinion['download_url'] %>
+    <div id="document">
+      <header>
+        <strong>Full Opinion</strong>
+        <span>
+          Read the
+          <em><a href="<%= opinion['download_url'] %>" target="_blank">
+            original full opinion</a></em>
+          <% if opinion['download_url'].ends_with? 'pdf' %>
+            (PDF)
+          <% end %>
+          at the court's website.
+        </span>
+      </header>
+      <hr/>
 
-    <article>
-    </article>
-  </div>
+      <article>
+      </article>
+    </div>
+  <% end %>
 
-  <script type="text/javascript">
-    $(function() {
-      var url = "<%= escape_javascript opinion['download_url'] %>";
+  <% if opinion['download_url'] and opinion['download_url'].ends_with? 'pdf' %>
+    <script type="text/javascript">
+      $(function() {
+        var url = "<%= escape_javascript opinion['download_url'] %>";
 
-      if (!window._ie) {
-        var elem = $("<iframe/>", {src: url})
-        elem.css("width", "100%");
-        elem.css("height", "800px");
-        elem.appendTo("article");
-      }
-    });
-  </script>
+        if (!window._ie) {
+          var elem = $("<iframe/>", {src: url})
+          elem.css("width", "100%");
+          elem.css("height", "800px");
+          elem.appendTo("article");
+        }
+      });
+    </script>
+  <% end %>
 </div>

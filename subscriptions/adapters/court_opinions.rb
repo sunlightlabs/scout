@@ -8,6 +8,7 @@ module Subscriptions
 
       FIELDS = %w{
         id absolute_url download_url
+        download_URL citation
         case_name case_number court court_id date_filed docket_number
       }
 
@@ -78,7 +79,11 @@ module Subscriptions
       def self.url_for_detail(item_id, options = {})
         endpoint = "https://www.courtlistener.com/api/rest/v1"
 
+        # goes to /opinion endpoint, not /search as expressed in resource_uri
+        # todo: can switch to /opinion when court name is available
+        #       (and preferably when other inconsistencies worked out)
         url = endpoint
+        # url << "/opinion"
         url << "/search"
         url << "/#{item_id}/"
         url << "?format=json"
@@ -134,6 +139,15 @@ module Subscriptions
         return nil unless opinion
 
         date = Time.zone.parse opinion['date_filed']
+
+        # account for differences between /search and /opinion
+        if opinion['download_URL']
+          opinion['download_url'] = opinion['download_URL']
+        end
+
+        if opinion['citation'] and opinion['citation']['case_name']
+          opinion['case_name'] = opinion['citation']['case_name']
+        end
 
         SeenItem.new(
           item_id: opinion["id"],
