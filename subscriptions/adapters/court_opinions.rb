@@ -41,8 +41,6 @@ module Subscriptions
       end
 
       def self.url_for(subscription, function, options = {})
-        # api_key = options[:api_key] || Environment.config['subscriptions']['sunlight_api_key']
-
         endpoint = "https://www.courtlistener.com/api/rest/v1"
 
         url = endpoint

@@ -51,7 +51,9 @@
     </div>
   <% end %>
 
-  <% if opinion['download_url'] and opinion['download_url'].ends_with? 'pdf' %>
+  <%# if opinion['download_url'] and opinion['download_url'].ends_with? 'pdf' %>
+  <%# sigh, not for now, need to do pdf.js for all before this can work %>
+  <% false %>
     <script type="text/javascript">
       $(function() {
         var url = "<%= escape_javascript opinion['download_url'] %>";
