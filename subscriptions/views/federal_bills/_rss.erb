@@ -1,15 +1,27 @@
 <% bill = item.data %>
-<title><%= bill['short_title'].present? ? bill['short_title'] : bill['official_title'] %></title>
-<% if highlight = bill_highlight(item, interest) %>
-    <description><![CDATA[
+<% version = bill['version'] %>
+<title>
+  <%= bill['short_title'].present? ? bill['short_title'] : bill['official_title'] %>
+</title>
+<description><![CDATA[
+  <p>
+    <strong>
+      <%= bill_code bill['bill_type'], bill['number'] %>
+    </strong>
+    &mdash;
+    <% if version %>
+      <%= bill_version version['version_code'] %>
+    <% else %>
+      Introduced
+    <% end %>
+  </p>
+  <p>
+    <% if highlight = bill_highlight(item, interest) %>
       <%= highlight %>
-    ]]></description>
-<% elsif bill['summary'].present? %>
-  <description><![CDATA[
-    <%= truncate bill['summary'], 500 %>
-    ]]></description>
-<% else %>
-  <description>
-    No excerpt or summary available.
-  </description>
-<% end %>
+    <% elsif bill['summary'].present? %>
+      <%= truncate bill['summary'], 500 %>
+    <% else %>
+      No excerpt or summary available.
+    <% end %>
+  </p>
+]]></description>

@@ -6,7 +6,12 @@
 </title>
 <% if highlight = opinion_highlight(item, interest) %>
   <description><![CDATA[
-    <%= opinion['court'] %> &mdash; <%= highlight %>
+    <p>
+      <strong>Court opinion</strong> from the <%= opinion['court'] %>
+    </p>
+    <p>
+      <%= highlight %>
+    </p>
   ]]></description>
 <% else %>
   <description>

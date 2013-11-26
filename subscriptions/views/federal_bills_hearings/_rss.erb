@@ -1,7 +1,11 @@
 <% hearing = item.data %>
 <title>
-  <%= interest_name item.interest %> - Hearing in the <%= hearing['committee']['name'] %>
+  <%= interest_name item.interest %>
 </title>
 <description><![CDATA[
+  <strong>
+    Hearing in the <%= hearing['committee']['name'] %>
+  </strong>
+  &mdash;
   <%= hearing['description'] %>
 ]]></description>

@@ -1,7 +1,11 @@
 <% vote = item.data %>
 <title>
-  <%= interest_name item.interest %> - Vote in the <%= vote['chamber'].capitalize %>
+  <%= interest_name item.interest %>
 </title>
 <description><![CDATA[
-     <%= vote['roll_type'] %>: <%= vote['result'] %>, <%= vote_breakdown vote %>
+  <strong>
+    <%= vote['chamber'].capitalize %> Vote
+  </strong>
+  &mdash;
+  <%= vote['roll_type'] %>: <%= vote['result'] %>, <%= vote_breakdown vote %>
 ]]></description>

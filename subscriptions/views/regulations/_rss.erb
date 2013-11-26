@@ -9,7 +9,9 @@
       &mdash;
     <% end %>
 
-    <%= regulation_type regulation %>
+    <strong>
+      <%= regulation_type regulation %>
+    </strong>
 
     <% if regulation['agency_names'].select(&:present?).any? %>
       &mdash;

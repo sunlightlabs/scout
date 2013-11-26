@@ -1,11 +1,14 @@
 <% speech = item.data %>
 <title>
-  <% if speech['bioguide_id'] %>
-    <%= just_date item.date %> - <%= speaker_name speech %>
-  <% else %>
-    <%= just_date item.date %>
-  <% end %>
+  <%= speech['title'] %>
 </title>
 <description><![CDATA[
-  "<%= speech_excerpt speech, interest %>"
+  <p>
+    <strong>Speech in Congress</strong>
+    by
+    <%= speaker_name speech %>
+  </p>
+  <p>
+    "<%= speech_excerpt speech, interest %>"
+  </p>
 ]]></description>
