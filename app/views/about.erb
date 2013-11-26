@@ -38,25 +38,12 @@
       Scout was developed by Sunlight Labs and data comes from a variety of sources.
     </p>
 
-    <h3>Bills in Congress</h3>
-
-    <%= partial "subscriptions/federal_bills/data", engine: :erb %>
-
-    <h3>Speeches in Congress</h3>
-
-    <%= partial "subscriptions/speeches/data", engine: :erb %>
-
-    <h3>State Bills</h3>
-
-    <%= partial "subscriptions/state_bills/data", engine: :erb %>
-
-    <h3>Federal Regulations</h3>
-
-    <%= partial "subscriptions/regulations/data", engine: :erb %>
-
-    <h3>GAO Reports</h3>
-
-    <%= partial "subscriptions/documents/data", engine: :erb %>
+    <% search_types.each do |subscription_type| %>
+      <h3>
+        <%= Subscription.adapter_for(subscription_type).search_name nil %>
+      </h3>
+      <%= partial "subscriptions/#{subscription_type}/data", engine: :erb %>
+    <% end %>
 
   </div>
   <div class="module">
