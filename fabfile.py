@@ -12,7 +12,6 @@ target = env.get('target', 'staging')
 if target == "staging":
   env.hosts = ["alarms@dupont"]
   username = "alarms"
-#  branch = "courtlistener"
 elif target == "production":
   env.hosts = ["scout@scout"]
   username = "scout"
