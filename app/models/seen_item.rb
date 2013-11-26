@@ -44,6 +44,7 @@ class SeenItem
 
   index({subscription_id: 1, item_id: 1})
   index item_id: 1
+  index item_type: 1
   index subscription_type: 1
   index user_id: 1
   index seen_by_id: 1
