@@ -4,6 +4,10 @@ end
 
 namespace :subscriptions do
 
+  # TODO: "everything" searches for citation searches should not add
+  # subscription types that are not in the cite_types array in
+  # config/environment.rb
+
   # for use in adding new subscription types to people's existing alerts.
   #
   # possible uses:

@@ -50,7 +50,12 @@ module Subscriptions
 
         query = subscription.query['query']
 
-        if query.present? and !["*", "\"*\""].include?(query)
+        # if it's a citation query, use the display form as a query string
+        if subscription.query['citations'].any?
+          query = subscription.interest_in
+          return nil unless query.present?
+          url << "&q=#{CGI.escape query}"
+        elsif query.present? and !["*", "\"*\""].include?(query)
           url << "&q=#{CGI.escape query}"
         end
 
