@@ -68,6 +68,7 @@ module Subscriptions
         url << "&fields=#{FIELDS.join ','}"
 
         query = subscription.query['query']
+        query = deblacklist query
 
         # if it's a citation query, use the display form as a query string
         if subscription.query['citations'].any?
