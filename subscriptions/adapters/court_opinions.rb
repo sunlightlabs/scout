@@ -25,6 +25,25 @@ module Subscriptions
         usjc jpml stp
       }
 
+      # this is an awful thing, but while we wait for CourtListener to
+      # provide a flag to disable highlighting, or fix the underlying issue,
+      # we need to blacklist certain phrases that cause unavoidable 500's.
+      # Right now, the best solution I have is to "de-phrase" them (run them
+      # as separate terms, rather than a phrase).
+      BLACKLIST = [
+        "nuclear regulatory commission"
+      ]
+
+      def self.deblacklist(query)
+        BLACKLIST.each do |bad|
+          quoted = "\"#{bad}\""
+          if query.include?(quoted)
+            query.gsub! quoted, bad
+          end
+        end
+        query
+      end
+
       # this adapter needs to inject http basic auth details into the Curl request
       def self.http(curl)
         curl.http_auth_types = :basic
