@@ -36,11 +36,10 @@ module Subscriptions
 
       def self.deblacklist(query)
         BLACKLIST.each do |bad|
-          quoted = "\"#{bad}\""
-          if query.include?(quoted)
-            query.gsub! quoted, bad
-          end
+          quoted = /\"#{bad}\"/i
+          query.gsub! quoted, bad
         end
+
         query
       end
 
