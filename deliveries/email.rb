@@ -338,7 +338,7 @@ module Deliveries
       end
 
       def self.interest_title(name, interest_type)
-        if name.size > 100
+        if name.size > 50
           font_size = "150"
         else
           font_size = "200"
