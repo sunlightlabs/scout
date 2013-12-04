@@ -35,6 +35,8 @@ module Subscriptions
       ]
 
       def self.deblacklist(query)
+        return nil unless query
+
         BLACKLIST.each do |bad|
           quoted = /\"#{bad}\"/i
           query.gsub! quoted, bad
@@ -128,7 +130,7 @@ module Subscriptions
       end
 
       def self.short_name(number, interest)
-        number == 1 ? 'opinion' : 'opinions'
+        number == 1 ? 'court opinion' : 'court opinions'
       end
 
       def self.interest_name(interest)
