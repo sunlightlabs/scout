@@ -111,7 +111,7 @@ module Subscriptions
         url << "/search"
         url << "/#{item_id}/"
         url << "?format=json"
-        url << "&fields=#{FIELDS.join ','}"
+        url << "&fields=#{([FIELDS] + ["text"]).join ','}"
 
         url
       end

@@ -25,6 +25,7 @@
 .entry.bill #document article,
 .entry.speech #document article,
 .entry.document #document article,
+.entry.opinion #document article,
 .entry.regulation #document article.text {
   color: #111;
 }

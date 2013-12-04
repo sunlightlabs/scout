@@ -30,41 +30,25 @@
     </ul>
   </div>
 
-  <% if opinion['download_url'] %>
-    <div id="document">
-      <header>
-        <strong>Full Opinion</strong>
-        <span>
-          Read the
+  <div id="document">
+    <header>
+      <strong>Full Opinion</strong>
+      <span>
+        We do our best to display the opinion below.
+        <% if opinion['download_url'] %>
+          You can also read the
           <em><a href="<%= opinion['download_url'] %>" target="_blank">
-            original full opinion</a></em>
-          <% if opinion['download_url'].ends_with? 'pdf' %>
-            (PDF)
-          <% end %>
-          at the court's website.
-        </span>
-      </header>
-      <hr/>
+            original text</a></em>.
+        <% end %>
+      </span>
+    </header>
 
-      <article>
-      </article>
-    </div>
-  <% end %>
+    <hr/>
 
-  <%# if opinion['download_url'] and opinion['download_url'].ends_with? 'pdf' %>
-  <%# sigh, not for now, need to do pdf.js for all before this can work %>
-  <% if false %>
-    <script type="text/javascript">
-      $(function() {
-        var url = "<%= escape_javascript opinion['download_url'] %>";
-
-        if (!window._ie) {
-          var elem = $("<iframe/>", {src: url})
-          elem.css("width", "100%");
-          elem.css("height", "800px");
-          elem.appendTo("article");
-        }
-      });
-    </script>
-  <% end %>
+    <article>
+      <pre>
+        <%= opinion['text'] %>
+      </pre>
+    </article>
+  </div>
 </div>
