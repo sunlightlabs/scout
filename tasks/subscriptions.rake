@@ -107,7 +107,7 @@ namespace :subscriptions do
 
               if rate_limit > 0
                 sleep rate_limit
-                puts "sleeping for #{rate_limit}"
+                puts "sleeping for #{rate_limit}s"
               end
 
               if result.nil? or result.is_a?(Hash)
