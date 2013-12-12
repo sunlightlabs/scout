@@ -40,6 +40,8 @@ namespace :glossary do
         amendment
       }
 
+      rate_limit = ENV['rate_limit'].present? ? ENV['rate_limit'].to_f : 0.1
+
       index_url = "https://api.github.com/repos/unitedstates/glossary/contents/definitions/congress?ref=gh-pages"
       puts "Downloading #{index_url}\n\n"
       definitions = Oj.load Subscriptions::Manager.download(index_url)
@@ -54,6 +56,11 @@ namespace :glossary do
 
         next if blacklist.include? term
         leftover_terms.delete term
+
+        if rate_limit > 0
+          puts "sleeping for #{rate_limit}s"
+          sleep rate_limit
+        end
 
         puts "[#{term}] Creating."
         details = Oj.load Subscriptions::Manager.download(term_url)

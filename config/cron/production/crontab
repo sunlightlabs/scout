@@ -12,8 +12,8 @@
 
 ######## External data loading #########
 
-# reload glossary terms every 20 minutes
-*/20 * * * * /projects/scout/current/config/cron/production/rake.sh glossary:load
+# reload glossary terms every hour
+0 * * * * /projects/scout/current/config/cron/production/rake.sh glossary:load rate_limit=1
 
 # reload legislators once a day
 20 8 * * * /projects/scout/current/config/cron/production/rake.sh legislators:load
