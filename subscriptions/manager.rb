@@ -472,7 +472,11 @@ module Subscriptions
       if curl.status.start_with?("2")
         curl.body_str
       else
-        raise BadFetchException.new("Bad status code: #{curl.status} at URL: #{url}")
+        message = "Bad status code: #{curl.status} at URL: #{url}"
+        if curl.status =~ /(301|302)/
+          message << "\n\nRedirect URL: #{curl.redirect_url}"
+        end
+        raise BadFetchException.new message
       end
     end
 
