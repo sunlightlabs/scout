@@ -63,7 +63,8 @@ namespace :glossary do
         end
 
         puts "[#{term}] Creating."
-        details = Oj.load Subscriptions::Manager.download(term_url)
+        body = Subscriptions::Manager.download(term_url)
+        details = Oj.load body
 
         definition = Definition.find_or_initialize_by term: term
         definition.attributes = details
