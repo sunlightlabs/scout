@@ -71,14 +71,14 @@ module Subscriptions
 
       # catch any items which suddenly appear, dated in the past,
       # that weren't caught during initialization or prior polls
-
+      #
       # accumulate backfilled items to report per-subscription.
       # buffer of 30 days, to allow for information to make its way through whatever
       # pipelines it has to go through (could eventually configure this per-adapter)
-
+      #
       # Was 5 days, bumped it to 30 because of federal_bills. The LOC, CRS, and GPO all
       # move in waves, apparently, of unpredictable frequency.
-
+      #
       # disabled in test mode (for now, this is obviously not ideal)
 
       backfills = []
@@ -108,12 +108,7 @@ module Subscriptions
           mark_as_seen! item unless dry_run
 
           if !test? and (item.date < backfill_date)
-            # this is getting out of hand -
-            # don't deliver state bill backfills, but don't email me about them
-            # temporary until Open States allows sorting by last_action dates
-            # if subscription_type != "state_bills"
-              backfills << item.attributes
-            # end
+            backfills << item.attributes
           else
             unless dry_run
               # deliver one copy for the user whose interest found it
