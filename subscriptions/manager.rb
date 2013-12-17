@@ -88,6 +88,8 @@ module Subscriptions
         backfill_date = 30.days.ago
       end
 
+      # check for seeming courtlistener bugs
+      courtlistener_warnings = []
 
       # 1) does a poll
       # 2) stores any items as yet unseen by this subscription in seen_ids
@@ -109,6 +111,10 @@ module Subscriptions
 
           if !test? and (item.date < backfill_date)
             backfills << item.attributes
+
+          elsif (subscription.subscription_type == "court_opinions") and !Subscriptions::Adapters::CourtOpinions.double_check(item)
+            courtlistener_warnings << item.attributes
+
           else
             unless dry_run
               # deliver one copy for the user whose interest found it
@@ -126,6 +132,10 @@ module Subscriptions
 
       if backfills.any?
         Admin.report Report.warning("Check", "[#{subscription.subscription_type}][#{subscription.interest_in}] #{backfills.size} backfills not delivered, attached", :backfills => backfills)
+      end
+
+      if courtlistener_warnings.any?
+        Admin.report Report.warning("Check", "[#{subscription.subscription_type}][#{subscription.interest_in}] #{courtlistener_warnings.size} CL warnings not delivered, attached", courtlistener_warnings: courtlistener_warnings)
       end
 
       unless dry_run
