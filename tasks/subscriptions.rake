@@ -122,7 +122,7 @@ namespace :subscriptions do
           if errors.any? and (subscription_type != "feed")
             Admin.report Report.warning(
               "check:#{subscription_type}", "#{errors.size} errors while checking #{subscription_type}, will check again next time.",
-              errors: errors[0..2],
+              errors: errors[0..20]
             )
           end
 
