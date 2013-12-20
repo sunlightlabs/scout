@@ -167,7 +167,7 @@ module Subscriptions
 
         # normalize, downcase, remove puncutation
         query = query.downcase.gsub /[^\w]/, ''
-        mark = marks.first.downcase.gsub /[^\w]/, ''
+        mark = marks.first.first.downcase.gsub /[^\w]/, ''
 
         # if the first 3 letters of the first matched mark
         # is contained nowhere inside the original query, flag it
