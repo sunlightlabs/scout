@@ -109,11 +109,11 @@ module Subscriptions
 
           mark_as_seen! item unless dry_run
 
-          if !test? and (item.date < backfill_date)
-            backfills << item.attributes
-
-          elsif (subscription.subscription_type == "court_opinions") and !Subscriptions::Adapters::CourtOpinions.double_check(item)
+          if (subscription.subscription_type == "court_opinions") and !Subscriptions::Adapters::CourtOpinions.double_check(item)
             courtlistener_warnings << item.attributes
+
+          elsif !test? and (item.date < backfill_date)
+            backfills << item.attributes
 
           else
             unless dry_run

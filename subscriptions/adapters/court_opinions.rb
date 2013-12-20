@@ -165,7 +165,7 @@ module Subscriptions
         # don't bother with unprocessed citation stuff
         return true unless query = item.subscription.query['query']
 
-        # normalize, downcase, remove puncutation
+        # normalize, downcase, remove punctuation
         query = query.downcase.gsub /[^\w]/, ''
         mark = marks.first.first.downcase.gsub /[^\w]/, ''
 
