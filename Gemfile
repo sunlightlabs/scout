@@ -23,6 +23,10 @@ gem "unf"
 gem 'ruby-hmac'
 gem 'bcrypt-ruby'
 
+# detect gov't and educational email addresses
+gem 'gman'
+gem 'swot'
+
 gem 'postmark', '0.9.10'
 gem 'mail', '2.4.4'
 gem 'pony', '1.4'

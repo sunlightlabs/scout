@@ -1,5 +1,8 @@
 require 'bcrypt'
 
+require 'gman'
+require 'swot'
+
 # A subscriber.
 #
 # Scout can act as a white-label service for other services. For example,
@@ -50,6 +53,12 @@ class User
   # @return [String] the user's public email address
   field :contact_email
 
+  # @return [Boolean] whether the email comes from government
+  field :government, type: Boolean, default: false
+  # @return [Boolean] whether the email comes from education
+  field :education, type: Boolean, default: false
+
+
   # validates_format_of :url, with: URI::regexp(%w(http https)), message: "Not a valid URL.", allow_blank: true
 
   has_mongoid_attached_file :image,
@@ -93,6 +102,16 @@ class User
     end
   end
 
+  before_save :check_email_type
+  def check_email_type
+    return unless email.present?
+
+    self.government = Gman.valid? email
+    self.education = Swot::is_academic? email
+
+    true
+  end
+
   def contact
     if email.present?
       email
@@ -125,7 +144,6 @@ class User
   validates_confirmation_of :password, :message => "Your passwords did not match."
 
   before_save :encrypt_password
-
 
   def self.email_format
     /^[-a-z0-9_+\.]+\@([-a-z0-9]+\.)+[a-z0-9]{2,4}$/i
