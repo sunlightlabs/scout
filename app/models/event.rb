@@ -76,6 +76,7 @@ class Event
       unsubscribed = true
       if user
         user.notifications = "none"
+        user.confirmed = false
         user.save!
       end
     end
