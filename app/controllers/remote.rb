@@ -1,6 +1,6 @@
-# endpoint for syncing alerts with other services, 
+# endpoint for syncing alerts with other services,
 # for which Scout will serve as a whitelabeled alert system.
-# 
+#
 # Receive POSTs, with a secret key, with an array of active and inactive interests.
 #
 # If the service is invalid, 403.
@@ -10,7 +10,12 @@
 # add it to their account like anything else. The service syncing this to us
 # should understand that these new interests won't be whitelabeled. We whitelabel per-user,
 # not per-interest, at this time.
-# 
+#
+# But note: this means that users who unsubscribed with Scout can get their settings
+# reset, unless they or we communicate that back upstream to the provider we're whitelabeling for.
+# So, for users who we auto-unsubscribe because Postmark returns an error, we also set
+# their "confirmed" flag to false. This prevents users from being re-subscribed on sync.
+#
 # If the user account does not exist, create it:
 #   with the provided 'service' field
 #   with the provided 'notifications' field
@@ -30,14 +35,14 @@
 #   if it does exist, delete it *unless* it has an updated_at timestamp that is newer than the timestamp provided for that interest
 #
 # Check validity of each new interest, and only save/delete interests if
-# all new item interests successfully 'found' their referenced item. 
+# all new item interests successfully 'found' their referenced item.
 # If they did not, 500 without any changes to the user's account or interests.
 
 post "/remote/service/sync" do
-  # post body is JSON 
+  # post body is JSON
   request.body.rewind # in case someone already read it
   body = request.body.read
-  
+
   begin
     data = JSON.load body
   rescue JSON::ParserError => ex
@@ -64,7 +69,7 @@ post "/remote/service/sync" do
     user = User.new(
       email: data['email'],
       notifications: data['notifications'],
-      
+
       announcements: false,
       organization_announcements: false
     )
@@ -76,7 +81,7 @@ post "/remote/service/sync" do
     # set to a random password; for now we are not syncing passwords across services
     user.reset_password
     user.should_change_password = false # must come after the reset
-    
+
     unless user.valid?
       halt 403, "Invalid new user."
     end
@@ -129,7 +134,7 @@ post "/remote/service/sync" do
         else
           changed_at = Time.zone.parse(change['changed_at'])
         end
-        
+
         if changed_at > interest.updated_at
           to_remove << interest
         else
@@ -146,7 +151,7 @@ post "/remote/service/sync" do
 
     # always update the last time a user was synced
     user.synced_at = Time.now
-    
+
     # commit everything
     if user.new_record?
       user.save!
@@ -161,7 +166,7 @@ post "/remote/service/sync" do
 
     halt 201, {
       actions: {
-        added: to_add.size, 
+        added: to_add.size,
         removed: to_remove.size,
       },
 
@@ -184,8 +189,8 @@ end
 
 # endpoint for accepting subscriptions from Twilio for SMS subscribers
 # auto-signs up a user by phone number alone, adds subscription for a given bill
-# 
-# requirements: 
+#
+# requirements:
 #   phone: a phone number (should not have an account tied to it already)
 #   interest_type: "item"
 #   item_type: "bill"
@@ -241,7 +246,7 @@ post "/remote/subscribe/sms" do
     user.confirmed = false
     user.phone_confirmed = false
     user.source = source
-    
+
     # this password is made but never seen by the user, it will be re-reset on confirmation
     user.reset_password
 
@@ -280,7 +285,7 @@ end
 
 # Twilio SMS receiving endpoint, unfortunately needs to be one giant thing
 post "/remote/twilio/receive" do
-  
+
   body = params['Body'] ? params['Body'].strip.downcase : nil
   phone = params['From'] ? params['From'].strip : nil
   halt 500 unless body.present? and phone.present?
