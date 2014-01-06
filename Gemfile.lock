@@ -40,7 +40,7 @@ GEM
       climate_control (>= 0.0.3, < 1.0)
     curb (0.8.5)
     email_veracity (0.6.0)
-    escape_utils (0.3.2)
+    escape_utils (1.0.0)
     eventmachine (1.0.3)
     excon (0.27.6)
     factory_girl (4.2.0)
