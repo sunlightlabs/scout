@@ -161,12 +161,16 @@ put '/account/phone' do
     current_user.phone_confirmed = false
 
     current_user.new_phone_verify_code
-    current_user.save!
 
-    SMS.deliver! "Verification Code", current_user.phone, User.phone_verify_message(current_user.phone_verify_code)
+    if SMS.deliver!("Verification Code", current_user.phone, User.phone_verify_message(current_user.phone_verify_code))
+      current_user.save!
 
-    flash[:phone] = "We've sent you a text with a verification code."
-    redirect "/account/settings"
+      flash[:phone] = "We've sent you a text with a verification code."
+      redirect "/account/settings"
+    else
+      flash[:phone] = "There was an error sending a verification code to that phone number. You can use another number, or try again."
+      redirect "/account/settings"
+    end
   else
     flash[:phone] = "Phone number is invalid, or taken."
     redirect "/account/settings"
