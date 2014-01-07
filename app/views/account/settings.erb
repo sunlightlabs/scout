@@ -186,19 +186,25 @@
             <strong><%= user.phone %></strong> (Unverified)
           </span>
           <p>
-            To confirm your phone number, Enter the verification code we sent you.
+            To confirm your phone number, enter the verification code we sent you.
           </p>
 
           <form class="phone verify" action="/account/phone/confirm" method="post">
             <%= text_field_tag "phone_verify_code" %>
-            <button type="submit">
+            <button type="submit" class="smallButton">
               <span>Verify</span>
             </button>
           </form>
 
           <form class="phone resend" action="/account/phone/resend" method="post">
-            <button type="submit">
+            <button type="submit" class="smallButton">
               <span>Resend</span>
+            </button>
+          </form>
+
+          <form class="phone reset" action="/account/phone/reset" method="post">
+            <button type="submit" class="smallButton">
+              <span>Start Over</span>
             </button>
           </form>
         </div>

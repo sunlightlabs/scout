@@ -202,3 +202,14 @@ post '/account/phone/resend' do
   flash[:phone] = "We've sent you another verification code."
   redirect "/account/settings"
 end
+
+post '/account/phone/reset' do
+  requires_login
+
+  current_user.phone = nil
+  current_user.phone_confirmed = false
+  current_user.save!
+
+  flash[:phone] = "We've reset and cleared your phone number."
+  redirect "/account/settings"
+end

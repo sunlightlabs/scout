@@ -1686,7 +1686,7 @@ button.smallButton, button.secondary {
 }
 
 button.smallButton, button.secondary, button.disabled {
-    background: rgb(28,131,152); /* Old browsers */
+    background: rgb(132,131,152); /* Old browsers */
     background: -moz-linear-gradient(top,  rgba(132,138,139,1) 0%, rgba(132,138,139,1) 50%, rgba(116,121,122,1) 51%, rgba(116,121,122,1) 100%); /* FF3.6+ */
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(132,138,139,1)), color-stop(50%,rgba(132,138,139,1)), color-stop(51%,rgba(116,121,122,1)), color-stop(100%,rgba(116,121,122,1))); /* Chrome,Safari4+ */
     background: -webkit-linear-gradient(top,  rgba(132,138,139,1) 0%,rgba(132,138,139,1) 50%,rgba(116,121,122,1) 51%,rgba(116,121,122,1) 100%); /* Chrome10+,Safari5.1+ */
@@ -2050,9 +2050,6 @@ div.indicators span {
 }
 .phone button{
     float: left;
-}
-.phone.resend {
-    float: right;
 }
 
 .settings #flash div.flash{
