@@ -1,14 +1,16 @@
 # Scout
 
-A government-wide search and notification system. Currently deployed to [scout.sunlightfoundation.com](https://scout.sunlightfoundation.com/). [![Build Status](https://secure.travis-ci.org/sunlightlabs/scout.png)](http://travis-ci.org/sunlightlabs/scout)
+A government-wide search and notification system. Currently deployed to [scout.sunlightfoundation.com](https://scout.sunlightfoundation.com/).
+
+[![Build Status](https://secure.travis-ci.org/sunlightlabs/scout.png)](http://travis-ci.org/sunlightlabs/scout)
 
 ## Setting Up
 
-Scout depends on **Ruby 2.0**.
+Scout can run on **Ruby 1.9 and up**. It's currently developed on Ruby 2.1.
 
-**Recommended**: use [rvm](https://rvm.io/) to install Ruby 2.0 and create a virtual environment for the project.
+**Recommended**: use [rbenv](https://github.com/sstephenson/rbenv) to install Ruby 2.1 to your home directory.
 
-Install included dependencies with:
+After a `gem install bundler`, install included dependencies with:
 
 ```bash
 bundle install --local
@@ -64,4 +66,4 @@ We'd really love it if others used the Scout codebase to set up their own alert 
 
 But if you do want to set this up yourself, there will surely turn out to be more to do! Send [konklone](https://github.com/konklone) a message if this is something you're interested in.
 
-Copyright (c) 2011-2013 Sunlight Foundation, released under the GNU General Public License, Version 3.
+Copyright (c) 2011-2013 Sunlight Foundation, [released](https://github.com/sunlightlabs/scout/blob/master/LICENSE) under the [GNU General Public License, Version 3](http://www.gnu.org/licenses/gpl-3.0.txt).
