@@ -307,12 +307,21 @@ module Deliveries
       end
 
       # service-specific footer has everything we need
-      def self.footer(user); piece "footers", user; end
+      def self.footer(user)
+        piece "footers", user, locals: {donation: donation(user)}
+      end
 
-      def self.piece(piece, user)
+      def self.donation(user)
+        template = Tilt::ERBTemplate.new "app/views/emails/donations/#{user.service || "general"}.erb"
+        rendered = template.render Object.new, trim: false
+        rendered.force_encoding "utf-8"
+        rendered
+      end
+
+      def self.piece(piece, user, locals: {})
         context = Deliveries::SeenItemProxy.new # dummy to get helpers
         template = Tilt::ERBTemplate.new "app/views/emails/#{piece}/#{user.service || "general"}.erb"
-        rendered = template.render context, trim: false
+        rendered = template.render context, {trim: false}.merge(locals)
         rendered.force_encoding "utf-8"
         rendered
       end
