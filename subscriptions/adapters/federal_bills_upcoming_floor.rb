@@ -9,7 +9,7 @@ module Subscriptions
         if Environment.config['subscriptions']['congress_endpoint'].present?
           endpoint = Environment.config['subscriptions']['congress_endpoint'].dup
         else
-          endpoint = "http://congress.api.sunlightfoundation.com"
+          endpoint = "https://congress.api.sunlightfoundation.com"
         end
 
         fields = %w{ source_type bill_id chamber url legislative_day range }

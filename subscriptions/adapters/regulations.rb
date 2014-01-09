@@ -38,7 +38,7 @@ module Subscriptions
         if Environment.config['subscriptions']['congress_endpoint'].present?
           endpoint = Environment.config['subscriptions']['congress_endpoint'].dup
         else
-          endpoint = "http://congress.api.sunlightfoundation.com"
+          endpoint = "https://congress.api.sunlightfoundation.com"
         end
 
 
@@ -92,7 +92,7 @@ module Subscriptions
         if Environment.config['subscriptions']['congress_endpoint'].present?
           endpoint = Environment.config['subscriptions']['congress_endpoint'].dup
         else
-          endpoint = "http://congress.api.sunlightfoundation.com"
+          endpoint = "https://congress.api.sunlightfoundation.com"
         end
 
         url = "#{endpoint}/regulations?apikey=#{api_key}"
@@ -108,7 +108,7 @@ module Subscriptions
         if Environment.config['subscriptions']['congress_endpoint'].present?
           endpoint = Environment.config['subscriptions']['congress_endpoint'].dup
         else
-          endpoint = "http://congress.api.sunlightfoundation.com"
+          endpoint = "https://congress.api.sunlightfoundation.com"
         end
 
         url = "#{endpoint}/regulations?apikey=#{api_key}"
