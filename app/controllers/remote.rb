@@ -32,7 +32,7 @@
 #
 # For inactive interests:
 #   if it doesn't exist, do nothing
-#   if it does exist, delete it *unless* it has an updated_at timestamp that is newer than the timestamp provided for that interest
+#   if it does exist, delete it
 #
 # Check validity of each new interest, and only save/delete interests if
 # all new item interests successfully 'found' their referenced item.
@@ -129,17 +129,17 @@ post "/remote/service/sync" do
       if interest.new_record?
         # pass: we're done, it doesn't exist
       else
-        if change['changed_at'].is_a?(Float) or change['changed_at'].is_a?(Fixnum)
-          changed_at = Time.at change['changed_at']
-        else
-          changed_at = Time.zone.parse(change['changed_at'])
-        end
+        # if change['changed_at'].is_a?(Float) or change['changed_at'].is_a?(Fixnum)
+        #   changed_at = Time.at change['changed_at']
+        # else
+        #   changed_at = Time.zone.parse(change['changed_at'])
+        # end
 
-        if changed_at > interest.updated_at
+        # if changed_at > interest.updated_at
           to_remove << interest
-        else
+        # else
           # pass: the user has updated it here more recently, somehow
-        end
+        # end
       end
     end
   end

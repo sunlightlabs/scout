@@ -162,7 +162,7 @@ class RemoteTest < Test::Unit::TestCase
 
     assert_equal 2, user.interests.count
     assert_equal interest2['item_id'], user.interests.first.in
-    
+
     search_interest = user.interests.last
     assert_equal interest3['in'], search_interest.in
     assert_equal 'DE', search_interest.data['state']
@@ -230,7 +230,7 @@ class RemoteTest < Test::Unit::TestCase
     # a native Scout user
     email = "test@example.com"
     user = create :user, email: email
-    
+
     # one existing item subscription, native to Scout
     item_id = "hr4192-112"
     item_type = "bill"
@@ -275,7 +275,7 @@ class RemoteTest < Test::Unit::TestCase
     assert_equal 0, json_response['actions']['removed']
 
     user = User.where(email: email).first
-    
+
     assert_not_nil user
     assert_equal count, User.count
     assert_equal 2, user.interests.count
@@ -303,14 +303,14 @@ class RemoteTest < Test::Unit::TestCase
     assert_equal 2, user.interests.count
     assert_equal "none", user.notifications
 
-    
+
     # pretend an hour has passed
 
     user.interests.each do |interest|
       interest.update_attribute :updated_at, 1.hour.ago
     end
 
-    
+
     # now remove the first interest
 
     remove_interest2 = {
@@ -340,7 +340,7 @@ class RemoteTest < Test::Unit::TestCase
     assert_equal interest1.in, user.interests.first.in
     assert_equal notifications, user.notifications # changed back
 
-    
+
     # now, remove the *original* native interest, through the sync endpoint
     # this is going to be possible for now.
 
@@ -367,7 +367,7 @@ class RemoteTest < Test::Unit::TestCase
     assert_equal 1, json_response['actions']['removed']
 
     user = User.where(email: email).first
-    assert_equal 0, user.interests.count    
+    assert_equal 0, user.interests.count
   end
 
   # bad email, let's say
@@ -563,11 +563,11 @@ class RemoteTest < Test::Unit::TestCase
     subscriptions_count = Subscription.count
 
     post "/remote/subscribe/sms", {
-      :phone => phone, :interest_type => "item", :item_id => item_id, :item_type => item_type,
-      :source => "testing"
+      phone: phone, interest_type: "item", item_id: item_id, item_type: item_type,
+      source: "testing"
     }
     assert_response 500
-    
+
     assert_nil User.where(phone: phone).first
   end
 
