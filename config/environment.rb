@@ -69,6 +69,9 @@ configure do
   # ensure YAML files get loaded with naive processing
   SafeYAML::OPTIONS[:default_mode] = :safe
 
+  # this isn't used anywhere, we're setting it to avoid deprecation warnings
+  I18n.enforce_available_locales = true
+
   # default country code for phone numbers
   Phoner::Phone.default_country_code = '1'
 
