@@ -66,6 +66,9 @@ def reserved_names
 end
 
 configure do
+  # ensure YAML files get loaded with naive processing
+  SafeYAML::OPTIONS[:default_mode] = :safe
+
   # default country code for phone numbers
   Phoner::Phone.default_country_code = '1'
 
