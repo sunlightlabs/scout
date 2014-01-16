@@ -44,7 +44,7 @@ module TestHelper
     def search_interest!(user, search_type = "all", interest_in = "foia", query_type = "simple", filters = {}, attributes = {})
       interest = Interest.for_search user, search_type, interest_in, query_type, filters
       interest.attributes = attributes
-      
+
       # will be harmless if fixture doesn't exist
       interest.ensure_subscriptions
       interest.subscriptions.each do |subscription|
@@ -70,9 +70,13 @@ module TestHelper
       end
 
       if File.exists?(file)
-        Subscriptions::Manager.should_receive(:download).any_number_of_times.with(url).and_return File.read(file)
+        content = File.read(file)
+
+        # handle basic fetch, or with adapter passed in
+        Subscriptions::Manager.stub(:download).with(url).and_return content
+        Subscriptions::Manager.stub(:download).with(url, anything).and_return content
       else
-        Subscriptions::Manager.should_receive(:download).any_number_of_times.with(url).and_raise Errno::ECONNREFUSED.new
+        Subscriptions::Manager.stub(:download).and_raise Errno::ECONNREFUSED.new
       end
     end
 
@@ -110,7 +114,7 @@ module TestHelper
       file = "test/fixtures/#{fixture}.json"
       content = File.read file
       response = ::Oj.load content, mode: :compat
-      
+
       seen_item = adapter.item_detail_for response
       seen_item.item_type = item_type
 
@@ -119,7 +123,7 @@ module TestHelper
 
     def cache_item(item_id, item_type)
       subscription_type = item_types[item_type]['adapter']
-      
+
       fixture = "#{subscription_type}/item/#{item_id}"
       file = "test/fixtures/#{fixture}.json"
       content = File.read file
