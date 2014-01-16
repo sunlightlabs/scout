@@ -166,31 +166,6 @@ class RemoteTest < Test::Unit::TestCase
     search_interest = user.interests.last
     assert_equal interest3['in'], search_interest.in
     assert_equal 'DE', search_interest.data['state']
-
-    # finally, try (and fail) to remove an interest that has been
-    # updated since after the change time
-    interest3['active'] = false
-    interest3['changed_at'] = 2.days.ago
-
-    post "/remote/service/sync", {
-      email: email,
-      service: service,
-      secret_key: key,
-      notifications: notifications,
-      interests: [interest3]
-    }.to_json
-
-    assert_response 201
-
-    assert_equal 0, json_response['actions']['added']
-    assert_equal 0, json_response['actions']['removed']
-
-    user.reload
-
-    assert_equal count + 1, User.count
-    assert_equal interest_count + 2, Interest.count
-
-    assert_equal 2, user.interests.count
   end
 
   # no key, bunk key, valid key for wrong service
