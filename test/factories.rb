@@ -20,7 +20,7 @@ FactoryGirl.define do
     end
 
     factory :service_user do
-      service "open_states"
+      service "service1"
       confirmed true
       notifications "email_daily"
       should_change_password false

@@ -69,7 +69,7 @@ class LoginTest < Test::Unit::TestCase
     post '/login', login: email, password: password
     assert_response 200
 
-    assert_match /separate service/i, last_response.body
+    assert_match /Service 1/i, last_response.body
   end
 
   def test_login_with_phone_number
