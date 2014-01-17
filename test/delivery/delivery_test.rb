@@ -7,7 +7,7 @@ class DeliveryTest < Test::Unit::TestCase
 
   def test_deliver_one_interest_email_immediate
     user = create :user, notifications: "email_immediate"
-    
+
     # one fixture, one email
 
     interest = search_interest! user, "state_bills", "science_transition", "simple"
@@ -32,7 +32,7 @@ class DeliveryTest < Test::Unit::TestCase
     assert_equal "immediate", receipt.email_frequency
     assert_equal user.id, receipt.user_id
     assert_equal user.email, receipt.user_email
-    
+
     assert_equal items.size, receipt.deliveries.size
     assert_equal items.map(&:item_id).sort, receipt.deliveries.map {|d| d['item']['item_id']}.sort
 
@@ -45,7 +45,7 @@ class DeliveryTest < Test::Unit::TestCase
 
   def test_deliver_one_interest_email_daily
     user = create :user, notifications: "email_daily"
-    
+
     # one fixture, one email
 
     interest = search_interest! user, "state_bills", "science_transition", "simple"
@@ -70,7 +70,7 @@ class DeliveryTest < Test::Unit::TestCase
     assert_equal "daily", receipt.email_frequency
     assert_equal user.id, receipt.user_id
     assert_equal user.email, receipt.user_email
-    
+
     assert_equal items.size, receipt.deliveries.size
     assert_equal items.map(&:item_id).sort, receipt.deliveries.map {|d| d['item']['item_id']}.sort
 
@@ -87,7 +87,7 @@ class DeliveryTest < Test::Unit::TestCase
     email1 = "first@example.com"
     email2 = "second@example.com"
     user = create :user, email: email1, notifications: "email_daily"
-    
+
     # one fixture, one email
 
     interest = search_interest! user, "state_bills", "science_transition", "simple"
@@ -116,7 +116,7 @@ class DeliveryTest < Test::Unit::TestCase
     assert_equal "daily", receipt.email_frequency
     assert_equal user.id, receipt.user_id
     assert_equal user.email, receipt.user_email
-    
+
     assert_equal items.size, receipt.deliveries.size
     assert_equal items.map(&:item_id).sort, receipt.deliveries.map {|d| d['item']['item_id']}.sort
 
@@ -139,7 +139,7 @@ class DeliveryTest < Test::Unit::TestCase
     # 3 new ones each
     i2 = search_interest! user, "state_bills", "conscience", "simple"
     i3 = search_interest! user, "state_bills", "science", "simple"
-    
+
     all_items = {}
     # schedule a delivery for every result from every one
     [i1, i2, i3].each do |interest|
@@ -154,12 +154,12 @@ class DeliveryTest < Test::Unit::TestCase
     Deliveries::Manager.deliver! 'mechanism' => "email", 'email_frequency' => "immediate"
     assert_equal 0, Delivery.count
     assert_equal 3, Receipt.count
-    
+
     Receipt.all.each do |receipt|
       item = receipt.deliveries.first['item']
       interest = Interest.find item['interest_id']
       items = all_items[interest.id]
-      
+
       assert_equal "email", receipt.mechanism
       assert_equal "immediate", receipt.email_frequency
       assert_equal user.id, receipt.user_id
@@ -187,7 +187,7 @@ class DeliveryTest < Test::Unit::TestCase
     # 3 new ones each
     i2 = search_interest! user, "state_bills", "conscience", "simple"
     i3 = search_interest! user, "state_bills", "science", "simple"
-    
+
     all_items = {}
     # schedule a delivery for every result from every one
     [i1, i2, i3].each do |interest|
@@ -202,7 +202,7 @@ class DeliveryTest < Test::Unit::TestCase
     Deliveries::Manager.deliver! 'mechanism' => "email", 'email_frequency' => "daily"
     assert_equal 0, Delivery.count
     assert_equal 1, Receipt.count
-    
+
     receipt = Receipt.first
 
     assert_equal "email", receipt.mechanism
@@ -249,7 +249,7 @@ class DeliveryTest < Test::Unit::TestCase
     end
 
     all_items = {}
-    [i1a, i1b, i1c, i2a, i2b, i2c, i3a, i3b, i3c].each do |i| 
+    [i1a, i1b, i1c, i2a, i2b, i2c, i3a, i3b, i3c].each do |i|
       initial = i.seen_items.count
       Subscriptions::Manager.check! i.subscriptions.first
       all_items[i.id] = i.seen_items.asc(:_id).to_a[initial..-1]
@@ -326,7 +326,7 @@ class DeliveryTest < Test::Unit::TestCase
     end
 
     all_items = {}
-    [i1a, i1b, i1c, i2a, i2b, i2c, i3a, i3b, i3c].each do |i| 
+    [i1a, i1b, i1c, i2a, i2b, i2c, i3a, i3b, i3c].each do |i|
       initial = i.seen_items.count
       Subscriptions::Manager.check! i.subscriptions.first
       all_items[i.id] = i.seen_items.asc(:_id).to_a[initial..-1]
@@ -346,7 +346,7 @@ class DeliveryTest < Test::Unit::TestCase
       "custom subject abcdefgh",
       "custom header 1234567",
       {
-        "interest_type" => "search", 
+        "interest_type" => "search",
         "search_type" => "state_bills"
       }
     )
@@ -358,7 +358,7 @@ class DeliveryTest < Test::Unit::TestCase
       receipt = user.receipts.first
       assert_equal "email", receipt.mechanism
       assert_equal "custom", receipt.email_frequency
-      
+
       # same for every user
       items = all_items[i1b.id] + all_items[i1c.id]
       assert_equal items.map(&:item_id).sort, receipt.deliveries.map {|d| d['item']['item_id']}.sort
