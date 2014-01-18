@@ -23,7 +23,7 @@ cp config.ru.example config.ru
 cp config/config.yml.example config/config.yml
 ```
 
-Change anything in `config.yml` that needs to be changed. Among other things, you will need to add your own Sunlight API key.
+Change anything in `config.yml` that needs to be changed. Among other things, you will need to add your own Sunlight API key. You can get an API key [here](http://sunlightfoundation.com/api/accounts/register/).
 
 Then run the app on port 8080 with:
 
