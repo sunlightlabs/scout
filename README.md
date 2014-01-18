@@ -10,6 +10,8 @@ Scout can run on **Ruby 1.9 and up**. It's currently developed on Ruby 2.1.
 
 **Recommended**: use [rbenv](https://github.com/sstephenson/rbenv) to install Ruby 2.1 to your home directory.
 
+You need a MongoDB server. Scout will create its own database and collections as needed.
+
 After a `gem install bundler`, install included dependencies with:
 
 ```bash
@@ -23,7 +25,7 @@ cp config.ru.example config.ru
 cp config/config.yml.example config/config.yml
 ```
 
-Change anything in `config.yml` that needs to be changed. Among other things, you will need to add your own Sunlight API key. You can get an API key [here](http://sunlightfoundation.com/api/accounts/register/).
+Change anything in `config.yml` that needs to be changed. Among other things, you will need to add your own Sunlight API key. You can get an API key [here](http://sunlightfoundation.com/api/accounts/register/). You can change the MongoDB configuration in this file if you need to.
 
 Then run the app on port 8080 with:
 
