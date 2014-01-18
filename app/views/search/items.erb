@@ -1,6 +1,6 @@
 <% if items %>
   <%# client-side pagination is just that %>
-  <% if defined?(per_page) %>
+  <% if defined?(per_page) && per_page %>
     <% items = items.first per_page %>
   <% end %>
 
