@@ -210,7 +210,7 @@ class User
 
   # @private
   def self.short_token
-    zero_prefix rand(10000)
+    "%04d" % rand(10000)
   end
 
   def new_reset_token
@@ -260,20 +260,6 @@ class User
 
   def new_phone_verify_code
     self.phone_verify_code = User.short_token
-  end
-
-  # zero prefixes a number below 10,000 out to 4 digits
-  # @private
-  def self.zero_prefix(number)
-    if number < 10
-      "000#{number}"
-    elsif number < 100
-      "00#{number}"
-    elsif number < 1000
-      "0#{number}"
-    else
-      number.to_s
-    end
   end
 
   # XXX this method should be a helper method to the account controller, because it's View not Model code
