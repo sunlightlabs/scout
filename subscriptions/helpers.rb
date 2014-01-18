@@ -625,7 +625,7 @@ module Helpers
         "http://clerk.house.gov/evs/#{vote['year']}/roll#{vote['number']}.xml"
       elsif vote['chamber'] == "senate"
         subsession = {0 => 2, 1 => 1}[vote['year'].to_i % 2]
-        "http://www.senate.gov/legislative/LIS/roll_call_lists/roll_call_vote_cfm.cfm?congress=#{vote['session']}&session=#{subsession}&vote=#{zero_prefix_five vote['number']}"
+        "http://www.senate.gov/legislative/LIS/roll_call_lists/roll_call_vote_cfm.cfm?congress=#{vote['session']}&session=#{subsession}&vote=#{"%05d" % vote['number']}"
       end
     end
 
