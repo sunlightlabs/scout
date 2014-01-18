@@ -179,13 +179,13 @@ module Search
     distance = []
 
     parsed.each do |piece|
-      if term = (piece[:term] or piece[:word] or piece[:phrase])
+      if term = (piece[:term] || piece[:word] || piece[:phrase])
         term = term.to_s
         
         if piece[:prohibited]
           excluded << {'term' => term}
 
-        elsif piece[:distance] and piece[:distance].to_s.to_i > 0
+        elsif piece[:distance] && piece[:distance].to_s.to_i > 0
           # split term into words
           # (doesn't support distance between multi-word phrases)
           # (doesn't support citations)
@@ -244,7 +244,7 @@ module Search
   def self.normalize(query)
     string = ""
 
-    if query['citations'] and query['citations'].any?
+    if query['citations'] && query['citations'].any?
       # start with sorted citations, if any
       string << query['citations'].map do |cite|
         "#{cite['citation_type']}:#{cite['citation_id']}"

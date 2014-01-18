@@ -32,7 +32,7 @@ get "/user/:user_id/:collection" do
 
   user, collection = load_user_and_collection
 
-  if collection.private? and (user != current_user)
+  if collection.private? && (user != current_user)
     halt 404 and return
   end
 

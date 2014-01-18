@@ -42,7 +42,7 @@ module Subscriptions
 
         url = "#{endpoint}/text.json?apikey=#{api_key}"
 
-        if query.present? and !["\"*\"", "*"].include?(query)
+        if query.present? && !["\"*\"", "*"].include?(query)
           url << "&q=#{CGI.escape query}"
         end
 

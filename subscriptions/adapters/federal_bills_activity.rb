@@ -50,7 +50,7 @@ module Subscriptions
         response['results'].first['actions'].each do |action|
           # don't alert on vote actions, they are handled separately, by the votes adapter
           # but do show them on the front-end, weird to pretend it's not there
-          next if (action['type'] == "vote") and (function != :search)
+          next if (action['type'] == "vote") && (function != :search)
 
           actions << item_for(bill_id, action)
         end

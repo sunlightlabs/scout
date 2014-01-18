@@ -127,7 +127,7 @@ class User
     types = []
     types << "email_daily" if email.present?
     types << "email_immediate" if email.present?
-    types << "sms" if phone.present? and phone_confirmed
+    types << "sms" if phone.present? && phone_confirmed
     types << "none"
     types
   end

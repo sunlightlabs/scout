@@ -32,7 +32,7 @@ class Environment
   end
 
   def self.asset_path(path)
-    if config['assets'] and config['assets']['enabled']
+    if config['assets'] && config['assets']['enabled']
       File.join Environment.config['assets']['asset_host'], "assets", path
     else
       File.join "/assets", path

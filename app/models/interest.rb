@@ -408,7 +408,7 @@ class Interest
   def self.subscription_for(interest, subscription_type, regenerate = false)
     # if the interest is created, and we're not asking for regeneration,
     # we can count on the interest having it
-    if !interest.new_record? and !regenerate
+    if !interest.new_record? && !regenerate
       return interest.subscriptions.where(subscription_type: subscription_type).first
     end
 

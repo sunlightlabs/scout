@@ -145,7 +145,7 @@ module Deliveries
         puts "#{header} Not scheduling delivery, user wants no notifications for this interest" unless Sinatra::Application.test?
       elsif !user.confirmed?
         puts "#{header} Not scheduling delivery, user is unconfirmed" unless Sinatra::Application.test?
-      elsif (mechanism == "sms") and (user.phone.blank? or !user.phone_confirmed)
+      elsif (mechanism == "sms") && (user.phone.blank? || !user.phone_confirmed)
         puts "#{header} Not scheduling delivery, it is for SMS and user has no confirmed phone number" unless Sinatra::Application.test?
       else
         puts "#{header} Scheduling delivery" unless Sinatra::Application.test?

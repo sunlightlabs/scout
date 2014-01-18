@@ -170,18 +170,18 @@ module Helpers
         item.data['url']
 
       # special case: Open States users get direct links
-      elsif interest and user and (user.service == "open_states")
-        if interest.search? and interest.search_type == "state_bills"
+      elsif interest && user && (user.service == "open_states")
+        if interest.search? && interest.search_type == "state_bills"
           openstates_url item.data
-        elsif interest.item? and interest.item_type == "state_bill"
+        elsif interest.item? && interest.item_type == "state_bill"
           openstates_url interest.data
-        elsif interest.item? and interest.item_type == "state_legislator"
+        elsif interest.item? && interest.item_type == "state_legislator"
           openstates_url item.data
         end
 
       # item subscription adapters must each define a direct_item_url method
-      elsif item.item? and interest and
-        (adapter = Subscription.adapter_for(item.subscription_type)) and
+      elsif item.item? && interest &&
+        (adapter = Subscription.adapter_for(item.subscription_type)) &&
         (url = adapter.direct_item_url item.data, interest)
         url
       else
@@ -227,7 +227,7 @@ module Helpers
         end
       end
 
-      if user and user.service.present?
+      if user && user.service.present?
         data[:d][:service] = user.service
       end
 

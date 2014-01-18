@@ -25,7 +25,7 @@ helpers do
 
   def rss_for(view, items, locals = {})
     page = (params[:page] || 1).to_i
-    page = 1 if page <= 0 or page > 200000000
+    page = 1 if page <= 0 || page > 200000000
     per_page = 100
 
     items = items.skip(per_page * (page - 1)).limit(per_page)

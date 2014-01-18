@@ -16,7 +16,7 @@ post '/login' do
 
   @new_user = User.new
 
-  if (user = User.where(email: login).first || User.by_phone(login)) and User.authenticate(user, params[:password])
+  if (user = User.where(email: login).first || User.by_phone(login)) && User.authenticate(user, params[:password])
     if user.service.present?
       Event.blocked_email! login, user.service
 

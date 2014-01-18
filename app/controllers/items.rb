@@ -94,7 +94,7 @@ post '/item/:item_type/:item_id/follow' do
   halt 200 and return unless interest.new_record?
 
   # todo: kill now that the map is fixed
-  adapter = if item_types[item_type] and item_types[item_type]['adapter']
+  adapter = if item_types[item_type] && item_types[item_type]['adapter']
     item_types[item_type]['adapter']
   else
     item_type.pluralize

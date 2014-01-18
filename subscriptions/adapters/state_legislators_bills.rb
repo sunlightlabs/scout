@@ -95,7 +95,7 @@ module Subscriptions
 
         # use first action (introduction date) for a sponsored bills feed
         # first action should always be present, but just in case, default to created date
-        if bill['action_dates'] and bill['action_dates']['first']
+        if bill['action_dates'] && bill['action_dates']['first']
           date = bill['action_dates']['first']
         else
           date = bill['created_at']
