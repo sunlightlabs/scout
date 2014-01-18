@@ -27,7 +27,7 @@ module Helpers
     end
 
     def page_title(interest)
-      if (interest.query_type == "simple") and (interest.query['citations'] and interest.query['citations'].any?)
+      if (interest.query_type == "simple") && (interest.query['citations'] && interest.query['citations'].any?)
         name = Search.cite_standard interest.query['citations'].first
       else
         name = interest.in
@@ -116,7 +116,7 @@ module Helpers
 
     def errors_for(object)
 
-      if object and object.errors and object.errors.any?
+      if object && object.errors && object.errors.any?
         object.errors.map do |key, msg|
           "<div class=\"error user\">#{msg}</div>"
         end.join

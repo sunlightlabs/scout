@@ -235,7 +235,7 @@ module Deliveries
         subject << grouped.map do |subscription_type, subscription_deliveries|
           type = "#{subscription_deliveries.size} #{Subscription.adapter_for(subscription_type).short_name subscription_deliveries.size, interest}"
 
-          if grouped.keys.size == 1 and interest.filters.any?
+          if grouped.keys.size == 1 && interest.filters.any?
             filters = interest.filters.map do |field, value|
               interest.filter_name field, value
             end.join(", ")

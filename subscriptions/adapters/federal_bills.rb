@@ -46,7 +46,7 @@ module Subscriptions
           url << "&bill_type=#{federal_bill[0]}"
           url << "&number=#{federal_bill[1]}"
 
-        elsif query.present? and !["*", "\"*\""].include?(query)
+        elsif query.present? && !["*", "\"*\""].include?(query)
           url << "&query=#{CGI.escape query}"
 
           url << "&highlight=true"
@@ -162,7 +162,7 @@ module Subscriptions
       # given a seen item (bill), return the document URL to fetch
       def self.document_url(item)
         bill = item.data
-        if bill['last_version'] and bill['last_version']['urls']['xml']
+        if bill['last_version'] && bill['last_version']['urls']['xml']
           bill_version_id = bill['last_version']['bill_version_id']
           "http://unitedstates.sunlightfoundation.com/documents/bills/#{bill['congress']}/#{bill['bill_type']}/#{bill_version_id}.htm"
         end
@@ -250,7 +250,7 @@ module Subscriptions
         if now.month == 1
           if [1, 2].include?(now.day)
             year - 1
-          elsif (now.day == 3) and (now.hour < 12)
+          elsif (now.day == 3) && (now.hour < 12)
             year - 1
           else
             year

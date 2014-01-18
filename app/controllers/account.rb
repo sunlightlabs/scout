@@ -31,7 +31,7 @@ end
 put '/account/settings' do
   requires_login
 
-  if params[:user] and params[:user][:image]
+  if params[:user] && params[:user][:image]
     tempfile = params[:user][:image][:tempfile]
     params[:user].delete :image
     params[:user].delete 'image'
@@ -155,7 +155,7 @@ put '/account/phone' do
 
   current_user.phone = params[:user]['phone']
 
-  if Phoner::Phone.valid?(current_user.phone) and current_user.valid?
+  if Phoner::Phone.valid?(current_user.phone) && current_user.valid?
 
     # manually set to false, in case the phone number was set and is changing
     current_user.phone_confirmed = false

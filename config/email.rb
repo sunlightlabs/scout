@@ -30,7 +30,7 @@ module Email
     puts "EXCEPTION SENDING EMAIL:"
     puts "\n#{exc.class}"
     puts "\n#{exc.message}"
-    if exc.backtrace and exc.backtrace.respond_to?(:each)
+    if exc.backtrace && exc.backtrace.respond_to?(:each)
       exc.backtrace.each do |line|
         puts line
       end
@@ -108,7 +108,7 @@ module Email
       true
     rescue Exception => e
       # if it's a hard bounce to a valid user, unsubscribe that user from future emails
-      if e.is_a?(Postmark::InvalidMessageError) and e.message["hard bounce or a spam complaint"]
+      if e.is_a?(Postmark::InvalidMessageError) && e.message["hard bounce or a spam complaint"]
         if user = User.where(email: to).first
           user.unsubscribe!
           Admin.report(

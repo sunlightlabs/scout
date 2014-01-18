@@ -58,7 +58,7 @@ module Subscriptions
       subscription_type = subscription.subscription_type
 
       # if the subscription is orphaned, catch this, warn admin, and abort
-      if interest.nil? and !dry_run
+      if interest.nil? && !dry_run
         subscription.seen_items.each {|i| i.destroy}
         subscription.destroy
         Admin.report Report.warning("Check", "Orphaned subscription, deleting, moving on", subscription: subscription.attributes.dup)
@@ -109,10 +109,10 @@ module Subscriptions
 
           mark_as_seen! item unless dry_run
 
-          if (subscription.subscription_type == "court_opinions") and !Subscriptions::Adapters::CourtOpinions.double_check(item)
+          if (subscription.subscription_type == "court_opinions") && !Subscriptions::Adapters::CourtOpinions.double_check(item)
             courtlistener_warnings << item.attributes
 
-          elsif !test? and (item.date < backfill_date)
+          elsif !test? && (item.date < backfill_date)
             backfills << item.attributes
 
           else
@@ -183,7 +183,7 @@ module Subscriptions
       adapter = subscription.adapter
       url = adapter.url_for subscription, function, options
 
-      puts "\n[#{subscription.subscription_type}][#{function}][#{subscription.interest_in}][#{subscription.id}] #{url}\n\n" if !test? and Environment.config['debug']['output_urls']
+      puts "\n[#{subscription.subscription_type}][#{function}][#{subscription.interest_in}][#{subscription.id}] #{url}\n\n" if !test? && Environment.config['debug']['output_urls']
 
       # Feed parser
       if adapter.respond_to?(:url_to_response)
@@ -209,7 +209,7 @@ module Subscriptions
       else
         items = begin
           # searches use a caching layer
-          if (function == :search) and (body = cache_for(url, :search, subscription.subscription_type))
+          if (function == :search) && (body = cache_for(url, :search, subscription.subscription_type))
             # should be guaranteed to work
             response = ::Oj.load body, mode: :compat
 
@@ -223,7 +223,7 @@ module Subscriptions
             response = ::Oj.load body, mode: :compat
 
             # wait for JSON parse, so as not to cache errors
-            if (function == :search) and !Environment.config['no_cache']
+            if (function == :search) && !Environment.config['no_cache']
               cache! url, :search, subscription.subscription_type, body
             end
           end
@@ -288,7 +288,7 @@ module Subscriptions
 
       url = adapter.url_for_detail item_id, options
 
-      puts "\n[#{adapter_type}][find][#{item_id}] #{url}\n\n" if !test? and Environment.config['debug']['output_urls']
+      puts "\n[#{adapter_type}][find][#{item_id}] #{url}\n\n" if !test? && Environment.config['debug']['output_urls']
 
       # top-layer cache - if we've synced the item already, use it
       if item = item_cache_for(item_type, item_id)
@@ -325,7 +325,7 @@ module Subscriptions
         item.item_type = item_type
         item.find_url = url
 
-        if adapter.respond_to?(:document_url) and (url = adapter.document_url item)
+        if adapter.respond_to?(:document_url) && (url = adapter.document_url item)
           # a url_type of 'document' means their cache will not get flushed --
           # which is what we want. keep documents forever.
           item.data['document'] = fetch url, :document, options
@@ -346,7 +346,7 @@ module Subscriptions
     # @return [String] the response body
     # @private
     def self.fetch(url, url_type, options = {})
-      puts "\n[fetch][#{url_type}] #{url}\n\n" if !test? and Environment.config['debug']['output_urls']
+      puts "\n[fetch][#{url_type}] #{url}\n\n" if !test? && Environment.config['debug']['output_urls']
 
       body = nil
       begin
@@ -389,7 +389,7 @@ module Subscriptions
       adapter = Subscription.adapter_for subscription_type
       url = adapter.url_for_sync options
 
-      puts "\n[#{subscription_type}][sync][#{options[:page]}] #{url}\n\n" if !test? and Environment.config['debug']['output_urls']
+      puts "\n[#{subscription_type}][sync][#{options[:page]}] #{url}\n\n" if !test? && Environment.config['debug']['output_urls']
 
       items = begin
         body = download url, adapter
@@ -414,7 +414,7 @@ module Subscriptions
       items.map do |item|
         item.item_type = search_adapters[subscription_type]
 
-        if adapter.respond_to?(:document_url) and (url = adapter.document_url item)
+        if adapter.respond_to?(:document_url) && (url = adapter.document_url item)
           # a url_type of 'document' means their cache will not get flushed --
           # which is what we want. keep documents forever.
           item.data['document'] = fetch url, :document, options
@@ -469,7 +469,7 @@ module Subscriptions
       curl.headers["User-Agent"] = "Scout (scout.sunlightfoundation.com) / curl"
 
       # provide adapter an optional chance to modify Curl request
-      if adapter and adapter.respond_to?(:http)
+      if adapter && adapter.respond_to?(:http)
         curl = adapter.http curl
       end
 

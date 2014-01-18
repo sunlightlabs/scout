@@ -16,7 +16,7 @@ get "/import/feed/preview" do
         urls = Feedbag.find url
 
         # manually handle http->https error
-        if urls.empty? and !url.start_with?("https:")
+        if urls.empty? && !url.start_with?("https:")
           url = url.start_with?("http:") ? url : "http://#{url}"
           Feedbag.find url.sub(/^http:/, "https:")
         else

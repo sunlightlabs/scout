@@ -145,7 +145,7 @@ module Subscriptions
         inner = inner.at("p") if inner.at("p")
 
         last_link = (inner / :a).last
-        if last_link and last_link.inner_text.blank?
+        if last_link && last_link.inner_text.blank?
           last_link.remove
           inner.inner_html + "…"
         else

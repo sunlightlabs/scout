@@ -80,11 +80,11 @@ module Helpers
     def bill_highlight(item, interest, options = {})
       keywords = keywords_from interest
 
-      if item.data['citations'] and item.data['citations'].any?
+      if item.data['citations'] && item.data['citations'].any?
         matches = item.data['citations'].map {|c| c['match']}
         cite = item.data['citations'].first
         excerpt cite['excerpt'], (keywords + matches), options
-      elsif item.data['search'] and item.data['search']['highlight']
+      elsif item.data['search'] && item.data['search']['highlight']
         field = preferred_field item, bill_priorities
         return nil unless field
 
@@ -102,11 +102,11 @@ module Helpers
     def regulation_highlight(item, interest, options = {})
       keywords = keywords_from interest
 
-      if item.data['citations'] and item.data['citations'].any?
+      if item.data['citations'] && item.data['citations'].any?
         matches = item.data['citations'].map {|c| c['match']}
         cite = item.data['citations'].first
         excerpt cite['excerpt'], (keywords + matches), options
-      elsif item.data['search'] and item.data['search']['highlight']
+      elsif item.data['search'] && item.data['search']['highlight']
         field = preferred_field item, regulation_priorities
         return nil unless field
         text = item.data['search']['highlight'][field].first
@@ -119,11 +119,11 @@ module Helpers
     def document_highlight(item, interest, options = {})
       keywords = keywords_from interest
 
-      if item.data['citations'] and item.data['citations'].any?
+      if item.data['citations'] && item.data['citations'].any?
         matches = item.data['citations'].map {|c| c['match']}
         cite = item.data['citations'].first
         excerpt cite['excerpt'], (keywords + matches), options
-      elsif item.data['search'] and item.data['search']['highlight']
+      elsif item.data['search'] && item.data['search']['highlight']
         field = preferred_field item, document_priorities
         return nil unless field
         text = item.data['search']['highlight'][field].first
@@ -394,7 +394,7 @@ module Helpers
 
     # XXX only used by federal_bills views
     def bill_text_url(bill, version)
-      if version and version['urls']
+      if version && version['urls']
         version['urls']['xml'] || version['urls']['pdf']
       end
     end
@@ -561,7 +561,7 @@ module Helpers
 
     # XXX only used by regulations views
     def regulation_type(regulation)
-      if regulation['article_type'].nil? or (regulation['article_type'] == "regulation")
+      if regulation['article_type'].nil? || (regulation['article_type'] == "regulation")
         {
           "proposed" => "Proposed Rule",
           "final" => "Final Rule"
@@ -591,7 +591,7 @@ module Helpers
     # XXX only used by state_bills_votes views
     def state_vote_type(vote)
       type = ""
-      if vote['committee'] or vote['motion'] =~ /committee/i
+      if vote['committee'] || vote['motion'] =~ /committee/i
         type = "Committee "
       end
       "#{type}#{vote['type'].capitalize}"

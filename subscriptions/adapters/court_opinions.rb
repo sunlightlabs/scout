@@ -76,7 +76,7 @@ module Subscriptions
           query = subscription.interest_in
           return nil unless query.present?
           url << "&q=#{CGI.escape query}"
-        elsif query.present? and !["*", "\"*\""].include?(query)
+        elsif query.present? && !["*", "\"*\""].include?(query)
           url << "&q=#{CGI.escape query}"
         end
 
@@ -202,7 +202,7 @@ module Subscriptions
           opinion['download_url'] = opinion['download_URL']
         end
 
-        if opinion['citation'] and opinion['citation']['case_name']
+        if opinion['citation'] && opinion['citation']['case_name']
           opinion['case_name'] = opinion['citation']['case_name']
         end
 

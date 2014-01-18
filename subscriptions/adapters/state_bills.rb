@@ -85,7 +85,7 @@ module Subscriptions
           # if there's a state bill code, extract it and apply the specific bill_ids__in filter
           if state_bill = Search.state_bill_for(query)
             url << "&bill_id__in=#{CGI.escape state_bill}"
-          elsif query.present? and !["*", "\"*\""].include?(query)
+          elsif query.present? && !["*", "\"*\""].include?(query)
             url << "&q=#{CGI.escape query}"
           end
         end
@@ -115,7 +115,7 @@ module Subscriptions
         end
 
         # subjects - array of strings, e.g. ["Agriculture and Food", "Public Services"]
-        if subscription.data['subjects'].present? and subscription.data['subjects'].any?
+        if subscription.data['subjects'].present? && subscription.data['subjects'].any?
           url << subscription.data['subjects'].map {|s| "&subjects=#{s}"}.join("")
         end
 
@@ -247,7 +247,7 @@ module Subscriptions
         end
 
         # use most recent action for the date, if present (which it should always be)
-        if bill['action_dates'] and bill['action_dates']['last']
+        if bill['action_dates'] && bill['action_dates']['last']
           date = bill['action_dates']['last']
         else
           date = bill['created_at']

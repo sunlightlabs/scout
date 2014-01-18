@@ -38,7 +38,7 @@ module Subscriptions
         url << "/documents/search?"
 
         query = subscription.query['query']
-        if query.present? and !["*", "\"*\""].include?(query)
+        if query.present? && !["*", "\"*\""].include?(query)
           url << "&query=#{CGI.escape query}"
 
           url << "&highlight=true"
