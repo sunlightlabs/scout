@@ -1,5 +1,5 @@
 <% display_name = user.display_name.present? ? user.display_name : user.username %>
-<% content_for :title do %><%= display_name %> is following "<%= collection.name %>".<% end %>
+<% content_for :title do %><%= display_name %> is following <%= collection.name %>.<% end %>
 <% if collection.description.present? %>
   <% content_for :description do %><%= truncate collection.description, 200 %><% end %>
 <% else %>
