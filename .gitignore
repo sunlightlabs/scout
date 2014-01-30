@@ -10,6 +10,9 @@
 /public/assets/*/*.gz
 /public/assets/*/*/*.gz
 
+# copied into place on deploy
+/public/robots.txt
+
 /public/system
 
 /tmp

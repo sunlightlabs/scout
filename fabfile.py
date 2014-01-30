@@ -36,6 +36,16 @@ def links():
   run("ln -s %s/config.ru %s/config.ru" % (shared_path, version_path))
   run("ln -s %s/unicorn.rb %s/unicorn.rb" % (shared_path, version_path))
 
+  # default to a robots.txt.else rather than a robots.txt,
+  # so that if this fails for some reason, we end up with no robots.txt
+  # rather than a don't-index-anything robots.txt.
+  if target == "production":
+    robots = "production"
+  else:
+    robots = "else"
+
+  run("cp %s/robots.txt.%s %s/robots.txt" % version_path, robots, version_path)
+
 def dependencies():
   run("cd %s && bundle install --local" % version_path)
 
