@@ -44,7 +44,7 @@ def links():
   else:
     robots = "else"
 
-  run("cp %s/robots.txt.%s %s/robots.txt" % version_path, robots, version_path)
+  run("cp %s/public/robots.txt.%s %s/public/robots.txt" % (version_path, robots, version_path))
 
 def dependencies():
   run("cd %s && bundle install --local" % version_path)
