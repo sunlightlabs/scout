@@ -39,7 +39,7 @@ module Subscriptions
 
         BLACKLIST.each do |bad|
           quoted = /\"#{bad}\"/i
-          query.gsub! quoted, bad
+          query = query.gsub quoted, bad
         end
 
         query
@@ -165,14 +165,35 @@ module Subscriptions
         # don't bother with unprocessed citation stuff
         return true unless query = item.subscription.query['query']
 
-        # normalize, downcase, remove punctuation
-        query = query.downcase.gsub /[^\w]/, ''
-        mark = marks.first.first.downcase.gsub /[^\w]/, ''
+        # if we've extracted the query CourtListener sees, check it
+        if meta_q = opinion['meta_q']
 
-        # if the first 3 letters of the first matched mark
-        # is contained nowhere inside the original query, flag it
-        if !query.include?(mark[0..2])
-          return false
+          # reverse the process by which a subscription's query gets
+          # escaped and added to the string
+          meta_q = CGI.unescape meta_q
+
+          # if it was blacklisted (quotes stripped), add quotes back
+          if BLACKLIST.include?(meta_q)
+            meta_q = "\"#{meta_q}\""
+          end
+
+          # okay, if the extracted q doesn't match what it should have been, reject
+          if query != meta_q
+            puts "WARNING: #{query} != #{meta_q}"
+            return false
+          end
+
+        # otherwise, do a cruder check
+        else
+          # normalize, downcase, remove punctuation
+          query = query.downcase.gsub /[^\w]/, ''
+          mark = marks.first.first.downcase.gsub /[^\w]/, ''
+
+          # if the first 3 letters of the first matched mark
+          # is contained nowhere inside the original query, flag it
+          if !query.include?(mark[0..2])
+            return false
+          end
         end
 
         true
@@ -184,7 +205,7 @@ module Subscriptions
         raise AdapterParseException.new("Response didn't include objects field: #{response.inspect}") unless response['objects']
 
         response['objects'].map do |opinion|
-          item_for opinion
+          item_for opinion, response['meta']
         end
       end
 
@@ -192,7 +213,8 @@ module Subscriptions
         item_for response
       end
 
-      def self.item_for(opinion)
+      # opinion data, and optional meta hash if coming from a search
+      def self.item_for(opinion, meta = nil)
         return nil unless opinion
 
         date = Time.zone.parse opinion['date_filed']
@@ -204,6 +226,15 @@ module Subscriptions
 
         if opinion['citation'] and opinion['citation']['case_name']
           opinion['case_name'] = opinion['citation']['case_name']
+        end
+
+        if meta
+          opinion['meta_url'] = meta['request_uri']
+
+          # extract the query, make it match what the input should be
+          if match = opinion['meta_url'].match(/&q=([^&]+)&/)
+            opinion['meta_q'] = match[1]
+          end
         end
 
         SeenItem.new(

@@ -109,12 +109,18 @@ module Subscriptions
 
           mark_as_seen! item unless dry_run
 
+          # if it fails the CourtListener double check, don't deliver
           if (subscription.subscription_type == "court_opinions") and !Subscriptions::Adapters::CourtOpinions.double_check(item)
-            courtlistener_warnings << item.attributes
+            courtlistener_warnings << {
+              item_data: item.data,
+              subscription_query: subscription.query
+            }
 
+          # if it's a suddenly seen old item, don't deliver
           elsif !test? and (item.date < backfill_date)
             backfills << item.attributes
 
+          # okay, schedule a delivery (unless this is a dry run)
           else
             unless dry_run
               # deliver one copy for the user whose interest found it
