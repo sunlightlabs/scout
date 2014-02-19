@@ -21,7 +21,7 @@
     </div>
   </div>
 
-  <% if (regulation['document_type'] == 'public_inspection') or 
+  <% if (regulation['document_type'] == 'public_inspection') or
       regulation['effective_on'] or regulation['comments_close_on'] %>
     <div class="core-context">
       <% if regulation['document_type'] == 'public_inspection' %>
@@ -36,7 +36,7 @@
         <dl>
           <dt class="float-left">Effective Date</dt>
           <dd>
-            This <%= regulation_type regulation %> 
+            This <%= regulation_type regulation %>
             <% if Time.zone.parse(regulation["effective_on"]) < Time.zone.now %>
               became
             <% else %>
@@ -72,12 +72,14 @@
     </div>
 
     <div id="document">
-      <header>
-        <strong>Full Text</strong>
-        <span>
-          Read the <a data-resource="original" class="pdf" href="<%= regulation['pdf_url'] %>">full text</a> (PDF) of this document.
-        </span>
-      </header>
+      <% if regulation['pdf_url'].present? %>
+        <header>
+          <strong>Full Text</strong>
+          <span>
+            Read the <a data-resource="original" class="pdf" href="<%= regulation['pdf_url'] %>">full text</a> (PDF) of this document.
+          </span>
+        </header>
+      <% end %>
       <article>
         <p>
           This is a <strong>pre-release</strong> version of this <%= regulation_type(regulation) %>. It will be formally published on <strong><%= just_date regulation['publication_date'] %></strong> in the Federal Register.
@@ -117,7 +119,7 @@
 
         $("#document article a.external.usc").each(function() {
           this.target="_blank";
-          
+
           var title = $(this).data("title");
           var section = $(this).data("section");
           var url = "/search/all/" + title + " usc " + section;
@@ -126,7 +128,7 @@
 
         $("#document article a.external.publ").each(function() {
           this.target="_blank";
-          
+
           var congress = $(this).data("congress");
           var number = $(this).data("number");
           var url = "/search/all/public law " + congress + "-" + number;
