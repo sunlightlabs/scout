@@ -166,25 +166,25 @@ module Subscriptions
         return true unless query = item.subscription.query['query']
 
         # if we've extracted the query CourtListener sees, check it
-        if meta_q = opinion['meta_q']
+        # if meta_q = opinion['meta_q']
 
-          # reverse the process by which a subscription's query gets
-          # escaped and added to the string
-          meta_q = CGI.unescape meta_q
+        #   # reverse the process by which a subscription's query gets
+        #   # escaped and added to the string
+        #   meta_q = CGI.unescape meta_q
 
-          # if it was blacklisted (quotes stripped), add quotes back
-          if BLACKLIST.include?(meta_q)
-            meta_q = "\"#{meta_q}\""
-          end
+        #   # if it was blacklisted (quotes stripped), add quotes back
+        #   if BLACKLIST.include?(meta_q)
+        #     meta_q = "\"#{meta_q}\""
+        #   end
 
-          # okay, if the extracted q doesn't match what it should have been, reject
-          if query != meta_q
-            puts "WARNING: #{query} != #{meta_q}"
-            return false
-          end
+        #   # okay, if the extracted q doesn't match what it should have been, reject
+        #   if query != meta_q
+        #     puts "WARNING: #{query} != #{meta_q}"
+        #     return false
+        #   end
 
-        # otherwise, do a cruder check
-        else
+        # # otherwise, do a cruder check
+        # else
           # normalize, downcase, remove punctuation
           query = query.downcase.gsub /[^\w]/, ''
           mark = marks.first.first.downcase.gsub /[^\w]/, ''
@@ -194,7 +194,7 @@ module Subscriptions
           if !query.include?(mark[0..2])
             return false
           end
-        end
+        # end
 
         true
       end
