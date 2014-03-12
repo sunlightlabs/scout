@@ -425,7 +425,9 @@ module Subscriptions
         if adapter.respond_to?(:document_url) and (url = adapter.document_url item)
           # a url_type of 'document' means their cache will not get flushed --
           # which is what we want. keep documents forever.
-          item.data['document'] = fetch url, :document, options
+
+          # TEMPORARILY DISABLE while we work out s3 sync issues
+          # item.data['document'] = fetch url, :document, options
         end
 
         item
