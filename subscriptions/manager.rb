@@ -472,6 +472,8 @@ module Subscriptions
     def self.download(url, adapter = nil)
       curl = Curl::Easy.new url
 
+      curl.follow_location = true
+
       curl.headers["User-Agent"] = "Scout (scout.sunlightfoundation.com) / curl"
 
       # provide adapter an optional chance to modify Curl request
@@ -480,13 +482,18 @@ module Subscriptions
       end
 
       curl.perform
-      if curl.status.start_with?("2")
+
+      ok = curl.status.start_with? "2"
+      redirected = (curl.redirect_count >= 1) and curl.status.start_with?("3")
+
+      if redirected
+        puts "\tredirecting to: #{curl.redirect_url}"
+      end
+
+      if ok or redirected
         curl.body_str
       else
         message = "Bad status code: #{curl.status} at URL: #{url}"
-        if curl.status =~ /(301|302)/
-          message << "\n\nRedirect URL: #{curl.redirect_url}"
-        end
         raise BadFetchException.new message
       end
     end
