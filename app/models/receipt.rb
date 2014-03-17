@@ -13,8 +13,6 @@ class Receipt
   field :user_id
   # @return [String] the user's email address, if delivered via email
   field :user_email
-  # XXX unused
-  field :user_delivery
   # @return [String] the service that generated the user, if not Scout itself,
   #   e.g. "open_states"
   field :user_service
