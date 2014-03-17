@@ -168,11 +168,6 @@ class Interest
     @tag_user ||= tag.user
   end
 
-  # XXX unused
-  def tags_display
-    self.tags.join ", "
-  end
-
 
   # other interests following this interest.
   # only makes sense for a saved interest with a user that owns it
