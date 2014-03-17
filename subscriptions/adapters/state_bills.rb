@@ -2,6 +2,10 @@ module Subscriptions
   module Adapters
 
     class StateBills
+      ITEM_TYPE = 'state_bill'
+      SEARCH_ADAPTER = true
+      SEARCH_TYPE = true
+      SORT_WEIGHT = 30
 
       # if the adapter supports sync, this must be supplied
       MAX_PER_PAGE = 50

@@ -140,36 +140,49 @@ require './subscriptions/manager'
 # convenience functions for sections of the subscriptions map
 
 def search_adapters
-  if @search_adapters
-    @search_adapters
-  else
-    @search_adapters = {}
-
-    item_types.each do |item_type, info|
-      if search_adapter = info['adapter']
-        @search_adapters[search_adapter] = item_type
+  @search_adapters ||= {}.tap do |hash|
+    adapter_info.each do |adapter,info|
+      if info[:search_adapter] && info[:item_type]
+        hash[adapter] = info[:item_type]
       end
     end
-
-    @search_adapters
   end
 end
 
 def item_adapters
-  if @item_adapters
-    @item_adapters
-  else
-    @item_adapters = {}
-
-    item_types.each do |item_type, info|
-      if subscriptions = info['subscriptions']
-        subscriptions.each do |subscription_type|
-          @item_adapters[subscription_type] = item_type
-        end
+  @item_adapters ||= {}.tap do |hash|
+    adapter_info.each do |adapter,info|
+      if info[:item_adapter] && info[:item_type]
+        hash[adapter] = info[:item_type]
       end
     end
+  end
+end
 
-    @item_adapters
+def adapter_info
+  @adapter_info ||= begin
+    hash = {}
+
+    Subscriptions::Adapters.constants.each do |symbol|
+      klass = Subscriptions::Adapters.const_get(symbol)
+      hash[symbol.to_s.underscore] = {
+        klass: klass,
+        # One of "bill", "document", "opinion", "regulation", "speech", "state_bill", "state_legislator" or nil.
+        item_type: klass.const_defined?(:ITEM_TYPE) ? klass::ITEM_TYPE : nil,
+        # Either `true` or `false`.
+        search_adapter: klass.const_defined?(:SEARCH_ADAPTER) ? klass::SEARCH_ADAPTER : false,
+        # Either `true` or `false`.
+        item_adapter: klass.const_defined?(:ITEM_ADAPTER) ? klass::ITEM_ADAPTER : false,
+        # Either `true` or `false`.
+        search_type: klass.const_defined?(:SEARCH_TYPE) ? klass::SEARCH_TYPE : false,
+        # Either `true` or `false`.
+        cite_type: klass.const_defined?(:CITE_TYPE) ? klass::CITE_TYPE : false,
+        # An integer.
+        sort_weight: klass.const_defined?(:SORT_WEIGHT) ? klass::SORT_WEIGHT : Float::INFINITY,
+      }
+    end
+
+    Hash[hash.sort_by{|_,info| info[:sort_weight]}]
   end
 end
 
@@ -177,28 +190,21 @@ def item_types
   @item_types ||= YAML.safe_load_file(File.join(File.dirname(__FILE__), "../subscriptions/subscriptions.yml"))['item_types']
 end
 
-# hardcoded for now
 def search_types
-  ["federal_bills", "court_opinions", "regulations", "state_bills", "documents", "speeches"]
+  adapter_info.select{|_,info| info[:search_type]}.keys
+end
+
+def cite_types
+  adapter_info.select{|_,info| info[:cite_type]}.keys
 end
 
 # cache the constantized stuff (this is dumb, this all needs to be refactored)
 def adapter_map
-  if @adapter_map
-    @adapter_map
-  else
-    @adapter_map = {}
-    adapters = Dir.glob File.join(File.dirname(__FILE__), "../subscriptions/adapters/*.rb")
-    adapters.each do |adapter|
-      type = File.basename adapter, ".rb"
-      @adapter_map[type] = "Subscriptions::Adapters::#{type.camelize}".constantize
+  @adapter_map ||= {}.tap do |hash|
+    adapter_info.each do |adapter,info|
+      hash[adapter] = info[:klass]
     end
-    @adapter_map
   end
-end
-
-def cite_types
-  ["federal_bills", "regulations", "documents"]
 end
 
 # warm caches (ugh)

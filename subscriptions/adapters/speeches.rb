@@ -2,6 +2,10 @@ module Subscriptions
   module Adapters
 
     class Speeches
+      ITEM_TYPE = 'speech'
+      SEARCH_ADAPTER = true
+      SEARCH_TYPE = true
+      SORT_WEIGHT = 50
 
       MAX_PER_PAGE = 50
 
