@@ -7,6 +7,7 @@ module Subscriptions
       SEARCH_TYPE = true
       CITE_TYPE = true
       SORT_WEIGHT = 20
+      SYNCABLE = true
 
       MAX_PER_PAGE = 50
 

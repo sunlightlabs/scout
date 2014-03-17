@@ -6,6 +6,7 @@ module Subscriptions
       SEARCH_ADAPTER = true
       SEARCH_TYPE = true
       SORT_WEIGHT = 50
+      SYNCABLE = true
 
       MAX_PER_PAGE = 50
 
