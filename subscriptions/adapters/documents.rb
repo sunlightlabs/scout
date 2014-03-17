@@ -2,6 +2,12 @@ module Subscriptions
   module Adapters
 
     class Documents
+      ITEM_TYPE = 'document'
+      SEARCH_ADAPTER = true
+      SEARCH_TYPE = true
+      CITE_TYPE = true
+      SORT_WEIGHT = 40
+      SYNCABLE = true
 
       MAX_PER_PAGE = 50
 

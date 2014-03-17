@@ -67,7 +67,6 @@ class Interest
 
   # @return [String] the item's type, e.g. "bill"
   # @note Only relevant if the interest is in an item.
-  # @note There is a list of item types in `subscriptions/subscriptions.yml`
   field :item_type
 
   # @return [Hash] arbitrary metadata, which varies depending according to the

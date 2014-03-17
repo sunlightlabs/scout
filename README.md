@@ -68,4 +68,14 @@ We'd really love it if others used the Scout codebase to set up their own alert 
 
 But if you do want to set this up yourself, there will surely turn out to be more to do! Send [konklone](https://github.com/konklone) a message if this is something you're interested in.
 
+### Custom Adapters
+
+Set the environment variable `SCOUT_ADAPTER_PATH` to the path to the directory containing your adapters, for example:
+
+```bash
+SCOUT_ADAPTER_PATH=/path/to/adapters bundle exec unicorn
+```
+
+Each file within this directory must define an adapter class, and the filename must be the lowercase, underscored version of the class name. The adapter class must be defined in a `Subscriptions::Adapters` module.
+
 Copyright (c) 2011-2013 Sunlight Foundation, [released](https://github.com/sunlightlabs/scout/blob/master/LICENSE) under the [GNU General Public License, Version 3](http://www.gnu.org/licenses/gpl-3.0.txt).

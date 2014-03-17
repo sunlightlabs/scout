@@ -2,6 +2,8 @@ module Subscriptions
   module Adapters
 
     class StateBillsActivity
+      ITEM_TYPE = 'state_bill'
+      ITEM_ADAPTER = true
 
       def self.url_for(subscription, function, options = {})
         endpoint = "http://openstates.org/api/v1"

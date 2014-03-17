@@ -2,6 +2,12 @@ module Subscriptions
   module Adapters
 
     class FederalBills
+      ITEM_TYPE = 'bill'
+      SEARCH_ADAPTER = true
+      SEARCH_TYPE = true
+      CITE_TYPE = true
+      SORT_WEIGHT = 0
+      SYNCABLE = true
 
       # if the adapter supports sync, this must be supplied
       MAX_PER_PAGE = 50
