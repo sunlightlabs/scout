@@ -187,7 +187,18 @@ def adapter_info
 end
 
 def item_types
-  @item_types ||= YAML.safe_load_file(File.join(File.dirname(__FILE__), "../subscriptions/subscriptions.yml"))['item_types']
+  @item_types ||= {}.tap do |hash|
+    adapter_info.each do |adapter,info|
+      if info[:item_type]
+        hash[info[:item_type]] ||= {'subscriptions' => []}
+        if info[:search_adapter]
+          hash[info[:item_type]]['adapter'] = adapter
+        elsif info[:item_adapter]
+          hash[info[:item_type]]['subscriptions'] << adapter
+        end
+      end
+    end
+  end
 end
 
 def search_types
