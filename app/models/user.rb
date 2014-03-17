@@ -262,11 +262,6 @@ class User
     self.phone_verify_code = User.short_token
   end
 
-  # XXX this method should be a helper method to the account controller, because it's View not Model code
-  def self.phone_verify_message(code)
-    "[Scout] Your verification code is #{code}."
-  end
-
   # turn off the user's email notifications, and any announcement subscriptions
   # log the user's unsubscription in the events table, and what the user's settings were
   def unsubscribe!(description = nil)
