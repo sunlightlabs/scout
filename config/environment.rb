@@ -12,6 +12,7 @@ require 'phone'
 
 require 'asset_sync'
 
+set :adapter_path, ENV.fetch('SCOUNT_ADAPTER_PATH', './subscriptions/adapters')
 
 class Environment
   def self.services
@@ -38,10 +39,6 @@ class Environment
       File.join "/assets", path
     end
   end
-end
-
-def subscription_map
-  @subscription_map ||= YAML.safe_load_file File.join(File.dirname(__FILE__), "../subscriptions/subscriptions.yml")
 end
 
 # words not allowed to be usernames, very inclusive to preserve flexibility in routing
@@ -136,7 +133,7 @@ require './config/admin'
 Dir.glob('deliveries/*.rb').each {|filename| load filename}
 
 # subscription management and adapters
-Dir.glob('subscriptions/adapters/*.rb').each {|filename| load filename}
+Dir.glob(File.join(settings.adapter_path, "*.rb")).each {|filename| load filename}
 require './subscriptions/manager'
 
 
@@ -177,7 +174,7 @@ def item_adapters
 end
 
 def item_types
-  @item_types ||= subscription_map['item_types']
+  @item_types ||= YAML.safe_load_file(File.join(File.dirname(__FILE__), "../subscriptions/subscriptions.yml"))['item_types']
 end
 
 # hardcoded for now
