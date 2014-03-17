@@ -1,4 +1,4 @@
-subscription_types = Dir.glob(File.join(ENV.fetch('SCOUNT_ADAPTER_PATH', './subscriptions/adapters'), '*.rb')).map do |file|
+subscription_types = Dir.glob(File.join(ENV.fetch('SCOUT_ADAPTER_PATH', './subscriptions/adapters'), '*.rb')).map do |file|
   File.basename file, File.extname(file)
 end
 

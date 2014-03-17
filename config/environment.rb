@@ -12,7 +12,7 @@ require 'phone'
 
 require 'asset_sync'
 
-set :adapter_path, ENV.fetch('SCOUNT_ADAPTER_PATH', './subscriptions/adapters')
+set :adapter_path, ENV.fetch('SCOUT_ADAPTER_PATH', './subscriptions/adapters')
 
 class Environment
   def self.services

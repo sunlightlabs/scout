@@ -1,6 +1,6 @@
 require 'active_support/core_ext/string/inflections'
 
-Dir.glob(File.join(ENV.fetch('SCOUNT_ADAPTER_PATH', './subscriptions/adapters'), '*.rb')).each {|filename| load filename}
+Dir.glob(File.join(ENV.fetch('SCOUT_ADAPTER_PATH', './subscriptions/adapters'), '*.rb')).each {|filename| load filename}
 
 syncable = []
 Subscriptions::Adapters.constants.each do |symbol|
