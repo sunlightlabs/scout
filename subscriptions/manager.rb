@@ -501,13 +501,6 @@ module Subscriptions
         raise BadFetchException.new message
       end
     end
-
-    # helper function to straighten dates into UTC times (necessary for serializing to BSON, sigh)
-    # XXX move to the speeches adapter
-    def self.noon_utc_for(date)
-      return nil unless date
-      date.to_time.midnight + 12.hours
-    end
   end
 
   # used by adapters to signal an error in parsing
