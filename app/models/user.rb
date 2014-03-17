@@ -267,16 +267,6 @@ class User
     "[Scout] Your verification code is #{code}."
   end
 
-  # XXX this method can be inlined
-  def self.phone_remote_subscribe_message
-    "You've been signed up for SMS alerts. Confirm your phone number by replying to this text with 'C'."
-  end
-
-  # XXX this method can be inlined
-  def self.phone_remote_confirm_message(password)
-    "Your number has been confirmed. Log in to #{Environment.config['hostname']} with the password \"#{password}\" to manage your alerts." # Text \"HELP\" for a list of commands."
-  end
-
   # turn off the user's email notifications, and any announcement subscriptions
   # log the user's unsubscription in the events table, and what the user's settings were
   def unsubscribe!(description = nil)

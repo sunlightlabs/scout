@@ -269,7 +269,7 @@ post "/remote/subscribe/sms" do
   # ask user to confirm their new subscription
   if new_record
     Admin.new_user user
-    SMS.deliver! "Remote Subscription", user.phone, User.phone_remote_subscribe_message
+    SMS.deliver! "Remote Subscription", user.phone, "You've been signed up for SMS alerts. Confirm your phone number by replying to this text with 'C'."
   end
 
   json 200, {
@@ -296,7 +296,7 @@ post "/remote/twilio/receive" do
     user.confirmed = true
     user.phone_confirmed = true
     new_password = user.reset_password true # with short token
-    SMS.deliver! "Remote SMS Confirmation", user.phone, User.phone_remote_confirm_message(new_password)
+    SMS.deliver! "Remote SMS Confirmation", user.phone, "Your number has been confirmed. Log in to #{Environment.config['hostname']} with the password \"#{new_password}\" to manage your alerts." # Text \"HELP\" for a list of commands."
     user.save!
   else
     SMS.deliver! "Remote Unknown Command", user.phone, "Unrecognized command."
