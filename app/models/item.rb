@@ -8,7 +8,6 @@ class Item
   include Mongoid::Timestamps
 
   # @return [String] the item's type, e.g. "bill"
-  # @note There is a list of item types in `subscriptions/subscriptions.yml`
   field :item_type
 
   # @return [String] the item's unique identifier among items of the same type
