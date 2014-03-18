@@ -18,8 +18,7 @@ class Cache
   # Used by `Manager.cache_for`.
   index({url: 1, function: 1, subscription_type: 1})
   # used for cache clearing
-  # XXX need to remove `function` for `Manager.uncache!` to use this index
-  index({function: 1, subscription_type: 1})
-  # whatever XXX unused
+  index({subscription_type: 1, function: 1})
+  # used for debugging
   index created_at: 1
 end

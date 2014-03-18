@@ -162,7 +162,7 @@ put '/account/phone' do
 
     current_user.new_phone_verify_code
 
-    if SMS.deliver!("Verification Code", current_user.phone, User.phone_verify_message(current_user.phone_verify_code))
+    if SMS.deliver!("Verification Code", current_user.phone, "[Scout] Your verification code is #{current_user.phone_verify_code}.")
       current_user.save!
 
       flash[:phone] = "We've sent you a text with a verification code."
@@ -197,7 +197,7 @@ post '/account/phone/resend' do
 
   current_user.new_phone_verify_code
   current_user.save!
-  SMS.deliver! "Resend Verification Code", current_user.phone, User.phone_verify_message(current_user.phone_verify_code)
+  SMS.deliver! "Resend Verification Code", current_user.phone, "[Scout] Your verification code is #{current_user.phone_verify_code}."
 
   flash[:phone] = "We've sent you another verification code."
   redirect "/account/settings"

@@ -169,7 +169,7 @@ module Subscriptions
       def self.item_for(result)
         return nil unless result
 
-        result['date'] = Subscriptions::Manager.noon_utc_for result['date']
+        result['date'] = noon_utc_for result['date']
         result['date_year'] = result['date'].year
         result['date_month']= result['date'].month
         result['date_day'] = result['date'].day
@@ -185,6 +185,13 @@ module Subscriptions
           :data => result
         )
 
+      end
+
+      # helper function to straighten dates into UTC times (necessary for serializing to BSON, sigh)
+      # @private
+      def self.noon_utc_for(date)
+        return nil unless date
+        date.to_time.midnight + 12.hours
       end
 
       def self.party_map
