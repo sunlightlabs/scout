@@ -19,4 +19,6 @@ class Cache
   index({url: 1, function: 1, subscription_type: 1})
   # used for cache clearing
   index({subscription_type: 1, function: 1})
+  # used for debugging
+  index created_at: 1
 end
