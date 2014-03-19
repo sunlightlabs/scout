@@ -5,6 +5,9 @@ module Subscriptions
   module Adapters
 
     class StateLegislators
+      ITEM_TYPE = 'state_legislator'
+      SEARCH_ADAPTER = true
+
       def self.url_for_detail(item_id, options = {})
         api_key = options[:api_key] || Environment.config['subscriptions']['sunlight_api_key']
         endpoint = "http://openstates.org/api/v1"

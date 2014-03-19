@@ -31,7 +31,7 @@ configure(:development) do |config|
   config.also_reload "./app/helpers/*.rb"
   config.also_reload "./app/models/*.rb"
   config.also_reload "./app/controllers/*.rb"
-  config.also_reload "./subscriptions/adapters/*.rb"
+  config.also_reload File.join(settings.adapter_path, "*.rb")
   config.also_reload "./subscriptions/*.rb"
   config.also_reload "./deliveries/*.rb"
 end

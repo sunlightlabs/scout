@@ -2,6 +2,12 @@ module Subscriptions
   module Adapters
 
     class Regulations
+      ITEM_TYPE = 'regulation'
+      SEARCH_ADAPTER = true
+      SEARCH_TYPE = true
+      CITE_TYPE = true
+      SORT_WEIGHT = 20
+      SYNCABLE = true
 
       MAX_PER_PAGE = 50
 

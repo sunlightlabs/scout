@@ -2,6 +2,8 @@ module Subscriptions
   module Adapters
 
     class FederalBillsUpcomingFloor
+      ITEM_TYPE = 'bill'
+      ITEM_ADAPTER = true
 
       def self.url_for(subscription, function, options = {})
         api_key = options[:api_key] || Environment.config['subscriptions']['sunlight_api_key']

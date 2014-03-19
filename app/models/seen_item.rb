@@ -8,14 +8,11 @@ class SeenItem
   include Mongoid::Document
   include Mongoid::Timestamps
 
+  # @todo Refactor this out. It should be possible to derive subscriptions
+  #   on-demand from the interest.
   belongs_to :subscription
   belongs_to :interest
   belongs_to :user
-
-  # @todo Refactor this out. It should be possible to derive subscriptions
-  #   on-demand from the interest.
-  # XXX redundant with `belongs_to :subscription`?
-  field :subscription_id
 
   # @return [String] what the user is interested in (terms, feed URL, etc.)
   field :interest_in
@@ -25,7 +22,6 @@ class SeenItem
   field :subscription_type
 
   # @return [String] the item's type, e.g. "bill"
-  # @note There is a list of item types in `subscriptions/subscriptions.yml`
   field :item_type
 
   # @return [String] the item's unique identifier among items of the same type

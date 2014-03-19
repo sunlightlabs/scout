@@ -2,6 +2,10 @@ module Subscriptions
   module Adapters
 
     class CourtOpinions
+      ITEM_TYPE = 'opinion'
+      SEARCH_ADAPTER = true
+      SEARCH_TYPE = true
+      SORT_WEIGHT = 10
 
       # if the adapter supports sync, this must be supplied
       MAX_PER_PAGE = 20

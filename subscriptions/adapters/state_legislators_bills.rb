@@ -5,6 +5,9 @@ module Subscriptions
   module Adapters
 
     class StateLegislatorsBills
+      ITEM_TYPE = 'state_legislator'
+      ITEM_ADAPTER = true
+
       def self.url_for(subscription, function, options = {})
         api_key = options[:api_key] || Environment.config['subscriptions']['sunlight_api_key']
 

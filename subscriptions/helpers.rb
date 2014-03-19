@@ -20,18 +20,6 @@ module Helpers
       "#{bill_type type} #{number}"
     end
 
-    # XXX unused
-    def bill_fields_from(bill_id)
-      type = bill_id.gsub /[^a-z]/, ''
-      number = bill_id.match(/[a-z]+(\d+)-/)[1].to_i
-      session = bill_id.match(/-(\d+)$/)[1].to_i
-
-      code = "#{type}#{number}"
-      chamber = {'h' => 'house', 's' => 'senate'}[type.first.downcase]
-
-      [type, number, session, code, chamber]
-    end
-
     # standardized in accordance with http://www.gpo.gov/help/index.html#about_congressional_bills.htm
     # @private
     def bill_type(short)
@@ -407,16 +395,6 @@ module Helpers
       @state_map ||= ::Subscriptions::Adapters::StateBills.state_map
     end
 
-    # XXX unused
-    def state_version_info?(bill)
-      bill['versions'] and bill['versions'].any?
-    end
-
-    # XXX unused
-    def state_source_info?(bill)
-      bill['sources'] and bill['sources'].any?
-    end
-
     # XXX only used by speeches views
     def speaker_name(speech)
       party = speech['speaker_party']
@@ -424,41 +402,10 @@ module Helpers
       "#{speaker_name_only speech} (#{party}-#{state})"
     end
 
-    # XXX unused
-    def speaker_party(party)
-      ::Subscriptions::Adapters::Speeches.party_map[party]
-    end
-
     # @private
     def speaker_name_only(speech)
       title = (speech['chamber'] == 'Senate') ? 'Sen' : 'Rep'
       "#{title}. #{speech['speaker_first']} #{speech['speaker_last']}"
-    end
-
-    # XXX unused
-    def legislator_name(legislator)
-      titled_name = "#{legislator['title']}. #{(legislator['nickname'].to_s != "") ? legislator['nickname'] : legislator['first_name']} #{legislator['last_name']}"
-      "#{titled_name} [#{legislator['party']}-#{legislator['state']}]"
-    end
-
-    # XXX unused
-    def bill_summary(bill)
-      return nil unless bill['summary'].present?
-
-      summary = bill['summary'].dup
-      summary.sub! /^\d+\/\d+\/\d+--.+?\.\s*/, ""
-      summary.sub! /(\(This measure.+?\))\n*\s*/, ""
-
-      if bill['short_title']
-        summary.sub! /^#{bill['short_title']} - /, ""
-      end
-
-      post_truncate = lambda do |sum|
-        # try to split up into meaningful paragraphs if possible
-        sum.gsub(/\(Sec\.\s+\d+\)/) {|x| "\n\n<strong>#{x}</strong>"}
-      end
-
-      truncate_more_html "bill_summary", summary, 500, post_truncate
     end
 
     # XXX only used by state_bills views
@@ -484,13 +431,6 @@ module Helpers
       title = state_bill_title_text bill
       title.gsub! ';', ";\n\n"
       truncate_more_html "state_bill_title", title, 500
-    end
-
-    # XXX unused
-    def regulation_abstract(regulation)
-      return nil unless regulation['abstract'].present? # also checked in view
-
-      simple_format regulation['abstract']
     end
 
     # XXX only used by speeches views
@@ -547,16 +487,6 @@ module Helpers
       description = "<p>#{description}</p>"
 
       description
-    end
-
-    # XXX unused
-    def legislator_image(legislator)
-      "http://assets.sunlightfoundation.com/moc/40x50/#{legislator['bioguide_id']}.jpg"
-    end
-
-    # XXX unused
-    def speaker_url(speech)
-      "http://capitolwords.org/legislator/#{speech['bioguide_id']}"
     end
 
     # XXX only used by regulations views

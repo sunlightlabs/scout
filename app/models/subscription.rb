@@ -11,8 +11,6 @@ class Subscription
   field :initialized, type: Boolean, default: false
   # @return [String] what the user is interested in (terms, feed URL, etc.)
   field :interest_in
-  # XXX redundant with `belongs_to :interest`?
-  field :interest_id
   # @return [Time] the time at which the subscription was last checked
   field :last_checked_at, type: Time
 

@@ -1,9 +1,21 @@
+require 'active_support/core_ext/string/inflections'
+
+Dir.glob(File.join(ENV.fetch('SCOUT_ADAPTER_PATH', './subscriptions/adapters'), '*.rb')).each {|filename| load filename}
+
+syncable = []
+Subscriptions::Adapters.constants.each do |symbol|
+  klass = Subscriptions::Adapters.const_get(symbol)
+  if klass.const_defined?(:SYNCABLE) && klass::SYNCABLE
+    syncable << symbol.to_s.underscore
+  end
+end
+
 namespace :sync do
 
-  [:state_bills, :federal_bills, :speeches, :regulations, :documents].each do |type|
+  syncable.each do |type|
     desc "Sync #{type}"
     task type => :environment do
-      sync type.to_s
+      sync type
     end
   end
 
