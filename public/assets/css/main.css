@@ -354,8 +354,9 @@ div.error {
 }
 
 header.contentWrapper{
-    margin-top: -4px;
     padding-bottom: 20px;
+    margin: -4px auto 0 auto;
+    overflow: visible;
 }
 
 li.user{
@@ -2388,4 +2389,68 @@ iframe.document {
   width: 650px; height: 830px;
   margin: 30px auto;
   display: block;
+}
+
+
+/* Branding Bar Defaults */
+
+
+
+.branding-bar_links {
+  float: left;
+  line-height: 38px;
+  margin-top: 3px;
+}
+
+.headerWrapper a.social {
+  text-decoration: none;
+}
+
+.headerWrapper a.social .icon {
+  color: #aaa;
+  font-size: 16px;
+  margin-right: 10px;
+  transition: color 200ms ease-out;
+}
+
+.headerWrapper .social .icon-facebook:hover{ color: #3B5998; }
+.headerWrapper .social .icon-twitter:hover{ color: #00aced; }
+.headerWrapper .social .icon-google-plus:hover{ color: #dd4b39; }
+
+.branding-bar_trigger {
+  color: #666;
+  cursor: pointer;
+  font-family: 'franklin-gothic-urw', helvetica, arial, sans-serif;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.branding-bar_trigger:hover {
+  color: #000;
+}
+
+.branding-bar_logo {
+  float: right;
+  line-height: 38px;
+}
+
+.branding-bar_productof {
+  color: #888;
+  font-family: 'Georgia';
+  font-size: 11px;
+  font-style: italic;
+  margin-right: 2px;
+  text-rendering: optimizeLegibility;
+}
+
+.branding-bar_sunlight-logo {
+  background: url('http://sunlight-cdn.s3.amazonaws.com/brandingbar/0.1.1/img/sunlight-logo.png') no-repeat center center;
+  background: rgba(0,0,0,0) url('http://sunlight-cdn.s3.amazonaws.com/brandingbar/0.1.1/img/sunlight-logo.svg') no-repeat center center;
+  background-size: 100% 100%;
+  color: transparent;
+  display: inline-block;
+  font-size: 0;
+  height: 30px;
+  width: 160px;
+  vertical-align: middle;
 }
