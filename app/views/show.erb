@@ -67,7 +67,6 @@
     container.find(".content").hide();
 
     $.get("/fetch" + window.location.pathname, {}, function(data) {
-      window.data = data;
       container.find(".loading").hide();
       container.find(".content").show().html(data.results);
       $(".module.sharing").html(data.share);

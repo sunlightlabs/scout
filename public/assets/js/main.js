@@ -137,7 +137,10 @@ var Utils = {
   },
 
   shareButtons: function(title) {
-    var title = $("#share-title, .entryHeader h2").text();
+    if (!title) {
+      title = $("#share-title, .entryHeader h2").text();
+      title = $.trim(title);
+    }
     if (!title) return;
 
     title = "Scout - " + title;
@@ -147,7 +150,6 @@ var Utils = {
       .attr("data-twitter-tweet-options", "count=none");
 
     $(".share-buttons").trigger("register").trigger("ready");
-    // console.log("Sharing: " + title);
   }
 };
 

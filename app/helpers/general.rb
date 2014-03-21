@@ -144,6 +144,14 @@ module Helpers
       partial "partials/follow", engine: :erb, locals: {type: :tag, interest: interest, enabled: enabled}
     end
 
+    # share text for a public collection
+    def collection_share(user, collection)
+      message = ""
+      message << (user.display_name.present? ? user.display_name : user.username)
+      message << " is following \"#{collection.name}\""
+      message
+    end
+
     def truncate(string, length)
       string ||= ""
       if string.size > length
