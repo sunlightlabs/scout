@@ -392,6 +392,8 @@ header h1{
     padding-left: 22px;
 }
 
+/*#userNav li.dim {font-weight: normal;}*/
+
 #search_form{
     float: right;
     margin-top: 72px;
