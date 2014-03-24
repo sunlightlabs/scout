@@ -147,7 +147,7 @@ module Helpers
     # share text for a public collection
     def collection_share(user, collection)
       message = ""
-      message << (user.display_name.present? ? user.display_name : user.username)
+      message << (user.display_name.present? ? user.display_name : (user.username || "This user"))
       message << " is following \"#{collection.name}\""
       message
     end
