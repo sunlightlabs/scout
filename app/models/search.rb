@@ -15,14 +15,14 @@ module Search
 
     if citation_id = usc_check(term)
       {
-        'citation_id' => citation_id, 
+        'citation_id' => citation_id,
         'citation_type' => 'usc',
-        'original' => term 
+        'original' => term
       }
     elsif citation_id = law_check(term)
       {
         'citation_id' => citation_id,
-        'citation_type' => 'law',
+        'citation_type' => 'us-law',
         'original' => term
       }
     else
@@ -31,13 +31,13 @@ module Search
   end
 
   # Reads in a term and returns a US code citation ID compliant with citation.js
-  # 
+  #
   # This obviously duplicates some of the functionality of citation.js, but is a convenient
   # beginning, and not all of what Scout looks for in searches will be what citation.js extracts.
   # also, citation.js (will eventually) use a whole lot more kinds of patterns and processing
   # strategies than are necessary for looking at search terms in Scout.
-  # 
-  # If this gets more complicated, we can have this call out to a Citation server 
+  #
+  # If this gets more complicated, we can have this call out to a Citation server
   # instance in the future.
 
   # Checks the string to see if it *is* (not contains) a US Code citation.
@@ -66,10 +66,10 @@ module Search
   # @private
   def self.law_check(string)
     string = string.strip
-    if parts = string.scan(/(pub(?:lic)?|priv(?:ate)?)\.? +l(?:aw)?\.?(?: +No\.?)? +(\d+)[-–]+(\d+)/i).first 
+    if parts = string.scan(/(pub(?:lic)?|priv(?:ate)?)\.? +l(?:aw)?\.?(?: +No\.?)? +(\d+)[-–]+(\d+)/i).first
       type, congress, number = parts
       type = type.match(/^priv/i) ? "private" : "public"
-      ["law", type, congress, number].join "/"
+      ['us-law', type, congress, number].join "/"
     else
       nil
     end
@@ -85,12 +85,12 @@ module Search
     string = string.gsub " ", ""
 
     # this was provided by Open States in January of 2013
-    # occasionally prefixes get added, so it could merit updating, 
+    # occasionally prefixes get added, so it could merit updating,
     # but probably good enough to start
     bill_prefixes = %w{
-      A ACA HR HP SMR JR RCS HJ ACR B RC HM HB HC MIS HF RCC SCM PS LB 
-      PC SCA HMR CAS LR CER JSR HJRCA K CA SCR HCR PR HCMR AB E CACR SJR 
-      H AJR J AM L SC S AR RKS SJM RS HCO PET HCM SJRCA HJR SR SP JRH SJ 
+      A ACA HR HP SMR JR RCS HJ ACR B RC HM HB HC MIS HF RCC SCM PS LB
+      PC SCA HMR CAS LR CER JSR HJRCA K CA SCR HCR PR HCMR AB E CACR SJR
+      H AJR J AM L SC S AR RKS SJM RS HCO PET HCM SJRCA HJR SR SP JRH SJ
       R JRS SN SM HJM SB RKC SF
     }
 
@@ -126,13 +126,13 @@ module Search
   # takes in a hash with 'citation_id' and 'citation_type' fields
   def self.cite_standard(citation)
     citation_id = citation['citation_id']
-    
+
     if citation['citation_type'] == 'usc'
       usc, title, section, *subsections = citation_id.split "/"
       base = "#{title} USC § #{section}"
       base << "(#{subsections.join(")(")})" if subsections.any?
       base
-    elsif citation['citation_type'] == 'law'
+    elsif citation['citation_type'] == 'us-law'
       # subsections not supported
       law, type, congress, number = citation_id.split "/"
       "#{type.capitalize} Law #{congress}-#{number}"
@@ -156,7 +156,7 @@ module Search
   # 2) yanks out any included terms which are citations, yanks out
   # 3) reserializes query string from parsed results
   def self.parse_advanced(query)
-    
+
     # default to returning original query
     details = {'query' => query, 'citations' => []}
 
@@ -171,7 +171,7 @@ module Search
     end
 
     parsed = [parsed] unless parsed.is_a?(Array)
-    
+
     citations = []
 
     included = []
@@ -181,7 +181,7 @@ module Search
     parsed.each do |piece|
       if term = (piece[:term] or piece[:word] or piece[:phrase])
         term = term.to_s
-        
+
         if piece[:prohibited]
           excluded << {'term' => term}
 
@@ -224,14 +224,14 @@ module Search
     quotify = -> str {str[" "] ? "\"#{str}\"" : str}
 
     query = ""
-    query << " " + advanced['included'].map do |term| 
+    query << " " + advanced['included'].map do |term|
       quotify.call term['term']
     end.sort.join(" ")
 
     query << " " + advanced['distance'].map do |term|
       "\"#{term['words'].sort.join " "}\"~#{term['distance']}"
     end.sort.join(" ")
-    
+
     query << " " + advanced['excluded'].map do |term|
       "-#{quotify.call term['term']}"
     end.sort.join(" ")
