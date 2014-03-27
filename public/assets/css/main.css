@@ -756,13 +756,15 @@ footer nav li{
     margin-bottom: 36px;
 }
 .home.modules .module.rad-collections{
-	width: 66%;
+	width: 50%;
     box-sizing: border-box;
     -webkit-boxsizing: border-box;
     -moz-box-sizing: border-box;
     background: none;
     margin-bottom: 80px;
-    padding-right: 25px;
+    padding: 20px;
+    margin-right: 20px;
+    background: #f5f6f3;
 }
 .home.modules .module.video h3 {
 	text-align: left;
@@ -780,7 +782,6 @@ footer nav li{
 .feature-collection {
 	margin-bottom: 40px;
 	padding: 0 20px;
-    background: url('../images/bg_featured_collection.png') left top no-repeat;
     height: 133px;
     width: 570px;
     margin-top: 35px;
