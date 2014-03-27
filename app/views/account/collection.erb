@@ -1,5 +1,5 @@
 <% display_name = user.display_name.present? ? user.display_name : user.username %>
-<% content_for :title do %><%= display_name %> is following <%= collection.name %>.<% end %>
+<% content_for :title do %><%= display_name %> is following "<%= collection.name %>".<% end %>
 <% if collection.description.present? %>
   <% content_for :description do %><%= truncate collection.description, 200 %><% end %>
 <% else %>
@@ -83,6 +83,11 @@
         </a>
       <% end %>
     </div>
+
+    <div class="module sharing">
+      <%= partial "partials/share", engine: :erb %>
+    </div>
+
     <% if other_public_collections.any? %>
       <div class="module">
         <h4>
@@ -113,7 +118,8 @@
 <div class="contentArea left collection <%= current_user == user ? "" : "public" %>">
   <div class="collectionHeader">
 
-    <h2>
+    <h2 id="share-title"
+      data-share="<%= escape_attribute collection_share(user, collection) %>">
       <%= h collection.name %>
     </h2>
 
@@ -301,6 +307,9 @@
     <% if logged_in? and interest.new_record? and (params[:follow] == "now") %>
       follow();
     <% end %>
+
+    var title = $("#share-title").data("share");
+    Utils.shareButtons(title);
   }
 
   function follow() {

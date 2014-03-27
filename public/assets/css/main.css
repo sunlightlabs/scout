@@ -392,6 +392,8 @@ header h1{
     padding-left: 22px;
 }
 
+/*#userNav li.dim {font-weight: normal;}*/
+
 #search_form{
     float: right;
     margin-top: 72px;
@@ -2449,8 +2451,8 @@ iframe.document {
 }
 
 .branding-bar_sunlight-logo {
-  background: url('http://sunlight-cdn.s3.amazonaws.com/brandingbar/0.1.1/img/sunlight-logo.png') no-repeat center center;
-  background: rgba(0,0,0,0) url('http://sunlight-cdn.s3.amazonaws.com/brandingbar/0.1.1/img/sunlight-logo.svg') no-repeat center center;
+  background: url('https://sunlight-cdn.s3.amazonaws.com/brandingbar/0.1.1/img/sunlight-logo.png') no-repeat center center;
+  background: rgba(0,0,0,0) url('https://sunlight-cdn.s3.amazonaws.com/brandingbar/0.1.1/img/sunlight-logo.svg') no-repeat center center;
   background-size: 100% 100%;
   color: transparent;
   display: inline-block;

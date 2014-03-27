@@ -20,7 +20,7 @@ class Legislator
     api_key = Environment.config['subscriptions']['sunlight_api_key']
     fields = %w{bioguide_id name_suffix first_name middle_name last_name nickname party state title}
 
-    url = "http://congress.api.sunlightfoundation.com"
+    url = "https://congress.api.sunlightfoundation.com"
     url << "/legislators?per_page=all"
     url << "&apikey=#{api_key}"
     url << "&fields=#{fields.join ','}"

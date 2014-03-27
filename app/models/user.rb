@@ -109,7 +109,9 @@ class User
     return unless email.present?
 
     self.government = Gman.valid? email
-    self.education = Swot::is_academic? email
+
+    # todo: ditch the #dup when swot updates to newer than 0.2.13
+    self.education = Swot::is_academic? email.dup
 
     true
   end

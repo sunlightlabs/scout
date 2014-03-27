@@ -8,7 +8,7 @@ end
 
 require 'rake/testtask'
 
-Dir.glob('tasks/*.rake').each{|filename| load filename}
+Dir.glob('tasks/*.rake').each {|filename| load filename}
 
 namespace :tests do
   Rake::TestTask.new(:all) do |t|

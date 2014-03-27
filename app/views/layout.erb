@@ -1,8 +1,5 @@
 <!doctype html>
 
-<!--[if lt IE 7 ]> <html lang="en" class="ie6 ie"> <![endif]-->
-<!--[if IE 7 ]>    <html lang="en" class="ie7 ie"> <![endif]-->
-<!--[if IE 8 ]>    <html lang="en" class="ie8 ie"> <![endif]-->
 <!--[if IE 9 ]>    <html lang="en" class="ie9 ie"> <![endif]-->
 <!--[if (gt IE 9)|!(IE)]><!-->
 <html lang="en" class="bb_wrapper"> <!--<![endif]-->
@@ -55,17 +52,13 @@
 
   <script src="<%= asset_path "/js/jquery-2.0.3.min.js" %>"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qtip2/2.1.1/jquery.qtip.min.js"></script>
-  <link rel="stylesheet" href="https://sunlight-cdn.s3.amazonaws.com/brandingbar/0.1.1/css/brandingbar.css">
-  <link rel="stylesheet" href="http://sf-icons.s3.amazonaws.com/css/sf-icons.css">
-  <!--[if IE 8]>
-      <script src="http://sf-icons.s3.amazonaws.com/js/sf-icons.js"></script>
-  <![endif]-->
-
+  <link rel="stylesheet" href="https://sunlight-cdn.s3.amazonaws.com/brandingbar/0.2/css/brandingbar.css">
+  <link rel="stylesheet" href="https://sf-icons.s3.amazonaws.com/css/sf-icons.css">
 
 </head>
 <body>
-  
-  <div data-bb-brandingbar="true" data-bb-property-id="sunlightlabs-awesome" class="headerWrapper">
+
+  <div data-bb-brandingbar="true" class="headerWrapper">
     <div class="hatWrap">
       <div class="contentWrapper">
         <div class="branding-bar_links">
@@ -75,12 +68,12 @@
             <a class="social" href="https://twitter.com/sunfoundation"><span class="icon icon-twitter"></span></a>
             <a class="social" href="https://plus.google.com/+sunlightfoundation"><span class="icon icon-google-plus"></span></a>
 
-            <!-- Branding Bar Toggle --> 
-            <a class="branding-bar_trigger" data-bb-toggle=".bb_wrapper" href="http://sunlightfoundation.com/about/">About Sunlight Foundation</a>
+            <!-- Branding Bar Toggle -->
+            <a class="branding-bar_trigger" data-bb-toggle=".bb_wrapper" href="https://sunlightfoundation.com/about/">About Sunlight Foundation</a>
         </div>
         <div class="branding-bar_logo">
             <span class="branding-bar_productof">a product of </span>
-            <a class="branding-bar_sunlight-logo" href="http://www.sunlightfoundation.com">Sunlight Foundation</a>
+            <a class="branding-bar_sunlight-logo" href="https://sunlightfoundation.com">Sunlight Foundation</a>
         </div>
       </div>
     </div>
@@ -110,12 +103,24 @@
             <li class="feedback">
               <a href="mailto:<%= Environment.config['organization']['contact'] %>" class="feedback">Contact</a>
             </li>
+            <li class="dim">
+              <a href="/about">About</a>
+            </li>
+            <li class="dim">
+              <a href="https://sunlightfoundation.com/join/">Get Involved</a>
+            </li>
             <li>
               <a href="/logout" class="logout">Log Out</a>
             </li>
           <% else %>
             <li class="feedback">
               <a href="mailto:<%= Environment.config['organization']['contact'] %>" class="feedback">Contact</a>
+            </li>
+            <li class="dim">
+              <a href="/about">About</a>
+            </li>
+            <li class="dim">
+              <a href="https://sunlightfoundation.com/join/">Get Involved</a>
             </li>
             <li>
               <a href="/login" class="login">Login or Sign up</a>
@@ -190,7 +195,6 @@
       <nav>
       <ul>
         <li><a href="/collections">Scout Collections</a></li>
-        <li><a href="/about">About</a></li>
       </ul>
       </nav>
 
@@ -267,7 +271,7 @@
   <script src="<%= asset_path "/js/main.js?#{Time.now.to_i}" %>"></script>
 
   <script type="text/javascript" src="https://s3.amazonaws.com/assets.sunlightfoundation.com/social/scripts/simple-socialite-pack.min.js.gz" ></script>
-  <script src="https://sunlight-cdn.s3.amazonaws.com/brandingbar/0.1.1/js/brandingbar.js"></script>
+  <script src="https://sunlight-cdn.s3.amazonaws.com/brandingbar/0.2/js/brandingbar.js"></script>
 
   <%= yield_content :foot %>
 
