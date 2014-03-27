@@ -766,6 +766,10 @@ footer nav li{
     margin-right: 20px;
     background: #f5f6f3;
 }
+.home.modules .module.video {
+    padding: 25px 25px 25px 0;
+    width: 318px;
+}
 .home.modules .module.video h3 {
 	text-align: left;
 }
@@ -779,12 +783,12 @@ footer nav li{
 .home.modules .module.video img:hover{
 	opacity: .9;
 }
+.home.modules .module.social {
+    width: 100px;
+    padding-top: 20px;
+}
 .feature-collection {
-	margin-bottom: 40px;
-	padding: 0 20px;
     height: 133px;
-    width: 570px;
-    margin-top: 35px;
 }
 .feature-collection .vert-middle {
     display: table-row;
