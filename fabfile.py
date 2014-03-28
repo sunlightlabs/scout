@@ -6,6 +6,9 @@ env.use_ssh_config = True
 branch = "master"
 repo = "git://github.com/sunlightlabs/scout.git"
 
+# keep 10 releases at a time on disk
+keep = 10
+
 # default to staging, override with "fab [command] --set target=production"
 target = env.get('target', 'staging')
 
@@ -19,11 +22,22 @@ elif target == "production":
 
 home = "/projects/%s" % username
 shared_path = "%s/shared" % home
-version_path = "%s/versions/%s" % (home, time.strftime("%Y%m%d%H%M%S"))
+versions_path = "%s/versions" % home
+version_path = "%s/%s" % (versions_path, time.strftime("%Y%m%d%H%M%S"))
 current_path = "%s/current" % home
 
 
 ## can be run only as part of deploy
+
+def cleanup():
+  versions = run("ls -x %s" % versions_path).split()
+  # destroy all but the most recent X
+  destroy = versions[:-keep]
+
+  for version in destroy:
+    command = "rm -rf %s/%s" % (versions_path, version)
+    run(command)
+
 
 def checkout():
   run('git clone -q -b %s %s %s' % (branch, repo, version_path))
@@ -95,6 +109,7 @@ def deploy():
   execute(set_crontab)
   execute(stop)
   execute(start)
+  execute(cleanup)
   # execute(restart)
 
 # only difference is it uses start instead of restart
