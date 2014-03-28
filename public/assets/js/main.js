@@ -146,8 +146,8 @@ var Utils = {
     title = "Scout - " + title;
 
     $(".share-buttons")
-      .attr("data-options", "title=" + encodeURIComponent(title))
-      .attr("data-twitter-tweet-options", "count=none");
+      .attr("data-options", "title=" + encodeURIComponent(title));
+      // .attr("data-twitter-tweet-options", "count=none");
 
     $(".share-buttons").trigger("register").trigger("ready");
   }
