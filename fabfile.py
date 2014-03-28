@@ -31,7 +31,6 @@ current_path = "%s/current" % home
 
 def cleanup():
   versions = run("ls -x %s" % versions_path).split()
-  # destroy all but the most recent X
   destroy = versions[:-keep]
 
   for version in destroy:
@@ -72,11 +71,6 @@ def sync_assets():
 def make_current():
   run('rm -f %s && ln -s %s %s' % (current_path, version_path, current_path))
 
-# TODO...
-# https://github.com/sunlightlabs/tcamp/blob/master/fabfile.py#L118
-def prune_releases():
-  pass
-
 
 ## can be run on their own
 
@@ -107,10 +101,8 @@ def deploy():
   execute(sync_assets)
   execute(make_current)
   execute(set_crontab)
-  execute(stop)
-  execute(start)
+  execute(restart)
   execute(cleanup)
-  # execute(restart)
 
 # only difference is it uses start instead of restart
 def deploy_cold():
