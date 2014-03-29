@@ -75,7 +75,7 @@
 #
 # ...and re-enabled after adding some workaround logic to catch and notify.
 #
-30 9 * * * /projects/scout/current/config/cron/production/check.sh court_opinions rate_limit=1
+30 8 * * * /projects/scout/current/config/cron/production/check.sh court_opinions rate_limit=1
 
 # item-specific subscriptions
 
