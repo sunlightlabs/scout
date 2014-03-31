@@ -104,17 +104,19 @@ class User
     end
   end
 
-  # freeze email between validation and save step
+  # freeze email between validation and save step.
+  # this was added after a third-party lib (Swot) was caught
+  # downcase-ing emails in-place, after validation and before save.
   after_validation :freeze_email
   after_save :unfreeze_email
   def freeze_email; self.email.freeze; end
   def unfreeze_email; self.email = self.email.dup; end
 
+
   before_save :check_email_type
   def check_email_type
     return unless email.present?
 
-    # #dup is done as a precaution against libraries mutating data
     self.government = Gman.valid? email.dup
     self.education = Swot::is_academic? email.dup
 
