@@ -108,7 +108,7 @@ class User
   def check_email_type
     return unless email.present?
 
-    self.government = Gman.valid? email
+    self.government = Gman.valid? email.dup
 
     # todo: ditch the #dup when swot updates to newer than 0.2.13
     self.education = Swot::is_academic? email.dup

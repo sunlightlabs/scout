@@ -168,6 +168,55 @@ class RemoteTest < Test::Unit::TestCase
     assert_equal 'DE', search_interest.data['state']
   end
 
+  # covers a real bug where Swot was mutating emails in-place,
+  # and de-duping was not happening correctly
+  def test_service_does_not_lowercase
+    service = "service1"
+    key = Environment.services["service1"]['secret_key']
+    notifications = "email_daily"
+
+    email = "Test@example.com" # capitalized!
+
+    # user exists, 1 user, 0 alerts
+    assert_nil User.where(email: email).first
+    count = User.count
+    interest_count = Interest.count
+
+    # new item subscription
+    item_id = "hr4192-112"
+    item_type = "bill"
+    mock_item item_id, item_type
+
+    interest1 = {
+      'active' => true,
+      'changed_at' => Time.now,
+
+      'interest_type' => "item",
+      'item_type' => item_type,
+      'item_id' => item_id
+    }
+
+    post "/remote/service/sync", {
+      email: email,
+      service: service,
+      secret_key: key,
+      notifications: notifications,
+      interests: [interest1]
+    }.to_json
+    assert_response 201
+
+    assert_equal 1, json_response['actions']['added']
+    assert_equal 0, json_response['actions']['removed']
+
+    # user created under given email
+    assert_not_nil User.where(email: email).first
+    assert_nil User.where(email: email.downcase).first
+
+    assert_equal count + 1, User.count
+    assert_equal interest_count + 1, Interest.count
+  end
+
+
   # no key, bunk key, valid key for wrong service
   def test_service_sync_invalid_secret_key
     service = "service1"
@@ -544,9 +593,6 @@ class RemoteTest < Test::Unit::TestCase
     assert_response 500
 
     assert_nil User.where(phone: phone).first
-  end
-
-  def test_subscribe_by_sms_with_invalid_credentials_fails
   end
 
 
