@@ -5,16 +5,14 @@ class UserTest < Test::Unit::TestCase
   include TestHelper::Methods
   include FactoryGirl::Syntax::Methods
 
-  # peek into User's validation path to make sure emails
-  # are not mutated post-validation and before-save
+  # A test class that intentionally should raise exceptions on save,
+  # because it mutates an email during before_save.
   class TestUser < User
     # should raise exception
     before_save :mutate!
     def mutate!; email.upcase!; end
   end
 
-  # I'm not sure how to test the general problem of ensuring email
-  # validations aren't disturbed in any way between validate and save.
   def test_emails_cannot_mutate_before_validation
     email = "Testing@example.com"
     user = TestUser.new email: email
