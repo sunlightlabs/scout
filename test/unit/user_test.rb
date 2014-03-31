@@ -5,6 +5,32 @@ class UserTest < Test::Unit::TestCase
   include TestHelper::Methods
   include FactoryGirl::Syntax::Methods
 
+  # peek into User's validation path to make sure emails
+  # are not mutated post-validation and before-save
+  class TestUser < User
+    # should raise exception
+    before_save :mutate!
+    def mutate!; email.upcase!; end
+  end
+
+  # I'm not sure how to test the general problem of ensuring email
+  # validations aren't disturbed in any way between validate and save.
+  def test_emails_cannot_mutate_before_validation
+    email = "Testing@example.com"
+    user = TestUser.new email: email
+
+    assert_raise_with_message(RuntimeError, "can't modify frozen String") do
+      user.save
+    end
+
+    # but it's okay in a non-saving circumstance
+    user = User.new email: email
+    assert_nothing_raised do
+      user.save
+      user.email.upcase!
+    end
+  end
+
   def test_mass_assignment
     user = create :user
 

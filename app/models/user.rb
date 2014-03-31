@@ -104,13 +104,18 @@ class User
     end
   end
 
+  # freeze email between validation and save step
+  after_validation :freeze_email
+  after_save :unfreeze_email
+  def freeze_email; self.email.freeze; end
+  def unfreeze_email; self.email = self.email.dup; end
+
   before_save :check_email_type
   def check_email_type
     return unless email.present?
 
+    # #dup is done as a precaution against libraries mutating data
     self.government = Gman.valid? email.dup
-
-    # todo: ditch the #dup when swot updates to newer than 0.2.13
     self.education = Swot::is_academic? email.dup
 
     true
