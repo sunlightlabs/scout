@@ -70,7 +70,7 @@ module TestHelper
       end
 
       if File.exists?(file)
-        content = File.read(file)
+        content = File.read file
 
         # handle basic fetch, or with adapter passed in
         Subscriptions::Manager.stub(:download).with(url).and_return content
