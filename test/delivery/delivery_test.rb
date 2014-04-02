@@ -243,6 +243,10 @@ class DeliveryTest < Test::Unit::TestCase
     i3b = search_interest! user3, "state_bills", "environment_transition", "simple", {}, {notifications: "email_immediate"}
     i3c = search_interest! user3, "state_bills", "science_transition", "simple"
 
+    # adding this would flush out any race conditions involving
+    # shifting timestamps in URLs, during testing. Frozen in test_helper.
+    # sleep 1
+
     [user1, user2, user3].each do |u|
       assert_equal 7, u.seen_items.count
       assert_equal 0, u.deliveries.count

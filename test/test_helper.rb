@@ -10,6 +10,7 @@ require './scout'
 require './test/factories'
 
 require 'rspec/mocks'
+require 'timecop'
 
 set :environment, :test
 
@@ -20,6 +21,9 @@ module TestHelper
     # Test::Unit hooks
 
     def setup
+      # FREEZE TIME
+      Timecop.freeze
+
       RSpec::Mocks.setup(self)
 
       Subscriptions::Manager.stub(:download).and_return("{}")
@@ -36,6 +40,7 @@ module TestHelper
     def teardown
       Mongoid.models.each &:delete_all
       RSpec::Mocks.teardown
+      Timecop.return
     end
 
 

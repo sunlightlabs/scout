@@ -48,7 +48,8 @@ end
 
 group :test do
   gem 'rack-test'
-  gem 'rspec-mocks', '2.9.0'
+  gem 'rspec-mocks', '~> 2.14'
+  gem 'timecop', '~> 0.7'
   gem 'factory_girl'
 end
 
