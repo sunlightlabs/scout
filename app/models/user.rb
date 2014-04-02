@@ -110,7 +110,7 @@ class User
   after_validation :freeze_email
   after_save :unfreeze_email
   def freeze_email; self.email.freeze; end
-  def unfreeze_email; self.email = self.email.dup; end
+  def unfreeze_email; self.email = self.email.dup if self.email.present?; end
 
 
   before_save :check_email_type
