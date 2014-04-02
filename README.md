@@ -6,9 +6,9 @@ A government-wide search and notification system. Currently deployed to [scout.s
 
 ## Setting Up
 
-Scout can run on **Ruby 1.9 and up**. It's currently developed on Ruby 2.1.
+Scout is developed and tested on **Ruby 2.1.0**.
 
-**Recommended**: use [rbenv](https://github.com/sstephenson/rbenv) to install Ruby 2.1 to your home directory.
+**Recommended**: use [rbenv](https://github.com/sstephenson/rbenv) to install Ruby 2.1.0 to your home directory.
 
 You need a MongoDB server. Scout will create its own database and collections as needed.
 
@@ -77,5 +77,7 @@ SCOUT_ADAPTER_PATH=/path/to/adapters bundle exec unicorn
 ```
 
 Each file within this directory must define an adapter class, and the filename must be the lowercase, underscored version of the class name. The adapter class must be defined in a `Subscriptions::Adapters` module.
+
+### License
 
 Copyright (c) 2011-2013 Sunlight Foundation, [released](https://github.com/sunlightlabs/scout/blob/master/LICENSE) under the [GNU General Public License, Version 3](http://www.gnu.org/licenses/gpl-3.0.txt).
