@@ -1,0 +1,13 @@
+# The crontab is currently disabled.
+#
+# If this comment is here, it means this action was taken deliberately, by an
+# administrator.
+#
+# But don't forget that the crontab is off!
+# The below task will send an email every so often with a reminder.
+
+# Currently: every 6 hours
+0 */6 * * * /projects/alarms/current/config/cron/staging/rake.sh crontab:warn
+
+
+# leave trailing newline please

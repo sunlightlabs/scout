@@ -78,7 +78,7 @@ def set_crontab():
   run("cd %s && rake crontab:set environment=%s current_path=%s" % (current_path, target, current_path))
 
 def disable_crontab():
-  run("cd %s && rake crontab:disable current_path=%s" % (current_path, current_path))
+  run("cd %s && rake crontab:disable environment=%s current_path=%s" % (current_path, target, current_path))
 
 def start():
   run("cd %s && bundle exec unicorn -D -l %s/%s.sock -c unicorn.rb" % (current_path, shared_path, username))

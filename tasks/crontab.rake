@@ -19,9 +19,10 @@ namespace :crontab do
 
   desc "Disable/clear the crontab for this environment"
   task disable: :environment do
+    environment = ENV['environment']
     current_path = ENV['current_path']
 
-    if system("cat #{current_path}/config/cron/disabled | crontab")
+    if system("cat #{current_path}/config/cron/#{environment}/disabled | crontab")
       puts "Successfully switched cron to disabled mode."
     else
       Admin.report Report.warning("Crontab", "Somehow failed at disabling crontab.")

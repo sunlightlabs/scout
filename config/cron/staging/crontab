@@ -6,13 +6,13 @@
 ######## External data loading #########
 
 # reload glossary terms once a day
-30 10 * * * /projects/scout/current/config/cron/production/rake.sh glossary:load
+30 10 * * * /projects/alarms/current/config/cron/staging/rake.sh glossary:load
 
 # reload legislators once a day
-20 8 * * * /projects/scout/current/config/cron/production/rake.sh legislators:load
+20 8 * * * /projects/alarms/current/config/cron/staging/rake.sh legislators:load
 
 # reload agencies once a week (these don't change often)
-0 0 * * 0 /projects/scout/current/config/cron/production/rake.sh agencies:load
+0 0 * * 0 /projects/alarms/current/config/cron/staging/rake.sh agencies:load
 
 
 ######## Delivery tasks ########
