@@ -78,6 +78,23 @@ SCOUT_ADAPTER_PATH=/path/to/adapters bundle exec unicorn
 
 Each file within this directory must define an adapter class, and the filename must be the lowercase, underscored version of the class name. The adapter class must be defined in a `Subscriptions::Adapters` module.
 
+### Maintaining Scout
+
+It's helpful to understand a few things about keeping Scout running.
+
+#### Upgrading Ruby
+
+To upgrade the Ruby version, do the following in **each environment** Scout will run:
+
+1. Update rbenv and ruby-build, by visiting `$HOME/.rbenv` and `$HOME/.rbenv/plugins/ruby-build` and running `git pull` in both.
+2. Run `rbenv install [version]`, where `[version]` might be `2.1.1` or `2.2.0`.
+3. Update `.ruby-version` in the project root, to reflect the version you installed, and commit this to the repository.
+4. Activate the new Ruby version. (`rbenv global [version]` is one way to do this.)
+5. Install bundler with `gem install bundler`.
+6. Install dependencies with `bundle install --local`.
+
+You should also run the test suite with `rake` to make sure everything is fine! But you probably only need to do that in one environment.
+
 ### License
 
 Copyright (c) 2011-2013 Sunlight Foundation, [released](https://github.com/sunlightlabs/scout/blob/master/LICENSE) under the [GNU General Public License, Version 3](http://www.gnu.org/licenses/gpl-3.0.txt).
