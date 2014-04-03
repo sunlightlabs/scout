@@ -67,6 +67,17 @@ module TestHelper
 
     # mock helpers for faking remote content
 
+    # runs a block with the cache guaranteed to be on,
+    # then restores it to whatever it was beforehand
+    def with_cache_on
+      if block_given?
+        no_cache = Environment.config['no_cache']
+        Environment.config['no_cache'] = false
+        yield
+        Environment.config['no_cache'] = no_cache
+      end
+    end
+
     def mock_response(url, fixture)
       if fixture["."]
         file = "test/fixtures/#{fixture}"
