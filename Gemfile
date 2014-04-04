@@ -22,7 +22,7 @@ gem 'asset_sync'
 gem "unf"
 
 gem 'ruby-hmac'
-gem 'bcrypt-ruby'
+gem 'bcrypt'
 
 # detect gov't and educational email addresses
 gem 'gman'
