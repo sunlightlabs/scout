@@ -1,5 +1,5 @@
 require 'nokogiri'
-require 'feedzirra'
+require 'feedjira'
 require 'sanitize'
 
 module Subscriptions
@@ -85,14 +85,15 @@ module Subscriptions
 
       def self.url_to_response(url)
         # first, verify the maximum size, so we don't choke
-        xml = Feedzirra::Feed.fetch_raw url, timeout: 5
+        xml = Feedjira::Feed.fetch_raw url, timeout: 5
 
         raise AdapterParseException.new("Got null from fetching feed") unless xml
         raise AdapterParseException.new("Feed is bigger than 1MB") if xml.size > (1024 * 1024 * 1)
 
-        # re-fetch it to take advantage of Feedzirra's full pipeline
+        # re-fetch it to take advantage of Feedjira's full pipeline
         # (including proper logging of the final feed URL location)
-        response = Feedzirra::Feed.fetch_and_parse url, timeout: 5
+        response = Feedjira::Feed.fetch_and_parse url, timeout: 5
+        return nil if response == 200
 
         raise AdapterParseException.new("Feed got invalid response code: #{response}") if response.is_a?(Fixnum)
 

@@ -45,12 +45,10 @@ GEM
       activesupport (>= 3.0.0)
     feedbag (0.9.2)
       hpricot (>= 0.6)
-    feedzirra (0.2.0.rc1)
-      curb (~> 0.8.0)
-      gorillib (~> 0.1.9)
+    feedjira (1.1.0)
+      curb (~> 0.8.1)
       loofah (~> 1.2.1)
-      nokogiri (~> 1.5.2)
-      sax-machine (~> 0.1.0)
+      sax-machine (~> 0.2.1)
     fog (1.21.0)
       fog-brightbox
       fog-core (~> 1.21, >= 1.21.1)
@@ -73,8 +71,6 @@ GEM
       addressable
       public_suffix
       swot
-    gorillib (0.1.11)
-      json
     hpricot (0.8.6)
     http_router (0.11.1)
       rack (>= 1.0.0)
@@ -94,6 +90,7 @@ GEM
       mime-types
       treetop (>= 1.4.5)
     mime-types (2.2)
+    mini_portile (0.5.3)
     mongoid (3.1.6)
       activemodel (~> 3.2)
       moped (~> 1.4)
@@ -107,7 +104,8 @@ GEM
     net-scp (1.1.2)
       net-ssh (>= 2.6.5)
     net-ssh (2.8.0)
-    nokogiri (1.5.11)
+    nokogiri (1.6.1)
+      mini_portile (~> 0.5.0)
     oj (2.7.1)
     origin (1.1.0)
     padrino-core (0.12.0)
@@ -151,8 +149,8 @@ GEM
     safe_yaml (1.0.1)
     sanitize (2.1.0)
       nokogiri (>= 1.4.4)
-    sax-machine (0.1.0)
-      nokogiri (> 0.0.0)
+    sax-machine (0.2.1)
+      nokogiri (~> 1.6.0)
     sinatra (1.4.4)
       rack (~> 1.4)
       rack-protection (~> 1.4)
@@ -205,7 +203,7 @@ DEPENDENCIES
   escape_utils
   factory_girl
   feedbag
-  feedzirra (= 0.2.0.rc1)
+  feedjira
   gman
   lucene_query_parser!
   mongoid (~> 3.1)

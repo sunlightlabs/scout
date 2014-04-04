@@ -53,7 +53,7 @@ group :test do
 end
 
 # feed parsing and discovery
-gem 'feedzirra', '0.2.0.rc1'
+gem 'feedjira'
 gem 'feedbag'
 gem 'sanitize'
 
