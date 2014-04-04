@@ -28,8 +28,7 @@ gem 'bcrypt-ruby'
 gem 'gman'
 gem 'swot'
 
-gem 'postmark', '~> 0.9.10'
-gem 'mail', '~> 2.4.4'
+gem 'postmark', '~> 1.0'
 gem 'pony', '~> 1.4'
 
 gem 'rack', '~> 1.5'

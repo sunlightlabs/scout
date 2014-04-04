@@ -2,7 +2,6 @@
 
 require 'pony'
 require 'postmark'
-require 'mail'
 
 module Email
 
@@ -83,27 +82,26 @@ module Email
       return true
     end
 
-    message = Mail.new
+    api_key = Environment.config['email']['postmark']['api_key']
+    client = Postmark::ApiClient.new api_key, secure: true, http_open_timeout: 15
 
-    message.delivery_method Mail::Postmark, api_key: Environment.config['email']['postmark']['api_key']
+    options = {
+      from: from || Environment.config['email']['from'],
+      reply_to: reply_to || Environment.config['email']['reply_to'],
+      to: to,
+      subject: subject,
+      tag: tag
+    }
 
     if html_tags.include?(tag)
-      message.content_type = "text/html"
+      options[:html_body] = body # content_type = "text/html"
     else
-      message.content_type = "text/plain"
+      options[:text_body] = body # content_type = "text/plain"
     end
 
-    message.tag = tag
-
-    message.from = from || Environment.config['email']['from']
-    message.reply_to = reply_to || Environment.config['email']['reply_to']
-
-    message.to = to
-    message.subject = subject
-    message.body = body
-
     begin
-      message.deliver!
+      client.deliver options
+
       sent_message "Postmark", tag, to, subject, body, from, reply_to
       true
     rescue Exception => e
