@@ -7,7 +7,7 @@ gem 'safe_yaml' # avoids problems with YAML vulnerabilities, but no symbol keys
 
 gem 'sinatra', '~> 1.4'
 gem 'sinatra-contrib', '~> 1.4'
-gem 'sinatra-flash', '~> 0.3'
+gem 'sinatra-flash'
 
 gem 'padrino-helpers', '~> 0.11'
 gem 'rinku'
@@ -47,7 +47,7 @@ end
 
 group :test do
   gem 'rack-test'
-  gem 'rspec-mocks', '~> 2.14'
+  gem 'rspec-mocks', '~> 2.14' # 3.X would need refactoring
   gem 'timecop', '~> 0.7'
   gem 'factory_girl'
 end

@@ -226,7 +226,7 @@ DEPENDENCIES
   sanitize
   sinatra (~> 1.4)
   sinatra-contrib (~> 1.4)
-  sinatra-flash (~> 0.3)
+  sinatra-flash
   swot
   timecop (~> 0.7)
   twilio-rb (= 2.2.0)
