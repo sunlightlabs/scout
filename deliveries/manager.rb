@@ -1,5 +1,3 @@
-
-
 module Deliveries
   module Manager
 
@@ -87,8 +85,6 @@ module Deliveries
 
         if delivery_options['mechanism'] == 'email'
           receipts += Deliveries::Email.deliver_for_user! user, delivery_options['email_frequency'], {"dry_run" => dry_run}
-        elsif delivery_options['mechanism'] == 'sms'
-          receipts += Deliveries::SMS.deliver_for_user! user, {"dry_run" => dry_run}
         else
           Admin.message "Unsure how to deliver to user #{user_contact user}, no known delivery mechanism for #{delivery_options['mechanism']}"
         end
@@ -114,7 +110,7 @@ module Deliveries
 
 
     # given the item to be delivered, the interest that found it with what subscription_type
-    # and assuming the user's setup checks out (if sms, has phone, etc.)
+    # and assuming the user's setup checks out
     # then schedule the delivery
     def self.schedule_delivery!(
       item, interest, subscription_type,
@@ -141,12 +137,10 @@ module Deliveries
       header = "[#{user_contact user}][#{interest.in}][#{subscription_type}](#{item.item_id})"
       header << "{through_tag}" if seen_through.tag?
 
-      if !["email", "sms"].include?(mechanism)
+      if !["email"].include?(mechanism)
         puts "#{header} Not scheduling delivery, user wants no notifications for this interest" unless Sinatra::Application.test?
       elsif !user.confirmed?
         puts "#{header} Not scheduling delivery, user is unconfirmed" unless Sinatra::Application.test?
-      elsif (mechanism == "sms") and (user.phone.blank? or !user.phone_confirmed)
-        puts "#{header} Not scheduling delivery, it is for SMS and user has no confirmed phone number" unless Sinatra::Application.test?
       else
         puts "#{header} Scheduling delivery" unless Sinatra::Application.test?
 

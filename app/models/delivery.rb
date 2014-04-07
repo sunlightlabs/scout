@@ -5,16 +5,16 @@
 class Delivery
   include Mongoid::Document
   include Mongoid::Timestamps
-  
+
   belongs_to :interest
   belongs_to :user
-  
+
   # @return [String] the lowercase underscored name of the subscription's adapter
   field :subscription_type
   # @return [String] what the user is interested in (terms, feed URL, etc.)
   field :interest_in
 
-  # used for DEBUG CONVENIENCE ONLY - the email to deliver this to 
+  # used for DEBUG CONVENIENCE ONLY - the email to deliver this to
   # should be looked up at delivery-time, not schedule-time.
   # @return [String] the subscriber's email address
   field :user_email
@@ -33,12 +33,14 @@ class Delivery
 
   # the delivery task should look at *this* field, so that we can
   # add the ability to override per-interest, per-subscription, whatever
-  # @return [String] the way in which to deliver the alert ("sms" or "email")
+  # @return [String] the way in which to deliver the alert ("email")
+
+  # TODO: kill this field
   field :mechanism
-  
+
   # @return [Hash] a copy of the item's attributes
   field :item, :type => Hash, :default => {}
-  
+
   index subscription_type: 1
   index user_email: 1
   index "item.date" => 1
@@ -46,7 +48,7 @@ class Delivery
   index interest_id: 1
   index user_id: 1
   index seen_through_id: 1
-  
+
   validates_presence_of :interest_id
   validates_presence_of :subscription_type
   validates_presence_of :interest_in
@@ -63,17 +65,16 @@ class Delivery
   # @param [Interest] seen_through "tag" interests see items through other
   #   user's interests
   # @param [User] user the user to deliver the item to
-  # @param [String] mechanism either "sms" or "email"
+  # @param [String] "email"
   # @param [String] email_frequency either "daily" or "immediate"
   def self.schedule!(item, interest, subscription_type, seen_through, user, mechanism, email_frequency)
     create! user_id: user.id,
-    
+
       # for convenience of debugging only - what these values were at schedule-time
       user_email: user.email,
-      user_phone: user.phone,
-      
+
       subscription_type: subscription_type,
-      
+
       interest_in: interest.in,
       interest: interest,
 
@@ -81,7 +82,7 @@ class Delivery
 
       mechanism: mechanism,
       email_frequency: email_frequency,
-      
+
       # drop the item into the delivery wholesale
       item: item.attributes.dup
   end
