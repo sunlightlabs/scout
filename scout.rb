@@ -46,7 +46,7 @@ before do
 end
 
 after do
-  Event.google!(env, @start_time) if google?
+  Event.google!(env, @start_time) if google? and !Environment.downtime?
 end
 
 
