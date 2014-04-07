@@ -6,12 +6,6 @@ GIT
       parslet
       rainbow
 
-GIT
-  remote: git://github.com/sunlightlabs/phone.git
-  revision: 3bd81f494bafaa3e19f3c4784d0f81158b38e9fb
-  specs:
-    phone (1.0)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -75,13 +69,8 @@ GEM
     http_router (0.11.1)
       rack (>= 1.0.0)
       url_mount (~> 0.2.1)
-    httparty (0.13.0)
-      json (~> 1.8)
-      multi_xml (>= 0.5.2)
     i18n (0.6.9)
     json (1.8.1)
-    jwt (0.1.11)
-      multi_json (>= 1.5)
     kgio (2.9.2)
     loofah (1.2.1)
       nokogiri (>= 1.4.4)
@@ -100,7 +89,6 @@ GEM
       paperclip (>= 2.3.6)
     moped (1.5.2)
     multi_json (1.9.2)
-    multi_xml (0.5.5)
     net-scp (1.1.2)
       net-ssh (>= 2.6.5)
     net-ssh (2.8.0)
@@ -171,12 +159,6 @@ GEM
     timecop (0.7.1)
     treetop (1.5.3)
       polyglot (~> 0.3)
-    twilio-rb (2.2.0)
-      activesupport (>= 3.0.0)
-      builder (>= 2.1.2)
-      httparty (>= 0.6.1)
-      i18n (~> 0.5)
-      jwt (>= 0.1.3)
     tzinfo (0.3.39)
     unf (0.1.3)
       unf_ext
@@ -212,7 +194,6 @@ DEPENDENCIES
   oj
   padrino-helpers (~> 0.11)
   paint
-  phone!
   pony (~> 1.4)
   postmark (~> 1.0)
   rack (~> 1.5)
@@ -229,7 +210,6 @@ DEPENDENCIES
   sinatra-flash
   swot
   timecop (~> 0.7)
-  twilio-rb (= 2.2.0)
   unf
   unicorn
   wirb

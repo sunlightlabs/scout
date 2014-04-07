@@ -21,7 +21,10 @@ module Helpers
     end
 
     def sadness
-      sads = %w{regrettably sadly unfortunately inexplicably sadheartedly sorrowfully most-unpleasantly with-great-sadness}
+      sads = %w{
+        regrettably sadly unfortunately inexplicably sadheartedly
+        sorrowfully most-unpleasantly with-great-sadness
+      }
       sad = sads[rand sads.size]
       sad.split('-').join(' ').capitalize
     end
@@ -97,7 +100,6 @@ module Helpers
       {
         "email_immediate" => "Email immediately",
         "email_daily" => "Email once a day",
-        "sms" => "SMS",
         "none" => "None",
         nil => "None",
         "" => "None"

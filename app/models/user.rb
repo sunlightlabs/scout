@@ -6,7 +6,7 @@ require 'swot'
 # A subscriber.
 #
 # Scout can act as a white-label service for other services. For example,
-# Sunlight's OpenStates uses Scout. Third-party services are configured in
+# Sunlight's Open States uses Scout. Third-party services are configured in
 # `config/services.yml`.
 class User
   include Mongoid::Document
@@ -15,9 +15,6 @@ class User
 
   # @return [String] the subscriber's email address
   field :email
-  # @return [String] the subscriber's phone number
-  field :phone
-
   # @return [String] one of "web", "remote" or a third-party service's ID
   field :source, default: "web"
 
@@ -33,7 +30,7 @@ class User
   #   * "email_daily" the user will receive notifications daily
   #   * "none": the user will not receive notifications
   field :notifications, default: "email_immediate"
-  validates_inclusion_of :notifications, in: ["none", "email_daily", "email_immediate"] # sms not valid at the user level
+  validates_inclusion_of :notifications, in: ["none", "email_daily", "email_immediate"]
   validates_presence_of :notifications
 
   # @return [Boolean] whether the user receives announcements about Scout
@@ -123,12 +120,9 @@ class User
     true
   end
 
+  # TODO: kill this whenever possible
   def contact
-    if email.present?
-      email
-    else
-      phone
-    end
+    email
   end
 
   # delivery notification stuff
@@ -136,7 +130,6 @@ class User
     types = []
     types << "email_daily" if email.present?
     types << "email_immediate" if email.present?
-    types << "sms" if phone.present? and phone_confirmed
     types << "none"
     types
   end
@@ -145,7 +138,7 @@ class User
 
   field :signup_process, default: nil # can be "quick"
 
-  attr_accessible :email, :username, :display_name, :phone,
+  attr_accessible :email, :username, :display_name,
     :notifications, :announcements, :organization_announcements,
     :bio, :image, :url, :contact_email
 
@@ -160,16 +153,11 @@ class User
     /^[-a-z0-9_+\.]+\@([-a-z0-9]+\.)+[a-z0-9]{2,4}$/i
   end
 
-  validates_presence_of :email, message: "We need an email address.", :unless => :has_phone?
-  validates_uniqueness_of :email, message: "That email address is already signed up.", :allow_blank => true
-  validates_format_of :email, with: email_format, message: "Not a valid email address.", allow_blank: true
+  validates_presence_of :email, message: "We need an email address."
+  validates_uniqueness_of :email, message: "That email address is already signed up."
+  validates_format_of :email, with: email_format, message: "Not a valid email address."
 
 
-  # used to allow email-less user accounts
-  # @private
-  def has_phone?
-    self.phone.present?
-  end
 
   def self.authenticate(user, password)
     BCrypt::Password.new(user.password_hash) == password
@@ -236,40 +224,6 @@ class User
     new_password
   end
 
-
-  # phone number confirming and verification logic
-
-  field :phone_verify_code
-  field :phone_confirmed, type: Boolean, default: false
-
-  # only +, -, ., and digits allowed
-  validates_uniqueness_of :phone, :allow_blank => true, message: "has been taken"
-
-  before_validation :standardize_phone, :if => :has_phone?
-
-  # @private
-  def standardize_phone
-    if Phoner::Phone.valid?(self.phone)
-      self.phone = Phoner::Phone.parse(self.phone).to_s
-    else
-      errors.add(:base, "Not a valid phone number.")
-    end
-  end
-
-  # runs the phone standardizer on lookup
-  def self.by_phone(phone)
-    phone = phone.dup # apparently Phoner can't handle frozen strings??
-    if Phoner::Phone.valid?(phone)
-      standard = Phoner::Phone.parse(phone).to_s
-      where(phone: standard).first
-    else
-      nil
-    end
-  end
-
-  def new_phone_verify_code
-    self.phone_verify_code = User.short_token
-  end
 
   # turn off the user's email notifications, and any announcement subscriptions
   # log the user's unsubscription in the events table, and what the user's settings were

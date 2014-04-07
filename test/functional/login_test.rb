@@ -72,38 +72,6 @@ class LoginTest < Test::Unit::TestCase
     assert_match /Service 1/i, last_response.body
   end
 
-  def test_login_with_phone_number
-    phone = "+15555551212"
-    password = "test"
-    user = create :user, phone: phone, password: password, password_confirmation: password
-
-    post '/login', login: phone, password: password
-    assert_redirect '/'
-  end
-
-  def test_login_with_invalid_phone_number
-    phone = "+15555551212"
-    password = "test"
-    user = create :user, phone: phone, password: password, password_confirmation: password
-
-    post '/login', login: phone.succ, password: password
-    assert_response 200
-
-    assert_match /Invalid/, last_response.body
-  end
-
-  def test_login_with_unconfirmed_phone_account_fails
-    phone = "+15555551212"
-    password = "test"
-    user = create :phone_user, phone: phone, password: password, password_confirmation: password
-
-    assert !user.confirmed?
-    post '/login', login: phone, password: password
-    assert_response 200
-
-    assert_match /not been confirmed/i, last_response.body
-  end
-
   def test_login_with_unconfirmed_email_account_fails
     email = "test@example.com"
     password = "test"

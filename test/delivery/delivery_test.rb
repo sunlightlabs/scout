@@ -424,15 +424,6 @@ class DeliveryTest < Test::Unit::TestCase
     #TODO
   end
 
-  def test_deliver_sms
-    #TODO
-  end
-
-  def test_deliver_sms_from_anothers_tag
-    #TODO
-  end
-
-
   # flood checking checking
 
   def test_flood_check
@@ -457,7 +448,6 @@ class DeliveryTest < Test::Unit::TestCase
 
     assert_equal 0, Receipt.count
     Deliveries::Email.should_not_receive :deliver_for_user!
-    Deliveries::SMS.should_not_receive :deliver_for_user!
 
     Deliveries::Manager.deliver! 'mechanism' => interest.mechanism, 'email_frequency' => interest.email_frequency
 
@@ -485,60 +475,8 @@ class DeliveryTest < Test::Unit::TestCase
 
     assert_equal 0, Receipt.count
     Deliveries::Email.should_not_receive :deliver_for_user!
-    Deliveries::SMS.should_not_receive :deliver_for_user!
 
     Deliveries::Manager.deliver! 'mechanism' => interest.mechanism, 'email_frequency' => interest.email_frequency
-
-    assert_equal 0, Receipt.count
-  end
-
-  def test_sms_delivery_for_user_without_phone_is_not_delivered
-    query = "environment"
-    search_type = "federal_bills"
-    user = create :user, phone_confirmed: true
-    interest = search_interest! user, search_type, query, "simple", {}, notifications: "sms"
-    subscription = interest.subscriptions.first
-
-    mock_search subscription
-    items = subscription.search
-
-    # force delivery to be scheduled of the item, this would not normally be done
-    delivery = Delivery.schedule! items.first, interest, search_type, interest, user, interest.mechanism, interest.email_frequency
-
-    assert_equal "sms", delivery.mechanism
-    assert user.phone.blank?
-    assert user.phone_confirmed?
-
-    assert_equal 0, Receipt.count
-    Deliveries::SMS.should_not_receive :sms_user
-
-    Deliveries::SMS.deliver_for_user! user
-
-    assert_equal 0, Receipt.count
-  end
-
-  def test_sms_delivery_for_user_without_confirmed_phone_is_not_delivered
-    query = "environment"
-    search_type = "federal_bills"
-    phone = "+15555551212"
-    user = create :user, phone: phone, phone_confirmed: false
-    interest = search_interest! user, search_type, query, "simple", {}, notifications: "sms"
-    subscription = interest.subscriptions.first
-
-    mock_search subscription
-    items = subscription.search
-
-    # force delivery to be scheduled of the item, this would not normally be done
-    delivery = Delivery.schedule! items.first, interest, search_type, interest, user, interest.mechanism, interest.email_frequency
-
-    assert_equal "sms", delivery.mechanism
-    assert user.phone.present?
-    assert !user.phone_confirmed?
-
-    assert_equal 0, Receipt.count
-    Deliveries::SMS.should_not_receive :sms_user
-
-    Deliveries::SMS.deliver_for_user! user
 
     assert_equal 0, Receipt.count
   end

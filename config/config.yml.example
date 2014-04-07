@@ -112,15 +112,6 @@ email:
   postmark:
     api_key:
 
-# SMS message configuration.
-twilio:
-  # Your Account SID and Auth Token.
-  # @see http://twilio.com/user/account
-  account_sid:
-  auth_token:
-  # The phone number purchased from Twilio from which to send the message.
-  from:
-
 debug:
   # Whether the subscription manager should print polled, searched, fetched and
   # synced URLs to STDOUT. Useful both in development and production.
