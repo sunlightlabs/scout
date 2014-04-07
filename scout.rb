@@ -50,6 +50,21 @@ after do
 end
 
 
+# downtime mode. All GETs return downtime.erb,
+# all other methods return 500 (since it's our bad).
+before do
+  if Environment.downtime?
+    if request.get?
+      halt 200, erb(:downtime)
+    else
+      halt 500
+    end
+  end
+end
+
+
+# some main routes
+
 get '/' do
   erb :index
 end

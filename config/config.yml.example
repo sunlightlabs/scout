@@ -1,3 +1,7 @@
+# set to true to enable downtime mode
+downtime: false
+
+
 # Change the following settings to match your organization's details.
 organization:
   name: Sunlight Foundation

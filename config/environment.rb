@@ -15,6 +15,12 @@ require 'asset_sync'
 set :adapter_path, ENV.fetch('SCOUT_ADAPTER_PATH', './subscriptions/adapters')
 
 class Environment
+
+  # loaded at start time, needs restart to turn on/off
+  def self.downtime?
+    config['downtime'] == true
+  end
+
   def self.services
     @services ||= YAML.safe_load_file File.join(File.dirname(__FILE__), "services.yml")
   end
