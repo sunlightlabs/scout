@@ -7,7 +7,7 @@ module Deliveries
 
     def self.deliver_for_user!(user, options = {})
       dry_run = options['dry_run'] || false
-      
+
       unless user.phone.present? and user.phone_confirmed?
         Admin.report Report.failure("Delivery", "#{user.id} is signed up for SMS alerts but has no confirmed phone", :id => user.id.to_s, :email => user.email, :phone => user.phone, :phone_confirmed => user.phone_confirmed)
         return []
@@ -23,10 +23,10 @@ module Deliveries
       interest_deliveries = matching_deliveries.group_by &:interest
 
       interest_deliveries.each do |interest, deliveries|
-        # 1) change this to a landing page per-interest 
+        # 1) change this to a landing page per-interest
         #   (show page for item interests, new page for keyword interests [HTML version of RSS feed])
         # 2) shorten this URL in the Sunlight URL shortener
-        
+
         core, url = render_interest interest, deliveries
         content = render_final core, url
 
@@ -76,7 +76,7 @@ module Deliveries
       url = interest_url interest
 
       content = ""
-      
+
       content << grouped.map do |subscription_type, subscription_deliveries|
         number = subscription_deliveries.size
         "#{number} #{Subscription.adapter_for(subscription_type).short_name number, interest}"
@@ -107,7 +107,6 @@ module Deliveries
         user_phone: user.phone,
         user_notifications: user.notifications,
 
-        content: content,
         delivered_at: Time.now
       )
     end

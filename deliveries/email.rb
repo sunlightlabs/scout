@@ -174,7 +174,6 @@ module Deliveries
         user_service: user.service,
 
         subject: subject,
-        content: content,
         delivered_at: Time.now
       )
     end

@@ -21,8 +21,6 @@ class Receipt
 
   # @return [String] the email's "Subject" header
   field :subject
-  # @return [String] the content of the notification
-  field :content
   # @return [Time] the time at which the notification was sent
   field :delivered_at, :type => Time
 
@@ -36,7 +34,6 @@ class Receipt
   index({mechanism: 1, user_service: 1, created_at: 1})
 
   validates_presence_of :delivered_at
-  validates_presence_of :content
 
   # if the user is still around, no harm if it's not
   belongs_to :user
