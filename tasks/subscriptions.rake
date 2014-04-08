@@ -67,7 +67,13 @@ namespace :subscriptions do
     end
 
     if successes.size > 0
-      Admin.report Report.success "Initialize", "Successfully initialized #{successes.size} previously uninitialized subscriptions.", subscriptions: successes.map {|s| s.attributes.dup}
+      if successes.size < 20
+        results = successes.map {|s| s.attributes.dup}
+      else
+        results = "[too many to show]"
+      end
+
+      Admin.report Report.success "Initialize", "Successfully initialized #{successes.size} previously uninitialized subscriptions.", subscriptions: results
     else
       puts "Did not re-initialize any subscriptions."
     end
