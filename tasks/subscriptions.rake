@@ -44,10 +44,11 @@ namespace :subscriptions do
     count = 0
 
     timer = (ENV['minutes'] || 25).to_i
+    limit = (ENV['limits'] || 5000).to_i
 
     start = Time.now
 
-    Subscription.uninitialized.each do |subscription|
+    Subscription.uninitialized.limit(limit).to_a.each do |subscription|
       result = Subscriptions::Manager.initialize! subscription
       if result.nil? or result.is_a?(Hash)
         errors << result
