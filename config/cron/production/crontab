@@ -3,11 +3,11 @@
 */30 * * * * /projects/scout/current/config/cron/production/rake.sh subscriptions:reinitialize
 
 # post-midnight, email a report of Google's crawling activity
-0 6 * * * /projects/scout/current/config/cron/production/rake.sh analytics:google
+#! 0 6 * * * /projects/scout/current/config/cron/production/rake.sh analytics:google
 
 # on Monday morning, email about last week's user activity for OS and Scout
-0 6 * * 1 /projects/scout/current/config/cron/production/rake.sh analytics:weekly service=scout
-0 6 * * 1 /projects/scout/current/config/cron/production/rake.sh analytics:weekly service=open_states
+#! 0 6 * * 1 /projects/scout/current/config/cron/production/rake.sh analytics:weekly service=scout
+#! 0 6 * * 1 /projects/scout/current/config/cron/production/rake.sh analytics:weekly service=open_states
 
 
 ######## External data loading #########
@@ -28,13 +28,13 @@
 # update latest info every night and generate a sitemap
 
 # speeches, regulations (last year), documents, and state bills get synced each day
-30 13 * * * /projects/scout/current/config/cron/production/rake.sh sync type=speeches && /projects/scout/current/config/cron/production/rake.sh sync type=regulations since=current_year && /projects/scout/current/config/cron/production/rake.sh sync type=documents && /projects/scout/current/config/cron/production/rake.sh sync type=state_bills && /projects/scout/current/config/cron/production/rake.sh sitemap
+#! 30 13 * * * /projects/scout/current/config/cron/production/rake.sh sync type=speeches && /projects/scout/current/config/cron/production/rake.sh sync type=regulations since=current_year && /projects/scout/current/config/cron/production/rake.sh sync type=documents && /projects/scout/current/config/cron/production/rake.sh sync type=state_bills && /projects/scout/current/config/cron/production/rake.sh sitemap
 
 # bills (current congress) can be run and re-run throughout the day
-50 * * * * /projects/scout/current/config/cron/production/rake.sh sync type=federal_bills since=current_congress
+#! 50 * * * * /projects/scout/current/config/cron/production/rake.sh sync type=federal_bills since=current_congress
 
 # regulations (last 3 days) get re-checked throughout the day
-44 * * * * /projects/scout/current/config/cron/production/rake.sh sync type=regulations
+#! 44 * * * * /projects/scout/current/config/cron/production/rake.sh sync type=regulations
 
 ######## Delivery tasks ########
 
@@ -45,7 +45,7 @@
 */10 * * * *  /projects/scout/current/config/cron/production/deliver.sh email_immediate
 
 # SMS messages - throughout the day, every 10 minutes
-*/10 * * * * /projects/scout/current/config/cron/production/deliver.sh sms
+#! */10 * * * * /projects/scout/current/config/cron/production/deliver.sh sms
 
 
 ######## Polling tasks  #########
@@ -82,13 +82,13 @@
 # activity on bills in Congress - daily, bounded by THOMAS
 0 8,14 * * *  /projects/scout/current/config/cron/production/check.sh federal_bills_activity
 
-# upcoming notices for bills in Congress - every 10 minutes, bounded by party leadership
+# upcoming notices for bills in Congress
 12 * * * *   /projects/scout/current/config/cron/production/check.sh federal_bills_upcoming_floor
 
-# upcoming hearings for bills in Congress - every 10 minutes, updated throughout the day
+# upcoming hearings for bills in Congress
 18 * * * *   /projects/scout/current/config/cron/production/check.sh federal_bills_hearings
 
-# vote results for bills in Congress - every 5 minutes, updated by House/Senate throughout the day
+# vote results for bills in Congress
 24 * * * *   /projects/scout/current/config/cron/production/check.sh federal_bills_votes
 
 # activity on bills in the States - 8am (Open States done scraping by 6:30am)
