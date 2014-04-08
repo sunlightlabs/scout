@@ -166,7 +166,11 @@ module Deliveries
         email_frequency: frequency,
         mechanism: "email",
 
-        deliveries: deliveries,
+        deliveries: deliveries.map {|delivery|
+          # already been dup'ed in serialize_deliveries
+          delivery['item']['data'] = nil
+          delivery
+        },
 
         user_id: user.id,
         user_email: user.email,

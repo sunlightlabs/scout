@@ -6,7 +6,8 @@ class Receipt
   include Mongoid::Timestamps
 
   # @return [Array<Hash>] a list of the attributes of the deliveries made in
-  #   this transaction (each delivery is about a single item)
+  #   this transaction (each delivery is about a single item).
+  #   these deliveries will have had their `item.data` fields removed, to save storage.
   field :deliveries, :type => Array
 
   # @return [String] the user's ID
