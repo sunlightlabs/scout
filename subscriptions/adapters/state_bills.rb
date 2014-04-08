@@ -57,6 +57,9 @@ module Subscriptions
           url << "&search_window=all"
         elsif options[:since] == "current_session" # default to current session only
           url << "&search_window=session"
+        elsif options[:since] =~ /^\d{4}-\d{2}-\d{2}$/
+          last_action_since = Time.parse(options[:since]).strftime("%Y-%m-%dT%H:%M:%S")
+          url << "&last_action_since=#{last_action_since}"
         else # default to just 2 days, it's big
           last_action_since = (options[:start] - 2.days).strftime("%Y-%m-%dT%H:%M:%S")
           url << "&last_action_since=#{last_action_since}"
