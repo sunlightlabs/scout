@@ -216,6 +216,16 @@
       '<%= Environment.config['layout']['google_analytics_property_id'] %>',
       '<%= Environment.config['layout']['google_analytics_domain'] %>'
     );
+    <% if Environment.config['layout']['google_analytics_property_id_global'] %>
+      ga(
+        'create',
+        '<%= Environment.config['layout']['google_analytics_property_id_global'] %>',
+        '<%= Environment.config['layout']['google_analytics_domain'] %>',
+        {'name': 'global'}
+      );
+      ga('global.send', 'pageview');
+    <% end %>
+
     ga('send', 'pageview');
 
     // IP anonymization (last triplet) - this is optional, not part of the standard snippet

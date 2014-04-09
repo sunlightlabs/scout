@@ -27,6 +27,9 @@ layout:
   # Uncomment to use Google Analytics.
   # @see https://support.google.com/analytics/answer/1032385?hl=en
   # google_analytics_property_id: UA-22821126-16
+  #
+  # Uncomment to use a global roll-up property as well.
+  # google_analytics_property_id_global: UA-48789618-1
 
   # Twitter summary card.
   # @see https://dev.twitter.com/docs/cards/types/summary-card
