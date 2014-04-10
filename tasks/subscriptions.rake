@@ -44,7 +44,7 @@ namespace :subscriptions do
     count = 0
 
     timer = (ENV['minutes'] || 25).to_i
-    limit = (ENV['limits'] || 5000).to_i
+    limit = (ENV['limit'] || 20000).to_i
 
     start = Time.now
 

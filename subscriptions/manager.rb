@@ -24,6 +24,14 @@ module Subscriptions
       interest = subscription.interest
       subscription_type = subscription.subscription_type
 
+      # if the subscription is orphaned, catch this, warn admin, and abort
+      if interest.nil?
+        subscription.seen_items.each {|i| i.destroy}
+        subscription.destroy
+        Admin.report Report.warning("Check", "Orphaned subscription, deleting, moving on", subscription: subscription.attributes.dup)
+        return true
+      end
+
       # default strategy:
       # 1) does the initial poll
       # 2) stores every item ID as seen
