@@ -343,8 +343,7 @@ module Subscriptions
           # a url_type of 'document' means their cache will not get flushed --
           # which is what we want. keep documents forever.
 
-          # TEMPORARILY DISABLED while we work out load issues with s3 sync
-          # item.data['document'] = fetch url, :document, options
+          item.data['document'] = fetch url, :document, options
         end
 
         item
@@ -434,8 +433,7 @@ module Subscriptions
           # a url_type of 'document' means their cache will not get flushed --
           # which is what we want. keep documents forever.
 
-          # TEMPORARILY DISABLE while we work out s3 sync issues
-          # item.data['document'] = fetch url, :document, options
+          item.data['document'] = fetch url, :document, options
         end
 
         item
