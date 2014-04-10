@@ -28,7 +28,7 @@ module Subscriptions
       if interest.nil?
         subscription.seen_items.each {|i| i.destroy}
         subscription.destroy
-        Admin.report Report.warning("Check", "Orphaned subscription, deleting, moving on", subscription: subscription.attributes.dup)
+        Admin.report Report.warning("Initialize", "Orphaned subscription, deleting, moving on", subscription: subscription.attributes.dup)
         return true
       end
 
