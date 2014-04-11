@@ -1,6 +1,8 @@
 # set to true to enable downtime mode
 downtime: false
 
+# Add Sentry DSN to use Sentry for exception handling
+# sentry:
 
 # Change the following settings to match your organization's details.
 organization:

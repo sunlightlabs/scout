@@ -15,8 +15,7 @@ namespace :assets do
       # and to upload it to the original non-.gz URL with the right headers
       AssetSync.sync
     rescue Exception => ex
-      report = Report.exception 'Assets', "Exception compressing and syncing assets", ex
-      Admin.report report
+      Admin.exception "assets:sync", ex
       puts "Error compressing and syncing assets, emailed report."
     end
   end

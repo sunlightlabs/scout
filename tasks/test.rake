@@ -1,30 +1,24 @@
-# some helpful test tasks to exercise emails and SMS
+# some helpful test tasks
 
 namespace :test do
 
+  # based on raven test, so we can depend on environment being loaded
+  desc "Send a test Sentry event"
+  task raven: :environment do
+    Raven::CLI.test Environment.config['sentry']
+  end
+
   desc "Send a test email to the admin"
-  task :email_admin => :environment do
+  task email_admin: :environment do
     message = ENV['msg'] || "Test message. May you receive this in good health."
     Admin.message message
   end
 
-  desc "Send two test reports"
-  task :email_report => :environment do
+  desc "Send three test reports"
+  task email_report: :environment do
     Admin.report Report.failure("Admin.report 1", "Testing regular failure reports.", {name: "test report"})
     Admin.report Report.exception("Admin.report 2", "Testing exception reports", Exception.new("WOW! OUCH!!"))
-  end
-
-  desc "Send a test SMS"
-  task :sms => :environment do
-    message = ENV['msg'] || "Test SMS. May you receive this in good health."
-    number = ENV['number']
-
-    unless number.present?
-      puts "Include a 'number' parameter."
-      return
-    end
-
-    ::SMS.deliver! "Test", number, message
+    Admin.exception "Admin.report 3", Exception.new("OH MAN!!!"), {extra: "information"}
   end
 
   desc "Creates an item subscription for a user"
@@ -67,7 +61,7 @@ namespace :test do
     puts "User subscribed to #{item_type} with ID: #{item_id}"
   end
 
-  desc "Forces emails or SMSes to be sent for the first X results of every subscription a user has"
+  desc "Forces emails to be sent for the first X results of every subscription a user has"
   task send_user: :environment do
     email = ENV['email'] || Environment.config['admin'].first
 

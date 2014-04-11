@@ -2,6 +2,8 @@ require 'sinatra'
 require 'mongoid'
 require 'mongoid_paperclip'
 
+require 'raven'
+
 require 'safe_yaml' # we only use yaml for config, but just in case, sanitize
 require 'escape_utils'
 
@@ -80,6 +82,15 @@ configure do
   # if a consistent time zone is needed, use Eastern Time
   Time.zone = ActiveSupport::TimeZone.find_tzinfo "America/New_York"
 
+  # Sentry for exception handling
+  if Environment.config['sentry'].present?
+    Raven.configure do |config|
+      config.dsn = Environment.config['sentry']
+      config.ssl_verification = true
+      config.environments = ['production']
+      config.tags = {environment: Sinatra::Base.environment}
+    end
+  end
 
   assets = Environment.config['assets']
   AssetSync.configure do |config|

@@ -124,21 +124,19 @@ end
 
 error do
   exception = env['sinatra.error']
-  name = exception.class.name
-  message = exception.message
+  extra = {current_user: (current_user ? current_user.id.to_s : nil)}
 
-  request = {
-    method: env['REQUEST_METHOD'],
-    url: [Environment.config['hostname'], env['REQUEST_URI']].join,
-    params: params.inspect,
-    user_agent: env['HTTP_USER_AGENT']
-  }
-
-  if current_user
-    request[:user] = current_user.id.to_s
+  # if no Sentry, piece together request details myself
+  if Environment.config['sentry'].blank?
+    extra = extra.merge(
+      method: env['REQUEST_METHOD'],
+      url: [Environment.config['hostname'], env['REQUEST_URI']].join,
+      params: params.inspect,
+      user_agent: env['HTTP_USER_AGENT']
+    )
   end
 
-  Admin.report Report.exception("Exception Notifier", "#{name}: #{message}", exception, request: request)
+  Admin.exception "Web Handler", exception, extra
   erb :"500"
 end
 

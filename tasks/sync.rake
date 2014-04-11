@@ -46,6 +46,6 @@ def sync(subscription_type)
     # not usually needed
     # Admin.report Report.success("sync:#{subscription_type}", "Synced #{total} #{subscription_type}.", {duration: (Time.now - start), total: total, options: options, subscription_type: subscription_type})
   rescue Exception => ex
-    Admin.report Report.exception("sync:#{subscription_type}", "Failed to sync #{subscription_type}, died at page #{page}", ex, {duration: (Time.now - start), options: options, subscription_type: subscription_type})
+    Admin.exception "sync:#{subscription_type}", ex, {died_at: page, duration: (Time.now - start), options: options, subscription_type: subscription_type}
   end
 end

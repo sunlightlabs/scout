@@ -16,6 +16,9 @@ gem 'escape_utils'
 gem "mongoid", '~> 3.1'
 gem "mongoid-paperclip", require: "mongoid_paperclip"
 
+# exception handling
+gem "sentry-raven", github: "getsentry/raven-ruby"
+
 # asset syncing to S3
 gem "aws-sdk"
 gem 'asset_sync'

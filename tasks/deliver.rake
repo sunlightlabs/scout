@@ -27,7 +27,7 @@ namespace :deliver do
     begin
       Deliveries::Manager.deliver! delivery_options
     rescue Exception => ex
-      Admin.report Report.exception("Delivery", "Problem during deliver:email_daily.", ex)
+      Admin.exception "deliver:email_daily", ex
       puts "Error during delivery, emailed report."
     end
   end
@@ -43,17 +43,7 @@ namespace :deliver do
     begin
       Deliveries::Manager.deliver! delivery_options
     rescue Exception => ex
-      Admin.report Report.exception("Delivery", "Problem during deliver:email_immediate.", ex)
-      puts "Error during delivery, emailed report."
-    end
-  end
-
-  desc "Deliveries of SMSes for whenever, per-interest"
-  task :sms => :environment do
-    begin
-      Deliveries::Manager.deliver! "mechanism" => "sms"
-    rescue Exception => ex
-      Admin.report Report.exception("Delivery", "Problem during deliver:sms.", ex)
+      Admin.exception "deliver:email_immediate", ex
       puts "Error during delivery, emailed report."
     end
   end

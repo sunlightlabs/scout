@@ -22,8 +22,7 @@ namespace :analytics do
       msg = google_report start_time, end_time
       Admin.analytics "google", "Google activity for #{day}", msg
     rescue Exception => ex
-      report = Report.exception 'analytics:google', "Exception preparing analytics:google", ex
-      Admin.report report
+      Admin.exception 'analytics:google', ex
       puts "Error sending analytics, emailed report."
     end
   end
@@ -45,8 +44,7 @@ namespace :analytics do
       name = {"scout" => "Scout", "open_states" => "Open States"}[service]
       Admin.analytics "weekly_#{service}", "#{name} user activity for week of #{starting}", msg
     rescue Exception => ex
-      report = Report.exception 'analytics:clicks', "Exception preparing analytics:clicks", ex
-      Admin.report report
+      Admin.exception 'analytics:clicks', ex
       puts "Error sending analytics, emailed report."
     end
   end
