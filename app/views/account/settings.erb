@@ -167,92 +167,27 @@
 
   <div class="module allNotifications">
     <div class="module phoneSettings">
+      <h3>SMS alerts</h3>
 
-        <h3>SMS</h3>
+      <p>
+        Scout no longer offers SMS alerts directly. You can continue to receive SMS alerts by using your alerts' RSS feeds with <a href="https://ifttt.com">IFTTT</a> (If This Then That). To do this:
+      </p>
+      <p>
+        <strong>1.</strong> <a href="https://ifttt.com/join">Create an IFTTT account</a> and <a href="https://ifttt.com/sms">activate your SMS Channel</a>.
+      </p>
+      <p>
+        <strong>2.</strong> Copy the URL of Scout's RSS feed for your alert from <a href="/account/settings">your Settings page</a>, as below:
 
-        <%= flash_for [:phone] %>
+        <img src="<%= asset_path "images/rss-alerts.png" %>" />
+      </p>
 
-        <div class="confirmed phone_settings">
-          <span>
-            <strong><%= user.phone %></strong> (Verified)
-          </span>
-          <a href="#" class="dismiss phone">
-            Change
-          </a>
-        </div>
+      <p>
+        <strong>3.</strong> Click "Use" below, then paste the alert URL you copied into the URL field of the IFTTT recipe.
+      </p>
 
-        <div class="unconfirmed phone_settings">
-          <span class="unverified">
-            <strong><%= user.phone %></strong> (Unverified)
-          </span>
-          <p>
-            To confirm your phone number, enter the verification code we sent you.
-          </p>
-
-          <form class="phone verify" action="/account/phone/confirm" method="post">
-            <%= text_field_tag "phone_verify_code" %>
-            <button type="submit" class="smallButton">
-              <span>Verify</span>
-            </button>
-          </form>
-
-          <form class="phone resend" action="/account/phone/resend" method="post">
-            <button type="submit" class="smallButton">
-              <span>Resend</span>
-            </button>
-          </form>
-
-          <form class="phone reset" action="/account/phone/reset" method="post">
-            <button type="submit" class="smallButton">
-              <span>Start Over</span>
-            </button>
-          </form>
-        </div>
-
-        <div class="none phone_settings">
-          <p>
-            Enter a phone number below to turn on SMS notifications.
-          </p>
-          <p>
-            We'll send you a text message to confirm.
-          </p>
-
-          <form action="/account/phone" method="post">
-            <input type="hidden" name="_method" value="put" />
-
-            <label for="user_phone">Phone:</label>
-            <%= text_field_tag "user[phone]", value: user.phone %>
-
-            <button type="submit">
-              <span>Add Phone Number</span>
-            </button>
-          </form>
-
-          <small>
-            Standard text message charges may apply. Some subscriptions can generate a lot of results &mdash; be careful what you sign up for.
-          </small>
-        </div>
+      <p>
+        <a href="https://ifttt.com/view_embed_recipe/161435-get-my-scout-alert-via-sms" target = "_blank" class="embed_recipe embed_recipe-l_26" id= "embed_recipe-161435"><img src= 'https://ifttt.com/recipe_embed_img/161435' alt="IFTTT Recipe: Get my Scout alert via SMS connects feed to sms" width="370px" style="max-width:100%"/></a><script async type="text/javascript" src= "//ifttt.com/assets/embed_recipe.js"></script>
+      </p>
     </div>
   </div>
 </div>
-
-<script type="text/javascript">
-    $(function() {
-
-        <% if user.phone.present? and user.phone_confirmed? %>
-            $(".phone_settings.confirmed").show();
-        <% elsif user.phone.present? %>
-            $(".phone_settings.unconfirmed").show();
-        <% else %>
-            $(".phone_settings.none").show();
-        <% end %>
-
-        $("a.dismiss.phone").click(function() {
-            $(".phone_settings.confirmed").hide();
-            $(".phone_settings.none").show();
-
-            return false;
-        });
-
-    });
-</script>

@@ -57,9 +57,5 @@ gem 'feedjira'
 gem 'feedbag'
 gem 'sanitize'
 
-# TODO: kill when we remove SMS
-gem 'twilio-rb', '2.2.0'
-gem 'phone', git: 'git://github.com/sunlightlabs/phone.git'
-
 # advanced search string parsing
 gem 'lucene_query_parser', git: 'git://github.com/sunlightlabs/lucene_query_parser.git'

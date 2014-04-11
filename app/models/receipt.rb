@@ -17,7 +17,9 @@ class Receipt
   # @return [String] the service that generated the user, if not Scout itself,
   #   e.g. "open_states"
   field :user_service
-  # @return [String] either "sms" or "email"
+
+  # @return [String] "email"
+  # TODO: kill this
   field :mechanism
 
   # @return [String] the email's "Subject" header
@@ -39,5 +41,10 @@ class Receipt
   # if the user is still around, no harm if it's not
   belongs_to :user
 
-  scope :for_time, ->(start, ending) {where(delivered_at: {"$gt" => Time.zone.parse(start).midnight, "$lt" => Time.zone.parse(ending).midnight})}
+  scope :for_time, ->(start, ending) {
+    where(delivered_at: {
+      "$gt" => Time.zone.parse(start).midnight,
+      "$lt" => Time.zone.parse(ending).midnight
+    })
+  }
 end

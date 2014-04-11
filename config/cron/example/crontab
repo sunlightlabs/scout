@@ -24,9 +24,8 @@ SCOUT_LOG_PATH=/path/to/logs
 # At 8am, deliver daily emails
 0    13 * * * . $SCOUT_ENV_FILE && cd $SCOUT_PATH && rake deliver:email_daily            > $SCOUT_LOG_PATH/deliver-email_daily.log 2>&1
 
-# Every 10 minutes, deliver immediate emails and SMS messages
+# Every 10 minutes, deliver immediate emails
 */10 *  * * * . $SCOUT_ENV_FILE && cd $SCOUT_PATH && rake deliver:email_immediate        > $SCOUT_LOG_PATH/deliver-email_immediate.log 2>&1
-*/10 *  * * * . $SCOUT_ENV_FILE && cd $SCOUT_PATH && rake deliver:sms                    > $SCOUT_LOG_PATH/deliver-sms.log 2>&1
 
 ### Polling tasks
 

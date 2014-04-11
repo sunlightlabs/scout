@@ -44,9 +44,6 @@
 # immediate emails - throughout the day, every 10 minutes
 */10 * * * *  /projects/scout/current/config/cron/production/deliver.sh email_immediate
 
-# SMS messages - throughout the day, every 10 minutes
-#! */10 * * * * /projects/scout/current/config/cron/production/deliver.sh sms
-
 
 ######## Polling tasks  #########
 

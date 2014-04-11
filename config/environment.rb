@@ -6,9 +6,7 @@ require 'safe_yaml' # we only use yaml for config, but just in case, sanitize
 require 'escape_utils'
 
 require 'tzinfo'
-require 'twilio-rb'
 require 'feedbag'
-require 'phone'
 
 require 'asset_sync'
 
@@ -55,7 +53,7 @@ def reserved_names
     names = %w{
       user account subscription interest item fetch
       ajax pjax tag seen delivery receipt report email route
-      sms admin login logout session signup signout request response
+      admin login logout session signup signout request response
       server client rss feed atom json xml search api api_key import
       export download upload favicon index about privacy_policy privacy
       terms legal contact username slug name error exception tos terms_of_service
@@ -75,18 +73,8 @@ configure do
   # this isn't used anywhere, we're setting it to avoid deprecation warnings
   I18n.enforce_available_locales = true
 
-  # default country code for phone numbers
-  Phoner::Phone.default_country_code = '1'
-
   Mongoid.configure do |c|
     c.load_configuration Environment.config['mongoid'][Sinatra::Base.environment.to_s]
-  end
-
-  if Environment.config['twilio']
-    Twilio::Config.setup(
-      account_sid: Environment.config['twilio']['account_sid'],
-      auth_token: Environment.config['twilio']['auth_token']
-    )
   end
 
   # if a consistent time zone is needed, use Eastern Time
@@ -128,14 +116,11 @@ helpers Helpers::General
 helpers Helpers::Subscriptions
 helpers Helpers::Routing
 
-# transmission mechanisms (Twilio, pony, postmark, "fake")
+# email transports, and admin messages/reports
 require './config/email'
-require './config/sms'
-
-# admin messages and reports
 require './config/admin'
 
-# delivery management and mechanisms
+# delivery manager and email assembler
 Dir.glob('deliveries/*.rb').each {|filename| load filename}
 
 # subscription management and adapters

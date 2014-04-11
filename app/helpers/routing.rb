@@ -11,10 +11,6 @@ module Helpers
       end
     end
 
-    def user_contact(user)
-      user.contact
-    end
-
     # for item interests
     def interest_adapter(interest)
       Subscription.adapter_for(item_types[interest.item_type]['adapter'])
