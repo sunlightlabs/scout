@@ -1,5 +1,14 @@
 $(function() {
 
+  // ensure we trigger pageviews on each pjax click
+  $(document).on('pjax:success', function() {
+    if (window.ga) {
+      console.log("[pjax] Sending pageview.")
+      ga('send', 'pageview');
+    }
+  });
+
+
   $(".view_preview a").click(function() {
     $('html, body').animate({
       scrollTop: $("#preview").offset().top
