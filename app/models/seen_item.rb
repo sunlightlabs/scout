@@ -54,14 +54,6 @@ class SeenItem
   validates_presence_of :subscription_id
   validates_presence_of :item_id
 
-  # the subset of fields appropriate for public syndication (omit database IDs, for instance)
-  # @private
-  def self.public_json_fields
-    [
-      'created_at', 'item_id', 'data', 'date', 'subscription_type'
-    ]
-  end
-
   # @return [Boolean] whether the interest is in search terms
   def search?
     interest_type == "search"

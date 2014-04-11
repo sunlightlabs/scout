@@ -1,4 +1,4 @@
-# An interest, e.g. "intellectual property". 
+# An interest, e.g. "intellectual property".
 #
 # ## "search" interests
 #
@@ -90,7 +90,7 @@ class Interest
   #   user's global notification settings:
   #   * "email_immediate": the user will receive notifications immediately
   #   * "email_daily" the user will receive notifications daily
-  #   * "sms": the user will receive both an SMS and email immediately
+  #   * "sms": the user will receive an SMS immediately
   #   * "none": the user will not receive notifications
   field :notifications
   validates_inclusion_of :notifications, :in => ["none", "email_daily", "email_immediate", "sms"], :allow_blank => true
@@ -143,12 +143,6 @@ class Interest
   # @return [Boolean] whether the interest is in a collection
   def tag?
     interest_type == "tag"
-  end
-
-  def self.public_json_fields
-    [
-      'created_at', 'updated_at', 'interest_type', 'in', 'item_type', 'search_type'
-    ]
   end
 
   def new_tags=(names)
