@@ -140,7 +140,7 @@ namespace :subscriptions do
           )
 
         rescue Exception => ex
-          Admin.report Report.exception("check:#{subscription_type}", "Problem during 'rake subscriptions:check:#{subscription_type}'.", ex)
+          Admin.exception "check:#{subscription_type}", ex
           puts "Error during subscription checking, emailed report."
         end
       end

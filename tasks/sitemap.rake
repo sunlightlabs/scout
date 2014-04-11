@@ -82,8 +82,7 @@ task :sitemap => :environment do
 
     puts "Saved sitemaps."
   rescue Exception => ex
-    report = Report.exception 'Sitemap', "Exception generating sitemap", ex
-    Admin.report report
+    Admin.exception 'sitemap', ex
     puts "Error generating sitemap, emailed report."
   end
 end

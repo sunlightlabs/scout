@@ -84,8 +84,7 @@ namespace :glossary do
       puts "Saved #{count} definitions, deleted #{leftover_terms.size} terms."
 
     rescue Exception => ex
-      report = Report.exception 'Glossary', "Exception loading glossary.", ex
-      Admin.report report
+      Admin.exception 'Glossary', ex
       puts "Error loading glossary, emailed report."
     end
   end
@@ -113,8 +112,7 @@ namespace :legislators do
       puts "Loaded #{Legislator.count} current legislators."
 
     rescue Exception => ex
-      report = Report.exception 'Legislators', "Exception loading legislators.", ex
-      Admin.report report
+      Admin.exception 'Legislators', ex
       puts "Error loading legislators, emailed report."
     end
 
@@ -141,8 +139,7 @@ namespace :agencies do
       puts "Loaded #{Agency.count} current federal agencies."
 
     rescue Exception => ex
-      report = Report.exception 'Agencies', "Exception loading agencies.", ex
-      Admin.report report
+      Admin.exception 'Agencies', ex
       puts "Error loading agencies, emailed report."
     end
 
