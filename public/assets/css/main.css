@@ -1911,10 +1911,21 @@ div.indicators span {
     padding-top: 33px;
     padding-bottom: 33px;
 }
+
 .settings.contentArea .module.phoneSettings{
     background: none;
     padding-left: 10px;
     padding-right: 30px;
+    width: 100%;
+}
+
+.settings .phoneSettings p {
+
+}
+
+.settings .phoneSettings img {
+    border: 3px double #888;
+    margin: 10px 0;
 }
 
 .settings.contentArea .module.notifications div.forgot {
@@ -1971,24 +1982,7 @@ div.indicators span {
 .updateSettings button{
     margin-top: 15px;
 }
-.settings .phone_settings {
-    display: none;
-}
 
-.settings .phone_settings small {
-    margin-top: 10px;
-    margin-bottom: 10px;
-    display: block;
-}
-
-.settings .phone_settings span.unverified {
-    display: block;
-    margin-bottom: 10px;
-}
-
-.settings .phone_settings button {
-    margin-bottom: 10px;
-}
 
 .settings.contentArea .module{
     background: url('../images/tinyborder.png') center bottom repeat-x;

@@ -141,47 +141,4 @@ class ScheduleTest < Test::Unit::TestCase
 
     assert_equal 0, Delivery.count
   end
-
-  def test_sms_delivery_for_user_without_phone_is_not_scheduled
-    query = "environment"
-    search_type = "federal_bills"
-    user = create :user, phone_confirmed: true, confirmed: true
-    interest = search_interest! user, search_type, query, "simple", {}, notifications: "sms"
-    subscription = interest.subscriptions.first
-
-    mock_search subscription
-    items = subscription.search
-
-    assert_equal 0, Delivery.count
-
-    assert user.confirmed?
-    assert user.phone.blank?
-    assert user.phone_confirmed?
-
-    Deliveries::Manager.schedule_delivery! items.first, interest, search_type
-
-    assert_equal 0, Delivery.count
-  end
-
-  def test_sms_delivery_for_user_with_unconfirmed_phone_is_not_scheduled
-    query = "environment"
-    search_type = "federal_bills"
-    phone = "+15555551212"
-    user = create :user, phone: phone, phone_confirmed: false, confirmed: true
-    interest = search_interest! user, search_type, query, "simple", {}, notifications: "sms"
-    subscription = interest.subscriptions.first
-
-    mock_search subscription
-    items = subscription.search
-
-    assert_equal 0, Delivery.count
-
-    assert user.confirmed?
-    assert user.phone.present?
-    assert !user.phone_confirmed?
-
-    Deliveries::Manager.schedule_delivery! items.first, interest, search_type
-
-    assert_equal 0, Delivery.count
-  end
 end

@@ -90,7 +90,7 @@
         <ul id="userNav">
           <% if logged_in? %>
             <li class="user">
-              <%= user_contact current_user %>
+              <%= current_user.email %>
             </li>
             <li class="subscriptions">
               <a href="/account/subscriptions">

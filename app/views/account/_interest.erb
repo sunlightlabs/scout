@@ -56,7 +56,7 @@
 
         <form>
           <ul>
-            <% types = ["email_immediate", "email_daily", "sms", "none"] %>
+            <% types = ["email_immediate", "email_daily", "none"] %>
             <% allowable = current_user.allowable_notifications %>
             <% preference = interest.notifications || current_user.notifications %>
             <% default = types.delete current_user.notifications %>
