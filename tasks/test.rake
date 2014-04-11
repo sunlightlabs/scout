@@ -70,7 +70,6 @@ namespace :test do
   desc "Forces emails or SMSes to be sent for the first X results of every subscription a user has"
   task send_user: :environment do
     email = ENV['email'] || Environment.config['admin'].first
-    phone = ENV['phone']
 
     max = (ENV['max'] || ENV['limit'] || 2).to_i
     only = (ENV['only'] || "").split(",")
@@ -80,7 +79,7 @@ namespace :test do
 
     function = (ENV['function'] || :check).to_sym
 
-    mechanism = ENV['by'] || (phone.present? ? 'sms' : 'email')
+    mechanism = 'email'
     email_frequency = ENV['frequency'] || 'immediate'
 
     unless ['immediate', 'daily'].include?(email_frequency)
@@ -88,19 +87,12 @@ namespace :test do
       return
     end
 
-    user = nil
-    if phone.present?
-      user = User.by_phone phone
-    else
-      user = User.where(:email => email).first
-    end
-
-    unless user
-      puts "Can't find user by that email or phone."
+    unless user = User.where(email: email).first
+      puts "Can't find user by that email."
       exit -1
     end
 
-    puts "Clearing all deliveries for #{user.email || user.phone}"
+    puts "Clearing all deliveries for #{user.email}"
     user.deliveries.delete_all
 
     user.interests.each do |interest|
@@ -142,49 +134,25 @@ namespace :test do
 
     end
 
-    Deliveries::Manager.deliver! "mechanism" => mechanism, "email_frequency" => email_frequency
+    # scopes deliveries to a particular email, using Delivery#user_email.
+    # The Delivery#user_email field is for TESTING/DEBUGGING only,
+    # during real delivery, the user's email should get looked up again,
+    # at the instant of delivery, in case it's changed between scheduling
+    # and delivery.
+    Deliveries::Manager.deliver!(
+      "mechanism" => mechanism,
+      "email_frequency" => email_frequency,
+      "user_email" => email
+    )
   end
 
   desc "Deliver an individual delivery (use 'id' parameter)"
-  task :delivery => :environment do
+  task delivery: :environment do
     id = ENV['id']
     if delivery = Delivery.find(id)
       Deliveries::Manager.deliver! '_id' => id, 'mechanism' => delivery.mechanism, 'email_frequency' => delivery.email_frequency
     else
       puts "Couldn't locate delivery by provided ID"
-    end
-  end
-
-  namespace :remote do
-
-    desc "Test remote subscription via SMS"
-    task :subscribe => :environment do
-      unless (phone = ENV['phone']).present?
-        puts "Give a phone number with the 'phone' parameter."
-      end
-      item_type = ENV['item_type'] || 'bill'
-      item_id = ENV['item_id'] || 'hr1234-112'
-      hostname = ENV['host'] || Environment.config['hostname']
-
-      url = "#{hostname}/remote/subscribe/sms"
-
-      response = HTTParty.post url, {body: {phone: phone, interest_type: "item", item_type: item_type, item_id: item_id}}
-      puts "Status: #{response.code}"
-      if response.code == 200
-        puts "Body: #{JSON.pretty_generate JSON.parse(response.body)}"
-      else
-        puts "Body: #{response.body}"
-      end
-    end
-
-    desc "Test confirmation of remote account, via SMS"
-    task confirm: :environment do
-      unless (phone = ENV['phone']).present?
-        puts "Give a phone number with the 'phone' parameter."
-      end
-      hostname = ENV['host'] || Environment.config['hostname']
-
-      url = "#{hostname}/remote/subscribe/sms"
     end
   end
 

@@ -14,8 +14,9 @@ class Delivery
   # @return [String] what the user is interested in (terms, feed URL, etc.)
   field :interest_in
 
-  # used for DEBUG CONVENIENCE ONLY - the email to deliver this to
-  # should be looked up at delivery-time, not schedule-time.
+  # used for DEBUG/TESTING CONVENIENCE ONLY -
+  # During actual delivery, the email to deliver this to
+  # should be looked up AGAIN, in case the user's email has changed.
   # @return [String] the subscriber's email address
   field :user_email
 
