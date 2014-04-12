@@ -28,13 +28,13 @@
 # update latest info every night and generate a sitemap
 
 # speeches, regulations (last year), documents, and state bills get synced each day
-#! 30 13 * * * /projects/scout/current/config/cron/production/rake.sh sync type=speeches && /projects/scout/current/config/cron/production/rake.sh sync type=regulations since=current_year && /projects/scout/current/config/cron/production/rake.sh sync type=documents && /projects/scout/current/config/cron/production/rake.sh sync type=state_bills && /projects/scout/current/config/cron/production/rake.sh sitemap
+30 13 * * * /projects/scout/current/config/cron/production/rake.sh sync type=speeches && /projects/scout/current/config/cron/production/rake.sh sync type=regulations since=current_year && /projects/scout/current/config/cron/production/rake.sh sync type=documents && /projects/scout/current/config/cron/production/rake.sh sync type=state_bills && /projects/scout/current/config/cron/production/rake.sh sitemap
 
 # bills (current congress) can be run and re-run throughout the day
-#! 50 * * * * /projects/scout/current/config/cron/production/rake.sh sync type=federal_bills since=current_congress
+50 * * * * /projects/scout/current/config/cron/production/rake.sh sync type=federal_bills since=current_congress
 
 # regulations (last 3 days) get re-checked throughout the day
-#! 44 * * * * /projects/scout/current/config/cron/production/rake.sh sync type=regulations
+44 * * * * /projects/scout/current/config/cron/production/rake.sh sync type=regulations
 
 ######## Delivery tasks ########
 

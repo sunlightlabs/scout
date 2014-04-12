@@ -5,4 +5,4 @@ cd /projects/scout/current
 
 FIRST=$1
 shift
-rake $FIRST $@ > /projects/scout/shared/cron/$FIRST.last 2>&1
+RACK_ENV=production rake $FIRST $@ > /projects/scout/shared/cron/$FIRST.last 2>&1
