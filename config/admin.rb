@@ -5,8 +5,10 @@ module Admin
   # if Sentry is configured, uses Sentry.
   # if not, uses normal admin email route (SMTP).
   def self.exception(source, exception, extra = {})
+    message = "#{exception.class.name}: #{exception.message}"
 
     if Environment.config['sentry'].present?
+      puts "Sending to Raven: [#{source}] #{message}"
       Raven.capture_exception(
         exception,
         extra: extra.merge(
@@ -15,7 +17,6 @@ module Admin
       )
 
     else
-      message = "#{exception.class.name}: #{exception.message}"
       report = Report.exception source, message, exception, extra
       Admin.report report
     end
