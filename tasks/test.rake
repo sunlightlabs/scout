@@ -2,9 +2,14 @@
 
 namespace :test do
 
+  desc "Say what the app believes is the current environment"
+  task env: :environment do
+    puts "Current environment: #{Sinatra::Base.environment}"
+  end
+
   # based on raven test, so we can depend on environment being loaded
   desc "Send a test Sentry event"
-  task raven: :environment do
+  task sentry: :environment do
     Raven::CLI.test Environment.config['sentry']
   end
 

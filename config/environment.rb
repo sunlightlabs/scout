@@ -84,11 +84,16 @@ configure do
 
   # Sentry for exception handling
   if Environment.config['sentry'].present?
+    # only output actual things
+    logger = ::Logger.new(STDOUT)
+    logger.level = ::Logger::WARN
+
     Raven.configure do |config|
       config.dsn = Environment.config['sentry']
       config.ssl_verification = true
       config.environments = ['production']
       config.tags = {environment: Sinatra::Base.environment}
+      config.logger = logger
     end
   end
 
