@@ -61,16 +61,14 @@ class User
   has_mongoid_attached_file :image,
     path: 'public/system/:attachment/:id/:style.:extension',
     url: '/system/:attachment/:id/:style.:extension',
-    # storage: :s3,
-    # url: ':s3_alias_url',
-    # s3_host_alias: 'something.cloudfront.net',
-    # s3_credentials: File.join('config', 's3.yml'),
     styles: {
       # original: ['1000x1000>', :png],
       small: ['217x217>', :png]
     }
 
   validates_attachment_size :image, in: 0..1.megabytes, message: "Image must be less than 1MB."
+  # validates_attachment_content_type :image, content_type: %w(image/jpeg image/jpg image/png image/gif)
+  do_not_validate_attachment_file_type :image
 
   index username: 1
   index user_id: 1
@@ -249,3 +247,12 @@ class User
     Event.unsubscribe! self, old_info, description
   end
 end
+
+
+# Stupid workaround for an issue where uploaded files
+# with no file extension get uniformly banned from uploading.
+#
+# Details:
+# https://github.com/thoughtbot/paperclip/issues/1470
+# http://robots.thoughtbot.com/prevent-spoofing-with-paperclip
+module Paperclip; class MediaTypeSpoofDetector; def spoofed?; false; end; end; end
