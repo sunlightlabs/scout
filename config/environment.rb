@@ -4,7 +4,7 @@ require 'mongoid_paperclip'
 
 require 'raven'
 
-require 'safe_yaml' # we only use yaml for config, but just in case, sanitize
+require 'safe_yaml'
 require 'escape_utils'
 
 require 'tzinfo'
@@ -69,7 +69,6 @@ def reserved_names
 end
 
 configure do
-  # ensure YAML files get loaded with naive processing
   SafeYAML::OPTIONS[:default_mode] = :safe
 
   # this isn't used anywhere, we're setting it to avoid deprecation warnings
