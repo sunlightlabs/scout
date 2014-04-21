@@ -1,8 +1,6 @@
 <% opinion = item.data %>
 <title>
-  <h4>
-    <%= opinion['case_name'] %>
-  </h4>
+  <%= opinion['case_name'] %>
 </title>
 <% if highlight = opinion_highlight(item, interest) %>
   <description><![CDATA[
