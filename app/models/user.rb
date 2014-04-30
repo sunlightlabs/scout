@@ -73,7 +73,7 @@ class User
   index username: 1
   index user_id: 1
   index government: 1
-  index edcuation: 1
+  index education: 1
 
   validates_uniqueness_of :username, allow_blank: true, message: "has already been taken."
   validates_exclusion_of :username, in: reserved_names, message: "cannot be used."
