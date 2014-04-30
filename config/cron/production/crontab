@@ -3,11 +3,11 @@
 */30 * * * * /projects/scout/current/config/cron/production/rake.sh subscriptions:reinitialize
 
 # post-midnight, email a report of Google's crawling activity
-#! 0 6 * * * /projects/scout/current/config/cron/production/rake.sh analytics:google
+0 6 * * * /projects/scout/current/config/cron/production/rake.sh analytics:google
 
 # on Monday morning, email about last week's user activity for OS and Scout
-#! 0 6 * * 1 /projects/scout/current/config/cron/production/rake.sh analytics:weekly service=scout
-#! 0 6 * * 1 /projects/scout/current/config/cron/production/rake.sh analytics:weekly service=open_states
+0 6 * * 1 /projects/scout/current/config/cron/production/rake.sh analytics:weekly service=scout
+0 6 * * 1 /projects/scout/current/config/cron/production/rake.sh analytics:weekly service=open_states
 
 
 ######## External data loading #########
