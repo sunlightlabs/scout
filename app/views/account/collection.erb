@@ -234,7 +234,7 @@
         <% by_type['feed'].each do |interest| %>
           <div class="interest basic-row collection_feed">
             <div class="type">
-              <img src="<%= asset_path "/images/icon_type_feed.png" %>">
+              <img src="<%= asset_path "/images/icon_type_feed.png" %>" />
             </div>
             <h4>
               <a href="<%= interest_path interest %>">
@@ -244,7 +244,9 @@
           </div>
         <% end %>
       <% end %>
+
     </div>
+
     <div id="preview" class="collection-preview section container">
       <h2>Preview of Current Scout Results</h2>
       <ul>

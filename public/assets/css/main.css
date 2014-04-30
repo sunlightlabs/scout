@@ -1640,7 +1640,7 @@ h3.interestHeader, .add.rss{
     display: inline;
     padding-right: 16px;
 }
-.feed {
+a.feed {
     float: right;
 }
 .subscription .json.feed{
