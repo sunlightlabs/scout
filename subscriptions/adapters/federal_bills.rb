@@ -191,16 +191,7 @@ module Subscriptions
       end
 
       def self.formatted_code(bill)
-        code = {
-          "hr" => "H.R.",
-          "hres" => "H.Res.",
-          "hjres" => "H.J.Res.",
-          "hconres" => "H.Con.Res.",
-          "s" => "S.",
-          "sres" => "S.Res.",
-          "sjres" => "S.J.Res.",
-          "sconres" => "S.Con.Res."
-        }[bill['bill_type']]
+        code = bill_types[bill['bill_type']]
         "#{code} #{bill['number']}"
       end
 
@@ -245,6 +236,19 @@ module Subscriptions
 
       def self.congress_for_year(year)
         ((year.to_i + 1) / 2) - 894
+      end
+
+      def self.bill_types
+        @bill_types ||= {
+          "hr" => "H.R.",
+          "hres" => "H.Res.",
+          "hjres" => "H.J.Res.",
+          "hconres" => "H.Con.Res.",
+          "s" => "S.",
+          "sres" => "S.Res.",
+          "sjres" => "S.J.Res.",
+          "sconres" => "S.Con.Res."
+        }
       end
 
       # legislative year - consider Jan 1, Jan 2, and first half of Jan 3 to be last year
