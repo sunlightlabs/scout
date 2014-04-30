@@ -192,8 +192,9 @@ class Interest
 
   def generate_slug
     adapter = Subscription.adapter_for item_types[item_type]['adapter']
-    if adapter.respond_to?(:slug_for)
-      Environment.to_url adapter.slug_for(data)
+    if adapter.respond_to?(:slug_for) and data and data.any?
+      slug = adapter.slug_for data
+      Environment.to_url(slug) if slug
     end
   end
 
