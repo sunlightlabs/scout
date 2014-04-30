@@ -46,6 +46,20 @@ module TestHelper
 
     # factory for interests
 
+    def item_interest(user, item_id, item_type)
+      interest = Interest.for_item user, item_id, item_type
+      mock_item item_id, item_type
+      subscription_type = item_types[item_type]['adapter']
+      item = Subscriptions::Manager.find(subscription_type, item_id)
+      interest.data = item.data
+
+      interest
+    end
+
+    def item_interest!(user, item_id, item_type)
+      item_interest(user, item_id, item_type).save!
+    end
+
     def search_interest!(user, search_type = "all", interest_in = "foia", query_type = "simple", filters = {}, attributes = {})
       interest = Interest.for_search user, search_type, interest_in, query_type, filters
       interest.attributes = attributes
