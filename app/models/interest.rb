@@ -102,6 +102,7 @@ class Interest
   index item_type: 1
   index tags: 1
   index({user_id: 1, tags: 1})
+  index({in: 1, interest_type: 1})
 
   validates_presence_of :user_id
   validates_presence_of :in
@@ -161,6 +162,65 @@ class Interest
     @tag_user ||= tag.user
   end
 
+  # generate path at create_time.
+  # if it's referenced prior to create, generate it on demand.
+
+  field :frozen_path
+
+  # calculate collection paths on demand,
+  # look up feed paths on demand,
+  # search and item will be frozen at save-time.
+  def path
+    if tag?
+      collection_path self.tag_user, self.tag
+    elsif feed?
+      data['site_url'] || data['url'] # URL
+    else # item? or search?
+      frozen_path || freeze_path
+    end
+  end
+
+  # does not depend on being saved first, or having subscriptions.
+  before_save :freeze_path
+  def freeze_path
+    if item?
+      self.frozen_path = generate_item_path
+    elsif search?
+      self.frozen_path = generate_search_path
+    end
+  end
+
+  def generate_item_path
+    SeenItem.generate_path self.in, self.item_type, self.data
+  end
+
+  def generate_search_path
+    if search_type == "all"
+      base = "/search/all"
+      base << "/#{URI.encode self.in}" if self.in
+      base << "/advanced" if query_type == 'advanced'
+      base
+    else
+      search_path_for self.search_type
+    end
+  end
+
+  # also called directly in /all search pages
+  def search_path_for(subscription_type)
+    base = "/search/#{subscription_type}"
+
+    base << "/#{URI.encode self.in}"
+
+    base << "/advanced" if query_type == 'advanced'
+
+    query_string = filters.map do |key, value|
+      "#{subscription_type}[#{key}]=#{URI.encode value}"
+    end.join("&")
+
+    base << "?#{query_string}" if query_string.present?
+
+    base
+  end
 
   # other interests following this interest.
   # only makes sense for a saved interest with a user that owns it

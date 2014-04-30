@@ -252,7 +252,7 @@
         </div>
 
         <% unless subscription %>
-          <a href="<%= subscription_path s %>" class="viewMore" data-pjax="#center">
+          <a href="<%= interest.search_path_for s.subscription_type %>" class="viewMore" data-pjax="#center">
             View more <span><%= s.search_name %></span>
           </a>
           <div class="clear"></div>

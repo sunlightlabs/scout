@@ -8,7 +8,7 @@ class RoutingTest < Test::Unit::TestCase
   class Anonymous; extend Helpers::Routing; end
   def routing; Anonymous; end
 
-  
+
   def test_interest_path
     user = create :user
 
@@ -25,6 +25,10 @@ class RoutingTest < Test::Unit::TestCase
 
     advanced_search = search_interest! user, "federal_bills", query, "advanced"
     assert_equal "/search/federal_bills/#{URI.encode query}/advanced", routing.interest_path(advanced_search)
+
+    basic_item = item_interest user, "hr4192-112", "bill"
+    assert_equal "due-process-and-military-detention-amendments-act", SeenItem.generate_slug(basic_item.item_type, basic_item.data)
+    assert_equal "/item/bill/hr4192-112/due-process-and-military-detention-amendments-act", routing.interest_path(basic_item)
   end
 
 end

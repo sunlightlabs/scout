@@ -44,8 +44,8 @@ group :development do
   gem 'wirb'
   gem 'paint'
   gem 'unicorn'
-#  gem 'rblineprof'
-#  gem 'rack-lineprof'
+  gem 'rblineprof'
+  gem 'rack-lineprof'
 end
 
 group :test do

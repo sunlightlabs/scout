@@ -71,35 +71,12 @@ module Helpers
       end
     end
 
-    def interest_json_path(interest)
-      if interest.tag?
-        collection_feed_path interest.tag_user, interest.tag, "json"
-      else
-        "/interest/#{interest.id}.json"
-      end
-    end
-
+    # frozen on interest at create/update time.
     def interest_path(interest)
-      if interest.item?
-        route = "/item/#{interest.item_type}/#{interest.in}"
-
-        adapter = Subscription.adapter_for item_types[interest.item_type]['adapter']
-
-        if adapter.respond_to?(:slug_for)
-          route = "#{route}/#{Environment.to_url adapter.slug_for(interest.data)}"
-        end
-
-        route
-
-      elsif interest.feed?
-        interest.data['site_url'] || interest.data['url'] # URL
-      elsif interest.search?
-        search_interest_path interest
-      elsif interest.tag?
-        collection_path interest.tag_user, interest.tag
-      end
+      interest.path
     end
 
+    # uses frozen path.
     def interest_url(interest)
       if interest.feed?
         interest_path interest
@@ -108,57 +85,8 @@ module Helpers
       end
     end
 
-    def search_interest_path(interest)
-      if interest.search_type == "all"
-        base = "/search/all"
-        base << "/#{URI.encode interest.in}" if interest.in
-        base << "/advanced" if interest.query_type == 'advanced'
-        base
-      else
-        subscription_path interest.subscriptions.first
-      end
-    end
-
-    # given a subscription, serialize it to a URL
-    # assumes it is a search subscription
-    def subscription_path(subscription)
-      base = "/search/#{subscription.subscription_type}"
-
-      base << "/#{URI.encode subscription.interest_in}"
-
-      base << "/advanced" if subscription.query_type == 'advanced'
-
-      query_string = subscription.filters.map do |key, value|
-        "#{subscription.subscription_type}[#{key}]=#{URI.encode value}"
-      end.join("&")
-
-      base << "?#{query_string}" if query_string.present?
-
-      base
-    end
-
     def item_path(item)
-      if item.item?
-        "/item/#{item.item_type}/#{item.interest_in}"
-      elsif item.feed?
-        item.data['url']
-      elsif item.search?
-        landing_path(item)
-      end
-    end
-
-    # given an item or seen_item, generate a landing page route
-    def landing_path(item)
-      route = "/item/#{item.item_type}/#{item.item_id}"
-
-      # may not have a subscription_type, but will have an item type
-      adapter = Subscription.adapter_for item_types[item.item_type]['adapter']
-
-      if adapter.respond_to?(:slug_for)
-        route = "#{route}/#{Environment.to_url adapter.slug_for(item.data)}"
-      end
-
-      route
+      item.path
     end
 
     def item_url(item, interest = nil, user = nil)
