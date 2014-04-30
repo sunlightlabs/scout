@@ -219,14 +219,6 @@ module Helpers
       link.gsub "&", "&amp;"
     end
 
-    def html_date(time)
-      if time.is_a?(String)
-        time
-      else
-        time.strftime "%Y-%m-%d"
-      end
-    end
-
     def h(text)
       Rack::Utils.escape_html(text)
     end
