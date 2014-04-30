@@ -1,5 +1,5 @@
-<li class="item <%= item.subscription.subscription_type %>"
-  data-subscription_type="<%= item.subscription.subscription_type %>"
+<li class="item <%= item.subscription_type %>"
+  data-subscription_type="<%= item.subscription_type %>"
   data-search_type="<%= interest.search_type %>">
 
   <div class="side">
@@ -8,7 +8,7 @@
     </time>
   </div>
 
-  <%= partial "subscriptions/#{item.subscription.subscription_type}/result", engine: "erb", locals: {interest: interest, item: item, query: query} %>
+  <%= partial "subscriptions/#{item.subscription_type}/result", engine: "erb", locals: {interest: interest, item: item, query: query} %>
 
   <% if defined?(preview) and preview %>
     <div class="source">
