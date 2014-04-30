@@ -18,7 +18,7 @@
           <% name = "" %>
           <% if interest.search_type == "all" %>
             <% name = "<strong>Everything</strong>" %>
-          
+
           <% else %>
             <% subscription = interest.subscriptions.first %>
 
@@ -36,7 +36,7 @@
           <% if interest == current_interest %>
             <%= name %>
           <% else %>
-            <a href="<%= search_interest_path interest %>" data-pjax="#center"><%= name %></a>
+            <a href="<%= interest_path interest %>" data-pjax="#center"><%= name %></a>
           <% end %>
         </li>
       <% end %>
