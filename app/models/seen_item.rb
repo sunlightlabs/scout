@@ -48,7 +48,7 @@ class SeenItem
   index date: 1
   index interest_id: 1
 
-  # used for lookups for RSS feeds
+  # used for lookups for collections and RSS feeds
   index({interest_id: 1, date: 1})
 
   validates_presence_of :subscription_id

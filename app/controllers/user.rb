@@ -42,7 +42,7 @@ get "/user/:user_id/:collection" do
   other_public_collections = user.tags.where(public: true, _id: {"$ne" => collection._id}).to_a
 
   # preview of items fetched so far for this collection
-  interest_ids = collection.interests.only(:_id).map &:_id
+  interest_ids = collection.interests.distinct :_id
   items = SeenItem.where(
     interest_id: {"$in" => interest_ids},
     date: {"$lt" => Time.zone.now}

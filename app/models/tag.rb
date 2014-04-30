@@ -18,6 +18,7 @@ class Tag
   index user_id: 1
 
   index({user_id: 1, name: 1})
+  index({user_id: 1, public: 1, _id: 1})
 
   validates_uniqueness_of :name, scope: :user_id
 

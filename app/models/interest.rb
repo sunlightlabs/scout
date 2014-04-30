@@ -103,6 +103,7 @@ class Interest
   index tags: 1
   index({user_id: 1, tags: 1})
   index({in: 1, interest_type: 1})
+  index({user_id: 1, in: 1, interest_type: 1})
 
   validates_presence_of :user_id
   validates_presence_of :in

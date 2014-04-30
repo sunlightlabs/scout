@@ -13,7 +13,8 @@ module Helpers
 
     # for item interests
     def interest_adapter(interest)
-      Subscription.adapter_for(item_types[interest.item_type]['adapter'])
+      type = item_types[interest.item_type]
+      Subscription.adapter_for type['adapter']
     end
 
     # Warning: using keyword arg syntax in this way is new in Ruby 2.0!
