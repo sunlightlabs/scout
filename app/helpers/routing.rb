@@ -86,27 +86,7 @@ module Helpers
     end
 
     def item_path(item)
-      if item.item?
-        "/item/#{item.item_type}/#{item.interest_in}"
-      elsif item.feed?
-        item.data['url']
-      elsif item.search?
-        landing_path(item)
-      end
-    end
-
-    # given an item or seen_item, generate a landing page route
-    def landing_path(item)
-      route = "/item/#{item.item_type}/#{item.item_id}"
-
-      # may not have a subscription_type, but will have an item type
-      adapter = Subscription.adapter_for item_types[item.item_type]['adapter']
-
-      if adapter.respond_to?(:slug_for)
-        route = "#{route}/#{Environment.to_url adapter.slug_for(item.data)}"
-      end
-
-      route
+      item.path
     end
 
     def item_url(item, interest = nil, user = nil)

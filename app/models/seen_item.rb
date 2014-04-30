@@ -54,6 +54,47 @@ class SeenItem
   validates_presence_of :subscription_id
   validates_presence_of :item_id
 
+
+  # generate slug and path at create_time.
+  # if it's referenced prior to create, generate it on demand.
+
+  field :frozen_path
+
+  def path
+    if item?
+      "/item/#{item_type}/#{interest_in}"
+    elsif feed?
+      self.data['url']
+    else # search?
+      frozen_path || freeze_path
+    end
+  end
+
+  before_save :freeze_path
+  def freeze_path
+    if search?
+      self.frozen_path = SeenItem.generate_path item_id, item_type, data
+    end
+  end
+
+  # utility methods for generating an item's path and slug,
+  # from its ID, type, and data hash
+  def self.generate_slug(item_type, data)
+    adapter = Subscription.adapter_for item_types[item_type]['adapter']
+    if adapter.respond_to?(:slug_for) and data and data.any?
+      slug = adapter.slug_for data
+      Environment.to_url(slug) if slug
+    end
+  end
+
+  def self.generate_path(item_id, item_type, data)
+    slug = generate_slug item_type, data
+    route = "/item/#{item_type}/#{item_id}"
+    route << "/#{slug}" if slug.present?
+    route
+  end
+
+
   # @return [Boolean] whether the interest is in search terms
   def search?
     interest_type == "search"

@@ -162,7 +162,7 @@ class Interest
     @tag_user ||= tag.user
   end
 
-  # generate slug and path at create_time.
+  # generate path at create_time.
   # if it's referenced prior to create, generate it on demand.
 
   field :frozen_path
@@ -190,19 +190,8 @@ class Interest
     end
   end
 
-  def generate_slug
-    adapter = Subscription.adapter_for item_types[item_type]['adapter']
-    if adapter.respond_to?(:slug_for) and data and data.any?
-      slug = adapter.slug_for data
-      Environment.to_url(slug) if slug
-    end
-  end
-
   def generate_item_path
-    slug = generate_slug
-    route = "/item/#{item_type}/#{self.in}"
-    route << "/#{slug}" if slug.present?
-    route
+    SeenItem.generate_path self.in, self.item_type, self.data
   end
 
   def generate_search_path

@@ -27,7 +27,7 @@ class RoutingTest < Test::Unit::TestCase
     assert_equal "/search/federal_bills/#{URI.encode query}/advanced", routing.interest_path(advanced_search)
 
     basic_item = item_interest user, "hr4192-112", "bill"
-    assert_equal "due-process-and-military-detention-amendments-act", basic_item.generate_slug
+    assert_equal "due-process-and-military-detention-amendments-act", SeenItem.generate_slug(basic_item.item_type, basic_item.data)
     assert_equal "/item/bill/hr4192-112/due-process-and-military-detention-amendments-act", routing.interest_path(basic_item)
   end
 

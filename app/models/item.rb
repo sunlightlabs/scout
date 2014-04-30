@@ -34,6 +34,11 @@ class Item
     Subscription.adapter_for(item_types[item_type]['adapter'])
   end
 
+  # defer to seenitem's path generation
+  def path
+    SeenItem.generate_path item_id, item_type, data
+  end
+
   # @param [SeenItem] a seen item
   def self.from_seen!(seen_item)
     item = Item.find_or_initialize_by(

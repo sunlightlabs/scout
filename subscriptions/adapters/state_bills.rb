@@ -194,7 +194,7 @@ module Subscriptions
       end
 
       def self.title_for(bill)
-        "#{bill['bill_id']}, #{state_map[bill['state'].upcase]}: #{(bill['+short_title'] || bill['title'])}"
+        "#{bill['bill_id']}, #{state_map[(bill['state'] || "").upcase]}: #{(bill['+short_title'] || bill['title'])}"
       end
 
       def self.slug_for(bill)
