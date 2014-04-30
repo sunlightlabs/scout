@@ -142,6 +142,17 @@
 
   </div>
 
+  <%
+    # group interests by type and ID to look up for later display
+    by_type = {}
+    by_id = {}
+    interests.each do |interest|
+      by_type[interest.interest_type] ||= []
+      by_type[interest.interest_type] << interest
+      by_id[interest.id] = interest
+    end
+  %>
+
   <div class="collection-index">
     <% if interests.empty? %>
       <p class="empty">
@@ -149,10 +160,8 @@
       </p>
     <% else %>
 
-      <% grouped = interests.group_by &:interest_type %>
-
-      <% if grouped['search'] and grouped['search'].any? %>
-        <% by_query = grouped['search'].group_by &:in %>
+      <% if by_type['search'] and by_type['search'].any? %>
+        <% by_query = by_type['search'].group_by &:in %>
         <% by_query.keys.each do |query| %>
           <div class="interest search basic-row">
             <div class="type">
@@ -175,9 +184,9 @@
         <% end %>
       <% end %>
 
-      <% if grouped['item'] and grouped['item'].any? %>
+      <% if by_type['item'] and by_type['item'].any? %>
 
-        <% by_item_type = grouped['item'].group_by &:item_type %>
+        <% by_item_type = by_type['item'].group_by &:item_type %>
         <% by_item_type.each do |item_type, item_interests| %>
           <% item_interests.each do |interest| %>
             <div class="interest item basic-row <%= item_type %>">
@@ -221,8 +230,8 @@
 
       <% end %>
 
-      <% if grouped['feed'] and grouped['feed'].any? %>
-        <% grouped['feed'].each do |interest| %>
+      <% if by_type['feed'] and by_type['feed'].any? %>
+        <% by_type['feed'].each do |interest| %>
           <div class="interest basic-row collection_feed">
             <div class="type">
               <img src="<%= asset_path "/images/icon_type_feed.png" %>">
@@ -242,17 +251,17 @@
         <% items.each do |item| %>
           <% if item.search? %>
             <%= partial "search/item", engine: :erb, locals: {
-              item: item, interest: item.interest, query: interest.in,
+              item: item, interest: by_id[item.interest_id], query: interest.in,
               preview: true
               } %>
           <% elsif item.item? %>
             <%= partial "search/item", engine: :erb, locals: {
-              item: item, interest: item.interest, query: nil,
+              item: item, interest: by_id[item.interest_id], query: nil,
               preview: true
               } %>
           <% elsif item.feed? %>
             <%= partial "search/item", engine: :erb, locals: {
-              item: item, interest: item.interest, query: nil,
+              item: item, interest: by_id[item.interest_id], query: nil,
               preview: true
               } %>
           <% end %>
