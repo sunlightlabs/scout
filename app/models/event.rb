@@ -71,7 +71,7 @@ class Event
   def self.postmark_bounce!(email, bounce_type, details)
     user = User.where(email: email).first
 
-    stop = %w{ SpamComplaint SpamNotification BadEmailAddress Blocked }
+    stop = %w{ HardBounce SpamComplaint SpamNotification BadEmailAddress Blocked }
     unsubscribed = false
     if stop.include?(bounce_type)
       unsubscribed = true
