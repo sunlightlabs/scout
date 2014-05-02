@@ -41,13 +41,13 @@ Dir.glob("./app/controllers/*.rb").each {|filename| load filename}
 
 # log google hits in a database, to understand behavior and performance better
 
-before do
-  @start_time = Time.now
-end
+# before do
+#   @start_time = Time.now
+# end
 
-after do
-  Event.google!(env, @start_time) if google? and !Environment.downtime?
-end
+# after do
+#   Event.google!(env, @start_time) if google? and !Environment.downtime?
+# end
 
 
 # downtime mode. All GETs return downtime.erb,

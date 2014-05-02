@@ -2,9 +2,6 @@
 
 */30 * * * * /projects/scout/current/config/cron/production/rake.sh subscriptions:reinitialize
 
-# post-midnight, email a report of Google's crawling activity
-0 6 * * * /projects/scout/current/config/cron/production/rake.sh analytics:google
-
 # post-midnight, email a report of any of the day's warnings
 30 6 * * * /projects/scout/current/config/cron/production/rake.sh warnings:backfills && /projects/scout/current/config/cron/production/rake.sh warnings:courtlistener
 
