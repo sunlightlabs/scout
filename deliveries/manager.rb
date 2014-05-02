@@ -41,10 +41,14 @@ module Deliveries
         end
       end
 
-      # Let admin know when emails go out
+      # NOTE: admin emails for each delivery event are disabled.
+      # They are voluminous, and they would need to be aggregated
+      # through a more complex system in order to tame them.
+      # Uncomment here, and below, to re-enable them.
       if receipts.any?
         delivery_options = {"mechanism" => "email", "email_frequency" => "custom"}
-        Admin.message "Sent #{receipts.size} notifications", report_for(receipts, delivery_options)
+        # Let admin know when emails go out
+        # Admin.message "Sent #{receipts.size} notifications", report_for(receipts, delivery_options)
       else
         puts "No notifications sent." unless Sinatra::Application.test?
       end
@@ -90,9 +94,13 @@ module Deliveries
         end
       end
 
-      # Let admin know when emails go out
+      # NOTE: admin emails for each delivery event are disabled.
+      # They are voluminous, and they would need to be aggregated
+      # through a more complex system in order to tame them.
+      # Uncomment here, and below, to re-enable them.
       if receipts.any?
-        Admin.message "Sent #{receipts.size} notifications", report_for(receipts, delivery_options)
+        # Let admin know when emails go out
+        # Admin.message "Sent #{receipts.size} notifications", report_for(receipts, delivery_options)
       else
         puts "No notifications sent." unless Sinatra::Application.test?
       end
