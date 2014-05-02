@@ -99,7 +99,7 @@
         <ul>
           <% other_public_collections.each do |collection| %>
             <li>
-              <a href="<%= collection_path user, collection %>">
+              <a href="<%= Tag.collection_path user, collection %>">
                 <%= h collection.name %>
               </a>
             </li>

@@ -32,7 +32,7 @@ put '/account/collection/:name/public' do
   collection.public = params[:public]
   collection.save!
 
-  redirect collection_path(current_user, collection)
+  redirect Tag.collection_path(current_user, collection)
 end
 
 delete "/account/collections" do

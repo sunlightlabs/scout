@@ -37,6 +37,12 @@ class Tag
     end
   end
 
+  # @return URL to a user's tag
+  def self.collection_path(user, collection)
+    user_id = user.username.present? ? user.username : user.id.to_s
+    "/user/#{user_id}/#{Tag.slugify collection.name}"
+  end
+
   # @return [Boolean] whether the collection is private
   def private?
     !public?

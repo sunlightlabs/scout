@@ -15,7 +15,7 @@
           <input type="checkbox" class="collection_delete" name="names[]"
             value="<%= Tag.slugify h(collection.name) %>"
             />
-          <a href="<%= collection_path current_user, collection %>"
+          <a href="<%= Tag.collection_path current_user, collection %>"
             class="name"
             >
             <%= h collection.name %>

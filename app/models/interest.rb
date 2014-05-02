@@ -173,7 +173,7 @@ class Interest
   # search and item will be frozen at save-time.
   def path
     if tag?
-      collection_path self.tag_user, self.tag
+      Tag.collection_path self.tag_user, self.tag
     elsif feed?
       data['site_url'] || data['url'] # URL
     else # item? or search?

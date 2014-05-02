@@ -167,12 +167,8 @@ module Helpers
       end
     end
 
-    def collection_path(user, collection)
-      "/user/#{user_id user}/#{Tag.slugify collection.name}"
-    end
-
     def collection_feed_path(user, collection, format)
-      "#{collection_path user, collection}.#{format}"
+      "#{Tag.collection_path user, collection}.#{format}"
     end
 
     # only needed in RSS feeds, and external feeds are the only time we override the guid
