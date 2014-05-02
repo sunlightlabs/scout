@@ -185,11 +185,3 @@ post "/remote/service/sync" do
   end
 
 end
-
-
-# Postmark bounce report receiving endpoint
-post "/remote/postmark/bounce" do
-  body = request.body.read.to_s
-  doc = MultiJson.load body
-  Event.postmark_bounce! doc['Email'], doc['Type'], doc
-end
