@@ -144,13 +144,9 @@ module Subscriptions
 
       end
 
-      if backfills.any?
-        Admin.report Report.warning("Check", "[#{subscription.subscription_type}][#{subscription.interest_in}] #{backfills.size} backfills not delivered, attached", :backfills => backfills)
-      end
-
-      if courtlistener_warnings.any?
-        Admin.report Report.warning("Check", "[#{subscription.subscription_type}][#{subscription.interest_in}] #{courtlistener_warnings.size} CL warnings not delivered, attached", courtlistener_warnings: courtlistener_warnings)
-      end
+      # store warnings for aggregated notice
+      Event.backfills!(backfills, subscription.interest_in, subscription.subscription_type) if backfills.any?
+      Event.courtlistener!(courtlistener_warnings, subscription.interest_in, subscription.subscription_type) if courtlistener_warnings.any?
 
       unless dry_run
         subscription.last_checked_at = Time.now

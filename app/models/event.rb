@@ -23,6 +23,7 @@ class Event
 
   scope :for_time, ->(start, ending) {where(created_at: {"$gt" => Time.zone.parse(start).midnight, "$lt" => Time.zone.parse(ending).midnight})}
 
+
   # log a visit to the redirector
   def self.email_click!(data = {})
     create!({
@@ -104,7 +105,8 @@ class Event
     Admin.report Report.warning("Login", "Blocked login from #{email}, frowny face", event.attributes.dup)
   end
 
-  # use direct upsert command for efficiency
+  # use direct upsert command for efficiency.
+
   def self.google!(env, start_time)
     url = env['REQUEST_URI'] || env['PATH_INFO']
     pieces = url.split("/")
@@ -122,5 +124,32 @@ class Event
           my_ms: ((now - start_time) * 1000).to_i
         }
       })
+  end
+
+  # warning type: backfill
+  # When a remote data source suddenly returns suspiciously old data,
+  # a warning is logged, as it indicates unexpected turbulence in that data source.
+  # See subscriptions/manager.rb for details. (30 day window at press-time.)
+  def self.backfills!(backfills, interest_in, subscription_type)
+    puts "[#{subscription_type}][#{interest_in}] Logging #{backfills.size} backfills"
+    create!(
+      type: "backfills",
+      interest_in: interest_in,
+      subscription_type: subscription_type,
+      backfills: backfills
+    )
+  end
+
+  # warning type: courtlistener
+  # When CourtListener gives us back what we think are the wrong results,
+  # we log this and deliver the admin an email warning.
+  def self.courtlistener!(warnings, interest_in, subscription_type)
+    puts "[#{subscription_type}][#{interest_in}] Logging #{warnings.size} courtlistener warnings"
+    create!(
+      type: "courtlistener",
+      interest_in: interest_in,
+      subscription_type: subscription_type,
+      warnings: warnings
+    )
   end
 end
