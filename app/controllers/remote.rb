@@ -62,6 +62,10 @@ post "/remote/service/sync" do
     #   halt 403, "Wrong service for this user."
     # end
 
+    if user.bounced?
+      halt 403, "User's email address received a hard bounce or spam complaint."
+    end
+
     # the remote service can take this opportunity to turn notifications on/off
     user.notifications = data['notifications']
 
