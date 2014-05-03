@@ -42,10 +42,25 @@ class Event
   def self.unsubscribe!(user, old_info, description = nil)
     create!(
       type: "unsubscribe",
-      contact: user.contact,
-      description: (description || "One-click unsubscribe from #{user.contact}"),
+      contact: user.email,
+      description: description,
       data: old_info
     )
+  end
+
+  # this now gets called from config/email.rb, at send-time
+  # (not from a Postmark bounce hook)
+  # so the Postmark message text has already been scanned to
+  # make sure it's a spam or hard bounce.
+  def self.postmark_bounce!(user)
+    event = create!(
+      type: "postmark-bounce",
+      description: "Postmark bounce for #{user.email}",
+      contact: user.email
+    )
+
+    # email admin
+    Admin.bounce_report event.description, event.attributes.dup
   end
 
   def self.postmark_failed!(tag, to, subject, body)
@@ -66,32 +81,6 @@ class Event
         tag: tag, to: to, subject: subject, body: body
       }
     )
-  end
-
-  def self.postmark_bounce!(email, bounce_type, details)
-    user = User.where(email: email).first
-
-    stop = %w{ HardBounce SpamComplaint SpamNotification BadEmailAddress Blocked }
-    unsubscribed = false
-    if stop.include?(bounce_type)
-      unsubscribed = true
-      if user
-        user.notifications = "none"
-        user.confirmed = false
-        user.save!
-      end
-    end
-
-    event = create!(
-      type: "postmark-bounce",
-      description: "#{bounce_type} for #{email}",
-      data: details,
-      user_id: user ? user.id : nil,
-      unsubscribed: unsubscribed
-    )
-
-    # email admin
-    Admin.bounce_report event.description, event.attributes.dup
   end
 
   def self.blocked_email!(email, service)
