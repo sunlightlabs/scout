@@ -253,8 +253,9 @@ class User
       interest.save!
     end
 
-    Event.unsubscribe! self, old_info
     Event.postmark_bounce!(self) if bounced
+
+    Event.unsubscribe! self, old_info
   end
 end
 
