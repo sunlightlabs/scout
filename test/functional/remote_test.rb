@@ -166,6 +166,45 @@ class RemoteTest < Test::Unit::TestCase
     search_interest = user.interests.last
     assert_equal interest3['in'], search_interest.in
     assert_equal 'DE', search_interest.data['state']
+
+
+    # now verify that a user's notifications setting can be updated
+    # without having to add/remove stuff
+    post "/remote/service/sync", {
+      email: email,
+      service: service,
+      secret_key: key,
+      notifications: "none",
+      interests: [interest1, interest2, interest3]
+    }.to_json
+    assert_response 201
+
+    assert_equal 0, json_response['actions']['added']
+    assert_equal 0, json_response['actions']['removed']
+
+    user.reload
+
+    assert_equal "none", user.notifications
+    assert_not_equal notifications, user.notifications
+
+    # now, verify that a user marked as bounced will NOT
+    # allow their state to be updated
+
+    user.update_attribute :bounced, true
+
+    post "/remote/service/sync", {
+      email: email,
+      service: service,
+      secret_key: key,
+      notifications: notifications,
+      interests: [interest1, interest2, interest3]
+    }.to_json
+    assert_response 403
+
+    user.reload
+
+    assert_equal "none", user.notifications
+    assert_not_equal notifications, user.notifications
   end
 
   # covers a real bug where Swot was mutating emails in-place,
@@ -177,7 +216,7 @@ class RemoteTest < Test::Unit::TestCase
 
     email = "Test@example.com" # capitalized!
 
-    # user exists, 1 user, 0 alerts
+    # user doesn't exists
     assert_nil User.where(email: email).first
     count = User.count
     interest_count = Interest.count
@@ -215,6 +254,7 @@ class RemoteTest < Test::Unit::TestCase
     assert_equal count + 1, User.count
     assert_equal interest_count + 1, Interest.count
   end
+
 
 
   # no key, bunk key, valid key for wrong service

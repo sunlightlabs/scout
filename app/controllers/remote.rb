@@ -62,6 +62,10 @@ post "/remote/service/sync" do
     #   halt 403, "Wrong service for this user."
     # end
 
+    if user.bounced?
+      halt 403, "User's email address received a hard bounce or spam complaint."
+    end
+
     # the remote service can take this opportunity to turn notifications on/off
     user.notifications = data['notifications']
 
@@ -184,12 +188,4 @@ post "/remote/service/sync" do
     halt 403, message
   end
 
-end
-
-
-# Postmark bounce report receiving endpoint
-post "/remote/postmark/bounce" do
-  body = request.body.read.to_s
-  doc = MultiJson.load body
-  Event.postmark_bounce! doc['Email'], doc['Type'], doc
 end

@@ -108,7 +108,10 @@ module Email
       # if it's a hard bounce to a valid user, unsubscribe that user from future emails
       if e.is_a?(Postmark::InvalidMessageError) and e.message["hard bounce or a spam complaint"]
         if user = User.where(email: to).first
-          user.unsubscribe!
+
+          # true = bounce report
+          user.unsubscribe! true
+
           Admin.report(
             Report.exception "Postmark Exception", "Bad email: #{to}, user unsubscribed", e,
               tag: tag, to: to, subject: subject, body: body, from: from, reply_to: reply_to

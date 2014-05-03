@@ -23,6 +23,7 @@ class Event
 
   scope :for_time, ->(start, ending) {where(created_at: {"$gt" => Time.zone.parse(start).midnight, "$lt" => Time.zone.parse(ending).midnight})}
 
+
   # log a visit to the redirector
   def self.email_click!(data = {})
     create!({
@@ -41,10 +42,25 @@ class Event
   def self.unsubscribe!(user, old_info, description = nil)
     create!(
       type: "unsubscribe",
-      contact: user.contact,
-      description: (description || "One-click unsubscribe from #{user.contact}"),
+      contact: user.email,
+      description: description,
       data: old_info
     )
+  end
+
+  # this now gets called from config/email.rb, at send-time
+  # (not from a Postmark bounce hook)
+  # so the Postmark message text has already been scanned to
+  # make sure it's a spam or hard bounce.
+  def self.postmark_bounce!(user)
+    event = create!(
+      type: "postmark-bounce",
+      description: "Postmark bounce for #{user.email}",
+      contact: user.email
+    )
+
+    # email admin
+    Admin.bounce_report event.description, event.attributes.dup
   end
 
   def self.postmark_failed!(tag, to, subject, body)
@@ -67,32 +83,6 @@ class Event
     )
   end
 
-  def self.postmark_bounce!(email, bounce_type, details)
-    user = User.where(email: email).first
-
-    stop = %w{ SpamComplaint SpamNotification BadEmailAddress Blocked }
-    unsubscribed = false
-    if stop.include?(bounce_type)
-      unsubscribed = true
-      if user
-        user.notifications = "none"
-        user.confirmed = false
-        user.save!
-      end
-    end
-
-    event = create!(
-      type: "postmark-bounce",
-      description: "#{bounce_type} for #{email}",
-      data: details,
-      user_id: user ? user.id : nil,
-      unsubscribed: unsubscribed
-    )
-
-    # email admin
-    Admin.bounce_report event.description, event.attributes.dup
-  end
-
   def self.blocked_email!(email, service)
     event = create!(
       type: "blocked-email",
@@ -104,7 +94,8 @@ class Event
     Admin.report Report.warning("Login", "Blocked login from #{email}, frowny face", event.attributes.dup)
   end
 
-  # use direct upsert command for efficiency
+  # use direct upsert command for efficiency.
+
   def self.google!(env, start_time)
     url = env['REQUEST_URI'] || env['PATH_INFO']
     pieces = url.split("/")
@@ -122,5 +113,32 @@ class Event
           my_ms: ((now - start_time) * 1000).to_i
         }
       })
+  end
+
+  # warning type: backfill
+  # When a remote data source suddenly returns suspiciously old data,
+  # a warning is logged, as it indicates unexpected turbulence in that data source.
+  # See subscriptions/manager.rb for details. (30 day window at press-time.)
+  def self.backfills!(backfills, interest_in, subscription_type)
+    puts "[#{subscription_type}][#{interest_in}] Logging #{backfills.size} backfills"
+    create!(
+      type: "backfills",
+      interest_in: interest_in,
+      subscription_type: subscription_type,
+      backfills: backfills
+    )
+  end
+
+  # warning type: courtlistener
+  # When CourtListener gives us back what we think are the wrong results,
+  # we log this and deliver the admin an email warning.
+  def self.courtlistener!(warnings, interest_in, subscription_type)
+    puts "[#{subscription_type}][#{interest_in}] Logging #{warnings.size} courtlistener warnings"
+    create!(
+      type: "courtlistener",
+      interest_in: interest_in,
+      subscription_type: subscription_type,
+      warnings: warnings
+    )
   end
 end

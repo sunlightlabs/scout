@@ -55,6 +55,9 @@ class User
   # @return [Boolean] whether the email comes from education
   field :education, type: Boolean, default: false
 
+  # @return [Boolean] whether the user's email has gotten a bounce (and been unsubscribed)
+  field :bounced, type: Boolean, default: false
+
 
   # validates_format_of :url, with: URI::regexp(%w(http https)), message: "Not a valid URL.", allow_blank: true
 
@@ -225,7 +228,7 @@ class User
 
   # turn off the user's email notifications, and any announcement subscriptions
   # log the user's unsubscription in the events table, and what the user's settings were
-  def unsubscribe!(description = nil)
+  def unsubscribe!(bounced = false)
     old_info = {
       notifications: self.notifications,
       announcements: self.announcements,
@@ -236,6 +239,12 @@ class User
     self.notifications = "none"
     self.announcements = false
     self.organization_announcements = false
+
+    # if it's a bounce, mark the user
+    if bounced
+      self.bounced = true
+    end
+
     self.save!
 
     # unsubscribe individual interests
@@ -244,7 +253,9 @@ class User
       interest.save!
     end
 
-    Event.unsubscribe! self, old_info, description
+    Event.postmark_bounce!(self) if bounced
+
+    Event.unsubscribe! self, old_info
   end
 end
 
