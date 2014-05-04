@@ -6,6 +6,9 @@ namespace :warnings do
   desc "Backfill warnings"
   task backfills: :environment do
     # accumulate a full example of each, and a count of more
+
+    header = ""
+
     backfills = []
 
     Event.where(type: "backfills").each do |event|
@@ -15,10 +18,13 @@ namespace :warnings do
         subscription_type: event.subscription_type,
         interest_in: event.interest_in
       }
+
+      header << "[#{event.subscription_type}][#{event.interest_in}] #{event.backfills.size}"
+      header << "\n"
     end
 
     if backfills.any?
-      Admin.report Report.warning("Check", "#{backfills.size} backfills today, not delivered.", backfills: backfills)
+      Admin.report Report.warning("Check", "#{backfills.size} sets of backfills today, not delivered.", header: header, backfills: backfills)
       Event.where(type: "backfills").delete_all
     else
       puts "No backfill warnings to deliver today."

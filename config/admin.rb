@@ -92,6 +92,11 @@ module Admin
 
     body += "\n\n#{report['message']}" if report['message'].present?
 
+    if report[:attached][:header]
+      body += "\n\n"
+      body += report[:attached].delete :header
+    end
+
     if report[:attached]['exception']
       body += "\n\n#{exception_message report}"
     end
