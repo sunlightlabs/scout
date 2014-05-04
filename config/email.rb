@@ -112,10 +112,14 @@ module Email
           # true = bounce report
           user.unsubscribe! true
 
-          Admin.report(
-            Report.exception "Postmark Exception", "Bad email: #{to}, user unsubscribed", e,
-              tag: tag, to: to, subject: subject, body: body, from: from, reply_to: reply_to
-          )
+          # NOTE: now that unsubscribes are reliably working, I don't think this
+          # actually needs to be sent to the admin. This could be turned back on
+          # easily enough, by uncommenting the below Admin.report command.
+          #
+          # Admin.report(
+          #   Report.exception "Postmark Exception", "Bad email: #{to}, user unsubscribed", e,
+          #     tag: tag, to: to, subject: subject, body: body, from: from, reply_to: reply_to
+          # )
         else
           Admin.report(
             Report.exception "Postmark Exception", "Weird: Bad email: #{to}, but no user found by that email!", e,

@@ -48,10 +48,6 @@ module Admin
     deliver! "Confirmed User", message, ""
   end
 
-  def self.bounce_report(description, data)
-    deliver! "Email Bounce", "Bounce: #{description}", JSON.pretty_generate(data)
-  end
-
   def self.user_unsubscribe(user, data)
     deliver! "Unsubscribe", "Unsubscribe: #{user.contact}", JSON.pretty_generate(data)
   end

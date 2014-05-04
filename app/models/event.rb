@@ -58,9 +58,6 @@ class Event
       description: "Postmark bounce for #{user.email}",
       contact: user.email
     )
-
-    # email admin
-    Admin.bounce_report event.description, event.attributes.dup
   end
 
   def self.postmark_failed!(tag, to, subject, body)
