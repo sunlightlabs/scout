@@ -127,7 +127,7 @@ class Event
   # a warning is logged, as it indicates unexpected turbulence in that data source.
   # See subscriptions/manager.rb for details. (30 day window at press-time.)
   def self.backfills!(backfills, interest_in, subscription_type)
-    puts "[#{subscription_type}][#{interest_in}] Logging #{backfills.size} backfills"
+    # puts "[#{subscription_type}][#{interest_in}] Logging #{backfills.size} backfills"
     create!(
       type: "backfills",
       interest_in: interest_in,
