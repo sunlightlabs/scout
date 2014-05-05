@@ -23,7 +23,7 @@ module Admin
   end
 
   def self.confirmed_user(user)
-    message = "User confirmed: #{user.email || user.phone}"
+    message = "User confirmed: #{user.email}"
     deliver! "Confirmed User", message, ""
   end
 

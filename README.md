@@ -43,9 +43,8 @@ bundle exec unicorn
 
 Alice may [log in](https://scout.sunlightfoundation.com/login) to [configure notification settings](https://scout.sunlightfoundation.com/account/settings):
 
-* She may add and verify a phone number to receive SMS messages in addition to email messages. If so, she receives one SMS message per interest.
 * She may change the email frequency from "immediate" to "daily", or turn off all notifications. If daily, she receives a single email message for all interests once per day.
-* She may [configure interests](https://scout.sunlightfoundation.com/account/subscriptions) to have different notification settings: she may set a notification to be sent immediately, daily or via SMS only, or she may turn off notifications for the interest.
+* She may [configure interests](https://scout.sunlightfoundation.com/account/subscriptions) to have different notification settings: she may set a notification to be sent immediately or daily, or she may turn off notifications for the interest.
 
 ### Collections
 
@@ -55,7 +54,7 @@ Alice may [log in](https://scout.sunlightfoundation.com/login) to [configure not
 
 ### Other features
 
-Scout also implements an "RSS/Atom to Email/SMS" feature.
+Scout also implements an "RSS/Atom to Email" feature.
 
 ## Under the Hood
 

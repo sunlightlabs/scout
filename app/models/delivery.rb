@@ -57,7 +57,7 @@ class Delivery
   validates_presence_of :item
 
   # Schedules an item, from a data source, related to an interest, to be
-  # delivered to a user via either email or SMS, either immediately or daily.
+  # delivered to a user via email, either immediately or daily.
   #
   # @param [SeenItem] item the item to deliver
   # @param [Interest] interest the interest to which the item is related

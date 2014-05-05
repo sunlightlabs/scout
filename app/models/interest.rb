@@ -90,10 +90,9 @@ class Interest
   #   user's global notification settings:
   #   * "email_immediate": the user will receive notifications immediately
   #   * "email_daily" the user will receive notifications daily
-  #   * "sms": the user will receive an SMS immediately
   #   * "none": the user will not receive notifications
   field :notifications
-  validates_inclusion_of :notifications, :in => ["none", "email_daily", "email_immediate", "sms"], :allow_blank => true
+  validates_inclusion_of :notifications, :in => ["none", "email_daily", "email_immediate"], :allow_blank => true
 
   index in: 1
   index user_id: 1
@@ -238,7 +237,7 @@ class Interest
   end
 
 
-  # the mechanism this subscription prefers to be delivered as (e.g. email or SMS).
+  # the mechanism this subscription prefers to be delivered as (e.g. email or nothing).
   # for right now, reads right from the user's preferences, but could be changed
   # to be per-interest or per-subscription.
   def mechanism
@@ -246,8 +245,6 @@ class Interest
 
     if preference =~ /email/
       "email"
-    elsif preference == "sms"
-      "sms"
     else
       nil
     end
