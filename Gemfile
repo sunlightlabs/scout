@@ -6,6 +6,7 @@ gem 'curb'
 gem 'safe_yaml' # avoids problems with YAML vulnerabilities, but no symbol keys
 
 gem 'sinatra', '~> 1.4'
+gem 'sinatra-cross_origin'
 gem 'sinatra-contrib', '~> 1.4'
 gem 'sinatra-flash'
 

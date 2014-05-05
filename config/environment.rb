@@ -1,4 +1,5 @@
 require 'sinatra'
+require 'sinatra/cross_origin'
 require 'mongoid'
 require 'mongoid_paperclip'
 

@@ -54,7 +54,8 @@ Alice may [log in](https://scout.sunlightfoundation.com/login) to [configure not
 
 ### Other features
 
-Scout also implements an "RSS/Atom to Email" feature.
+* Importing and delivering alerts for any RSS/Atom feed.
+* All Scout-generated RSS feeds have [CORS](http://enable-cors.org/) enabled, so they can be accessed client-side directly, from any remote website.
 
 ## Under the Hood
 

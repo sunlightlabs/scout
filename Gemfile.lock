@@ -170,6 +170,7 @@ GEM
       rack-test
       sinatra (~> 1.4.0)
       tilt (~> 1.3)
+    sinatra-cross_origin (0.3.2)
     sinatra-flash (0.3.0)
       sinatra (>= 1.0.0)
     swot (0.3.0)
@@ -233,6 +234,7 @@ DEPENDENCIES
   sentry-raven!
   sinatra (~> 1.4)
   sinatra-contrib (~> 1.4)
+  sinatra-cross_origin
   sinatra-flash
   swot
   timecop (~> 0.7)

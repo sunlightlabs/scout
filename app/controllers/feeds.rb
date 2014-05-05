@@ -1,4 +1,9 @@
+# All RSS feeds go through this controller.
+# They have CORS enabled, so they can be used as an informal API,
+# even from within the browser.
+
 get "/interest/:interest_id.rss" do
+  cross_origin
 
   unless interest = Interest.find(params[:interest_id])
     halt 404 and return
@@ -10,6 +15,8 @@ get "/interest/:interest_id.rss" do
 end
 
 get "/user/:user_id/:collection.rss" do
+  cross_origin
+
   name = Tag.deslugify params[:collection]
   unless (user = load_user) and (collection = user.tags.where(name: name).first)
     halt 404 and return
