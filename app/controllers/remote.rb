@@ -158,11 +158,10 @@ post "/remote/service/sync" do
 
     # commit everything
     if user.new_record?
-      user.save!
-      Admin.new_user user
-    else
-      user.save!
+      Event.new_user user
     end
+
+    user.save!
 
     to_add.each {|interest| interest.save!}
     to_remove.each {|interest| interest.destroy}

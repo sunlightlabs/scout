@@ -5,6 +5,9 @@
 # post-midnight, email a report of any of the day's warnings
 30 6 * * * /projects/scout/current/config/cron/production/rake.sh warnings:backfills && /projects/scout/current/config/cron/production/rake.sh warnings:courtlistener
 
+# the day's new users
+0 7 * * * /projects/scout/current/config/cron/production/rake.sh warnings:new_users && /projects/scout/current/config/cron/production/rake.sh warnings:new_users service=open_states
+
 # on Monday morning, email about last week's user activity for OS and Scout
 0 6 * * 1 /projects/scout/current/config/cron/production/rake.sh analytics:weekly service=scout
 0 6 * * 1 /projects/scout/current/config/cron/production/rake.sh analytics:weekly service=open_states

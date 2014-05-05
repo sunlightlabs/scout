@@ -70,19 +70,27 @@ module Deliveries
 
       # if there's a suspiciously high amount of deliveries,
       # leave the deliveries there and notify the admin
-      if ENV['force'].blank?
 
-        # suspicious: if the deliveries are returning, on average,
-        # more than half of the max that they could be
+      # NOTE: Disabling the flood check. This has not been useful
+      # over the last ~2 years. Inevitably, it's a feed or some other
+      # temporary fluke, and will clear itself out once other deliveries
+      # roll in, and the average drops.
+      #
+      # Nonetheless, flood checking is probably a good idea -- it's just
+      # that this method is too simple and annoying to be useful.
+      # if ENV['force'].blank?
 
-        max_per_page = 40 # for now, anyway
-        threshold = 0.5
+      #   # suspicious: if the deliveries are returning, on average,
+      #   # more than half of the max that they could be
 
-        if deliveries_count > (interest_ids.size * max_per_page * threshold)
-          flood_check "Too many deliveries", deliveries_count, delivery_options, user_count: user_ids.size, interest_count: interest_ids.size
-          return
-        end
-      end
+      #   max_per_page = 40 # for now, anyway
+      #   threshold = 0.5
+
+      #   if deliveries_count > (interest_ids.size * max_per_page * threshold)
+      #     flood_check "Too many deliveries", deliveries_count, delivery_options, user_count: user_ids.size, interest_count: interest_ids.size
+      #     return
+      #   end
+      # end
 
       users.each do |user|
         next unless user.confirmed? # last-minute check, shouldn't be needed
@@ -109,10 +117,10 @@ module Deliveries
     def self.flood_check(message, size, delivery_options, options = {})
       Admin.report Report.warning("Flood Check",
         "High amount (#{size}) of deliveries, leaving in place and not delivering",
-        {:delivery_count => size,
-        :message => message,
-        :subscription_types => Delivery.where(delivery_options).distinct(:subscription_type),
-        :delivery_options => delivery_options}.merge(options)
+        {delivery_count: size,
+        message: message,
+        subscription_types: Delivery.where(delivery_options).distinct(:subscription_type),
+        delivery_options: delivery_options}.merge(options)
         )
     end
 

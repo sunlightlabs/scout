@@ -24,6 +24,16 @@ class Event
   scope :for_time, ->(start, ending) {where(created_at: {"$gt" => Time.zone.parse(start).midnight, "$lt" => Time.zone.parse(ending).midnight})}
 
 
+  # log new users for daily aggregate email
+  def self.new_user(user)
+    user_attributes = user.attributes.dup
+
+    # it's a salted hash, but still, no way
+    user_attributes.delete "password_hash"
+
+    create!({type: "new-user", service: user.service}.merge user_attributes)
+  end
+
   # log a visit to the redirector
   def self.email_click!(data = {})
     create!({
@@ -58,9 +68,6 @@ class Event
       description: "Postmark bounce for #{user.email}",
       contact: user.email
     )
-
-    # email admin
-    Admin.bounce_report event.description, event.attributes.dup
   end
 
   def self.postmark_failed!(tag, to, subject, body)
@@ -120,7 +127,7 @@ class Event
   # a warning is logged, as it indicates unexpected turbulence in that data source.
   # See subscriptions/manager.rb for details. (30 day window at press-time.)
   def self.backfills!(backfills, interest_in, subscription_type)
-    puts "[#{subscription_type}][#{interest_in}] Logging #{backfills.size} backfills"
+    # puts "[#{subscription_type}][#{interest_in}] Logging #{backfills.size} backfills"
     create!(
       type: "backfills",
       interest_in: interest_in,

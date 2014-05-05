@@ -59,7 +59,8 @@ post '/account/new' do
   @new_user.confirmed = true
 
   if @new_user.save
-    Admin.new_user @new_user
+    Event.new_user @new_user
+
     log_in @new_user
 
     flash[:success] = "Your account has been created."
@@ -89,7 +90,7 @@ post '/account/new/quick' do
   end
 
   if @new_user.save
-    Admin.new_user @new_user
+    Event.new_user @new_user
 
     log_in @new_user
 
