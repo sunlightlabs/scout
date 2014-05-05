@@ -1,7 +1,15 @@
 #!/bin/bash
 
+# Scout backup script. It's not the best, but it works.
+# TODO:
+# * Version on database server should be properly synced to version control.
+# * Should run from a different server than the database server.
+# * Should be burned down to the ground and turned into a proper backup system.
+
+
 today=$(date +%Y%m%d)
 
+# should be made relative
 cd /home/eric/backups
 
 
