@@ -2,6 +2,8 @@
 
 module Admin
 
+  # SCHEDULE: Unpredictable. Whenever an uncaught exception occurs.
+  #
   # if Sentry is configured, uses Sentry.
   # if not, uses normal admin email route (SMTP).
   def self.exception(source, exception, extra = {})
@@ -22,19 +24,25 @@ module Admin
     end
   end
 
+  # DISABLED.
+  # SCHEDULE: Whenever a user who used one-click signup confirms their account.
   def self.confirmed_user(user)
     message = "User confirmed: #{user.email}"
     deliver! "Confirmed User", message, ""
   end
 
+  # SCHEDULE: Whenever a user uses the one-click unsubscribe button.
   def self.user_unsubscribe(user, data)
     deliver! "Unsubscribe", "Unsubscribe: #{user.contact}", JSON.pretty_generate(data)
   end
 
+  # SCHEDULE: A weekly email is sent with user activity stats.
   def self.analytics(type, subject, body)
     deliver! "Analytics", subject, body, analytics_emails[type], "Analytics"
   end
 
+  # DISABLED.
+  # SCHEDULE: Whenever a user adds a new feed.
   def self.new_feed(interest)
     title = interest.data['title']
     url = interest.data['url']
@@ -60,6 +68,7 @@ module Admin
     deliver! "Feed", subject, body.strip
   end
 
+  # General purpose: used to send various exception/warning reports to the admin.
   def self.report(report)
     subject = "[#{report.status}] #{report.source} | #{report.message}"
 
@@ -87,10 +96,12 @@ module Admin
     deliver! "Report", subject, body.strip
   end
 
+  # General purpose.
   def self.message(subject, body = nil)
     deliver! "Admin", subject, (body || subject)
   end
 
+  # Workhorse: actually sends the admin emails. Does not use Postmark.
   def self.deliver!(tag, subject, body, recipients = nil, email_tag = nil)
     recipients ||= admin_emails
     email_tag ||= "ADMIN"
