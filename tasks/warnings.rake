@@ -3,6 +3,34 @@
 
 namespace :warnings do
 
+  desc "New users"
+  task new_users: :environment do
+    # send an email with any new users for the day.
+    # break it up by service.
+
+    body = ""
+
+    day = ENV['day'] || 1.day.ago.strftime("%Y-%m-%d")
+    ending = (Time.zone.parse(day) + 1.day).strftime "%Y-%m-%d"
+
+    service = ENV['service'] || nil
+    display_service = service || "scout"
+
+    criteria = Event.where(type: "new-user", service: service).for_time(day, ending)
+
+    if criteria.any?
+      criteria.each do |event|
+        body << "[#{event.created_at}] #{event.email}"
+        body << " (unconfirmed)" if !event['confirmed']
+        body << "\n"
+      end
+
+      Admin.message "[#{display_service}] New users for #{day}", body
+    else
+      puts "[#{display_service}] No new users for #{day} to deliver."
+    end
+  end
+
   desc "Backfill warnings"
   task backfills: :environment do
     # accumulate a full example of each, and a count of more

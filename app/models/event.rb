@@ -24,6 +24,16 @@ class Event
   scope :for_time, ->(start, ending) {where(created_at: {"$gt" => Time.zone.parse(start).midnight, "$lt" => Time.zone.parse(ending).midnight})}
 
 
+  # log new users for daily aggregate email
+  def self.new_user(user)
+    user_attributes = user.attributes.dup
+
+    # it's a salted hash, but still, no way
+    user_attributes.delete "password_hash"
+
+    create!({type: "new-user", service: user.service}.merge user_attributes)
+  end
+
   # log a visit to the redirector
   def self.email_click!(data = {})
     create!({

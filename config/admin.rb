@@ -22,27 +22,6 @@ module Admin
     end
   end
 
-  def self.new_user(user)
-    user_attributes = user.attributes.dup
-
-    # it's just a salted hash, but still
-    user_attributes.delete "password_hash"
-
-    message = "New user: #{user.email || user.phone}"
-
-    if user.service
-      message = "[#{user.service}] #{message}"
-    end
-
-    if user.signup_process == "quick"
-      subject = "New User [quick]"
-    else
-      subject = "New User"
-    end
-
-    deliver! subject, message, JSON.pretty_generate(user_attributes)
-  end
-
   def self.confirmed_user(user)
     message = "User confirmed: #{user.email || user.phone}"
     deliver! "Confirmed User", message, ""
