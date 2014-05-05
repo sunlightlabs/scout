@@ -4,6 +4,14 @@ downtime: false
 # Add Sentry DSN to use Sentry for exception handling
 # sentry:
 
+# Provide an S3 bucket and path to examine for backups.
+# Optional: add the rake task to the crontab to enable.
+# backups:
+#   bucket: # bucket name
+#   path: # prefix, e.g. "backups/are-in-this-dir"
+#   access_key:
+#   secret_key:
+
 # Change the following settings to match your organization's details.
 organization:
   name: Sunlight Foundation

@@ -20,7 +20,7 @@ gem "mongoid-paperclip", require: "mongoid_paperclip"
 # exception handling
 gem "sentry-raven", github: "getsentry/raven-ruby"
 
-# asset syncing to S3
+# asset syncing to S3 AND backup monitoring
 gem "aws-sdk"
 gem 'asset_sync'
 gem "unf"

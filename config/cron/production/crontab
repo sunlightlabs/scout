@@ -12,6 +12,9 @@
 0 6 * * 1 /projects/scout/current/config/cron/production/rake.sh analytics:weekly service=scout
 0 6 * * 1 /projects/scout/current/config/cron/production/rake.sh analytics:weekly service=open_states
 
+# backups runs at 5:00 UTC, check that backup works at 7:00 UTC
+0 7 * * * /projects/scout/current/config/cron/production/rake.sh backups:check
+
 
 ######## External data loading #########
 
