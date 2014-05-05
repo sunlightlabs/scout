@@ -63,10 +63,10 @@ def dependencies():
   run("cd %s && bundle install --local" % version_path)
 
 def create_indexes():
-  run("cd %s && rake create_indexes" % version_path)
+  run("cd %s && bundle exec rake create_indexes" % version_path)
 
 def sync_assets():
-  run("cd %s && rake assets:sync" % version_path)
+  run("cd %s && bundle exec rake assets:sync" % version_path)
 
 def make_current():
   run('rm -f %s && ln -s %s %s' % (current_path, version_path, current_path))
@@ -75,10 +75,10 @@ def make_current():
 ## can be run on their own
 
 def set_crontab():
-  run("cd %s && rake crontab:set environment=%s current_path=%s" % (current_path, target, current_path))
+  run("cd %s && bundle exec rake crontab:set environment=%s current_path=%s" % (current_path, target, current_path))
 
 def disable_crontab():
-  run("cd %s && rake crontab:disable environment=%s current_path=%s" % (current_path, target, current_path))
+  run("cd %s && bundle exec rake crontab:disable environment=%s current_path=%s" % (current_path, target, current_path))
 
 def start():
   run("cd %s && bundle exec unicorn -D -l %s/%s.sock -c unicorn.rb" % (current_path, shared_path, username))
