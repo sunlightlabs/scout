@@ -125,7 +125,7 @@ module Subscriptions
             }
 
           # if it's a suddenly seen old item, don't deliver
-          elsif true # !test? and (item.date < backfill_date)
+          elsif !test? and (item.date < backfill_date)
             backfills << item.attributes
 
           # okay, schedule a delivery (unless this is a dry run)
