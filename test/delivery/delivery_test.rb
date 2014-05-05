@@ -424,38 +424,38 @@ class DeliveryTest < Test::Unit::TestCase
     #TODO
   end
 
-  # flood checking checking
+  # # flood checking checking
 
-  def test_flood_check
-    query = "environment"
-    search_type = "federal_bills"
+  # def test_flood_check
+  #   query = "environment"
+  #   search_type = "federal_bills"
 
-    user = create :user, notifications: "email_immediate"
-    interest = search_interest! user, search_type, query, "simple"
-    subscription = interest.subscriptions.first
+  #   user = create :user, notifications: "email_immediate"
+  #   interest = search_interest! user, search_type, query, "simple"
+  #   subscription = interest.subscriptions.first
 
-    mock_search subscription
-    items = subscription.search
+  #   mock_search subscription
+  #   items = subscription.search
 
-    # schedule 30 times the usual deliveries for each result
-    30.times do
-      items.each do |item|
-        Deliveries::Manager.schedule_delivery! item, interest, search_type
-      end
-    end
+  #   # schedule 30 times the usual deliveries for each result
+  #   30.times do
+  #     items.each do |item|
+  #       Deliveries::Manager.schedule_delivery! item, interest, search_type
+  #     end
+  #   end
 
-    assert_equal (30 * items.size), Delivery.count
+  #   assert_equal (30 * items.size), Delivery.count
 
-    assert_equal 0, Receipt.count
-    Deliveries::Email.should_not_receive :deliver_for_user!
+  #   assert_equal 0, Receipt.count
+  #   Deliveries::Email.should_not_receive :deliver_for_user!
 
-    Deliveries::Manager.deliver! 'mechanism' => interest.mechanism, 'email_frequency' => interest.email_frequency
+  #   Deliveries::Manager.deliver! 'mechanism' => interest.mechanism, 'email_frequency' => interest.email_frequency
 
-    assert_equal 0, Receipt.count
+  #   assert_equal 0, Receipt.count
 
-    report = Report.where(source: /flood/i).first
-    assert_not_nil report
-  end
+  #   report = Report.where(source: /flood/i).first
+  #   assert_not_nil report
+  # end
 
 
   # final checks on inappropriate deliveries, done at schedule-time and delivery-time
