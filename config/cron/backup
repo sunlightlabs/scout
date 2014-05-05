@@ -1,0 +1,6 @@
+
+# runs on the mongo-scout database server, as of 2014-05-05.
+
+0 5 * * * /home/eric/backups/to-s3.sh > /home/eric/backups/to-s3.log 2>&1
+
+# leave newline
