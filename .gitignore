@@ -29,3 +29,5 @@
 /dump
 /migration.rb
 /*.txt
+
+/cl.rb
