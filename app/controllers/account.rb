@@ -111,9 +111,6 @@ get '/account/confirm' do
 
   user.save!
 
-  # Disabled, not very useful.
-  # Admin.confirmed_user user
-
   redirect "/account/welcome"
 end
 

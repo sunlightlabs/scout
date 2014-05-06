@@ -20,7 +20,7 @@ def topline
     msg << "\n"
   end
 
-  Admin.message "Scout User Stats", msg
+  Admin.sensitive "Scout User Stats", msg
 end
 
 def activity_report(days)
@@ -42,13 +42,13 @@ def activity_report(days)
 
     msg << "- #{start_time.strftime("%B %d, %Y")}\n"
     msg << "\n"
-    
+
     msg << "#{users.count} new users\n"
     msg << "#{interests.count} alerts created across all users\n"
     msg << "#{unsubscribes.count} alerts removed across all users\n"
     msg << "#{receipts.count} delivered emails across all users"
     msg << "\n"
-    
+
     users.each do |user|
       source = if user.source.is_a?(Hash)
         user.source['utm_source']
@@ -62,5 +62,5 @@ def activity_report(days)
     msg << "\n\n"
   end
 
-  Admin.message subject, msg
+  Admin.sensitive subject, msg
 end

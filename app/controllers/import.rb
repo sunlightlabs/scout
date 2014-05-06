@@ -111,7 +111,6 @@ post "/import/feed/create" do
 
   if interest.new_record?
     interest.save!
-    # Admin.new_feed interest
   end
 
   json 200, {interest_id: interest.id}

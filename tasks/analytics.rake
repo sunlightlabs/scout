@@ -12,21 +12,23 @@ namespace :analytics do
   #   puts msg
   # end
 
-  task google: :environment do
-    begin
-      day = ENV['day'] || 1.day.ago.strftime("%Y-%m-%d")
+  # desc "Analytics on Google activity."
+  # task google: :environment do
+  #   begin
+  #     day = ENV['day'] || 1.day.ago.strftime("%Y-%m-%d")
 
-      start_time = Time.zone.parse(day).midnight
-      end_time = start_time + 1.day
+  #     start_time = Time.zone.parse(day).midnight
+  #     end_time = start_time + 1.day
 
-      msg = google_report start_time, end_time
-      Admin.analytics "google", "Google activity for #{day}", msg
-    rescue Exception => ex
-      Admin.exception 'analytics:google', ex
-      puts "Error sending analytics, emailed report."
-    end
-  end
+  #     msg = google_report start_time, end_time
+  #     Admin.analytics "google", "Google activity for #{day}", msg
+  #   rescue Exception => ex
+  #     Admin.exception 'analytics:google', ex
+  #     puts "Error sending analytics, emailed report."
+  #   end
+  # end
 
+  desc "Weekly analytics report."
   task weekly: :environment do
     begin
       starting = ENV['starting'] || 7.day.ago.strftime("%Y-%m-%d")
@@ -157,8 +159,6 @@ namespace :analytics do
       msg << "  (no clicks on footer URLs)\n"
     end
     msg << "\n"
-
-    msg << "\n\n"
 
     msg
   end

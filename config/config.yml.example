@@ -4,6 +4,15 @@ downtime: false
 # Add Sentry DSN to use Sentry for exception handling
 # sentry:
 
+# optional Slack integration for admin notices
+slack:
+  channel: "#scout"
+  username: scout
+  icon_emoji: ":ghost:" # emoji for avatar (include colons, can be custom emoji)
+  team: # subdomain for your slack
+  token: # check your webhook integration for the token
+
+
 # Provide an S3 bucket and path to examine for backups.
 # Optional: add the rake task to the crontab to enable.
 # backups:
