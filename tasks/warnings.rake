@@ -19,6 +19,7 @@ namespace :warnings do
     criteria = Event.where(type: "new-user", service: service).for_time(day, ending)
 
     if criteria.any?
+      body << "[#{display_service}]"
       criteria.each do |event|
         body << "[#{event.created_at}] #{event.email}"
         body << " (unconfirmed)" if !event['confirmed']
