@@ -48,7 +48,7 @@ module Deliveries
       if receipts.any?
         delivery_options = {"mechanism" => "email", "email_frequency" => "custom"}
         # Let admin know when emails go out
-        # Admin.message "Sent #{receipts.size} notifications", report_for(receipts, delivery_options)
+        # Admin.sensitive "Sent #{receipts.size} notifications", report_for(receipts, delivery_options)
       else
         puts "No notifications sent." unless Sinatra::Application.test?
       end
@@ -98,7 +98,7 @@ module Deliveries
         if delivery_options['mechanism'] == 'email'
           receipts += Deliveries::Email.deliver_for_user! user, delivery_options['email_frequency'], {"dry_run" => dry_run}
         else
-          Admin.message "Unsure how to deliver to user #{user.email}, no known delivery mechanism for #{delivery_options['mechanism']}"
+          Admin.sensitive "Unsure how to deliver to user #{user.email}, no known delivery mechanism for #{delivery_options['mechanism']}"
         end
       end
 
@@ -108,7 +108,7 @@ module Deliveries
       # Uncomment here, and below, to re-enable them.
       if receipts.any?
         # Let admin know when emails go out
-        # Admin.message "Sent #{receipts.size} notifications", report_for(receipts, delivery_options)
+        # Admin.sensitive "Sent #{receipts.size} notifications", report_for(receipts, delivery_options)
       else
         puts "No notifications sent." unless Sinatra::Application.test?
       end
