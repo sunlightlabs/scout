@@ -26,14 +26,18 @@ module Email
   # cause an error report to get sent, leading to an infinite loop.
 
   rescue Exception => exc
-    puts "EXCEPTION SENDING EMAIL:"
-    puts "\n#{exc.class}"
-    puts "\n#{exc.message}"
+    msg = "EXCEPTION SENDING EMAIL:"
+    msg << "\n#{exc.class}"
+    msg << "\n#{exc.message}"
     if exc.backtrace and exc.backtrace.respond_to?(:each)
       exc.backtrace.each do |line|
-        puts line
+        msg << "\n#{line}"
       end
     end
+    puts msg
+
+    # fire off a Slack message, in case that still works
+    Slack.message! "Error sending email!", msg
   end
 
   # send using a plain SMTP client
@@ -70,7 +74,12 @@ module Email
       sent_message "Pony", tag, to, subject, body, from, reply_to
       true
     rescue Errno::ECONNREFUSED
-      puts "\n[#{tag}][Pony] Couldn't email message, connection refused! Check email settings."
+      msg = "Couldn't email message, connection refused! Check email settings."
+      puts "\n[#{tag}][Pony] #{msg}"
+
+      # fire off a Slack message, in case that still works
+      Slack.message! msg
+
       false
     end
   end
