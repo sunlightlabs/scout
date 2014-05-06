@@ -2414,9 +2414,9 @@ iframe.document {
   transition: color 200ms ease-out;
 }
 
-.headerWrapper .social .icon-facebook:hover{ color: #3B5998; }
-.headerWrapper .social .icon-twitter:hover{ color: #00aced; }
-.headerWrapper .social .icon-google-plus:hover{ color: #dd4b39; }
+.headerWrapper .social .sficon-facebook:hover{ color: #3B5998; }
+.headerWrapper .social .sficon-twitter:hover{ color: #00aced; }
+.headerWrapper .social .sficon-google-plus:hover{ color: #dd4b39; }
 
 .branding-bar_trigger {
   color: #666;
