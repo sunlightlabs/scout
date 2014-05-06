@@ -170,9 +170,6 @@ class LoginTest < Test::Unit::TestCase
     confirm_token = user.confirm_token
     assert_not_nil confirm_token
 
-    # still useless. I hate rspec-mocks.
-    # Admin.should_receive(:confirmed_user).with(anything)
-
     get "/account/confirm", confirm_token: confirm_token
     assert_redirect "/account/welcome"
 
@@ -209,9 +206,6 @@ class LoginTest < Test::Unit::TestCase
     user = create :user, confirmed: false
     confirm_token = user.confirm_token
 
-    # still useless. I hate rspec-mocks.
-    # Admin.should_receive(:confirmed_user).with(user)
-
     post "/account/confirm/resend", email: user.email
     assert_redirect "/account/confirm/resend"
 
@@ -224,8 +218,6 @@ class LoginTest < Test::Unit::TestCase
     user = create :user, confirmed: true
     confirm_token = user.confirm_token
 
-    Admin.should_not_receive(:confirmed_user)
-
     post "/account/confirm/resend", email: user.email
     assert_redirect "/account/confirm/resend"
 
@@ -237,8 +229,6 @@ class LoginTest < Test::Unit::TestCase
   def test_confirm_resend_invalid_user
     email = "nobody@nobody.com"
     assert_nil User.where(email: email).first
-
-    Admin.should_not_receive(:confirmed_user)
 
     post "/account/confirm/resend", email: email
     assert_redirect "/account/confirm/resend"
