@@ -173,6 +173,7 @@ GEM
     sinatra-cross_origin (0.3.2)
     sinatra-flash (0.3.0)
       sinatra (>= 1.0.0)
+    slack-notifier (0.4.1)
     swot (0.3.0)
       public_suffix
     term-ansicolor (1.3.0)
@@ -236,6 +237,7 @@ DEPENDENCIES
   sinatra-contrib (~> 1.4)
   sinatra-cross_origin
   sinatra-flash
+  slack-notifier
   swot
   timecop (~> 0.7)
   unf

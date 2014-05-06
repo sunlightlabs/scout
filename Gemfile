@@ -35,6 +35,8 @@ gem 'swot'
 gem 'postmark', '~> 1.0'
 gem 'pony', '~> 1.4'
 
+gem 'slack-notifier' # yes
+
 gem 'rack', '~> 1.5'
 gem 'rack-ssl'
 gem 'rake'

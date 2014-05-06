@@ -134,6 +134,7 @@ helpers Helpers::Routing
 
 # email transports, and admin messages/reports
 require './config/email'
+require './config/slack'
 require './config/admin'
 
 # delivery manager and email assembler
