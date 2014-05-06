@@ -25,7 +25,7 @@ namespace :tests do
 end
 
 desc "Run through each model and create all indexes"
-task :create_indexes => :environment do
+task create_indexes: :environment do
   begin
     Mongoid.models.each do |model|
       model.create_indexes
@@ -40,7 +40,7 @@ task :create_indexes => :environment do
 end
 
 desc "Clear the database"
-task :clear_data => :environment do
+task clear_data: :environment do
   models = Dir.glob('app/models/*.rb').map do |file|
     File.basename(file, File.extname(file)).camelize.constantize
   end
