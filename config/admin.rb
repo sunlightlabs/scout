@@ -9,6 +9,8 @@ module Admin
   def self.exception(source, exception, extra = {})
     message = "#{exception.class.name}: #{exception.message}"
 
+    report = Report.exception source, message, exception, extra
+
     if Environment.config['sentry'].present?
       puts "Sending to Raven: [#{source}] #{message}"
       Raven.capture_exception(
@@ -17,18 +19,10 @@ module Admin
           source: source,
         )
       )
-
+      Admin.report report, email: false
     else
-      report = Report.exception source, message, exception, extra
       Admin.report report
     end
-  end
-
-  # DISABLED.
-  # SCHEDULE: Whenever a user who used one-click signup confirms their account.
-  def self.confirmed_user(user)
-    message = "User confirmed: #{user.email}"
-    deliver! "Confirmed User", message, ""
   end
 
   # SCHEDULE: Whenever a user uses the one-click unsubscribe button.
@@ -38,38 +32,12 @@ module Admin
 
   # SCHEDULE: A weekly email is sent with user activity stats.
   def self.analytics(type, subject, body)
+    Slack.message! subject, body
     deliver! "Analytics", subject, body, analytics_emails[type], "Analytics"
   end
 
-  # DISABLED.
-  # SCHEDULE: Whenever a user adds a new feed.
-  def self.new_feed(interest)
-    title = interest.data['title']
-    url = interest.data['url']
-
-    original_title = interest.data['original_title']
-    original_description = interest.data['original_description']
-
-    subject = "New feed: #{title}"
-
-    body = "Title: #{title}\nURL: #{url}\n\n"
-    body += "Original Title: #{original_title}\n\nOriginal Description: #{original_description}"
-
-    body += "\n\n#{JSON.pretty_generate interest.attributes}"
-
-    if interest.seen_items.any?
-      example = interest.seen_items.first
-      body += "\n\nExample item:"
-      body += "\n\n#{JSON.pretty_generate example.attributes}"
-    end
-
-    body += "\n\n#{interest.id}"
-
-    deliver! "Feed", subject, body.strip
-  end
-
   # General purpose: used to send various exception/warning reports to the admin.
-  def self.report(report)
+  def self.report(report, email: true, slack: true)
     subject = "[#{report.status}] #{report.source} | #{report.message}"
 
     body = "#{report.id}"
@@ -92,12 +60,28 @@ module Admin
     attrs['attached'].delete 'exception'
     attrs.delete('attached') if attrs['attached'].empty?
     body += "\n\n#{JSON.pretty_generate attrs}" if attrs.any?
+    body.strip!
 
-    deliver! "Report", subject, body.strip
+    # slack is disabled when the report may have sensitive data,
+    # or when Slack integration itself has a problem.
+    if slack
+      Slack.message! subject, body
+    end
+
+    # email is only disabled when we already posted to Sentry.
+    if email
+      deliver! "Report", subject, body
+    end
   end
 
   # General purpose.
   def self.message(subject, body = nil)
+    Slack.message! subject, body
+    deliver! "Admin", subject, (body || subject)
+  end
+
+  # General purpose, but don't post to Slack.
+  def self.sensitive(subject, body = nil)
     deliver! "Admin", subject, (body || subject)
   end
 

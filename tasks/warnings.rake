@@ -26,7 +26,7 @@ namespace :warnings do
         body << "\n"
       end
 
-      Admin.message "[#{display_service}] New users for #{day}", body
+      Admin.sensitive "[#{display_service}] New users for #{day}", body
     else
       puts "[#{display_service}] No new users for #{day} to deliver."
     end
