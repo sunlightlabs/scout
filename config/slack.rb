@@ -23,8 +23,8 @@ module Slack
     notifier.ping message, icon_emoji: emoji
   rescue Exception => exc
     report = Report.exception 'Slack notifications', "Exception notifying slack", ex
-    Admin.report report, slack: false
-    puts "Error creating indexes, emailed report."
+    Admin.report report, slack: false # don't try to slack a slack error
+    puts "Error notifying slack, emailed report."
   end
 
 end
