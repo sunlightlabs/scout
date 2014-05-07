@@ -218,7 +218,7 @@ class Interest
         if value.size == 1
           value = value.first
         else
-          next # ???
+          next # ??? should only happen when synced from open_states, I guess
         end
       end
 
