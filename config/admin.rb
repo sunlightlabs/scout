@@ -9,8 +9,6 @@ module Admin
   def self.exception(source, exception, extra = {})
     message = "#{exception.class.name}: #{exception.message}"
 
-    report = Report.exception source, message, exception, extra
-
     if Environment.config['sentry'].present?
       puts "Sending to Raven: [#{source}] #{message}"
       Raven.capture_exception(
@@ -19,9 +17,10 @@ module Admin
           source: source,
         )
       )
-      Admin.report report, email: false
+      # Sentry will email admin and post to Slack on its own
     else
       Admin.report report
+      report = Report.exception source, message, exception, extra
     end
   end
 
