@@ -122,13 +122,15 @@ module Email
           user.unsubscribe! true
 
           Admin.report(
-            Report.exception "Postmark Exception", "Bad email: #{to}, user unsubscribed", e,
-              tag: tag, to: to, subject: subject, body: body, from: from, reply_to: reply_to
+            Report.exception("Postmark Exception", "Bad email: #{to}, user unsubscribed", e,
+              tag: tag, to: to, subject: subject, body: body, from: from, reply_to: reply_to),
+            slack: false
           )
         else
           Admin.report(
-            Report.exception "Postmark Exception", "Weird: Bad email: #{to}, but no user found by that email!", e,
-              tag: tag, to: to, subject: subject, body: body, from: from, reply_to: reply_to
+            Report.exception("Postmark Exception", "Weird: Bad email: #{to}, but no user found by that email!", e,
+              tag: tag, to: to, subject: subject, body: body, from: from, reply_to: reply_to),
+            slack: false
           )
         end
 
