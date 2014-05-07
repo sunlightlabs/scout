@@ -214,6 +214,14 @@ class Interest
     base << "/advanced" if query_type == 'advanced'
 
     query_string = filters.map do |key, value|
+      if value.is_a?(Array)
+        if value.size == 1
+          value = value.first
+        else
+          next # ???
+        end
+      end
+
       "#{subscription_type}[#{key}]=#{URI.encode value}"
     end.join("&")
 
