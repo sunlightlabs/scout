@@ -4,7 +4,7 @@ module Slack
 
   def self.message!(subject, body = nil)
     config = Environment.config
-    return unless config['slack'] and config['slack']['team'].present?
+    return unless slack?
 
     notifier = Slack::Notifier.new config['slack']['team'], config['slack']['token']
     notifier.channel = config['slack']['channel']
@@ -25,6 +25,12 @@ module Slack
     report = Report.exception 'Slack notifications', "Exception notifying slack", ex
     Admin.report report, slack: false # don't try to slack a slack error
     puts "Error notifying slack, emailed report."
+  end
+
+  # always disable slack in test mode
+  # allow development mode to disable slack by withholding the slack section/team
+  def self.slack?
+    !Sinatra::Application.test? and config['slack'] and config['slack']['team'].present?
   end
 
 end
