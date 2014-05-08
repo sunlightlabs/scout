@@ -60,8 +60,6 @@ module Subscriptions
           url << "&citing.details=true"
         end
 
-        # TODO: ditch the limitation
-        # url << "&document_type=gao_report"
         if subscription.data["document_type"].present?
           url << "&document_type=#{subscription.data['document_type']}"
         end

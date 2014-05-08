@@ -35,7 +35,8 @@ module Subscriptions
       # Right now, the best solution I have is to "de-phrase" them (run them
       # as separate terms, rather than a phrase).
       BLACKLIST = [
-        "nuclear regulatory commission"
+        "nuclear regulatory commission",
+        "public utilities commission"
       ]
 
       def self.deblacklist(query)
