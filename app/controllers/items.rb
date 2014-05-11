@@ -11,6 +11,7 @@ get "/item/:item_type/:item_id/?:slug?" do
 
   begin
     if item = Subscriptions::Manager.find(subscription_type, item_id, {cache_only: true})
+      item.assign_from_subscription_type subscription_type
       interest = item_interest
       interest.data = item.data # required for the interest to know its own title
 

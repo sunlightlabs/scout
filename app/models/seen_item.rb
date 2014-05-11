@@ -110,6 +110,28 @@ class SeenItem
     interest_type == "item"
   end
 
+  # made to process items found during landing page caching process.
+  # a bit hacky, and merits a refactor to use assign_to_subscription instead,
+  # but this is the quickest route for now.
+  def assign_from_subscription_type(subscription_type)
+    # interest may not exist on the subscription, infer it from the subscription_type
+    if subscription_type == "feed"
+      item_type = "feed_item" # ?
+      interest_type = "feed"
+    elsif item_type = search_adapters[subscription_type]
+      interest_type = "search"
+    elsif item_type = item_adapters[subscription_type]
+      interest_type = "item"
+    end
+
+    self.attributes = {
+      # core fields
+      subscription_type: subscription_type,
+      item_type: item_type,
+      interest_type: interest_type
+    }
+  end
+
   # take a SeenItem right from an adapter and assign it a particular subscription
   def assign_to_subscription(subscription)
 
