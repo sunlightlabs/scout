@@ -86,10 +86,6 @@ module Helpers
       end
     end
 
-    def item_path(item)
-      item.path
-    end
-
     def item_url(item, interest = nil, user = nil)
       if item.subscription_type == "feed"
         item.data['url']
@@ -110,7 +106,7 @@ module Helpers
         (url = adapter.direct_item_url item.data, interest)
         url
       else
-        "#{Environment.config['hostname']}#{item_path item}"
+        "#{Environment.config['hostname']}#{item.path}"
       end
     end
 

@@ -72,7 +72,7 @@ task :sitemap => :environment do
         counts[item_type] = 0
         Item.where(item_type: item_type.to_s).asc(:created_at).each do |item|
           counts[item_type] += 1
-          url = item_path item
+          url = item.path
           puts "[#{item_type}][#{item.item_id}] Adding to sitemap: #{url}" if debug
           add url, change_frequency: frequency
         end

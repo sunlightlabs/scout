@@ -1,7 +1,7 @@
 <% bill = item.data %>
 <% version = item.data['last_version'] %>
 
-<a href="<%= item_path item %>">
+<a href="<%= item.path %>">
   <% if bill['short_title'].present? %>
     <h4><%= bill['short_title'] %></h4>
   <% else %>

@@ -1,6 +1,6 @@
 <% speech = item.data %>
 
-<a href="<%= item_path item %>">
+<a href="<%= item.path %>">
   <h4>
     <% if speech['bioguide_id'] %>
       <%= speaker_name speech %>
@@ -11,7 +11,7 @@
 </a>
 
 <div class="subtitle">
-  <%= speech['title'] %> 
+  <%= speech['title'] %>
 </div>
 
 <p>
