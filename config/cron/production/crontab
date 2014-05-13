@@ -73,11 +73,6 @@
 30 11,15,19 * * *     /projects/scout/current/config/cron/production/check.sh documents rate_limit=0
 
 # court opinions - we've established a 4:30am EST checking time
-#
-# Temporarily disabled while we work out a bad false positive bug with CourtListener.
-#
-# ...and re-enabled after adding some workaround logic to catch and notify.
-#
 30 8 * * * /projects/scout/current/config/cron/production/check.sh court_opinions rate_limit=1
 
 # item-specific subscriptions

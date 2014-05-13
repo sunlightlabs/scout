@@ -150,60 +150,6 @@ module Subscriptions
         opinion['case_name']
       end
 
-      # temporary work-around: attempt to catch CL bugs and not deliver them
-      # Takes a SeenItem during the check process, looks at the snippet and
-      # extracts a highlighted term, compares it to the item's subscription's
-      # search term. Looks to see if they share the first several letters,
-      # since CourtListener allows stemming.
-      #
-      # returns true if item is a match and should be delivered.
-      # returns false if item appears to be a spurious match and
-      #   should not be delivered (will be emailed to admin instead).
-      def self.double_check(item)
-        opinion = item.data
-        return true unless opinion['snippet']
-
-        # have a match in the snippet
-        marks = opinion['snippet'].scan /<mark>([^<]+)</mi
-        return true unless marks.any?
-
-        # don't bother with unprocessed citation stuff
-        return true unless query = item.subscription.query['query']
-
-        # if we've extracted the query CourtListener sees, check it
-        # if meta_q = opinion['meta_q']
-
-        #   # reverse the process by which a subscription's query gets
-        #   # escaped and added to the string
-        #   meta_q = CGI.unescape meta_q
-
-        #   # if it was blacklisted (quotes stripped), add quotes back
-        #   if BLACKLIST.include?(meta_q)
-        #     meta_q = "\"#{meta_q}\""
-        #   end
-
-        #   # okay, if the extracted q doesn't match what it should have been, reject
-        #   if query != meta_q
-        #     puts "WARNING: #{query} != #{meta_q}"
-        #     return false
-        #   end
-
-        # # otherwise, do a cruder check
-        # else
-          # normalize, downcase, remove punctuation
-          query = query.downcase.gsub /[^\w]/, ''
-          mark = marks.first.first.downcase.gsub /[^\w]/, ''
-
-          # if the first 3 letters of the first matched mark
-          # is contained nowhere inside the original query, flag it
-          if !query.include?(mark[0..2])
-            return false
-          end
-        # end
-
-        true
-      end
-
       # takes parsed response and returns an array where each item is
       # a hash containing the id, title, and post date of each item found
       def self.items_for(response, function, options = {})

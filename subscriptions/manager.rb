@@ -96,9 +96,6 @@ module Subscriptions
         backfill_date = 30.days.ago
       end
 
-      # check for seeming courtlistener bugs
-      courtlistener_warnings = []
-
       # 1) does a poll
       # 2) stores any items as yet unseen by this subscription in seen_ids
       # 3) stores any items as yet unseen by this subscription in the delivery queue
@@ -117,15 +114,8 @@ module Subscriptions
 
           mark_as_seen! item unless dry_run
 
-          # if it fails the CourtListener double check, don't deliver
-          if (subscription.subscription_type == "court_opinions") and !Subscriptions::Adapters::CourtOpinions.double_check(item)
-            courtlistener_warnings << {
-              item_data: item.data,
-              subscription_query: subscription.query
-            }
-
           # if it's a suddenly seen old item, don't deliver
-          elsif !test? and (item.date < backfill_date)
+          if !test? and (item.date < backfill_date)
             backfills << item.attributes
 
           # okay, schedule a delivery (unless this is a dry run)
@@ -146,7 +136,6 @@ module Subscriptions
 
       # store warnings for aggregated notice
       Event.backfills!(backfills, subscription.interest_in, subscription.subscription_type) if backfills.any?
-      Event.courtlistener!(courtlistener_warnings, subscription.interest_in, subscription.subscription_type) if courtlistener_warnings.any?
 
       unless dry_run
         subscription.last_checked_at = Time.now
