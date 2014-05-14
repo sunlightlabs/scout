@@ -22,7 +22,7 @@ module Slack
 
     notifier.ping message, icon_emoji: emoji
   rescue Exception => exc
-    report = Report.exception 'Slack notifications', "Exception notifying slack", ex
+    report = Report.exception 'Slack notifications', "Exception notifying slack", exc
     Admin.report report, slack: false # don't try to slack a slack error
     puts "Error notifying slack, emailed report."
   end
@@ -30,6 +30,7 @@ module Slack
   # always disable slack in test mode
   # allow development mode to disable slack by withholding the slack section/team
   def self.slack?
+    config = Environment.config
     !Sinatra::Application.test? and config['slack'] and config['slack']['team'].present?
   end
 
