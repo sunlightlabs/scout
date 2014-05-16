@@ -128,11 +128,13 @@ This will log an `Event` in the database recording the time and email of the uns
 
 #### Admin emails
 
-Various warnings or errors may be delivered to you as Scout runs. Here's what some of them mean:
+Various warnings or errors may be delivered to you as Scout runs. Here's what some of them may look like:
 
 * `Postmark Exception | Bad email: [email address]` - This means we got a hard bounce or spam complaint from Postmark (from their attempt to send the email), and we should treat this user's email as unusable. Users are **automatically unsubscribed** from future emails when these events occur, so the email does not require any action.
 * `New users for [YYYY-MM-DD]` - Each day, a report of new users from the previous day. One email is sent for Scout, one email is sent for Open States. For users who signed up via the "quick signup" method, their account may say "(unconfirmed)" next to it, if they didn't confirm their account by the time the email was sent.
 * `Unsubscribe: [email]` - Any time a user manually chooses to unsubscribe, using the Unsubscribe From Everything workflow (linked at the bottom of each alert email), this email is sent to the admin. It requires no action, but you know, if a ton of them start happening, maybe perk up.
+* `check:federal_bills_upcoming_floor | 30 errors while checking...` - This usually means there was an error from the remote API during a routine check. This example is taken from when Scout happened to be in the middle of checking for upcoming floor activity from the Congress API, and the Congress API was mid-deploy (which involves several seconds of downtime). Unless the number of errors is egregious, or the emails consistent, this is probably not actionable.
+* `Check | XXX sets of backfills today, not delivered` - This means that during a routine check, Scout detected "backfills" -- results with an old date, but which the API had not previously seen before. These can occur for a variety of reasons, and most of our properties produce them now and then. Open States and the Congress API produce these most frequently, and it's not certain why. Unless the number of backfills is egregious, or the emails consistent, this is probably not actionable.
 
 #### Deploying to the server
 
