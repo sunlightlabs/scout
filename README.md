@@ -138,7 +138,7 @@ Various warnings or errors may be delivered to you as Scout runs. Here's what so
 
 #### Deploying to the server
 
-This project uses [fabric](#) for deployment, and its recipe is in [fabfile.py](fabfile.py).
+This project uses [fabric](http://www.fabfile.org/) for deployment, and its recipe is in [fabfile.py](fabfile.py).
 
 To deploy the latest code to production:
 
