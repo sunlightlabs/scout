@@ -121,6 +121,7 @@ So, given an email address for a user you wish to unsubscribe:
 
 * Open up an `irb` console with the app environment loaded (see prior section).
 * `user = User.where(email: "their.email@example.com").first`
+* (Double check that it's the right user and email address.)
 * `user.unsubscribe!`
 
 This will log an `Event` in the database recording the time and email of the unsubscribe, and what that user's notification values were prior to the unsubscribe.
