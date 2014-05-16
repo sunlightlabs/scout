@@ -126,6 +126,61 @@ So, given an email address for a user you wish to unsubscribe:
 
 This will log an `Event` in the database recording the time and email of the unsubscribe, and what that user's notification values were prior to the unsubscribe.
 
+#### Admin emails
+
+Various warnings or errors may be delivered to you as Scout runs. Here's what some of them mean:
+
+* `Postmark Exception | Bad email: [email address]` - This means we got a hard bounce or spam complaint from Postmark (from their attempt to send the email), and we should treat this user's email as unusable. Users are **automatically unsubscribed** from future emails when these events occur, so the email does not require any action.
+* `New users for [YYYY-MM-DD]` - Each day, a report of new users from the previous day. One email is sent for Scout, one email is sent for Open States. For users who signed up via the "quick signup" method, their account may say "(unconfirmed)" next to it, if they didn't confirm their account by the time the email was sent.
+* `Unsubscribe: [email]` - Any time a user manually chooses to unsubscribe, using the Unsubscribe From Everything workflow (linked at the bottom of each alert email), this email is sent to the admin. It requires no action, but you know, if a ton of them start happening, maybe perk up.
+
+#### Deploying to the server
+
+This project uses [fabric](#) for deployment, and its recipe is in [fabfile.py](fabfile.py).
+
+To deploy the latest code to production:
+
+```bash
+fab deploy --set target=production
+```
+
+To restart the server:
+
+```bash
+fab restart
+````
+
+#### Disabling cronjobs
+
+If things are going haywire, and you want to just stop Scout from checking for new things or possibly emailing people, run the fabric task:
+
+```bash
+fab disable_crontab
+```
+
+This just logs into the production server and runs `rake disable_crontab`.
+
+To turn the crontab back on, use `fab set_crontab` or `rake set_crontab` as appropriate.
+
+**Note**: Disabling the crontab will actually **replace** the crontab with an alternative "disabled" crontab, whose contents are at [config/cron/production/disabled](config/cron/production/disabled). This contains a single task that runs every 6 hours, warning the admin that the crontab has not yet been turned back on. This is a safety valve
+
+#### Backups
+
+Currently, backups are performed by a shell script on the MongoDB server that Scout uses. That script has been replicated in source control at [config/cron/production/backup.sh](config/cron/production/backup.sh).
+
+The backup script exports many, but not all, of the collections in MongoDB to disk, tarballs them up, and stores them in S3.
+
+The reasons for backing up, or not backing up, individual collections, are annotated in the comments in [the backup script](config/cron/production/backup.sh).
+
+The tiny crontab that this user runs on the Scout MongoDB server is replicated at [config/cron/backup](config/cron/backup) (it references a `to-s3.sh` that is the same as the the backup script in this repo).
+
+#### Backup Monitoring
+
+A rake task, `rake backups:check`, runs once a day, a couple hours after the backup itself runs, that looks to make sure that a backup file has been uploaded to S3 for the previous day, and that it is not 0 bytes.
+
+This is a safety valve, to try to catch when the backup script may have stopped working, for any reason. **It is not perfect**: other mechanisms should be employed, possibly including snapping EBSes.
+
+
 ### License
 
 Copyright (c) 2011-2014 Sunlight Foundation, [released](https://github.com/sunlightlabs/scout/blob/master/LICENSE) under the [GNU General Public License, Version 3](http://www.gnu.org/licenses/gpl-3.0.txt).
