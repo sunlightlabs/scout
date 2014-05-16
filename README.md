@@ -95,6 +95,36 @@ To upgrade the Ruby version, do the following in **each environment** Scout will
 
 You should also run the test suite with `rake` to make sure everything is fine! But you probably only need to do that in one environment.
 
+#### Entering the admin console
+
+An app console can be opened using `irb`, which comes with Ruby. It is very similar to `ipython` for Python.
+
+Any text in `$HOME/.irbrc` will be automatically run as `irb` on startup.
+
+Our production server is configured with a `.irbrc` that will load the app environment **automatically**, when `irb` is run from the app's current working directory.
+
+But if you want to do it yourself, it's:
+
+```ruby
+require 'rubygems'
+require 'bundler/setup'
+require './config/environment'
+```
+
+Once those have been executed, classes like `User` and `Delivery` will be available to you.
+
+#### Manually unsubscribing users
+
+Sometimes, users write in and want to be unsubscribed, and no matter what you tell them, they insist the process is broken or that you should do it.
+
+So, given an email address for a user you wish to unsubscribe:
+
+* Open up an `irb` console with the app environment loaded (see prior section).
+* `user = User.where(email: "their.email@example.com").first`
+* `user.unsubscribe!`
+
+This will log an `Event` in the database recording the time and email of the unsubscribe, and what that user's notification values were prior to the unsubscribe.
+
 ### License
 
-Copyright (c) 2011-2013 Sunlight Foundation, [released](https://github.com/sunlightlabs/scout/blob/master/LICENSE) under the [GNU General Public License, Version 3](http://www.gnu.org/licenses/gpl-3.0.txt).
+Copyright (c) 2011-2014 Sunlight Foundation, [released](https://github.com/sunlightlabs/scout/blob/master/LICENSE) under the [GNU General Public License, Version 3](http://www.gnu.org/licenses/gpl-3.0.txt).
