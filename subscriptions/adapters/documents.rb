@@ -31,6 +31,22 @@ module Subscriptions
         }
       end
 
+      # Return the URL that the given subscription, function, and options map to.
+      #
+      # subscription: An alert (may not be saved in the database) containing a
+      #    search term and any applied filters.
+      # function: :check, :initialize, or :search.
+      #    :check - The alert is saved in the database, and is being checked for new results.
+      #         Limit to a recent window, by date, if possible.
+      #    :initialize - The alert has *just* been saved, and is being checked for
+      #         whatever results should be considered "seen" to begin with.
+      #         Limit to at least 40 results, with no date filter.
+      #    :search - A user is doing a search right now, and this is the URL that
+      #         will back their results. Limit to 20, and respect the page number
+      #         coming in through the `options` hash. Don't limit by date.
+      # options:
+      #    page: page number of results to search for. Relevant when user is scrolling
+      #          through multiple pages of search results.
       def self.url_for(subscription, function, options = {})
         api_key = options[:api_key] || Environment.config['subscriptions']['sunlight_api_key']
 
