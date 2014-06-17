@@ -1,0 +1,30 @@
+<% document = item.data %>
+
+<a href="<%= item.path %>">
+  <h4><%= document['description'] || document['hearing_title'] %></h4>
+</a>
+
+<div class="subtitle">
+  <%= document['document_type_name'] %>
+</div>
+
+<% if document['hearing_title'] %>
+  <div class="subtitle">
+	<%= document['hearing_title'] %>
+  </div>
+<% end %>
+
+<% if document['witness_last'] %>
+	<p>
+		<%= document['witness_first'] %> <%= document['witness_last'] %>, <%= document['witness_organization'] %>
+	</p>
+<% end %>
+<p>
+  <% if highlight = document_highlight(item, interest) %>
+    <%= highlight %>
+  <% elsif (description = document_description(document)).present? %>
+    <%= truncate description, 500 %>
+  <% else %>
+    No excerpt or abstract available.
+  <% end %>
+</p>

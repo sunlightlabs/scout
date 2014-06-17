@@ -1,0 +1,46 @@
+<% document = item.data %>
+
+<div class="summary">
+
+  <div class="entryHeader">
+    
+    <h2><%= document['description'] || document['hearing_title'] %></h2>
+    
+    <div class="subtitle">
+      <%= document['document_type_name'] %>
+      published on
+        <time class="item">
+          <%= just_date_year item.publish_date %>
+        </time>
+    </div>
+
+    <div class="subtitle">
+      <%= document['hearing_title'] %>
+    </div>
+    
+    <div class="subtitle">
+      <% if document['witness_last'] %>
+        <p>
+          <%= document['witness_first'] %> <%= document['witness_last'] %>, <%= document['witness_organization'] %>
+        </p>
+      <% end %>
+    </div>
+
+  <div class="clear"></div>
+
+  <div class="resources">
+    
+    <h5>Resources</h5>
+    
+    <p>
+      <% if document["urls"]["url"].present? %>
+        Source: <a href="<%= document["urls"]["url"] %>">document["urls"]["url"]</a>
+      <% end %>
+    </p>
+    <p>
+      <% if document["urls"]["permalink"].present? %>
+        Permalink: <a href="<%= document["urls"]["permalink"] %>">document["urls"]["permalink"]</a>
+      <% end %>
+    </p> 
+    </div>
+</div>

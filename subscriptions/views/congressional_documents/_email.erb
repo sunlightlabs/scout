@@ -1,0 +1,21 @@
+<% document = item.data %>
+
+<%= email_header document['title'], url %>
+
+<%= email_subheader_div %>
+  <span class="date">
+    <%= just_date item.date %>
+  </span>
+  &mdash;
+  <%= document_subtitle document %>
+</div>
+
+<%= email_content_p %>
+  <% if highlight = document_highlight(item, interest, inline: true) %>
+    <%= highlight %>
+  <% elsif (description = document_description(document)).present? %>
+    <%= truncate description, 500 %>
+  <% else %>
+    No excerpt or abstract available.
+  <% end %>
+</div>
