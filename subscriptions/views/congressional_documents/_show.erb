@@ -7,15 +7,20 @@
     <h2><%= document['description'] || document['hearing_title'] %></h2>
     
     <div class="subtitle">
-      <%= document['document_type_name'] %>
-      published on
+      <p>
+        <%= document['document_type_name'] %>
+      </p>
+      <p>
         <time class="item">
-          <%= just_date_year item.publish_date %>
+          Published: <%= just_date_year document["published_on"] %>
         </time>
+      </p>
     </div>
 
     <div class="subtitle">
-      <%= document['hearing_title'] %>
+      <p>
+        <%= document['hearing_title'] %> <%= document['occours_at'] %>
+      </p>
     </div>
     
     <div class="subtitle">
@@ -27,19 +32,28 @@
     </div>
 
   <div class="clear"></div>
+  <% if highlight = document_highlight(item, interest) %>
+    <p>
+      <%= highlight %>
+    </p>
+  <% elsif (description = document_description(document)).present? %>
+    <p>
+      <%= truncate description, 500 %>
+    </p>  
+  <% end %>
 
   <div class="resources">
     
     <h5>Resources</h5>
     
     <p>
-      <% if document["urls"]["url"].present? %>
-        Source: <a href="<%= document["urls"]["url"] %>">document["urls"]["url"]</a>
+      <% if document["url"] %>
+        Source: <a href="<%= document["url"] %>">document["url"]</a>
       <% end %>
     </p>
     <p>
-      <% if document["urls"]["permalink"].present? %>
-        Permalink: <a href="<%= document["urls"]["permalink"] %>">document["urls"]["permalink"]</a>
+      <% if document["permalink"] %>
+        Permalink: <a href="<%= document["permalink"] %>">document["permalink"]</a>
       <% end %>
     </p> 
     </div>

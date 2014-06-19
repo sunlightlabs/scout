@@ -17,7 +17,7 @@ module Subscriptions
       FIELDS = %w{
         document_id version_code congress chamber hearing_title
         urls house_event_id description document_type_name 
-        committee_id bill_id bioguide_id chamber publish_date
+        committee_id bill_id bioguide_id chamber published_on
         witness_type witness_first witness_middle witness_last 
         witness_orgnization occours_at 
 
@@ -82,14 +82,14 @@ module Subscriptions
         #   url << "&document_type=#{subscription.data['document_type']}"
         # end
 
-        url << "&order=publish_date"
+        url << "&order=published_on"
         url << "&fields=#{FIELDS.join ','}"
         url << "&apikey=#{api_key}"
 
 
         # if it's background checking, filter to just the last month for speed
         if function == :check
-          url << "&publish_date__gte=#{1.month.ago.strftime "%Y-%m-%d"}"
+          url << "&posted_at__gte=#{1.month.ago.strftime "%Y-%m-%d"}"
         end
 
 
@@ -102,6 +102,8 @@ module Subscriptions
 
       # landing page
       def self.url_for_detail(item_id, options = {})
+        puts "here "
+        puts item_id
         api_key = options[:api_key] || Environment.config['subscriptions']['sunlight_api_key']
 
         if Environment.config['subscriptions']['congress_endpoint'].present?
@@ -110,10 +112,12 @@ module Subscriptions
           endpoint = "https://congress.api.sunlightfoundation.com"
         end
 
-        url = "#{endpoint}/documents/search?apikey=#{api_key}"
+        url = "#{endpoint}/congressional_documents/search?apikey=#{api_key}"
         url << "&document_id=#{item_id}"
         url << "&fields=#{FIELDS.join ','}"
-
+        puts "hello"
+        puts url
+        puts
         url
       end
 
@@ -159,7 +163,7 @@ module Subscriptions
         SeenItem.new(
           item_id: document["document_id"],
 ########### this is for debug only!!!!!!!!!!
-          date: (document["publish_date"] || rand(10).days.ago),
+          date: (document["published_on"] || rand(10).days.ago),
           data: document
         )
       end
