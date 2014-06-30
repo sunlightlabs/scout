@@ -19,8 +19,7 @@ module Subscriptions
         urls house_event_id description document_type_name 
         committee_id bill_id bioguide_id chamber published_on
         witness_type witness_first witness_middle witness_last 
-        witness_orgnization occours_at 
-
+        witness_orgnization occours_at text_preview committee_names
       }
 
       def self.filters
@@ -86,13 +85,11 @@ module Subscriptions
         url << "&fields=#{FIELDS.join ','}"
         url << "&apikey=#{api_key}"
 
-
         # if it's background checking, filter to just the last month for speed
         if function == :check
           url << "&posted_at__gte=#{1.month.ago.strftime "%Y-%m-%d"}"
         end
-
-
+ 
         url << "&page=#{options[:page]}" if options[:page]
         per_page = (function == :search) ? (options[:per_page] || 20) : 40
         url << "&per_page=#{per_page}"
@@ -111,16 +108,14 @@ module Subscriptions
         else
           endpoint = "https://congress.api.sunlightfoundation.com"
         end
-
         url = "#{endpoint}/congressional_documents/search?apikey=#{api_key}"
         url << "&document_id=#{item_id}"
         url << "&fields=#{FIELDS.join ','}"
-        puts "hello"
+        puts
         puts url
         puts
         url
       end
-
 
       def self.title_for(document)
         "Congressional Document: #{document['description'] || document['hearing_title']}"
@@ -162,8 +157,7 @@ module Subscriptions
 
         SeenItem.new(
           item_id: document["document_id"],
-########### this is for debug only!!!!!!!!!!
-          date: (document["published_on"] || rand(10).days.ago),
+          date: (document["published_on"]),
           data: document
         )
       end

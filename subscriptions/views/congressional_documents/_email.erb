@@ -1,14 +1,21 @@
 <% document = item.data %>
 
-<%= email_header document['title'], url %>
+<%= email_header document['description'] || document['hearing_title'], url %>
 
 <%= email_subheader_div %>
   <span class="date">
     <%= just_date item.date %>
   </span>
   &mdash;
-  <%= document_subtitle document %>
+  <%= document['document_type_name'] %>
+  <% if document['witness_last'] %>
+    <span>
+    <%= document['witness_first'] %> <%= document['witness_last'] %>, <%= document['witness_organization'] %>
+    </span>
+  <% end %>
+
 </div>
+
 
 <%= email_content_p %>
   <% if highlight = document_highlight(item, interest, inline: true) %>
