@@ -4,85 +4,78 @@
 
   <div class="entryHeader">
     
-    <h2><%= document['description'] || document['hearing_title'] %></h2>
-  </div>  
-      <p>
-        <time class="item">
-          Published: <%= just_date_year document["published_on"] %>
-        </time>
-      </p>
+    <h2><%= document['description'] || document['hearing_title'] %></h2> 
     <div class="subtitle">
-      <p>
-        <%= document['document_type_name'] %>
-      </p>
+      <time class="item">
+        Published: <%= just_date_year document["published_on"] %>
+      </time>
+      <% if document['document_type_name'] %>
+        <span> | <%= document['document_type_name'] %></span>
+      <% end %>
     </div>
 
-    <% if document['committee_names'] %>
-      <% document['committee_names'].each do |committee| %>
-          <div class="subtitle">
-            <p><%= committee %></p>
-          </div>
-      <% end %>
+    <%if document['hearing_title'] %>
+      <div class="subtitle">
+        <span>
+          <strong>Hearing title:</strong> <%= document['hearing_title'] %> <%= document['occours_at'] %>
+        </span>
+      </div>
     <% end %>
 
-    <div class="subtitle">
-      <p>
-        <%= document['hearing_title'] %> <%= document['occours_at'] %>
-      </p>
-    </div>
+
+    <% if document['committee_names'] %>
+      <div class="subtitle">
+        <strong>Committee(s)</strong>
+        <% document['committee_names'].each do |committee| %>
+            <span><%= committee %></span>
+        <% end %>
+      </div>
+    <% end %>
     
     <div class="subtitle">
       <% if document['witness_last'] %>
-        <p>
-          <%= document['witness_first'] %> <%= document['witness_last'] %>, <%= document['witness_organization'] %>
-        </p>
+        <strong>Witness:</strong>
+        <span>
+          <%= document['witness_first'] %> <%= document['witness_last'] %>, <strong><%= document['witness_organization'] %></strong>
+        </span>
       <% end %>
     </div>
-  
+  </div>
   <div class="clear"></div>
-
-  <h5>Resources</h5>
-
-  </br>
   
   <% if document['urls'][0] %>
-    <div class="resources">
-    <table>
-    <% if document['urls'][0]['permalink'] %>
-      <tr height=30>
-        <td><h5>Permalink</h5></td>
-        <td>
-           <a href="<%= document['urls'][0]['permalink'] %>"> <%= document['urls'][0]['permalink'] %> </a>
-        </td> 
-      </tr>
-    <% end %>
+    <div class="resources core-context long-links">
 
-    <% if document['urls'][0]['url'] %>
-      <tr height=30>
-        <td><h5>Original url</h5></td>
-        <td>
-           <a href="<%= document['urls'][0]['url'] %>"> <%= document['urls'][0]['url'] %> </a>
-        </td> 
-      </tr>
-    <% end %>
-    </table>
+        <dl>
+
+      <% if document['urls'][0]['url'] %>
+          <dt class="float-left">Original url</dt>
+             <dd>View the<a href="<%= document['urls'][0]['url'] %>"> official document </a></dd>
+      <% end %>
+      <% if document['urls'][0]['permalink'] %>
+          <dt class="float-left">Permalink</dt>
+             <dd>Or view an <a href="<%= document['urls'][0]['permalink'] %>">archived copy</a></dd>
+      <% end %>
+      </dl>
     </div>
   <% end %>
 
   <div class="clear"></div>
  
     <% if document['text_preview'] %>
-    <br>
+    <div id="document">
     <h5>Text preview</h5>
-    <br>
 
-    <p>
-      <%= document['text_preview'] %>...
-    </p>
+    <article>
+      <p>
+        <%= document['text_preview'] %>...
+      </p>
+    </article>
+  </div>
     <% elsif (description = document_description(document)).present? %>
       <%= truncate description, 500 %>
     <% else %>
-      No text previes available.
+      No text previews available.
     <% end %>
   </p> 
 

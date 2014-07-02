@@ -1378,6 +1378,11 @@ button.follow, button.following {display: none;}
     margin-right: 10px;
     display: inline-block;
     width: 100px;
+    float: left;
+    padding: 8px 0;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
 }
 
 .entry header em {
@@ -1388,17 +1393,22 @@ button.follow, button.following {display: none;}
 .entry .resources,
 .entry #document,
 .entry .core-context {
-    padding-left: 10px; padding-right: 10px;
+    padding-left: 10px; 
+    padding-right: 10px;
 }
 
 .entry .core-context dl {
     display: block;
     margin-bottom: 17px;
 }
-
 .entry .core-context dd {
     display: inline-block;
     max-width: 550px;
+    width: 100%;
+    padding: 8px 0;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
 }
 
 .entry .resources {
