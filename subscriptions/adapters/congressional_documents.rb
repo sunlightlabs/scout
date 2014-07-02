@@ -16,10 +16,9 @@ module Subscriptions
       # add published_on
       FIELDS = %w{
         document_id version_code congress chamber hearing_title
-        urls house_event_id description document_type_name 
-        committee_id bill_id bioguide_id chamber published_on
-        witness_type witness_first witness_middle witness_last 
-        witness_orgnization occours_at text_preview committee_names
+        urls house_event_id description document_type 
+        committee_id bill_id bioguide_id chamber published_at
+        witness occours_at text_preview committee_names
       }
 
       def self.filters
@@ -81,7 +80,7 @@ module Subscriptions
         #   url << "&document_type=#{subscription.data['document_type']}"
         # end
 
-        url << "&order=published_on"
+        url << "&order=published_at"
         url << "&fields=#{FIELDS.join ','}"
         url << "&apikey=#{api_key}"
 
@@ -157,7 +156,7 @@ module Subscriptions
 
         SeenItem.new(
           item_id: document["document_id"],
-          date: (document["published_on"]),
+          date: (document["published_at"]),
           data: document
         )
       end

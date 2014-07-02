@@ -5,7 +5,7 @@
 </a>
 
 <div class="subtitle">
-  <%= document['document_type_name'] %>
+  <%= document['document_type'] %>
 </div>
 
 <% if document['hearing_title'] %>
@@ -14,9 +14,9 @@
   </div>
 <% end %>
 
-<% if document['witness_last'] %>
+<% if document['witness'] %>
 	<p>
-		<%= document['witness_first'] %> <%= document['witness_last'] %>, <%= document['witness_organization'] %>
+		<%= document['witness']['first_name'] %> <%= document['witness']['last_name'] %>, <%= document['witness']['organization'] %>
 	</p>
 <% end %>
 <p>

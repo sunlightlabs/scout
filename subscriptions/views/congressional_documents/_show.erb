@@ -7,7 +7,7 @@
     <h2><%= document['description'] || document['hearing_title'] %></h2> 
     <div class="subtitle">
       <time class="item">
-        Published: <%= just_date_year document["published_on"] %>
+        Published: <%= just_date_year document["published_at"] %>
       </time>
       <% if document['document_type_name'] %>
         <span> | <%= document['document_type_name'] %></span>
@@ -33,10 +33,10 @@
     <% end %>
     
     <div class="subtitle">
-      <% if document['witness_last'] %>
+      <% if document['witness']['last_name'] %>
         <strong>Witness:</strong>
         <span>
-          <%= document['witness_first'] %> <%= document['witness_last'] %>, <strong><%= document['witness_organization'] %></strong>
+          <%= document['witness']['first_name'] %> <%= document['witness']['last_name'] %>, <strong><%= document['witness']['organization'] %></strong>
         </span>
       <% end %>
     </div>
