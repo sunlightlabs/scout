@@ -7,10 +7,10 @@
     <%= just_date item.date %>
   </span>
   &mdash;
-  <%= document['document_type'] %>
-  <% if document['witness_last'] %>
+  <%= document['type'] %>
+  <% if document['witness']['last_name'] %>
     <span>
-    <%= document['witness_first'] %> <%= document['witness_last'] %>, <%= document['witness_organization'] %>
+    <%= document['witness']['first_name'] %> <%= document['witness']['last_name'] %>, <%= document['witness']['organization'] %>
     </span>
   <% end %>
 

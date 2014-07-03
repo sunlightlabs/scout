@@ -9,8 +9,8 @@
       <time class="item">
         Published: <%= just_date_year document["published_at"] %>
       </time>
-      <% if document['document_type_name'] %>
-        <span> | <%= document['document_type_name'] %></span>
+      <% if document['type'] and document['type'] != 'Other' %>
+        <span> | <%= document['type'] %></span>
       <% end %>
     </div>
 

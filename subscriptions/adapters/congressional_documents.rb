@@ -16,7 +16,7 @@ module Subscriptions
       # add published_on
       FIELDS = %w{
         document_id version_code congress chamber hearing_title
-        urls house_event_id description document_type 
+        urls house_event_id description type 
         committee_id bill_id bioguide_id chamber published_at
         witness occours_at text_preview committee_names
       }
