@@ -86,7 +86,7 @@ module Subscriptions
 
         # if it's background checking, filter to just the last month for speed
         if function == :check
-          url << "&posted_at__gte=#{1.month.ago.strftime "%Y-%m-%d"}"
+          url << "&published_at__gte=#{1.month.ago.strftime "%Y-%m-%d"}"
         end
  
         url << "&page=#{options[:page]}" if options[:page]
