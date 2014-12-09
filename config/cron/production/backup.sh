@@ -6,18 +6,19 @@
 # * Should run from a different server than the database server.
 # * Should be burned down to the ground and turned into a proper backup system.
 
-DUMP_PATH="/home/ubuntu/bkups"
-DUMP_DIR="${DUMP_PATH}/dump"
+DUMP_PATH="/home/ubuntu/bkups/"
+DUMP_DIR="dump"
 S3_PATH="s3://scout-assets/scout/backups/mongo-scout"
 
 today=$(date +%Y%m%d)
 two_weeks_ago=$(date +%Y%m%d --date '14 days ago')
 
-# do things in directory
+# should be made relative
 cd $DUMP_PATH
 
-# so ... there used to be an ip for the mongo host here ... 
-# i removed it and just run this from the mongo host
+# previous dump might be hanging about ... 
+rm -rf ${DUMP_PATH}${DUMP_DIR}
+
 MONGODUMP="mongodump --db=scout"
 
 # maintain a whitelist of collections to dump.
@@ -82,8 +83,8 @@ tar -czvf $today.tgz $DUMP_DIR
 s3cmd put $today.tgz ${S3_PATH}/$today.tgz
 
 # cleanup locally
-rm -rf $DUMP_DIR
-rm $today.tgz
+rm -rf ${DUMP_PATH}${DUMP_DIR}
+rm ${DUMP_PATH}$today.tgz
 
 # cleanup globally
-s3cmd del ${S3_PATH/$two_weeks_ago.tgz
+s3cmd del ${S3_PATH}/$two_weeks_ago.tgz
