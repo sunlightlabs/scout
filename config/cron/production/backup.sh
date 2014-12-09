@@ -6,37 +6,44 @@
 # * Should run from a different server than the database server.
 # * Should be burned down to the ground and turned into a proper backup system.
 
+DUMP_PATH="/home/ubuntu/bkups"
+DUMP_DIR="${DUMP_PATH}/dump"
+S3_PATH="s3://scout-assets/scout/backups/mongo-scout"
 
 today=$(date +%Y%m%d)
+two_weeks_ago=$(date +%Y%m%d --date '14 days ago')
 
-# should be made relative
-cd /home/eric/backups
+# do things in directory
+cd $DUMP_PATH
 
+# so ... there used to be an ip for the mongo host here ... 
+# i removed it and just run this from the mongo host
+MONGODUMP="mongodump --db=scout"
 
 # maintain a whitelist of collections to dump.
 # Obviously: must be updated when new collections are added to the system!
 
 # clear any existing, possibly aborted, past dumps
-rm -rf dump
-rm *.tgz
+##rm -rf dump
+##rm *.tgz
 
 # easy to store, but easy to restore too
-mongodump --db=scout --collection=agencies
-mongodump --db=scout --collection=definitions
-mongodump --db=scout --collection=legislators
-mongodump --db=scout --collection=citations
-mongodump --db=scout --collection=system.indexes
+$MONGODUMP --collection=agencies
+$MONGODUMP --collection=definitions
+$MONGODUMP --collection=legislators
+$MONGODUMP --collection=citations
+$MONGODUMP --collection=system.indexes
 
 # growth should be manageable for some time
-mongodump --db=scout --collection=events
-mongodump --db=scout --collection=receipts
-mongodump --db=scout --collection=reports
+$MONGODUMP --collection=events
+$MONGODUMP --collection=receipts
+$MONGODUMP --collection=reports
 
 # absolutely vital: must be saved
-mongodump --db=scout --collection=interests
-mongodump --db=scout --collection=subscriptions
-mongodump --db=scout --collection=tags
-mongodump --db=scout --collection=users
+$MONGODUMP --collection=interests
+$MONGODUMP --collection=subscriptions
+$MONGODUMP --collection=tags
+$MONGODUMP --collection=users
 
 # seen_items is huge (1.7M items as of this writing, takes a while to write),
 # but it's worth backing up if possible.
@@ -51,26 +58,32 @@ mongodump --db=scout --collection=users
 # As of right now, it takes up too much disk space, so disabling.
 # I would prefer this be backed up, though.
 #
-# mongodump --db=scout --collection=seen_items
+# $MONGODUMP --collection=seen_items
+
 
 # blacklisted:
 #
 # items are huge, and for purely caching/sitemap purposes.
 # they can be restored using the instructions in reindex.md.
-# mongodump --db=scout --collection=items
+# $MONGODUMP --collection=items
 #
 # caches are huge, and also purely caching. can be restored through normal site use.
-# mongodump --db=scout --collection=caches
+# $MONGODUMP --collection=caches
 #
 # deliveries are an ephemeral queue. anything that might happen to be backed up,
 # should not be restored, for fear of re-delivery of old items.
-# mongodump --db=scout --collection=deliveries
+# $MONGODUMP --collection=deliveries
 
 # as of 2014-05-04, /dump takes up 1.1G
 # as of 2014-05-04, $today.tgz takes up 135M
-tar -czvf $today.tgz dump
+tar -czvf $today.tgz $DUMP_DIR
 
-s3cmd put $today.tgz s3://scout-assets/scout/backups/mongo-scout/$today.tgz
+# put to s3
+s3cmd put $today.tgz ${S3_PATH}/$today.tgz
 
-rm -rf dump
+# cleanup locally
+rm -rf $DUMP_DIR
 rm $today.tgz
+
+# cleanup globally
+s3cmd del ${S3_PATH/$two_weeks_ago.tgz
