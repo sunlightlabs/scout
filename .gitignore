@@ -4,7 +4,7 @@
 /config/config.yml
 /config/mongoid.yml
 /config/services.yml
-/vendor/gems
+/vendor/cache
 /.bundle
 /public/sitemap
 /public/assets/*/*.gz

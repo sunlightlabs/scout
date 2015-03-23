@@ -18,7 +18,7 @@ gem "mongoid", '~> 3.1'
 gem "mongoid-paperclip", require: "mongoid_paperclip"
 
 # exception handling
-gem "sentry-raven", github: "getsentry/raven-ruby"
+gem "sentry-raven", git: "https://github.com/getsentry/raven-ruby.git"
 
 # asset syncing to S3 AND backup monitoring
 gem "aws-sdk"
@@ -64,4 +64,4 @@ gem 'feedbag'
 gem 'sanitize'
 
 # advanced search string parsing
-gem 'lucene_query_parser', git: 'git://github.com/sunlightlabs/lucene_query_parser.git'
+gem 'lucene_query_parser', git: 'https://github.com/sunlightlabs/lucene_query_parser.git'
