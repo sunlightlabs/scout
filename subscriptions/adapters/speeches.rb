@@ -57,7 +57,7 @@ module Subscriptions
 
         # still keep it only to fields with a speaker (any bioguide_id)
         else
-          url << "&bioguide_id=['' TO *]"
+          url << "&bioguide_id=[''%20TO%20*]"
         end
 
         # filters
@@ -78,7 +78,7 @@ module Subscriptions
         url << "&page=#{options[:page].to_i - 1}" if options[:page]
         url << "&per_page=#{options[:per_page]}" if options[:per_page]
 
-        url << "&sort=date desc"
+        url << "&sort=date%20desc"
 
         url
       end
@@ -102,10 +102,10 @@ module Subscriptions
         url = "#{endpoint}/text.json?apikey=#{api_key}"
 
         # count up from date of speech
-        url << "&sort=date asc"
+        url << "&sort=date%20asc"
 
         # keep it only to fields with a speaker (bioguide_id)
-        url << "&bioguide_id=['' TO *]"
+        url << "&bioguide_id=[''%20TO%20*]"
 
 
         if options[:since] == "all"
