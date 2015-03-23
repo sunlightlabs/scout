@@ -1,5 +1,4 @@
 require 'oj'
-require 'uri'
 
 module Subscriptions
 
@@ -466,7 +465,7 @@ module Subscriptions
 
     # download content at the given URL
     def self.download(url, adapter = nil)
-      curl = Curl::Easy.new(URI.escape(url))
+      curl = Curl::Easy.new url
 
       curl.follow_location = true
 
