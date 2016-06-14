@@ -226,10 +226,10 @@
       ga('global.send', 'pageview');
     <% end %>
 
-    ga('send', 'pageview');
-
     // IP anonymization (last triplet) - this is optional, not part of the standard snippet
     ga('set', 'anonymizeIp', true);
+
+    ga('send', 'pageview');
 
   </script>
 <% end %>
